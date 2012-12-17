@@ -19,7 +19,6 @@
 #ifndef DCPLUSPLUS_DCPP_SHARE_MANAGER_H
 #define DCPLUSPLUS_DCPP_SHARE_MANAGER_H
 
-#include <list>
 #include <map>
 #include <memory>
 #include <set>
@@ -130,10 +129,16 @@ private:
 	class Directory : public FastAlloc<Directory>, public intrusive_ptr_base<Directory>, boost::noncopyable {
 	public:
 		typedef boost::intrusive_ptr<Directory> Ptr;
-		typedef unordered_map<string, Ptr, noCaseStringHash, noCaseStringEq> Map;
-		typedef Map::iterator MapIter;
 
 		struct File {
+			File() : size(0), parent(0) { }
+			File(const string& aName, int64_t aSize, const Directory::Ptr& aParent, const optional<TTHValue>& aRoot) :
+				name(aName), tth(aRoot), size(aSize), parent(aParent.get()) { }
+
+			bool operator==(const File& rhs) const {
+				return getParent() == rhs.getParent() && (Util::stricmp(getName(), rhs.getName()) == 0);
+			}
+
 			struct StringComp {
 				StringComp(const string& s) : a(s) { }
 				bool operator()(const File& b) const { return Util::stricmp(a, b.getName()) == 0; }
@@ -142,15 +147,6 @@ private:
 			struct FileLess {
 				bool operator()(const File& a, const File& b) const { return (Util::stricmp(a.getName(), b.getName()) < 0); }
 			};
-			typedef set<File, FileLess> Set;
-
-			File() : size(0), parent(0) { }
-			File(const string& aName, int64_t aSize, const Directory::Ptr& aParent, const optional<TTHValue>& aRoot) :
-				name(aName), tth(aRoot), size(aSize), parent(aParent.get()) { }
-
-			bool operator==(const File& rhs) const {
-				return getParent() == rhs.getParent() && (Util::stricmp(getName(), rhs.getName()) == 0);
-			}
 
 			/** Ensure this file's name doesn't clash with the names of the parent directory's sub-
 			directories or files; rename to "file (N).ext" otherwise (and set realPath to the
@@ -170,8 +166,8 @@ private:
 		};
 
 		int64_t size;
-		Map directories;
-		File::Set files;
+		unordered_map<string, Ptr, noCaseStringHash, noCaseStringEq> directories;
+		set<File, File::FileLess> files;
 
 		static Ptr create(const string& aName, const Ptr& aParent = Ptr()) { return Ptr(new Directory(aName, aParent)); }
 
@@ -179,6 +175,9 @@ private:
 			return ( (type == SearchManager::TYPE_ANY) || (fileTypes & (1 << type)) );
 		}
 		void addType(uint32_t type) noexcept;
+
+		const string& getRealName() const noexcept;
+		template<typename SetT> void setRealName(SetT&& realName) noexcept { this->realName = std::forward<SetT>(realName); }
 
 		string getADCPath() const noexcept;
 		string getFullName() const noexcept;
@@ -197,21 +196,23 @@ private:
 		void toXml(OutputStream& xmlFile, string& indent, string& tmp2, int8_t level) const;
 		void filesToXml(OutputStream& xmlFile, string& indent, string& tmp2) const;
 
-		File::Set::const_iterator findFile(const string& aFile) const { return find_if(files.begin(), files.end(), Directory::File::StringComp(aFile)); }
+		auto findFile(const string& aFile) const -> decltype(files.cbegin()) { return find_if(files.begin(), files.end(), File::StringComp(aFile)); }
 
 		void merge(const Ptr& source, const string& realPath);
 
 		GETSET(string, name, Name);
 		GETSET(Directory*, parent, Parent);
+
 	private:
 		friend void intrusive_ptr_release(intrusive_ptr_base<Directory>*);
 
 		Directory(const string& aName, const Ptr& aParent);
 		~Directory() { }
 
+		optional<string> realName; // only defined if this directory had to be renamed to avoid duplication.
+
 		/** Set of flags that say which SearchManager::TYPE_* a directory contains */
 		uint32_t fileTypes;
-
 	};
 
 	friend class Directory;
@@ -264,8 +265,7 @@ private:
 	mutable CriticalSection cs;
 
 	// List of root directory items
-	typedef std::list<Directory::Ptr> DirList;
-	DirList directories;
+	unordered_map<string, Directory::Ptr, noCaseStringHash, noCaseStringEq> directories;
 
 	/** Map real name to virtual name - multiple real names may be mapped to a single virtual one.
 	The map is sorted to make sure conflicts are always resolved in the same order when merging. */
@@ -277,19 +277,18 @@ private:
 
 	const Directory::File& findFile(const string& virtualFile) const;
 
-	Directory::Ptr buildTree(const string& aName, const Directory::Ptr& aParent);
-	bool checkHidden(const string& aName) const;
+	Directory::Ptr buildTree(const string& realPath, optional<const string&> dirName = nullptr, const Directory::Ptr& parent = nullptr);
+	bool checkHidden(const string& realPath) const;
 
 	void rebuildIndices();
 
 	void updateIndices(Directory& aDirectory);
-	void updateIndices(Directory& dir, const Directory::File::Set::iterator& i);
+	void updateIndices(Directory& dir, const decltype(std::declval<Directory>().files.begin())& i);
 
 	Directory::Ptr merge(const Directory::Ptr& directory, const string& realPath);
 
 	void generateXmlList();
 	bool loadCache() noexcept;
-	DirList::const_iterator getByVirtual(const string& virtualName) const noexcept;
 	pair<Directory::Ptr, string> splitVirtual(const string& virtualPath) const;
 	string findRealRoot(const string& virtualRoot, const string& virtualLeaf) const;
 
