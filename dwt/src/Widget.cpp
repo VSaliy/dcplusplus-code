@@ -55,14 +55,14 @@ namespace dwt {
 
 GlobalAtom Widget::propAtom(_T("dwt::Widget*"));
 
-#ifdef _DEBUG
+#ifdef DWT_DEBUG_WIDGETS
 int widgetCount;
 #endif
 
 Widget::Widget(Widget* parent_, Dispatcher& dispatcher_) :
 	hwnd(NULL), parent(parent_), dispatcher(dispatcher_)
 {
-#ifdef _DEBUG
+#ifdef DWT_DEBUG_WIDGETS
 	++widgetCount;
 	printf("created a dwt widget; count: %d\n", widgetCount);
 #endif
@@ -72,7 +72,7 @@ Widget::~Widget() {
 	if(hwnd) {
 		::RemoveProp(hwnd, propAtom);
 	}
-#ifdef _DEBUG
+#ifdef DWT_DEBUG_WIDGETS
 	--widgetCount;
 	printf("destroying a dwt widget; count: %d\n", widgetCount);
 #endif
