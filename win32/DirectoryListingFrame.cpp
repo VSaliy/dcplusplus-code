@@ -469,9 +469,6 @@ public:
 			step("ADLS");
 			ADLSearchManager::getInstance()->matchListing(*parent.dl);
 
-			step("sorting dirs");
-			parent.dl->sortDirs();
-
 			step("caching dirs");
 			cacheDirs(parent.dl->getRoot());
 
@@ -659,16 +656,13 @@ void DirectoryListingFrame::loadXML(const string& txt) {
 				}
 				dirs->erase(dir);
 				dir = dirs->getChild(treeRoot);
-				auto& pdirs = d->getParent()->directories;
-				pdirs.erase(std::remove(pdirs.begin(), pdirs.end(), d), pdirs.end());
+				d->getParent()->directories.erase(d);
 				delete d;
 			} else {
 				dir = dirs->getNextSibling(dir);
 			}
 		}
 		ADLSearchManager::getInstance()->matchListing(*dl);
-
-		dl->sortDirs();
 
 		loaded = true;
 		addRecent();
