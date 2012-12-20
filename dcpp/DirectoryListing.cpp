@@ -179,45 +179,49 @@ void ListLoader::startTag(const string& name, StringPairList& attribs, bool simp
 				return;
 			TTHValue tth(h); /// @todo verify validity?
 
-			if(updating) {
-				// just update the current file if it is already there.
-				for(auto& i: cur->files) {
-					auto& file = *i;
-					/// @todo comparisons should be case-insensitive but it takes too long - add a cache
-					if(file.getTTH() == tth || file.getName() == n) {
-						file.setName(n);
-						file.setSize(size);
-						file.setTTH(tth);
-						return;
-					}
+			auto f = new DirectoryListing::File(cur, n, size, tth);
+			auto insert = cur->files.insert(f);
+
+			if(!insert.second) {
+				// the file was already there
+				delete f;
+				if(updating) {
+					// partial file list
+					f = *insert.first;
+					f->setName(n); // the casing might have changed
+					f->setSize(size);
+					f->setTTH(tth);
+				} else {
+					// duplicates are forbidden in complete file lists
+					throw Exception(_("Duplicate item in the file list"));
 				}
 			}
-
-			DirectoryListing::File* f = new DirectoryListing::File(cur, n, size, tth);
-			cur->files.push_back(f);
 
 		} else if(name == sDirectory) {
 			const string& n = getAttrib(attribs, sName, 0);
 			if(n.empty()) {
 				throw SimpleXMLException(_("Directory missing name attribute"));
 			}
+
 			bool incomp = getAttrib(attribs, sIncomplete, 1) == "1";
-			DirectoryListing::Directory* d = nullptr;
-			if(updating) {
-				for(auto i: cur->directories) {
-					/// @todo comparisons should be case-insensitive but it takes too long - add a cache
-					if(i->getName() == n) {
-						d = i;
-						if(!d->getComplete())
-							d->setComplete(!incomp);
-						break;
-					}
+
+			auto d = new DirectoryListing::Directory(cur, n, false, !incomp);
+			auto insert = cur->directories.insert(d);
+
+			if(!insert.second) {
+				// the dir was already there
+				delete d;
+				if(updating) {
+					// partial file list
+					d = *insert.first;
+					if(!d->getComplete())
+						d->setComplete(!incomp);
+				} else {
+					// duplicates are forbidden in complete file lists
+					throw Exception(_("Duplicate item in the file list"));
 				}
 			}
-			if(!d) {
-				d = new DirectoryListing::Directory(cur, n, false, !incomp);
-				cur->directories.push_back(d);
-			}
+
 			cur = d;
 
 			if(simple) {
@@ -225,6 +229,7 @@ void ListLoader::startTag(const string& name, StringPairList& attribs, bool simp
 				endTag(name);
 			}
 		}
+
 	} else if(name == sFileListing) {
 		const string& b = getAttrib(attribs, sBase, 2);
 		if(b.size() >= 1 && b[0] == '/' && *(b.end() - 1) == '/') {
@@ -245,7 +250,7 @@ void ListLoader::startTag(const string& name, StringPairList& attribs, bool simp
 			}
 			if(!d) {
 				d = new DirectoryListing::Directory(cur, i, false, false);
-				cur->directories.push_back(d);
+				cur->directories.insert(d);
 			}
 			cur = d;
 		}
@@ -339,26 +344,6 @@ void DirectoryListing::File::save(OutputStream& stream, string& indent, string& 
 	stream.write(getTTH().toBase32(tmp));
 	stream.write(LIT("\"/>\r\n"));
 }
-
-void DirectoryListing::sortDirs() {
-	root->sortDirs();
-}
-
-void DirectoryListing::Directory::sortDirs() {
-	for(auto d: directories) {
-		d->sortDirs();
-	}
-	sort(directories.begin(), directories.end(), Directory::Sort());
-}
-
-bool DirectoryListing::Directory::Sort::operator()(const Ptr& a, const Ptr& b) const {
-	return compare(a->getName(), b->getName()) < 0;
-}
-
-bool DirectoryListing::File::Sort::operator()(const Ptr& a, const Ptr& b) const {
-	return compare(a->getName(), b->getName()) < 0;
-}
-
 void DirectoryListing::setComplete(bool complete) {
 	root->setAllComplete(complete);
 }
@@ -404,17 +389,12 @@ StringList DirectoryListing::getLocalPaths(const Directory* d) const {
 }
 
 void DirectoryListing::download(Directory* aDir, const string& aTarget, bool highPrio) {
-	string tmp;
 	string target = (aDir == getRoot()) ? aTarget : aTarget + aDir->getName() + PATH_SEPARATOR;
 	// First, recurse over the directories
-	Directory::List& lst = aDir->directories;
-	sort(lst.begin(), lst.end(), Directory::Sort());
-	for(auto& j: lst) {
+	for(auto& j: aDir->directories) {
 		download(j, target, highPrio);
 	}
 	// Then add the files
-	File::List& l = aDir->files;
-	sort(l.begin(), l.end(), File::Sort());
 	for(auto file: aDir->files) {
 		try {
 			download(file, target + file->getName(), false, highPrio);
@@ -458,25 +438,9 @@ DirectoryListing::Directory* DirectoryListing::find(const string& aName, Directo
 	return nullptr;
 }
 
-struct HashContained {
-	HashContained(const DirectoryListing::Directory::TTHSet& l) : tl(l) { }
-	const DirectoryListing::Directory::TTHSet& tl;
-	bool operator()(const DirectoryListing::File::Ptr i) const {
-		return tl.count((i->getTTH())) && (DeleteFunction()(i), true);
-	}
-};
-
-struct DirectoryEmpty {
-	bool operator()(const DirectoryListing::Directory::Ptr i) const {
-		bool r = i->getFileCount() + i->directories.size() == 0;
-		if (r) DeleteFunction()(i);
-		return r;
-	}
-};
-
 DirectoryListing::Directory::~Directory() {
-	for_each(directories.begin(), directories.end(), DeleteFunction());
-	for_each(files.begin(), files.end(), DeleteFunction());
+	std::for_each(directories.begin(), directories.end(), DeleteFunction());
+	std::for_each(files.begin(), files.end(), DeleteFunction());
 }
 
 void DirectoryListing::Directory::filterList(DirectoryListing& dirList) {
@@ -488,9 +452,28 @@ void DirectoryListing::Directory::filterList(DirectoryListing& dirList) {
 }
 
 void DirectoryListing::Directory::filterList(DirectoryListing::Directory::TTHSet& l) {
-	for(auto i: directories) i->filterList(l);
-	directories.erase(std::remove_if(directories.begin(),directories.end(),DirectoryEmpty()),directories.end());
-	files.erase(std::remove_if(files.begin(),files.end(),HashContained(l)),files.end());
+	for(auto i = directories.begin(); i != directories.end();) {
+		auto d = *i;
+
+		d->filterList(l);
+
+		if(d->directories.empty() || d->files.empty()) {
+			i = directories.erase(i);
+			delete d;
+		} else {
+			++i;
+		}
+	}
+
+	for(auto i = files.begin(); i != files.end();) {
+		auto f = *i;
+		if(l.find(f->getTTH()) != l.end()) {
+			i = files.erase(i);
+			delete f;
+		} else {
+			++i;
+		}
+	}
 }
 
 void DirectoryListing::Directory::getHashList(DirectoryListing::Directory::TTHSet& l) {

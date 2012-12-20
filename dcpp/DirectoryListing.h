@@ -19,6 +19,10 @@
 #ifndef DCPLUSPLUS_DCPP_DIRECTORY_LISTING_H
 #define DCPLUSPLUS_DCPP_DIRECTORY_LISTING_H
 
+#include <set>
+
+#include <boost/noncopyable.hpp>
+
 #include "forward.h"
 #include "noexcept.h"
 
@@ -30,6 +34,8 @@
 
 namespace dcpp {
 
+using std::set;
+
 class ListLoader;
 
 class DirectoryListing : boost::noncopyable
@@ -37,11 +43,9 @@ class DirectoryListing : boost::noncopyable
 public:
 	class Directory;
 
-	class File : public FastAlloc<File> {
+	class File : public FastAlloc<File>, boost::noncopyable {
 	public:
 		typedef File* Ptr;
-		typedef vector<Ptr> List;
-		typedef List::iterator Iter;
 
 		File(Directory* aDir, const string& aName, int64_t aSize, const TTHValue& aTTH) noexcept :
 			name(aName), size(aSize), parent(aDir), tthRoot(aTTH), adls(false)
@@ -54,8 +58,6 @@ public:
 
 		void save(OutputStream& stream, string& indent, string& tmp) const;
 
-		struct Sort { bool operator()(const Ptr& a, const Ptr& b) const; };
-
 		GETSET(string, name, Name);
 		GETSET(int64_t, size, Size);
 		GETSET(Directory*, parent, Parent);
@@ -66,13 +68,15 @@ public:
 	class Directory : public FastAlloc<Directory>, boost::noncopyable {
 	public:
 		typedef Directory* Ptr;
-		typedef vector<Ptr> List;
-		typedef List::iterator Iter;
 
 		typedef unordered_set<TTHValue> TTHSet;
 
-		List directories;
-		File::List files;
+		template<typename T> struct Less {
+			bool operator()(typename T::Ptr a, typename T::Ptr b) const { return compare(a->getName(), b->getName()) < 0; }
+		};
+
+		set<Ptr, Less<Directory>> directories;
+		set<File::Ptr, Less<File>> files;
 
 		Directory(Directory* aParent, const string& aName, bool _adls, bool aComplete)
 			: name(aName), parent(aParent), adls(_adls), complete(aComplete) { }
@@ -85,7 +89,6 @@ public:
 		void filterList(TTHSet& l);
 		void getHashList(TTHSet& l);
 		void save(OutputStream& stream, string& indent, string& tmp) const;
-		void sortDirs();
 		void setAllComplete(bool complete);
 
 		size_t getFileCount() const { return files.size(); }
@@ -97,8 +100,6 @@ public:
 			}
 			return x;
 		}
-
-		struct Sort { bool operator()(const Ptr& a, const Ptr& b) const; };
 
 		GETSET(string, name, Name);
 		GETSET(Directory*, parent, Parent);
@@ -123,8 +124,6 @@ public:
 
 	/** write an XML representation of this file list to the specified file. */
 	void save(const string& path) const;
-	/** sort directories and sub-directories recursively (case-insensitive). */
-	void sortDirs();
 	/** recursively mark directories and sub-directories as complete or incomplete. */
 	void setComplete(bool complete);
 

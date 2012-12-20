@@ -11,8 +11,11 @@
 * [L#1071363] Apply link & plugin formatting to status messages (crise, poy)
 * [L#311818] Share file name duplicates due to directory merges (poy)
 * [L#311818] Share file name duplicates due to case differences (poy)
+* [L#311818] Reject file lists that contain duplicate items (poy)
 
-Note for XP users: shared files will have to be re-hashed.
+Note: The hash registry will be upgraded when running this version for the
+first time. Make sure all your drives are connected to avoid re-hashing.
+That upgrade only works on Win >= Vista; re-hashing is compulsory on XP.
 
 -- 0.802 2012-10-20 --
 * Perf improvements using lock-free queues, requires P6 CPUs (poy)
