@@ -12,6 +12,7 @@
 * [L#311818] Share file name duplicates due to directory merges (poy)
 * [L#311818] Share file name duplicates due to case differences (poy)
 * [L#311818] Reject file lists that contain duplicate items (poy)
+* Drag & drop text into text input fields (poy)
 
 Note: The hash registry will be upgraded when running this version for the
 first time. Make sure all your drives are connected to avoid re-hashing.

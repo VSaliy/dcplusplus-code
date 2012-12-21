@@ -122,10 +122,6 @@ int dwtMain(dwt::Application& app) {
 		return 1;
 	}
 
-	HRESULT hr = ::CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
-	if(FAILED(hr))
-		return hr;
-
 	try {
 		std::string module = File(Text::fromT(app.getModuleFileName()), File::READ, File::OPEN).read();
 		TigerTree tth(TigerTree::calcBlockSize(module.size(), 1));
@@ -171,8 +167,6 @@ int dwtMain(dwt::Application& app) {
 	WinUtil::uninit();
 
 	shutdown();
-
-	::CoUninitialize();
 
 	return 0;
 }

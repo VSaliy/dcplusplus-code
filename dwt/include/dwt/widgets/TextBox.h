@@ -153,6 +153,9 @@ public:
 
 	unsigned getLineCount() const;
 
+	virtual int charFromPos(const ScreenCoordinate& pt) = 0;
+	virtual int lineFromPos(const ScreenCoordinate& pt) = 0;
+
 	virtual tstring textUnderCursor(const ScreenCoordinate& p, bool includeSpaces = false) = 0;
 	virtual tstring getSelection() const = 0;
 
