@@ -59,10 +59,121 @@ lines(1)
 {
 }
 
+class Dropper : public IDropTarget {
+public:
+	Dropper(TextBoxBase* const w) : IDropTarget(), w(w), ref(0), dragging(false) { }
+
+	virtual HRESULT STDMETHODCALLTYPE QueryInterface(
+		/* [in] */ REFIID riid,
+		/* [iid_is][out]  _COM_Outptr_*/ void __RPC_FAR *__RPC_FAR *ppvObject)
+	{
+		if(!ppvObject) { return E_POINTER; }
+		if(IsEqualIID(riid, IID_IUnknown) || IsEqualIID(riid, IID_IDropTarget)) {
+			*ppvObject = this;
+			AddRef();
+			return S_OK;
+		}
+		return E_NOINTERFACE;
+	}
+
+	virtual ULONG STDMETHODCALLTYPE AddRef( void)
+	{
+		return ++ref;
+	}
+
+	virtual ULONG STDMETHODCALLTYPE Release( void)
+	{
+		if(--ref == 0) { delete this; }
+		return ref;
+	}
+
+	virtual HRESULT STDMETHODCALLTYPE DragEnter(
+		/* [unique][in]  __RPC__in_opt*/ IDataObject *pDataObj,
+		/* [in] */ DWORD /*grfKeyState*/,
+		/* [in] */ POINTL /*pt*/,
+		/* [out][in]  __RPC__inout*/ DWORD *pdwEffect)
+	{
+		if(w->hasStyle(ES_READONLY)) { return S_OK; }
+		FORMATETC formatetc { CF_UNICODETEXT, nullptr, DVASPECT_CONTENT, -1, TYMED_HGLOBAL };
+		dragging = pDataObj->QueryGetData(&formatetc) == S_OK;
+		if(dragging) {
+			w->setFocus(); // focus to display the caret
+			*pdwEffect = DROPEFFECT_COPY;
+		} else {
+			*pdwEffect = DROPEFFECT_NONE;
+		}
+		return S_OK;
+	}
+
+	virtual HRESULT STDMETHODCALLTYPE DragOver(
+		/* [in] */ DWORD /*grfKeyState*/,
+		/* [in] */ POINTL pt,
+		/* [out][in]  __RPC__inout*/ DWORD *pdwEffect)
+	{
+		if(dragging) {
+			moveCaret(pt);
+			*pdwEffect = DROPEFFECT_COPY;
+		} else {
+			*pdwEffect = DROPEFFECT_NONE;
+		}
+		return S_OK;
+	}
+
+	virtual HRESULT STDMETHODCALLTYPE DragLeave( void)
+	{
+		dragging = false;
+		return S_OK;
+	}
+
+	virtual HRESULT STDMETHODCALLTYPE Drop(
+		/* [unique][in]  __RPC__in_opt*/ IDataObject *pDataObj,
+		/* [in] */ DWORD /*grfKeyState*/,
+		/* [in] */ POINTL pt,
+		/* [out][in]  __RPC__inout*/ DWORD *pdwEffect)
+	{
+		if(dragging) {
+			FORMATETC formatetc { CF_UNICODETEXT, nullptr, DVASPECT_CONTENT, -1, TYMED_HGLOBAL };
+			STGMEDIUM stgmedium;
+			if(pDataObj->GetData(&formatetc, &stgmedium) == S_OK) {
+				if(stgmedium.tymed == TYMED_HGLOBAL && stgmedium.hGlobal) {
+					auto text = reinterpret_cast<LPCTSTR>(::GlobalLock(stgmedium.hGlobal));
+					if(text) {
+						moveCaret(pt);
+						w->replaceSelection(text);
+						::GlobalUnlock(stgmedium.hGlobal);
+					}
+				}
+				::ReleaseStgMedium(&stgmedium);
+			}
+			*pdwEffect = DROPEFFECT_COPY;
+		} else {
+			*pdwEffect = DROPEFFECT_NONE;
+		}
+		return S_OK;
+	}
+
+private:
+	inline void moveCaret(const POINTL& pt) {
+		auto pos = w->charFromPos(ScreenCoordinate(Point(pt.x, pt.y)));
+		w->setSelection(pos, pos);
+	}
+
+	TextBoxBase* const w;
+	ULONG ref;
+	bool dragging;
+};
+
 void TextBoxBase::create(const Seed& cs) {
 	lines = cs.lines;
 	menuSeed = cs.menuSeed;
 	BaseType::create(cs);
+
+	auto dropper = new Dropper(this);
+	if(::RegisterDragDrop(handle(), dropper) == S_OK) {
+		onDestroy([this] { ::RevokeDragDrop(handle()); });
+	} else {
+		delete dropper;
+	}
 }
 
 TextBox::Seed::Seed(const tstring& caption) :

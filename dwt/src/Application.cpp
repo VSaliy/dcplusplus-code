@@ -250,7 +250,13 @@ void Application::removeFilter(const FilterIter& i) {
 int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 	dwt::Application::init(nCmdShow);
 
+	auto hr = ::OleInitialize(nullptr);
+	if(FAILED(hr))
+		return hr;
+
 	int ret = dwtMain(dwt::Application::instance()); // Call library user's startup function.
+
+	::OleUninitialize();
 
 	dwt::Application::uninit();
 
