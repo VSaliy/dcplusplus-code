@@ -220,7 +220,13 @@ LPCTSTR Dispatcher::className(const std::string& name) {
 	std::basic_stringstream<TCHAR> stream;
 	stream << name.c_str();
 
-	classNames.push_back(stream.str());
+#ifdef DWT_SHARED
+	/* in a shared library, classes registered by the lib can't clash with those regged by the host
+	or by other dynamically loaded libs. append a (hopefully unique) string to that end... */
+	stream << &Application::instance();
+#endif
+
+	classNames.push_back(move(stream.str()));
 	return classNames.back().c_str();
 }
 

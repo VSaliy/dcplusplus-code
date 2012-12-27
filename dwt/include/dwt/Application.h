@@ -74,7 +74,9 @@ class Widget;
   */
 class Application :public boost::noncopyable
 {
+#ifndef DWT_SHARED
 	static int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
+#endif
 
 	friend class Widget;
 public:
@@ -139,7 +141,7 @@ public:
 	/// The initialization that must be done first.
 	/** Used internally by the WinMain function, and externally for DLL initialization.
 	  */
-	static void init( int nCmdShow );
+	static void init();
 
 	/// Shut down operations
 	static void uninit();
@@ -152,6 +154,7 @@ public:
 	const CommandLine & getCommandLine() const;
 
 	int getCmdShow() const;
+	void setCmdShow(int cmdShow);
 
 	/// Adds a waitable event HANDLE and the according signal
 	/** You can feed in here HANDLEs of thread handles, console inputs, mutexes,
@@ -198,7 +201,7 @@ private:
 	DWORD threadId;
 
 	// Private Constructor to ensure Singleton Implementation
-	Application( int nCmdShow );
+	Application();
 
 	~Application();
 
