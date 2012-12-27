@@ -42,6 +42,7 @@
 #include <dcpp/UserMatchManager.h>
 #include <dcpp/version.h>
 
+#include <dwt/Clipboard.h>
 #include <dwt/DWTException.h>
 #include <dwt/LibraryLoader.h>
 #include <dwt/WidgetCreator.h>
@@ -828,35 +829,7 @@ bool WinUtil::browseFileList(dwt::Widget* parent, tstring& file) {
 }
 
 void WinUtil::setClipboard(const tstring& str) {
-	if(!mainWindow)
-		return;
-
-	if(!::OpenClipboard(mainWindow->handle())) {
-		return;
-	}
-
-	EmptyClipboard();
-
-	// Allocate a global memory object for the text.
-	HGLOBAL hglbCopy = GlobalAlloc(GMEM_MOVEABLE, (str.size() + 1) * sizeof(TCHAR));
-	if(hglbCopy == NULL) {
-		CloseClipboard();
-		return;
-	}
-
-	// Lock the handle and copy the text to the buffer.
-	TCHAR* lptstrCopy = (TCHAR*) GlobalLock(hglbCopy);
-	_tcscpy(lptstrCopy, str.c_str());
-	GlobalUnlock(hglbCopy);
-
-	// Place the handle on the clipboard.
-#ifdef UNICODE
-	SetClipboardData(CF_UNICODETEXT, hglbCopy);
-#else
-	SetClipboardData(CF_TEXT, hglbCopy);
-#endif
-
-	CloseClipboard();
+	dwt::Clipboard::setData(str, mainWindow);
 }
 
 bool WinUtil::getUCParams(dwt::Widget* parent, const UserCommand& uc, ParamMap& params) noexcept {
