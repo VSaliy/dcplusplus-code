@@ -65,7 +65,7 @@ extern "C" {
 
 /* Optional interfaces */
 #define DCINTF_DCPP_CONNECTIONS		"dcpp.network.DCConnection"	/* Peer connections */
-#define DCINTF_DCPP_CONNECTIONS_VER	1
+#define DCINTF_DCPP_CONNECTIONS_VER	2
 
 #define DCINTF_DCPP_HUBS			"dcpp.network.DCHub"		/* Hubs */
 #define DCINTF_DCPP_HUBS_VER		1
@@ -357,6 +357,9 @@ typedef struct tagDCConnection {
 	void			(DCAPI *send_udp_data)			(const char* ip, uint32_t port, dcptr_t data, size_t n);
 	void			(DCAPI *send_protocol_cmd)		(ConnectionDataPtr hConn, const char* cmd);
 	void			(DCAPI *terminate_conn)			(ConnectionDataPtr hConn, Bool graceless);
+
+	/* Version 2 functions */
+	UserDataPtr		(DCAPI *get_user)				(ConnectionDataPtr hConn);
 } DCConnection, *DCConnectionPtr;
 
 /* Hubs */
