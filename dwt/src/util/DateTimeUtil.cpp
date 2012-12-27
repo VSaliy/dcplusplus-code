@@ -33,7 +33,7 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <dwt/util/DateTime.h>
+#include <dwt/util/DateTimeUtil.h>
 #include <dwt/util/TimeSpan.h>
 
 namespace dwt { namespace util {
