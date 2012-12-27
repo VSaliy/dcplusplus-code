@@ -41,8 +41,6 @@
 #include <dwt/widgets/Control.h>
 #include <assert.h>
 
-extern int dwtMain(dwt::Application& app);
-
 namespace dwt {
 
 Application* Application::itsInstance = 0;
@@ -53,8 +51,8 @@ HANDLE Application::itsMutex = 0;
 /** Initializes the runtime for SmartWin++
  Typically only called by WinMain or DllMain.
  */
-void Application::init(int nCmdShow) {
-	itsInstance = new Application(nCmdShow);
+void Application::init() {
+	itsInstance = new Application();
 
 	BOOL enable;
 	if(::SystemParametersInfo(SPI_GETUIEFFECTS, 0, &enable, 0) && !enable) {
@@ -73,8 +71,8 @@ void Application::init(int nCmdShow) {
 	::InitCommonControlsEx(&init);
 }
 
-Application::Application(int nCmdShow) :
-	itsCmdShow(nCmdShow),
+Application::Application() :
+	itsCmdShow(0),
 	tasks(1024),
 	quit(false),
 	threadId(::GetCurrentThreadId())
@@ -223,6 +221,10 @@ int Application::getCmdShow() const {
 	return itsCmdShow;
 }
 
+void Application::setCmdShow(int cmdShow) {
+	itsCmdShow = cmdShow;
+}
+
 bool Application::dispatchAsync() {
 	Callback callback;
 	if(tasks.pop(callback)) {
@@ -232,10 +234,21 @@ bool Application::dispatchAsync() {
 	return false;
 }
 
+#ifndef DWT_SHARED
+
 void Application::callAsync(const Callback& callback) {
 	tasks.push(callback);
 	wake();
 }
+
+#else
+
+// async calls don't work when we aren't in charge of the message loop - run them synchronously.
+void Application::callAsync(const Callback& callback) {
+	callback();
+}
+
+#endif
 
 Application::FilterIter Application::addFilter(const FilterFunction& f) {
 	return filters.insert(filters.end(), f);
@@ -247,12 +260,18 @@ void Application::removeFilter(const FilterIter& i) {
 
 } // namespace dwt
 
+#ifndef DWT_SHARED
+
+extern int dwtMain(dwt::Application& app);
+
 int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
-	dwt::Application::init(nCmdShow);
+	dwt::Application::init();
 
 	auto hr = ::OleInitialize(nullptr);
 	if(FAILED(hr))
 		return hr;
+
+	dwt::Application::instance().setCmdShow(nCmdShow);
 
 	int ret = dwtMain(dwt::Application::instance()); // Call library user's startup function.
 
@@ -262,3 +281,5 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 	return ret;
 }
+
+#endif
