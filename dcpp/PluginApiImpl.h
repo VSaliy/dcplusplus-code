@@ -79,6 +79,8 @@ private:
 	static void DCAPI terminateConnection(ConnectionDataPtr conn, Bool graceless);
 	static void DCAPI sendUdpData(const char* ip, uint32_t port, dcptr_t data, size_t n);
 
+	static UserDataPtr DCAPI getUserFromConn(ConnectionDataPtr conn);
+
 	// Functions for DCUtils
 	static size_t DCAPI toUtf8(char* dst, const char* src, size_t n);
 	static size_t DCAPI fromUtf8(char* dst, const char* src, size_t n);
