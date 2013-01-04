@@ -1305,7 +1305,7 @@ bool registerHandler_(const tstring& name) {
 		::RegCloseKey(hk);
 	}
 
-	tstring app = _T("\"") + dwt::Application::instance().getModuleFileName() + _T("\" %1");
+	tstring app = _T("\"") + dwt::Application::instance().getModuleFileName() + _T("\" \"%1\"");
 	if(Util::stricmp(app.c_str(), Buf) == 0) {
 		// already registered to us
 		return true;
