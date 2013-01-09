@@ -226,7 +226,7 @@ LPCTSTR Dispatcher::className(const std::string& name) {
 	stream << &Application::instance();
 #endif
 
-	classNames.push_back(move(stream.str()));
+	classNames.push_back(stream.str());
 	return classNames.back().c_str();
 }
 
