@@ -404,7 +404,10 @@ bool HubFrame::runTimer() {
 }
 
 void HubFrame::enterImpl(const tstring& s) {
-	// Special command
+	bool resetText = true;
+	bool send = false;
+
+	// Process special commands
 	if(s[0] == _T('/')) {
 		tstring cmd = s;
 		tstring param;
@@ -414,7 +417,7 @@ void HubFrame::enterImpl(const tstring& s) {
 
 		if(PluginManager::getInstance()->onChatCommand(client, Text::fromT(s))) {
 			// Plugins, chat commands
-			message->setText(Util::emptyStringT);
+
 		} else if(WinUtil::checkCommand(cmd, param, msg, status, thirdPerson)) {
 			if(!msg.empty()) {
 				client->hubMessage(Text::fromT(msg), thirdPerson);
@@ -532,22 +535,34 @@ void HubFrame::enterImpl(const tstring& s) {
 					PrivateFrame::openWindow(getParent(), HintedUser(ui->getUser(), url), Util::emptyStringT);
 				}
 			}
+
+		} else if(SETTING(SEND_UNKNOWN_COMMANDS)) {
+			send = true;
 		} else {
-			if (SETTING(SEND_UNKNOWN_COMMANDS)) {
-				client->hubMessage(Text::fromT(s));
-			} else {
-				addStatus(str(TF_("Unknown command: %1%") % cmd));
-			}
+			addStatus(str(TF_("Unknown command: %1%") % cmd));
 		}
-		message->setText(_T(""));
+
 	} else if(waitingForPW) {
 		addStatus(T_("Don't remove /password before your password"));
 		message->setText(_T("/password "));
 		message->setFocus();
 		message->setSelection(10, 10);
+		resetText = false;
+
 	} else {
-		client->hubMessage(Text::fromT(s));
-		message->setText(_T(""));
+		send = true;
+	}
+
+	if(send) {
+		if(client->isConnected()) {
+			client->hubMessage(Text::fromT(s));
+		} else {
+			addStatus(T_("The message cannot be delivered because the hub is offline"));
+			resetText = false;
+		}
+	}
+	if(resetText) {
+		message->setText(Util::emptyStringT);
 	}
 }
 

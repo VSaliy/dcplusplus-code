@@ -273,6 +273,9 @@ void PrivateFrame::updateOnlineStatus() {
 	setText(WinUtil::getNicks(cid, hint) + _T(" - ") + hubNames.first);
 	hubName = move(hubNames.first);
 
+	if(hubNames.second != online) {
+		addStatus(hubNames.second ? T_("User went online") : T_("User went offline"));
+	}
 	online = hubNames.second;
 	setIcon(online ? IDI_PRIVATE : IDI_PRIVATE_OFF);
 
@@ -311,6 +314,7 @@ void PrivateFrame::updateOnlineStatus() {
 void PrivateFrame::enterImpl(const tstring& s) {
 	bool resetText = true;
 	bool send = false;
+
 	// Process special commands
 	if(s[0] == '/') {
 		tstring cmd = s;
@@ -321,8 +325,7 @@ void PrivateFrame::enterImpl(const tstring& s) {
 
 		if(PluginManager::getInstance()->onChatCommandPM(replyTo.getUser(), Text::fromT(s))) {
 			// Plugins, chat commands
-			resetText = true;
-			send = false;
+
 		} else if(WinUtil::checkCommand(cmd, param, message, status, thirdPerson)) {
 			if(!message.empty()) {
 				sendMessage(message, thirdPerson);
@@ -352,9 +355,13 @@ void PrivateFrame::enterImpl(const tstring& s) {
 			openLog();
 		} else if(Util::stricmp(cmd.c_str(), _T("help")) == 0) {
 			addChat(_T("*** ") + WinUtil::commands + _T(", /getlist, /grant, /close, /favorite, /ignore, /unignore, /log <system, downloads, uploads>"));
-		} else {
+
+		} else if(SETTING(SEND_UNKNOWN_COMMANDS)) {
 			send = true;
+		} else {
+			addStatus(str(TF_("Unknown command: %1%") % cmd));
 		}
+
 	} else {
 		send = true;
 	}
@@ -363,7 +370,7 @@ void PrivateFrame::enterImpl(const tstring& s) {
 		if(online) {
 			sendMessage(s);
 		} else {
-			addStatus(T_("User went offline"));
+			addStatus(T_("The message cannot be delivered because the user is offline"));
 			resetText = false;
 		}
 	}

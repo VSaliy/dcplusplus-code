@@ -40,7 +40,7 @@ PropPage::ListItem AppearancePage::listItems[] = {
 	{ SettingsManager::MINIMIZE_TRAY, N_("Minimize to tray"), IDH_SETTINGS_APPEARANCE_MINIMIZE_TRAY },
 	{ SettingsManager::ALWAYS_TRAY, N_("Always display tray icon"), IDH_SETTINGS_APPEARANCE_ALWAYS_TRAY },
 	{ SettingsManager::TIME_STAMPS, N_("Show timestamps in chat by default"), IDH_SETTINGS_APPEARANCE_TIME_STAMPS },
-	{ SettingsManager::STATUS_IN_CHAT, N_("View status messages in main chat"), IDH_SETTINGS_APPEARANCE_STATUS_IN_CHAT },
+	{ SettingsManager::STATUS_IN_CHAT, N_("View status messages in chat"), IDH_SETTINGS_APPEARANCE_STATUS_IN_CHAT },
 	{ SettingsManager::FILTER_MESSAGES, N_("Filter spam messages"), IDH_SETTINGS_APPEARANCE_FILTER_MESSAGES },
 	{ SettingsManager::SHOW_JOINS, N_("Show joins / parts in chat by default"), IDH_SETTINGS_APPEARANCE_SHOW_JOINS },
 	{ SettingsManager::FAV_SHOW_JOINS, N_("Only show joins / parts for favorite users"), IDH_SETTINGS_APPEARANCE_FAV_SHOW_JOINS },
