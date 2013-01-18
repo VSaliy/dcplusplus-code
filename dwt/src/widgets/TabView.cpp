@@ -75,6 +75,89 @@ dragging(0)
 {
 }
 
+/* general drag & drop COM interface. this selects tabs when the mouse hovers their header during
+a drag & drop operation. nothing happens when a drop actually occurs however. */
+
+class TabView::Dropper : public IDropTarget {
+public:
+	Dropper(TabView* const w) : IDropTarget(), w(w), ref(0), dragging(false) { }
+
+	virtual HRESULT STDMETHODCALLTYPE QueryInterface(
+		/* [in] */ REFIID riid,
+		/* [iid_is][out]  _COM_Outptr_*/ void __RPC_FAR *__RPC_FAR *ppvObject)
+	{
+		if(!ppvObject) { return E_POINTER; }
+		if(IsEqualIID(riid, IID_IUnknown) || IsEqualIID(riid, IID_IDropTarget)) {
+			*ppvObject = this;
+			AddRef();
+			return S_OK;
+		}
+		return E_NOINTERFACE;
+	}
+
+	virtual ULONG STDMETHODCALLTYPE AddRef( void)
+	{
+		return ++ref;
+	}
+
+	virtual ULONG STDMETHODCALLTYPE Release( void)
+	{
+		if(--ref == 0) { delete this; }
+		return ref;
+	}
+
+	virtual HRESULT STDMETHODCALLTYPE DragEnter(
+		/* [unique][in]  __RPC__in_opt*/ IDataObject * /*pDataObj*/,
+		/* [in] */ DWORD /*grfKeyState*/,
+		/* [in] */ POINTL pt,
+		/* [out][in]  __RPC__inout*/ DWORD *pdwEffect)
+	{
+		setPoint(pt);
+		*pdwEffect = dragging ? DROPEFFECT_COPY : DROPEFFECT_NONE;
+		return S_OK;
+	}
+
+	virtual HRESULT STDMETHODCALLTYPE DragOver(
+		/* [in] */ DWORD /*grfKeyState*/,
+		/* [in] */ POINTL pt,
+		/* [out][in]  __RPC__inout*/ DWORD *pdwEffect)
+	{
+		setPoint(pt);
+		*pdwEffect = dragging ? DROPEFFECT_COPY : DROPEFFECT_NONE;
+		return S_OK;
+	}
+
+	virtual HRESULT STDMETHODCALLTYPE DragLeave( void)
+	{
+		dragging = false;
+		return S_OK;
+	}
+
+	virtual HRESULT STDMETHODCALLTYPE Drop(
+		/* [unique][in]  __RPC__in_opt*/ IDataObject * /*pDataObj*/,
+		/* [in] */ DWORD /*grfKeyState*/,
+		/* [in] */ POINTL /*pt*/,
+		/* [out][in]  __RPC__inout*/ DWORD *pdwEffect)
+	{
+		*pdwEffect = DROPEFFECT_NONE;
+		return S_OK;
+	}
+
+private:
+	inline void setPoint(const POINTL& pt) {
+		auto i = w->hitTest(ScreenCoordinate(Point(pt.x, pt.y)));
+		auto tab = w->getTabInfo(i);
+		dragging = tab;
+		if(dragging && tab->w != w->getActive()) {
+			w->setActive(i);
+		}
+	}
+
+	TabView* const w;
+	ULONG ref;
+	bool dragging;
+};
+
 void TabView::create(const Seed & cs) {
 	if(cs.ctrlTab) {
 		addAccel(FCONTROL, VK_TAB, [this] { handleCtrlTab(false); });
@@ -131,6 +214,13 @@ void TabView::create(const Seed & cs) {
 		tip = WidgetCreator<ToolTip>::attach(this, TabCtrl_GetToolTips(handle())); // created and managed by the tab control thanks to the TCS_TOOLTIPS style
 		tip->addRemoveStyle(TTS_NOPREFIX, true);
 		tip->onRaw([this](WPARAM, LPARAM lParam) { return handleToolTip(lParam); }, Message(WM_NOTIFY, TTN_GETDISPINFO));
+	}
+
+	auto dropper = new Dropper(this);
+	if(::RegisterDragDrop(handle(), dropper) == S_OK) {
+		onDestroy([this] { ::RevokeDragDrop(handle()); });
+	} else {
+		delete dropper;
 	}
 }
 
