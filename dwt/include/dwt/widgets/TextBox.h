@@ -202,6 +202,8 @@ protected:
 	static Message getUpdateMessage();
 
 private:
+	class Dropper;
+
 	unsigned lines;
 	Menu::Seed menuSeed;
 };

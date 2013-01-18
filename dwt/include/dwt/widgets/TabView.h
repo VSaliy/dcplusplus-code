@@ -157,6 +157,8 @@ private:
 		control(control), w(w), icon(icon), handleContextMenu(nullptr), marked(false) { }
 	};
 
+	class Dropper;
+
 	Theme theme;
 	ToolTipPtr tip;
 

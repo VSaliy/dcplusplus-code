@@ -59,7 +59,10 @@ lines(1)
 {
 }
 
-class Dropper : public IDropTarget {
+/* drag & drop COM interface. this allows one to drop text inside this text box. during the drag,
+the caret moves inside the box to show where the drop will occur. */
+
+class TextBoxBase::Dropper : public IDropTarget {
 public:
 	Dropper(TextBoxBase* const w) : IDropTarget(), w(w), ref(0), dragging(false) { }
 
