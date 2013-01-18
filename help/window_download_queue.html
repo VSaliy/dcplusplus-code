@@ -70,6 +70,9 @@ This screen will display the queued directories in a tree view.
 	<li><p><i>Full tree does not match TTH root</i></p>
 		<p>The source provided wrong or corrupted <a href="http://en.wikipedia.org/wiki/Tiger_tree" target="_blank" class="external">Tiger tree</a> for the file. This can caused by connection problems or hashdata corruption (at one or both peers).</p>
 	</li>	
+	<li><p><i>No full tree available</i></p>
+		<p>None of the sources provided the <a href="http://en.wikipedia.org/wiki/Tiger_tree" target="_blank" class="external">Tiger tree</a> for this large file and as long as the full tree is not available DC++ cannot resume this file. You can readd the source(s) manually and let DC++ download the file without having the hash tree information at your own risk.</p>
+	</li>	
   	<li><p><i>Source too slow</i></p>
   		<p>The source is dropped because it meets one ore more criteria defined in your <a href="settings_queue.html#autodrop">Autodrop settings</a>.</p>
   	</li>	
@@ -78,6 +81,9 @@ This screen will display the queued directories in a tree view.
   	</li>	
   	<li><p><i>User certificate not trusted</i></p>
   		<p>You have set in <a href="settings_certs.html">Security certificates settings</a> that your client should only accept sources with trusted certificates. This source is not trusted so it'll be excluded from downloads.</p>
+  	</li>	
+  	<li><p><i>Remote ADC client does not use TLS encryption</i></p>
+  		<p>You have set in <a href="settings_certs.html">Security certificates settings</a> that your client should only accept sources with TLS encrypted connections. This source does not seem to have an encrypted connection so it'll be excluded from downloads.</p>
   	</li>	
    </ul>	
   </dd>
