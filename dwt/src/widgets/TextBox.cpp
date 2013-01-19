@@ -139,11 +139,16 @@ public:
 			STGMEDIUM stgmedium;
 			if(pDataObj->GetData(&formatetc, &stgmedium) == S_OK) {
 				if(stgmedium.tymed == TYMED_HGLOBAL && stgmedium.hGlobal) {
-					auto text = reinterpret_cast<LPCTSTR>(::GlobalLock(stgmedium.hGlobal));
-					if(text) {
-						moveCaret(pt);
-						w->replaceSelection(text);
+					auto buf = reinterpret_cast<LPCTSTR>(::GlobalLock(stgmedium.hGlobal));
+					if(buf) {
+						tstring text { buf };
 						::GlobalUnlock(stgmedium.hGlobal);
+						if(w->hasStyle(ES_NUMBER) && text.find_first_not_of(_T("0123456789")) != tstring::npos) {
+							w->sendMessage(WM_CHAR, 'A'); // simulate a key press to show the error popup
+						} else {
+							moveCaret(pt);
+							w->replaceSelection(text);
+						}
 					}
 				}
 				::ReleaseStgMedium(&stgmedium);
