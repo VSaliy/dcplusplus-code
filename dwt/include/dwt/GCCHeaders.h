@@ -105,6 +105,27 @@ typedef struct
         (BOOL)SNDMSG((hwnd), EM_SETCUEBANNER, (WPARAM)fDrawFocused, (LPARAM)lpcwText)
 #endif
 
+#ifndef EM_SHOWBALLOONTIP
+#define EM_SHOWBALLOONTIP   (ECM_FIRST + 3)
+typedef struct _tagEDITBALLOONTIP
+{
+    DWORD   cbStruct;
+    LPCWSTR pszTitle;
+    LPCWSTR pszText;
+    INT     ttiIcon; // From TTI_*
+} EDITBALLOONTIP, *PEDITBALLOONTIP;
+#endif
+#ifndef Edit_ShowBalloonTip
+#define Edit_ShowBalloonTip(hwnd, peditballoontip) \
+        (BOOL)SNDMSG((hwnd), EM_SHOWBALLOONTIP, 0, (LPARAM)(peditballoontip))
+#endif
+#ifndef TTI_NONE
+#define TTI_NONE                0
+#define TTI_INFO                1
+#define TTI_WARNING             2
+#define TTI_ERROR               3
+#endif
+
 // defs for the notification area & balloons
 #ifndef NIIF_INFO
 #define NIIF_INFO 0x1
