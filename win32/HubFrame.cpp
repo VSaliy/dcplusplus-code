@@ -557,7 +557,7 @@ void HubFrame::enterImpl(const tstring& s) {
 		if(client->isConnected()) {
 			client->hubMessage(Text::fromT(s));
 		} else {
-			addStatus(T_("The message cannot be delivered because the hub is offline"));
+			message->showPopup(T_("Hub offline"), T_("The message cannot be delivered because the hub is offline."), TTI_ERROR);
 			resetText = false;
 		}
 	}

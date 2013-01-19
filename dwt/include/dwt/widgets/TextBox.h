@@ -286,6 +286,10 @@ public:
 
 	tstring textUnderCursor(const ScreenCoordinate& p, bool includeSpaces = false);
 
+	/** Show a balloon popup; see the EM_SHOWBALLOONTIP doc for more info.
+	@param icon see the EDITBALLOONTIP doc for possible values. */
+	void showPopup(const tstring& title, const tstring& text, int icon);
+
 	/// Actually creates the TextBox
 	/** You should call WidgetFactory::createTextBox if you instantiate class
 	  * directly. <br>

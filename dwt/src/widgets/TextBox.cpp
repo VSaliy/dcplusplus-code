@@ -243,6 +243,11 @@ tstring TextBox::textUnderCursor(const ScreenCoordinate& p, bool includeSpaces) 
 	return tmp.substr(start, end-start);
 }
 
+void TextBox::showPopup(const tstring& title, const tstring& text, int icon) {
+	EDITBALLOONTIP tip { sizeof(EDITBALLOONTIP), title.c_str(), text.c_str(), icon };
+	Edit_ShowBalloonTip(handle(), &tip);
+}
+
 tstring TextBox::getSelection() const
 {
 	DWORD start, end;
