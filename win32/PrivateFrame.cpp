@@ -370,7 +370,7 @@ void PrivateFrame::enterImpl(const tstring& s) {
 		if(online) {
 			sendMessage(s);
 		} else {
-			addStatus(T_("The message cannot be delivered because the user is offline"));
+			message->showPopup(T_("User offline"), T_("The message cannot be delivered because the user is offline."), TTI_ERROR);
 			resetText = false;
 		}
 	}
