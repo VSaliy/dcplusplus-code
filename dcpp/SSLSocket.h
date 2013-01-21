@@ -33,6 +33,7 @@ public:
 #else //_DEBUG
 	SSLSocketException(const string& aError) noexcept : SocketException(aError) { }
 #endif // _DEBUG
+	SSLSocketException(int aError) noexcept : SocketException(aError) { }
 
 	virtual ~SSLSocketException() throw() { }
 };

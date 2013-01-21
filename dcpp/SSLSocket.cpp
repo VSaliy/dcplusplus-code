@@ -144,21 +144,33 @@ int SSLSocket::checkSSL(int ret) {
 		return -1;
 	}
 	if(ret <= 0) {
-		int err = SSL_get_error(ssl, ret);
+		/* inspired by boost.asio (asio/ssl/detail/impl/engine.ipp, function engine::perform) and
+		the SSL_get_error doc at <https://www.openssl.org/docs/ssl/SSL_get_error.html>. */
+		auto err = SSL_get_error(ssl, ret);
 		switch(err) {
-			case SSL_ERROR_NONE:		// Fallthrough - YaSSL doesn't for example return an openssl compatible error on recv fail
-			case SSL_ERROR_WANT_READ:	// Fallthrough
-			case SSL_ERROR_WANT_WRITE:
-				return -1;
-			case SSL_ERROR_ZERO_RETURN:
-				throw SocketException(_("Connection closed"));
-			default:
-				{
-					ssl.reset();
-					// @todo replace 80 with MAX_ERROR_SZ or whatever's appropriate for yaSSL in some nice way...
-					char errbuf[80];
-					throw SSLSocketException(str(F_("SSL Error: %1% (%2%, %3%)") % ERR_error_string(err, errbuf) % ret % err));
+		case SSL_ERROR_NONE:		// Fallthrough - YaSSL doesn't for example return an openssl compatible error on recv fail
+		case SSL_ERROR_WANT_READ:	// Fallthrough
+		case SSL_ERROR_WANT_WRITE:
+			return -1;
+		case SSL_ERROR_ZERO_RETURN:
+			throw SocketException(_("Connection closed"));
+		case SSL_ERROR_SYSCALL:
+			{
+				auto sys_err = ERR_get_error();
+				if(sys_err == 0) {
+					if(ret == 0) {
+						throw SSLSocketException(_("TLS error"));
+					}
+					sys_err = ::GetLastError();
 				}
+				throw SSLSocketException(sys_err);
+			}
+		default:
+			/* don't bother getting error messages from the codes because 1) there is some
+			additional management necessary (eg SSL_load_error_strings) and 2) openssl error codes
+			aren't shown to the end user; they only hit standard output in debug builds. */
+			dcdebug("TLS error: call ret = %1%, SSL_get_error = %2%, ERR_get_error = %3%", ret, err, ERR_get_error());
+			throw SSLSocketException(_("TLS error"));
 		}
 	}
 	return ret;
