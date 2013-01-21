@@ -129,6 +129,14 @@ protected:
 	void handleIgnoreChat(bool ignore) {
 		handleUserFunction([ignore](UserInfoBase* u) { u->ignoreChat(ignore); });
 	}
+	void handleCopyUserInfo() {
+		tstring text;
+		handleUserFunction([&](UserInfoBase* u) {
+			if(!text.empty()) { text += _T("\r\n\r\n"); }
+			text += u->getTooltip();
+		});
+		WinUtil::setClipboard(text);
+	}
 
 	void appendUserItems(TabViewPtr parent, Menu* menu, bool defaultIsGetList = true, bool includeSendPM = true) {
 		auto users = t().selectedUsersImpl();
@@ -156,6 +164,9 @@ protected:
 			menu->appendItem(T_("Ignore chat"), [this] { this->t().handleIgnoreChat(true); });
 		if(!traits.isSet(UserTraits::chatNotIgnoredOnly))
 			menu->appendItem(T_("Un-ignore chat"), [this] { this->t().handleIgnoreChat(false); });
+
+		menu->appendSeparator();
+		menu->appendItem(T_("Copy user information"), [this] { this->t().handleCopyUserInfo(); });
 	}
 };
 

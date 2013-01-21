@@ -128,6 +128,7 @@ tstring UserInfoBase::getTooltip() const {
 			value = str(TF_("%1%/%2%") % Text::toT(fs) % value);
 		addLine(str(TF_("%1%: %2%") % T_("Slots") % value));
 	}
+	addValue(T_("CID"), user.user->getCID().toBase32());
 
 	return ret;
 }
