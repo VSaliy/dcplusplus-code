@@ -801,6 +801,8 @@ MenuPtr SearchFrame::makeMenu() {
 	menu->appendSeparator();
 	menu->appendItem(T_("&Remove"), [this] { handleRemove(); });
 
+	WinUtil::addCopyMenu(menu.get(), results);
+
 	prepareMenu(menu.get(), UserCommand::CONTEXT_SEARCH, checkTTH.hubs);
 
 	return menu;

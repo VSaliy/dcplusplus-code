@@ -360,6 +360,7 @@ bool FavHubsFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 		menu->appendItem(T_("&Move to group"), nullptr, dwt::IconPtr(), false);
 	}
 	menu->appendItem(T_("Manage &groups"), [this] { handleGroups(); });
+	WinUtil::addCopyMenu(menu.get(), hubs);
 
 	menu->open(pt);
 	return true;

@@ -1524,6 +1524,43 @@ void WinUtil::makeColumns(dwt::TablePtr table, const ColumnInfo* columnInfo, siz
 	table->setColumnOrder(o);
 }
 
+void WinUtil::addCopyMenu(Menu* menu, dwt::TablePtr table) {
+	if(!table->hasSelected()) { return; }
+
+	menu->appendSeparator();
+	menu = menu->appendPopup(T_("Copy"));
+
+	auto cols = table->getColumns();
+	auto order = table->getColumnOrder();
+
+	auto copyF = [table](unsigned col) -> function<void ()> { return [=] {
+		tstring text;
+		for(auto row: table->getSelection()) {
+			if(!text.empty()) { text += _T("\r\n"); }
+			text += table->getText(row, col);
+		}
+		setClipboard(text);
+	}; };
+	for(auto col: order) {
+		menu->appendItem(cols[col].header, copyF(col));
+	}
+
+	menu->appendSeparator();
+	menu->appendItem(T_("All columns"), [=] {
+		tstring text;
+		for(auto row: table->getSelection()) {
+			tstring rowText;
+			for(auto col: order) {
+				if(!rowText.empty()) { rowText += _T("\r\n"); }
+				rowText += str(TF_("%1%: %2%") % cols[col].header % table->getText(row, col));
+			}
+			if(!text.empty()) { text += _T("\r\n\r\n"); }
+			text += move(rowText);
+		}
+		setClipboard(text);
+	});
+}
+
 int WinUtil::tableSortSetting(int column, bool ascending) {
 	return ascending || column == -1 ? column : -column - 2;
 }

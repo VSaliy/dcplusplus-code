@@ -134,7 +134,7 @@ void Table::updateArrow() {
 		item.mask = HDI_FORMAT;
 		Header_GetItem(header, i, &item);
 		item.fmt &= ~(HDF_SORTUP | HDF_SORTDOWN);
-		if (i == this->getSortColumn())
+		if (i == getSortColumn())
 			item.fmt |= flag;
 		Header_SetItem(header, i, &item);
 	}
@@ -303,7 +303,7 @@ void Table::addRemoveTableExtendedStyle( DWORD addStyle, bool add ) {
 }
 
 std::vector<int> Table::getColumnOrderImpl() const {
-	std::vector<int> ret(this->getColumnCount());
+	std::vector<int> ret(getColumnCount());
 	if(!::SendMessage(handle(), LVM_GETCOLUMNORDERARRAY, static_cast<WPARAM>(ret.size()), reinterpret_cast<LPARAM>(&ret[0]))) {
 		ret.clear();
 	}
@@ -311,7 +311,7 @@ std::vector<int> Table::getColumnOrderImpl() const {
 }
 
 std::vector<int> Table::getColumnWidthsImpl() const {
-	std::vector<int> ret(this->getColumnCount());
+	std::vector<int> ret(getColumnCount());
 	for(size_t i = 0; i < ret.size(); ++i) {
 		ret[i] = ::SendMessage(handle(), LVM_GETCOLUMNWIDTH, static_cast<WPARAM>(i), 0);
 	}
@@ -534,6 +534,30 @@ void Table::setColumnWidthImpl( unsigned columnNo, int width ) {
 	}
 }
 
+std::vector<Column> Table::getColumnsImpl() const {
+	std::vector<Column> ret(getColumnCount());
+	for(size_t i = 0, n = ret.size(); i < n; ++i) {
+		ret[i] = getColumn(i);
+	}
+	return ret;
+}
+
+Column Table::getColumnImpl(unsigned column) const {
+	LVCOLUMN col { LVCF_FMT | LVCF_WIDTH | LVCF_TEXT };
+
+	TCHAR buf[1024];
+	col.pszText = buf;
+	col.cchTextMax = sizeof(buf) / sizeof(TCHAR);
+
+	if(!ListView_GetColumn(handle(), column, &col)) {
+		dwtWin32DebugFail("Failed getting column information in Table");
+		return Column();
+	}
+
+	return Column(col.pszText, col.cx,
+		(col.fmt & LVCFMT_LEFT) == LVCFMT_LEFT ? Column::LEFT : (col.fmt & LVCFMT_RIGHT) == LVCFMT_RIGHT ? Column::RIGHT : Column::CENTER);
+}
+
 void Table::redraw( int firstRow, int lastRow ) {
 	if(lastRow == -1) {
 		lastRow = size();
@@ -592,32 +616,6 @@ int CALLBACK Table::compareFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSor
 	if(!p->ascending)
 		result = -result;
 	return result;
-}
-
-int Table::xoffFromColumn( int column, int & logicalColumn )
-{
-	HWND hWnd = handle();
-
-	// Now we must map a absolute column to a logical column
-	// Columnns can be moved but they keep their Column Number
-	logicalColumn = - 1;
-	HWND hHeader = reinterpret_cast< HWND >( ::SendMessage( hWnd, LVM_GETHEADER, 0, 0 ) );
-	int noItems = ::SendMessage( hHeader, HDM_GETITEMCOUNT, 0, 0 );
-	boost::scoped_array<int> myArrayOfCols(new int[noItems]);
-	int xOffset = 0;
-	::SendMessage( hHeader, HDM_GETORDERARRAY, static_cast< WPARAM >( noItems ), reinterpret_cast< LPARAM >( myArrayOfCols.get() ) );
-	for ( int idx = 0; idx < noItems; ++idx )
-	{
-		if ( myArrayOfCols[idx] == column )
-		{
-			logicalColumn = idx;
-			break;
-		}
-		else
-			xOffset += ListView_GetColumnWidth( hWnd, myArrayOfCols[idx] );
-	}
-
-	return xOffset;
 }
 
 std::pair<int, int> Table::hitTest(const ScreenCoordinate& pt) {

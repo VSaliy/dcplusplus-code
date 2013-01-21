@@ -1231,11 +1231,7 @@ bool HubFrame::handleUsersContextMenu(dwt::ScreenCoordinate pt) {
 
 		appendUserItems(getParent(), menu.get());
 
-		menu->appendSeparator();
-		auto copyMenu = menu->appendPopup(T_("&Copy"));
-		for(int j=0; j<COLUMN_LAST; j++) {
-			copyMenu->appendItem(T_(usersColumns[j].name), [this, j] { handleMultiCopy(j); });
-		}
+		WinUtil::addCopyMenu(menu.get(), users);
 
 		prepareMenu(menu.get(), UserCommand::CONTEXT_USER, url);
 
@@ -1275,23 +1271,6 @@ void HubFrame::handleShowUsersClicked() {
 
 	layout();
 	statusDirty = true;
-}
-
-void HubFrame::handleMultiCopy(unsigned index) {
-	if(index > COLUMN_LAST) {
-		return;
-	}
-
-	tstring tmpstr;
-	for(auto& i: selectedUsersImpl()) {
-		tmpstr += static_cast<UserInfo*>(i)->getText(index);
-		tmpstr += _T(" / ");
-	}
-	if(!tmpstr.empty()) {
-		// remove last space
-		tmpstr.erase(tmpstr.length() - 3);
-		WinUtil::setClipboard(tmpstr);
-	}
 }
 
 void HubFrame::handleCopyHub() {

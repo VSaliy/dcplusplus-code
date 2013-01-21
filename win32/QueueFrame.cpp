@@ -959,16 +959,18 @@ bool QueueFrame::handleFilesContextMenu(dwt::ScreenCoordinate pt) {
 		}
 
 		usingDirMenu = false;
-		MenuPtr contextMenu;
+		MenuPtr menu;
 
 		if(files->countSelected() == 1) {
 			QueueItemInfo* ii = files->getSelectedData();
-			contextMenu = makeSingleMenu(ii);
+			menu = makeSingleMenu(ii);
 		} else {
-			contextMenu = makeMultiMenu();
+			menu = makeMultiMenu();
 		}
 
-		contextMenu->open(pt);
+		WinUtil::addCopyMenu(menu.get(), files);
+
+		menu->open(pt);
 		return true;
 	}
 	return false;

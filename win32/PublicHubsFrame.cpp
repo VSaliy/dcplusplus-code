@@ -334,7 +334,7 @@ bool PublicHubsFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 		menu->setTitle(escapeMenu(hubs->getSelectedData()->getText(COLUMN_NAME)), getParent()->getIcon(this));
 		menu->appendItem(T_("&Connect"), [this] { handleConnect(); }, dwt::IconPtr(), true, true);
 		menu->appendItem(T_("Add To &Favorites"), [this] { handleAdd(); }, WinUtil::menuIcon(IDI_FAVORITE_HUBS));
-		menu->appendItem(T_("Copy &address to clipboard"), [this] { handleCopyHub(); });
+		WinUtil::addCopyMenu(menu.get(), hubs);
 
 		menu->open(pt);
 		return true;
@@ -372,12 +372,6 @@ void PublicHubsFrame::handleAdd() {
 
 	if(hubs->hasSelected()) {
 		FavoriteManager::getInstance()->addFavorite(*hubs->getSelectedData()->entry);
-	}
-}
-
-void PublicHubsFrame::handleCopyHub() {
-	if(hubs->hasSelected()) {
-		WinUtil::setClipboard(Text::toT(hubs->getSelectedData()->entry->getServer()));
 	}
 }
 

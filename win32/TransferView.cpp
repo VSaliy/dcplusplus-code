@@ -200,6 +200,8 @@ bool TransferView::handleConnectionsMenu(dwt::ScreenCoordinate pt) {
 		menu->appendSeparator();
 		menu->appendItem(T_("&Disconnect"), [this] { handleDisconnect(); });
 
+		WinUtil::addCopyMenu(menu.get(), connections);
+
 		menu->open(pt);
 		return true;
 	}
@@ -232,6 +234,8 @@ bool TransferView::handleDownloadsMenu(dwt::ScreenCoordinate pt) {
 				}
 			}
 		}
+
+		WinUtil::addCopyMenu(menu.get(), downloads);
 
 		menu->open(pt);
 		return true;

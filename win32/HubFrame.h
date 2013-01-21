@@ -235,7 +235,6 @@ private:
 	bool handleChatContextMenu(dwt::ScreenCoordinate pt);
 	bool handleUsersContextMenu(dwt::ScreenCoordinate pt);
 	void handleShowUsersClicked();
-	void handleMultiCopy(unsigned index);
 	void handleDoubleClickUsers();
 	void handleCopyHub();
 	void handleAddAsFavorite();

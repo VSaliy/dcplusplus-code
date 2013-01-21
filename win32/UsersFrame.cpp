@@ -464,6 +464,7 @@ bool UsersFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 		menu->appendSeparator();
 		menu->appendItem(T_("&Description"), [this] { handleDescription(); });
 		menu->appendItem(T_("&Remove"), [this] { handleRemove(); });
+		WinUtil::addCopyMenu(menu.get(), users);
 
 		menu->open(pt);
 
