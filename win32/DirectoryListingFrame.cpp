@@ -976,6 +976,8 @@ bool DirectoryListingFrame::handleFilesContextMenu(dwt::ScreenCoordinate pt) {
 
 		addUserMenu(menu.get());
 
+		WinUtil::addCopyMenu(menu.get(), files);
+
 		usingDirMenu = false;
 		menu->open(pt);
 		return true;

@@ -104,7 +104,6 @@ private:
 	void handleRefresh();
 	void handleConnect();
 	void handleAdd();
-	void handleCopyHub();
 	bool handleContextMenu(dwt::ScreenCoordinate pt);
 	bool handleKeyDown(int c);
 	void handleListSelChanged();

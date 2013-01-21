@@ -319,6 +319,7 @@ bool ADLSearchFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 	menu->appendItem(T_("&New..."), [this] { handleAdd(); });
 	menu->appendItem(T_("&Properties"), [this] { handleProperties(); }, dwt::IconPtr(), sel);
 	menu->appendItem(T_("&Remove"), [this] { handleRemove(); }, dwt::IconPtr(), sel);
+	WinUtil::addCopyMenu(menu.get(), items);
 
 	menu->open(pt);
 	return true;

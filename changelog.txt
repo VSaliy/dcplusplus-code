@@ -17,6 +17,7 @@
 * Apply "send unknown /commands" to PMs (poy)
 * Don't clear the message box when trying to send a message to a disconnected hub (poy)
 * Improve OpenSSL error handling
+* Add copy menus to various lists (poy)
 
 Note: The hash registry will be upgraded when running this version for the
 first time. Make sure all your drives are connected to avoid re-hashing.

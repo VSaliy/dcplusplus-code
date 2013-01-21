@@ -443,8 +443,6 @@ private:
 	void setIndex(LVITEM& item, int index) const;
 	void initGroupSupport();
 	void updateArrow();
-	// Calculates the adjustment from the columns of an item.
-	int xoffFromColumn( int column, int & logicalColumn );
 
 	// aspects::Data
 	int findDataImpl(LPARAM data, int start = -1);

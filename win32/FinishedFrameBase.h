@@ -469,6 +469,7 @@ private:
 			menu->appendSeparator();
 			WinUtil::addUserItems(menu.get(), files->forEachSelectedT(UserCollector()).users, this->getParent());
 			menu->appendShellMenu(checker.ShellMenuPaths);
+			WinUtil::addCopyMenu(menu.get(), files);
 
 			menu->open(pt);
 			return true;
@@ -492,6 +493,7 @@ private:
 			menu->appendItem(T_("Remove &all"), [this] { this->handleRemoveAll(); });
 			menu->appendSeparator();
 			WinUtil::addUserItems(menu.get(), users->forEachSelectedT(UserCollector()).users, this->getParent());
+			WinUtil::addCopyMenu(menu.get(), users);
 
 			menu->open(pt);
 			return true;

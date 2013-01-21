@@ -211,6 +211,7 @@ public:
 
 	static void makeColumns(dwt::TablePtr table, const ColumnInfo* columnInfo, size_t columnCount,
 		const string& order = Util::emptyString, const string& widths = Util::emptyString);
+	static void addCopyMenu(Menu* menu, dwt::TablePtr table);
 
 	/* functions to get / set table column sorting. a little trick is used to encode both the
 	column index & the "ascending sort" flag into an int. */
