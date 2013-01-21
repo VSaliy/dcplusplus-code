@@ -16,6 +16,7 @@
 * [L#1096465] Add "user online" / "user offline" status lines to PMs (emtee, poy)
 * Apply "send unknown /commands" to PMs (poy)
 * Don't clear the message box when trying to send a message to a disconnected hub (poy)
+* Improve OpenSSL error handling
 
 Note: The hash registry will be upgraded when running this version for the
 first time. Make sure all your drives are connected to avoid re-hashing.
