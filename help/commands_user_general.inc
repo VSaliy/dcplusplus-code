@@ -22,5 +22,9 @@
 	<dt>Un-ignore chat</dt>
 	<dd>Add user matching definitions (or modify existing ones, if possible) to stop ignoring chat
 	messages from the selected users.</dd>
+	<dt>Copy user information</dt>
+	<dd>Copy a few lines containing user information to the clipboard. The data may include: the
+	user's nick(s), her hub address(es), her IP, country, email, CID (not exhaustive). When
+	multiple users are selected, each user information blob is separated with a blank line.</dd>
 </dl>
 
