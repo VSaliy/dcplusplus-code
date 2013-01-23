@@ -196,7 +196,6 @@ bool TransferView::handleConnectionsMenu(dwt::ScreenCoordinate pt) {
 		menu->appendSeparator();
 
 		menu->appendItem(T_("&Force attempt"), [this] { handleForce(); });
-		menu->appendItem(T_("Copy &nick to clipboard"), [this] { handleCopyNick(); });
 		menu->appendSeparator();
 		menu->appendItem(T_("&Disconnect"), [this] { handleDisconnect(); });
 
@@ -294,15 +293,6 @@ void TransferView::handleForce() {
 		connections->getData(i)->columns[CONNECTION_COLUMN_STATUS] = T_("Connecting (forced)");
 		connections->update(i);
 		ConnectionManager::getInstance()->force(connections->getData(i)->getUser());
-	}
-}
-
-void TransferView::handleCopyNick() {
-	int i = -1;
-
-	/// @todo Fix when more items are selected
-	while( (i = connections->getNext(i, LVNI_SELECTED)) != -1) {
-		WinUtil::setClipboard(WinUtil::getNicks(connections->getData(i)->getUser()));
 	}
 }
 

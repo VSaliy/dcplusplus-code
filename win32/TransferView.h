@@ -259,7 +259,6 @@ private:
 	bool handleDownloadsMenu(dwt::ScreenCoordinate pt);
 	void handleDestroy();
 	void handleForce();
-	void handleCopyNick();
 	void handleDisconnect();
 	void runUserCommand(const UserCommand& uc);
 	bool handleKeyDown(int c);
