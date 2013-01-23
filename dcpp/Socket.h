@@ -180,6 +180,8 @@ public:
 	/** When socks settings are updated, this has to be called... */
 	static void socksUpdated();
 
+	static inline int getLastError();
+
 	GETSET(string, ip, Ip);
 	GETSET(string, localIp4, LocalIp4);
 	GETSET(string, localIp6, LocalIp6);
@@ -209,6 +211,7 @@ protected:
 
 	static addr udpAddr;
 	static socklen_t udpAddrLen;
+
 private:
 	void socksAuth(uint32_t timeout);
 	socket_t setSock(socket_t s, int af);
