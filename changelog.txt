@@ -19,6 +19,7 @@
 * Improve OpenSSL error handling
 * Add copy menus to various lists (poy)
 * [L#289713] Add a "Copy user information" menu item (poy)
+* [ADC] Revise INF order in c-c connections as advised by ADC 1.0.2
 
 Note: The hash registry will be upgraded when running this version for the
 first time. Make sure all your drives are connected to avoid re-hashing.

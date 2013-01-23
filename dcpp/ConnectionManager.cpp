@@ -393,7 +393,6 @@ void ConnectionManager::on(AdcCommand::SUP, UserConnection* aSource, const AdcCo
 			defFeatures.push_back("AD" + UserConnection::FEATURE_ZLIB_GET);
 		}
 		aSource->sup(defFeatures);
-		aSource->inf(false);
 	} else {
 		aSource->inf(true);
 	}
@@ -689,6 +688,10 @@ void ConnectionManager::on(AdcCommand::INF, UserConnection* aSource, const AdcCo
 	} else {
 		aSource->setFlag(UserConnection::FLAG_UPLOAD);
 		addUploadConnection(aSource);
+	}
+
+	if(aSource->isSet(UserConnection::FLAG_INCOMING)) {
+		aSource->inf(false);
 	}
 }
 
