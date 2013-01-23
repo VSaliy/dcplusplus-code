@@ -159,9 +159,10 @@ int SSLSocket::checkSSL(int ret) {
 				auto sys_err = ERR_get_error();
 				if(sys_err == 0) {
 					if(ret == 0) {
+						dcdebug("TLS error: call ret = %d, SSL_get_error = %d, ERR_get_error = %d\n", ret, err, sys_err);
 						throw SSLSocketException(_("TLS error"));
 					}
-					sys_err = ::GetLastError();
+					sys_err = getLastError();
 				}
 				throw SSLSocketException(sys_err);
 			}
