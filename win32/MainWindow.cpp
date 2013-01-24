@@ -295,7 +295,7 @@ void MainWindow::initMenu() {
 		file->appendSeparator();
 
 		file->appendItem(T_("Open file list...\tCtrl+L"), [this] { handleOpenFileList(); }, WinUtil::menuIcon(IDI_OPEN_FILE_LIST));
-		file->appendItem(T_("Open own list"), [this] { DirectoryListingFrame::openOwnList(getTabView(), Util::emptyStringT, DirectoryListingFrame::FORCE_ACTIVE); });
+		file->appendItem(T_("Open own list"), [this] { DirectoryListingFrame::openOwnList(getTabView()); }, WinUtil::menuIcon(IDI_OPEN_OWN_FILE_LIST));
 		file->appendItem(T_("Match downloaded lists"), [this] { handleMatchAll(); });
 		file->appendItem(T_("Refresh file list\tF5"), [this] { handleRefreshFileList(); }, WinUtil::menuIcon(IDI_REFRESH));
 		file->appendSeparator();
@@ -444,6 +444,8 @@ void MainWindow::initToolbar() {
 		IDH_TOOLBAR_NET_STATS, [this] { StatsFrame::openWindow(getTabView()); });
 	toolbar->addButton("OpenFL", WinUtil::toolbarIcon(IDI_OPEN_FILE_LIST), 0, T_("Open file list..."), false,
 		IDH_TOOLBAR_FILE_LIST, [this] { handleOpenFileList(); });
+	toolbar->addButton("OpenOwnFL", WinUtil::toolbarIcon(IDI_OPEN_OWN_FILE_LIST), 0, T_("Open own list"), false,
+		IDH_TOOLBAR_OWN_FILE_LIST, [this] { DirectoryListingFrame::openOwnList(getTabView()); });
 	toolbar->addButton("Recents", WinUtil::toolbarIcon(IDI_RECENTS), 0, T_("Recent windows"), false,
 		IDH_TOOLBAR_RECENT, nullptr, [this](const dwt::ScreenCoordinate& pt) { handleRecent(pt); });
 	toolbar->addButton("Settings", WinUtil::toolbarIcon(IDI_SETTINGS), 0, T_("Settings"), false,
@@ -475,11 +477,13 @@ void MainWindow::initToolbar() {
 			StatsFrame::id + comma +
 			comma +
 			"OpenFL" + comma +
+			"OpenOwnFL" + comma +
+			"Refresh" + comma +
+			comma +
 			"Recents" + comma +
 			comma +
 			"Settings" + comma +
 			NotepadFrame::id + comma +
-			"Refresh" + comma +
 			comma +
 			"CSHelp");
 	}

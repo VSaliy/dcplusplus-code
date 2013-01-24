@@ -498,6 +498,12 @@ void SettingsManager::load(string const& aFileName)
 			}
 		}
 
+		if(v <= 0.802) {
+			// added an "open own file list" button; let's see if we can squeeze it next to "open file list"...
+			if(isSet[TOOLBAR])
+				Util::replace("OpenFL", "OpenFL,OpenOwnFL", strSettings[TOOLBAR - STR_FIRST]);
+		}
+
 		if(SETTING(SET_MINISLOT_SIZE) < 512)
 			set(SET_MINISLOT_SIZE, 512);
 		if(SETTING(AUTODROP_INTERVAL) < 1)

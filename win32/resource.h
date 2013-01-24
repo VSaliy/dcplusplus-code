@@ -80,6 +80,7 @@
 #define IDI_SOUND 174
 #define IDI_ULIMIT 175
 #define IDI_DLIMIT 176
+#define IDI_OPEN_OWN_FILE_LIST 177
 #define IDI_PLUGINS 178
 
 // Stuff that uses multiple id's
