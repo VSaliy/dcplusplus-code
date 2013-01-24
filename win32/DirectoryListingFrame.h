@@ -85,7 +85,7 @@ private:
 public:
 	static void openWindow(TabViewPtr parent, const HintedUser& aUser, const string& txt, int64_t aSpeed);
 	static void activateWindow(const HintedUser& aUser);
-	static void openOwnList(TabViewPtr parent, const tstring& dir = Util::emptyStringT, Activation activate = FOLLOW_SETTING);
+	static void openOwnList(TabViewPtr parent, const tstring& dir = Util::emptyStringT, Activation activate = FORCE_ACTIVE);
 	static void closeAll();
 
 	WindowParams getWindowParams() const;

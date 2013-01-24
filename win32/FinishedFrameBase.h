@@ -292,7 +292,7 @@ private:
 		void open(TabViewPtr parent, const string& ownList) {
 			// see if we are opening our own file list.
 			if(in_UL && file == ownList) {
-				DirectoryListingFrame::openOwnList(parent, Util::emptyStringT, DirectoryListingFrame::FORCE_ACTIVE);
+				DirectoryListingFrame::openOwnList(parent);
 				return;
 			}
 

@@ -89,7 +89,7 @@ void SystemFrame::addLine(time_t t, const tstring& msg) {
 void SystemFrame::openFile(const string& path) const {
 	// see if we are opening our own file list.
 	if(path == ShareManager::getInstance()->getBZXmlFile()) {
-		DirectoryListingFrame::openOwnList(getParent(), Util::emptyStringT, DirectoryListingFrame::FORCE_ACTIVE);
+		DirectoryListingFrame::openOwnList(getParent());
 		return;
 	}
 

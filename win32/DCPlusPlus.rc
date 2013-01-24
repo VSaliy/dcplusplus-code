@@ -92,6 +92,7 @@ IDI_BALLOON             ICON                    "res/Balloon.ico"
 IDI_SOUND               ICON                    "res/Sound.ico"
 IDI_ULIMIT				ICON					"res/ULimit.ico"
 IDI_DLIMIT				ICON					"res/DLimit.ico"
+IDI_OPEN_OWN_FILE_LIST  ICON                    "res/OpenOwnFileList.ico"
 IDI_PLUGINS			ICON					"res/Plugins.ico"
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -99,8 +100,8 @@ IDI_PLUGINS			ICON					"res/Plugins.ico"
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,8,0,2
- PRODUCTVERSION 0,8,0,2
+ FILEVERSION 0,8,1,0
+ PRODUCTVERSION 0,8,1,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -117,12 +118,12 @@ BEGIN
         BEGIN
             VALUE "Comments", "http://dcplusplus.sourceforge.net"
             VALUE "FileDescription", "DC++"
-            VALUE "FileVersion", "0, 8, 0, 2"
+            VALUE "FileVersion", "0, 8, 1, 0"
             VALUE "InternalName", "DC++"
             VALUE "LegalCopyright", "Copyright 2001-2013 Jacek Sieka"
             VALUE "OriginalFilename", "DCPlusPlus.exe"
             VALUE "ProductName", "DC++"
-            VALUE "ProductVersion", "0, 8, 0, 2"
+            VALUE "ProductVersion", "0, 8, 1, 0"
         END
     END
     BLOCK "VarFileInfo"

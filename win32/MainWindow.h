@@ -167,7 +167,6 @@ private:
 	void handleQuickConnect();
 	void handleConnectFavHubGroup();
 	void handleOpenFileList();
-	void handleOpenOwnList();
 	void handleRefreshFileList();
 	void handleMatchAll();
 	void handleOpenDownloadsDir();
