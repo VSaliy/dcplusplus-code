@@ -664,6 +664,10 @@ void ConnectionManager::on(AdcCommand::INF, UserConnection* aSource, const AdcCo
 		token = aSource->getToken();
 	}
 
+	if(aSource->isSet(UserConnection::FLAG_INCOMING)) {
+		aSource->inf(false);
+	}
+
 	bool down = false;
 	{
 		Lock l(cs);
@@ -688,10 +692,6 @@ void ConnectionManager::on(AdcCommand::INF, UserConnection* aSource, const AdcCo
 	} else {
 		aSource->setFlag(UserConnection::FLAG_UPLOAD);
 		addUploadConnection(aSource);
-	}
-
-	if(aSource->isSet(UserConnection::FLAG_INCOMING)) {
-		aSource->inf(false);
 	}
 }
 
