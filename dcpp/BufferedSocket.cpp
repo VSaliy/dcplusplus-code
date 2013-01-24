@@ -87,18 +87,20 @@ void BufferedSocket::setOptions() {
 		sock->setSocketOpt(SO_SNDBUF, SETTING(SOCKET_OUT_BUFFER));
 }
 
-void BufferedSocket::accept(const Socket& srv, bool secure, bool allowUntrusted) {
+uint16_t BufferedSocket::accept(const Socket& srv, bool secure, bool allowUntrusted) {
 	dcdebug("BufferedSocket::accept() %p\n", (void*)this);
 
 	unique_ptr<Socket> s(secure ? CryptoManager::getInstance()->getServerSocket(allowUntrusted) : new Socket(Socket::TYPE_TCP));
 
-	s->accept(srv);
+	auto ret = s->accept(srv);
 
 	setSocket(move(s));
 	setOptions();
 
 	Lock l(cs);
 	addTask(ACCEPTED, 0);
+
+	return ret;
 }
 
 void BufferedSocket::connect(const string& aAddress, const string& aPort, bool secure, bool allowUntrusted, bool proxy) {

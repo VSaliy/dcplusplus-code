@@ -73,7 +73,7 @@ public:
 			Thread::sleep(100);
 	}
 
-	void accept(const Socket& srv, bool secure, bool allowUntrusted);
+	uint16_t accept(const Socket& srv, bool secure, bool allowUntrusted);
 	void connect(const string& aAddress, const string& aPort, bool secure, bool allowUntrusted, bool proxy);
 	void connect(const string& aAddress, const string& aPort, const string& localPort, NatRoles natRole, bool secure, bool allowUntrusted, bool proxy);
 
