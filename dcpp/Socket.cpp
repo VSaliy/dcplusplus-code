@@ -254,7 +254,7 @@ socket_t Socket::create(const addrinfo& ai) {
 	return setSock(check([&] { return ::socket(ai.ai_family, ai.ai_socktype, ai.ai_protocol); }), ai.ai_family);
 }
 
-void Socket::accept(const Socket& listeningSocket) {
+uint16_t Socket::accept(const Socket& listeningSocket) {
 	disconnect();
 
 	addr sock_addr = { { 0 } };
@@ -268,7 +268,17 @@ void Socket::accept(const Socket& listeningSocket) {
 	::WSAAsyncSelect(sock, NULL, 0, 0);
 #endif
 
+	// remote IP
 	setIp(resolveName(&sock_addr.sa, sz));
+
+	// return the remote port
+	if(sock_addr.sa.sa_family == AF_INET) {
+		return ntohs(sock_addr.sai.sin_port);
+	}
+	if(sock_addr.sa.sa_family == AF_INET6) {
+		return ntohs(sock_addr.sai6.sin6_port);
+	}
+	return 0;
 }
 
 string Socket::listen(const string& port) {

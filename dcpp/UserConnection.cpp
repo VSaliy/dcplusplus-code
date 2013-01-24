@@ -152,7 +152,7 @@ void UserConnection::accept(const Socket& aServer) {
 	dcassert(!socket);
 	socket = BufferedSocket::getSocket(0);
 	socket->addListener(this);
-	socket->accept(aServer, secure, SETTING(ALLOW_UNTRUSTED_CLIENTS));
+	setPort(Util::toString(socket->accept(aServer, secure, SETTING(ALLOW_UNTRUSTED_CLIENTS))));
 }
 
 void UserConnection::inf(bool withToken) {
