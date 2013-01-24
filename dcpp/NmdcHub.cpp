@@ -1017,6 +1017,7 @@ void NmdcHub::on(Minute, uint64_t aTick) noexcept {
 
 		protectedIPs.push_back("dcpp.net");
 		protectedIPs.push_back("dchublist.com");
+		protectedIPs.push_back("hublist.eu");
 		protectedIPs.push_back("hublista.hu");
 		protectedIPs.push_back("dcbase.org");
 		for(auto i = protectedIPs.begin(); i != protectedIPs.end();) {
