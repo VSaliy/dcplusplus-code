@@ -54,7 +54,7 @@ using std::numeric_limits;
 atomic_flag ShareManager::refreshing = ATOMIC_FLAG_INIT;
 
 ShareManager::ShareManager() : hits(0), xmlListLen(0), bzXmlListLen(0),
-	xmlDirty(true), forceXmlRefresh(true), refreshDirs(false), update(false), initial(true), listN(0),
+	xmlDirty(true), forceXmlRefresh(true), refreshDirs(false), update(false), listN(0),
 	lastXmlUpdate(0), lastFullUpdate(GET_TICK()), bloom(1<<20)
 {
 	SettingsManager::getInstance()->addListener(this);
@@ -370,84 +370,6 @@ void ShareManager::load(SimpleXML& aXml) {
 	}
 }
 
-static const string SDIRECTORY = "Directory";
-static const string SFILE = "File";
-static const string SNAME = "Name";
-static const string SSIZE = "Size";
-static const string STTH = "TTH";
-
-struct ShareLoader : public SimpleXMLReader::CallBack {
-	ShareLoader(decltype(ShareManager::directories)& aDirs) : dirs(aDirs), cur(0), depth(0) { }
-	void startTag(const string& name, StringPairList& attribs, bool simple) {
-		if(name == SDIRECTORY) {
-			const string& name = getAttrib(attribs, SNAME, 0);
-			if(!name.empty()) {
-				if(depth == 0) {
-					auto i = dirs.find(name);
-					if(i != dirs.end()) {
-						cur = i->second;
-					}
-				} else if(cur) {
-					cur = ShareManager::Directory::create(name, cur);
-					cur->getParent()->directories[cur->getName()] = cur;
-				}
-			}
-
-			if(simple) {
-				if(cur) {
-					cur = cur->getParent();
-				}
-			} else {
-				depth++;
-			}
-		} else if(cur && name == SFILE) {
-			const string& fname = getAttrib(attribs, SNAME, 0);
-			const string& size = getAttrib(attribs, SSIZE, 1);
-			const string& root = getAttrib(attribs, STTH, 2);
-			if(fname.empty() || size.empty() || (root.size() != 39)) {
-				dcdebug("Invalid file found: %s\n", fname.c_str());
-				return;
-			}
-			cur->files.insert(ShareManager::Directory::File(fname, Util::toInt64(size), cur, TTHValue(root)));
-		}
-	}
-	void endTag(const string& name) {
-		if(name == SDIRECTORY) {
-			depth--;
-			if(cur) {
-				cur = cur->getParent();
-			}
-		}
-	}
-
-private:
-	decltype(ShareManager::directories)& dirs;
-
-	ShareManager::Directory::Ptr cur;
-	size_t depth;
-};
-
-bool ShareManager::loadCache() noexcept {
-	try {
-		ShareLoader loader(directories);
-		SimpleXMLReader xml(&loader);
-
-		dcpp::File ff(Util::getPath(Util::PATH_USER_CONFIG) + "files.xml.bz2", dcpp::File::READ, dcpp::File::OPEN);
-		FilteredInputStream<UnBZFilter, false> f(&ff);
-
-		xml.parse(f);
-
-		for(const auto& i: directories) {
-			updateIndices(*i.second);
-		}
-
-		return true;
-	} catch(const Exception& e) {
-		dcdebug("%s\n", e.getError().c_str());
-	}
-	return false;
-}
-
 void ShareManager::save(SimpleXML& aXml) {
 	Lock l(cs);
 
@@ -494,28 +416,26 @@ void ShareManager::addDirectory(const string& realPath, const string& virtualNam
 	string vName = validateVirtual(virtualName);
 	dp->setName(vName);
 
-	{
-		Lock l(cs);
+	Lock l(cs);
 
-		shares[realPath] = move(vName);
-		updateIndices(*merge(dp, realPath));
+	shares[realPath] = move(vName);
 
-		setDirty();
-	}
+	merge(dp, realPath);
+
+	rebuildIndices();
+	setDirty();
 }
 
-ShareManager::Directory::Ptr ShareManager::merge(const Directory::Ptr& directory, const string& realPath) {
+void ShareManager::merge(const Directory::Ptr& directory, const string& realPath) {
 	auto i = directories.find(directory->getName());
 	if(i != directories.end()) {
 		dcdebug("Merging directory <%s> into %s\n", realPath.c_str(), directory->getName().c_str());
 		i->second->merge(directory, realPath);
-		return i->second;
+
+	} else {
+		dcdebug("Adding new directory %s\n", directory->getName().c_str());
+		directories[directory->getName()] = directory;
 	}
-
-	dcdebug("Adding new directory %s\n", directory->getName().c_str());
-
-	directories[directory->getName()] = directory;
-	return directory;
 }
 
 void ShareManager::Directory::merge(const Directory::Ptr& source, const string& realPath) {
@@ -782,14 +702,9 @@ void ShareManager::refresh(bool dirs /* = false */, bool aUpdate /* = true */, b
 	update = aUpdate;
 	refreshDirs = dirs;
 	join();
-	bool cached = false;
-	if(initial) {
-		cached = loadCache();
-		initial = false;
-	}
 	try {
 		start();
-		if(block && !cached) {
+		if(block) {
 			join();
 		} else {
 			setThreadPriority(Thread::LOW);
