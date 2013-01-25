@@ -182,7 +182,7 @@ public:
 	/** When socks settings are updated, this has to be called... */
 	static void socksUpdated();
 
-	static inline int getLastError();
+	static int getLastError();
 
 	GETSET(string, ip, Ip);
 	GETSET(string, localIp4, LocalIp4);
