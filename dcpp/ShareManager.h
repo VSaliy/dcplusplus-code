@@ -253,7 +253,6 @@ private:
 	bool forceXmlRefresh; /// bypass the 15-minutes guard
 	bool refreshDirs;
 	bool update;
-	bool initial;
 
 	int listN;
 
@@ -285,10 +284,9 @@ private:
 	void updateIndices(Directory& aDirectory);
 	void updateIndices(Directory& dir, const decltype(std::declval<Directory>().files.begin())& i);
 
-	Directory::Ptr merge(const Directory::Ptr& directory, const string& realPath);
+	void merge(const Directory::Ptr& directory, const string& realPath);
 
 	void generateXmlList();
-	bool loadCache() noexcept;
 	pair<Directory::Ptr, string> splitVirtual(const string& virtualPath) const;
 	string findRealRoot(const string& virtualRoot, const string& virtualLeaf) const;
 

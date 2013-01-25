@@ -22,6 +22,7 @@
 * [ADC] Revise INF order in c-c connections as advised by ADC 1.0.2
 * Add hublist.eu to default hub lists
 * Add a toolbar button to open own file list (poy)
+* [L#489704] Fix invalid share sizes after a directory merge (poy)
 
 Note: The hash registry will be upgraded when running this version for the
 first time. Make sure all your drives are connected to avoid re-hashing.
