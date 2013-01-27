@@ -1,3 +1,6 @@
+#ifndef BOOST_ATOMIC_DETAIL_PLATFORM_HPP
+#define BOOST_ATOMIC_DETAIL_PLATFORM_HPP
+
 //  Copyright (c) 2009 Helge Bahmann
 //
 //  Distributed under the Boost Software License, Version 1.0.
@@ -6,7 +9,11 @@
 
 // Platform selection file
 
-#include <boost/config.hpp>
+#include <boost/atomic/detail/config.hpp>
+
+#ifdef BOOST_ATOMIC_HAS_PRAGMA_ONCE
+#pragma once
+#endif
 
 #if defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
 
@@ -37,9 +44,9 @@
 
     #include <boost/atomic/detail/gcc-sparcv9.hpp>
 
-#elif defined(BOOST_USE_WINDOWS_H) || defined(_WIN32_CE) || defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__CYGWIN__)
+#elif defined(BOOST_WINDOWS) || defined(_WIN32_CE)
 
-    #include <boost/atomic/detail/interlocked.hpp>
+    #include <boost/atomic/detail/windows.hpp>
 
 #elif 0 && defined(__GNUC__) /* currently does not work correctly */
 
@@ -49,5 +56,7 @@
 #else
 
 #include <boost/atomic/detail/base.hpp>
+
+#endif
 
 #endif
