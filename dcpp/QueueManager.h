@@ -155,7 +155,7 @@ private:
 	private:
 		static atomic_flag active;
 		typedef pair<string, string> FilePair;
-		boost::lockfree::queue<FilePair> files;
+		boost::lockfree::queue<FilePair*> files;
 	} mover;
 
 	class Rechecker : public Thread {
@@ -174,7 +174,7 @@ private:
 	private:
 		QueueManager* qm;
 		static atomic_flag active;
-		boost::lockfree::queue<string> files;
+		boost::lockfree::queue<string*> files;
 	} rechecker;
 
 	/** All queue items by target */

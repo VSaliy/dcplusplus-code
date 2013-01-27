@@ -191,7 +191,7 @@ private:
 	// The according signals we must raise, go in this vector.
 	std::vector<Callback> itsVSignals;
 
-	boost::lockfree::queue<Callback> tasks;
+	boost::lockfree::queue<Callback*> tasks;
 
 	FilterList filters;
 

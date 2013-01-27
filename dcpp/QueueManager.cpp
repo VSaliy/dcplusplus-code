@@ -300,7 +300,7 @@ void QueueManager::UserQueue::remove(QueueItem* qi, const UserPtr& aUser, bool r
 }
 
 void QueueManager::FileMover::moveFile(const string& source, const string& target) {
-	files.push(make_pair(source, target));
+	files.push(new FilePair(source, target));
 	if(!active.test_and_set()) {
 		start();
 	}
@@ -310,18 +310,18 @@ int QueueManager::FileMover::run() {
 	ScopedFunctor([this] { active.clear(); });
 
 	while(true) {
-		FilePair next;
+		unique_ptr<FilePair> next;
 		if(!files.pop(next)) {
 			return 0;
 		}
 
-		moveFile_(next.first, next.second);
+		moveFile_(next->first, next->second);
 	}
 	return 0;
 }
 
 void QueueManager::Rechecker::add(const string& file) {
-	files.push(file);
+	files.push(new string(file));
 	if(!active.test_and_set()) {
 		start();
 	}
@@ -331,7 +331,7 @@ int QueueManager::Rechecker::run() {
 	ScopedFunctor([this] { active.clear(); });
 
 	while(true) {
-		string file;
+		unique_ptr<string> file;
 		if(!files.pop(file)) {
 			return 0;
 		}
@@ -343,12 +343,12 @@ int QueueManager::Rechecker::run() {
 		{
 			Lock l(qm->cs);
 
-			q = qm->fileQueue.find(file);
+			q = qm->fileQueue.find(*file);
 			if(!q || q->isSet(QueueItem::FLAG_USER_LIST))
 				continue;
 
 			qm->fire(QueueManagerListener::RecheckStarted(), q->getTarget());
-			dcdebug("Rechecking %s\n", file.c_str());
+			dcdebug("Rechecking %s\n", file->c_str());
 
 			tempSize = File::getSize(q->getTempTarget());
 
@@ -383,7 +383,7 @@ int QueueManager::Rechecker::run() {
 			Lock l(qm->cs);
 
 			// get q again in case it has been (re)moved
-			q = qm->fileQueue.find(file);
+			q = qm->fileQueue.find(*file);
 			if(!q)
 				continue;
 
@@ -411,7 +411,7 @@ int QueueManager::Rechecker::run() {
 		Lock l(qm->cs);
 
 		// get q again in case it has been (re)moved
-		q = qm->fileQueue.find(file);
+		q = qm->fileQueue.find(*file);
 		if(!q)
 			continue;
 
