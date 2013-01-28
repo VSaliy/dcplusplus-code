@@ -502,7 +502,7 @@ void AdcHub::handle(AdcCommand::SCH, AdcCommand& c) noexcept {
 		return;
 	}
 
-	fire(ClientListener::AdcSearch(), this, c, ou->getUser()->getCID());
+	fire(ClientListener::AdcSearch(), this, c, *ou);
 }
 
 void AdcHub::handle(AdcCommand::RES, AdcCommand& c) noexcept {

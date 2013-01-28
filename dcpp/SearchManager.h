@@ -69,7 +69,7 @@ public:
 		search(who, aName, Util::toInt64(aSize), aTypeMode, aSizeMode, aToken, aExtList);
 	}
 
-	void respond(const AdcCommand& cmd, const CID& cid,  bool isUdpActive);
+	void respond(const AdcCommand& cmd, const OnlineUser& user);
 
 	const string& getPort() const { return port; }
 

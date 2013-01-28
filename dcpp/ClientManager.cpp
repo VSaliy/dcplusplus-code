@@ -428,21 +428,17 @@ void ClientManager::userCommand(const HintedUser& user, const UserCommand& uc, P
 	ou->getClient().sendUserCmd(uc, params);
 }
 
-void ClientManager::send(AdcCommand& cmd, const CID& cid) {
-	Lock l(cs);
-	auto i = onlineUsers.find(cid);
-	if(i != onlineUsers.end()) {
-		OnlineUser& u = *i->second;
-		if(cmd.getType() == AdcCommand::TYPE_UDP && !u.getIdentity().isUdpActive()) {
-			cmd.setType(AdcCommand::TYPE_DIRECT);
-			cmd.setTo(u.getIdentity().getSID());
-			u.getClient().send(cmd);
-		} else {
-			try {
-				udp.writeTo(u.getIdentity().getIp(), u.getIdentity().getUdpPort(), cmd.toString(getMe()->getCID()));
-			} catch(const SocketException&) {
-				dcdebug("Socket exception sending ADC UDP command\n");
-			}
+void ClientManager::sendUDP(AdcCommand& cmd, const OnlineUser& user) {
+	dcassert(cmd.getType() == AdcCommand::TYPE_UDP);
+	if(!user.getIdentity().isUdpActive()) {
+		cmd.setType(AdcCommand::TYPE_DIRECT);
+		cmd.setTo(user.getIdentity().getSID());
+		const_cast<Client&>(user.getClient()).send(cmd);
+	} else {
+		try {
+			udp.writeTo(user.getIdentity().getIp(), user.getIdentity().getUdpPort(), cmd.toString(getMe()->getCID()));
+		} catch(const SocketException&) {
+			dcdebug("Socket exception sending ADC UDP command\n");
 		}
 	}
 }
@@ -504,19 +500,8 @@ void ClientManager::on(NmdcSearch, Client* aClient, const string& aSeeker, int a
 	}
 }
 
-void ClientManager::on(AdcSearch, Client*, const AdcCommand& adc, const CID& from) noexcept {
-	bool isUdpActive = false;
-	{
-		Lock l(cs);
-
-		auto i = onlineUsers.find(from);
-		if(i != onlineUsers.end()) {
-			OnlineUser& u = *i->second;
-			isUdpActive = u.getIdentity().isUdpActive();
-		}
-
-	}
-	SearchManager::getInstance()->respond(adc, from, isUdpActive);
+void ClientManager::on(AdcSearch, Client*, const AdcCommand& cmd, const OnlineUser& from) noexcept {
+	SearchManager::getInstance()->respond(cmd, from);
 }
 
 void ClientManager::search(int aSizeMode, int64_t aSize, int aFileType, const string& aString, const string& aToken) {
