@@ -259,10 +259,9 @@ void SearchManager::onData(const uint8_t* buf, size_t aLen, const string& remote
 			return;
 		}
 
-
-		SearchResultPtr sr(new SearchResult(user, type, slots, freeSlots, size,
-			file, hubName, url, remoteIp, TTHValue(tth), Util::emptyString));
-		fire(SearchManagerListener::SR(), sr);
+		fire(SearchManagerListener::SR(), SearchResultPtr(new SearchResult(HintedUser(user, url),
+			type, slots, freeSlots, size, file, hubName, remoteIp, TTHValue(tth),
+			Util::emptyString)));
 
 	} else if(x.compare(1, 4, "RES ") == 0 && x[x.length() - 1] == 0x0a) {
 		AdcCommand c(x.substr(0, x.length()-1));
@@ -310,22 +309,31 @@ void SearchManager::onRES(const AdcCommand& cmd, const UserPtr& from, const stri
 		}
 	}
 
-	if(!file.empty() && freeSlots != -1 && size != -1) {
+	if(file.empty() || freeSlots == -1 || size == -1) { return; }
 
-		/// @todo get the hub this was sent from, to be passed as a hint? (eg by using the token?)
-		StringList names = ClientManager::getInstance()->getHubNames(from->getCID());
-		string hubName = names.empty() ? _("Offline") : Util::toString(names);
-		StringList hubs = ClientManager::getInstance()->getHubUrls(from->getCID());
-		string hub = hubs.empty() ? _("Offline") : Util::toString(hubs);
+	auto type = (*(file.end() - 1) == '\\' ? SearchResult::TYPE_DIRECTORY : SearchResult::TYPE_FILE);
+	if(type == SearchResult::TYPE_FILE && tth.empty()) { return; }
 
-		SearchResult::Types type = (file[file.length() - 1] == '\\' ? SearchResult::TYPE_DIRECTORY : SearchResult::TYPE_FILE);
-		if(type == SearchResult::TYPE_FILE && tth.empty())
-			return;
-		/// @todo Something about the slots
-		SearchResultPtr sr(new SearchResult(from, type, 0, freeSlots, size,
-			file, hubName, hub, remoteIp, TTHValue(tth), token));
-		fire(SearchManagerListener::SR(), sr);
+	string hubUrl;
+
+	// token format: [pointer to the client class] "/" [actual token] (see AdcHub::search)
+	auto slash = token.find('/');
+	if(slash == string::npos) { return; }
+	{
+		auto lock = ClientManager::getInstance()->lock();
+		auto& clients = ClientManager::getInstance()->getClients();
+		auto i = clients.find(reinterpret_cast<Client*>(Util::toInt64(token.substr(0, slash))));
+		if(i == clients.end()) { return; }
+		hubUrl = (*i)->getHubUrl();
 	}
+	token.erase(0, slash + 1);
+
+	StringList names = ClientManager::getInstance()->getHubNames(from->getCID(), hubUrl);
+	string hubName = names.empty() ? _("Offline") : Util::toString(names);
+
+	/// @todo Something about the slots
+	fire(SearchManagerListener::SR(), SearchResultPtr(new SearchResult(HintedUser(from, hubUrl),
+		type, 0, freeSlots, size, file, hubName, remoteIp, TTHValue(tth), token)));
 }
 
 void SearchManager::respond(const AdcCommand& cmd, const OnlineUser& user) {

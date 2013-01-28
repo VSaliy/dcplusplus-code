@@ -1535,7 +1535,7 @@ void QueueManager::on(SearchManagerListener::SR, const SearchResultPtr& sr) noex
 			if(qi->getSize() == sr->getSize() && !qi->isSource(sr->getUser()) && !qi->isBadSource(sr->getUser())) {
 				try {
 					if(!SETTING(AUTO_SEARCH_AUTO_MATCH))
-						wantConnection = addSource(qi, HintedUser(sr->getUser(), sr->getHubURL()), 0);
+						wantConnection = addSource(qi, sr->getUser(), 0);
 					added = true;
 				} catch(const Exception&) {
 					// ...
@@ -1547,15 +1547,14 @@ void QueueManager::on(SearchManagerListener::SR, const SearchResultPtr& sr) noex
 
 	if(added && SETTING(AUTO_SEARCH_AUTO_MATCH)) {
 		try {
-			addList(HintedUser(sr->getUser(), sr->getHubURL()), QueueItem::FLAG_MATCH_QUEUE);
+			addList(sr->getUser(), QueueItem::FLAG_MATCH_QUEUE);
 		} catch(const Exception&) {
 			// ...
 		}
 	}
-	if(added && sr->getUser()->isOnline() && wantConnection) {
-		ConnectionManager::getInstance()->getDownloadConnection(HintedUser(sr->getUser(), sr->getHubURL()));
+	if(added && sr->getUser().user->isOnline() && wantConnection) {
+		ConnectionManager::getInstance()->getDownloadConnection(sr->getUser());
 	}
-
 }
 
 // ClientManagerListener
