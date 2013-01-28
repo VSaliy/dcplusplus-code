@@ -69,7 +69,7 @@ public:
 	virtual void on(NickTaken, Client*) noexcept { }
 	virtual void on(SearchFlood, Client*, const string&) noexcept { }
 	virtual void on(NmdcSearch, Client*, const string&, int, int64_t, int, const string&) noexcept { }
-	virtual void on(AdcSearch, Client*, const AdcCommand&, const CID&) noexcept { }
+	virtual void on(AdcSearch, Client*, const AdcCommand&, const OnlineUser&) noexcept { }
 	virtual void on(ClientLine, Client*, const string& line, int type) noexcept { };
 };
 

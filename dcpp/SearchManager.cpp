@@ -328,30 +328,24 @@ void SearchManager::onRES(const AdcCommand& cmd, const UserPtr& from, const stri
 	}
 }
 
-void SearchManager::respond(const AdcCommand& adc, const CID& from,  bool isUdpActive) {
+void SearchManager::respond(const AdcCommand& cmd, const OnlineUser& user) {
 	// Filter own searches
-	if(from == ClientManager::getInstance()->getMe()->getCID())
-		return;
-
-	UserPtr p = ClientManager::getInstance()->findUser(from);
-	if(!p)
+	if(user.getUser() == ClientManager::getInstance()->getMe())
 		return;
 
 	SearchResultList results;
-	ShareManager::getInstance()->search(results, adc.getParameters(), isUdpActive ? 10 : 5);
-
-	string token;
-
-	adc.getParam("TO", 0, token);
-
+	ShareManager::getInstance()->search(results, cmd.getParameters(), user.getIdentity().isUdpActive() ? 10 : 5);
 	if(results.empty())
 		return;
 
+	string token;
+	cmd.getParam("TO", 0, token);
+
 	for(auto& i: results) {
-		AdcCommand cmd = i->toRES(AdcCommand::TYPE_UDP);
+		AdcCommand res = i->toRES(AdcCommand::TYPE_UDP);
 		if(!token.empty())
-			cmd.addParam("TO", token);
-		ClientManager::getInstance()->send(cmd, from);
+			res.addParam("TO", token);
+		ClientManager::getInstance()->sendUDP(res, user);
 	}
 }
 

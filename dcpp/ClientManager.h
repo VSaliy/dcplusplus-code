@@ -119,7 +119,7 @@ public:
 
 	UserPtr& getMe();
 
-	void send(AdcCommand& c, const CID& to);
+	void sendUDP(AdcCommand& cmd, const OnlineUser& user);
 
 	void connect(const HintedUser& user, const string& token);
 	void privateMessage(const HintedUser& user, const string& msg, bool thirdPerson);
@@ -192,7 +192,7 @@ private:
 	virtual void on(HubUserCommand, Client*, int, int, const string&, const string&) noexcept;
 	virtual void on(NmdcSearch, Client* aClient, const string& aSeeker, int aSearchType, int64_t aSize,
 		int aFileType, const string& aString) noexcept;
-	virtual void on(AdcSearch, Client* c, const AdcCommand& adc, const CID& from) noexcept;
+	virtual void on(AdcSearch, Client*, const AdcCommand& cmd, const OnlineUser& from) noexcept;
 	// TimerManagerListener
 	virtual void on(TimerManagerListener::Minute, uint64_t aTick) noexcept;
 };
