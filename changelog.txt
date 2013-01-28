@@ -26,6 +26,7 @@
 * Satisfy some boost lockfree requirements, could fix bugs on heavy load
 * Clean up earlier after receiving zlib data (thanks irainman)
 * [ADC] Send passive search replies via the hub they were requested from (poy)
+* [ADC] Actions on search results happen on the correct hub (poy)
 
 Note: The hash registry will be upgraded when running this version for the
 first time. Make sure all your drives are connected to avoid re-hashing.

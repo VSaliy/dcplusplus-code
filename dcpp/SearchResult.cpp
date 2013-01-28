@@ -27,16 +27,16 @@
 
 namespace dcpp {
 
-SearchResult::SearchResult(const UserPtr& aUser, Types aType, int aSlots, int aFreeSlots,
+SearchResult::SearchResult(const HintedUser& aUser, Types aType, int aSlots, int aFreeSlots,
 	int64_t aSize, const string& aFile, const string& aHubName,
-	const string& aHubURL, const string& ip, TTHValue aTTH, const string& aToken) :
-file(aFile), hubName(aHubName), hubURL(aHubURL), user(aUser),
+	const string& ip, TTHValue aTTH, const string& aToken) :
+file(aFile), hubName(aHubName), user(aUser),
 	size(aSize), type(aType), slots(aSlots), freeSlots(aFreeSlots), IP(ip),
 	tth(aTTH), token(aToken) { }
 
 SearchResult::SearchResult(Types aType, int64_t aSize, const string& aFile, const TTHValue& aTTH) :
-	file(aFile), user(ClientManager::getInstance()->getMe()), size(aSize), type(aType), slots(SETTING(SLOTS)),
-	freeSlots(UploadManager::getInstance()->getFreeSlots()),
+	file(aFile), user(ClientManager::getInstance()->getMe(), Util::emptyString), size(aSize),
+	type(aType), slots(SETTING(SLOTS)), freeSlots(UploadManager::getInstance()->getFreeSlots()),
 	tth(aTTH) { }
 
 string SearchResult::toSR(const Client& c) const {
@@ -88,6 +88,10 @@ string SearchResult::getFileName() const {
 		return getFile();
 
 	return getFile().substr(i + 1);
+}
+
+string SearchResult::getSlotString() const {
+	return Util::toString(getFreeSlots()) + '/' + Util::toString(getSlots());
 }
 
 }

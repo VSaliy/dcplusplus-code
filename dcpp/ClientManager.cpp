@@ -413,12 +413,7 @@ void ClientManager::privateMessage(const HintedUser& user, const string& msg, bo
 
 void ClientManager::userCommand(const HintedUser& user, const UserCommand& uc, ParamMap& params, bool compatibility) {
 	Lock l(cs);
-	/** @todo we allow wrong hints for now because users
-	 * extracted from search results don't always have a correct hint; see
-	 * SearchManager::onRES(const AdcCommand& cmd, ...). when that is done, and SearchResults are
-	 * switched to storing only reliable HintedUsers (found with the token of the ADC command),
-	 * change this call to findOnlineUserHint. */
-	OnlineUser* ou = findOnlineUser(user.user->getCID(), user.hint.empty() ? uc.getHub() : user.hint);
+	OnlineUser* ou = findOnlineUserHint(user.user->getCID(), user.hint.empty() ? uc.getHub() : user.hint);
 	if(!ou)
 		return;
 

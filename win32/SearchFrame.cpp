@@ -392,7 +392,7 @@ void SearchFrame::postClosing() {
 void SearchFrame::SearchInfo::view() {
 	if(srs[0]->getType() == SearchResult::TYPE_FILE) {
 		QueueManager::getInstance()->add(Util::getTempPath() + srs[0]->getFileName(),
-			srs[0]->getSize(), srs[0]->getTTH(), HintedUser(srs[0]->getUser(), srs[0]->getHubURL()),
+			srs[0]->getSize(), srs[0]->getTTH(), srs[0]->getUser(),
 			QueueItem::FLAG_CLIENT_VIEW | QueueItem::FLAG_TEXT);
 	}
 }
@@ -409,7 +409,7 @@ void SearchFrame::SearchInfo::Download::addFile(SearchInfo* si, const string& ta
 	for(const auto& sr: si->srs) {
 		total++;
 		try {
-			QueueManager::getInstance()->add(target, sr->getSize(), sr->getTTH(), HintedUser(sr->getUser(), sr->getHubURL()));
+			QueueManager::getInstance()->add(target, sr->getSize(), sr->getTTH(), sr->getUser());
 		} catch(const Exception& e) {
 			ignored++;
 			error = e.getError();
@@ -424,7 +424,7 @@ void SearchFrame::SearchInfo::Download::addDir(SearchInfo* si, const string& tar
 	total++;
 	// TODO Add all users...
 	QueueManager::getInstance()->addDirectory(target.empty() ? si->srs[0]->getFile() : target,
-		HintedUser(si->srs[0]->getUser(), si->srs[0]->getHubURL()), Text::fromT(tgt),
+		si->srs[0]->getUser(), Text::fromT(tgt),
 		WinUtil::isShift() ? QueueItem::HIGHEST : QueueItem::DEFAULT);
 }
 
@@ -460,10 +460,10 @@ void SearchFrame::SearchInfo::CheckTTH::operator()(SearchInfo* si) {
 	}
 
 	if(firstHubs && hubs.empty()) {
-		hubs = ClientManager::getInstance()->getHubUrls(sr->getUser()->getCID(), sr->getHubURL());
+		hubs = ClientManager::getInstance()->getHubUrls(sr->getUser());
 		firstHubs = false;
 	} else if(!hubs.empty()) {
-		Util::intersect(hubs, ClientManager::getInstance()->getHubUrls(sr->getUser()->getCID(), sr->getHubURL()));
+		Util::intersect(hubs, ClientManager::getInstance()->getHubUrls(sr->getUser()));
 	}
 }
 
@@ -510,14 +510,14 @@ void SearchFrame::SearchInfo::update() {
 		}
 		columns[COLUMN_HUB] = Text::toT(Util::toString(StringList(hubs.begin(), hubs.end())));
 	} else {
-		columns[COLUMN_NICK] = WinUtil::getNicks(sr->getUser(), sr->getHubURL());
-		columns[COLUMN_CONNECTION] = Text::toT(ClientManager::getInstance()->getConnection(sr->getUser()->getCID()));
+		columns[COLUMN_NICK] = WinUtil::getNicks(sr->getUser());
+		columns[COLUMN_CONNECTION] = Text::toT(ClientManager::getInstance()->getConnection(sr->getUser().user->getCID()));
 		columns[COLUMN_SLOTS] = Text::toT(sr->getSlotString());
 		const auto& ip = sr->getIP();
 		const auto& country = GeoManager::getInstance()->getCountry(ip);
 		columns[COLUMN_IP] = Text::toT(country.empty() ? ip : str(F_("%1% (%2%)") % country % ip));
 		columns[COLUMN_HUB] = Text::toT(sr->getHubName());
-		columns[COLUMN_CID] = Text::toT(sr->getUser()->getCID().toBase32());
+		columns[COLUMN_CID] = Text::toT(sr->getUser().user->getCID().toBase32());
 	}
 }
 
@@ -528,7 +528,7 @@ void SearchFrame::addResult(SearchResultPtr psr) {
 	if(currentSearch.empty()) {
 		return;
 	}
-	if(!sr.getToken().empty() && sr.getToken() != token) {
+	if(sr.getToken() != token) {
 		addDropped();
 		return;
 	}
@@ -569,7 +569,7 @@ void SearchFrame::addResult(SearchResultPtr psr) {
 		for(auto& j: si2.srs) {
 			auto& sr2 = *j;
 
-			bool sameUser = sr.getUser()->getCID() == sr2.getUser()->getCID();
+			bool sameUser = sr.getUser() == sr2.getUser();
 			if(sameUser && sr.getFile() == sr2.getFile()) {
 				return; // dupe
 			}
@@ -765,7 +765,7 @@ struct UserCollector {
 	void operator()(T* si) {
 		for(const auto& sr: si->srs) {
 			if(std::find(users.begin(), users.end(), sr->getUser()) == users.end()) {
-				users.emplace_back(sr->getUser(), sr->getHubURL());
+				users.emplace_back(sr->getUser());
 				dirs.push_back(Util::getFilePath(sr->getFile()));
 			}
 		}
@@ -1066,13 +1066,13 @@ void SearchFrame::runUserCommand(const UserCommand& uc) {
 		auto si = results->getData(sel);
 		for(auto sr: si->srs) {
 
-			if(!sr->getUser()->isOnline())
+			if(!sr->getUser().user->isOnline())
 				continue;
 
 			if(uc.once()) {
-				if(users.find(sr->getUser()->getCID()) != users.end())
+				if(users.find(sr->getUser().user->getCID()) != users.end())
 					continue;
-				users.insert(sr->getUser()->getCID());
+				users.insert(sr->getUser().user->getCID());
 			}
 
 			ucParams["fileFN"] = [sr] { return sr->getFile(); };
@@ -1090,7 +1090,7 @@ void SearchFrame::runUserCommand(const UserCommand& uc) {
 			ucParams["tth"] = ucParams["fileTR"];
 
 			auto tmp = ucParams;
-			ClientManager::getInstance()->userCommand(HintedUser(sr->getUser(), sr->getHubURL()), uc, tmp, true);
+			ClientManager::getInstance()->userCommand(sr->getUser(), uc, tmp, true);
 		}
 	}
 }
