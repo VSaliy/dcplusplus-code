@@ -33,10 +33,18 @@ using std::string;
 entangled tags, such as: <a> <b> </a> </b> -> <a> <b> </b></a><b> </b> */
 class Tagger {
 public:
-	void add(size_t start, size_t end, string id, string attributes);
-	string merge(const string& text, string& tmp);
+	Tagger(const string& text);
+	Tagger(string&& text);
+
+	const string& getText() const;
+
+	void addTag(size_t start, size_t end, string id, string attributes);
+	void replaceText(size_t start, size_t end, const string& replacement);
+	string merge(string& tmp);
 
 private:
+	string text;
+
 	struct Tag { size_t pos; string s; bool opening; Tag* otherTag; };
 	list<Tag> tags; // this table holds the tags to be added along with their position.
 };

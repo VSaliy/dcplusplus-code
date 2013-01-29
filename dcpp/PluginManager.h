@@ -111,7 +111,7 @@ public:
 	DCCorePtr getCore() { return &dcCore; }
 
 	// Functions that call the plugin
-	bool onChatTags(const string& text, Tagger& tagger, OnlineUser* from = nullptr);
+	bool onChatTags(Tagger& tagger, OnlineUser* from = nullptr);
 	bool onChatDisplay(string& htmlMessage, OnlineUser* from = nullptr);
 	bool onChatCommand(Client* client, const string& line);
 	bool onChatCommandPM(const HintedUser& user, const string& line);

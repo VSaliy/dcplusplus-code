@@ -96,13 +96,13 @@ messageTimestamp(messageTimestamp)
 	message += tmp;
 
 	/* format the message; this will involve adding custom tags. use the Tagger class to that end. */
-	Tagger tags;
-	format(tmp, tags, xmlTmp);
+	Tagger tags(move(tmp));
+	format(tags, xmlTmp);
 
 	// let plugins play with the tag list
-	PluginManager::getInstance()->onChatTags(tmp, tags, from);
+	PluginManager::getInstance()->onChatTags(tags, from);
 
-	htmlMessage += "<span id=\"text\">" + tags.merge(tmp, xmlTmp) + "</span></span>";
+	htmlMessage += "<span id=\"text\">" + tags.merge(xmlTmp) + "</span></span>";
 
 	// forward to plugins
 	PluginManager::getInstance()->onChatDisplay(htmlMessage, from);
@@ -114,12 +114,14 @@ namespace { inline bool validSchemeChar(char c, bool first) {
 		(!first && (c == '+' || c == '.' || c == '-'));
 } }
 
-void ChatMessage::format(string& text, Tagger& tags, string& tmp) {
+void ChatMessage::format(Tagger& tags, string& tmp) {
+	const auto& text = tags.getText();
+
 	/* link formatting - optimize the lookup a bit by using the fact that every link identifier
 	(except www ones) contains a colon. */
 
 	auto addLinkStr = [&tmp, &tags](size_t begin, size_t end, const string& link) {
-		tags.add(begin, end, "a", "href=\"" + SimpleXML::escape(link, tmp, true) + "\"");
+		tags.addTag(begin, end, "a", "href=\"" + SimpleXML::escape(link, tmp, true) + "\"");
 	};
 
 	auto addLink = [&text, &addLinkStr](size_t begin, size_t end) {
@@ -154,10 +156,10 @@ void ChatMessage::format(string& text, Tagger& tags, string& tmp) {
 				if(!name.empty()) {
 					// magnet link: replace with the friendly name
 					name += " (magnet)";
-					text.replace(begin, end - begin, name);
+					tags.replaceText(begin, end, name);
 
 					// the size of the string has changed; update counts.
-					auto delta = name.size() - link.size();
+					const auto delta = static_cast<int>(name.size()) - static_cast<int>(link.size());
 					end += delta;
 					n += delta;
 				}

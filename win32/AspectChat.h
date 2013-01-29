@@ -75,16 +75,16 @@ protected:
 
 	/// add a chat message with some formatting and call addedChat.
 	void addChat(const tstring& message) {
-		string xmlTmp, tmp = Text::fromT(message);
+		string tmp;
 
-		Tagger tags;
-		ChatMessage::format(tmp, tags, xmlTmp);
+		Tagger tags(Text::fromT(message));
+		ChatMessage::format(tags, tmp);
 
-		PluginManager::getInstance()->onChatTags(tmp, tags);
+		PluginManager::getInstance()->onChatTags(tags);
 
 		string htmlMessage = "<span id=\"message\" style=\"white-space: pre-wrap;\">"
-			"<span id=\"timestamp\">" + SimpleXML::escape("[" + Util::getShortTimeString() + "]", xmlTmp, false) + "</span> "
-			"<span id=\"text\">" + tags.merge(tmp, xmlTmp) + "</span></span>";
+			"<span id=\"timestamp\">" + SimpleXML::escape("[" + Util::getShortTimeString() + "]", tmp, false) + "</span> "
+			"<span id=\"text\">" + tags.merge(tmp) + "</span></span>";
 
 		PluginManager::getInstance()->onChatDisplay(htmlMessage);
 

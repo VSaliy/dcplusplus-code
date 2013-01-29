@@ -168,7 +168,10 @@ DCUtils PluginApiImpl::dcUtils = {
 DCTagger PluginApiImpl::dcTagger = {
 	DCINTF_DCPP_TAGGER_VER,
 
-	&PluginApiImpl::addTag
+	&PluginApiImpl::addTag,
+
+	&PluginApiImpl::getText,
+	&PluginApiImpl::replaceText
 };
 
 Socket* PluginApiImpl::udpSocket = nullptr;
@@ -497,7 +500,15 @@ size_t PluginApiImpl::fromBase32(uint8_t* dst, const char* src, size_t n) {
 
 // Functions for DCTagger
 void PluginApiImpl::addTag(TagDataPtr hTags, size_t start, size_t end, const char* id, const char* attributes) {
-	reinterpret_cast<Tagger*>(hTags->object)->add(start, end, id, attributes);
+	reinterpret_cast<Tagger*>(hTags->object)->addTag(start, end, id, attributes);
+}
+
+const char* PluginApiImpl::getText(TagDataPtr hTags) {
+	return reinterpret_cast<Tagger*>(hTags->object)->getText().c_str();
+}
+
+void PluginApiImpl::replaceText(TagDataPtr hTags, size_t start, size_t end, const char* replacement) {
+	reinterpret_cast<Tagger*>(hTags->object)->replaceText(start, end, replacement);
 }
 
 // Functions for DCQueue
