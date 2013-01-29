@@ -62,7 +62,7 @@ void Tagger::replaceText(size_t start, size_t end, const string& replacement) {
 
 	for(auto& tag: tags) {
 		if(tag.pos >= end) {
-			tag.pos -= delta;
+			tag.pos += delta;
 		} else if(tag.pos > start) {
 			tag.pos = start;
 		}
