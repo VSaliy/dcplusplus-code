@@ -811,10 +811,10 @@ void AdcHub::search(int aSizeMode, int64_t aSize, int aFileType, const string& a
 
 	AdcCommand c(AdcCommand::CMD_SCH, AdcCommand::TYPE_BROADCAST);
 
-	/* token format: [pointer to this class] "/" [actual token]
+	/* token format: [per-hub unique id] "/" [per-search actual token]
 	this allows easily knowing which hub a search was sent on when parsing a search result,
 	whithout having to bother maintaining a list of sent tokens. */
-	c.addParam("TO", Util::toString(reinterpret_cast<uintptr_t>(this)) + "/" + aToken);
+	c.addParam("TO", Util::toString(getUniqueId()) + "/" + aToken);
 
 	if(aFileType == SearchManager::TYPE_TTH) {
 		c.addParam("TR", aString);
