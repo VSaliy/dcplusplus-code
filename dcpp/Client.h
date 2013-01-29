@@ -100,6 +100,7 @@ public:
 	GETSET(Identity, myIdentity, MyIdentity);
 	GETSET(Identity, hubIdentity, HubIdentity);
 
+	GETSET(uint32_t, uniqueId, UniqueId);
 	GETSET(string, defpassword, Password);
 	GETSET(uint32_t, reconnDelay, ReconnDelay);
 	GETSET(uint64_t, lastActivity, LastActivity);

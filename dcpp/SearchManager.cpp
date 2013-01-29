@@ -19,6 +19,7 @@
 #include "stdinc.h"
 #include "SearchManager.h"
 
+#include <boost/range/algorithm/find_if.hpp>
 #include <boost/scoped_array.hpp>
 
 #include "ClientManager.h"
@@ -316,13 +317,14 @@ void SearchManager::onRES(const AdcCommand& cmd, const UserPtr& from, const stri
 
 	string hubUrl;
 
-	// token format: [pointer to the client class] "/" [actual token] (see AdcHub::search)
+	// token format: [per-hub unique id] "/" [per-search actual token] (see AdcHub::search)
 	auto slash = token.find('/');
 	if(slash == string::npos) { return; }
 	{
+		auto uniqueId = Util::toUInt32(token.substr(0, slash));
 		auto lock = ClientManager::getInstance()->lock();
 		auto& clients = ClientManager::getInstance()->getClients();
-		auto i = clients.find(reinterpret_cast<Client*>(Util::toInt64(token.substr(0, slash))));
+		auto i = boost::find_if(clients, [uniqueId](const Client* client) { return client->getUniqueId() == uniqueId; });
 		if(i == clients.end()) { return; }
 		hubUrl = (*i)->getHubUrl();
 	}
