@@ -94,6 +94,9 @@ private:
 	// Functions for DCTagger
 	static void DCAPI addTag(TagDataPtr hTags, size_t start, size_t end, const char* id, const char* attributes);
 
+	static const char* DCAPI getText(TagDataPtr hTags);
+	static void DCAPI replaceText(TagDataPtr hTags, size_t start, size_t end, const char* replacement);
+
 	// Functions for DCQueue
 	static QueueDataPtr DCAPI addList(UserDataPtr user, Bool silent);
 	static QueueDataPtr DCAPI addDownload(const char* hash, uint64_t size, const char* target);

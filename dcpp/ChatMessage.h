@@ -61,7 +61,7 @@ struct ChatMessage {
 
 	/** Store context-agnostic formattings that can be applied to the given message in the tagger.
 	Note that the string may be modified. */
-	static void format(string& text, Tagger& tags, string& tmp);
+	static void format(Tagger& tags, string& tmp);
 };
 
 } // namespace dcpp

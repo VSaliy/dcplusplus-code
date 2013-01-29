@@ -207,8 +207,8 @@ const PluginInfo* PluginManager::getPlugin(size_t index) const {
 }
 
 // Functions that call the plugin
-bool PluginManager::onChatTags(const string& text, Tagger& tagger, OnlineUser* from) {
-	TagData data = { text.c_str(), reinterpret_cast<dcptr_t>(&tagger), True };
+bool PluginManager::onChatTags(Tagger& tagger, OnlineUser* from) {
+	TagData data = { reinterpret_cast<dcptr_t>(&tagger), True };
 	return runHook(HOOK_UI_CHAT_TAGS, from, &data);
 }
 
