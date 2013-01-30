@@ -162,7 +162,7 @@ int SSLSocket::checkSSL(int ret) {
 				if(sys_err == 0) {
 					if(ret == 0) {
 						dcdebug("TLS error: call ret = %d, SSL_get_error = %d, ERR_get_error = %d\n", ret, err, sys_err);
-						throw SSLSocketException(_("TLS error"));
+						throw SSLSocketException(_("Connection closed"));
 					}
 					sys_err = getLastError();
 				}
