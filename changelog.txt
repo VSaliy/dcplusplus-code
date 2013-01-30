@@ -1,3 +1,4 @@
+-- 0.810 2013-01-30 --
 * Fix a race condition on file list download (thanks bigmuscle)
 * [L#668548] Fix a potential infinite loop in BufferedSocket->setDataMode (crise)
 * Add "chunked" transfer encoding as per the HTTP/1.1 spec (crise)

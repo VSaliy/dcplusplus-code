@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-09-09 16:53+0200\n"
+"POT-Creation-Date: 2013-01-30 17:00+0100\n"
 "PO-Revision-Date: 2012-05-16 01:15+0000\n"
 "Last-Translator: الأستاذ عوض الغامدي _ منتديات عميد التعريب <Unknown>\n"
 "Language-Team: awadh alghaamdi <awadh_al_ghaamdi@hotmail.com>\n"
@@ -17,24 +17,25 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n % 100 >= "
 "3 && n % 100 <= 10 ? 3 : n % 100 >= 11 && n % 100 <= 99 ? 4 : 5;\n"
-"X-Launchpad-Export-Date: 2012-09-16 15:36+0000\n"
-"X-Generator: Launchpad (build 15944)\n"
+"X-Launchpad-Export-Date: 2013-01-30 15:44+0000\n"
+"X-Generator: Launchpad (build 16455)\n"
 "X-Poedit-Country: SAUDI ARABIA\n"
 "X-Poedit-Language: Arabic\n"
 
-#: win32\PublicHubsFrame.cpp:425
+#: win32\PublicHubsFrame.cpp:420
 msgid " from Coral"
 msgstr ""
 
-#: win32\TransferView.cpp:729
-msgid " of "
+#: win32\TransferView.cpp:725
+#, boost-format
+msgid " of %1%"
 msgstr ""
 
-#: win32\FinishedFrameBase.h:723
+#: win32\FinishedFrameBase.h:733
 msgid "% transferred"
 msgstr ""
 
-#: win32\MainWindow.cpp:1339
+#: win32\MainWindow.cpp:1383
 #, fuzzy, boost-format
 msgid ""
 "%1%\n"
@@ -46,40 +47,40 @@ msgstr "فتح مجلد التحميلات"
 msgid "%1% %2%: %3%"
 msgstr "%1%/s, %2% متبقية"
 
-#: win32\TransferView.cpp:615
+#: win32\TransferView.cpp:611
 #, boost-format
 msgid "%1% (%2$0.2f)"
 msgstr "%1% (%2$0.2f)"
 
-#: win32\SearchFrame.cpp:515
+#: win32\SearchFrame.cpp:518
 #, fuzzy, boost-format
 msgid "%1% (%2%)"
 msgstr "%1% (%2$0.2f)"
 
-#: win32\SearchFrame.cpp:1015
+#: win32\SearchFrame.cpp:1020
 #, boost-format
 msgid "%1% / %2% item"
 msgid_plural "%1% / %2% items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: win32\SearchFrame.cpp:1046
+#: win32\SearchFrame.cpp:1051
 #, boost-format
 msgid "%1% / %2% sources ignored: %3%"
 msgstr ""
 
-#: win32\PluginPage.cpp:266
+#: win32\PluginPage.cpp:279
 #, boost-format
 msgid "%1% doesn't need any additional configuration"
 msgstr ""
 
-#: win32\SearchFrame.cpp:1021
+#: win32\SearchFrame.cpp:1026
 #, fuzzy, boost-format
 msgid "%1% dropped"
 msgstr "%1% تم فرزها"
 
-#: win32\QueueFrame.cpp:855 win32\TransferView.cpp:217 win32\WinUtil.cpp:816
-#: win32\FinishedFrameBase.h:455
+#: win32\QueueFrame.cpp:869 win32\TransferView.cpp:221 win32\WinUtil.cpp:817
+#: win32\FinishedFrameBase.h:461
 #, boost-format
 msgid "%1% files"
 msgstr "%1% ملفات"
@@ -89,7 +90,7 @@ msgstr "%1% ملفات"
 msgid "%1% files/h, %2% files left"
 msgstr "%1% ملفات/h, %2% ملفات متبقية"
 
-#: win32\MainWindow.cpp:1053
+#: win32\MainWindow.cpp:1097
 #, boost-format
 msgid "%1% free slots of %2% total upload slots - Click to adjust"
 msgstr ""
@@ -99,14 +100,14 @@ msgstr ""
 msgid "%1% hubs"
 msgstr "الحد الأعلى للمحاور"
 
-#: win32\SearchFrame.cpp:1013 win32\FinishedFrameBase.h:564
+#: win32\SearchFrame.cpp:1018 win32\FinishedFrameBase.h:572
 #, boost-format
 msgid "%1% item"
 msgid_plural "%1% items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: win32\ADLSearchFrame.cpp:317 win32\DirectoryListingFrame.cpp:750
+#: win32\ADLSearchFrame.cpp:318 win32\DirectoryListingFrame.cpp:877
 #, fuzzy, boost-format
 msgid "%1% items"
 msgstr "%1% ملفات"
@@ -121,44 +122,44 @@ msgstr "%1% متبقية"
 msgid "%1% port"
 msgstr "%1% متبقية"
 
-#: win32\MainWindow.cpp:752
+#: win32\MainWindow.cpp:795
 #, boost-format
 msgid "%1% recent items will be saved from now on."
 msgstr ""
 
-#: win32\SearchFrame.cpp:780
+#: win32\SearchFrame.cpp:783
 #, fuzzy, boost-format
 msgid "%1% results"
 msgstr "%1% متبقية"
 
-#: win32\SearchFrame.cpp:1047
+#: win32\SearchFrame.cpp:1052
 #, boost-format
 msgid "%1% sources added"
 msgstr ""
 
-#: win32\HubFrame.cpp:358 win32\SearchFrame.cpp:499
+#: win32\HubFrame.cpp:363 win32\SearchFrame.cpp:502
 #, boost-format
 msgid "%1% user"
 msgid_plural "%1% users"
 msgstr[0] ""
 msgstr[1] ""
 
-#: win32\HubFrame.cpp:1211 win32\TransferView.cpp:189 win32\UsersFrame.cpp:456
-#: win32\FinishedFrameBase.h:483
+#: win32\HubFrame.cpp:1229 win32\TransferView.cpp:192 win32\UsersFrame.cpp:462
+#: win32\FinishedFrameBase.h:490
 #, fuzzy, boost-format
 msgid "%1% users"
 msgstr "لا يوجد مستخدمين"
 
-#: win32\MainWindow.cpp:1052 win32\UserInfoBase.cpp:128
+#: win32\MainWindow.cpp:1096 win32\UserInfoBase.cpp:128
 #, fuzzy, boost-format
 msgid "%1%/%2%"
 msgstr "%1%/s"
 
-#: win32\MainWindow.cpp:783 win32\MainWindow.cpp:1068
-#: win32\MainWindow.cpp:1072 win32\MainWindow.cpp:1076
-#: win32\MainWindow.cpp:1080 win32\TransferView.cpp:630
-#: win32\TransferView.cpp:682 win32\UsersFrame.cpp:73
-#: win32\FinishedFrameBase.h:566
+#: win32\MainWindow.cpp:826 win32\MainWindow.cpp:1112
+#: win32\MainWindow.cpp:1116 win32\MainWindow.cpp:1120
+#: win32\MainWindow.cpp:1124 win32\TransferView.cpp:626
+#: win32\TransferView.cpp:678 win32\UsersFrame.cpp:73
+#: win32\FinishedFrameBase.h:574
 #, boost-format
 msgid "%1%/s"
 msgstr "%1%/s"
@@ -168,8 +169,8 @@ msgstr "%1%/s"
 msgid "%1%/s, %2% left"
 msgstr "%1%/s, %2% متبقية"
 
-#: win32\DirectoryListingFrame.cpp:706 win32\UserInfoBase.cpp:104
-#: win32\UserInfoBase.cpp:129
+#: win32\DirectoryListingFrame.cpp:833 win32\UserInfoBase.cpp:104
+#: win32\UserInfoBase.cpp:129 win32\WinUtil.cpp:1555
 #, fuzzy, boost-format
 msgid "%1%: %2%"
 msgstr "%1%/s, %2% متبقية"
@@ -186,13 +187,13 @@ msgstr "اُضيفت"
 msgid "&Add folder"
 msgstr "&إضافة مجلد"
 
-#: win32\WinUtil.cpp:1513 win32\UserInfoBase.h:142
+#: win32\WinUtil.cpp:1487 win32\UserInfoBase.h:150
 msgid "&Browse file list"
 msgstr "ت&صفح قائمة الملفات"
 
-#: win32\DirectoryListingFrame.cpp:805 win32\LogPage.cpp:79
-#: win32\NotificationsPage.cpp:112 win32\SearchFrame.cpp:817
-#: win32\SearchFrame.cpp:845
+#: win32\DirectoryListingFrame.cpp:932 win32\LogPage.cpp:79
+#: win32\NotificationsPage.cpp:112 win32\SearchFrame.cpp:822
+#: win32\SearchFrame.cpp:850
 #, fuzzy
 msgid "&Browse..."
 msgstr "...تصفح"
@@ -211,27 +212,27 @@ msgstr "الألوان"
 msgid "&Configure"
 msgstr "ا&ضبط"
 
-#: win32\MainWindow.cpp:706
+#: win32\MainWindow.cpp:749
 #, fuzzy
 msgid "&Configure..."
 msgstr "ا&ضبط"
 
 #: win32\FavHubsFrame.cpp:90 win32\FavHubsFrame.cpp:348
-#: win32\PublicHubsFrame.cpp:334
+#: win32\PublicHubsFrame.cpp:335
 #, fuzzy
 msgid "&Connect"
 msgstr "موصل حاليا"
 
-#: win32\HubFrame.cpp:1217 win32\RichTextBox.cpp:104
+#: win32\RichTextBox.cpp:105
 msgid "&Copy"
 msgstr ""
 
-#: win32\dwt_Texts.cpp:31
+#: win32\dwtTexts.cpp:33
 #, fuzzy
 msgid "&Copy\tCtrl+C"
 msgstr "المذكرة"
 
-#: win32\MainWindow.cpp:1536
+#: win32\MainWindow.cpp:1580
 msgid "&Customize\tDouble-click"
 msgstr ""
 
@@ -239,26 +240,26 @@ msgstr ""
 msgid "&Defaults"
 msgstr ""
 
-#: win32\dwt_Texts.cpp:33
+#: win32\dwtTexts.cpp:35
 msgid "&Delete\tDel"
 msgstr ""
 
-#: win32\UsersFrame.cpp:459
+#: win32\UsersFrame.cpp:465
 msgid "&Description"
 msgstr "الو&صف:"
 
-#: win32\TransferView.cpp:198
+#: win32\TransferView.cpp:200
 #, fuzzy
 msgid "&Disconnect"
 msgstr "توصيل سريع"
 
-#: win32\DirectoryListingFrame.cpp:725 win32\DirectoryListingFrame.cpp:752
-#: win32\DirectoryListingFrame.cpp:765 win32\SearchFrame.cpp:783
+#: win32\DirectoryListingFrame.cpp:852 win32\DirectoryListingFrame.cpp:879
+#: win32\DirectoryListingFrame.cpp:892 win32\SearchFrame.cpp:786
 #, fuzzy
 msgid "&Download"
 msgstr "التحميلات"
 
-#: win32\MainWindow.cpp:324
+#: win32\MainWindow.cpp:330
 #, fuzzy
 msgid "&Download Queue\tCtrl+D"
 msgstr "طابور التحميل"
@@ -267,44 +268,44 @@ msgstr "طابور التحميل"
 msgid "&Edit"
 msgstr "&تحرير"
 
-#: win32\MainWindow.cpp:319
+#: win32\MainWindow.cpp:325
 #, fuzzy
 msgid "&Favorite Hubs\tCtrl+H"
 msgstr "المحاور المفضلة"
 
-#: win32\MainWindow.cpp:286
+#: win32\MainWindow.cpp:288
 #, fuzzy
 msgid "&File"
 msgstr "ملف"
 
-#: win32\RichTextBox.cpp:96
+#: win32\RichTextBox.cpp:97
 #, fuzzy
 msgid "&Find...\tCtrl+F"
 msgstr "البحث"
 
-#: win32\TransferView.cpp:195
+#: win32\TransferView.cpp:198
 msgid "&Force attempt"
 msgstr ""
 
-#: win32\QueueFrame.cpp:891 win32\WinUtil.cpp:1510 win32\UserInfoBase.h:141
+#: win32\QueueFrame.cpp:905 win32\WinUtil.cpp:1484 win32\UserInfoBase.h:149
 msgid "&Get file list"
 msgstr ""
 
-#: win32\DirectoryListingFrame.cpp:739
+#: win32\DirectoryListingFrame.cpp:866
 #, fuzzy
 msgid "&Go to directory"
 msgstr "تحميل المجلد بالكامل"
 
-#: win32\MainWindow.cpp:372
+#: win32\MainWindow.cpp:378
 msgid "&Help"
 msgstr "&مساعدة"
 
-#: win32\MainWindow.cpp:1552
+#: win32\MainWindow.cpp:1596
 #, fuzzy
 msgid "&Hide\tCtrl+1"
 msgstr "البحث"
 
-#: win32\WinUtil.cpp:1516 win32\UserInfoBase.h:143
+#: win32\WinUtil.cpp:1490 win32\UserInfoBase.h:151
 #, fuzzy
 msgid "&Match queue"
 msgstr "توافق الطابور"
@@ -314,48 +315,48 @@ msgstr "توافق الطابور"
 msgid "&Move to group"
 msgstr ""
 
-#: win32\QueueFrame.cpp:838 win32\QueueFrame.cpp:857 win32\QueueFrame.cpp:873
+#: win32\QueueFrame.cpp:852 win32\QueueFrame.cpp:871 win32\QueueFrame.cpp:887
 #, fuzzy
 msgid "&Move/Rename"
 msgstr "تغيير الأسم"
 
-#: win32\ADLSearchFrame.cpp:85 win32\ADLSearchFrame.cpp:318
+#: win32\ADLSearchFrame.cpp:86 win32\ADLSearchFrame.cpp:319
 #: win32\FavHubsFrame.cpp:97 win32\FavHubsFrame.cpp:350
 msgid "&New..."
 msgstr "&جديد..."
 
-#: win32\MainWindow.cpp:335
+#: win32\MainWindow.cpp:341
 #, fuzzy
 msgid "&Notepad\tCtrl+N"
 msgstr "المذكرة"
 
-#: win32\RichTextBox.cpp:103 win32\SystemFrame.cpp:126
-#: win32\FinishedFrameBase.h:458
+#: win32\RichTextBox.cpp:104 win32\SystemFrame.cpp:126
+#: win32\FinishedFrameBase.h:464
 msgid "&Open"
 msgstr "&فتح"
 
-#: win32\dwt_Texts.cpp:32
+#: win32\dwtTexts.cpp:34
 #, fuzzy
 msgid "&Paste\tCtrl+V"
 msgstr "المذكرة"
 
-#: win32\ADLSearchFrame.cpp:91 win32\ADLSearchFrame.cpp:319
+#: win32\ADLSearchFrame.cpp:92 win32\ADLSearchFrame.cpp:320
 #: win32\FavHubsFrame.cpp:105 win32\FavHubsFrame.cpp:351
 #, fuzzy
 msgid "&Properties"
 msgstr "ADLخواص البحث"
 
-#: win32\MainWindow.cpp:317
+#: win32\MainWindow.cpp:323
 #, fuzzy
 msgid "&Public Hubs\tCtrl+P"
 msgstr "المحاور العامة"
 
-#: win32\MainWindow.cpp:288
+#: win32\MainWindow.cpp:290
 #, fuzzy
 msgid "&Quick connect...\tCtrl+Q"
 msgstr "توصيل سريع"
 
-#: win32\HubFrame.cpp:1236 win32\MainWindow.cpp:292
+#: win32\HubFrame.cpp:1250 win32\MainWindow.cpp:294
 msgid "&Reconnect\tCtrl+R"
 msgstr ""
 
@@ -363,29 +364,29 @@ msgstr ""
 msgid "&Refresh"
 msgstr "&تحديث"
 
-#: win32\ADLSearchFrame.cpp:109 win32\ADLSearchFrame.cpp:320
+#: win32\ADLSearchFrame.cpp:110 win32\ADLSearchFrame.cpp:321
 #: win32\FavHubGroupsDlg.cpp:107 win32\FavHubsFrame.cpp:126
 #: win32\FavHubsFrame.cpp:355 win32\FavoriteDirsPage.cpp:78
-#: win32\PluginPage.cpp:119 win32\QueueFrame.cpp:847 win32\QueueFrame.cpp:861
-#: win32\QueueFrame.cpp:875 win32\SearchFrame.cpp:799
+#: win32\PluginPage.cpp:119 win32\QueueFrame.cpp:861 win32\QueueFrame.cpp:875
+#: win32\QueueFrame.cpp:889 win32\SearchFrame.cpp:802
 #: win32\SearchTypesPage.cpp:94 win32\StringListDlg.cpp:160
 #: win32\UCPage.cpp:76 win32\UploadPage.cpp:90 win32\UserMatchPage.cpp:98
-#: win32\UsersFrame.cpp:460 win32\FinishedFrameBase.h:461
-#: win32\FinishedFrameBase.h:485
+#: win32\UsersFrame.cpp:466 win32\FinishedFrameBase.h:467
+#: win32\FinishedFrameBase.h:492
 #, fuzzy
 msgid "&Remove"
 msgstr "تغيير الأسم"
 
-#: win32\MainWindow.cpp:331
+#: win32\MainWindow.cpp:337
 #, fuzzy
 msgid "&Search\tCtrl+S"
 msgstr "البحث"
 
-#: win32\QueueFrame.cpp:898 win32\WinUtil.cpp:1519 win32\UserInfoBase.h:145
+#: win32\QueueFrame.cpp:912 win32\WinUtil.cpp:1493 win32\UserInfoBase.h:153
 msgid "&Send private message"
 msgstr ""
 
-#: win32\dwt_Texts.cpp:29
+#: win32\dwtTexts.cpp:31
 #, fuzzy
 msgid "&Undo\tCtrl+Z"
 msgstr "المذكرة"
@@ -394,26 +395,30 @@ msgstr "المذكرة"
 msgid "&Update"
 msgstr ""
 
-#: win32\MainWindow.cpp:321
+#: win32\MainWindow.cpp:327
 #, fuzzy
 msgid "&Users\tCtrl+U"
 msgstr "المستخدمين المفضلين"
 
-#: win32\MainWindow.cpp:315
+#: win32\MainWindow.cpp:321
 #, fuzzy
 msgid "&View"
 msgstr "فيديو"
 
-#: win32\DirectoryListingFrame.cpp:729 win32\SearchFrame.cpp:787
-#: win32\FinishedFrameBase.h:457
+#: win32\DirectoryListingFrame.cpp:856 win32\SearchFrame.cpp:790
+#: win32\FinishedFrameBase.h:463
 msgid "&View as text"
 msgstr "عرض ب&هيئة نص"
 
-#: win32\MainWindow.cpp:350
+#: win32\MainWindow.cpp:356
 msgid "&Window"
 msgstr "&نافذة"
 
-#: win32\MainWindow.cpp:713
+#: win32\MainWindow.cpp:679
+msgid "(No plugin command found)"
+msgstr ""
+
+#: win32\MainWindow.cpp:756
 msgid "(No recent item found)"
 msgstr ""
 
@@ -432,12 +437,12 @@ msgstr "-.-- ملفات/h، %1% ملفات متبقية"
 msgid "-:--:--"
 msgstr "-:--:-- متبقي"
 
-#: win32\PluginPage.cpp:206
+#: win32\PluginPage.cpp:219
 #, fuzzy
 msgid "<Information unavailable>"
 msgstr "الملف غير موجود"
 
-#: win32\WinUtil.cpp:1444
+#: win32\WinUtil.cpp:1418
 msgid ""
 "A MAGNET link was given to DC++, but it didn't contain a valid file hash for "
 "use on the Direct Connect network.  No action will be taken."
@@ -452,7 +457,7 @@ msgid ""
 "contents?"
 msgstr "يوجد مجلد تخيلي باسم %1% مسبقاً. هل تودّ دمج المحتويات؟"
 
-#: win32\MainWindow.cpp:332 win32\MainWindow.cpp:435
+#: win32\MainWindow.cpp:338 win32\MainWindow.cpp:441
 msgid "ADL Search"
 msgstr "ADL بحث"
 
@@ -460,7 +465,7 @@ msgstr "ADL بحث"
 msgid "ADLSearch Properties"
 msgstr "ADLخواص البحث"
 
-#: win32\AboutDlg.cpp:147 win32\MainWindow.cpp:378
+#: win32\AboutDlg.cpp:147 win32\MainWindow.cpp:384
 msgid "About DC++"
 msgstr "حول البرنامج"
 
@@ -476,8 +481,8 @@ msgstr ""
 msgid "Active mode (let DC++ configure my router with NAT-PMP / UPnP)"
 msgstr ""
 
-#: win32\HubFrame.cpp:1233 win32\PublicHubsFrame.cpp:335
-#: win32\WinUtil.cpp:1522 win32\UserInfoBase.h:147
+#: win32\HubFrame.cpp:1247 win32\PublicHubsFrame.cpp:336
+#: win32\WinUtil.cpp:1496 win32\UserInfoBase.h:155
 #, fuzzy
 msgid "Add To &Favorites"
 msgstr "إضافة للمف&ضلة"
@@ -490,8 +495,12 @@ msgstr ""
 msgid "Add finished files to share instantly (if shared)"
 msgstr "اضافة الملفات المنتهية للمساهمة بها فورا - اذا تمت المساهمة بها"
 
-#: win32\PluginPage.cpp:235
+#: win32\PluginPage.cpp:248
 msgid "Add plugin"
+msgstr ""
+
+#: win32\GeneralPage.cpp:101
+msgid "Add timestamp to the end of away messages"
 msgstr ""
 
 #: win32\QueueFrame.cpp:57
@@ -507,16 +516,21 @@ msgstr "العنوان"
 msgid "Advanced"
 msgstr "متقدم"
 
-#: win32\QueueFrame.cpp:906 win32\QueueFrame.cpp:915 win32\WinUtil.cpp:1477
+#: win32\QueueFrame.cpp:920 win32\QueueFrame.cpp:929 win32\WinUtil.cpp:1451
 msgid "All"
 msgstr "الكل"
 
-#: win32\QueueFrame.cpp:328
+#: win32\QueueFrame.cpp:340
 #, fuzzy, boost-format
 msgid "All %1% users offline"
 msgstr "جميع المستخدمين الـ %1% غير موجودين"
 
-#: win32\WinUtil.cpp:819 win32\WinUtil.cpp:826
+#: win32\WinUtil.cpp:1549
+#, fuzzy
+msgid "All columns"
+msgstr "جميع الملفات"
+
+#: win32\WinUtil.cpp:820 win32\WinUtil.cpp:827
 msgid "All files"
 msgstr "جميع الملفات"
 
@@ -570,7 +584,7 @@ msgstr "على الأقل"
 msgid "At most"
 msgstr "على الأكثر"
 
-#: win32\PluginPage.cpp:215
+#: win32\PluginPage.cpp:228
 msgid "Author: "
 msgstr ""
 
@@ -648,7 +662,7 @@ msgstr "(فتح وصلة جديدة إذا كانت السرعة منخفضة (�
 msgid "Automatically search for alternative download locations"
 msgstr "عمل البحث لمصادر تحميل أخرى أوتوماتيكيا"
 
-#: win32\HubFrame.cpp:1062
+#: win32\HubFrame.cpp:1078
 #, fuzzy, boost-format
 msgid "Average: %1%"
 msgstr "المستحدمين"
@@ -665,11 +679,11 @@ msgstr ""
 msgid "Away mode"
 msgstr ""
 
-#: win32\WinUtil.cpp:611 win32\WinUtil.cpp:620
+#: win32\WinUtil.cpp:612 win32\WinUtil.cpp:621
 msgid "Away mode off"
 msgstr "نظام الذهاب لا يعمل"
 
-#: win32\WinUtil.cpp:616
+#: win32\WinUtil.cpp:617
 #, fuzzy, boost-format
 msgid "Away mode on: %1%"
 msgstr "نظام الذهاب لا يعمل"
@@ -684,7 +698,7 @@ msgstr "B"
 msgid "B/s"
 msgstr "Kb/s"
 
-#: win32\DirectoryListingFrame.cpp:342
+#: win32\DirectoryListingFrame.cpp:346
 msgid "Back"
 msgstr ""
 
@@ -714,7 +728,7 @@ msgstr ""
 msgid "Bind address"
 msgstr "عنوان"
 
-#: win32\MainWindow.cpp:390
+#: win32\MainWindow.cpp:396
 msgid "Blog"
 msgstr ""
 
@@ -738,33 +752,34 @@ msgstr ""
 msgid "Button style"
 msgstr ""
 
-#: win32\HubFrame.cpp:66 win32\SearchFrame.cpp:59 win32\UserMatchDlg.cpp:223
-#: win32\UserMatchPage.cpp:216 win32\UsersFrame.cpp:59 win32\UsersFrame.cpp:98
+#: win32\HubFrame.cpp:66 win32\SearchFrame.cpp:59 win32\UserInfoBase.cpp:131
+#: win32\UserMatchDlg.cpp:223 win32\UserMatchPage.cpp:216
+#: win32\UsersFrame.cpp:59 win32\UsersFrame.cpp:98
 msgid "CID"
 msgstr ""
 
-#: win32\FinishedFrameBase.h:725
+#: win32\FinishedFrameBase.h:735
 msgid "CRC Checked"
 msgstr ""
 
-#: win32\QueueFrame.cpp:376
+#: win32\QueueFrame.cpp:388
 msgid "CRC32 inconsistency (SFV-Check)"
 msgstr "CRC32 تضارب (SFV-فحص)"
 
-#: win32\PublicHubsFrame.cpp:434
+#: win32\PublicHubsFrame.cpp:429
 msgid "Cached hub list is corrupted or unsupported"
 msgstr ""
 
-#: win32\WinUtil.cpp:1118
+#: win32\WinUtil.cpp:1092
 #, fuzzy
 msgid "Cancel"
 msgstr "log تغيير ملف"
 
-#: win32\MainWindow.cpp:377
+#: win32\MainWindow.cpp:383
 msgid "Change Log"
 msgstr "log تغيير ملف"
 
-#: win32\TextFrame.cpp:89
+#: win32\TextFrame.cpp:91
 msgid "Change the text viewer font"
 msgstr ""
 
@@ -793,7 +808,7 @@ msgstr ""
 msgid "Clear search box after each search"
 msgstr "مسح خانة البحث بعد البحث"
 
-#: win32\dwt_Texts.cpp:35
+#: win32\dwtTexts.cpp:37
 msgid "Click and drag to resize"
 msgstr ""
 
@@ -802,41 +817,41 @@ msgstr ""
 msgid "Client type"
 msgstr "نوع الملف"
 
-#: win32\dwt_Texts.cpp:36
+#: win32\dwtTexts.cpp:38
 #, fuzzy
 msgid "Close"
 msgstr "الألوان"
 
-#: win32\MainWindow.cpp:361
+#: win32\MainWindow.cpp:367
 msgid "Close all PM windows"
 msgstr ""
 
-#: win32\MainWindow.cpp:365
+#: win32\MainWindow.cpp:371
 msgid "Close all file list windows"
 msgstr ""
 
-#: win32\MainWindow.cpp:355
+#: win32\MainWindow.cpp:361
 msgid "Close all hubs"
 msgstr ""
 
-#: win32\MainWindow.cpp:357 win32\MainWindow.cpp:1502
+#: win32\MainWindow.cpp:363 win32\MainWindow.cpp:1546
 msgid "Close all hubs of a favorite group"
 msgstr ""
 
-#: win32\MainWindow.cpp:362
+#: win32\MainWindow.cpp:368
 msgid "Close all offline PM windows"
 msgstr ""
 
-#: win32\MainWindow.cpp:368
+#: win32\MainWindow.cpp:374
 msgid "Close all search windows"
 msgstr ""
 
-#: win32\MainWindow.cpp:356
+#: win32\MainWindow.cpp:362
 #, fuzzy
 msgid "Close disconnected hubs"
 msgstr "فصل و غلق"
 
-#: win32\MainWindow.cpp:358 win32\MainWindow.cpp:1502
+#: win32\MainWindow.cpp:364 win32\MainWindow.cpp:1546
 msgid "Close hubs not in a favorite group"
 msgstr ""
 
@@ -848,7 +863,7 @@ msgstr "الأمر"
 msgid "Command Type"
 msgstr ""
 
-#: win32\MainWindow.cpp:391
+#: win32\MainWindow.cpp:397
 msgid "Community news"
 msgstr ""
 
@@ -856,7 +871,7 @@ msgstr ""
 msgid "Configure Public Hub Lists"
 msgstr "تضبيط قائمة المحاور"
 
-#: win32\PluginPage.cpp:236
+#: win32\PluginPage.cpp:249
 #, fuzzy
 msgid "Configure plugin"
 msgstr "ا&ضبط"
@@ -904,38 +919,38 @@ msgstr ""
 msgid "Confirm item removal in download queue"
 msgstr "تأكيد إزالة البند من طابور التحميل"
 
-#: win32\MainWindow.cpp:289
+#: win32\MainWindow.cpp:291
 msgid "Connect to a favorite hub &group...\tCtrl+G"
 msgstr ""
 
-#: win32\MainWindow.cpp:833
+#: win32\MainWindow.cpp:876
 #, fuzzy
 msgid "Connect to a favorite hub group"
 msgstr "تأكيد إزالة المحور المفضل"
 
-#: win32\MainWindow.cpp:685
+#: win32\MainWindow.cpp:728
 msgid "Connect to all hubs in this group"
 msgstr ""
 
-#: win32\UserInfoBase.h:150
+#: win32\UserInfoBase.h:158
 msgid "Connect to hub"
 msgstr ""
 
-#: win32\HubFrame.cpp:631
+#: win32\HubFrame.cpp:651
 msgid "Connected"
 msgstr "موصل حاليا"
 
-#: win32\TransferView.cpp:691 win32\TransferView.cpp:698
+#: win32\TransferView.cpp:687 win32\TransferView.cpp:694
 #, fuzzy
 msgid "Connecting"
 msgstr "الوصلة"
 
-#: win32\TransferView.cpp:287
+#: win32\TransferView.cpp:293
 #, fuzzy
 msgid "Connecting (forced)"
 msgstr "موصل حاليا"
 
-#: win32\HubFrame.cpp:907
+#: win32\HubFrame.cpp:923
 #, fuzzy, boost-format
 msgid "Connecting to %1%..."
 msgstr "الوصلة"
@@ -959,19 +974,23 @@ msgstr "موصل حاليا"
 msgid "Context"
 msgstr ""
 
-#: win32\HubFrame.cpp:1237 win32\PublicHubsFrame.cpp:336
+#: win32\WinUtil.cpp:1531
+msgid "Copy"
+msgstr ""
+
+#: win32\HubFrame.cpp:1251
 #, fuzzy
 msgid "Copy &address to clipboard"
 msgstr "نسخ الوصلة للحافظة"
 
-#: win32\TransferView.cpp:196
-#, fuzzy
-msgid "Copy &nick to clipboard"
-msgstr "نسخ الوصلة للحافظة"
-
-#: win32\WinUtil.cpp:765
+#: win32\WinUtil.cpp:766
 msgid "Copy magnet link to clipboard"
 msgstr "نسخ الوصلة للحافظة"
+
+#: win32\UserInfoBase.h:169
+#, fuzzy
+msgid "Copy user information"
+msgstr "المعلومات الخاصة"
 
 #: win32\HubFrame.cpp:64 win32\PublicHubsFrame.cpp:45
 #: win32\TransferView.cpp:59 win32\UserInfoBase.cpp:121
@@ -992,12 +1011,12 @@ msgstr "خلق/تغيير الأمر"
 msgid "Creating file index..."
 msgstr "خلق مؤشر للملفات"
 
-#: win32\dwt_Texts.cpp:30
+#: win32\dwtTexts.cpp:32
 #, fuzzy
 msgid "Cu&t\tCtrl+X"
 msgstr "المذكرة"
 
-#: win32\HubFrame.cpp:499
+#: win32\HubFrame.cpp:513
 #, boost-format
 msgid "Current hub topic: %1%"
 msgstr ""
@@ -1019,28 +1038,28 @@ msgstr ""
 msgid "Custom text color"
 msgstr ""
 
-#: win32\MainWindow.cpp:792
+#: win32\MainWindow.cpp:835
 msgid "Custom..."
 msgstr ""
 
-#: win32\MainWindow.cpp:1061
+#: win32\MainWindow.cpp:1105
 #, boost-format
 msgid "D: %1%"
 msgstr ""
 
-#: win32\MainWindow.cpp:1069
+#: win32\MainWindow.cpp:1113
 #, boost-format
 msgid "D: %1%/s (%2%)"
 msgstr ""
 
-#: win32\MainWindow.cpp:1699
+#: win32\MainWindow.cpp:1743
 #, boost-format
 msgid ""
 "D: %1%/s (%2%)\r\n"
 "U: %3%/s (%4%)"
 msgstr ""
 
-#: win32\MainWindow.cpp:645
+#: win32\MainWindow.cpp:688
 #, boost-format
 msgid "DC++ - %1%"
 msgstr ""
@@ -1051,13 +1070,13 @@ msgid ""
 "the Direct Connect network.  What would you like to do?"
 msgstr ""
 
-#: win32\PluginPage.cpp:248
+#: win32\PluginPage.cpp:261
 #, fuzzy
 msgid "DLL files"
 msgstr "%1% ملفات"
 
 #: win32\AppearancePage.cpp:142 win32\AppearancePage.cpp:175
-#: win32\WinUtil.cpp:1162
+#: win32\WinUtil.cpp:1136
 msgid "Default"
 msgstr ""
 
@@ -1065,7 +1084,7 @@ msgstr ""
 msgid "Default download directory"
 msgstr "مجلد التحميل الإفتراضي"
 
-#: win32\FavHubsFrame.cpp:381
+#: win32\FavHubsFrame.cpp:382
 msgid "Default group"
 msgstr ""
 
@@ -1076,13 +1095,13 @@ msgstr "رسالة الذهاب الإفتراضية"
 
 #: win32\FavHubGroupsDlg.cpp:140 win32\FavHubProperties.cpp:88
 #: win32\FavHubProperties.cpp:115 win32\FavHubsFrame.cpp:46
-#: win32\GeneralPage.cpp:60 win32\HubFrame.cpp:60 win32\HubFrame.cpp:425
+#: win32\GeneralPage.cpp:60 win32\HubFrame.cpp:60 win32\HubFrame.cpp:439
 #: win32\PublicHubsFrame.cpp:42 win32\UserInfoBase.cpp:117
-#: win32\UsersFrame.cpp:58 win32\UsersFrame.cpp:80 win32\UsersFrame.cpp:421
+#: win32\UsersFrame.cpp:58 win32\UsersFrame.cpp:80 win32\UsersFrame.cpp:428
 msgid "Description"
 msgstr "المواصفات"
 
-#: win32\PluginPage.cpp:214
+#: win32\PluginPage.cpp:227
 #, fuzzy
 msgid "Description: "
 msgstr "المواصفات"
@@ -1109,9 +1128,9 @@ msgstr "الوصلة"
 msgid "Directories"
 msgstr "المجلدات"
 
-#: win32\ADLSProperties.cpp:77 win32\DirectoryListingFrame.cpp:1390
+#: win32\ADLSProperties.cpp:77 win32\DirectoryListingFrame.cpp:1573
 #: win32\FavoriteDirsPage.cpp:41 win32\LogPage.cpp:74
-#: win32\SearchFrame.cpp:492 win32\UploadPage.cpp:47
+#: win32\SearchFrame.cpp:495 win32\UploadPage.cpp:47
 msgid "Directory"
 msgstr "مجلد"
 
@@ -1119,12 +1138,12 @@ msgstr "مجلد"
 msgid "Directory or directory name already exists"
 msgstr "المجلد أو أسم المجلد موجود حاليا"
 
-#: win32\MainWindow.cpp:783
+#: win32\MainWindow.cpp:826
 #, fuzzy
 msgid "Disabled"
 msgstr "يعمل"
 
-#: win32\MainWindow.cpp:386
+#: win32\MainWindow.cpp:392
 #, fuzzy
 msgid "Discussion forum"
 msgstr "DC++ منتديات الحوار لـ"
@@ -1173,7 +1192,7 @@ msgstr "لا تحمل ملفات مساهم بها حاليا"
 msgid "Don't download files already in the queue"
 msgstr "لا تحمل ملفات مساهم بها حاليا"
 
-#: win32\HubFrame.cpp:533
+#: win32\HubFrame.cpp:546
 msgid "Don't remove /password before your password"
 msgstr "لا تمسح / كلمة السر قبل كلمة السر"
 
@@ -1185,7 +1204,7 @@ msgstr ""
 msgid "Don't send the away message to bots"
 msgstr "bots لا ترسل رسالة ذهاب للـ"
 
-#: win32\MainWindow.cpp:389
+#: win32\MainWindow.cpp:395
 msgid "Donate (paypal)"
 msgstr "paypal التبرع عن طريق"
 
@@ -1193,12 +1212,12 @@ msgstr "paypal التبرع عن طريق"
 msgid "Done"
 msgstr "انتهى"
 
-#: win32\QueueFrame.cpp:1094
+#: win32\QueueFrame.cpp:1109
 #, fuzzy
 msgid "Done."
 msgstr "انتهى"
 
-#: win32\DirectoryListingFrame.cpp:794
+#: win32\DirectoryListingFrame.cpp:921
 #, fuzzy
 msgid "Download &to..."
 msgstr ": التحميل إلى"
@@ -1207,45 +1226,45 @@ msgstr ": التحميل إلى"
 msgid "Download Matches"
 msgstr "التحميلات المتوافقة"
 
-#: win32\MainWindow.cpp:427 win32\QueueFrame.cpp:63 win32\TabsPage.cpp:43
+#: win32\MainWindow.cpp:433 win32\QueueFrame.cpp:63 win32\TabsPage.cpp:43
 msgid "Download Queue"
 msgstr "طابور التحميل"
 
-#: win32\PublicHubsFrame.cpp:421
+#: win32\PublicHubsFrame.cpp:416
 #, fuzzy, boost-format
 msgid "Download failed: %1%"
 msgstr "تم تحميله"
 
-#: win32\WinUtil.cpp:94
+#: win32\WinUtil.cpp:95
 #, fuzzy
 msgid "Download finished"
 msgstr "تم تحميله"
 
-#: win32\DirectoryListingFrame.cpp:365
+#: win32\DirectoryListingFrame.cpp:369
 msgid "Download full list"
 msgstr ""
 
-#: win32\MainWindow.cpp:759 win32\MainWindow.cpp:1680
+#: win32\MainWindow.cpp:802 win32\MainWindow.cpp:1724
 #, fuzzy
 msgid "Download limit"
 msgstr "التحميلات"
 
-#: win32\WinUtil.cpp:648
+#: win32\WinUtil.cpp:649
 #, fuzzy
 msgid "Download limit disabled"
 msgstr "التحميلات"
 
-#: win32\WinUtil.cpp:648
+#: win32\WinUtil.cpp:649
 #, fuzzy, boost-format
 msgid "Download limit set to %1% KiB/s"
 msgstr "التحميلات"
 
-#: win32\MainWindow.cpp:1077
+#: win32\MainWindow.cpp:1121
 #, fuzzy, boost-format
 msgid "Download limit: %1%/s - Click to adjust"
 msgstr "التحميلات"
 
-#: win32\WinUtil.cpp:596
+#: win32\WinUtil.cpp:597
 #, fuzzy
 msgid "Download slots set"
 msgstr "التحميلات"
@@ -1255,15 +1274,15 @@ msgstr "التحميلات"
 msgid "Download speed"
 msgstr "تم تحميله"
 
-#: win32\SearchFrame.cpp:807
+#: win32\SearchFrame.cpp:812
 msgid "Download to..."
 msgstr ": التحميل إلى"
 
-#: win32\SearchFrame.cpp:785
+#: win32\SearchFrame.cpp:788
 msgid "Download whole directory"
 msgstr "تحميل المجلد بالكامل"
 
-#: win32\SearchFrame.cpp:835
+#: win32\SearchFrame.cpp:840
 msgid "Download whole directory to..."
 msgstr ": تحميل المجلد بالكامل إلى"
 
@@ -1271,33 +1290,33 @@ msgstr ": تحميل المجلد بالكامل إلى"
 msgid "Downloaded"
 msgstr "تم تحميله"
 
-#: win32\PublicHubsFrame.cpp:436
+#: win32\PublicHubsFrame.cpp:431
 #, boost-format
 msgid "Downloaded hub list is corrupted or unsupported (%1%)"
 msgstr ""
 
-#: win32\TransferView.cpp:784
+#: win32\TransferView.cpp:780
 #, fuzzy, boost-format
 msgid "Downloading %1%"
 msgstr "...جاري التحميل"
 
-#: win32\TransferView.cpp:680
+#: win32\TransferView.cpp:676
 #, boost-format
 msgid "Downloading from %1% user"
 msgid_plural "Downloading from %1% users"
 msgstr[0] ""
 msgstr[1] ""
 
-#: win32\DirectoryListingFrame.cpp:1134
+#: win32\DirectoryListingFrame.cpp:1262
 #, fuzzy
 msgid "Downloading list..."
 msgstr "...جاري التحميل"
 
-#: win32\PublicHubsFrame.cpp:212 win32\PublicHubsFrame.cpp:345
+#: win32\PublicHubsFrame.cpp:212 win32\PublicHubsFrame.cpp:346
 msgid "Downloading public hub list..."
 msgstr "تحميل قائمة المحاور العامة"
 
-#: win32\PublicHubsFrame.cpp:417
+#: win32\PublicHubsFrame.cpp:412
 #, fuzzy, boost-format
 msgid "Downloading public hub list... (%1%)"
 msgstr "تحميل قائمة المحاور العامة"
@@ -1306,12 +1325,12 @@ msgstr "تحميل قائمة المحاور العامة"
 msgid "Downloading..."
 msgstr "...جاري التحميل"
 
-#: win32\MainWindow.cpp:383 win32\SettingsDialog.cpp:164
+#: win32\MainWindow.cpp:389 win32\SettingsDialog.cpp:164
 #: win32\StylesPage.cpp:165 win32\TransferView.cpp:106
 msgid "Downloads"
 msgstr "التحميلات"
 
-#: win32\QueueFrame.cpp:1085
+#: win32\QueueFrame.cpp:1100
 msgid "Downloads running, please disconnect them"
 msgstr ""
 
@@ -1319,7 +1338,7 @@ msgstr ""
 msgid "Drop sources below"
 msgstr ""
 
-#: win32\MainWindow.cpp:311
+#: win32\MainWindow.cpp:317
 msgid "E&xit\tAlt+F4"
 msgstr ""
 
@@ -1336,13 +1355,13 @@ msgstr "الإيميل"
 msgid "Edit detected settings"
 msgstr ""
 
-#: win32\FinishedFrameBase.h:727 win32\FinishedFrameBase.h:738
+#: win32\FinishedFrameBase.h:737 win32\FinishedFrameBase.h:748
 #, fuzzy
 msgid "Elapsed"
 msgstr "الحد الأدنى للوصلات"
 
 #: win32\FavHubGroupsDlg.cpp:144 win32\FavHubProperties.cpp:120
-#: win32\GeneralPage.cpp:65 win32\HubFrame.cpp:426
+#: win32\GeneralPage.cpp:65 win32\HubFrame.cpp:440
 #, fuzzy
 msgid "Email"
 msgstr "الإيميل"
@@ -1355,15 +1374,15 @@ msgstr ""
 msgid "Enable automatic SFV checking"
 msgstr "الأوتوماتيكي SFV تفعيل الفحص لـ"
 
-#: win32\GeneralPage.cpp:114
+#: win32\GeneralPage.cpp:121
 msgid "Enable away mode after"
 msgstr ""
 
-#: win32\GeneralPage.cpp:100
+#: win32\GeneralPage.cpp:107
 msgid "Enable away mode when DC++ is minimized"
 msgstr ""
 
-#: win32\GeneralPage.cpp:104
+#: win32\GeneralPage.cpp:111
 msgid "Enable away mode when the Windows session is locked"
 msgstr ""
 
@@ -1406,7 +1425,7 @@ msgstr ""
 msgid "Error processing version information"
 msgstr "المعلومات الخاصة"
 
-#: win32\WinUtil.cpp:1369
+#: win32\WinUtil.cpp:1343
 #, boost-format
 msgid "Error registering %1%:// link handler"
 msgstr ""
@@ -1426,11 +1445,11 @@ msgid ""
 "DC++ is licenced under GPL"
 msgstr ""
 
-#: win32\UserMatchPage.cpp:217 win32\WinUtil.cpp:1157
+#: win32\UserMatchPage.cpp:217 win32\WinUtil.cpp:1131
 msgid "Exact match"
 msgstr ""
 
-#: win32\DirectoryListingFrame.cpp:66 win32\QueueFrame.cpp:55
+#: win32\DirectoryListingFrame.cpp:67 win32\QueueFrame.cpp:55
 #: win32\SearchFrame.cpp:56
 msgid "Exact size"
 msgstr "الحجم المضبوط"
@@ -1439,7 +1458,7 @@ msgstr "الحجم المضبوط"
 msgid "Example hub tab"
 msgstr ""
 
-#: win32\MainWindow.cpp:1683
+#: win32\MainWindow.cpp:1727
 msgid "Exit"
 msgstr ""
 
@@ -1468,7 +1487,7 @@ msgstr ""
 msgid "Extensions for the %1% search type"
 msgstr ""
 
-#: win32\ConnectivityManualPage.cpp:76 win32\HubFrame.cpp:427
+#: win32\ConnectivityManualPage.cpp:76 win32\HubFrame.cpp:441
 msgid "External / WAN IP"
 msgstr ""
 
@@ -1477,13 +1496,13 @@ msgstr ""
 msgid "F&ilter"
 msgstr "ملف"
 
-#: win32\HubFrame.cpp:701
+#: win32\HubFrame.cpp:721
 msgid ""
 "Failed to create a new PM window; check the \"Max PM windows\" value in "
 "Settings > Experts only"
 msgstr ""
 
-#: win32\UsersFrame.cpp:53 win32\UsersFrame.cpp:185
+#: win32\UsersFrame.cpp:53 win32\UsersFrame.cpp:187
 #, fuzzy
 msgid "Favorite"
 msgstr "المحاور المفضلة"
@@ -1492,7 +1511,7 @@ msgstr "المحاور المفضلة"
 msgid "Favorite Hub Properties"
 msgstr "خواص المحور المفضل"
 
-#: win32\FavHubsFrame.cpp:55 win32\MainWindow.cpp:422
+#: win32\FavHubsFrame.cpp:55 win32\MainWindow.cpp:428
 msgid "Favorite Hubs"
 msgstr "المحاور المفضلة"
 
@@ -1500,7 +1519,7 @@ msgstr "المحاور المفضلة"
 msgid "Favorite download directories"
 msgstr "التحميلات المفضلة للمجلادت"
 
-#: win32\HubFrame.cpp:1090
+#: win32\HubFrame.cpp:1106
 msgid "Favorite hub added"
 msgstr "المحور المفضل تمت إضافته"
 
@@ -1509,7 +1528,7 @@ msgstr "المحور المفضل تمت إضافته"
 msgid "Favorite hub groups"
 msgstr "المحور المفضل تمت إضافته"
 
-#: win32\HubFrame.cpp:1100
+#: win32\HubFrame.cpp:1116
 #, fuzzy
 msgid "Favorite hub removed"
 msgstr "المحور المفضل تمت إضافته"
@@ -1519,11 +1538,11 @@ msgstr "المحور المفضل تمت إضافته"
 msgid "Favorite name"
 msgstr "الإسم المفضل"
 
-#: win32\PrivateFrame.cpp:344
+#: win32\PrivateFrame.cpp:347
 msgid "Favorite user added"
 msgstr "تمت اضافة المستخدم المفضل"
 
-#: win32\WinUtil.cpp:457
+#: win32\WinUtil.cpp:458
 #, boost-format
 msgid "Favorite users (added by %1%)"
 msgstr ""
@@ -1537,7 +1556,7 @@ msgstr "المحاور المفضلة"
 msgid "Features"
 msgstr ""
 
-#: win32\DirectoryListingFrame.cpp:63 win32\DirectoryListingFrame.cpp:1383
+#: win32\DirectoryListingFrame.cpp:64 win32\DirectoryListingFrame.cpp:1566
 #: win32\SearchFrame.cpp:48
 msgid "File"
 msgstr "ملف"
@@ -1551,26 +1570,26 @@ msgstr ""
 msgid "File List"
 msgstr "قائمة الملفات"
 
-#: win32\QueueFrame.cpp:442 win32\WinUtil.cpp:826
+#: win32\QueueFrame.cpp:456 win32\WinUtil.cpp:827
 #, fuzzy
 msgid "File Lists"
 msgstr "قائمة الملفات"
 
-#: win32\QueueFrame.cpp:1091
+#: win32\QueueFrame.cpp:1106
 #, fuzzy
 msgid "File is already finished"
 msgstr "لا تحمل ملفات مساهم بها حاليا"
 
-#: win32\WinUtil.cpp:95
+#: win32\WinUtil.cpp:96
 #, fuzzy
 msgid "File list downloaded"
 msgstr "الملفات المحملة المنتهية"
 
-#: win32\QueueFrame.cpp:372
+#: win32\QueueFrame.cpp:384
 msgid "File not available"
 msgstr "الملف غير موجود"
 
-#: win32\FinishedFrameBase.h:722
+#: win32\FinishedFrameBase.h:732
 #, fuzzy
 msgid "File size"
 msgstr "ملف"
@@ -1584,8 +1603,8 @@ msgid "Filelist Menu"
 msgstr "قائمة الملفات"
 
 #: win32\ADLSProperties.cpp:76 win32\LogPage.cpp:94 win32\QueueFrame.cpp:48
-#: win32\TransferView.cpp:63 win32\UsersFrame.cpp:411
-#: win32\FinishedFrameBase.h:718
+#: win32\TransferView.cpp:63 win32\UsersFrame.cpp:418
+#: win32\FinishedFrameBase.h:728
 msgid "Filename"
 msgstr "أسم الملف"
 
@@ -1593,13 +1612,17 @@ msgstr "أسم الملف"
 msgid "Filename:"
 msgstr ": اسم الملف"
 
-#: win32\FinishedFrameBase.h:736
+#: win32\FinishedFrameBase.h:746
 #, fuzzy
 msgid "Files"
 msgstr "ملف"
 
-#: win32\DirectoryListingFrame.cpp:1090 win32\DirectoryListingFrame.cpp:1106
-#: win32\QueueFrame.cpp:219
+#: win32\DirectoryListingFrame.cpp:1218
+#, boost-format
+msgid "Files (total): %1%"
+msgstr ""
+
+#: win32\DirectoryListingFrame.cpp:1234 win32\QueueFrame.cpp:228
 #, boost-format
 msgid "Files: %1%"
 msgstr ""
@@ -1609,12 +1632,12 @@ msgstr ""
 msgid "Filter hubs"
 msgstr "ملف"
 
-#: win32\SearchFrame.cpp:276
+#: win32\SearchFrame.cpp:278
 #, fuzzy
 msgid "Filter search results"
 msgstr "أدخل كلمة البحث"
 
-#: win32\SearchFrame.cpp:272
+#: win32\SearchFrame.cpp:274
 #, fuzzy
 msgid "Filter search results:"
 msgstr "أدخل كلمة البحث"
@@ -1624,50 +1647,50 @@ msgstr "أدخل كلمة البحث"
 msgid "Filter spam messages"
 msgstr "للمسجات للحالة Log عمل"
 
-#: win32\HubFrame.cpp:219 win32\UsersFrame.cpp:161
+#: win32\HubFrame.cpp:222 win32\UsersFrame.cpp:163
 #, fuzzy
 msgid "Filter users"
 msgstr "المستخدمين المفضلين"
 
-#: win32\UsersFrame.cpp:156
+#: win32\UsersFrame.cpp:158
 #, fuzzy
 msgid "Filter:"
 msgstr "ملف"
 
-#: win32\DirectoryListingFrame.cpp:368
+#: win32\DirectoryListingFrame.cpp:372
 msgid "Find"
 msgstr "ابحث"
 
-#: win32\RichTextBox.cpp:97
+#: win32\RichTextBox.cpp:98
 msgid "Find &Next\tF3"
 msgstr ""
 
-#: win32\DirectoryListingFrame.cpp:259
+#: win32\DirectoryListingFrame.cpp:262
 #, fuzzy
 msgid "Find files"
 msgstr "ملف"
 
-#: win32\DirectoryListingFrame.cpp:284
+#: win32\DirectoryListingFrame.cpp:287
 #, fuzzy
 msgid "Find next"
 msgstr "ابحث"
 
-#: win32\DirectoryListingFrame.cpp:277
+#: win32\DirectoryListingFrame.cpp:280
 msgid "Find previous"
 msgstr ""
 
-#: win32\QueueFrame.cpp:334
+#: win32\QueueFrame.cpp:346
 #, fuzzy
 msgid "Finished"
 msgstr "ابحث"
 
-#: win32\FinishedDLFrame.cpp:28 win32\MainWindow.cpp:326
-#: win32\MainWindow.cpp:429 win32\TabsPage.cpp:44
+#: win32\FinishedDLFrame.cpp:28 win32\MainWindow.cpp:332
+#: win32\MainWindow.cpp:435 win32\TabsPage.cpp:44
 msgid "Finished Downloads"
 msgstr "الملفات المحملة المنتهية"
 
-#: win32\FinishedULFrame.cpp:28 win32\MainWindow.cpp:328
-#: win32\MainWindow.cpp:431 win32\TabsPage.cpp:45
+#: win32\FinishedULFrame.cpp:28 win32\MainWindow.cpp:334
+#: win32\MainWindow.cpp:437 win32\TabsPage.cpp:45
 msgid "Finished Uploads"
 msgstr "رفع الملفات المنتهية"
 
@@ -1679,7 +1702,7 @@ msgstr ""
 msgid "Format"
 msgstr "الهيئة"
 
-#: win32\DirectoryListingFrame.cpp:343
+#: win32\DirectoryListingFrame.cpp:347
 #, fuzzy
 msgid "Forward"
 msgstr "الهيئة"
@@ -1689,7 +1712,7 @@ msgstr "الهيئة"
 msgid "Free slots"
 msgstr "الحد الأدنى للوصلات"
 
-#: win32\MainWindow.cpp:384
+#: win32\MainWindow.cpp:390
 msgid "Frequently asked questions"
 msgstr "FAQ - الأسألة المتراودة"
 
@@ -1697,7 +1720,7 @@ msgstr "FAQ - الأسألة المتراودة"
 msgid "Full Path"
 msgstr "المسار الكامل"
 
-#: win32\QueueFrame.cpp:378
+#: win32\QueueFrame.cpp:390
 msgid "Full tree does not match TTH root"
 msgstr "السلسلة المحملة لا تتوافق مع \"تي تي إتش\" الرئيسي"
 
@@ -1710,7 +1733,7 @@ msgstr "GB"
 msgid "General"
 msgstr ""
 
-#: win32\UsersFrame.cpp:368
+#: win32\UsersFrame.cpp:375
 #, fuzzy
 msgid "General information"
 msgstr "المعلومات الخاصة"
@@ -1724,11 +1747,11 @@ msgstr ""
 msgid "Generated by %1%"
 msgstr ""
 
-#: win32\MainWindow.cpp:308
+#: win32\MainWindow.cpp:310
 msgid "GeoIP database update"
 msgstr ""
 
-#: win32\MainWindow.cpp:375
+#: win32\MainWindow.cpp:381
 msgid "Get started"
 msgstr ""
 
@@ -1742,7 +1765,7 @@ msgstr "GB"
 msgid "Global application style"
 msgstr "تأكيد الخروج من البرنامج"
 
-#: win32\WinUtil.cpp:1525 win32\UserInfoBase.h:148
+#: win32\WinUtil.cpp:1499 win32\UserInfoBase.h:156
 msgid "Grant &extra slot"
 msgstr ""
 
@@ -1784,15 +1807,15 @@ msgstr "(لقائمة المحاور فقط)  HTTP بروكسي"
 msgid "Height of the message editing box"
 msgstr ""
 
-#: win32\WinUtil.cpp:1130
+#: win32\WinUtil.cpp:1104
 msgid "Help"
 msgstr ""
 
-#: win32\MainWindow.cpp:374
+#: win32\MainWindow.cpp:380
 msgid "Help &Contents\tF1"
 msgstr ""
 
-#: win32\MainWindow.cpp:385
+#: win32\MainWindow.cpp:391
 msgid "Help center"
 msgstr ""
 
@@ -1806,7 +1829,7 @@ msgstr "Passive المستخد في وضعية"
 msgid "Hide files already in share"
 msgstr "لا تحمل ملفات مساهم بها حاليا"
 
-#: win32\QueueFrame.cpp:353 win32\QueueFrame.cpp:885
+#: win32\QueueFrame.cpp:365 win32\QueueFrame.cpp:899
 msgid "High"
 msgstr "أعلى"
 
@@ -1814,7 +1837,7 @@ msgstr "أعلى"
 msgid "High prio max size"
 msgstr ""
 
-#: win32\QueueFrame.cpp:354 win32\QueueFrame.cpp:886
+#: win32\QueueFrame.cpp:366 win32\QueueFrame.cpp:900
 msgid "Highest"
 msgstr "الأعلى"
 
@@ -1831,18 +1854,18 @@ msgstr ""
 msgid "History"
 msgstr "الهيستوري للرسائل الخاصة"
 
-#: win32\MainWindow.cpp:382
+#: win32\MainWindow.cpp:388
 #, fuzzy
 msgid "Homepage"
 msgstr "DC++ موقع"
 
 #: win32\FavHubProperties.cpp:70 win32\SearchFrame.cpp:55
 #: win32\TabsPage.cpp:38 win32\TransferView.cpp:51 win32\UCPage.cpp:39
-#: win32\FinishedFrameBase.h:733
+#: win32\FinishedFrameBase.h:743
 msgid "Hub"
 msgstr "المحور"
 
-#: win32\HubFrame.cpp:421
+#: win32\HubFrame.cpp:435
 msgid "Hub IP & port"
 msgstr ""
 
@@ -1850,7 +1873,7 @@ msgstr ""
 msgid "Hub Menu"
 msgstr "قائمة المحاور"
 
-#: win32\HubFrame.cpp:420 win32\UserMatchDlg.cpp:223
+#: win32\HubFrame.cpp:434 win32\UserMatchDlg.cpp:223
 #: win32\UserMatchPage.cpp:216
 #, fuzzy
 msgid "Hub address"
@@ -1864,18 +1887,23 @@ msgstr ""
 msgid "Hub address cannot be empty"
 msgstr ""
 
-#: win32\MainWindow.cpp:822
+#: win32\MainWindow.cpp:865
 msgid "Hub address or Magnet link"
 msgstr ""
 
-#: win32\FavHubsFrame.cpp:217 win32\HubFrame.cpp:1092
+#: win32\FavHubsFrame.cpp:217 win32\HubFrame.cpp:1108
 msgid "Hub already exists as a favorite"
 msgstr ""
 
-#: win32\PublicHubsFrame.cpp:425
+#: win32\PublicHubsFrame.cpp:420
 #, boost-format
 msgid "Hub list downloaded%1% (%2%)"
 msgstr ""
+
+#: win32\HubFrame.cpp:560
+#, fuzzy
+msgid "Hub offline"
+msgstr "المستخدم غير موجود"
 
 #: win32\UserInfoBase.cpp:112
 msgid "Hub operator"
@@ -1911,13 +1939,13 @@ msgstr "محاور"
 msgid "Hubs (registered)"
 msgstr ""
 
-#: win32\MainWindow.cpp:1048 win32\PublicHubsFrame.cpp:245
+#: win32\MainWindow.cpp:1092 win32\PublicHubsFrame.cpp:246
 #: win32\UserInfoBase.cpp:94
 #, fuzzy, boost-format
 msgid "Hubs: %1%"
 msgstr "محاور"
 
-#: win32\PublicHubsFrame.cpp:243
+#: win32\PublicHubsFrame.cpp:244
 #, fuzzy, boost-format
 msgid "Hubs: %1% / %2%"
 msgstr "محاور"
@@ -1937,7 +1965,7 @@ msgstr ""
 msgid "IP (v6)"
 msgstr ""
 
-#: win32\MainWindow.cpp:1447
+#: win32\MainWindow.cpp:1491
 msgid ""
 "IP -> country mappings are disabled. Turn them back on via Settings > "
 "Appearance."
@@ -1947,11 +1975,11 @@ msgstr ""
 msgid "Identification (leave blank for defaults)"
 msgstr ""
 
-#: win32\TransferView.cpp:581 win32\TransferView.cpp:898
+#: win32\TransferView.cpp:577 win32\TransferView.cpp:894
 msgid "Idle"
 msgstr ""
 
-#: win32\UserInfoBase.h:156
+#: win32\UserInfoBase.h:164
 #, fuzzy
 msgid "Ignore chat"
 msgstr "\"تغاضى عن بحث الـ \"تي تي إتش"
@@ -1971,7 +1999,7 @@ msgstr "فتح السائل الخاصة في النافذة الخاص بها"
 msgid "Ignore private messages from the hub"
 msgstr "فتح السائل الخاصة في النافذة الخاص بها"
 
-#: win32\HubFrame.cpp:696
+#: win32\HubFrame.cpp:716
 #, boost-format
 msgid "Ignored message: %1%"
 msgstr ""
@@ -1981,7 +2009,7 @@ msgstr ""
 msgid "In away mode"
 msgstr "نظام الذهاب لا يعمل"
 
-#: win32\MainWindow.cpp:341
+#: win32\MainWindow.cpp:347
 msgid "Indexing progress"
 msgstr "عملية التأشير"
 
@@ -1989,7 +2017,7 @@ msgstr "عملية التأشير"
 msgid "Installed Plugins"
 msgstr ""
 
-#: win32\QueueFrame.cpp:1051
+#: win32\QueueFrame.cpp:1066
 #, boost-format
 msgid "Integrity check: %1% (%2%)"
 msgstr ""
@@ -1999,11 +2027,11 @@ msgstr ""
 msgid "Invalid extension: %1%"
 msgstr ""
 
-#: win32\MainWindow.cpp:1237
+#: win32\MainWindow.cpp:1281
 msgid "Invalid file list name"
 msgstr ""
 
-#: win32\WinUtil.cpp:590 win32\WinUtil.cpp:598
+#: win32\WinUtil.cpp:591 win32\WinUtil.cpp:599
 msgid "Invalid number of slots"
 msgstr "عدد وصلات خاطيء"
 
@@ -2011,28 +2039,28 @@ msgstr "عدد وصلات خاطيء"
 msgid "Item edition"
 msgstr ""
 
-#: win32\QueueFrame.cpp:215
+#: win32\QueueFrame.cpp:221
 #, boost-format
 msgid "Items: %1%"
 msgstr ""
 
-#: win32\HubFrame.cpp:459
+#: win32\HubFrame.cpp:473
 msgid "Join/part of favorite users showing off"
 msgstr "وصل / القطع للمستخدمين المفضلين لا يعمل"
 
-#: win32\HubFrame.cpp:457
+#: win32\HubFrame.cpp:471
 msgid "Join/part of favorite users showing on"
 msgstr "وصل / القطع للمستخدمين المفضلين يعمل"
 
-#: win32\HubFrame.cpp:452
+#: win32\HubFrame.cpp:466
 msgid "Join/part showing off"
 msgstr "وصل/القطع لا يعمل"
 
-#: win32\HubFrame.cpp:450
+#: win32\HubFrame.cpp:464
 msgid "Join/part showing on"
 msgstr "وصل/القطع يعمل"
 
-#: win32\HubFrame.cpp:613
+#: win32\HubFrame.cpp:633
 #, boost-format
 msgid "Joins: %1%"
 msgstr ""
@@ -2100,7 +2128,7 @@ msgstr "الحدود"
 msgid "Line speed (upload)"
 msgstr "رفع الملفات المنتهية"
 
-#: win32\MainWindow.cpp:381 win32\StylesPage.cpp:168
+#: win32\MainWindow.cpp:387 win32\StylesPage.cpp:168
 #, fuzzy
 msgid "Links"
 msgstr "أسم المستخدم"
@@ -2114,12 +2142,12 @@ msgstr ""
 msgid "Loading DC++, please wait... (%1%)"
 msgstr ""
 
-#: win32\DirectoryListingFrame.cpp:713
+#: win32\DirectoryListingFrame.cpp:840
 #, boost-format
 msgid "Loading file list: %1%"
 msgstr ""
 
-#: win32\PublicHubsFrame.cpp:429
+#: win32\PublicHubsFrame.cpp:424
 #, boost-format
 msgid "Locally cached (as of %1%) version of the hub list loaded (%2%)"
 msgstr ""
@@ -2173,11 +2201,11 @@ msgstr "أسم المستخدم"
 msgid "Logs"
 msgstr "أسم المستخدم"
 
-#: win32\WinUtil.cpp:764
+#: win32\WinUtil.cpp:765
 msgid "Lookup TTH at Bitzi.com"
 msgstr "Bitzi.com البحث عن \"تي تي إتش\" في"
 
-#: win32\QueueFrame.cpp:351 win32\QueueFrame.cpp:883
+#: win32\QueueFrame.cpp:363 win32\QueueFrame.cpp:897
 msgid "Low"
 msgstr "أقل"
 
@@ -2185,7 +2213,7 @@ msgstr "أقل"
 msgid "Low prio max size"
 msgstr ""
 
-#: win32\QueueFrame.cpp:350 win32\QueueFrame.cpp:882
+#: win32\QueueFrame.cpp:362 win32\QueueFrame.cpp:896
 msgid "Lowest"
 msgstr "الأقل"
 
@@ -2193,7 +2221,7 @@ msgstr "الأقل"
 msgid "M&odify"
 msgstr ""
 
-#: win32\MagnetDlg.cpp:122 win32\WinUtil.cpp:1445
+#: win32\MagnetDlg.cpp:122 win32\WinUtil.cpp:1419
 msgid "MAGNET Link detected"
 msgstr "تم العثور على وصلة ممغنطة"
 
@@ -2202,7 +2230,7 @@ msgstr "تم العثور على وصلة ممغنطة"
 msgid "MB"
 msgstr "ميجابايت"
 
-#: win32\WinUtil.cpp:96
+#: win32\WinUtil.cpp:97
 #, fuzzy
 msgid "Main chat message received"
 msgstr "عمل صوت معين كلما تصلني رسالة خاصة"
@@ -2221,7 +2249,7 @@ msgstr "المعلومات الخاصة"
 msgid "Match bots"
 msgstr ""
 
-#: win32\MainWindow.cpp:297
+#: win32\MainWindow.cpp:299
 msgid "Match downloaded lists"
 msgstr ""
 
@@ -2239,11 +2267,11 @@ msgstr "وصل / القطع للمستخدمين المفضلين يعمل"
 msgid "Match operators"
 msgstr "خواص البحث"
 
-#: win32\DirectoryListingFrame.cpp:364
+#: win32\DirectoryListingFrame.cpp:368
 msgid "Match queue"
 msgstr "توافق الطابور"
 
-#: win32\DirectoryListingFrame.cpp:629
+#: win32\DirectoryListingFrame.cpp:756
 #, boost-format
 msgid "Matched %1% file"
 msgid_plural "Matched %1% files"
@@ -2296,7 +2324,7 @@ msgstr "الحد الأعلى للتحميلات في نفس الوقت - | صف
 msgid "Maximum Upload Rate (KiB/s) (0 = infinite)"
 msgstr "الحد الأعلى للتحميلات في نفس الوقت - | صفر | معناه غير محدود"
 
-#: win32\HistoryPage.cpp:86 win32\MainWindow.cpp:748
+#: win32\HistoryPage.cpp:86 win32\MainWindow.cpp:791
 msgid "Maximum number of recent items to save"
 msgstr ""
 
@@ -2304,7 +2332,7 @@ msgstr ""
 msgid "Maximum simultaneous downloads (0 = infinite)"
 msgstr "الحد الأعلى للتحميلات في نفس الوقت - | صفر | معناه غير محدود"
 
-#: win32\MainWindow.cpp:343
+#: win32\MainWindow.cpp:349
 #, fuzzy
 msgid "Menu bar\tCtrl+0"
 msgstr "البحث"
@@ -2373,13 +2401,13 @@ msgstr "الحد الأدنى للوصلات"
 msgid "Minimize to tray"
 msgstr "إرسال إلى التراي"
 
-#: win32\ADLSearchFrame.cpp:103 win32\FavHubsFrame.cpp:119
+#: win32\ADLSearchFrame.cpp:104 win32\FavHubsFrame.cpp:119
 #: win32\FavHubsFrame.cpp:353 win32\StringListDlg.cpp:150 win32\UCPage.cpp:72
 #: win32\UserMatchPage.cpp:94
 msgid "Move &Down"
 msgstr ""
 
-#: win32\ADLSearchFrame.cpp:97 win32\FavHubsFrame.cpp:112
+#: win32\ADLSearchFrame.cpp:98 win32\FavHubsFrame.cpp:112
 #: win32\FavHubsFrame.cpp:352 win32\StringListDlg.cpp:145 win32\UCPage.cpp:68
 #: win32\UserMatchPage.cpp:90
 msgid "Move &Up"
@@ -2393,15 +2421,15 @@ msgstr ""
 msgid "Move &up"
 msgstr ""
 
-#: win32\PluginPage.cpp:239
+#: win32\PluginPage.cpp:252
 msgid "Move plugin down"
 msgstr ""
 
-#: win32\PluginPage.cpp:238
+#: win32\PluginPage.cpp:251
 msgid "Move plugin up"
 msgstr ""
 
-#: win32\DirectoryListingFrame.cpp:1381
+#: win32\DirectoryListingFrame.cpp:1564
 msgid "NONE"
 msgstr ""
 
@@ -2423,7 +2451,7 @@ msgstr ""
 msgid "Name under which the others see the directory"
 msgstr "ضع اسما لكي يرى الآخرين أسم المجلد"
 
-#: win32\PluginPage.cpp:212
+#: win32\PluginPage.cpp:225
 #, fuzzy
 msgid "Name: "
 msgstr "المستحدمين"
@@ -2433,11 +2461,11 @@ msgstr "المستحدمين"
 msgid "Name: %1%"
 msgstr "المستحدمين"
 
-#: win32\MainWindow.cpp:339 win32\MainWindow.cpp:437 win32\StatsFrame.cpp:32
+#: win32\MainWindow.cpp:345 win32\MainWindow.cpp:443 win32\StatsFrame.cpp:32
 msgid "Network Statistics"
 msgstr "مواصفات الشبكة"
 
-#: win32\MainWindow.cpp:794
+#: win32\MainWindow.cpp:837
 #, fuzzy
 msgid "New limit (KiB/s) (0 = infinite)"
 msgstr "الحد الأعلى للتحميلات في نفس الوقت - | صفر | معناه غير محدود"
@@ -2457,47 +2485,47 @@ msgstr "...أسم وهمي يطابق أسما قديما ، جاري الإلغ
 
 #: win32\FavHubGroupsDlg.cpp:135 win32\FavHubProperties.cpp:102
 #: win32\FavHubsFrame.cpp:47 win32\GeneralPage.cpp:54 win32\HubFrame.cpp:58
-#: win32\HubFrame.cpp:424 win32\UserMatchDlg.cpp:223
+#: win32\HubFrame.cpp:438 win32\UserMatchDlg.cpp:223
 #: win32\UserMatchPage.cpp:216 win32\UsersFrame.cpp:55 win32\UsersFrame.cpp:78
-#: win32\FinishedFrameBase.h:732
+#: win32\FinishedFrameBase.h:742
 msgid "Nick"
 msgstr "الأسم"
 
-#: win32\FinishedFrameBase.h:720
+#: win32\FinishedFrameBase.h:730
 #, fuzzy
 msgid "Nicks"
 msgstr "الأسم"
 
-#: win32\ADLSearchFrame.cpp:329 win32\NotificationsPage.cpp:281
-#: win32\NotificationsPage.cpp:287 win32\WinUtil.cpp:1164
-#: win32\FinishedFrameBase.h:257
+#: win32\ADLSearchFrame.cpp:331 win32\NotificationsPage.cpp:281
+#: win32\NotificationsPage.cpp:287 win32\WinUtil.cpp:1138
+#: win32\FinishedFrameBase.h:263
 msgid "No"
 msgstr ""
 
-#: win32\WinUtil.cpp:616
+#: win32\WinUtil.cpp:617
 msgid "No away message"
 msgstr ""
 
-#: win32\QueueFrame.cpp:391
+#: win32\QueueFrame.cpp:405
 msgid "No errors"
 msgstr "لا أخطاء"
 
-#: win32\MainWindow.cpp:893
+#: win32\MainWindow.cpp:936
 #, fuzzy
 msgid "No favorite hub group found"
 msgstr "المحور المفضل تمت إضافته"
 
-#: win32\QueueFrame.cpp:1088
+#: win32\QueueFrame.cpp:392 win32\QueueFrame.cpp:1103
 #, fuzzy
 msgid "No full tree available"
 msgstr "الملف غير موجود"
 
-#: win32\WinUtil.cpp:1095
+#: win32\WinUtil.cpp:1069
 #, fuzzy
 msgid "No help information available"
 msgstr "الملف غير موجود"
 
-#: win32\DirectoryListingFrame.cpp:1353
+#: win32\DirectoryListingFrame.cpp:1536
 #, fuzzy, boost-format
 msgid "No matches found for: %1%"
 msgstr "لا يوجد تطابق"
@@ -2507,7 +2535,7 @@ msgid "No new downloads if speed exceeds (KiB/s, 0 = disable)"
 msgstr ""
 "(عدم البدء في تحميل جديد إذا تجاوزت السرعة (كيلوبايت/ثانية ، صفر = لا يعمل"
 
-#: win32\PluginPage.cpp:192
+#: win32\PluginPage.cpp:197
 msgid "No plugin has been selected"
 msgstr ""
 
@@ -2515,11 +2543,11 @@ msgstr ""
 msgid "No transfers yet"
 msgstr ""
 
-#: win32\QueueFrame.cpp:312
+#: win32\QueueFrame.cpp:324
 msgid "No users"
 msgstr "لا يوجد مستخدمين"
 
-#: win32\QueueFrame.cpp:324
+#: win32\QueueFrame.cpp:336
 msgid "No users to download from"
 msgstr "لا يوجد مستخدمين لتحمل منهم"
 
@@ -2527,7 +2555,7 @@ msgstr "لا يوجد مستخدمين لتحمل منهم"
 msgid "Noon"
 msgstr ""
 
-#: win32\QueueFrame.cpp:352 win32\QueueFrame.cpp:884 win32\SearchFrame.cpp:180
+#: win32\QueueFrame.cpp:364 win32\QueueFrame.cpp:898 win32\SearchFrame.cpp:180
 msgid "Normal"
 msgstr "عادي"
 
@@ -2553,7 +2581,7 @@ msgstr "ملاحظة؛ الملفات تظهر في المساهمات فقط إ
 msgid "Note; because of changing download speeds, this is not 100% accurate..."
 msgstr "%ملاحظة ؛ لأن التغيير في سرعات التحميل ؛ فهذا ليس دقيقا 100"
 
-#: win32\MainWindow.cpp:445 win32\NotepadFrame.cpp:33
+#: win32\MainWindow.cpp:453 win32\NotepadFrame.cpp:33
 msgid "Notepad"
 msgstr "المذكرة"
 
@@ -2561,24 +2589,24 @@ msgstr "المذكرة"
 msgid "Notifications"
 msgstr ""
 
-#: win32\WinUtil.cpp:1110
+#: win32\WinUtil.cpp:1084
 msgid "OK"
 msgstr ""
 
-#: win32\UsersFrame.cpp:264 win32\UsersFrame.cpp:279 win32\WinUtil.cpp:701
+#: win32\UsersFrame.cpp:269 win32\UsersFrame.cpp:284 win32\WinUtil.cpp:702
 msgid "Offline"
 msgstr "غير متصل"
 
-#: win32\UsersFrame.cpp:184 win32\UsersFrame.cpp:261 win32\UsersFrame.cpp:276
+#: win32\UsersFrame.cpp:186 win32\UsersFrame.cpp:266 win32\UsersFrame.cpp:281
 msgid "Online"
 msgstr "متصل"
 
-#: win32\HubFrame.cpp:422
+#: win32\HubFrame.cpp:436
 #, fuzzy
 msgid "Online users"
 msgstr "المستخدمين المفضلين"
 
-#: win32\FinishedFrameBase.h:142
+#: win32\FinishedFrameBase.h:146
 #, fuzzy
 msgid "Only show fully downloaded files"
 msgstr "لا يوجد مستخدمين لتحمل منهم"
@@ -2596,24 +2624,24 @@ msgstr "للمستخدمين الذين يملكون وصلات غير متست�
 msgid "Only where I'm op"
 msgstr "OP للمكان الذي أنا فيه"
 
-#: win32\SystemFrame.cpp:127 win32\FinishedFrameBase.h:459
+#: win32\SystemFrame.cpp:127 win32\FinishedFrameBase.h:465
 msgid "Open &folder"
 msgstr ""
 
-#: win32\MainWindow.cpp:302
+#: win32\MainWindow.cpp:304
 msgid "Open crash log"
 msgstr ""
 
-#: win32\MainWindow.cpp:301 win32\MainWindow.cpp:1677
+#: win32\MainWindow.cpp:303 win32\MainWindow.cpp:1721
 msgid "Open downloads directory"
 msgstr "فتح مجلد التحميلات"
 
-#: win32\MainWindow.cpp:439
+#: win32\MainWindow.cpp:445
 #, fuzzy
 msgid "Open file list..."
 msgstr "فتح القائمة الخاصة"
 
-#: win32\MainWindow.cpp:295
+#: win32\MainWindow.cpp:297
 msgid "Open file list...\tCtrl+L"
 msgstr ""
 
@@ -2629,7 +2657,7 @@ msgstr "فتح نوافذ الرسائل الخاصة في الخلف"
 msgid "Open new window when using /join"
 msgstr "فتح نافذة جديدة عند استخدام /اتصال"
 
-#: win32\MainWindow.cpp:296
+#: win32\MainWindow.cpp:298 win32\MainWindow.cpp:447
 msgid "Open own list"
 msgstr "فتح القائمة الخاصة"
 
@@ -2647,7 +2675,7 @@ msgstr "فتح السائل الخاصة في النافذة الخاص بها"
 msgid "Open private messages in their own window"
 msgstr "فتح السائل الخاصة في النافذة الخاص بها"
 
-#: win32\WinUtil.cpp:468
+#: win32\WinUtil.cpp:469
 #, boost-format
 msgid "Operators (added by %1%)"
 msgstr ""
@@ -2677,15 +2705,15 @@ msgstr "رسالة خاصة"
 msgid "Parameters"
 msgstr ""
 
-#: win32\DirectoryListingFrame.cpp:565
+#: win32\DirectoryListingFrame.cpp:682
 msgid "Partial file list loaded"
 msgstr ""
 
-#: win32\UserMatchPage.cpp:217 win32\WinUtil.cpp:1157
+#: win32\UserMatchPage.cpp:217 win32\WinUtil.cpp:1131
 msgid "Partial match"
 msgstr ""
 
-#: win32\HubFrame.cpp:620
+#: win32\HubFrame.cpp:640
 #, boost-format
 msgid "Parts: %1%"
 msgstr ""
@@ -2694,7 +2722,7 @@ msgstr ""
 msgid "Passive mode (last resort - has serious limitations)"
 msgstr ""
 
-#: win32\QueueFrame.cpp:374
+#: win32\QueueFrame.cpp:386
 msgid "Passive user"
 msgstr "Passive المستخد في وضعية"
 
@@ -2704,7 +2732,7 @@ msgid "Password"
 msgstr "كلمة السر"
 
 #: win32\QueueFrame.cpp:54 win32\SearchFrame.cpp:52 win32\TransferView.cpp:64
-#: win32\FinishedFrameBase.h:719
+#: win32\FinishedFrameBase.h:729
 msgid "Path"
 msgstr "المسار"
 
@@ -2712,27 +2740,27 @@ msgstr "المسار"
 msgid "Pause hashing"
 msgstr ""
 
-#: win32\HashProgressDlg.cpp:147 win32\QueueFrame.cpp:349
-#: win32\QueueFrame.cpp:881
+#: win32\HashProgressDlg.cpp:147 win32\QueueFrame.cpp:361
+#: win32\QueueFrame.cpp:895
 msgid "Paused"
 msgstr "توقف"
 
-#: win32\UsersFrame.cpp:186
+#: win32\UsersFrame.cpp:188
 #, fuzzy
 msgid "Pending download"
 msgstr "للتحميلات Log عمل"
 
-#: win32\UsersFrame.cpp:391
+#: win32\UsersFrame.cpp:398
 #, fuzzy
 msgid "Pending downloads information"
 msgstr "المعلومات الخاصة"
 
-#: win32\UsersFrame.cpp:187
+#: win32\UsersFrame.cpp:189
 #, fuzzy
 msgid "Pending upload"
 msgstr "لرفع الملفات Log عمل"
 
-#: win32\UsersFrame.cpp:406
+#: win32\UsersFrame.cpp:413
 #, fuzzy
 msgid "Pending uploads information"
 msgstr "المعلومات الخاصة"
@@ -2749,11 +2777,11 @@ msgstr ""
 msgid "Play a sound"
 msgstr ""
 
-#: win32\WinUtil.cpp:512
+#: win32\WinUtil.cpp:513
 msgid "Please enter a nickname in the settings dialog!"
 msgstr "لو سمحت أضف اسما في نافذة خواص البرنامج"
 
-#: win32\HubFrame.cpp:650
+#: win32\HubFrame.cpp:670
 msgid "Please enter a password"
 msgstr "لو سمحت أدخل باسوورد"
 
@@ -2768,11 +2796,11 @@ msgstr ""
 msgid "Plugin information"
 msgstr "المعلومات الخاصة"
 
-#: win32\PluginPage.cpp:234
+#: win32\PluginPage.cpp:247
 msgid "Plugin options"
 msgstr ""
 
-#: win32\SettingsDialog.cpp:194
+#: win32\MainWindow.cpp:313 win32\SettingsDialog.cpp:194
 msgid "Plugins"
 msgstr ""
 
@@ -2809,17 +2837,17 @@ msgstr ""
 msgid "Private message"
 msgstr ""
 
-#: win32\HubFrame.cpp:705
+#: win32\HubFrame.cpp:725
 #, boost-format
 msgid "Private message from %1%: %2%"
 msgstr ""
 
-#: win32\WinUtil.cpp:97
+#: win32\WinUtil.cpp:98
 #, fuzzy
 msgid "Private message received"
 msgstr "للمسجات للحالة Log عمل"
 
-#: win32\WinUtil.cpp:98
+#: win32\WinUtil.cpp:99
 #, fuzzy
 msgid "Private message window opened"
 msgstr "عمل صوت معين كلما فتحت نافذة رسالة خاصة"
@@ -2837,7 +2865,7 @@ msgstr ""
 msgid "Proxy settings for outgoing connections"
 msgstr ""
 
-#: win32\MainWindow.cpp:418 win32\PublicHubsFrame.cpp:84
+#: win32\MainWindow.cpp:424 win32\PublicHubsFrame.cpp:84
 msgid "Public Hubs"
 msgstr "المحاور العامة"
 
@@ -2861,15 +2889,15 @@ msgstr ""
 msgid "Queued"
 msgstr ""
 
-#: win32\UsersFrame.cpp:399
+#: win32\UsersFrame.cpp:406
 msgid "Queued bytes"
 msgstr ""
 
-#: win32\UsersFrame.cpp:395
+#: win32\UsersFrame.cpp:402
 msgid "Queued files"
 msgstr ""
 
-#: win32\MainWindow.cpp:822
+#: win32\MainWindow.cpp:865
 msgid "Quick Connect"
 msgstr "توصيل سريع"
 
@@ -2886,7 +2914,7 @@ msgstr ""
 msgid "Raw"
 msgstr "سطر"
 
-#: win32\QueueFrame.cpp:839 win32\QueueFrame.cpp:858
+#: win32\QueueFrame.cpp:853 win32\QueueFrame.cpp:872
 msgid "Re&check integrity"
 msgstr ""
 
@@ -2896,16 +2924,16 @@ msgstr ""
 msgid "Re&name"
 msgstr "تغيير الأسم"
 
-#: win32\QueueFrame.cpp:905
+#: win32\QueueFrame.cpp:919
 msgid "Re-add source"
 msgstr "إعادة إضافة المصدر"
 
-#: win32\DirectoryListingFrame.cpp:1343
+#: win32\DirectoryListingFrame.cpp:1526
 #, boost-format
 msgid "Reached the %1% of the file list, continuing from the %2%"
 msgstr ""
 
-#: win32\SearchFrame.cpp:1037
+#: win32\SearchFrame.cpp:1042
 msgid "Ready to search..."
 msgstr "... جاهز لعملية البحث"
 
@@ -2914,66 +2942,66 @@ msgstr "... جاهز لعملية البحث"
 msgid "Really close %1% hub windows?"
 msgstr "حقا تريد الإزالة ؟"
 
-#: win32\HubFrame.cpp:294
+#: win32\HubFrame.cpp:296
 #, fuzzy
 msgid "Really close?"
 msgstr "حقا تريد الإزالة ؟"
 
-#: win32\MainWindow.cpp:954
+#: win32\MainWindow.cpp:997
 msgid "Really exit?"
 msgstr "حقا تريد الخروج ؟"
 
-#: win32\ADLSearchFrame.cpp:249 win32\FavHubsFrame.cpp:287
-#: win32\QueueFrame.cpp:602 win32\QueueFrame.cpp:607 win32\UsersFrame.cpp:432
+#: win32\ADLSearchFrame.cpp:250 win32\FavHubsFrame.cpp:287
+#: win32\QueueFrame.cpp:616 win32\QueueFrame.cpp:621 win32\UsersFrame.cpp:438
 msgid "Really remove?"
 msgstr "حقا تريد الإزالة ؟"
 
-#: win32\HubFrame.cpp:938
+#: win32\HubFrame.cpp:966
 #, boost-format
 msgid "Received a redirect request to %1%, click here to follow it"
 msgstr ""
 
-#: win32\HistoryPage.cpp:92 win32\MainWindow.cpp:740
+#: win32\HistoryPage.cpp:92 win32\MainWindow.cpp:783
 msgid "Recent PMs"
 msgstr ""
 
-#: win32\HistoryPage.cpp:95 win32\MainWindow.cpp:741
+#: win32\HistoryPage.cpp:95 win32\MainWindow.cpp:784
 #, fuzzy
 msgid "Recent file lists"
 msgstr "فتح القائمة الخاصة"
 
-#: win32\HistoryPage.cpp:89 win32\MainWindow.cpp:739
+#: win32\HistoryPage.cpp:89 win32\MainWindow.cpp:782
 msgid "Recent hubs"
 msgstr ""
 
-#: win32\MainWindow.cpp:441
+#: win32\MainWindow.cpp:449
 msgid "Recent windows"
 msgstr ""
 
-#: win32\MainWindow.cpp:420
+#: win32\MainWindow.cpp:426
 #, fuzzy
 msgid "Reconnect"
 msgstr "موصل حاليا"
 
-#: win32\MainWindow.cpp:352
+#: win32\MainWindow.cpp:358
 #, fuzzy
 msgid "Reconnect disconnected hubs"
 msgstr "فصل و غلق"
 
-#: win32\HubFrame.cpp:930 win32\HubFrame.cpp:1444
+#: win32\HubFrame.cpp:958 win32\HubFrame.cpp:1442
 msgid "Redirect request received to a hub that's already connected"
 msgstr "عملية التحويل تم استلامها من المحور المتصل به حاليا"
 
-#: win32\HubFrame.cpp:1439
+#: win32\HubFrame.cpp:1437
 msgid "Redirect request to an empty hub address"
 msgstr ""
 
-#: win32\MainWindow.cpp:447
+#: win32\MainWindow.cpp:455
 #, fuzzy
 msgid "Refresh file list"
 msgstr "ت&صفح قائمة الملفات"
 
-#: win32\MainWindow.cpp:298
+#: win32\MainWindow.cpp:300
 #, fuzzy
 msgid "Refresh file list\tF5"
 msgstr "ت&صفح قائمة الملفات"
@@ -2988,7 +3016,7 @@ msgid "Register with Windows to handle magnet: URI links"
 msgstr "URI الإشتراك للنوافذ للتعامل مع الوصلات المغنطة"
 
 #: win32\ADLSearchFrame.cpp:45 win32\ADLSProperties.cpp:68
-#: win32\UserMatchPage.cpp:217 win32\WinUtil.cpp:1157
+#: win32\UserMatchPage.cpp:217 win32\WinUtil.cpp:1131
 msgid "Regular Expression"
 msgstr ""
 
@@ -2996,19 +3024,19 @@ msgstr ""
 msgid "Reliability"
 msgstr "الإتكال عليه"
 
-#: win32\QueueFrame.cpp:386
+#: win32\QueueFrame.cpp:400
 msgid "Remote ADC client does not use TLS encryption"
 msgstr ""
 
-#: win32\QueueFrame.cpp:382 win32\TransferView.cpp:710
+#: win32\QueueFrame.cpp:396 win32\TransferView.cpp:706
 msgid "Remote client does not fully support TTH - cannot download"
 msgstr ""
 
-#: win32\FinishedFrameBase.h:462 win32\FinishedFrameBase.h:486
+#: win32\FinishedFrameBase.h:468 win32\FinishedFrameBase.h:493
 msgid "Remove &all"
 msgstr ""
 
-#: win32\PluginPage.cpp:241
+#: win32\PluginPage.cpp:254
 #, fuzzy
 msgid "Remove plugin"
 msgstr "حذف المصدر"
@@ -3017,11 +3045,11 @@ msgstr "حذف المصدر"
 msgid "Remove slow filelists"
 msgstr ""
 
-#: win32\QueueFrame.cpp:914
+#: win32\QueueFrame.cpp:928
 msgid "Remove source"
 msgstr "حذف المصدر"
 
-#: win32\QueueFrame.cpp:923 win32\WinUtil.cpp:1528 win32\UserInfoBase.h:152
+#: win32\QueueFrame.cpp:937 win32\WinUtil.cpp:1502 win32\UserInfoBase.h:160
 msgid "Remove user from queue"
 msgstr "حذف المستخدم من الطابور"
 
@@ -3029,15 +3057,15 @@ msgstr "حذف المستخدم من الطابور"
 msgid "Rename a search type"
 msgstr ""
 
-#: win32\MainWindow.cpp:388
+#: win32\MainWindow.cpp:394
 msgid "Report a bug"
 msgstr "Bug - إرسال خطأ في البرنامج"
 
-#: win32\MainWindow.cpp:387
+#: win32\MainWindow.cpp:393
 msgid "Request a feature"
 msgstr "اقتراح ميزة جديدة في البرنامج"
 
-#: win32\TransferView.cpp:756
+#: win32\TransferView.cpp:752
 #, boost-format
 msgid "Requesting %1%"
 msgstr ""
@@ -3054,7 +3082,7 @@ msgstr ""
 msgid "Run in background"
 msgstr "العمل في الخلف"
 
-#: win32\QueueFrame.cpp:332
+#: win32\QueueFrame.cpp:344
 msgid "Running..."
 msgstr "...جاري العمل"
 
@@ -3062,19 +3090,19 @@ msgstr "...جاري العمل"
 msgid "SOCKS5"
 msgstr "سوكس"
 
-#: win32\ConnectivityManualPage.cpp:108 win32\MainWindow.cpp:433
-#: win32\RichTextBox.cpp:111 win32\SearchFrame.cpp:112
+#: win32\ConnectivityManualPage.cpp:108 win32\MainWindow.cpp:439
+#: win32\RichTextBox.cpp:112 win32\SearchFrame.cpp:112
 #: win32\SearchFrame.cpp:165 win32\TabsPage.cpp:41
 msgid "Search"
 msgstr "بحث"
 
-#: win32\SearchFrame.cpp:991 win32\SearchFrame.cpp:1003
-#: win32\SearchFrame.cpp:1033
+#: win32\SearchFrame.cpp:996 win32\SearchFrame.cpp:1008
+#: win32\SearchFrame.cpp:1038
 #, fuzzy, boost-format
 msgid "Search - %1%"
 msgstr "البحث"
 
-#: win32\SearchFrame.cpp:1038
+#: win32\SearchFrame.cpp:1043
 #, fuzzy
 msgid "Search - Ready to search..."
 msgstr "... جاهز لعملية البحث"
@@ -3091,7 +3119,7 @@ msgstr "جمل البحث"
 msgid "Search for"
 msgstr "البحث عن"
 
-#: win32\WinUtil.cpp:763
+#: win32\WinUtil.cpp:764
 msgid "Search for alternates"
 msgstr "اليحث عن بدائل"
 
@@ -3113,7 +3141,7 @@ msgstr "البحث عن"
 msgid "Search port (v6)"
 msgstr "البحث عن"
 
-#: win32\HubFrame.cpp:996
+#: win32\HubFrame.cpp:1024
 #, boost-format
 msgid "Search spam detected from %1%"
 msgstr ""
@@ -3128,17 +3156,17 @@ msgstr "بحث غير شرغي"
 msgid "Search types"
 msgstr "بحث غير شرغي"
 
-#: win32\SearchFrame.cpp:985
+#: win32\SearchFrame.cpp:990
 #, fuzzy, boost-format
 msgid "Searching for %1%..."
 msgstr "البحث عن"
 
-#: win32\DirectoryListingFrame.cpp:1234
+#: win32\DirectoryListingFrame.cpp:1417
 #, fuzzy, boost-format
 msgid "Searching for: %1%"
 msgstr "البحث عن"
 
-#: win32\SearchFrame.cpp:1001 win32\SearchFrame.cpp:1031
+#: win32\SearchFrame.cpp:1006 win32\SearchFrame.cpp:1036
 #, boost-format
 msgid "Searching too soon, next search in %1% second"
 msgid_plural "Searching too soon, next search in %1% seconds"
@@ -3157,11 +3185,11 @@ msgstr ""
 msgid "Security certificates"
 msgstr ""
 
-#: win32\dwt_Texts.cpp:34
+#: win32\dwtTexts.cpp:36
 msgid "Select &All\tCtrl+A"
 msgstr ""
 
-#: win32\MainWindow.cpp:901
+#: win32\MainWindow.cpp:944
 msgid "Select a favorite hub group"
 msgstr ""
 
@@ -3197,16 +3225,16 @@ msgstr "سيرفر"
 msgid "Set lowest prio for newly added files larger than Low prio size"
 msgstr ""
 
-#: win32\QueueFrame.cpp:880
+#: win32\QueueFrame.cpp:894
 msgid "Set priority"
 msgstr "وضع الأولوية"
 
-#: win32\MainWindow.cpp:443 win32\MainWindow.cpp:1679
+#: win32\MainWindow.cpp:451 win32\MainWindow.cpp:1723
 #: win32\SettingsDialog.cpp:366
 msgid "Settings"
 msgstr "الخواص"
 
-#: win32\MainWindow.cpp:305
+#: win32\MainWindow.cpp:307
 #, fuzzy
 msgid "Settings\tCtrl+F3"
 msgstr "الخواص"
@@ -3219,7 +3247,7 @@ msgstr ""
 msgid "Share hidden files"
 msgstr "الملفات المختفية"
 
-#: win32\HubFrame.cpp:59 win32\HubFrame.cpp:423 win32\PublicHubsFrame.cpp:46
+#: win32\HubFrame.cpp:59 win32\HubFrame.cpp:437 win32\PublicHubsFrame.cpp:46
 #: win32\UserInfoBase.cpp:116
 msgid "Shared"
 msgstr "الحجم المساهم به"
@@ -3250,7 +3278,7 @@ msgstr ""
 msgid "Shell menus"
 msgstr ""
 
-#: win32\MainWindow.cpp:1676
+#: win32\MainWindow.cpp:1720
 msgid "Show"
 msgstr "عرض"
 
@@ -3267,18 +3295,23 @@ msgstr ""
 msgid "Show timestamps in chat by default"
 msgstr "أظهر المؤقت في الدردشة افتراضيا"
 
-#: win32\DirectoryListingFrame.cpp:65 win32\MainWindow.cpp:1540
+#: win32\DirectoryListingFrame.cpp:66 win32\MainWindow.cpp:1584
 #: win32\QueueFrame.cpp:50 win32\SearchFrame.cpp:51 win32\SearchFrame.cpp:170
 #: win32\TransferView.cpp:69 win32\UploadPage.cpp:48
 msgid "Size"
+msgstr "الحجم"
+
+#: win32\DirectoryListingFrame.cpp:1219
+#, fuzzy, boost-format
+msgid "Size (total): %1%"
 msgstr "الحجم"
 
 #: win32\ADLSProperties.cpp:97
 msgid "Size Type"
 msgstr ""
 
-#: win32\DirectoryListingFrame.cpp:1091 win32\DirectoryListingFrame.cpp:1108
-#: win32\QueueFrame.cpp:216 win32\QueueFrame.cpp:220
+#: win32\DirectoryListingFrame.cpp:1236 win32\QueueFrame.cpp:222
+#: win32\QueueFrame.cpp:229
 #, fuzzy, boost-format
 msgid "Size: %1%"
 msgstr "الحجم"
@@ -3287,7 +3320,7 @@ msgstr "الحجم"
 msgid "Skip zero-byte files"
 msgstr "التغاضي عن الملفات الصفرية"
 
-#: win32\PrivateFrame.cpp:339
+#: win32\PrivateFrame.cpp:342
 msgid "Slot granted"
 msgstr "تم أخذ الوصلة"
 
@@ -3295,7 +3328,7 @@ msgstr "تم أخذ الوصلة"
 msgid "Slots"
 msgstr "الوصلات"
 
-#: win32\WinUtil.cpp:588
+#: win32\WinUtil.cpp:589
 msgid "Slots set"
 msgstr "عمل الوصلات"
 
@@ -3307,7 +3340,7 @@ msgstr ""
 msgid "Socket write buffer"
 msgstr ""
 
-#: win32\PluginPage.cpp:135
+#: win32\PluginPage.cpp:134
 #, boost-format
 msgid "Some plugins may require you to restart %1%"
 msgstr ""
@@ -3336,11 +3369,11 @@ msgstr "الخواص"
 msgid "Source Type"
 msgstr "نوع المصدر"
 
-#: win32\QueueFrame.cpp:380
+#: win32\QueueFrame.cpp:394
 msgid "Source too slow"
 msgstr ""
 
-#: win32\WinUtil.cpp:635
+#: win32\WinUtil.cpp:636
 msgid "Specify a URL"
 msgstr ""
 
@@ -3348,25 +3381,25 @@ msgstr ""
 msgid "Specify a name for this user matching definition"
 msgstr ""
 
-#: win32\WinUtil.cpp:604 win32\WinUtil.cpp:623 win32\WinUtil.cpp:629
+#: win32\WinUtil.cpp:605 win32\WinUtil.cpp:624 win32\WinUtil.cpp:630
 msgid "Specify a search string"
 msgstr "حدد كلمة البحث"
 
-#: win32\HubFrame.cpp:441
+#: win32\HubFrame.cpp:455
 msgid "Specify a server to connect to"
 msgstr "حدد سيرفرا لتتوصل إليه"
 
-#: win32\RichTextBox.cpp:111
+#: win32\RichTextBox.cpp:112
 #, fuzzy
 msgid "Specify search string"
 msgstr "حدد كلمة البحث"
 
 #: win32\TransferView.cpp:53 win32\TransferView.cpp:67
-#: win32\FinishedFrameBase.h:724 win32\FinishedFrameBase.h:735
+#: win32\FinishedFrameBase.h:734 win32\FinishedFrameBase.h:745
 msgid "Speed"
 msgstr "السرعة"
 
-#: win32\DirectoryListingFrame.cpp:1092
+#: win32\DirectoryListingFrame.cpp:1220
 #, boost-format
 msgid "Speed: %1%/s"
 msgstr ""
@@ -3375,7 +3408,7 @@ msgstr ""
 msgid "Start a search for this file"
 msgstr "بدأ عملية البحث عن هذا الملف"
 
-#: win32\QueueFrame.cpp:1076
+#: win32\QueueFrame.cpp:1091
 #, fuzzy
 msgid "Started..."
 msgstr "الحجم المساهم به"
@@ -3393,19 +3426,19 @@ msgstr "الحالة"
 msgid "Status / Time last seen"
 msgstr "آخر وقت وجد فيه"
 
-#: win32\MainWindow.cpp:346
+#: win32\MainWindow.cpp:352
 msgid "Status bar\tCtrl+3"
 msgstr ""
 
-#: win32\MainWindow.cpp:1087
+#: win32\MainWindow.cpp:1131
 msgid "Status: Available - Double-click to switch to Away"
 msgstr ""
 
-#: win32\MainWindow.cpp:1086
+#: win32\MainWindow.cpp:1130
 msgid "Status: Away - Double-click to switch to Available"
 msgstr ""
 
-#: win32\HubFrame.cpp:646
+#: win32\HubFrame.cpp:666
 msgid "Stored password sent..."
 msgstr "...كلمة السر المخزنة تم ارسالها"
 
@@ -3413,11 +3446,11 @@ msgstr "...كلمة السر المخزنة تم ارسالها"
 msgid "Styles"
 msgstr ""
 
-#: win32\DirectoryListingFrame.cpp:363
+#: win32\DirectoryListingFrame.cpp:367
 msgid "Subtract list"
 msgstr ""
 
-#: win32\MainWindow.cpp:337 win32\SystemFrame.cpp:37 win32\TabsPage.cpp:42
+#: win32\MainWindow.cpp:343 win32\SystemFrame.cpp:37 win32\TabsPage.cpp:42
 msgid "System Log"
 msgstr ""
 
@@ -3430,12 +3463,12 @@ msgstr "B"
 msgid "TLS Keyprint"
 msgstr ""
 
-#: win32\AboutDlg.cpp:106 win32\DirectoryListingFrame.cpp:67
+#: win32\AboutDlg.cpp:106 win32\DirectoryListingFrame.cpp:68
 #: win32\QueueFrame.cpp:58 win32\SearchFrame.cpp:58
 msgid "TTH"
 msgstr ""
 
-#: win32\TransferView.cpp:721
+#: win32\TransferView.cpp:717
 #, boost-format
 msgid "TTH: %1%"
 msgstr ""
@@ -3460,12 +3493,12 @@ msgstr ""
 msgid "Tag"
 msgstr "بطاقة"
 
-#: win32\MainWindow.cpp:1475
+#: win32\MainWindow.cpp:1519
 #, boost-format
 msgid "The %1% GeoIP database could not be updated"
 msgstr ""
 
-#: win32\MainWindow.cpp:1471
+#: win32\MainWindow.cpp:1515
 #, boost-format
 msgid "The %1% GeoIP database has been successfully updated"
 msgstr ""
@@ -3481,13 +3514,21 @@ msgid ""
 "group."
 msgstr ""
 
-#: win32\MainWindow.cpp:1571
+#: win32\MainWindow.cpp:1615
 msgid ""
 "The menu bar is now hidden. Press Alt or F10 to temporarily bring it back "
 "into view."
 msgstr ""
 
-#: win32\HubFrame.cpp:1102
+#: win32\HubFrame.cpp:560
+msgid "The message cannot be delivered because the hub is offline."
+msgstr ""
+
+#: win32\PrivateFrame.cpp:373
+msgid "The message cannot be delivered because the user is offline."
+msgstr ""
+
+#: win32\HubFrame.cpp:1118
 msgid "This hub is not a favorite hub"
 msgstr ""
 
@@ -3505,7 +3546,7 @@ msgstr ""
 msgid "TiB"
 msgstr ""
 
-#: win32\FinishedFrameBase.h:726 win32\FinishedFrameBase.h:737
+#: win32\FinishedFrameBase.h:736 win32\FinishedFrameBase.h:747
 msgid "Time"
 msgstr "الوقت"
 
@@ -3526,11 +3567,11 @@ msgstr ""
 msgid "Toggle window when selecting an active tab"
 msgstr "أظهر النافذة عندما تختار تاب فعالة"
 
-#: win32\MainWindow.cpp:1534
+#: win32\MainWindow.cpp:1578
 msgid "Toolbar"
 msgstr ""
 
-#: win32\MainWindow.cpp:344
+#: win32\MainWindow.cpp:350
 msgid "Toolbar\tCtrl+1"
 msgstr ""
 
@@ -3555,11 +3596,11 @@ msgstr ""
 msgid "Transfer Rate Limiting"
 msgstr ""
 
-#: win32\MainWindow.cpp:345
+#: win32\MainWindow.cpp:351
 msgid "Transfer view\tCtrl+2"
 msgstr ""
 
-#: win32\FinishedFrameBase.h:721 win32\FinishedFrameBase.h:734
+#: win32\FinishedFrameBase.h:731 win32\FinishedFrameBase.h:744
 msgid "Transferred"
 msgstr ""
 
@@ -3575,26 +3616,26 @@ msgstr ""
 msgid "Trusted certificates path"
 msgstr ""
 
-#: win32\DirectoryListingFrame.cpp:64 win32\QueueFrame.cpp:59
+#: win32\DirectoryListingFrame.cpp:65 win32\QueueFrame.cpp:59
 #: win32\SearchFrame.cpp:50
 msgid "Type"
 msgstr "النوع"
 
-#: win32\MainWindow.cpp:1065
+#: win32\MainWindow.cpp:1109
 #, boost-format
 msgid "U: %1%"
 msgstr ""
 
-#: win32\MainWindow.cpp:1073
+#: win32\MainWindow.cpp:1117
 #, boost-format
 msgid "U: %1%/s (%2%)"
 msgstr ""
 
-#: win32\UserInfoBase.h:158
+#: win32\UserInfoBase.h:166
 msgid "Un-ignore chat"
 msgstr ""
 
-#: win32\MainWindow.cpp:1224
+#: win32\MainWindow.cpp:1268
 #, boost-format
 msgid ""
 "Unable to open %1% port. Searching or file transfers will not work correctly "
@@ -3614,28 +3655,28 @@ msgstr "تحت أي أسم ترى المجلد"
 msgid "Unfinished downloads directory"
 msgstr "مجلد التحميلات الغير منتهي"
 
-#: win32\QueueFrame.cpp:1079
+#: win32\QueueFrame.cpp:1094
 msgid "Unfinished file not found"
 msgstr ""
 
-#: win32\QueueFrame.cpp:1082
+#: win32\QueueFrame.cpp:1097
 msgid "Unfinished file too small"
 msgstr ""
 
-#: win32\QueueFrame.cpp:338 win32\QueueFrame.cpp:339
+#: win32\QueueFrame.cpp:350 win32\QueueFrame.cpp:351
 msgid "Unknown"
 msgstr "غير معروف"
 
-#: win32\HubFrame.cpp:528
+#: win32\HubFrame.cpp:542 win32\PrivateFrame.cpp:362
 #, boost-format
 msgid "Unknown command: %1%"
 msgstr ""
 
-#: win32\DirectoryListingFrame.cpp:345
+#: win32\DirectoryListingFrame.cpp:349
 msgid "Up one level"
 msgstr ""
 
-#: win32\MainWindow.cpp:1457
+#: win32\MainWindow.cpp:1501
 #, boost-format
 msgid "Updating the %1% GeoIP database..."
 msgstr ""
@@ -3645,27 +3686,27 @@ msgstr ""
 msgid "Upload Slots"
 msgstr "الوصلات لعملية الرفع"
 
-#: win32\MainWindow.cpp:759 win32\MainWindow.cpp:1681
+#: win32\MainWindow.cpp:802 win32\MainWindow.cpp:1725
 #, fuzzy
 msgid "Upload limit"
 msgstr "الوصلات لعملية الرفع"
 
-#: win32\WinUtil.cpp:644
+#: win32\WinUtil.cpp:645
 #, fuzzy
 msgid "Upload limit disabled"
 msgstr "الوصلات لعملية الرفع"
 
-#: win32\WinUtil.cpp:644
+#: win32\WinUtil.cpp:645
 #, fuzzy, boost-format
 msgid "Upload limit set to %1% KiB/s"
 msgstr "التحميلات"
 
-#: win32\MainWindow.cpp:1081
+#: win32\MainWindow.cpp:1125
 #, boost-format
 msgid "Upload limit: %1%/s - Click to adjust"
 msgstr ""
 
-#: win32\MainWindow.cpp:1640 win32\UploadPage.cpp:123
+#: win32\MainWindow.cpp:1684 win32\UploadPage.cpp:123
 msgid "Upload slots"
 msgstr "الوصلات لعملية الرفع"
 
@@ -3679,7 +3720,7 @@ msgstr "الملفات المرفعة"
 msgid "Upload: %1%, Download: %2%"
 msgstr ""
 
-#: win32\TransferView.cpp:869
+#: win32\TransferView.cpp:865
 #, fuzzy, boost-format
 msgid "Uploading %1%"
 msgstr "الملفات المرفعة"
@@ -3717,7 +3758,7 @@ msgid "Use system icons when browsing files (slows browsing down a bit)"
 msgstr ""
 "(استخدم الإيقونات الخاصة بالنظام في حال تصفح الملفات (تخفض سرعة التصفح قليلا"
 
-#: win32\DirectoryListingFrame.cpp:790 win32\SearchFrame.cpp:49
+#: win32\DirectoryListingFrame.cpp:917 win32\SearchFrame.cpp:49
 #: win32\TransferView.cpp:50
 msgid "User"
 msgstr "المستخدم"
@@ -3730,7 +3771,7 @@ msgstr "مواصفات المستخدم"
 msgid "User Menu"
 msgstr "قائمة المستخدم"
 
-#: win32\QueueFrame.cpp:384
+#: win32\QueueFrame.cpp:398
 msgid "User certificate not trusted"
 msgstr ""
 
@@ -3752,20 +3793,26 @@ msgstr ""
 msgid "User matching definitions"
 msgstr ""
 
-#: win32\DirectoryListingFrame.cpp:1139 win32\QueueFrame.cpp:326
+#: win32\DirectoryListingFrame.cpp:1267 win32\PrivateFrame.cpp:373
+#: win32\QueueFrame.cpp:338
 msgid "User offline"
 msgstr "المستخدم غير موجود"
 
-#: win32\PrivateFrame.cpp:366
+#: win32\PrivateFrame.cpp:277
 msgid "User went offline"
 msgstr "المستخدم غادر"
 
-#: win32\MainWindow.cpp:425 win32\PublicHubsFrame.cpp:43
+#: win32\PrivateFrame.cpp:277
+#, fuzzy
+msgid "User went online"
+msgstr "المستخدم غادر"
+
+#: win32\MainWindow.cpp:431 win32\PublicHubsFrame.cpp:43
 #: win32\QueueFrame.cpp:53 win32\StylesPage.cpp:150 win32\UsersFrame.cpp:108
 msgid "Users"
 msgstr "المستحدمين"
 
-#: win32\PublicHubsFrame.cpp:246
+#: win32\PublicHubsFrame.cpp:247
 #, fuzzy, boost-format
 msgid "Users: %1%"
 msgstr "المستحدمين"
@@ -3774,15 +3821,16 @@ msgstr "المستحدمين"
 msgid "Value"
 msgstr ""
 
-#: win32\PluginPage.cpp:213
+#: win32\PluginPage.cpp:226
 msgid "Version: "
 msgstr ""
 
 #: win32\AppearancePage.cpp:43
-msgid "View status messages in main chat"
+#, fuzzy
+msgid "View status messages in chat"
 msgstr "مشاهدة رسائل الحالة في الدردشة الرئيسة"
 
-#: win32\TextFrame.cpp:97
+#: win32\TextFrame.cpp:99
 #, boost-format
 msgid "Viewing text file: %1%"
 msgstr ""
@@ -3791,24 +3839,24 @@ msgstr ""
 msgid "Virtual name"
 msgstr "الإسم الوهمي"
 
-#: win32\QueueFrame.cpp:320
+#: win32\QueueFrame.cpp:332
 #, fuzzy, boost-format
 msgid "Waiting (%1% of %2% users online)"
 msgstr "(الإنتظار (المستخدم أون لاين"
 
-#: win32\QueueFrame.cpp:318
+#: win32\QueueFrame.cpp:330
 msgid "Waiting (User online)"
 msgstr "(الإنتظار (المستخدم أون لاين"
 
-#: win32\TransferView.cpp:676
+#: win32\TransferView.cpp:672
 msgid "Waiting for slot"
 msgstr ""
 
-#: win32\TransferView.cpp:698
+#: win32\TransferView.cpp:694
 msgid "Waiting to retry"
 msgstr ""
 
-#: win32\PublicHubsFrame.cpp:272
+#: win32\PublicHubsFrame.cpp:273
 #, boost-format
 msgid ""
 "Warning: fraudulent hub list detected!\r\n"
@@ -3822,11 +3870,11 @@ msgid ""
 "\"Configure\" button below."
 msgstr ""
 
-#: win32\PluginPage.cpp:216
+#: win32\PluginPage.cpp:229
 msgid "Website: "
 msgstr ""
 
-#: win32\MainWindow.cpp:449
+#: win32\MainWindow.cpp:457
 msgid "What's This?"
 msgstr ""
 
@@ -3842,8 +3890,8 @@ msgstr "Windows"
 msgid "Write buffer size"
 msgstr "buffer كتابة حجم الـ"
 
-#: win32\ADLSearchFrame.cpp:329 win32\NotificationsPage.cpp:288
-#: win32\WinUtil.cpp:1163 win32\FinishedFrameBase.h:257
+#: win32\ADLSearchFrame.cpp:331 win32\NotificationsPage.cpp:288
+#: win32\WinUtil.cpp:1137 win32\FinishedFrameBase.h:263
 msgid "Yes"
 msgstr ""
 
@@ -3859,11 +3907,11 @@ msgstr ""
 msgid "You must enter a name"
 msgstr ""
 
-#: win32\HubFrame.cpp:992
+#: win32\HubFrame.cpp:1020
 msgid "Your nick was already taken, please change to something else!"
 msgstr "!الإسم المستعار مأخوذ حاليا ، قم بتغييره لأسم آخر"
 
-#: win32\DirectoryListingFrame.cpp:1359
+#: win32\DirectoryListingFrame.cpp:1542
 msgid "[Ignored some incomplete directories]"
 msgstr ""
 
@@ -3872,16 +3920,16 @@ msgstr ""
 msgid "and"
 msgstr "الأمر"
 
-#: win32\DirectoryListingFrame.cpp:1342
+#: win32\DirectoryListingFrame.cpp:1525
 msgid "beginning"
 msgstr ""
 
-#: win32\DirectoryListingFrame.cpp:1342
+#: win32\DirectoryListingFrame.cpp:1525
 #, fuzzy
 msgid "end"
 msgstr "الأمر"
 
-#: win32\TransferView.cpp:723
+#: win32\TransferView.cpp:719
 #, fuzzy
 msgid "file list"
 msgstr "قائمة الملفات"
@@ -3896,7 +3944,7 @@ msgstr "متصل"
 msgid "minutes"
 msgstr "متصل"
 
-#: win32\GeneralPage.cpp:120
+#: win32\GeneralPage.cpp:127
 msgid "minutes of inactivity (0 = disabled)"
 msgstr ""
 

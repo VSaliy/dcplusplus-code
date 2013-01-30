@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcpp-help VERSION\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-01-22 18:27+0100\n"
+"POT-Creation-Date: 2013-01-30 17:00+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -481,7 +481,7 @@ msgid "Send private message"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd><placeholder>
-#: H:/Dev/DC++/repo/help/commands_user_general.inc:11 help/dialog_fav_hub_groups.html:10 help/dialog_fav_hub_groups.html:10 help/dialog_fav_hub_groups.html:10 help/dialog_fav_hub_groups.html:10 help/dialog_fav_hub_groups.html:15 help/dialog_favorite_hub.html:34 help/dialog_favorite_hub.html:38 help/dialog_favorite_hub.html:39 help/dialog_user_matching.html:13 help/dialog_user_matching.html:20 help/dialog_user_matching.html:21 help/dialog_user_matching.html:27 help/index.html:14 help/index.html:14 help/index.html:16 help/index.html:16 help/index.html:20 help/index.html:20 help/index.html:28 help/index.html:28 help/index.html:29 help/index.html:29 help/index.html:30 help/index.html:30 help/index.html:31 help/index.html:31 help/index.html:32 help/index.html:32 help/index.html:33 help/index.html:33 help/index.html:34 help/index.html:34 help/index.html:35 help/index.html:35 help/index.html:36 help/index.html:36 help/index.html:37 help/index.html:37 help/index.html:38 help/index.html:38 help/index.html:39 help/index.html:39 help/index.html:40 help/index.html:40 help/index.html:41 help/index.html:41 help/index.html:42 help/index.html:42 help/index.html:43 help/index.html:43 help/index.html:44 help/index.html:44 help/index.html:45 help/index.html:45 help/index.html:51 help/index.html:51 help/index.html:52 help/index.html:52 help/index.html:53 help/index.html:53 help/index.html:59 help/index.html:59 help/index.html:60 help/index.html:60 help/index.html:61 help/index.html:61 help/index.html:62 help/index.html:62 help/index.html:63 help/index.html:63 help/index.html:64 help/index.html:64 help/index.html:65 help/index.html:65 help/index.html:66 help/index.html:66 help/index.html:67 help/index.html:67 help/index.html:73 help/index.html:73 help/index.html:74 help/index.html:74 help/index.html:76 help/index.html:76 help/index.html:77 help/index.html:77 help/index.html:78 help/index.html:78 help/index.html:81 help/index.html:81 help/index.html:83 help/index.html:83 help/index.html:84 help/index.html:84 help/index.html:87 help/index.html:87 help/index.html:89 help/index.html:89 help/index.html:91 help/index.html:91 help/index.html:92 help/index.html:92 help/index.html:93 help/index.html:93 help/index.html:96 help/index.html:96 help/index.html:98 help/index.html:98 help/index.html:100 help/index.html:100 help/index.html:104 help/index.html:104 help/index.html:106 help/index.html:106 help/index.html:107 help/index.html:107 help/index.html:108 help/index.html:108 help/index.html:109 help/index.html:109 help/index.html:110 help/index.html:110 help/index.html:113 help/index.html:113 help/index.html:119 help/index.html:119 help/index.html:120 help/index.html:120 help/index.html:121 help/index.html:121 help/index.html:122 help/index.html:122 help/index.html:123 help/index.html:123 help/index.html:124 help/index.html:124 help/index.html:125 help/index.html:125 help/index.html:126 help/index.html:126 help/index.html:127 help/index.html:127 help/index.html:128 help/index.html:128 help/index.html:129 help/index.html:129 help/index.html:130 help/index.html:130 help/index.html:131 help/index.html:131 help/index.html:132 help/index.html:132 help/index.html:138 help/index.html:138 help/index.html:139 help/index.html:139 help/index.html:140 help/index.html:140 help/index.html:144 help/index.html:144 help/index.html:150 help/index.html:150 help/index.html:155 help/index.html:155 help/index.html:162 help/index.html:162 help/index.html:166 help/index.html:166 help/keyboard_commands.html:35 help/keyboard_commands.html:41 help/keyboard_commands.html:41 help/keyboard_commands.html:41 help/keyboard_commands.html:46 help/keyboard_commands.html:48 help/keyboard_commands.html:52 help/keyboard_commands.html:55 help/keyboard_commands.html:58 help/keyboard_commands.html:60 help/keyboard_commands.html:68 help/keyboard_commands.html:68 help/keyboard_commands.html:70 help/keyboard_commands.html:70 help/keyboard_commands.html:72 help/keyboard_commands.html:72 help/keyboard_commands.html:74 help/keyboard_commands.html:76 help/keyboard_commands.html:76 help/keyboard_commands.html:78 help/keyboard_commands.html:79 help/keyboard_commands.html:80 help/keyboard_commands.html:80 help/keyboard_commands.html:82 help/keyboard_commands.html:84 help/keyboard_commands.html:84 help/keyboard_commands.html:89 help/keyboard_commands.html:89 help/settings_appearance.html:80 help/settings_appearance.html:80 help/settings_connectivity.html:17 help/settings_connectivity.html:54 help/settings_connectivity.html:64 help/settings_downloads.html:103 help/settings_downloads.html:103 help/settings_expert.html:49 help/settings_expert.html:51 help/settings_expert.html:53 help/settings_history.html:17 help/settings_history.html:25 help/settings_history.html:36 help/settings_history.html:43 help/settings_history.html:50 help/settings_history.html:58 help/settings_history.html:58 help/settings_notifications.html:26 help/settings_notifications.html:37 help/settings_search_types.html:12 help/settings_styles.html:80 help/settings_user_matching.html:22 help/settings_user_matching.html:29 help/settings_user_matching.html:50 H:/Dev/DC++/repo/help/commands_user_general.inc:11 H:/Dev/DC++/repo/help/commands_user_general.inc:11 help/window_favorite_hubs.html:33 help/window_favorite_hubs.html:53 help/window_favorite_hubs.html:54 H:/Dev/DC++/repo/help/commands_user_general.inc:11 H:/Dev/DC++/repo/help/commands_user_general.inc:11 H:/Dev/DC++/repo/help/commands_user_general.inc:11 help/window_hub.html:90 help/window_main.html:28 help/window_main.html:29 help/window_main.html:47 help/window_main.html:67 help/window_main.html:71 help/window_main.html:75 help/window_main.html:79 help/window_main.html:83 help/window_main.html:87 help/window_main.html:91 help/window_main.html:95 help/window_main.html:99 help/window_main.html:103 help/window_main.html:107 help/window_main.html:111 help/window_main.html:135 help/window_main.html:138 help/window_main.html:139 help/window_main.html:143 help/window_main.html:144 help/window_main.html:147 help/window_main.html:149 help/window_main.html:153 help/window_main.html:229 help/window_main.html:236 help/window_main.html:237 help/window_main.html:238 help/window_main.html:242 help/window_main.html:245 help/window_main.html:248 help/window_main.html:251 help/window_main.html:254 help/window_main.html:257 help/window_main.html:260 help/window_main.html:276 help/window_main.html:335 help/window_main.html:339 help/window_main.html:343 help/window_main.html:347 help/window_pm.html:34 H:/Dev/DC++/repo/help/commands_user_general.inc:11 H:/Dev/DC++/repo/help/commands_user_general.inc:11
+#: H:/Dev/DC++/repo/help/commands_user_general.inc:11 help/dialog_fav_hub_groups.html:10 help/dialog_fav_hub_groups.html:10 help/dialog_fav_hub_groups.html:10 help/dialog_fav_hub_groups.html:10 help/dialog_fav_hub_groups.html:15 help/dialog_favorite_hub.html:34 help/dialog_favorite_hub.html:38 help/dialog_favorite_hub.html:39 help/dialog_user_matching.html:13 help/dialog_user_matching.html:20 help/dialog_user_matching.html:21 help/dialog_user_matching.html:27 help/index.html:14 help/index.html:14 help/index.html:16 help/index.html:16 help/index.html:20 help/index.html:20 help/index.html:28 help/index.html:28 help/index.html:29 help/index.html:29 help/index.html:30 help/index.html:30 help/index.html:31 help/index.html:31 help/index.html:32 help/index.html:32 help/index.html:33 help/index.html:33 help/index.html:34 help/index.html:34 help/index.html:35 help/index.html:35 help/index.html:36 help/index.html:36 help/index.html:37 help/index.html:37 help/index.html:38 help/index.html:38 help/index.html:39 help/index.html:39 help/index.html:40 help/index.html:40 help/index.html:41 help/index.html:41 help/index.html:42 help/index.html:42 help/index.html:43 help/index.html:43 help/index.html:44 help/index.html:44 help/index.html:45 help/index.html:45 help/index.html:51 help/index.html:51 help/index.html:52 help/index.html:52 help/index.html:53 help/index.html:53 help/index.html:59 help/index.html:59 help/index.html:60 help/index.html:60 help/index.html:61 help/index.html:61 help/index.html:62 help/index.html:62 help/index.html:63 help/index.html:63 help/index.html:64 help/index.html:64 help/index.html:65 help/index.html:65 help/index.html:66 help/index.html:66 help/index.html:67 help/index.html:67 help/index.html:73 help/index.html:73 help/index.html:74 help/index.html:74 help/index.html:76 help/index.html:76 help/index.html:77 help/index.html:77 help/index.html:78 help/index.html:78 help/index.html:81 help/index.html:81 help/index.html:83 help/index.html:83 help/index.html:84 help/index.html:84 help/index.html:87 help/index.html:87 help/index.html:89 help/index.html:89 help/index.html:91 help/index.html:91 help/index.html:92 help/index.html:92 help/index.html:93 help/index.html:93 help/index.html:96 help/index.html:96 help/index.html:98 help/index.html:98 help/index.html:100 help/index.html:100 help/index.html:104 help/index.html:104 help/index.html:106 help/index.html:106 help/index.html:107 help/index.html:107 help/index.html:108 help/index.html:108 help/index.html:109 help/index.html:109 help/index.html:110 help/index.html:110 help/index.html:113 help/index.html:113 help/index.html:119 help/index.html:119 help/index.html:120 help/index.html:120 help/index.html:121 help/index.html:121 help/index.html:122 help/index.html:122 help/index.html:123 help/index.html:123 help/index.html:124 help/index.html:124 help/index.html:125 help/index.html:125 help/index.html:126 help/index.html:126 help/index.html:127 help/index.html:127 help/index.html:128 help/index.html:128 help/index.html:129 help/index.html:129 help/index.html:130 help/index.html:130 help/index.html:131 help/index.html:131 help/index.html:132 help/index.html:132 help/index.html:138 help/index.html:138 help/index.html:139 help/index.html:139 help/index.html:140 help/index.html:140 help/index.html:144 help/index.html:144 help/index.html:150 help/index.html:150 help/index.html:155 help/index.html:155 help/index.html:162 help/index.html:162 help/index.html:166 help/index.html:166 help/keyboard_commands.html:35 help/keyboard_commands.html:41 help/keyboard_commands.html:41 help/keyboard_commands.html:41 help/keyboard_commands.html:46 help/keyboard_commands.html:48 help/keyboard_commands.html:52 help/keyboard_commands.html:55 help/keyboard_commands.html:58 help/keyboard_commands.html:60 help/keyboard_commands.html:68 help/keyboard_commands.html:68 help/keyboard_commands.html:70 help/keyboard_commands.html:70 help/keyboard_commands.html:72 help/keyboard_commands.html:72 help/keyboard_commands.html:74 help/keyboard_commands.html:76 help/keyboard_commands.html:76 help/keyboard_commands.html:78 help/keyboard_commands.html:79 help/keyboard_commands.html:80 help/keyboard_commands.html:80 help/keyboard_commands.html:82 help/keyboard_commands.html:84 help/keyboard_commands.html:84 help/keyboard_commands.html:89 help/keyboard_commands.html:89 help/settings_appearance.html:80 help/settings_appearance.html:80 help/settings_connectivity.html:17 help/settings_connectivity.html:54 help/settings_connectivity.html:64 help/settings_downloads.html:103 help/settings_downloads.html:103 help/settings_expert.html:49 help/settings_expert.html:51 help/settings_expert.html:53 help/settings_history.html:17 help/settings_history.html:25 help/settings_history.html:36 help/settings_history.html:43 help/settings_history.html:50 help/settings_history.html:58 help/settings_history.html:58 help/settings_notifications.html:26 help/settings_notifications.html:37 help/settings_search_types.html:12 help/settings_styles.html:80 help/settings_user_matching.html:22 help/settings_user_matching.html:29 help/settings_user_matching.html:50 H:/Dev/DC++/repo/help/commands_user_general.inc:11 H:/Dev/DC++/repo/help/commands_user_general.inc:11 help/window_favorite_hubs.html:33 help/window_favorite_hubs.html:53 help/window_favorite_hubs.html:54 H:/Dev/DC++/repo/help/commands_user_general.inc:11 H:/Dev/DC++/repo/help/commands_user_general.inc:11 H:/Dev/DC++/repo/help/commands_user_general.inc:11 help/window_hub.html:90 help/window_main.html:28 help/window_main.html:29 help/window_main.html:47 help/window_main.html:67 help/window_main.html:71 help/window_main.html:75 help/window_main.html:79 help/window_main.html:83 help/window_main.html:87 help/window_main.html:91 help/window_main.html:95 help/window_main.html:99 help/window_main.html:103 help/window_main.html:107 help/window_main.html:111 help/window_main.html:135 help/window_main.html:138 help/window_main.html:139 help/window_main.html:143 help/window_main.html:144 help/window_main.html:147 help/window_main.html:149 help/window_main.html:153 help/window_main.html:230 help/window_main.html:237 help/window_main.html:238 help/window_main.html:239 help/window_main.html:243 help/window_main.html:246 help/window_main.html:249 help/window_main.html:252 help/window_main.html:255 help/window_main.html:258 help/window_main.html:261 help/window_main.html:286 help/window_main.html:342 help/window_main.html:346 help/window_main.html:350 help/window_main.html:354 help/window_pm.html:34 H:/Dev/DC++/repo/help/commands_user_general.inc:11 H:/Dev/DC++/repo/help/commands_user_general.inc:11
 msgid "<placeholder id=0/>"
 msgstr ""
 
@@ -959,12 +959,12 @@ msgid "When your changes are complete, click the Close button to save your chang
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd><div><placeholder><a>
-#: help/dialog_fav_hub_groups.html:9 help/dialog_favorite_hub.html:34 help/dialog_favorite_hub.html:38 help/dialog_favorite_hub.html:39 help/index.html:63 help/window_favorite_hubs.html:33 help/window_favorite_hubs.html:53 help/window_favorite_hubs.html:54 help/window_main.html:29 help/window_main.html:139 help/window_main.html:144 help/window_main.html:238
+#: help/dialog_fav_hub_groups.html:9 help/dialog_favorite_hub.html:34 help/dialog_favorite_hub.html:38 help/dialog_favorite_hub.html:39 help/index.html:63 help/window_favorite_hubs.html:33 help/window_favorite_hubs.html:53 help/window_favorite_hubs.html:54 help/window_main.html:29 help/window_main.html:139 help/window_main.html:144 help/window_main.html:239
 msgid "Favorite hub groups"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd><div><placeholder><a>
-#: help/dialog_fav_hub_groups.html:10 help/index.html:33 help/keyboard_commands.html:46 help/window_main.html:70 help/window_main.html:70 help/window_main.html:71 help/window_main.html:204 help/window_main.html:234 help/window_main.html:236 help/window_main.html:237
+#: help/dialog_fav_hub_groups.html:10 help/index.html:33 help/keyboard_commands.html:46 help/window_main.html:70 help/window_main.html:70 help/window_main.html:71 help/window_main.html:204 help/window_main.html:235 help/window_main.html:237 help/window_main.html:238
 msgid "Favorite Hubs"
 msgstr ""
 
@@ -1753,7 +1753,7 @@ msgid "Match favorite users"
 msgstr ""
 
 #. type: Content of: <html><body><h1>
-#: help/dialog_user_matching.html:27 help/index.html:34 help/keyboard_commands.html:60 help/keyboard_commands.html:89 help/settings_styles.html:47 help/window_download_queue.html:52 help/window_hub.html:112 help/window_hub.html:112 help/window_main.html:74 help/window_main.html:74 help/window_main.html:75 help/window_main.html:205 help/window_main.html:241 help/window_main.html:242 help/window_public_hubs.html:19 help/window_public_hubs.html:88 help/window_users.html:10 help/window_users.html:11
+#: help/dialog_user_matching.html:27 help/index.html:34 help/keyboard_commands.html:60 help/keyboard_commands.html:89 help/settings_styles.html:47 help/window_download_queue.html:52 help/window_hub.html:112 help/window_hub.html:112 help/window_main.html:74 help/window_main.html:74 help/window_main.html:75 help/window_main.html:205 help/window_main.html:242 help/window_main.html:243 help/window_public_hubs.html:19 help/window_public_hubs.html:88 help/window_users.html:10 help/window_users.html:11
 msgid "Users"
 msgstr ""
 
@@ -4435,27 +4435,27 @@ msgid "File List"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd><placeholder><a>
-#: help/index.html:32 help/keyboard_commands.html:52 help/keyboard_commands.html:89 help/window_main.html:66 help/window_main.html:66 help/window_main.html:67 help/window_main.html:202 help/window_main.html:228 help/window_main.html:229
+#: help/index.html:32 help/keyboard_commands.html:52 help/keyboard_commands.html:89 help/window_main.html:66 help/window_main.html:66 help/window_main.html:67 help/window_main.html:202 help/window_main.html:229 help/window_main.html:230
 msgid "Public Hubs"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd><placeholder><a>
-#: help/index.html:35 help/keyboard_commands.html:35 help/settings_tabs.html:57 help/window_main.html:78 help/window_main.html:78 help/window_main.html:79 help/window_main.html:206 help/window_main.html:244 help/window_main.html:245
+#: help/index.html:35 help/keyboard_commands.html:35 help/settings_tabs.html:57 help/window_main.html:78 help/window_main.html:78 help/window_main.html:79 help/window_main.html:206 help/window_main.html:245 help/window_main.html:246
 msgid "Download Queue"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd><placeholder><a>
-#: help/index.html:36 help/settings_tabs.html:60 help/window_main.html:82 help/window_main.html:82 help/window_main.html:83 help/window_main.html:207 help/window_main.html:247 help/window_main.html:248
+#: help/index.html:36 help/settings_tabs.html:60 help/window_main.html:82 help/window_main.html:82 help/window_main.html:83 help/window_main.html:207 help/window_main.html:248 help/window_main.html:249
 msgid "Finished Downloads"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd><placeholder><a>
-#: help/index.html:37 help/settings_tabs.html:63 help/window_main.html:86 help/window_main.html:86 help/window_main.html:87 help/window_main.html:208 help/window_main.html:250 help/window_main.html:251
+#: help/index.html:37 help/settings_tabs.html:63 help/window_main.html:86 help/window_main.html:86 help/window_main.html:87 help/window_main.html:208 help/window_main.html:251 help/window_main.html:252
 msgid "Finished Uploads"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/index.html:38 help/keyboard_commands.html:58 help/settings_history.html:58 help/settings_search_types.html:12 help/settings_tabs.html:51 help/window_main.html:90 help/window_main.html:90 help/window_main.html:91 help/window_main.html:153 help/window_main.html:209 help/window_main.html:253 help/window_main.html:254 help/window_search.html:10 help/window_search.html:11 help/window_search.html:38
+#: help/index.html:38 help/keyboard_commands.html:58 help/settings_history.html:58 help/settings_search_types.html:12 help/settings_tabs.html:51 help/window_main.html:90 help/window_main.html:90 help/window_main.html:91 help/window_main.html:153 help/window_main.html:209 help/window_main.html:254 help/window_main.html:255 help/window_search.html:10 help/window_search.html:11 help/window_search.html:38
 msgid "Search"
 msgstr ""
 
@@ -4465,7 +4465,7 @@ msgid "ADLSearch"
 msgstr ""
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:40 help/keyboard_commands.html:48 help/window_main.html:98 help/window_main.html:98 help/window_main.html:99 help/window_main.html:215 help/window_main.html:275 help/window_main.html:276 help/window_notepad.html:10 help/window_notepad.html:11
+#: help/index.html:40 help/keyboard_commands.html:48 help/window_main.html:98 help/window_main.html:98 help/window_main.html:99 help/window_main.html:217 help/window_main.html:285 help/window_main.html:286 help/window_notepad.html:10 help/window_notepad.html:11
 msgid "Notepad"
 msgstr ""
 
@@ -4480,7 +4480,7 @@ msgid "System Log"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd><div><placeholder><a>
-#: help/index.html:43 help/window_main.html:106 help/window_main.html:106 help/window_main.html:107 help/window_main.html:211 help/window_main.html:259 help/window_main.html:260 help/window_main.html:335 help/window_main.html:339 help/window_main.html:343 help/window_main.html:347
+#: help/index.html:43 help/window_main.html:106 help/window_main.html:106 help/window_main.html:107 help/window_main.html:211 help/window_main.html:260 help/window_main.html:261 help/window_main.html:342 help/window_main.html:346 help/window_main.html:350 help/window_main.html:354
 msgid "Network Statistics"
 msgstr ""
 
@@ -4520,7 +4520,7 @@ msgid "Dialogs"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/index.html:71 help/window_main.html:49 help/window_main.html:49 help/window_main.html:214 help/window_main.html:272
+#: help/index.html:71 help/window_main.html:49 help/window_main.html:49 help/window_main.html:216 help/window_main.html:282
 msgid "Settings"
 msgstr ""
 
@@ -4570,7 +4570,7 @@ msgid "Appearance"
 msgstr ""
 
 #. type: Content of: <html><body><h2>
-#: help/index.html:92 help/window_main.html:287
+#: help/index.html:92 help/window_main.html:294
 msgid "Tabs"
 msgstr ""
 
@@ -4831,7 +4831,7 @@ msgid "Ctrl + D"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/keyboard_commands.html:35 help/keyboard_commands.html:46 help/keyboard_commands.html:48 help/keyboard_commands.html:52 help/keyboard_commands.html:58 help/keyboard_commands.html:60 help/window_main.html:67 help/window_main.html:71 help/window_main.html:75 help/window_main.html:79 help/window_main.html:83 help/window_main.html:87 help/window_main.html:91 help/window_main.html:95 help/window_main.html:99 help/window_main.html:103 help/window_main.html:107 help/window_main.html:229 help/window_main.html:236 help/window_main.html:242 help/window_main.html:245 help/window_main.html:248 help/window_main.html:251 help/window_main.html:254 help/window_main.html:257 help/window_main.html:260 help/window_main.html:276
+#: help/keyboard_commands.html:35 help/keyboard_commands.html:46 help/keyboard_commands.html:48 help/keyboard_commands.html:52 help/keyboard_commands.html:58 help/keyboard_commands.html:60 help/window_main.html:67 help/window_main.html:71 help/window_main.html:75 help/window_main.html:79 help/window_main.html:83 help/window_main.html:87 help/window_main.html:91 help/window_main.html:95 help/window_main.html:99 help/window_main.html:103 help/window_main.html:107 help/window_main.html:230 help/window_main.html:237 help/window_main.html:243 help/window_main.html:246 help/window_main.html:249 help/window_main.html:252 help/window_main.html:255 help/window_main.html:258 help/window_main.html:261 help/window_main.html:286
 msgid "Open the <placeholder id=0/> window."
 msgstr ""
 
@@ -4946,7 +4946,7 @@ msgid "Ctrl + F3"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/keyboard_commands.html:62 help/window_main.html:273
+#: help/keyboard_commands.html:62 help/window_main.html:283
 msgid "Open the Settings dialog."
 msgstr ""
 
@@ -6917,7 +6917,7 @@ msgid "Chat lines to recall from history when opening a window"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/settings_history.html:14 help/window_main.html:320 help/window_main.html:320 help/window_public_hubs.html:85 help/window_search.html:60
+#: help/settings_history.html:14 help/window_main.html:327 help/window_main.html:327 help/window_public_hubs.html:85 help/window_search.html:60
 msgid "Hubs"
 msgstr ""
 
@@ -10112,7 +10112,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><h2>
-#: help/window_file_list.html:86 help/window_main.html:310
+#: help/window_file_list.html:86 help/window_main.html:317
 msgid "Status bar (bottom)"
 msgstr ""
 
@@ -10805,7 +10805,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_main.html:31 help/window_main.html:31 help/window_main.html:203 help/window_main.html:231
+#: help/window_main.html:31 help/window_main.html:31 help/window_main.html:203 help/window_main.html:232
 msgid "Reconnect"
 msgstr ""
 
@@ -10817,7 +10817,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_main.html:33 help/window_main.html:33 help/window_main.html:151 help/window_main.html:212 help/window_main.html:262
+#: help/window_main.html:33 help/window_main.html:33 help/window_main.html:151 help/window_main.html:212 help/window_main.html:263
 msgid "Open file list..."
 msgstr ""
 
@@ -10829,13 +10829,13 @@ msgid ""
 "settings files</a>."
 msgstr ""
 
-#. type: Content of: <html><body><dl><dd><dl><dt>
-#: help/window_main.html:35
+#. type: Content of: <html><body><dl><dt>
+#: help/window_main.html:35 help/window_main.html:35 help/window_main.html:213 help/window_main.html:268
 msgid "Open own list"
 msgstr ""
 
-#. type: Content of: <html><body><dl><dd><dl><dd>
-#: help/window_main.html:36
+#. type: Content of: <html><body><dl><dd>
+#: help/window_main.html:36 help/window_main.html:270
 msgid ""
 "You can open and check how your own file list looks like. Useful to see "
 "what's displayed to others when they get your file list."
@@ -10855,12 +10855,12 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_main.html:39 help/window_main.html:39 help/window_main.html:216 help/window_main.html:278
+#: help/window_main.html:39 help/window_main.html:39 help/window_main.html:215 help/window_main.html:274
 msgid "Refresh file list"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_main.html:40 help/window_main.html:279
+#: help/window_main.html:40 help/window_main.html:275
 msgid ""
 "This will immediately rescan your shared directories for new or changed "
 "content and updates your file list."
@@ -10982,7 +10982,7 @@ msgid "This is the place where you can search for files to download."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd><placeholder><a>
-#: help/window_main.html:94 help/window_main.html:94 help/window_main.html:95 help/window_main.html:210 help/window_main.html:256 help/window_main.html:257
+#: help/window_main.html:94 help/window_main.html:94 help/window_main.html:95 help/window_main.html:210 help/window_main.html:257 help/window_main.html:258
 msgid "ADL Search"
 msgstr ""
 
@@ -11264,27 +11264,27 @@ msgid "<a po4a-id=0>"
 msgstr ""
 
 #. type: Content of: <html><body><p><a>
-#: help/window_main.html:202 help/window_main.html:203 help/window_main.html:204 help/window_main.html:205 help/window_main.html:206 help/window_main.html:207 help/window_main.html:208 help/window_main.html:209 help/window_main.html:210 help/window_main.html:211 help/window_main.html:212 help/window_main.html:213 help/window_main.html:214 help/window_main.html:215 help/window_main.html:216
+#: help/window_main.html:202 help/window_main.html:203 help/window_main.html:204 help/window_main.html:205 help/window_main.html:206 help/window_main.html:207 help/window_main.html:208 help/window_main.html:209 help/window_main.html:210 help/window_main.html:211 help/window_main.html:212 help/window_main.html:213 help/window_main.html:214 help/window_main.html:215 help/window_main.html:216 help/window_main.html:217
 msgid "</a> <a po4a-id=0>"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_main.html:213 help/window_main.html:267
+#: help/window_main.html:214 help/window_main.html:277
 msgid "Recent windows"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_main.html:217 help/window_main.html:281
+#: help/window_main.html:218 help/window_main.html:288
 msgid "What's This?"
 msgstr ""
 
 #. type: Content of: <html><body><p>
-#: help/window_main.html:217
+#: help/window_main.html:218
 msgid "</a>"
 msgstr ""
 
 #. type: Content of: <html><body><p>
-#: help/window_main.html:219
+#: help/window_main.html:220
 msgid ""
 "The toolbar provides quick access to some regularly used parts and functions "
 "of DC++. You can customize the toolbar for yourself, add, remove and group "
@@ -11292,68 +11292,68 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li>
-#: help/window_main.html:222
+#: help/window_main.html:223
 msgid ""
 "Holding the \"shift\" key you can drag &amp; drop toolbar buttons wherever "
 "you want."
 msgstr ""
 
 #. type: Content of: <html><body><ul><li>
-#: help/window_main.html:223
+#: help/window_main.html:224
 msgid ""
 "Right-click to the toolbar will bring up the toolbar context menu with a "
 "\"Customize\" item to open the <a po4a-id=0>Customize Toolbar dialog</a>."
 msgstr ""
 
 #. type: Content of: <html><body><ul><li>
-#: help/window_main.html:224
+#: help/window_main.html:225
 msgid ""
 "As a shortcut, double-click to the empty area of the toolbar will also open "
 "the <a po4a-id=0>Customize Toolbar dialog</a>."
 msgstr ""
 
 #. type: Content of: <html><body><p>
-#: help/window_main.html:226
+#: help/window_main.html:227
 msgid "The toolbar can hold the following available icons:"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_main.html:232
+#: help/window_main.html:233
 msgid ""
 "Reconnect (disconnect and connect again) the hub which is currently in the "
 "foreground."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd><div>
-#: help/window_main.html:237
+#: help/window_main.html:238
 msgid ""
 "Use the arrow placed on the right of the icon to easily connect to one of "
 "your favorite hubs without having to open the <placeholder id=0/> window."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd><div>
-#: help/window_main.html:238
+#: help/window_main.html:239
 msgid ""
 "Consult the help topic associated to the <placeholder id=0/> dialog to find "
 "out how to add sub-menus to the menu that appears under the arrow."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_main.html:264
+#: help/window_main.html:265
 msgid ""
 "Open a file list previously saved on your disk (a dialog will appear so you "
 "can pick the one you wish to open)."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_main.html:269
+#: help/window_main.html:279
 msgid ""
 "Open menus with <acronym po4a-id=0>MRU</acronym> lists of recently opened "
 "windows. The list is saved across DC++ restarts."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_main.html:283
+#: help/window_main.html:290
 msgid ""
 "You can get help on specific parts of DC++ by using the &quot;What's "
 "This?&quot; help button: click it once, and your mouse cursor will change "
@@ -11361,40 +11361,40 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><p>
-#: help/window_main.html:288
+#: help/window_main.html:295
 msgid ""
 "Each window opened in DC++ has a corresponding tab, which appears in the "
 "global tab control."
 msgstr ""
 
 #. type: Content of: <html><body><p>
-#: help/window_main.html:289
+#: help/window_main.html:296
 msgid ""
 "Tabs in DC++ behave the same as in standard Windows applications; moreover, "
 "they have the following additional features:"
 msgstr ""
 
 #. type: Content of: <html><body><ul><li>
-#: help/window_main.html:292
+#: help/window_main.html:299
 msgid "They can be moved around in a drag-and-drop fashion."
 msgstr ""
 
 #. type: Content of: <html><body><ul><li>
-#: help/window_main.html:293
+#: help/window_main.html:300
 msgid ""
 "There are some easy ways to switch between them: with mouse extra buttons or "
 "using Ctrl+Tab."
 msgstr ""
 
 #. type: Content of: <html><body><ul><li>
-#: help/window_main.html:294
+#: help/window_main.html:301
 msgid ""
 "When many tabs are opened, and they can't fit into a single row, they will "
 "automatically occupy more rows."
 msgstr ""
 
 #. type: Content of: <html><body><ul><li>
-#: help/window_main.html:295
+#: help/window_main.html:302
 msgid ""
 "Each tab has its own context-menu which provides commands related to the "
 "window the tab belongs to.  Description of the common context menu options "
@@ -11402,61 +11402,61 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li>
-#: help/window_main.html:298
+#: help/window_main.html:305
 msgid "Tabs can be closed with:"
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
-#: help/window_main.html:299
+#: help/window_main.html:306
 msgid "Middle mouse click"
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
-#: help/window_main.html:300
+#: help/window_main.html:307
 msgid "Shift + left mouse click"
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
-#: help/window_main.html:301
+#: help/window_main.html:308
 msgid "Left mouse click on the"
 msgstr ""
 
 #. type: Attribute 'alt' of: <html><body><ul><li><ul><li><img>
-#: help/window_main.html:301
+#: help/window_main.html:308
 msgid "Close tab button"
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
-#: help/window_main.html:301
+#: help/window_main.html:308
 msgid ""
 "button on the right of the tabs (appears only if <a po4a-id=0>DC++'s own tab "
 "style</a> is used)"
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
-#: help/window_main.html:302
+#: help/window_main.html:309
 msgid "The &quot;Close&quot; command from the tab context-menu"
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
-#: help/window_main.html:303
+#: help/window_main.html:310
 msgid "Ctrl+W"
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
-#: help/window_main.html:304
+#: help/window_main.html:311
 msgid "Ctrl+F4"
 msgstr ""
 
 #. type: Content of: <html><body>
-#: help/window_main.html:307
+#: help/window_main.html:314
 msgid ""
 "You can customize the look and behavior of tabs from the <a po4a-id=0>Tabs "
 "settings</a> and <a po4a-id=1>Windows settings</a> respectively."
 msgstr ""
 
 #. type: Content of: <html><body>
-#: help/window_main.html:311
+#: help/window_main.html:318
 msgid ""
 "The main status bar is always visible in the bottom of the DC++ window. You "
 "can get information from the current state of several parameters of DC++ "
@@ -11465,12 +11465,12 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_main.html:313
+#: help/window_main.html:320
 msgid "System messages"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_main.html:314
+#: help/window_main.html:321
 msgid ""
 "The first part of the status bar contains the last system message with a "
 "timestamp. To see more from the recent system messages you can move the "
@@ -11482,170 +11482,170 @@ msgid ""
 msgstr ""
 
 #. type: Attribute 'alt' of: <html><body><dl><dt><img>
-#: help/window_main.html:316
+#: help/window_main.html:323
 msgid "Online user"
 msgstr ""
 
 #. type: Attribute 'alt' of: <html><body><dl><dt><img>
-#: help/window_main.html:316
+#: help/window_main.html:323
 msgid "Away user"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_main.html:316
+#: help/window_main.html:323
 msgid "Away indicator"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_main.html:317
+#: help/window_main.html:324
 msgid ""
 "The user icon turns from green to grey when DC++ is in <a po4a-id=0>away "
 "mode</a>."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_main.html:318
+#: help/window_main.html:325
 msgid "Double-click to switch away mode on and off."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_main.html:321
+#: help/window_main.html:328
 msgid ""
 "Shows the number of hubs you are currently connected to in the following "
 "format: x/y/z, where:"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd><p>
-#: help/window_main.html:323
+#: help/window_main.html:330
 msgid "x = number of connected hubs where you're not a registered user;"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd><p>
-#: help/window_main.html:324
+#: help/window_main.html:331
 msgid "y = number of connected hubs where you're registered in;"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd><p>
-#: help/window_main.html:325
+#: help/window_main.html:332
 msgid "z = number of connected hubs where you're an operator;"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_main.html:327
+#: help/window_main.html:334
 msgid ""
 "just the same way as in the <a po4a-id=0>DC++ tags</a> of the users listed "
 "on a hub."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_main.html:330 help/window_main.html:330 help/window_search.html:74
+#: help/window_main.html:337 help/window_main.html:337 help/window_search.html:74
 msgid "Slots"
 msgstr ""
 
 #. type: Attribute 'alt' of: <html><body><dl><dt><img>
-#: help/window_main.html:330
+#: help/window_main.html:337
 msgid "Slots full"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_main.html:331
+#: help/window_main.html:338
 msgid ""
 "Indicates the number of currently free upload slots out of the total number "
 "of slots opened."
 msgstr ""
 
 #. type: Attribute 'alt' of: <html><body><dl><dt><img>
-#: help/window_main.html:333
+#: help/window_main.html:340
 msgid "Downloaded bytes"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_main.html:333
+#: help/window_main.html:340
 msgid "Total downloaded bytes"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd><div>
-#: help/window_main.html:334
+#: help/window_main.html:341
 msgid ""
 "Shows the total number of bytes received in the current session, including "
 "file transfers, hub-client communication and hublists."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd><div>
-#: help/window_main.html:335 help/window_main.html:339 help/window_main.html:343 help/window_main.html:347
+#: help/window_main.html:342 help/window_main.html:346 help/window_main.html:350 help/window_main.html:354
 msgid "Double-click to open the <placeholder id=0/> window."
 msgstr ""
 
 #. type: Attribute 'alt' of: <html><body><dl><dt><img>
-#: help/window_main.html:337
+#: help/window_main.html:344
 msgid "Uploaded bytes"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_main.html:337
+#: help/window_main.html:344
 msgid "Total uploaded bytes"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd><div>
-#: help/window_main.html:338
+#: help/window_main.html:345
 msgid ""
 "Shows the total number of bytes sent in the current session, including file "
 "transfers and hub-client communication."
 msgstr ""
 
 #. type: Attribute 'alt' of: <html><body><dl><dt><img>
-#: help/window_main.html:341
+#: help/window_main.html:348
 msgid "Download speed"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_main.html:341
+#: help/window_main.html:348
 msgid "Current download speed"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd><div>
-#: help/window_main.html:342
+#: help/window_main.html:349
 msgid ""
 "Shows the current overall download speed and the number of current download "
 "connections in parentheses (updated in every second)."
 msgstr ""
 
 #. type: Attribute 'alt' of: <html><body><dl><dt><img>
-#: help/window_main.html:345
+#: help/window_main.html:352
 msgid "Upload speed"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_main.html:345
+#: help/window_main.html:352
 msgid "Current upload speed"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd><div>
-#: help/window_main.html:346
+#: help/window_main.html:353
 msgid ""
 "Shows the current overall upload speed and the number of current upload "
 "connections in parentheses (updated in every second)."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_main.html:349
+#: help/window_main.html:356
 msgid "Current download limit"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_main.html:350
+#: help/window_main.html:357
 msgid ""
 "Shows the current maximum download rate. Zero speed value means that "
 "download limiting is disabled."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_main.html:352
+#: help/window_main.html:359
 msgid "Current upload limit"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_main.html:353
+#: help/window_main.html:360
 msgid ""
 "Shows the current maximum upload rate. Zero speed value means that upload "
 "limiting is disabled."

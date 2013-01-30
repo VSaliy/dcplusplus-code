@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-09-09 16:53+0300\n"
+"POT-Creation-Date: 2013-01-30 17:00+0100\n"
 "PO-Revision-Date: 2012-08-03 23:15+0000\n"
 "Last-Translator: adrian_007 <Unknown>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-09-16 15:37+0000\n"
-"X-Generator: Launchpad (build 15944)\n"
+"X-Launchpad-Export-Date: 2013-01-30 15:45+0000\n"
+"X-Generator: Launchpad (build 16455)\n"
 
 #. type: Content of: <html><body><ul><li><div><placeholder><a>
 #: help/chat_commands.html:9 help/index.html:144
@@ -128,16 +128,16 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd><placeholder><a>
 #: help/chat_commands.html:49
-#: C:/Documents/Programmes/DC++/repo/help/commands_user_general.inc:11
-#: help/index.html:30 help/keyboard_commands.html:41
-#: help/keyboard_commands.html:68 help/keyboard_commands.html:70
-#: help/keyboard_commands.html:72 help/keyboard_commands.html:76
-#: help/keyboard_commands.html:79 help/keyboard_commands.html:80
-#: help/keyboard_commands.html:84 help/settings_appearance.html:80
-#: help/settings_expert.html:49 help/settings_expert.html:51
-#: help/settings_history.html:25 help/settings_history.html:43
-#: help/settings_notifications.html:37 help/window_main.html:147
-#: help/window_main.html:149 help/window_pm.html:10 help/window_pm.html:11
+#: H:/Dev/DC++/repo/help/commands_user_general.inc:11 help/index.html:30
+#: help/keyboard_commands.html:41 help/keyboard_commands.html:68
+#: help/keyboard_commands.html:70 help/keyboard_commands.html:72
+#: help/keyboard_commands.html:76 help/keyboard_commands.html:79
+#: help/keyboard_commands.html:80 help/keyboard_commands.html:84
+#: help/settings_appearance.html:80 help/settings_expert.html:49
+#: help/settings_expert.html:51 help/settings_history.html:25
+#: help/settings_history.html:43 help/settings_notifications.html:37
+#: help/window_main.html:147 help/window_main.html:149 help/window_pm.html:10
+#: help/window_pm.html:11
 msgid "Private Message"
 msgstr "Prywatna Widomość"
 
@@ -338,12 +338,12 @@ msgstr ""
 "okna Pomocy związanego z danym oknem."
 
 #. type: Content of: <html><body><dl><dt>
-#: C:/Documents/Programmes/DC++/repo/help/commands_file_general.inc:2
+#: H:/Dev/DC++/repo/help/commands_file_general.inc:2
 msgid "Search for alternates"
 msgstr "Szukaj alternatywy"
 
 #. type: Content of: <html><body><dl><dd>
-#: C:/Documents/Programmes/DC++/repo/help/commands_file_general.inc:3
+#: H:/Dev/DC++/repo/help/commands_file_general.inc:3
 msgid ""
 "Will open a new <a po4a-id=0>Search window</a> to search for alternate "
 "sources for the selected file."
@@ -352,34 +352,34 @@ msgstr ""
 "dla wybranego pliku."
 
 #. type: Content of: <html><body><dl><dt>
-#: C:/Documents/Programmes/DC++/repo/help/commands_file_general.inc:5
+#: H:/Dev/DC++/repo/help/commands_file_general.inc:5
 msgid "Lookup TTH at Bitzi.com"
 msgstr "Szukaj TTH na Bitzi.com"
 
 #. type: Content of: <html><body><dl><dd>
-#: C:/Documents/Programmes/DC++/repo/help/commands_file_general.inc:6
+#: H:/Dev/DC++/repo/help/commands_file_general.inc:6
 msgid ""
 "Will trigger the default browser to lookup the TTH of the selected file at "
 "Bitzi.com."
 msgstr "Uruchomi domyślą przegląrkę by poszukać TTH pliku wBitzi.com."
 
 #. type: Content of: <html><body><dl><dt>
-#: C:/Documents/Programmes/DC++/repo/help/commands_file_general.inc:8
+#: H:/Dev/DC++/repo/help/commands_file_general.inc:8
 msgid "Copy magnet link to clipboard"
 msgstr "Kopiuj magnet link do schowka"
 
 #. type: Content of: <html><body><dl><dd>
-#: C:/Documents/Programmes/DC++/repo/help/commands_file_general.inc:9
+#: H:/Dev/DC++/repo/help/commands_file_general.inc:9
 msgid "Will copy the file's <a po4a-id=0>magnet link</a> to the clipboard."
 msgstr "Skopiuje <a po4a-id=0>magnet link</a> pliku do schowka."
 
 #. type: Content of: <html><body><dl><dt>
-#: C:/Documents/Programmes/DC++/repo/help/commands_file_download.inc:2
+#: H:/Dev/DC++/repo/help/commands_file_download.inc:2
 msgid "Download"
 msgstr "Pobieranie"
 
 #. type: Content of: <html><body><dl><dd>
-#: C:/Documents/Programmes/DC++/repo/help/commands_file_download.inc:3
+#: H:/Dev/DC++/repo/help/commands_file_download.inc:3
 msgid ""
 "Adds the selected file(s) or director(ies) to the Download Queue. They will "
 "be downloaded to the <a po4a-id=0>Default download directory</a>."
@@ -388,12 +388,12 @@ msgstr ""
 "do <a po4a-id=0>Domyślnego folderu pobierań</a>."
 
 #. type: Content of: <html><body><dl><dt>
-#: C:/Documents/Programmes/DC++/repo/help/commands_file_download.inc:6
+#: H:/Dev/DC++/repo/help/commands_file_download.inc:6
 msgid "Download to..."
 msgstr "Pobierz do..."
 
 #. type: Content of: <html><body><dl><dd>
-#: C:/Documents/Programmes/DC++/repo/help/commands_file_download.inc:7
+#: H:/Dev/DC++/repo/help/commands_file_download.inc:7
 msgid ""
 "Adds the selected file(s) or director(ies) to the Download Queue. The "
 "download target can be selected using the submenu elements : either a "
@@ -406,12 +406,12 @@ msgstr ""
 "podmenu <i>Wybierz...</i>."
 
 #. type: Content of: <html><body><dl><dt>
-#: C:/Documents/Programmes/DC++/repo/help/commands_file_management.inc:2
+#: H:/Dev/DC++/repo/help/commands_file_management.inc:2
 msgid "Open"
 msgstr "Otwórz"
 
 #. type: Content of: <html><body><dl><dd>
-#: C:/Documents/Programmes/DC++/repo/help/commands_file_management.inc:3
+#: H:/Dev/DC++/repo/help/commands_file_management.inc:3
 msgid ""
 "Opens the file with its respective external viewer software. You should have "
 "the appropriate viewer / player software installed and correctly registered "
@@ -422,12 +422,12 @@ msgstr ""
 "pliku, które jest poprawnie zarejestrowane."
 
 #. type: Content of: <html><body><dl><dt>
-#: C:/Documents/Programmes/DC++/repo/help/commands_file_management.inc:6
+#: H:/Dev/DC++/repo/help/commands_file_management.inc:6
 msgid "Open folder"
 msgstr "Otwiera listę plików."
 
 #. type: Content of: <html><body><dl><dd>
-#: C:/Documents/Programmes/DC++/repo/help/commands_file_management.inc:7
+#: H:/Dev/DC++/repo/help/commands_file_management.inc:7
 msgid ""
 "Opens the selected folder (or the folder containing the selected file) in "
 "Windows Explorer."
@@ -436,12 +436,12 @@ msgstr ""
 "Eksploratorze Windows."
 
 #. type: Content of: <html><body><dl><dt>
-#: C:/Documents/Programmes/DC++/repo/help/commands_file_management.inc:9
+#: H:/Dev/DC++/repo/help/commands_file_management.inc:9
 msgid "Shell menu"
 msgstr "Menu Pomoc"
 
 #. type: Content of: <html><body><dl><dd>
-#: C:/Documents/Programmes/DC++/repo/help/commands_file_management.inc:10
+#: H:/Dev/DC++/repo/help/commands_file_management.inc:10
 msgid ""
 "Opens the Windows shell menu as submenu items. This menu contains the same "
 "items as in the context menu of Windows Explorer. Note that the submenu "
@@ -474,7 +474,7 @@ msgstr ""
 "skieruj się do okna Pomocy związanego z danym oknem."
 
 #. type: Content of: <html><body><dl><dt>
-#: C:/Documents/Programmes/DC++/repo/help/commands_listview.inc:2
+#: H:/Dev/DC++/repo/help/commands_listview.inc:2
 #: help/dialog_fav_hub_groups.html:16 help/dialog_public_hub_lists.html:28
 #: help/dialog_string_list.html:29 help/settings_favoritedirs.html:22
 #: help/settings_plugins.html:42 help/settings_search_types.html:28
@@ -485,7 +485,7 @@ msgid "Remove"
 msgstr "Usuń"
 
 #. type: Content of: <html><body><dl><dd>
-#: C:/Documents/Programmes/DC++/repo/help/commands_listview.inc:3
+#: H:/Dev/DC++/repo/help/commands_listview.inc:3
 msgid ""
 "Deletes the actual item from the list. If the corresponding setting in <a "
 "po4a-id=0>Confirm dialog options</a> is enabled, you will be prompted before "
@@ -496,12 +496,12 @@ msgstr ""
 "potwierdzenie usunięcia."
 
 #. type: Content of: <html><body><dl><dt>
-#: C:/Documents/Programmes/DC++/repo/help/commands_listview.inc:6
+#: H:/Dev/DC++/repo/help/commands_listview.inc:6
 msgid "Remove all"
 msgstr "Usuń wszystko"
 
 #. type: Content of: <html><body><dl><dd>
-#: C:/Documents/Programmes/DC++/repo/help/commands_listview.inc:7
+#: H:/Dev/DC++/repo/help/commands_listview.inc:7
 msgid ""
 "Deletes all the selected items from the list. If the corresponding setting "
 "in <a po4a-id=0>Confirm dialog options</a> is enabled, you will be prompted "
@@ -510,6 +510,19 @@ msgstr ""
 "Usuwa wszystkie zaznaczone pozycje z listy. Jeżeli odpowiednik ustawień w <a "
 "po4a-id=0>Opcjach potwierdzenia</a> jest włączony, zostaniesz zapytany o "
 "potwierdzenie usunięcia."
+
+#. type: Content of: <html><body><dl><dt>
+#: H:/Dev/DC++/repo/help/commands_listview.inc:10
+msgid "Copy"
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
+#: H:/Dev/DC++/repo/help/commands_listview.inc:11
+msgid ""
+"Allows copying the content of any column to the clipboard. An &quot;All "
+"columns&quot; command is available as well to gather all the columns in the "
+"copied text (one column per copied line)."
+msgstr ""
 
 #. type: Content of: <html><body><h1>
 #: help/commands_user.html:10
@@ -528,22 +541,22 @@ msgstr ""
 "okien skieruj się do okna Pomocy związanego z danym oknem."
 
 #. type: Content of: <html><body><dl><dt>
-#: C:/Documents/Programmes/DC++/repo/help/commands_user_general.inc:2
+#: H:/Dev/DC++/repo/help/commands_user_general.inc:2
 msgid "Get file list"
 msgstr "Pobierz listę plików"
 
 #. type: Content of: <html><body><dl><dd>
-#: C:/Documents/Programmes/DC++/repo/help/commands_user_general.inc:3
+#: H:/Dev/DC++/repo/help/commands_user_general.inc:3
 msgid "Download the file list of the selected users."
 msgstr "Pobierz listę plików wybranego użytkownika."
 
 #. type: Content of: <html><body><dl><dt>
-#: C:/Documents/Programmes/DC++/repo/help/commands_user_general.inc:4
+#: H:/Dev/DC++/repo/help/commands_user_general.inc:4
 msgid "Browse file list"
 msgstr "Pobierz listę plików"
 
 #. type: Content of: <html><body><dl><dd>
-#: C:/Documents/Programmes/DC++/repo/help/commands_user_general.inc:5
+#: H:/Dev/DC++/repo/help/commands_user_general.inc:5
 msgid ""
 "Download only the required pieces of the file lists of the selected users in "
 "form of a partial file list. Note that you may not able to fully exploit "
@@ -552,13 +565,13 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: C:/Documents/Programmes/DC++/repo/help/commands_user_general.inc:6
+#: H:/Dev/DC++/repo/help/commands_user_general.inc:6
 #: help/window_file_list.html:24
 msgid "Match queue"
 msgstr "Porównaj kolejkę"
 
 #. type: Content of: <html><body><dl><dd>
-#: C:/Documents/Programmes/DC++/repo/help/commands_user_general.inc:7
+#: H:/Dev/DC++/repo/help/commands_user_general.inc:7
 msgid ""
 "Matches the files in your download queue to the file lists of the selected "
 "users. 2 files are considered to be the same if their TTH is the same. If "
@@ -571,12 +584,12 @@ msgstr ""
 "jako źródło dla danego pliku."
 
 #. type: Content of: <html><body><dl><dt>
-#: C:/Documents/Programmes/DC++/repo/help/commands_user_general.inc:10
+#: H:/Dev/DC++/repo/help/commands_user_general.inc:10
 msgid "Send private message"
 msgstr "Wyślij prywatną wiadomość"
 
 #. type: Content of: <html><body><dl><dd><placeholder>
-#: C:/Documents/Programmes/DC++/repo/help/commands_user_general.inc:11
+#: H:/Dev/DC++/repo/help/commands_user_general.inc:11
 #: help/dialog_fav_hub_groups.html:10 help/dialog_fav_hub_groups.html:15
 #: help/dialog_favorite_hub.html:34 help/dialog_favorite_hub.html:38
 #: help/dialog_favorite_hub.html:39 help/dialog_user_matching.html:13
@@ -635,19 +648,19 @@ msgstr "Wyślij prywatną wiadomość"
 #: help/window_main.html:139 help/window_main.html:143
 #: help/window_main.html:144 help/window_main.html:147
 #: help/window_main.html:149 help/window_main.html:153
-#: help/window_main.html:229 help/window_main.html:236
-#: help/window_main.html:237 help/window_main.html:238
-#: help/window_main.html:242 help/window_main.html:245
-#: help/window_main.html:248 help/window_main.html:251
-#: help/window_main.html:254 help/window_main.html:257
-#: help/window_main.html:260 help/window_main.html:276
-#: help/window_main.html:335 help/window_main.html:339
-#: help/window_main.html:343 help/window_main.html:347 help/window_pm.html:34
+#: help/window_main.html:230 help/window_main.html:237
+#: help/window_main.html:238 help/window_main.html:239
+#: help/window_main.html:243 help/window_main.html:246
+#: help/window_main.html:249 help/window_main.html:252
+#: help/window_main.html:255 help/window_main.html:258
+#: help/window_main.html:261 help/window_main.html:286
+#: help/window_main.html:342 help/window_main.html:346
+#: help/window_main.html:350 help/window_main.html:354 help/window_pm.html:34
 msgid "<placeholder id=0/>"
 msgstr "<placeholder id=0/>"
 
 #. type: Content of: <html><body><dl><dd>
-#: C:/Documents/Programmes/DC++/repo/help/commands_user_general.inc:11
+#: H:/Dev/DC++/repo/help/commands_user_general.inc:11
 msgid ""
 "Open <placeholder id=0/> windows to chat privately with the selected users."
 msgstr ""
@@ -655,12 +668,12 @@ msgstr ""
 "użytkownika."
 
 #. type: Content of: <html><body><dl><dt>
-#: C:/Documents/Programmes/DC++/repo/help/commands_user_general.inc:13
+#: H:/Dev/DC++/repo/help/commands_user_general.inc:13
 msgid "Grant extra slot"
 msgstr "Przydziel slota."
 
 #. type: Content of: <html><body><dl><dd>
-#: C:/Documents/Programmes/DC++/repo/help/commands_user_general.inc:14
+#: H:/Dev/DC++/repo/help/commands_user_general.inc:14
 msgid ""
 "In addition to your regular upload slots, an extra upload slot will be given "
 "to the selected users until the end of the current DC++ session."
@@ -669,13 +682,13 @@ msgstr ""
 "slot dla wybranego użytkownika aż do zakończenia obecnej sesji DC++."
 
 #. type: Content of: <html><body><dl><dt>
-#: C:/Documents/Programmes/DC++/repo/help/commands_user_general.inc:16
-#: help/window_download_queue.html:111
+#: H:/Dev/DC++/repo/help/commands_user_general.inc:16
+#: help/window_download_queue.html:117
 msgid "Remove user from queue"
 msgstr "Usuń użytkowników z kolejki"
 
 #. type: Content of: <html><body><dl><dd>
-#: C:/Documents/Programmes/DC++/repo/help/commands_user_general.inc:17
+#: H:/Dev/DC++/repo/help/commands_user_general.inc:17
 msgid ""
 "Remove the selected users from the source list of all queued files. Pending "
 "file list requests will be removed as well."
@@ -684,12 +697,12 @@ msgstr ""
 "w kolejce. Obecne pobierania list plików zostaną również usunięte."
 
 #. type: Content of: <html><body><dl><dt>
-#: C:/Documents/Programmes/DC++/repo/help/commands_user_general.inc:19
+#: H:/Dev/DC++/repo/help/commands_user_general.inc:19
 msgid "Ignore chat"
 msgstr "Ignoruj chat"
 
 #. type: Content of: <html><body><dl><dd>
-#: C:/Documents/Programmes/DC++/repo/help/commands_user_general.inc:20
+#: H:/Dev/DC++/repo/help/commands_user_general.inc:20
 msgid ""
 "Add user matching definitions (or modify existing ones, if possible) to "
 "ignore chat messages from the selected users."
@@ -698,12 +711,12 @@ msgstr ""
 "aby ignorować na czacie wiadomości wybranych użytkowników."
 
 #. type: Content of: <html><body><dl><dt>
-#: C:/Documents/Programmes/DC++/repo/help/commands_user_general.inc:22
+#: H:/Dev/DC++/repo/help/commands_user_general.inc:22
 msgid "Un-ignore chat"
 msgstr "Od-ignoruj czat"
 
 #. type: Content of: <html><body><dl><dd>
-#: C:/Documents/Programmes/DC++/repo/help/commands_user_general.inc:23
+#: H:/Dev/DC++/repo/help/commands_user_general.inc:23
 msgid ""
 "Add user matching definitions (or modify existing ones, if possible) to stop "
 "ignoring chat messages from the selected users."
@@ -712,13 +725,28 @@ msgstr ""
 "aby przestać ignorować na czacie wiadomości wybranych użytkowników."
 
 #. type: Content of: <html><body><dl><dt>
-#: C:/Documents/Programmes/DC++/repo/help/commands_user_favorites.inc:2
+#: H:/Dev/DC++/repo/help/commands_user_general.inc:25
+#, fuzzy
+msgid "Copy user information"
+msgstr "Informacje osobiste"
+
+#. type: Content of: <html><body><dl><dd>
+#: H:/Dev/DC++/repo/help/commands_user_general.inc:26
+msgid ""
+"Copy a few lines containing user information to the clipboard. The data may "
+"include: the user's nick(s), her hub address(es), her IP, country, email, "
+"CID (not exhaustive). When multiple users are selected, each user "
+"information blob is separated with a blank line."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dt>
+#: H:/Dev/DC++/repo/help/commands_user_favorites.inc:2
 #: help/window_public_hubs.html:45
 msgid "Add to favorites"
 msgstr "Dodaj do ulubionych"
 
 #. type: Content of: <html><body><dl><dd>
-#: C:/Documents/Programmes/DC++/repo/help/commands_user_favorites.inc:3
+#: H:/Dev/DC++/repo/help/commands_user_favorites.inc:3
 msgid "Adds the selected users to your <a po4a-id=0>Favorite Users</a> list."
 msgstr ""
 "Dodaje wybranego użytkownika do listy <a po4a-id=0>Ulubionych użytkowników</"
@@ -1198,7 +1226,7 @@ msgstr ""
 #: help/index.html:63 help/window_favorite_hubs.html:33
 #: help/window_favorite_hubs.html:53 help/window_favorite_hubs.html:54
 #: help/window_main.html:29 help/window_main.html:139
-#: help/window_main.html:144 help/window_main.html:238
+#: help/window_main.html:144 help/window_main.html:239
 msgid "Favorite hub groups"
 msgstr "Ulubione grupy hubów"
 
@@ -1206,8 +1234,8 @@ msgstr "Ulubione grupy hubów"
 #: help/dialog_fav_hub_groups.html:10 help/index.html:33
 #: help/keyboard_commands.html:46 help/window_main.html:70
 #: help/window_main.html:71 help/window_main.html:204
-#: help/window_main.html:234 help/window_main.html:236
-#: help/window_main.html:237
+#: help/window_main.html:235 help/window_main.html:237
+#: help/window_main.html:238
 msgid "Favorite Hubs"
 msgstr "Ulubione Huby"
 
@@ -2134,8 +2162,8 @@ msgstr "Dopasuj ulubionych użytkowników"
 #: help/keyboard_commands.html:60 help/keyboard_commands.html:89
 #: help/settings_styles.html:47 help/window_download_queue.html:52
 #: help/window_hub.html:112 help/window_main.html:74 help/window_main.html:75
-#: help/window_main.html:205 help/window_main.html:241
-#: help/window_main.html:242 help/window_public_hubs.html:19
+#: help/window_main.html:205 help/window_main.html:242
+#: help/window_main.html:243 help/window_public_hubs.html:19
 #: help/window_public_hubs.html:88 help/window_users.html:10
 #: help/window_users.html:11
 msgid "Users"
@@ -2602,10 +2630,10 @@ msgstr ""
 #. type: Content of: <html><body><p>
 #: help/faq_connection.html:142
 msgid ""
-"Currently, DC++ includes two different UPnP implementations and support for "
-"NAT-PMP as well. If automatic port mapping is enabled in the connectivity "
-"configuration DC++ will try to map the ports with all the available mapper "
-"interfaces until a successful attempt. To enable automatic port mapping"
+"Currently, DC++ includes support for both UPnP and NAT-PMP. If automatic "
+"port mapping is enabled in the connectivity configuration DC++ will try to "
+"map the ports with all the available mapper interfaces until a successful "
+"attempt. To enable automatic port mapping"
 msgstr ""
 
 #. type: Content of: <html><body><p><ul><li>
@@ -2668,23 +2696,13 @@ msgid ""
 "id=2>disallow the automatic IP override</a> in these cases."
 msgstr ""
 
-#. type: Content of: <html><body><p><ul><li>
-#: help/faq_connection.html:184
-msgid ""
-"While the preferred UPnP interface is MiniUPnP, in some cases you may find "
-"the legacy Windows UPnP mapper more successful (eg. if you have an older "
-"router model and it worked well with older versions of DC++). In any case it "
-"worth a try if the other mappers are failed and you'll find troubleshooting "
-"tips for the <u>Windows UPnP only</u> in <a po4a-id=0>this FAQ</a>."
-msgstr ""
-
 #. type: Content of: <html><body><h3>
-#: help/faq_connection.html:191
+#: help/faq_connection.html:192
 msgid "Manual port mapping configuration"
 msgstr ""
 
 #. type: Content of: <html><body><p>
-#: help/faq_connection.html:193
+#: help/faq_connection.html:194
 msgid ""
 "If you are unable to automate port forwarding with NAT-PMP or UPnP, you can "
 "follow the <a po4a-id=0> Manual port forwarding FAQ</a> to achieve active "
@@ -2693,13 +2711,13 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><h3>
-#: help/faq_connection.html:197
+#: help/faq_connection.html:198
 #, fuzzy
 msgid "Select passive mode as the last resort"
 msgstr "Firewall (tryb pasywny, ostateczność)"
 
 #. type: Content of: <html><body><p>
-#: help/faq_connection.html:199
+#: help/faq_connection.html:200
 #, fuzzy
 msgid ""
 "If none of the above helped or you are not able to use active mode in your "
@@ -2717,7 +2735,7 @@ msgstr ""
 "jednak opcja ta ma kilka wad."
 
 #. type: Content of: <html><body><p>
-#: help/faq_connection.html:206
+#: help/faq_connection.html:207
 msgid ""
 "If you still unable to search and/or download even in passive mode another "
 "possibility is that your ISP is blocking DC (and often other p2p protocols "
@@ -5580,7 +5598,7 @@ msgstr "Lista plików"
 #: help/index.html:32 help/keyboard_commands.html:52
 #: help/keyboard_commands.html:89 help/window_main.html:66
 #: help/window_main.html:67 help/window_main.html:202
-#: help/window_main.html:228 help/window_main.html:229
+#: help/window_main.html:229 help/window_main.html:230
 msgid "Public Hubs"
 msgstr "Publiczne Huby"
 
@@ -5588,21 +5606,21 @@ msgstr "Publiczne Huby"
 #: help/index.html:35 help/keyboard_commands.html:35
 #: help/settings_tabs.html:57 help/window_main.html:78
 #: help/window_main.html:79 help/window_main.html:206
-#: help/window_main.html:244 help/window_main.html:245
+#: help/window_main.html:245 help/window_main.html:246
 msgid "Download Queue"
 msgstr "Kolejka pobierania"
 
 #. type: Content of: <html><body><dl><dd><placeholder><a>
 #: help/index.html:36 help/settings_tabs.html:60 help/window_main.html:82
 #: help/window_main.html:83 help/window_main.html:207
-#: help/window_main.html:247 help/window_main.html:248
+#: help/window_main.html:248 help/window_main.html:249
 msgid "Finished Downloads"
 msgstr "Pobrane pliki"
 
 #. type: Content of: <html><body><dl><dd><placeholder><a>
 #: help/index.html:37 help/settings_tabs.html:63 help/window_main.html:86
 #: help/window_main.html:87 help/window_main.html:208
-#: help/window_main.html:250 help/window_main.html:251
+#: help/window_main.html:251 help/window_main.html:252
 msgid "Finished Uploads"
 msgstr "Plik wysyłane"
 
@@ -5611,8 +5629,8 @@ msgstr "Plik wysyłane"
 #: help/settings_history.html:58 help/settings_search_types.html:12
 #: help/settings_tabs.html:51 help/window_main.html:90
 #: help/window_main.html:91 help/window_main.html:153
-#: help/window_main.html:209 help/window_main.html:253
-#: help/window_main.html:254 help/window_search.html:10
+#: help/window_main.html:209 help/window_main.html:254
+#: help/window_main.html:255 help/window_search.html:10
 #: help/window_search.html:11 help/window_search.html:38
 msgid "Search"
 msgstr "Szukaj"
@@ -5624,8 +5642,8 @@ msgstr "ADLSearch"
 
 #. type: Content of: <html><body><h1>
 #: help/index.html:40 help/keyboard_commands.html:48 help/window_main.html:98
-#: help/window_main.html:99 help/window_main.html:215
-#: help/window_main.html:275 help/window_main.html:276
+#: help/window_main.html:99 help/window_main.html:217
+#: help/window_main.html:285 help/window_main.html:286
 #: help/window_notepad.html:10 help/window_notepad.html:11
 msgid "Notepad"
 msgstr "Notatnik"
@@ -5643,10 +5661,10 @@ msgstr "Log systemowy"
 
 #. type: Content of: <html><body><dl><dd><div><placeholder><a>
 #: help/index.html:43 help/window_main.html:106 help/window_main.html:107
-#: help/window_main.html:211 help/window_main.html:259
-#: help/window_main.html:260 help/window_main.html:335
-#: help/window_main.html:339 help/window_main.html:343
-#: help/window_main.html:347
+#: help/window_main.html:211 help/window_main.html:260
+#: help/window_main.html:261 help/window_main.html:342
+#: help/window_main.html:346 help/window_main.html:350
+#: help/window_main.html:354
 msgid "Network Statistics"
 msgstr "Statystyki sieci"
 
@@ -5688,8 +5706,8 @@ msgid "Dialogs"
 msgstr "Okna dialogowe"
 
 #. type: Content of: <html><body><dl><dt>
-#: help/index.html:71 help/window_main.html:49 help/window_main.html:214
-#: help/window_main.html:272
+#: help/index.html:71 help/window_main.html:49 help/window_main.html:216
+#: help/window_main.html:282
 msgid "Settings"
 msgstr "Ustawienia"
 
@@ -5743,7 +5761,7 @@ msgid "Appearance"
 msgstr "Wygląd"
 
 #. type: Content of: <html><body><h2>
-#: help/index.html:92 help/window_main.html:287
+#: help/index.html:92 help/window_main.html:294
 msgid "Tabs"
 msgstr "Karty"
 
@@ -6034,11 +6052,11 @@ msgstr "Ctrl + D"
 #: help/window_main.html:79 help/window_main.html:83 help/window_main.html:87
 #: help/window_main.html:91 help/window_main.html:95 help/window_main.html:99
 #: help/window_main.html:103 help/window_main.html:107
-#: help/window_main.html:229 help/window_main.html:236
-#: help/window_main.html:242 help/window_main.html:245
-#: help/window_main.html:248 help/window_main.html:251
-#: help/window_main.html:254 help/window_main.html:257
-#: help/window_main.html:260 help/window_main.html:276
+#: help/window_main.html:230 help/window_main.html:237
+#: help/window_main.html:243 help/window_main.html:246
+#: help/window_main.html:249 help/window_main.html:252
+#: help/window_main.html:255 help/window_main.html:258
+#: help/window_main.html:261 help/window_main.html:286
 msgid "Open the <placeholder id=0/> window."
 msgstr "Otwórz <placeholder id=0/> okno."
 
@@ -6155,7 +6173,7 @@ msgid "Ctrl + F3"
 msgstr "Ctrl + F3"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/keyboard_commands.html:62 help/window_main.html:273
+#: help/keyboard_commands.html:62 help/window_main.html:283
 msgid "Open the Settings dialog."
 msgstr "Otwiera okno Ustawień."
 
@@ -7022,14 +7040,17 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_appearance.html:28
-msgid "View status messages in main chat"
+#, fuzzy
+msgid "View status messages in chat"
 msgstr "Pokazuj wiadomości statusu na głównym chacie"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_appearance.html:29
+#, fuzzy
 msgid ""
-"Show some messages destined for the Status Bar in main chat as well. <i>It's "
-"generally a good idea to leave this enabled.</i>"
+"Show some messages destined for the Status Bar in the chat window as well. "
+"Applies to both hub and private chat windows.<i>It's generally a good idea "
+"to leave this enabled.</i>"
 msgstr ""
 "Pokaż niektóre wiadomości przeznaczone dla Paska Statusu również na czacie "
 "głównym. <i>Ogółem jest dobrym pomysłem by zostawić to włączone.</i>"
@@ -7743,28 +7764,20 @@ msgstr ""
 msgid "MiniUPnP: An open-source UPnP library."
 msgstr ""
 
-#. type: Content of: <html><body><dl><dd><ul><li>
-#: help/settings_connectivity_manual.html:102
-msgid ""
-"Windows UPnP: Use Windows discovery services. Note that the DC++ "
-"implementation of Windows UPnP is partial and prone to random failures. "
-"MiniUPnP is recommended instead."
-msgstr ""
-
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_connectivity_manual.html:105
+#: help/settings_connectivity_manual.html:103
 msgid ""
 "The interface selected here will be tried first; other available interfaces "
 "will then be tried if the preferred port mapping interface were to fail."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/settings_connectivity_manual.html:109
+#: help/settings_connectivity_manual.html:107
 msgid "Bind address"
 msgstr "Dowiąż adres"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_connectivity_manual.html:111
+#: help/settings_connectivity_manual.html:109
 msgid ""
 "This setting allows binding DC++ network connections to a specific network "
 "adapter by its IP address. Useful when you have more than one physical or "
@@ -7773,7 +7786,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_connectivity_manual.html:114
+#: help/settings_connectivity_manual.html:112
 msgid ""
 "If this setting is empty (it is by default) it means that DC++ is relying on "
 "the operating system to find the best adapter. In case of the adapter "
@@ -7784,7 +7797,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_connectivity_manual.html:119
+#: help/settings_connectivity_manual.html:117
 msgid ""
 "If binding with the given IP address fails, it will do so silently and the "
 "default value (INADDR_ANY) will be used instead. This setting is ignored "
@@ -8406,11 +8419,21 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_general.html:80
-msgid "Enable away mode after X minutes of inactivity"
+msgid "Add timestamp to end of away messages"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_general.html:82
+msgid "Display time at which DC++ entered away mode in away message."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dt>
+#: help/settings_general.html:85
+msgid "Enable away mode after X minutes of inactivity"
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_general.html:87
 msgid ""
 "Switch to away mode whenever the Windows session hasn't received any mouse "
 "or keyboard input for the last X minutes; disable away mode when input is "
@@ -8424,7 +8447,7 @@ msgid "Chat lines to recall from history when opening a window"
 msgstr "Linie czatu do przywołania z histori po otwarciu okna"
 
 #. type: Content of: <html><body><dl><dt>
-#: help/settings_history.html:14 help/window_main.html:320
+#: help/settings_history.html:14 help/window_main.html:327
 #: help/window_public_hubs.html:85 help/window_search.html:60
 msgid "Hubs"
 msgstr "Huby"
@@ -11173,7 +11196,7 @@ msgid "Country code of the connected peer (if available)"
 msgstr "Kod kraju podłączonego użytkownika (jeżeli dostępny)"
 
 #. type: Content of: <html><body><h2>
-#: help/window_connections.html:42 help/window_download_queue.html:91
+#: help/window_connections.html:42 help/window_download_queue.html:97
 #: help/window_downloads.html:29 help/window_file_list.html:75
 #: help/window_finished_downloads.html:44 help/window_finished_uploads.html:44
 #: help/window_hub.html:66 help/window_public_hubs.html:41
@@ -11222,7 +11245,7 @@ msgid "Menu options"
 msgstr "Opcje menu"
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_download_queue.html:17 help/window_download_queue.html:105
+#: help/window_download_queue.html:17 help/window_download_queue.html:111
 msgid "Set priority"
 msgstr "Ustaw priorytet"
 
@@ -11237,7 +11260,7 @@ msgstr ""
 "ściągania i nie będzie <a po4a-id=0>automatycznie szukał</a> źródeł."
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_download_queue.html:19 help/window_download_queue.html:94
+#: help/window_download_queue.html:19 help/window_download_queue.html:100
 msgid "Move/Rename"
 msgstr "Przenieś/Zmień nazwę"
 
@@ -11365,7 +11388,7 @@ msgid "Priority"
 msgstr "Priorytet"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_download_queue.html:51 help/window_download_queue.html:106
+#: help/window_download_queue.html:51 help/window_download_queue.html:112
 msgid ""
 "The file's priority. If a file is paused, it will not begin to download and "
 "it will not be <a po4a-id=0>automatically searched</a> for."
@@ -11475,11 +11498,26 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd><ul><li><p>
 #: help/window_download_queue.html:73
+#, fuzzy
+msgid "<i>No full tree available</i>"
+msgstr "<i>Plik nie jest dostępny</i>"
+
+#. type: Content of: <html><body><dl><dd><ul><li><p>
+#: help/window_download_queue.html:74
+msgid ""
+"None of the sources provided the <a po4a-id=0>Tiger tree</a> for this large "
+"file and as long as the full tree is not available DC++ cannot resume this "
+"file. You can readd the source(s) manually and let DC++ download the file "
+"without having the hash tree information at your own risk."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd><ul><li><p>
+#: help/window_download_queue.html:76
 msgid "<i>Source too slow</i>"
 msgstr "<i>Źródło jest za wolne</i>"
 
 #. type: Content of: <html><body><dl><dd><ul><li><p>
-#: help/window_download_queue.html:74
+#: help/window_download_queue.html:77
 msgid ""
 "The source is dropped because it meets one ore more criteria defined in your "
 "<a po4a-id=0>Autodrop settings</a>."
@@ -11488,23 +11526,23 @@ msgstr ""
 "<a po4a-id=0>Ustawieniach automatycznego porzucenia</a>."
 
 #. type: Content of: <html><body><dl><dd><ul><li><p>
-#: help/window_download_queue.html:76
+#: help/window_download_queue.html:79
 msgid "<i>Remote client does not fully support TTH - cannot download</i>"
 msgstr ""
 "<i>Ten użytkownik nie posiada wsparcia dla TTH - nie można pobierać</i>"
 
 #. type: Content of: <html><body><dl><dd><ul><li><p>
-#: help/window_download_queue.html:77
+#: help/window_download_queue.html:80
 msgid "The source using an old or unsupported client."
 msgstr "Źródło używa starego lub nie wspieranego klienta."
 
 #. type: Content of: <html><body><dl><dd><ul><li><p>
-#: help/window_download_queue.html:79
+#: help/window_download_queue.html:82
 msgid "<i>User certificate not trusted</i>"
 msgstr "<i>Nie zaufany certyfikat użytkownika</i>"
 
 #. type: Content of: <html><body><dl><dd><ul><li><p>
-#: help/window_download_queue.html:80
+#: help/window_download_queue.html:83
 msgid ""
 "You have set in <a po4a-id=0>Security certificates settings</a> that your "
 "client should only accept sources with trusted certificates. This source is "
@@ -11514,54 +11552,74 @@ msgstr ""
 "będzie akceptował tylko certyfikaty z zaufanych źródeł. To nie jest zaufane "
 "źródło więc zostanie wyłączone z ewentualnych pobierań."
 
+#. type: Content of: <html><body><dl><dd><ul><li><p>
+#: help/window_download_queue.html:85
+#, fuzzy
+msgid "<i>Remote ADC client does not use TLS encryption</i>"
+msgstr ""
+"<i>Ten użytkownik nie posiada wsparcia dla TTH - nie można pobierać</i>"
+
+#. type: Content of: <html><body><dl><dd><ul><li><p>
+#: help/window_download_queue.html:86
+#, fuzzy
+msgid ""
+"You have set in <a po4a-id=0>Security certificates settings</a> that your "
+"client should only accept sources with TLS encrypted connections. This "
+"source does not seem to have an encrypted connection so it'll be excluded "
+"from downloads."
+msgstr ""
+"Ustawiłeś <a po4a-id=0>Certyfikaty bezpieczeństwa</a> więc twój klient "
+"będzie akceptował tylko certyfikaty z zaufanych źródeł. To nie jest zaufane "
+"źródło więc zostanie wyłączone z ewentualnych pobierań."
+
 #. type: Content of: <html><body><dl><dt>
-#: help/window_download_queue.html:84
+#: help/window_download_queue.html:90
 msgid "Added"
 msgstr "Dodano"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_download_queue.html:85
+#: help/window_download_queue.html:91
 msgid "The date and time when the file was added to the queue."
 msgstr "Data i czas dodania pliku do kolejki."
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_download_queue.html:86 help/window_search.html:86
+#: help/window_download_queue.html:92 help/window_search.html:86
 msgid "TTH root"
 msgstr "TTH"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_download_queue.html:87
+#: help/window_download_queue.html:93
 msgid "The file's TTH root."
 msgstr "Numer TTH."
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_download_queue.html:88 help/window_file_list.html:65
+#: help/window_download_queue.html:94 help/window_file_list.html:65
 #: help/window_search.html:70
 msgid "Type"
 msgstr "Rodzaj"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_download_queue.html:89
+#: help/window_download_queue.html:95
 msgid "The extension (file type) of the queued file."
 msgstr "Rozszerzenie (typ pliku) znajdującego się w kolejce."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_download_queue.html:95
+#: help/window_download_queue.html:101
 msgid "Moves and/or renames the queued file."
 msgstr "Przenosi i/lub zmienia nazwę pliku w kolejce."
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_download_queue.html:96
+#: help/window_download_queue.html:102
 msgid "Recheck integrity"
 msgstr "Sprawdź ponownie intergralność"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_download_queue.html:97
+#: help/window_download_queue.html:103
 msgid "Rechecks the corresponding unfinished download. Useful:"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd><ul><li>
-#: help/window_download_queue.html:99
+#: help/window_download_queue.html:105
 msgid ""
 "if your settings have been damaged, in particular the &quot;Queue.xml&quot; "
 "file. You simply readd the lost items to the queue, recheck them and files "
@@ -11569,44 +11627,44 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd><ul><li>
-#: help/window_download_queue.html:101
+#: help/window_download_queue.html:107
 msgid "if the unfinished file has been damaged (eg because of disk errors)."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd><ul><li>
-#: help/window_download_queue.html:102
+#: help/window_download_queue.html:108
 msgid ""
 "if the file was successfully downloaded but DC++ failed to move it to its "
 "final destination."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_download_queue.html:107
+#: help/window_download_queue.html:113
 msgid "Re-add source"
 msgstr "Dodaj ponownie źródło"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_download_queue.html:108
+#: help/window_download_queue.html:114
 msgid "Re-add a source that was previously removed."
 msgstr "Dodaj ponownie źródło, które było poprzednio usunięte."
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_download_queue.html:109
+#: help/window_download_queue.html:115
 msgid "Remove source"
 msgstr "Usuń źródło"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_download_queue.html:110
+#: help/window_download_queue.html:116
 msgid "Remove a source from a queued file."
 msgstr "Usuń źródło z kolejki danego pliku."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_download_queue.html:112
+#: help/window_download_queue.html:118
 msgid "Removes the user from all files in the queue."
 msgstr "Usuwa użytkownika z wszystkich plików z kolejki."
 
 #. type: Content of: <html><body><h2>
-#: help/window_download_queue.html:117 help/window_finished_downloads.html:56
+#: help/window_download_queue.html:123 help/window_finished_downloads.html:56
 #: help/window_finished_uploads.html:56 help/window_hub.html:95
 #: help/window_main.html:126 help/window_pm.html:38
 #: help/window_public_hubs.html:73 help/window_search.html:125
@@ -11614,53 +11672,53 @@ msgid "Status bar"
 msgstr "Pasek statusu"
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_download_queue.html:119
+#: help/window_download_queue.html:125
 msgid "Unnamed checkbox"
 msgstr "Nieoznaczony kwadrat."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_download_queue.html:120
+#: help/window_download_queue.html:126
 msgid "This will toggle the appearance of the <a po4a-id=0>left screen</a>."
 msgstr "Wyłączy lub włączy <a po4a-id=0>okno po lewej</a>."
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_download_queue.html:121
+#: help/window_download_queue.html:127
 msgid "Items"
 msgstr "Pozycje"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_download_queue.html:122
+#: help/window_download_queue.html:128
 msgid "The amount of selected items."
 msgstr "Ilość wybranych pozycji."
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_download_queue.html:123 help/window_file_list.html:92
+#: help/window_download_queue.html:129 help/window_file_list.html:92
 msgid "Size (left)"
 msgstr "Rozmiar (z lewej)"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_download_queue.html:124
+#: help/window_download_queue.html:130
 msgid "The total size (in bytes) of selected items."
 msgstr "Suma rozmiaru wybranych plików (w bajtach)."
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_download_queue.html:125 help/window_finished_downloads.html:38
+#: help/window_download_queue.html:131 help/window_finished_downloads.html:38
 #: help/window_finished_uploads.html:38
 msgid "Files"
 msgstr "Pliki"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_download_queue.html:126
+#: help/window_download_queue.html:132
 msgid "The total amount of files queued."
 msgstr "Suma ilości plików w kolejce."
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_download_queue.html:127 help/window_file_list.html:96
+#: help/window_download_queue.html:133 help/window_file_list.html:96
 msgid "Size (right)"
 msgstr "Rozmiar (z prawej)"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_download_queue.html:128
+#: help/window_download_queue.html:134
 msgid "The total amount of bytes queued."
 msgstr "Suma ilości bajtów w kolejce."
 
@@ -12035,7 +12093,7 @@ msgid "View as text"
 msgstr "Wyświetl jako tekst"
 
 #. type: Content of: <html><body><dl><dd><p>
-#: C:/Documents/Programmes/DC++/repo/help/commands_viewastext.inc:1
+#: H:/Dev/DC++/repo/help/commands_viewastext.inc:1
 msgid ""
 "This function is useful for previewing small text based info files as they "
 "may contain more information about other files in the same folder.  Note "
@@ -12052,7 +12110,7 @@ msgstr ""
 "Pobierań</a> używając komendy menu \"Otwórz\"."
 
 #. type: Content of: <html><body><h2>
-#: help/window_file_list.html:86 help/window_main.html:310
+#: help/window_file_list.html:86 help/window_main.html:317
 msgid "Status bar (bottom)"
 msgstr "Pasek statusu (w dole)"
 
@@ -12602,7 +12660,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd><p><div>
-#: C:/Documents/Programmes/DC++/repo/help/window_list_filter.inc:1
+#: H:/Dev/DC++/repo/help/window_list_filter.inc:1
 msgid ""
 "The filter, consisting of an input box, a column selection box and a method "
 "selection box, can help filter the list on the fly based on textual "
@@ -12614,7 +12672,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd><p><div>
-#: C:/Documents/Programmes/DC++/repo/help/window_list_filter.inc:2
+#: H:/Dev/DC++/repo/help/window_list_filter.inc:2
 #: help/window_public_hubs.html:58
 #, fuzzy
 msgid "The filter input box can be focused with Alt+I."
@@ -12851,7 +12909,7 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_main.html:31 help/window_main.html:203
-#: help/window_main.html:231
+#: help/window_main.html:232
 msgid "Reconnect"
 msgstr "Połącz ponownie"
 
@@ -12867,7 +12925,7 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_main.html:33 help/window_main.html:151
-#: help/window_main.html:212 help/window_main.html:262
+#: help/window_main.html:212 help/window_main.html:263
 msgid "Open file list..."
 msgstr "Otwórz listę plików..."
 
@@ -12882,13 +12940,14 @@ msgstr ""
 "To menu służy otwieraniu poprzednio pobrane listy plików. Prowadzi do "
 "katalogu FileList w twoim folderze DC++."
 
-#. type: Content of: <html><body><dl><dd><dl><dt>
-#: help/window_main.html:35
+#. type: Content of: <html><body><dl><dt>
+#: help/window_main.html:35 help/window_main.html:213
+#: help/window_main.html:268
 msgid "Open own list"
 msgstr "Otwórz własną listę"
 
-#. type: Content of: <html><body><dl><dd><dl><dd>
-#: help/window_main.html:36
+#. type: Content of: <html><body><dl><dd>
+#: help/window_main.html:36 help/window_main.html:270
 msgid ""
 "You can open and check how your own file list looks like. Useful to see "
 "what's displayed to others when they get your file list."
@@ -12913,13 +12972,13 @@ msgstr ""
 "(która jest przechowywana w katalogu FileLists w folderze twojego DC++)"
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_main.html:39 help/window_main.html:216
-#: help/window_main.html:278
+#: help/window_main.html:39 help/window_main.html:215
+#: help/window_main.html:274
 msgid "Refresh file list"
 msgstr "Odświeża listę plików"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_main.html:40 help/window_main.html:279
+#: help/window_main.html:40 help/window_main.html:275
 msgid ""
 "This will immediately rescan your shared directories for new or changed "
 "content and updates your file list."
@@ -13052,7 +13111,7 @@ msgstr "Jest to miejsce gdzie możesz szukać plików i je pobierać."
 
 #. type: Content of: <html><body><dl><dd><placeholder><a>
 #: help/window_main.html:94 help/window_main.html:95 help/window_main.html:210
-#: help/window_main.html:256 help/window_main.html:257
+#: help/window_main.html:257 help/window_main.html:258
 msgid "ADL Search"
 msgstr "Wyszkiwanie ADL"
 
@@ -13366,27 +13425,27 @@ msgstr "<a po4a-id=0>"
 #: help/window_main.html:210 help/window_main.html:211
 #: help/window_main.html:212 help/window_main.html:213
 #: help/window_main.html:214 help/window_main.html:215
-#: help/window_main.html:216
+#: help/window_main.html:216 help/window_main.html:217
 msgid "</a> <a po4a-id=0>"
 msgstr "</a> <a po4a-id=0>"
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_main.html:213 help/window_main.html:267
+#: help/window_main.html:214 help/window_main.html:277
 msgid "Recent windows"
 msgstr "Ostatnie okna"
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_main.html:217 help/window_main.html:281
+#: help/window_main.html:218 help/window_main.html:288
 msgid "What's This?"
 msgstr "Co to jest?"
 
 #. type: Content of: <html><body><p>
-#: help/window_main.html:217
+#: help/window_main.html:218
 msgid "</a>"
 msgstr "</a>"
 
 #. type: Content of: <html><body><p>
-#: help/window_main.html:219
+#: help/window_main.html:220
 msgid ""
 "The toolbar provides quick access to some regularly used parts and functions "
 "of DC++. You can customize the toolbar for yourself, add, remove and group "
@@ -13398,7 +13457,7 @@ msgstr ""
 "paska:"
 
 #. type: Content of: <html><body><ul><li>
-#: help/window_main.html:222
+#: help/window_main.html:223
 msgid ""
 "Holding the \"shift\" key you can drag &amp; drop toolbar buttons wherever "
 "you want."
@@ -13407,7 +13466,7 @@ msgstr ""
 "\"przeciągnij i upuść\"."
 
 #. type: Content of: <html><body><ul><li>
-#: help/window_main.html:223
+#: help/window_main.html:224
 msgid ""
 "Right-click to the toolbar will bring up the toolbar context menu with a "
 "\"Customize\" item to open the <a po4a-id=0>Customize Toolbar dialog</a>."
@@ -13417,7 +13476,7 @@ msgstr ""
 "a>"
 
 #. type: Content of: <html><body><ul><li>
-#: help/window_main.html:224
+#: help/window_main.html:225
 msgid ""
 "As a shortcut, double-click to the empty area of the toolbar will also open "
 "the <a po4a-id=0>Customize Toolbar dialog</a>."
@@ -13426,12 +13485,12 @@ msgstr ""
 "otworzysz okno <a po4a-id=0>Dostosuj Pasek Narzędzi</a>"
 
 #. type: Content of: <html><body><p>
-#: help/window_main.html:226
+#: help/window_main.html:227
 msgid "The toolbar can hold the following available icons:"
 msgstr "Pasek narzędzi może zawierać następujące ikony:"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_main.html:232
+#: help/window_main.html:233
 msgid ""
 "Reconnect (disconnect and connect again) the hub which is currently in the "
 "foreground."
@@ -13440,7 +13499,7 @@ msgstr ""
 "pierwszym planie."
 
 #. type: Content of: <html><body><dl><dd><div>
-#: help/window_main.html:237
+#: help/window_main.html:238
 msgid ""
 "Use the arrow placed on the right of the icon to easily connect to one of "
 "your favorite hubs without having to open the <placeholder id=0/> window."
@@ -13449,7 +13508,7 @@ msgstr ""
 "ulubionych hubów bez potrzeby otwierania okna <placeholder id=0/>."
 
 #. type: Content of: <html><body><dl><dd><div>
-#: help/window_main.html:238
+#: help/window_main.html:239
 msgid ""
 "Consult the help topic associated to the <placeholder id=0/> dialog to find "
 "out how to add sub-menus to the menu that appears under the arrow."
@@ -13458,7 +13517,7 @@ msgstr ""
 "dowiedzieć jak dodać pod-menu do menu które widać pod strzałką."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_main.html:264
+#: help/window_main.html:265
 msgid ""
 "Open a file list previously saved on your disk (a dialog will appear so you "
 "can pick the one you wish to open)."
@@ -13467,7 +13526,7 @@ msgstr ""
 "możesz wybrać, którą listę otworzyć)."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_main.html:269
+#: help/window_main.html:279
 msgid ""
 "Open menus with <acronym po4a-id=0>MRU</acronym> lists of recently opened "
 "windows. The list is saved across DC++ restarts."
@@ -13476,7 +13535,7 @@ msgstr ""
 "otwartych okien. Lista jest zachowana do momentu restartu DC++."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_main.html:283
+#: help/window_main.html:290
 msgid ""
 "You can get help on specific parts of DC++ by using the &quot;What's This?"
 "&quot; help button: click it once, and your mouse cursor will change into a "
@@ -13487,7 +13546,7 @@ msgstr ""
 "miejsce o którym chcesz uzyskać informacje."
 
 #. type: Content of: <html><body><p>
-#: help/window_main.html:288
+#: help/window_main.html:295
 msgid ""
 "Each window opened in DC++ has a corresponding tab, which appears in the "
 "global tab control."
@@ -13496,7 +13555,7 @@ msgstr ""
 "kontrolce zakładek."
 
 #. type: Content of: <html><body><p>
-#: help/window_main.html:289
+#: help/window_main.html:296
 msgid ""
 "Tabs in DC++ behave the same as in standard Windows applications; moreover, "
 "they have the following additional features:"
@@ -13505,12 +13564,12 @@ msgstr ""
 "mają również takie oto cechy:"
 
 #. type: Content of: <html><body><ul><li>
-#: help/window_main.html:292
+#: help/window_main.html:299
 msgid "They can be moved around in a drag-and-drop fashion."
 msgstr "Mogą być przenoszone metodą \"przeciągnij i upuść\"."
 
 #. type: Content of: <html><body><ul><li>
-#: help/window_main.html:293
+#: help/window_main.html:300
 msgid ""
 "There are some easy ways to switch between them: with mouse extra buttons or "
 "using Ctrl+Tab."
@@ -13519,7 +13578,7 @@ msgstr ""
 "przyciskami myszy lub klawiszami Ctrl+Tag."
 
 #. type: Content of: <html><body><ul><li>
-#: help/window_main.html:294
+#: help/window_main.html:301
 msgid ""
 "When many tabs are opened, and they can't fit into a single row, they will "
 "automatically occupy more rows."
@@ -13528,7 +13587,7 @@ msgstr ""
 "przeniosą się one automatycznie tworząc kolejny rząd."
 
 #. type: Content of: <html><body><ul><li>
-#: help/window_main.html:295
+#: help/window_main.html:302
 msgid ""
 "Each tab has its own context-menu which provides commands related to the "
 "window the tab belongs to.  Description of the common context menu options "
@@ -13540,55 +13599,55 @@ msgstr ""
 "Komendy Menu</a>"
 
 #. type: Content of: <html><body><ul><li>
-#: help/window_main.html:298
+#: help/window_main.html:305
 msgid "Tabs can be closed with:"
 msgstr "Zakładki można zamknąć:"
 
 #. type: Content of: <html><body><ul><li><ul><li>
-#: help/window_main.html:299
+#: help/window_main.html:306
 msgid "Middle mouse click"
 msgstr "Środkowym przyciskiem myszki"
 
 #. type: Content of: <html><body><ul><li><ul><li>
-#: help/window_main.html:300
+#: help/window_main.html:307
 msgid "Shift + left mouse click"
 msgstr "Shift + lewy przycisk myszy"
 
 #. type: Content of: <html><body><ul><li><ul><li>
-#: help/window_main.html:301
+#: help/window_main.html:308
 #, fuzzy
 msgid "Left mouse click on the"
 msgstr "Shift + lewy przycisk myszy"
 
 #. type: Attribute 'alt' of: <html><body><ul><li><ul><li><img>
-#: help/window_main.html:301
+#: help/window_main.html:308
 msgid "Close tab button"
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
-#: help/window_main.html:301
+#: help/window_main.html:308
 msgid ""
 "button on the right of the tabs (appears only if <a po4a-id=0>DC++'s own tab "
 "style</a> is used)"
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
-#: help/window_main.html:302
+#: help/window_main.html:309
 msgid "The &quot;Close&quot; command from the tab context-menu"
 msgstr "Komendą &quot;Zamknij&quot; w kontekstowym menu zakładki"
 
 #. type: Content of: <html><body><ul><li><ul><li>
-#: help/window_main.html:303
+#: help/window_main.html:310
 msgid "Ctrl+W"
 msgstr "Ctrl+W"
 
 #. type: Content of: <html><body><ul><li><ul><li>
-#: help/window_main.html:304
+#: help/window_main.html:311
 msgid "Ctrl+F4"
 msgstr "Ctrl+F4"
 
 #. type: Content of: <html><body>
-#: help/window_main.html:307
+#: help/window_main.html:314
 msgid ""
 "You can customize the look and behavior of tabs from the <a po4a-id=0>Tabs "
 "settings</a> and <a po4a-id=1>Windows settings</a> respectively."
@@ -13597,7 +13656,7 @@ msgstr ""
 "id=0>Tabs settings</a> and <a po4a-id=1>Windows settings</a>"
 
 #. type: Content of: <html><body>
-#: help/window_main.html:311
+#: help/window_main.html:318
 msgid ""
 "The main status bar is always visible in the bottom of the DC++ window. You "
 "can get information from the current state of several parameters of DC++ "
@@ -13609,12 +13668,12 @@ msgstr ""
 "dla lepszej czytelności. Znaczenie od lewej do prawej."
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_main.html:313
+#: help/window_main.html:320
 msgid "System messages"
 msgstr "Widomości systemowe"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_main.html:314
+#: help/window_main.html:321
 msgid ""
 "The first part of the status bar contains the last system message with a "
 "timestamp. To see more from the recent system messages you can move the "
@@ -13631,23 +13690,23 @@ msgstr ""
 "dwukrotnie kliknij na pasek stanu."
 
 #. type: Attribute 'alt' of: <html><body><dl><dt><img>
-#: help/window_main.html:316
+#: help/window_main.html:323
 msgid "Online user"
 msgstr ""
 
 #. type: Attribute 'alt' of: <html><body><dl><dt><img>
-#: help/window_main.html:316
+#: help/window_main.html:323
 #, fuzzy
 msgid "Away user"
 msgstr "Maksimum Użytkowników"
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_main.html:316
+#: help/window_main.html:323
 msgid "Away indicator"
 msgstr "Wskaźnik away"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_main.html:317
+#: help/window_main.html:324
 #, fuzzy
 msgid ""
 "The user icon turns from green to grey when DC++ is in <a po4a-id=0>away "
@@ -13657,12 +13716,12 @@ msgstr ""
 "niedostępności</a>."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_main.html:318
+#: help/window_main.html:325
 msgid "Double-click to switch away mode on and off."
 msgstr "Kliknij podwójnie aby włączyć lub wyłączyć tryb away."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_main.html:321
+#: help/window_main.html:328
 msgid ""
 "Shows the number of hubs you are currently connected to in the following "
 "format: x/y/z, where:"
@@ -13671,25 +13730,25 @@ msgstr ""
 "gdzie:"
 
 #. type: Content of: <html><body><dl><dd><p>
-#: help/window_main.html:323
+#: help/window_main.html:330
 msgid "x = number of connected hubs where you're not a registered user;"
 msgstr ""
 "x = to ilość hubów z którymi jesteś połączony jako użytkownik "
 "niezarejestrowany;"
 
 #. type: Content of: <html><body><dl><dd><p>
-#: help/window_main.html:324
+#: help/window_main.html:331
 msgid "y = number of connected hubs where you're registered in;"
 msgstr ""
 "y = to ilość hubów z którymi jesteś połączony jako użytkownik zarejestrowany;"
 
 #. type: Content of: <html><body><dl><dd><p>
-#: help/window_main.html:325
+#: help/window_main.html:332
 msgid "z = number of connected hubs where you're an operator;"
 msgstr "z = to ilość hubów z którymi jesteś połączony jako operator;"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_main.html:327
+#: help/window_main.html:334
 msgid ""
 "just the same way as in the <a po4a-id=0>DC++ tags</a> of the users listed "
 "on a hub."
@@ -13698,36 +13757,36 @@ msgstr ""
 "użytkowników."
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_main.html:330 help/window_search.html:74
+#: help/window_main.html:337 help/window_search.html:74
 msgid "Slots"
 msgstr "Sloty"
 
 #. type: Attribute 'alt' of: <html><body><dl><dt><img>
-#: help/window_main.html:330
+#: help/window_main.html:337
 #, fuzzy
 msgid "Slots full"
 msgstr "Sloty"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_main.html:331
+#: help/window_main.html:338
 msgid ""
 "Indicates the number of currently free upload slots out of the total number "
 "of slots opened."
 msgstr "Wskazuje liczbę wolnych slotów w stosunku do slotów otwartych."
 
 #. type: Attribute 'alt' of: <html><body><dl><dt><img>
-#: help/window_main.html:333
+#: help/window_main.html:340
 #, fuzzy
 msgid "Downloaded bytes"
 msgstr "Suma ściągniętych bajtów"
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_main.html:333
+#: help/window_main.html:340
 msgid "Total downloaded bytes"
 msgstr "Suma ściągniętych bajtów"
 
 #. type: Content of: <html><body><dl><dd><div>
-#: help/window_main.html:334
+#: help/window_main.html:341
 msgid ""
 "Shows the total number of bytes received in the current session, including "
 "file transfers, hub-client communication and hublists."
@@ -13736,24 +13795,24 @@ msgstr ""
 "plików, komunikację między hubem a klientem oraz list hubów."
 
 #. type: Content of: <html><body><dl><dd><div>
-#: help/window_main.html:335 help/window_main.html:339
-#: help/window_main.html:343 help/window_main.html:347
+#: help/window_main.html:342 help/window_main.html:346
+#: help/window_main.html:350 help/window_main.html:354
 msgid "Double-click to open the <placeholder id=0/> window."
 msgstr "Kliknij podwójnie aby otworzyć <placeholder id=0/> okno."
 
 #. type: Attribute 'alt' of: <html><body><dl><dt><img>
-#: help/window_main.html:337
+#: help/window_main.html:344
 #, fuzzy
 msgid "Uploaded bytes"
 msgstr "Suma wysłanych bajtów"
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_main.html:337
+#: help/window_main.html:344
 msgid "Total uploaded bytes"
 msgstr "Suma wysłanych bajtów"
 
 #. type: Content of: <html><body><dl><dd><div>
-#: help/window_main.html:338
+#: help/window_main.html:345
 msgid ""
 "Shows the total number of bytes sent in the current session, including file "
 "transfers and hub-client communication."
@@ -13762,18 +13821,18 @@ msgstr ""
 "plików i komunikację między hubem a klientem."
 
 #. type: Attribute 'alt' of: <html><body><dl><dt><img>
-#: help/window_main.html:341
+#: help/window_main.html:348
 #, fuzzy
 msgid "Download speed"
 msgstr "Pobrano"
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_main.html:341
+#: help/window_main.html:348
 msgid "Current download speed"
 msgstr "Obecna prędkość pobierania"
 
 #. type: Content of: <html><body><dl><dd><div>
-#: help/window_main.html:342
+#: help/window_main.html:349
 msgid ""
 "Shows the current overall download speed and the number of current download "
 "connections in parentheses (updated in every second)."
@@ -13782,18 +13841,18 @@ msgstr ""
 "pobierań (sprawdzane co sekundę)"
 
 #. type: Attribute 'alt' of: <html><body><dl><dt><img>
-#: help/window_main.html:345
+#: help/window_main.html:352
 #, fuzzy
 msgid "Upload speed"
 msgstr "Wysyłane"
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_main.html:345
+#: help/window_main.html:352
 msgid "Current upload speed"
 msgstr "Obecna prędkość wysyłania"
 
 #. type: Content of: <html><body><dl><dd><div>
-#: help/window_main.html:346
+#: help/window_main.html:353
 msgid ""
 "Shows the current overall upload speed and the number of current upload "
 "connections in parentheses (updated in every second)."
@@ -13802,12 +13861,12 @@ msgstr ""
 "połączeń wychodzących (sprawdzane co sekundę)."
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_main.html:349
+#: help/window_main.html:356
 msgid "Current download limit"
 msgstr "Obecny limit pobierania"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_main.html:350
+#: help/window_main.html:357
 msgid ""
 "Shows the current maximum download rate. Zero speed value means that "
 "download limiting is disabled."
@@ -13816,12 +13875,12 @@ msgstr ""
 "pokazująca zero oznacza wyłączenie limitera."
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_main.html:352
+#: help/window_main.html:359
 msgid "Current upload limit"
 msgstr "Obecny limit wysyłania"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_main.html:353
+#: help/window_main.html:360
 msgid ""
 "Shows the current maximum upload rate. Zero speed value means that upload "
 "limiting is disabled."

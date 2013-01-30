@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libdcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-01-22 18:27+0100\n"
+"POT-Creation-Date: 2013-01-30 17:00+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -164,33 +164,33 @@ msgstr ""
 msgid "Another port mapping attempt is in progress..."
 msgstr ""
 
-#: dcpp\SearchManager.cpp:35
+#: dcpp\SearchManager.cpp:36
 msgid "Any"
 msgstr ""
 
-#: dcpp\SearchManager.cpp:36
+#: dcpp\SearchManager.cpp:37
 msgid "Audio"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:1628
+#: dcpp\QueueManager.cpp:1627
 msgid "CRC32 inconsistency (SFV-Check)"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:1619
+#: dcpp\QueueManager.cpp:1618
 #, boost-format
 msgid "CRC32 inconsistency (SFV-Check): %1%"
 msgstr ""
 
-#: dcpp\SearchManager.cpp:37
+#: dcpp\SearchManager.cpp:38
 msgid "Compressed"
 msgstr ""
 
-#: dcpp\BufferedSocket.cpp:198 dcpp\SSLSocket.cpp:156
+#: dcpp\BufferedSocket.cpp:205 dcpp\SSLSocket.cpp:158 dcpp\SSLSocket.cpp:165
 msgid "Connection closed"
 msgstr ""
 
-#: dcpp\BufferedSocket.cpp:165 dcpp\BufferedSocket.cpp:183
-#: dcpp\ConnectionManager.cpp:182 dcpp\Socket.cpp:362
+#: dcpp\BufferedSocket.cpp:172 dcpp\BufferedSocket.cpp:190
+#: dcpp\ConnectionManager.cpp:182 dcpp\Socket.cpp:372
 msgid "Connection timeout"
 msgstr ""
 
@@ -228,7 +228,7 @@ msgstr ""
 msgid "Connectivity: "
 msgstr ""
 
-#: dcpp\Socket.cpp:326
+#: dcpp\Socket.cpp:336
 msgid "Could not open port for listening"
 msgstr ""
 
@@ -245,15 +245,15 @@ msgstr ""
 msgid "Determining the best connectivity settings..."
 msgstr ""
 
-#: dcpp\SearchManager.cpp:42
+#: dcpp\SearchManager.cpp:43
 msgid "Directory"
 msgstr ""
 
-#: dcpp\ShareManager.cpp:482
+#: dcpp\ShareManager.cpp:404
 msgid "Directory already shared"
 msgstr ""
 
-#: dcpp\ShareManager.cpp:469
+#: dcpp\ShareManager.cpp:391
 msgid "Directory is hidden"
 msgstr ""
 
@@ -265,7 +265,7 @@ msgstr ""
 msgid "Discard"
 msgstr ""
 
-#: dcpp\BufferedSocket.cpp:468
+#: dcpp\BufferedSocket.cpp:475
 msgid "Disconnected"
 msgstr ""
 
@@ -274,7 +274,7 @@ msgstr ""
 msgid "Disconnected user leaving the hub: %1%"
 msgstr ""
 
-#: dcpp\SearchManager.cpp:38
+#: dcpp\SearchManager.cpp:39
 msgid "Document"
 msgstr ""
 
@@ -282,7 +282,7 @@ msgstr ""
 msgid "Download Queue"
 msgstr ""
 
-#: dcpp\ShareManager.cpp:761
+#: dcpp\ShareManager.cpp:681
 #, boost-format
 msgid "Duplicate file will not be shared: %1% (Size: %2% B) Dupe matched against: %3%"
 msgstr ""
@@ -341,7 +341,7 @@ msgstr ""
 msgid "Error saving hash data: %1%"
 msgstr ""
 
-#: dcpp\SearchManager.cpp:39
+#: dcpp\SearchManager.cpp:40
 msgid "Executable"
 msgstr ""
 
@@ -387,7 +387,7 @@ msgstr ""
 msgid "Failed to remove port mappings from the %1% device with the %2% interface"
 msgstr ""
 
-#: dcpp\Socket.cpp:594
+#: dcpp\Socket.cpp:604
 msgid "Failed to set up the socks server for UDP relay (check socks address and port)"
 msgstr ""
 
@@ -395,25 +395,25 @@ msgstr ""
 msgid "File already exists at the target location"
 msgstr ""
 
-#: dcpp\ShareManager.cpp:918
+#: dcpp\ShareManager.cpp:833
 #, boost-format
 msgid "File list %1% generated"
 msgstr ""
 
-#: dcpp\ShareManager.cpp:798
+#: dcpp\ShareManager.cpp:713
 #, boost-format
 msgid "File list refresh failed: %1%"
 msgstr ""
 
-#: dcpp\ShareManager.cpp:846
+#: dcpp\ShareManager.cpp:761
 msgid "File list refresh finished"
 msgstr ""
 
-#: dcpp\ShareManager.cpp:778
+#: dcpp\ShareManager.cpp:698
 msgid "File list refresh in progress, please wait for it to finish before trying to refresh again"
 msgstr ""
 
-#: dcpp\ShareManager.cpp:821
+#: dcpp\ShareManager.cpp:736
 msgid "File list refresh initiated"
 msgstr ""
 
@@ -479,7 +479,7 @@ msgstr ""
 msgid "Invalid file list extension (must be .xml or .bz2)"
 msgstr ""
 
-#: dcpp\ShareManager.cpp:662
+#: dcpp\ShareManager.cpp:582
 #, boost-format
 msgid "Invalid file name found while hashing folder %1%"
 msgstr ""
@@ -489,7 +489,7 @@ msgstr ""
 msgid "Invalid regular expression: %1%"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:620
+#: dcpp\SettingsManager.cpp:626
 msgid "Invalid search type name"
 msgstr ""
 
@@ -509,7 +509,7 @@ msgstr ""
 msgid "Local network with possible NAT detected, trying to map the ports..."
 msgstr ""
 
-#: dcpp\BufferedSocket.cpp:291
+#: dcpp\BufferedSocket.cpp:298
 msgid "Maximum command length exceeded"
 msgstr ""
 
@@ -526,7 +526,7 @@ msgstr ""
 msgid "No certificate file chosen"
 msgstr ""
 
-#: dcpp\ShareManager.cpp:465
+#: dcpp\ShareManager.cpp:387
 msgid "No directory specified"
 msgstr ""
 
@@ -542,7 +542,7 @@ msgstr ""
 msgid "No slots available"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:678
+#: dcpp\SettingsManager.cpp:684
 msgid "No such search type"
 msgstr ""
 
@@ -557,8 +557,8 @@ msgstr ""
 
 #: dcpp\ClientManager.cpp:174 dcpp\FinishedManager.cpp:131
 #: dcpp\FinishedManager.cpp:137 dcpp\FinishedManager.cpp:143
-#: dcpp\SearchManager.cpp:255 dcpp\SearchManager.cpp:317
-#: dcpp\SearchManager.cpp:319 dcpp\Transfer.cpp:81 dcpp\Transfer.cpp:85
+#: dcpp\SearchManager.cpp:256 dcpp\SearchManager.cpp:334 dcpp\Transfer.cpp:81
+#: dcpp\Transfer.cpp:85
 msgid "Offline"
 msgstr ""
 
@@ -570,7 +570,7 @@ msgstr ""
 msgid "Passive mode"
 msgstr ""
 
-#: dcpp\SearchManager.cpp:40
+#: dcpp\SearchManager.cpp:41
 msgid "Picture"
 msgstr ""
 
@@ -587,7 +587,7 @@ msgstr ""
 msgid "Redirect user(s)"
 msgstr ""
 
-#: dcpp\ShareManager.cpp:485
+#: dcpp\ShareManager.cpp:407
 msgid "Remove all subdirectories before adding this one"
 msgstr ""
 
@@ -603,12 +603,12 @@ msgstr ""
 msgid "Search (UDP)"
 msgstr ""
 
-#: dcpp\SearchManager.cpp:153
+#: dcpp\SearchManager.cpp:154
 #, boost-format
 msgid "Search disabled: %1%"
 msgstr ""
 
-#: dcpp\SearchManager.cpp:145
+#: dcpp\SearchManager.cpp:146
 msgid "Search enabled again"
 msgstr ""
 
@@ -625,7 +625,7 @@ msgstr ""
 msgid "Shared Files"
 msgstr ""
 
-#: dcpp\Socket.cpp:470 dcpp\Socket.cpp:474
+#: dcpp\Socket.cpp:480 dcpp\Socket.cpp:484
 msgid "Socks server authentication failed (bad login / password?)"
 msgstr ""
 
@@ -653,11 +653,11 @@ msgstr ""
 msgid "TLS disabled, no certificate file set"
 msgstr ""
 
-#: dcpp\SSLSocket.cpp:162 dcpp\SSLSocket.cpp:173
+#: dcpp\SSLSocket.cpp:176
 msgid "TLS error"
 msgstr ""
 
-#: dcpp\SearchManager.cpp:43
+#: dcpp\SearchManager.cpp:44
 msgid "TTH"
 msgstr ""
 
@@ -673,20 +673,20 @@ msgstr ""
 msgid "Target filename too long"
 msgstr ""
 
-#: dcpp\Socket.cpp:456
+#: dcpp\Socket.cpp:466
 msgid "The socks server doesn't support login / password authentication"
 msgstr ""
 
-#: dcpp\Socket.cpp:369 dcpp\Socket.cpp:377 dcpp\Socket.cpp:410
-#: dcpp\Socket.cpp:414 dcpp\Socket.cpp:438 dcpp\Socket.cpp:453
+#: dcpp\Socket.cpp:379 dcpp\Socket.cpp:387 dcpp\Socket.cpp:420
+#: dcpp\Socket.cpp:424 dcpp\Socket.cpp:448 dcpp\Socket.cpp:463
 msgid "The socks server failed establish a connection"
 msgstr ""
 
-#: dcpp\Socket.cpp:442
+#: dcpp\Socket.cpp:452
 msgid "The socks server requires authentication"
 msgstr ""
 
-#: dcpp\ShareManager.cpp:473
+#: dcpp\ShareManager.cpp:395
 msgid "The temporary download directory cannot be shared"
 msgstr ""
 
@@ -703,7 +703,7 @@ msgstr ""
 msgid "This hub is trying to use your client to spam %1%, please urge hub owner to fix this"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:624 dcpp\SettingsManager.cpp:646
+#: dcpp\SettingsManager.cpp:630 dcpp\SettingsManager.cpp:652
 msgid "This search type already exists"
 msgstr ""
 
@@ -766,7 +766,7 @@ msgstr ""
 msgid "Users"
 msgstr ""
 
-#: dcpp\SearchManager.cpp:41
+#: dcpp\SearchManager.cpp:42
 msgid "Video"
 msgstr ""
 
