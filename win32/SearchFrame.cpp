@@ -528,7 +528,7 @@ void SearchFrame::addResult(SearchResultPtr psr) {
 	if(currentSearch.empty()) {
 		return;
 	}
-	if(sr.getToken() != token) {
+	if(!sr.getToken().empty() /* NMDC searches have no token */ && sr.getToken() != token) {
 		addDropped();
 		return;
 	}
