@@ -35,11 +35,13 @@ class Dev:
 			self.env.Append(LINKFLAGS=["-Wl,--enable-runtime-pseudo-reloc"])
 
 			prefix = ''
-			if self.env.get('prefix') is not None:
+			if self.env.get('prefix'):
 				prefix = self.env['prefix']
+			elif self.env['arch'] == 'x64':
+				prefix = 'x86_64-w64-mingw32-'
 			elif sys.platform != 'win32':
 				prefix = 'i386-mingw32-'
-			
+
 			self.env['CC'] = prefix + 'gcc'
 			self.env['CXX'] = prefix + 'g++'
 			self.env['LINK'] = prefix + 'g++'
