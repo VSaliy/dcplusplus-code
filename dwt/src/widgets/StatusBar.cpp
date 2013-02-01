@@ -40,6 +40,10 @@ namespace dwt {
 
 const TCHAR StatusBar::windowClass[] = STATUSCLASSNAME;
 
+/* the minimum width of the part of the status bar that has to fill all the remaining space of the
+bar (see Seed). if the bar is too narrow, only the "fill" part will be shown. */
+const unsigned fillMin = 100;
+
 StatusBar::Seed::Seed(unsigned parts_, unsigned fill_, bool sizeGrip) :
 BaseType::Seed(WS_CHILD | WS_CLIPSIBLINGS),
 font(0),
@@ -75,7 +79,7 @@ void StatusBar::create(const Seed& cs) {
 
 void StatusBar::setSize(unsigned part, unsigned size) {
 	dwtassert(part < parts.size(), "Invalid part number");
-	parts[part].size = size;
+	parts[part].desiredSize = size;
 }
 
 void StatusBar::setText(unsigned part, const tstring& text, bool alwaysResize) {
@@ -123,7 +127,7 @@ void StatusBar::setHelpId(unsigned part, unsigned id) {
 void StatusBar::setWidget(unsigned part, Control* widget, const Rectangle& padding) {
 	dwtassert(part < parts.size(), "Invalid part number");
 	auto p = new WidgetPart(widget, padding);
-	p->size = widget->getPreferredSize().x;
+	p->desiredSize = widget->getPreferredSize().x;
 	p->helpId = widget->getHelpId();
 	parts.insert(parts.erase(parts.begin() + part), p);
 }
@@ -187,8 +191,8 @@ void StatusBar::Part::updateSize(StatusBar* bar, bool alwaysResize) {
 	}
 	if(newSize > 0)
 		newSize += 10; // add margins
-	if(newSize > size || (alwaysResize && newSize != size)) {
-		size = newSize;
+	if(newSize > desiredSize || (alwaysResize && newSize != desiredSize)) {
+		desiredSize = newSize;
 		bar->layoutSections();
 	}
 }
@@ -217,21 +221,33 @@ void StatusBar::layoutSections() {
 void StatusBar::layoutSections(const Point& sz) {
 	std::vector<unsigned> sizes(parts.size());
 	for(size_t i = 0, n = sizes.size(); i < n; ++i)
-		sizes[i] = parts[i].size;
+		sizes[i] = parts[i].desiredSize;
 
 	sizes[fill] = 0;
-	parts[fill].size = sizes[fill] = sz.x - std::accumulate(sizes.begin(), sizes.end(), 0);
 
-	std::vector< unsigned > newVec( sizes );
-	auto origIdx = sizes.begin();
-	unsigned offset = 0;
-	for(auto idx = newVec.begin(); idx != newVec.end(); ++idx, ++origIdx ) {
-		* idx = ( * origIdx ) + offset;
-		offset += * origIdx;
+	const auto total = std::accumulate(sizes.begin(), sizes.end(), 0);
+	if(total + fillMin < static_cast<unsigned>(sz.x)) {
+		// cool, there's enough room to fit all the parts.
+		for(auto& part: parts) {
+			part.actualSize = part.desiredSize;
+		}
+		parts[fill].actualSize = sizes[fill] = sz.x - total;
+
+		// transform sizes into offsets
+		unsigned offset = 0;
+		for(auto& size: sizes) {
+			offset += size;
+			size = offset;
+		}
+
+	} else {
+		// only show the "fill" part if the status bar is too narrow.
+		for(auto& part: parts) { part.actualSize = 0; }
+		for(auto& size: sizes) { size = 0; }
+		parts[fill].actualSize = sizes[fill] = sz.x;
 	}
-	const unsigned * intArr = & newVec[0];
-	const size_t size = newVec.size();
-	sendMessage(SB_SETPARTS, static_cast< WPARAM >( size ), reinterpret_cast< LPARAM >( intArr ) );
+
+	sendMessage(SB_SETPARTS, sizes.size(), reinterpret_cast<LPARAM>(sizes.data()));
 
 	// reposition embedded widgets.
 	for(auto i = parts.begin(); i != parts.end(); ++i) {
@@ -249,7 +265,7 @@ StatusBar::Part* StatusBar::getClickedPart() {
 	unsigned x = ClientCoordinate(ScreenCoordinate(Point::fromLParam(::GetMessagePos())), this).x();
 	unsigned total = 0;
 	for(auto& i: parts) {
-		total += i.size;
+		total += i.actualSize;
 		if(total > x)
 			return dynamic_cast<Part*>(&i);
 	}
@@ -261,7 +277,7 @@ void StatusBar::handleToolTip(tstring& text) {
 	Part* part = getClickedPart();
 	if(part) {
 		text = part->tip;
-		tip->setMaxTipWidth((text.find('\n') == tstring::npos) ? -1 : part->size);
+		tip->setMaxTipWidth((text.find('\n') == tstring::npos) ? -1 : part->actualSize);
 	} else {
 		text.clear();
 	}

@@ -158,10 +158,11 @@ private:
 
 	// base class for all kinds of parts.
 	struct PartBase {
-		PartBase() : size(0), helpId(0) { }
+		PartBase() : desiredSize(0), actualSize(0), helpId(0) { }
 		virtual ~PartBase() { }
 
-		unsigned size;
+		unsigned desiredSize; // the size the caller would like this part to have
+		unsigned actualSize; // the actual size of this part when displayed in the status bar
 		unsigned helpId;
 	};
 
