@@ -233,18 +233,23 @@ void SearchManager::onData(const uint8_t* buf, size_t aLen, const string& remote
 			return;
 		}
 
-		string hubIpPort = x.substr(i, j-i);
-		string url = ClientManager::getInstance()->findHub(hubIpPort);
+		HintedUser user;
 
-		string encoding = ClientManager::getInstance()->findHubEncoding(url);
+		user.hint = ClientManager::getInstance()->findHub(x.substr(i, j - i));
+		if(user.hint.empty()) {
+			// Could happen if hub has multiple URLs / IPs
+			user = ClientManager::getInstance()->findLegacyUser(nick);
+			if(!user)
+				return;
+		}
+
+		string encoding = ClientManager::getInstance()->findHubEncoding(user.hint);
 		nick = Text::toUtf8(nick, encoding);
 		file = Text::toUtf8(file, encoding);
 		hubName = Text::toUtf8(hubName, encoding);
 
-		UserPtr user = ClientManager::getInstance()->findUser(nick, url);
 		if(!user) {
-			// Could happen if hub has multiple URLs / IPs
-			user = ClientManager::getInstance()->findLegacyUser(nick);
+			user.user = ClientManager::getInstance()->findUser(nick, user.hint);
 			if(!user)
 				return;
 		}
@@ -252,7 +257,7 @@ void SearchManager::onData(const uint8_t* buf, size_t aLen, const string& remote
 		string tth;
 		if(hubName.compare(0, 4, "TTH:") == 0) {
 			tth = hubName.substr(4);
-			StringList names = ClientManager::getInstance()->getHubNames(user->getCID(), Util::emptyString);
+			StringList names = ClientManager::getInstance()->getHubNames(user);
 			hubName = names.empty() ? _("Offline") : Util::toString(names);
 		}
 
@@ -260,9 +265,8 @@ void SearchManager::onData(const uint8_t* buf, size_t aLen, const string& remote
 			return;
 		}
 
-		fire(SearchManagerListener::SR(), SearchResultPtr(new SearchResult(HintedUser(user, url),
-			type, slots, freeSlots, size, file, hubName, remoteIp, TTHValue(tth),
-			Util::emptyString)));
+		fire(SearchManagerListener::SR(), SearchResultPtr(new SearchResult(user, type, slots,
+			freeSlots, size, file, hubName, remoteIp, TTHValue(tth), Util::emptyString)));
 
 	} else if(x.compare(1, 4, "RES ") == 0 && x[x.length() - 1] == 0x0a) {
 		AdcCommand c(x.substr(0, x.length()-1));

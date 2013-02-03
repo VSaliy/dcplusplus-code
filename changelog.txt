@@ -1,4 +1,5 @@
 * Fix status bar parts when the window is too small (poy)
+* [L#534440] [NMDC] Preserve encodings in some search results (poy)
 
 -- 0.810 2013-01-30 --
 * Fix a race condition on file list download (thanks bigmuscle)

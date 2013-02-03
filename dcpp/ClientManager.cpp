@@ -234,18 +234,24 @@ string ClientManager::findHubEncoding(const string& aUrl) const {
 	return Text::systemCharset;
 }
 
-UserPtr ClientManager::findLegacyUser(const string& aNick) const noexcept {
-	if (aNick.empty())
-		return UserPtr();
+HintedUser ClientManager::findLegacyUser(const string& nick) const noexcept {
+	if(nick.empty())
+		return HintedUser();
 
 	Lock l(cs);
 
 	for(auto& i: onlineUsers) {
-		const OnlineUser* ou = i.second;
-		if(ou->getUser()->isSet(User::NMDC) && Util::stricmp(ou->getIdentity().getNick(), aNick) == 0)
-			return ou->getUser();
+		auto& ou = *i.second;
+		if(ou.getUser()->isSet(User::NMDC) &&
+			/** @todo this conv runs each time on ever user; remove it when we store non-UTF-8
+			nicks as well... */
+			Util::stricmp(ou.getIdentity().getNick(), Text::toUtf8(nick, ou.getClient().getEncoding())) == 0)
+		{
+			return HintedUser(ou);
+		}
 	}
-	return UserPtr();
+
+	return HintedUser();
 }
 
 UserPtr ClientManager::getUser(const string& aNick, const string& aHubUrl) noexcept {
