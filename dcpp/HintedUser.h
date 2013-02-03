@@ -35,6 +35,7 @@ struct HintedUser {
 	UserPtr user;
 	string hint;
 
+	HintedUser() : user(nullptr) { }
 	HintedUser(const UserPtr& user, const string& hint) : user(user), hint(hint) { }
 	HintedUser(const OnlineUser& ou) : HintedUser(ou.getUser(), ou.getClient().getHubUrl()) { }
 
@@ -47,6 +48,8 @@ struct HintedUser {
 	}
 
 	operator UserPtr() const { return user; }
+
+	explicit operator bool() const { return user; }
 };
 
 }

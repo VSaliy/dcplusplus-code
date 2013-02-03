@@ -1384,21 +1384,7 @@ bool WinUtil::parseLink(const tstring& str, bool followExternal) {
 	{
 		HubFrame::openWindow(mainWindow->getTabView(), url);
 
-		if(!file.empty()) {
-			if(file[0] == '/') {
-				// Remove any '/' in from of the file
-				file = file.substr(1);
-				if(file.empty()) return true;
-			}
-			try {
-				UserPtr user = ClientManager::getInstance()->findLegacyUser(file);
-				if(user)
-					QueueManager::getInstance()->addList(HintedUser(user, url), QueueItem::FLAG_CLIENT_VIEW | QueueItem::FLAG_PARTIAL_LIST);
-				// @todo else report error
-			} catch (const Exception&) {
-				// ...
-			}
-		}
+		/// @todo parse other params when RFCs for these schemes have been published.
 
 		return true;
 

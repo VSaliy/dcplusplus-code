@@ -100,7 +100,9 @@ public:
 
 	UserPtr findUser(const string& aNick, const string& aHubUrl) const noexcept { return findUser(makeCid(aNick, aHubUrl)); }
 	UserPtr findUser(const CID& cid) const noexcept;
-	UserPtr findLegacyUser(const string& aNick) const noexcept;
+	/** Find an online NMDC user by nick only (random user returned if multiple hubs share users
+	with the same nick). The nick is given in hub-dependant encoding. */
+	HintedUser findLegacyUser(const string& nick) const noexcept;
 
 	bool isOnline(const UserPtr& aUser) const {
 		Lock l(cs);
