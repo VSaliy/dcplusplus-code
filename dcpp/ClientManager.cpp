@@ -199,10 +199,11 @@ string ClientManager::findHub(const string& ipPort) const {
 	Lock l(cs);
 
 	string ip;
-	string port = "411";
+	string port;
 	string::size_type i = ipPort.rfind(':');
 	if(i == string::npos) {
 		ip = ipPort;
+		port = "411";
 	} else {
 		ip = ipPort.substr(0, i);
 		port = ipPort.substr(i+1);
@@ -240,14 +241,14 @@ HintedUser ClientManager::findLegacyUser(const string& nick) const noexcept {
 
 	Lock l(cs);
 
-	for(auto& i: onlineUsers) {
-		auto& ou = *i.second;
-		if(ou.getUser()->isSet(User::NMDC) &&
-			/** @todo this conv runs each time on ever user; remove it when we store non-UTF-8
-			nicks as well... */
-			Util::stricmp(ou.getIdentity().getNick(), Text::toUtf8(nick, ou.getClient().getEncoding())) == 0)
-		{
-			return HintedUser(ou);
+	for(auto i: clients) {
+		auto nmdc = dynamic_cast<NmdcHub*>(i);
+		if(nmdc) {
+			/** @todo run the search directly on non-UTF-8 nicks when we store them. */
+			auto ou = nmdc->findUser(nmdc->toUtf8(nick));
+			if(ou) {
+				return HintedUser(*ou);
+			}
 		}
 	}
 
