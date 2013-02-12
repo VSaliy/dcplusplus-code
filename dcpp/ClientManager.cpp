@@ -279,6 +279,10 @@ UserPtr ClientManager::getUser(const CID& cid) noexcept {
 		return ui->second;
 	}
 
+	if(cid == getMe()->getCID()) {
+		return getMe();
+	}
+
 	UserPtr p(new User(cid));
 	users.emplace(cid, p);
 	return p;
