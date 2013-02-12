@@ -515,7 +515,7 @@ void SettingsManager::load(string const& aFileName)
 		else if(SETTING(AUTO_SEARCH_LIMIT) < 1)
 			set(AUTO_SEARCH_LIMIT, 1);
 
-#ifdef _DEBUG
+#ifdef DCPP_REGEN_CID
 		set(PRIVATE_ID, CID::generate().toBase32());
 #endif
 
