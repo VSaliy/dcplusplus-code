@@ -383,6 +383,14 @@ bool upgradeFromV2(string& file) {
 		return false;
 	}
 
+	static auto upgradeStart = GET_TICK();
+	static auto cancelled = false;
+	if(cancelled || GET_TICK() > upgradeStart + 26 * 1000) {
+		// the upgrade is taking too long - cancel the process; the files will be re-hashed.
+		cancelled = true;
+		return false;
+	}
+
 	WIN32_FIND_DATA data;
 	// FindFirstFile does a case-insensitive search by default
 	auto handle = ::FindFirstFile(Text::toT(file).c_str(), &data);
