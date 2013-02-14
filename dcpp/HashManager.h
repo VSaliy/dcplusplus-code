@@ -19,6 +19,7 @@
 #ifndef DCPLUSPLUS_DCPP_HASH_MANAGER_H
 #define DCPLUSPLUS_DCPP_HASH_MANAGER_H
 
+#include <functional>
 #include <map>
 
 #include <boost/optional.hpp>
@@ -34,6 +35,7 @@
 
 namespace dcpp {
 
+using std::function;
 using std::map;
 
 using boost::optional;
@@ -83,7 +85,7 @@ public:
 	 */
 	void rebuild() { hasher.scheduleRebuild(); }
 
-	void startup() { hasher.start(); store.load(); }
+	void startup(function<void (float)> progressF) { hasher.start(); store.load(progressF); }
 
 	void shutdown() {
 		hasher.shutdown();
@@ -148,7 +150,7 @@ private:
 		HashStore();
 		void addFile(const string& aFileName, uint32_t aTimeStamp, const TigerTree& tth, bool aUsed);
 
-		void load();
+		void load(function<void (float)> progressF);
 		void save();
 
 		void rebuild();

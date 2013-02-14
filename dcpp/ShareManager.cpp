@@ -693,7 +693,7 @@ void ShareManager::updateIndices(Directory& dir, const decltype(std::declval<Dir
 	bloom.add(Text::toLower(f.getName()));
 }
 
-void ShareManager::refresh(bool dirs /* = false */, bool aUpdate /* = true */, bool block /* = false */) noexcept {
+void ShareManager::refresh(bool dirs, bool aUpdate, bool block, function<void (float)> progressF) noexcept {
 	if(refreshing.test_and_set()) {
 		LogManager::getInstance()->message(_("File list refresh in progress, please wait for it to finish before trying to refresh again"));
 		return;
@@ -701,16 +701,19 @@ void ShareManager::refresh(bool dirs /* = false */, bool aUpdate /* = true */, b
 
 	update = aUpdate;
 	refreshDirs = dirs;
+
 	join();
-	try {
-		start();
-		if(block) {
-			join();
-		} else {
+
+	if(block) {
+		runRefresh(progressF);
+
+	} else {
+		try {
+			start();
 			setThreadPriority(Thread::LOW);
+		} catch(const ThreadException& e) {
+			LogManager::getInstance()->message(str(F_("File list refresh failed: %1%") % e.getError()));
 		}
-	} catch(const ThreadException& e) {
-		LogManager::getInstance()->message(str(F_("File list refresh failed: %1%") % e.getError()));
 	}
 }
 
@@ -724,8 +727,12 @@ StringPairList ShareManager::getDirectories() const noexcept {
 }
 
 int ShareManager::run() {
+	runRefresh();
+	return 0;
+}
 
-	StringPairList dirs = getDirectories();
+void ShareManager::runRefresh(function<void (float)> progressF) {
+	auto dirs = getDirectories();
 	// Don't need to refresh if no directories are shared
 	if(dirs.empty())
 		refreshDirs = false;
@@ -738,11 +745,18 @@ int ShareManager::run() {
 		lastFullUpdate = GET_TICK();
 
 		vector<pair<Directory::Ptr, string>> newDirs;
+
+		float progressCounter = 0, dirCount = dirs.size();
+
 		for(auto& i: dirs) {
-			if (checkHidden(i.second)) {
+			if(checkHidden(i.second)) {
 				auto dp = buildTree(i.second);
 				dp->setName(i.first);
 				newDirs.emplace_back(dp, i.second);
+			}
+
+			if(progressF) {
+				progressF(++progressCounter / dirCount);
 			}
 		}
 
@@ -766,7 +780,6 @@ int ShareManager::run() {
 	}
 
 	refreshing.clear();
-	return 0;
 }
 
 void ShareManager::getBloom(ByteVector& v, size_t k, size_t m, size_t h) const {

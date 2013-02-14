@@ -21,12 +21,13 @@
 
 #include <boost/scoped_array.hpp>
 
-#include "SimpleXML.h"
-#include "LogManager.h"
 #include "File.h"
 #include "FileReader.h"
-#include "ZUtils.h"
+#include "LogManager.h"
+#include "ScopedFunctor.h"
+#include "SimpleXML.h"
 #include "SFVReader.h"
+#include "ZUtils.h"
 
 namespace dcpp {
 
@@ -322,13 +323,26 @@ string HashManager::HashStore::getDataFile() { return Util::getPath(Util::PATH_U
 
 class HashLoader: public SimpleXMLReader::CallBack {
 public:
-	HashLoader(HashManager::HashStore& s) :
-		store(s), version(HASH_FILE_VERSION), inTrees(false), inFiles(false), inHashStore(false) {
-	}
+	HashLoader(HashManager::HashStore& s, const CountedInputStream<false>& countedStream, uint64_t fileSize, function<void (float)> progressF) :
+		store(s),
+		countedStream(countedStream),
+		streamPos(0),
+		fileSize(fileSize),
+		progressF(progressF),
+		version(HASH_FILE_VERSION),
+		inTrees(false),
+		inFiles(false),
+		inHashStore(false)
+	{ }
 	void startTag(const string& name, StringPairList& attribs, bool simple);
 
 private:
 	HashManager::HashStore& store;
+
+	const CountedInputStream<false>& countedStream;
+	uint64_t streamPos;
+	uint64_t fileSize;
+	function<void (float)> progressF;
 
 	int version;
 	string file;
@@ -338,13 +352,14 @@ private:
 	bool inHashStore;
 };
 
-void HashManager::HashStore::load() {
+void HashManager::HashStore::load(function<void (float)> progressF) {
 	try {
 		Util::migrate(getIndexFile());
 
-		HashLoader l(*this);
 		File f(getIndexFile(), File::READ, File::OPEN);
-		SimpleXMLReader(&l).parse(f);
+		CountedInputStream<false> countedStream(&f);
+		HashLoader l(*this, countedStream, f.getSize(), progressF);
+		SimpleXMLReader(&l).parse(countedStream);
 	} catch (const Exception&) {
 		// ...
 	}
@@ -380,14 +395,6 @@ t_GetFinalPathNameByHandle initGFPNBH() {
 bool upgradeFromV2(string& file) {
 	auto GetFinalPathNameByHandle = initGFPNBH();
 	if(!GetFinalPathNameByHandle) {
-		return false;
-	}
-
-	static auto upgradeStart = GET_TICK();
-	static auto cancelled = false;
-	if(cancelled || GET_TICK() > upgradeStart + 26 * 1000) {
-		// the upgrade is taking too long - cancel the process; the files will be re-hashed.
-		cancelled = true;
 		return false;
 	}
 
@@ -462,6 +469,14 @@ static const string sTimeStamp = "TimeStamp";
 static const string sRoot = "Root";
 
 void HashLoader::startTag(const string& name, StringPairList& attribs, bool simple) {
+	ScopedFunctor([this] {
+		auto readBytes = countedStream.getReadBytes();
+		if(readBytes != streamPos) {
+			streamPos = readBytes;
+			progressF(static_cast<float>(readBytes) / static_cast<float>(fileSize));
+		}
+	});
+
 	if (!inHashStore && name == sHashStore) {
 		version = Util::toInt(getAttrib(attribs, sVersion, 0));
 		if (version == 0) {
