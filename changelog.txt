@@ -2,6 +2,7 @@
 * [L#534440] [NMDC] Preserve encodings in some search results (poy)
 * [ADC] Fix problems after marking oneself as a favorite user
 * Display progress information when DC++ starts (poy)
+* No GUI freeze when DC++ starts (poy)
 
 -- 0.810 2013-01-30 --
 * Fix a race condition on file list download (thanks bigmuscle)
