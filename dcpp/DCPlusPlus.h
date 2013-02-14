@@ -28,7 +28,7 @@ using std::function;
 using std::string;
 
 void startup();
-void load(function<void (const string&)> f);
+void load(function<void (const string&)> stepF, function<void (float)> progressF);
 void shutdown();
 
 } // namespace dcpp

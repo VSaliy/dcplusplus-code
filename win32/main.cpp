@@ -133,12 +133,12 @@ int dwtMain(dwt::Application& app) {
 	}
 
 	try {
-		SplashWindow* splash(new SplashWindow);
+		auto splash = new SplashWindow();
 
 		startup();
 		PluginApiWin::init();
 
-		load([splash](const string& str) { (*splash)(str); });
+		load([splash](const string& str) { (*splash)(str); }, [splash](float progress) { (*splash)(progress); });
 
 		bindtextdomain(PACKAGE, LOCALEDIR);
 		textdomain(PACKAGE);

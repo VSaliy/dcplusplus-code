@@ -19,6 +19,7 @@
 #ifndef DCPLUSPLUS_DCPP_SHARE_MANAGER_H
 #define DCPLUSPLUS_DCPP_SHARE_MANAGER_H
 
+#include <functional>
 #include <map>
 #include <memory>
 #include <set>
@@ -45,6 +46,7 @@
 
 namespace dcpp {
 
+using std::function;
 using std::map;
 using std::set;
 using std::unique_ptr;
@@ -80,7 +82,7 @@ public:
 	StringList getRealPaths(const string& virtualPath);
 	optional<TTHValue> getTTH(const string& virtualFile) const;
 
-	void refresh(bool dirs = false, bool aUpdate = true, bool block = false) noexcept;
+	void refresh(bool dirs = false, bool aUpdate = true, bool block = false, function<void (float)> progressF = nullptr) noexcept;
 	void setDirty() { xmlDirty = true; }
 
 	void search(SearchResultList& l, const string& aString, int aSearchType, int64_t aSize, int aFileType, Client* aClient, StringList::size_type maxResults) noexcept;
@@ -297,6 +299,7 @@ private:
 	optional<const ShareManager::Directory::File&> getFile(const string& realPath, Directory::Ptr d = nullptr) noexcept;
 
 	virtual int run();
+	void runRefresh(function<void (float)> progressF = nullptr);
 
 	// QueueManagerListener
 	virtual void on(QueueManagerListener::FileMoved, const string& realPath) noexcept;

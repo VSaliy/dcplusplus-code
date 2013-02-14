@@ -132,7 +132,7 @@ public:
 
 	int countOnlineSources(const string& aTarget);
 
-	void loadQueue() noexcept;
+	void loadQueue(function<void (float)> progressF) noexcept;
 	void saveQueue(bool force = false) noexcept;
 
 	string getListPath(const HintedUser& user);

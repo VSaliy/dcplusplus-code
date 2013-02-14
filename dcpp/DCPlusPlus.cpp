@@ -88,7 +88,7 @@ void startup() {
 	PluginApiImpl::init();
 }
 
-void load(function<void (const string&)> f) {
+void load(function<void (const string&)> stepF, function<void (float)> progressF) {
 	SettingsManager::getInstance()->load();
 
 #ifdef _WIN32
@@ -101,9 +101,9 @@ void load(function<void (const string&)> f) {
 	}
 #endif
 
-	auto announce = [&f](const string& str) {
-		if(f) {
-			f(str);
+	auto announce = [&stepF](const string& str) {
+		if(stepF) {
+			stepF(str);
 		}
 	};
 
@@ -111,19 +111,19 @@ void load(function<void (const string&)> f) {
 	ClientManager::getInstance()->loadUsers();
 	FavoriteManager::getInstance()->load();
 
-	PluginManager::getInstance()->loadPlugins(f);
+	PluginManager::getInstance()->loadPlugins(stepF);
 
 	announce(_("Security certificates"));
 	CryptoManager::getInstance()->loadCertificates();
 
 	announce(_("Hash database"));
-	HashManager::getInstance()->startup();
+	HashManager::getInstance()->startup(progressF);
 
 	announce(_("Shared Files"));
-	ShareManager::getInstance()->refresh(true, false, true);
+	ShareManager::getInstance()->refresh(true, false, true, progressF);
 
 	announce(_("Download Queue"));
-	QueueManager::getInstance()->loadQueue();
+	QueueManager::getInstance()->loadQueue(progressF);
 
 	if(SETTING(GET_USER_COUNTRY)) {
 		announce(_("Country information"));

@@ -24,12 +24,14 @@
 #include <dcpp/version.h>
 
 #include <dwt/DWTException.h>
+#include <dwt/widgets/ProgressBar.h>
 
 #include "resource.h"
 #include "WinUtil.h"
 
 SplashWindow::SplashWindow() :
-dwt::Window(0)
+	dwt::Window(0),
+	progress(0)
 {
 	// 256x icons only work on >= Vista. on failure, try loading a 48x image.
 	try {
@@ -58,7 +60,19 @@ SplashWindow::~SplashWindow() {
 }
 
 void SplashWindow::operator()(const string& status) {
-	auto text = str(TF_("Loading DC++, please wait... (%1%)") % Text::toT(status));
+	this->status = str(TF_("Loading DC++, please wait... (%1%)") % Text::toT(status));
+	progress = 0;
+	draw();
+}
+
+void SplashWindow::operator()(float progress) {
+	this->progress = progress;
+	draw();
+}
+
+void SplashWindow::draw() {
+	auto text = status;
+	if(progress) { text += _T(" [") + Text::toT(Util::toString(progress * 100.)) + _T("%]"); }
 
 	// set up sizes.
 	const long spacing { 6 }; // space between the icon and the text
@@ -90,8 +104,13 @@ void SplashWindow::operator()(const string& status) {
 	canvas.drawText(text.c_str(), textRect, DT_CENTER | DT_VCENTER | DT_SINGLELINE | DT_NOPREFIX);
 
 	// set bits within the text rectangle to not be transparent. rgbReserved is the alpha value.
-	for(long x = textRect.left(), xn = textRect.right(); x < xn; ++x) {
-		for(long y = textRect.top(), yn = textRect.bottom(); y < yn; ++y) {
+	// to simulate a progress bar, some bits are made to be semi-opaque.
+	long pos = textRect.left() + progress * static_cast<float>(textRect.width());
+	for(long y = textRect.top(), yn = textRect.bottom(); y < yn; ++y) {
+		for(long x = textRect.left(); x < pos; ++x) {
+			bits[x + y * size.cx].rgbReserved = 191;
+		}
+		for(long x = pos, xn = textRect.right(); x < xn; ++x) {
 			bits[x + y * size.cx].rgbReserved = 255;
 		}
 	}

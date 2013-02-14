@@ -1302,6 +1302,20 @@ void QueueManager::setPriority(const string& aTarget, QueueItem::Priority p) noe
 	}
 }
 
+int QueueManager::countOnlineSources(const string& aTarget) {
+	Lock l(cs);
+
+	QueueItem* qi = fileQueue.find(aTarget);
+	if(!qi)
+		return 0;
+	int onlineSources = 0;
+	for(auto& i: qi->getSources()) {
+		if(i.getUser().user->isOnline())
+			onlineSources++;
+	}
+	return onlineSources;
+}
+
 void QueueManager::saveQueue(bool force) noexcept {
 	if(!dirty && !force)
 		return;
@@ -1383,41 +1397,41 @@ void QueueManager::saveQueue(bool force) noexcept {
 
 class QueueLoader : public SimpleXMLReader::CallBack {
 public:
-	QueueLoader() : cur(NULL), inDownloads(false) { }
+	QueueLoader(const CountedInputStream<false>& countedStream, uint64_t fileSize, function<void (float)> progressF) :
+		countedStream(countedStream),
+		streamPos(0),
+		fileSize(fileSize),
+		progressF(progressF),
+		cur(nullptr),
+		inDownloads(false)
+	{ }
 	void startTag(const string& name, StringPairList& attribs, bool simple);
 	void endTag(const string& name);
+
 private:
+	const CountedInputStream<false>& countedStream;
+	uint64_t streamPos;
+	uint64_t fileSize;
+	function<void (float)> progressF;
+
 	string target;
 
 	QueueItem* cur;
 	bool inDownloads;
 };
 
-void QueueManager::loadQueue() noexcept {
+void QueueManager::loadQueue(function<void (float)> progressF) noexcept {
 	try {
-		QueueLoader l;
 		Util::migrate(getQueueFile());
 
 		File f(getQueueFile(), File::READ, File::OPEN);
-		SimpleXMLReader(&l).parse(f);
+		CountedInputStream<false> countedStream(&f);
+		QueueLoader l(countedStream, f.getSize(), progressF);
+		SimpleXMLReader(&l).parse(countedStream);
 		dirty = false;
 	} catch(const Exception&) {
 		// ...
 	}
-}
-
-int QueueManager::countOnlineSources(const string& aTarget) {
-	Lock l(cs);
-
-	QueueItem* qi = fileQueue.find(aTarget);
-	if(!qi)
-		return 0;
-	int onlineSources = 0;
-	for(auto& i: qi->getSources()) {
-		if(i.getUser().user->isOnline())
-			onlineSources++;
-	}
-	return onlineSources;
 }
 
 static const string sDownloads = "Downloads";
@@ -1436,11 +1450,19 @@ static const string sSegment = "Segment";
 static const string sStart = "Start";
 
 void QueueLoader::startTag(const string& name, StringPairList& attribs, bool simple) {
+	ScopedFunctor([this] {
+		auto readBytes = countedStream.getReadBytes();
+		if(readBytes != streamPos) {
+			streamPos = readBytes;
+			progressF(static_cast<float>(readBytes) / static_cast<float>(fileSize));
+		}
+	});
+
 	QueueManager* qm = QueueManager::getInstance();
 	if(!inDownloads && name == sDownloads) {
 		inDownloads = true;
 	} else if(inDownloads) {
-		if(cur == NULL && name == sDownload) {
+		if(cur == nullptr && name == sDownload) {
 			int64_t size = Util::toInt64(getAttrib(attribs, sSize, 1));
 			if(size == 0)
 				return;
@@ -1469,7 +1491,7 @@ void QueueLoader::startTag(const string& name, StringPairList& attribs, bool sim
 
 			QueueItem* qi = qm->fileQueue.find(target);
 
-			if(qi == NULL) {
+			if(qi == nullptr) {
 				qi = qm->fileQueue.add(target, size, 0, p, tempTarget, added, TTHValue(tthRoot));
 				if(downloaded > 0) {
 					qi->addSegment(Segment(0, downloaded));
@@ -1508,7 +1530,7 @@ void QueueLoader::startTag(const string& name, StringPairList& attribs, bool sim
 void QueueLoader::endTag(const string& name) {
 	if(inDownloads) {
 		if(name == sDownload) {
-			cur = NULL;
+			cur = nullptr;
 		} else if(name == sDownloads) {
 			inDownloads = false;
 		}

@@ -27,10 +27,16 @@ public:
 	virtual ~SplashWindow();
 
 	void operator()(const string& status);
+	void operator()(float progress);
 
 private:
+	void draw();
+
 	long iconSize;
 	dwt::IconPtr icon;
+
+	tstring status;
+	float progress;
 };
 
 #endif
