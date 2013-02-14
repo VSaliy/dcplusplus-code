@@ -32,8 +32,10 @@
 #include <dcpp/MerkleTree.h>
 #include <dcpp/File.h>
 #include <dcpp/Text.h>
+#include <dcpp/Thread.h>
 #include <dcpp/MappingManager.h>
 #include <dcpp/ResourceManager.h>
+#include <dcpp/version.h>
 
 #include <dwt/Application.h>
 
@@ -138,25 +140,38 @@ int dwtMain(dwt::Application& app) {
 		startup();
 		PluginApiWin::init();
 
-		load([splash](const string& str) { (*splash)(str); }, [splash](float progress) { (*splash)(progress); });
+		// load in a separate thread to avoid freezing the GUI thread.
+		struct Loader : Thread {
+			Loader(SplashWindow& splash) : Thread(), splash(splash) { }
+			int run() {
+				load([this](const string& str) { this->splash(str); }, [this](float progress) { this->splash(progress); });
 
-		bindtextdomain(PACKAGE, LOCALEDIR);
-		textdomain(PACKAGE);
+				splash(Text::fromT(_T(APPNAME)));
 
-		if(ResourceManager::getInstance()->isRTL()) {
-			SetProcessDefaultLayout(LAYOUT_RTL);
-		}
+				dwt::Application::instance().callAsync([this] {
+					bindtextdomain(PACKAGE, LOCALEDIR);
+					textdomain(PACKAGE);
 
-		dwtTexts::init();
+					if(ResourceManager::getInstance()->isRTL()) {
+						SetProcessDefaultLayout(LAYOUT_RTL);
+					}
 
-		WinUtil::init();
+					dwtTexts::init();
 
-		MainWindow* wnd = new MainWindow;
-		WinUtil::mainWindow = wnd;
-		//WinUtil::mdiParent = wnd->getMDIParent();
+					WinUtil::init();
 
-		splash->close();
+					MainWindow* wnd = new MainWindow;
+					WinUtil::mainWindow = wnd;
+					//WinUtil::mdiParent = wnd->getMDIParent();
 
+					this->splash.close();
+				});
+				return 0;
+			}
+			SplashWindow& splash;
+		} loader { *splash };
+
+		loader.start();
 		app.run();
 
 	} catch(const std::exception& e) {
