@@ -4,6 +4,8 @@
 * Display progress information when DC++ starts (poy)
 * No GUI freeze when DC++ starts (poy)
 * Plugin API: conversion functions return the required buffer size
+* Update Boost to version 1.53
+* Update OpenSSL to version 1.0.1e
 
 -- 0.810 2013-01-30 --
 * Fix a race condition on file list download (thanks bigmuscle)
