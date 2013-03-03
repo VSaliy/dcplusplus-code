@@ -19,6 +19,7 @@
 #ifndef DCPLUSPLUS_DCPP_CRITICAL_SECTION_H
 #define DCPLUSPLUS_DCPP_CRITICAL_SECTION_H
 
+#include <boost/thread/lock_guard.hpp>
 #include <boost/thread/recursive_mutex.hpp>
 
 namespace dcpp {

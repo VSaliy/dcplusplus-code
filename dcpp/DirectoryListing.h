@@ -48,11 +48,14 @@ public:
 		typedef File* Ptr;
 
 		File(Directory* aDir, const string& aName, int64_t aSize, const TTHValue& aTTH) noexcept :
+			boost::noncopyable(),
 			name(aName), size(aSize), parent(aDir), tthRoot(aTTH), adls(false)
 		{
 		}
 
-		File(const File& rhs, bool _adls = false) : name(rhs.name), size(rhs.size), parent(rhs.parent), tthRoot(rhs.tthRoot), adls(_adls)
+		File(const File& rhs, bool _adls = false) :
+			boost::noncopyable(),
+			name(rhs.name), size(rhs.size), parent(rhs.parent), tthRoot(rhs.tthRoot), adls(_adls)
 		{
 		}
 
@@ -78,8 +81,9 @@ public:
 		set<Ptr, Less<Directory>> directories;
 		set<File::Ptr, Less<File>> files;
 
-		Directory(Directory* aParent, const string& aName, bool _adls, bool aComplete)
-			: name(aName), parent(aParent), adls(_adls), complete(aComplete) { }
+		Directory(Directory* aParent, const string& aName, bool _adls, bool aComplete) :
+			boost::noncopyable(),
+			name(aName), parent(aParent), adls(_adls), complete(aComplete) { }
 
 		virtual ~Directory();
 
