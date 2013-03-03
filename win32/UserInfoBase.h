@@ -48,6 +48,11 @@ public:
 	virtual void connectFav(TabViewPtr);
 	virtual void ignoreChat(bool ignore);
 
+	enum {
+		INFO_WITH_CID = 1 << 0,
+		INFO_ALL = INFO_WITH_CID
+	};
+	tstring getInfo(int flags = 0) const;
 	tstring getTooltip() const;
 
 	const HintedUser& getUser() const { return user; }
@@ -133,7 +138,7 @@ protected:
 		tstring text;
 		handleUserFunction([&](UserInfoBase* u) {
 			if(!text.empty()) { text += _T("\r\n\r\n"); }
-			text += u->getTooltip();
+			text += u->getInfo(UserInfoBase::INFO_ALL);
 		});
 		WinUtil::setClipboard(text);
 	}

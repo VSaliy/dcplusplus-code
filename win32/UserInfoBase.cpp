@@ -80,7 +80,7 @@ void UserInfoBase::ignoreChat(bool ignore) {
 	UserMatchManager::getInstance()->ignoreChat(user, ignore);
 }
 
-tstring UserInfoBase::getTooltip() const {
+tstring UserInfoBase::getInfo(int flags) const {
 	static const size_t maxChars = 100; // max chars per tooltip line
 
 	tstring ret(WinUtil::getNicks(user));
@@ -128,9 +128,15 @@ tstring UserInfoBase::getTooltip() const {
 			value = str(TF_("%1%/%2%") % Text::toT(fs) % value);
 		addLine(str(TF_("%1%: %2%") % T_("Slots") % value));
 	}
-	addValue(T_("CID"), user.user->getCID().toBase32());
+	if((flags & INFO_WITH_CID) == INFO_WITH_CID) {
+		addValue(T_("CID"), user.user->getCID().toBase32());
+	}
 
 	return ret;
+}
+
+tstring UserInfoBase::getTooltip() const {
+	return getInfo();
 }
 
 UserTraits::UserTraits() :
