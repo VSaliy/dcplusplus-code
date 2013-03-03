@@ -74,7 +74,7 @@ extern "C" {
 #define DCINTF_DCPP_QUEUE_VER		2
 
 #define DCINTF_DCPP_UTILS			"dcpp.utils.DCUtils"		/* Utility and convenience functions */
-#define DCINTF_DCPP_UTILS_VER		1
+#define DCINTF_DCPP_UTILS_VER		2
 
 #define DCINTF_DCPP_TAGGER			"dcpp.xml.DCTagger"			/* Manipulation of an XML tagger */
 #define DCINTF_DCPP_TAGGER_VER		2
@@ -408,6 +408,8 @@ typedef struct tagDCQueue {
 typedef struct tagDCUtils {
 	/* Utility API version */
 	uint32_t apiVersion;
+
+	/* These functions attempt a conversion; they return the required buffer size. */
 
 	size_t		(DCAPI *to_utf8)					(char* dst, const char* src, size_t n);
 	size_t		(DCAPI *from_utf8)					(char* dst, const char* src, size_t n);

@@ -459,38 +459,43 @@ UserDataPtr PluginApiImpl::getUserFromConn(ConnectionDataPtr conn) {
 
 // Functions for DCUtils
 size_t PluginApiImpl::toUtf8(char* dst, const char* src, size_t n) {
-	string sSrc(Text::toUtf8(src));
-	n = (sSrc.size() < n) ? sSrc.size() : n;
-	strncpy(dst, sSrc.c_str(), n);
-	return n;
+	string str(Text::toUtf8(src));
+	if(n >= str.size()) {
+		strncpy(dst, str.c_str(), str.size());
+	}
+	return str.size();
 }
 
 size_t PluginApiImpl::fromUtf8(char* dst, const char* src, size_t n) {
-	string sSrc(Text::fromUtf8(src));
-	n = (sSrc.size() < n) ? sSrc.size() : n;
-	strncpy(dst, sSrc.c_str(), n);
-	return n;
+	string str(Text::fromUtf8(src));
+	if(n >= str.size()) {
+		strncpy(dst, str.c_str(), str.size());
+	}
+	return str.size();
 }
 
 size_t PluginApiImpl::Utf8toWide(wchar_t* dst, const char* src, size_t n) {
-	wstring sSrc(Text::utf8ToWide(src));
-	n = (sSrc.size() < n) ? sSrc.size() : n;
-	wcsncpy(dst, sSrc.c_str(), n);
-	return n;
+	wstring str(Text::utf8ToWide(src));
+	if(n >= str.size()) {
+		wcsncpy(dst, str.c_str(), str.size());
+	}
+	return str.size();
 }
 
 size_t PluginApiImpl::WidetoUtf8(char* dst, const wchar_t* src, size_t n) {
-	string sSrc(Text::wideToUtf8(src));
-	n = (sSrc.size() < n) ? sSrc.size() : n;
-	strncpy(dst, sSrc.c_str(), n);
-	return n;
+	string str(Text::wideToUtf8(src));
+	if(n >= str.size()) {
+		strncpy(dst, str.c_str(), str.size());
+	}
+	return str.size();
 }
 
 size_t PluginApiImpl::toBase32(char* dst, const uint8_t* src, size_t n) {
-	string sSrc(Encoder::toBase32(src, n));
-	n = (sSrc.size() < n) ? sSrc.size() : n;
-	strncpy(dst, sSrc.c_str(), n);
-	return n;
+	string str(Encoder::toBase32(src, n));
+	if(n >= str.size()) {
+		strncpy(dst, str.c_str(), str.size());
+	}
+	return str.size();
 }
 
 size_t PluginApiImpl::fromBase32(uint8_t* dst, const char* src, size_t n) {
