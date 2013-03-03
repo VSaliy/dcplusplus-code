@@ -22,7 +22,11 @@
 #if defined(__GNUC__)
 #if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 7)
 #error GCC 4.7 is required
+#endif
 
+#ifndef HAVE_MINGW64
+#error Regular MinGW has stability problems; use a MinGW package from mingw-w64
+// see <https://bugs.launchpad.net/dcplusplus/+bug/1029629> for details
 #endif
 
 #elif defined(_MSC_VER)
