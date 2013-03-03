@@ -21,6 +21,11 @@
 #error GCC 4.7 is required
 #endif
 
+#ifndef HAVE_MINGW64
+#error Regular MinGW has stability problems; use a MinGW package from mingw-w64
+// see <https://bugs.launchpad.net/dcplusplus/+bug/1029629> for details
+#endif
+
 #elif defined(_MSC_VER)
 #if _MSC_VER < 1700 || _MSC_FULL_VER < 170051025
 #error Visual Studio 2012 with the Nov 2012 CTP is required

@@ -51,9 +51,11 @@
 2. Compiler
 
 	a. MinGW (GCC 4.7 or later):
-	<http://sourceforge.net/projects/mingw/files/>
 	<http://sourceforge.net/projects/mingw-w64/files/>
+	<http://sourceforge.net/projects/mingw/files/>
 
+		We recommend using compilers from the MinGW-w64 project. All you have to do to use one is
+		download it and extract it.
 		Prefer DWARF versions of 32-bit compilers and SEH versions of 64-bit ones. (In short, avoid
 		SJLJ for performance reasons.)
 
@@ -61,9 +63,8 @@
 		mingw-get. Extract it to C:\MinGW and run:
 			mingw-get install gcc g++
 		A graphical installer around mingw-get is also available to facilitate the above.
-
-		The MinGW-w64 project also provides compilers that should be able to grok DC++; in
-		particular, they can be used to build 64-bit binaries (add arch=x64 to the SCons params).
+		Note that building DC++ with MinGW (not MinGW-w64) is not often tested and may lead to
+		stability issues.
 
 		Make sure that MinGW\bin is in your PATH environment variable.
 
