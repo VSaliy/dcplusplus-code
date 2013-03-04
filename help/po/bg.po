@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-01-30 17:00+0100\n"
-"PO-Revision-Date: 2012-10-27 06:24+0000\n"
-"Last-Translator: Hafo <hafo@abv.bg>\n"
+"POT-Creation-Date: 2013-03-04 13:16+0100\n"
+"PO-Revision-Date: 2013-02-27 00:42+0000\n"
+"Last-Translator: Blagovest Petrov <blagovest@petrovs.info>\n"
 "Language-Team: Bulgarian <bg@li.org>\n"
 "Language: bg_BG\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-01-30 15:45+0000\n"
-"X-Generator: Launchpad (build 16455)\n"
+"X-Launchpad-Export-Date: 2013-03-04 12:09+0000\n"
+"X-Generator: Launchpad (build 16514)\n"
 
 #. type: Content of: <html><body><ul><li><div><placeholder><a>
 #: help/chat_commands.html:9 help/index.html:144
@@ -524,7 +524,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: H:/Dev/DC++/repo/help/commands_listview.inc:10
 msgid "Copy"
-msgstr ""
+msgstr "Копиране"
 
 #. type: Content of: <html><body><dl><dd>
 #: H:/Dev/DC++/repo/help/commands_listview.inc:11
@@ -742,9 +742,8 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: H:/Dev/DC++/repo/help/commands_user_general.inc:25
-#, fuzzy
 msgid "Copy user information"
-msgstr "Лични данни"
+msgstr "Копирай информацията за потребителя"
 
 #. type: Content of: <html><body><dl><dd>
 #: H:/Dev/DC++/repo/help/commands_user_general.inc:26
@@ -800,6 +799,7 @@ msgstr "Преводачи"
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
+"  Blagovest Petrov https://launchpad.net/~eniac-bg\n"
 "  Hafo https://launchpad.net/~hafo\n"
 "  Pavlin Grucov https://launchpad.net/~pavlin-grucov\n"
 "  badboyyyyyy https://launchpad.net/~yordan89\n"
@@ -7358,14 +7358,14 @@ msgstr "Показвай ми съобщения за статуса в глав
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_appearance.html:29
-#, fuzzy
 msgid ""
 "Show some messages destined for the Status Bar in the chat window as well. "
 "Applies to both hub and private chat windows.<i>It's generally a good idea "
 "to leave this enabled.</i>"
 msgstr ""
-"Показване на някои съобщения, предназначени за лентата за състоянието, в "
-"главния чат. <i>По принцип е добра идея тази опция да се разреши.</i>"
+"Показване на някои съобщения, предназначени за лентата за статуса, също и в "
+"прозореца за чат. Отнася се и за прозорците с лични съобщения.<i>По принцип "
+"е добра идея да се разреши.</i>"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_appearance.html:31
@@ -8954,7 +8954,7 @@ msgstr "Съобщение при отсъствие (празно = без съ
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_general.html:82
 msgid "Display time at which DC++ entered away mode in away message."
-msgstr ""
+msgstr "Показване на времето, когато DC++ е преминала в режим Отсъстващ"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_general.html:85

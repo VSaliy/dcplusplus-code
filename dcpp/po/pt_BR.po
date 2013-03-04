@@ -7,21 +7,21 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-01-30 17:00+0100\n"
-"PO-Revision-Date: 2012-02-01 18:46+0000\n"
-"Last-Translator: Júlio Cezar Santos Pires <Unknown>\n"
+"POT-Creation-Date: 2013-03-04 13:16+0100\n"
+"PO-Revision-Date: 2013-02-14 19:25+0000\n"
+"Last-Translator: Andre Herman <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-01-30 15:44+0000\n"
-"X-Generator: Launchpad (build 16455)\n"
+"X-Launchpad-Export-Date: 2013-03-04 12:09+0000\n"
+"X-Generator: Launchpad (build 16514)\n"
 
 #: dcpp\DownloadManager.cpp:360
 #, boost-format
 msgid " - Queued: %1%"
-msgstr ""
+msgstr " - Em fila: %1%"
 
 #: dcpp\Util.cpp:561
 #, c-format, boost-format
@@ -56,12 +56,12 @@ msgstr "%.02f TiB"
 #: dcpp\UserMatchManager.cpp:132
 #, boost-format
 msgid "%1% %2% (added by %3%)"
-msgstr ""
+msgstr "%1% %2% (adicionado por %3%)"
 
 #: dcpp\MappingManager.cpp:116 dcpp\MappingManager.cpp:153
 #, boost-format
 msgid "%1% %2% port (%3% %4%)"
-msgstr ""
+msgstr "%1% %2% porta (%3% %4%)"
 
 #: dcpp\HttpConnection.cpp:205 dcpp\HttpConnection.cpp:271
 #, boost-format
@@ -81,19 +81,19 @@ msgstr "%1% (Apelido desconhecido)"
 #: dcpp\PluginManager.cpp:127
 #, boost-format
 msgid "%1% is already installed"
-msgstr ""
+msgstr "%1% já está instalado"
 
 #: dcpp\PluginManager.cpp:112
-#, fuzzy, boost-format
+#, boost-format
 msgid "%1% is not a valid plugin"
-msgstr "%1%: Arquivo não disponível"
+msgstr "%1% não é um plugin válido"
 
 #: dcpp\PluginManager.cpp:133
 #, boost-format
 msgid "%1% is too old, contact the plugin author for an update"
-msgstr ""
+msgstr "%1% é muito antigo, entre em contato com o autor para obter um update"
 
-#: dcpp\HashManager.cpp:675
+#: dcpp\HashManager.cpp:698
 #, boost-format
 msgid ""
 "%1% not shared; calculated CRC32 does not match the one found in SFV file."
@@ -148,15 +148,16 @@ msgid "A file with the same hash already exists in your share"
 msgstr "Um arquivo com o mesmo hash já existe no seu compartilhamento"
 
 #: dcpp\ConnectivityManager.cpp:189
-#, fuzzy
 msgid "Active mode"
-msgstr "Modo passivo"
+msgstr "Modo ativo"
 
 #: dcpp\ConnectivityManager.cpp:194
 #, boost-format
 msgid ""
 "Active mode behind a router that %1% can configure; port mapping status: %2%"
 msgstr ""
+"Modo ativo  atrás de um roteador que %1% pode configurar; estado do "
+"mapeamento da porta: %2%"
 
 #: dcpp\ConnectivityManager.cpp:236
 msgid ""
@@ -180,11 +181,11 @@ msgstr "Qualquer"
 msgid "Audio"
 msgstr "Áudio"
 
-#: dcpp\QueueManager.cpp:1627
+#: dcpp\QueueManager.cpp:1649
 msgid "CRC32 inconsistency (SFV-Check)"
 msgstr "Inconsistência do CRC32 (Verificação do SFV)"
 
-#: dcpp\QueueManager.cpp:1618
+#: dcpp\QueueManager.cpp:1640
 #, fuzzy, boost-format
 msgid "CRC32 inconsistency (SFV-Check): %1%"
 msgstr "Inconsistência do CRC32 (Verificação do SFV)"
@@ -317,7 +318,7 @@ msgstr "Transferência criptografada"
 msgid "Endless redirection loop (%1%)"
 msgstr ""
 
-#: dcpp\HashManager.cpp:523
+#: dcpp\HashManager.cpp:546
 #, boost-format
 msgid "Error creating hash data file: %1%"
 msgstr "Erro ao criar o arquivo de dados do hash: %1%"
@@ -338,7 +339,7 @@ msgstr "Erro durante a descompressão"
 msgid "Error generating certificate"
 msgstr "Erro ao gerar o certificado"
 
-#: dcpp\HashManager.cpp:680
+#: dcpp\HashManager.cpp:703
 #, boost-format
 msgid "Error hashing %1%: %2%"
 msgstr "Erro ao fazer o hash: %1%: %2%"
@@ -348,7 +349,7 @@ msgstr "Erro ao fazer o hash: %1%: %2%"
 msgid "Error loading %1%: %2%"
 msgstr "Erro ao fazer o hash: %1%: %2%"
 
-#: dcpp\HashManager.cpp:108 dcpp\HashManager.cpp:315
+#: dcpp\HashManager.cpp:109 dcpp\HashManager.cpp:316
 #, boost-format
 msgid "Error saving hash data: %1%"
 msgstr "Erro ao salvar os dados do hash: %1%"
@@ -412,17 +413,17 @@ msgstr ""
 msgid "File already exists at the target location"
 msgstr "O arquivo já existe na pasta de destino"
 
-#: dcpp\ShareManager.cpp:833
+#: dcpp\ShareManager.cpp:846
 #, boost-format
 msgid "File list %1% generated"
 msgstr "Lista de Arquivos %1% gerada"
 
-#: dcpp\ShareManager.cpp:713
+#: dcpp\ShareManager.cpp:715
 #, boost-format
 msgid "File list refresh failed: %1%"
 msgstr "A atualização da lista de arquivos falhou: %1%"
 
-#: dcpp\ShareManager.cpp:761
+#: dcpp\ShareManager.cpp:775
 msgid "File list refresh finished"
 msgstr "Atualização da lista de arquivos concluída"
 
@@ -434,21 +435,21 @@ msgstr ""
 "Atualização da lista de arquivos em progresso, por favor espere ela terminar "
 "antes de tentar atualizar de novo"
 
-#: dcpp\ShareManager.cpp:736
+#: dcpp\ShareManager.cpp:743
 msgid "File list refresh initiated"
 msgstr "Atualização da lista de arquivos iniciada"
 
-#: dcpp\HashManager.cpp:80
+#: dcpp\HashManager.cpp:81
 #, boost-format
 msgid "Finished hashing: %1%"
 msgstr "Terminou de fazer o hash: %1%"
 
-#: dcpp\HashManager.cpp:74
+#: dcpp\HashManager.cpp:75
 #, boost-format
 msgid "Finished hashing: %1% (%2% at %3%/s)"
 msgstr "Término do Hashing: %1% (%2% em %3%/s)"
 
-#: dcpp\HashManager.cpp:77
+#: dcpp\HashManager.cpp:78
 #, boost-format
 msgid "Finished hashing: %1% (%2%)"
 msgstr "Término do Hashing: %1% (%2%)"
@@ -469,11 +470,11 @@ msgstr "Genérico"
 msgid "Hash database"
 msgstr "Base de dados do hash"
 
-#: dcpp\HashManager.cpp:602
+#: dcpp\HashManager.cpp:625
 msgid "Hash database rebuilt"
 msgstr "Base de dados do hash reconstruída"
 
-#: dcpp\HashManager.cpp:67 dcpp\HashManager.cpp:260
+#: dcpp\HashManager.cpp:68 dcpp\HashManager.cpp:261
 #, boost-format
 msgid "Hashing failed: %1%"
 msgstr "Falhou em fazer o hash: %1%"
@@ -547,7 +548,7 @@ msgstr "Tamanho máximo do comando excedido"
 msgid "Missing dependencies for %1%"
 msgstr ""
 
-#: dcpp\Streams.h:140
+#: dcpp\Streams.h:160
 msgid "More bytes written than requested"
 msgstr "Mais bytes gravados do que o pedido"
 
@@ -586,7 +587,7 @@ msgstr "Não escutando conexões - por favor reinicie o %1%"
 
 #: dcpp\ClientManager.cpp:174 dcpp\FinishedManager.cpp:131
 #: dcpp\FinishedManager.cpp:137 dcpp\FinishedManager.cpp:143
-#: dcpp\SearchManager.cpp:256 dcpp\SearchManager.cpp:334 dcpp\Transfer.cpp:81
+#: dcpp\SearchManager.cpp:261 dcpp\SearchManager.cpp:338 dcpp\Transfer.cpp:81
 #: dcpp\Transfer.cpp:85
 msgid "Offline"
 msgstr "Offline"
@@ -782,7 +783,7 @@ msgstr ""
 msgid "Unable to open filelist: %1%"
 msgstr "Incapaz de abrir a lista de arquivos: %1%"
 
-#: dcpp\HashManager.cpp:121
+#: dcpp\HashManager.cpp:122
 msgid "Unable to read hash data file"
 msgstr "Incapaz de ler o arquivo de dados do hash"
 

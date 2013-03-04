@@ -1,3 +1,4 @@
+-- 0.811 2013-03-04 --
 * Fix status bar parts when the window is too small (poy)
 * [L#534440] [NMDC] Preserve encodings in some search results (poy)
 * [ADC] Fix problems after marking oneself as a favorite user
@@ -6,6 +7,7 @@
 * Plugin API: conversion functions return the required buffer size
 * Update Boost to version 1.53
 * Update OpenSSL to version 1.0.1e
+* [L#1029629] Compile with MinGW-w64 instead of MinGW
 
 -- 0.810 2013-01-30 --
 * Fix a race condition on file list download (thanks bigmuscle)

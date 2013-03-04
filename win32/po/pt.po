@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dccwin32\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-01-30 17:00+0100\n"
+"POT-Creation-Date: 2013-03-04 13:16+0100\n"
 "PO-Revision-Date: 2012-05-16 01:15+0000\n"
 "Last-Translator: Launchpad Translations Administrators <Unknown>\n"
 "Language-Team: \n"
@@ -16,8 +16,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2013-01-30 15:44+0000\n"
-"X-Generator: Launchpad (build 16455)\n"
+"X-Launchpad-Export-Date: 2013-03-04 12:08+0000\n"
+"X-Generator: Launchpad (build 16514)\n"
 "X-Poedit-Country: Portugal\n"
 "X-Poedit-Language: Portuguese\n"
 
@@ -171,7 +171,7 @@ msgid "%1%/s, %2% left"
 msgstr "%1%/s, resta %2%"
 
 #: win32\DirectoryListingFrame.cpp:833 win32\UserInfoBase.cpp:104
-#: win32\UserInfoBase.cpp:129 win32\WinUtil.cpp:1555
+#: win32\UserInfoBase.cpp:129 win32\WinUtil.cpp:1541
 #, boost-format
 msgid "%1%: %2%"
 msgstr "%1%: %2%"
@@ -186,7 +186,7 @@ msgstr "&Adicionar"
 msgid "&Add folder"
 msgstr "&Adicionar pasta"
 
-#: win32\WinUtil.cpp:1487 win32\UserInfoBase.h:150
+#: win32\WinUtil.cpp:1473 win32\UserInfoBase.h:155
 msgid "&Browse file list"
 msgstr "&Procurar na lista de ficheiros"
 
@@ -276,7 +276,7 @@ msgstr "&Procurar...\tF3"
 msgid "&Force attempt"
 msgstr "&Forçar tentativa"
 
-#: win32\QueueFrame.cpp:905 win32\WinUtil.cpp:1484 win32\UserInfoBase.h:149
+#: win32\QueueFrame.cpp:905 win32\WinUtil.cpp:1470 win32\UserInfoBase.h:154
 msgid "&Get file list"
 msgstr "O&bter lista de ficheiros"
 
@@ -292,7 +292,7 @@ msgstr "Aj&uda"
 msgid "&Hide\tCtrl+1"
 msgstr "Oc&ultar\tCtrl+1"
 
-#: win32\WinUtil.cpp:1490 win32\UserInfoBase.h:151
+#: win32\WinUtil.cpp:1476 win32\UserInfoBase.h:156
 msgid "&Match queue"
 msgstr "&Verificação de ficheiros"
 
@@ -360,7 +360,7 @@ msgstr "&Remover"
 msgid "&Search\tCtrl+S"
 msgstr "&Procurar\tCtrl+S"
 
-#: win32\QueueFrame.cpp:912 win32\WinUtil.cpp:1493 win32\UserInfoBase.h:153
+#: win32\QueueFrame.cpp:912 win32\WinUtil.cpp:1479 win32\UserInfoBase.h:158
 msgid "&Send private message"
 msgstr "En&viar mensagem privada"
 
@@ -418,7 +418,7 @@ msgstr "falta -:--:--"
 msgid "<Information unavailable>"
 msgstr "Ficheiro indisponível"
 
-#: win32\WinUtil.cpp:1418
+#: win32\WinUtil.cpp:1404
 msgid ""
 "A MAGNET link was given to DC++, but it didn't contain a valid file hash for "
 "use on the Direct Connect network.  No action will be taken."
@@ -459,7 +459,7 @@ msgid "Active mode (let DC++ configure my router with NAT-PMP / UPnP)"
 msgstr ""
 
 #: win32\HubFrame.cpp:1247 win32\PublicHubsFrame.cpp:336
-#: win32\WinUtil.cpp:1496 win32\UserInfoBase.h:155
+#: win32\WinUtil.cpp:1482 win32\UserInfoBase.h:160
 msgid "Add To &Favorites"
 msgstr "Adicionar aos pre&feridos"
 
@@ -492,7 +492,7 @@ msgstr "Endereço"
 msgid "Advanced"
 msgstr "Avançado"
 
-#: win32\QueueFrame.cpp:920 win32\QueueFrame.cpp:929 win32\WinUtil.cpp:1451
+#: win32\QueueFrame.cpp:920 win32\QueueFrame.cpp:929 win32\WinUtil.cpp:1437
 msgid "All"
 msgstr "Todos"
 
@@ -501,7 +501,7 @@ msgstr "Todos"
 msgid "All %1% users offline"
 msgstr "%1% utilizadores desligados"
 
-#: win32\WinUtil.cpp:1549
+#: win32\WinUtil.cpp:1535
 #, fuzzy
 msgid "All columns"
 msgstr "Todos os ficheiros"
@@ -727,7 +727,7 @@ msgstr "Navegador de temas"
 msgid "Button style"
 msgstr "Estilo dos botões"
 
-#: win32\HubFrame.cpp:66 win32\SearchFrame.cpp:59 win32\UserInfoBase.cpp:131
+#: win32\HubFrame.cpp:66 win32\SearchFrame.cpp:59 win32\UserInfoBase.cpp:132
 #: win32\UserMatchDlg.cpp:223 win32\UserMatchPage.cpp:216
 #: win32\UsersFrame.cpp:59 win32\UsersFrame.cpp:98
 msgid "CID"
@@ -900,7 +900,7 @@ msgstr "Ligar a um grupo de hub(s) preferido(s)"
 msgid "Connect to all hubs in this group"
 msgstr ""
 
-#: win32\UserInfoBase.h:158
+#: win32\UserInfoBase.h:163
 msgid "Connect to hub"
 msgstr "Ligar ao hub"
 
@@ -939,7 +939,7 @@ msgstr "&Ligar"
 msgid "Context"
 msgstr "Contexto"
 
-#: win32\WinUtil.cpp:1531
+#: win32\WinUtil.cpp:1517
 #, fuzzy
 msgid "Copy"
 msgstr "&Copiar"
@@ -952,7 +952,7 @@ msgstr "Copi&ar endereço para a área de transferência"
 msgid "Copy magnet link to clipboard"
 msgstr "Copiar ligação magnet para a área de transferência"
 
-#: win32\UserInfoBase.h:169
+#: win32\UserInfoBase.h:174
 #, fuzzy
 msgid "Copy user information"
 msgstr "Geral"
@@ -1710,7 +1710,7 @@ msgstr "GB"
 msgid "Global application style"
 msgstr "Confirmar a saída do DC++"
 
-#: win32\WinUtil.cpp:1499 win32\UserInfoBase.h:156
+#: win32\WinUtil.cpp:1485 win32\UserInfoBase.h:161
 msgid "Grant &extra slot"
 msgstr "Garantir slot &extra"
 
@@ -1918,7 +1918,7 @@ msgstr "Idenficação (deixar em branco para omissões)"
 msgid "Idle"
 msgstr "Inativo"
 
-#: win32\UserInfoBase.h:164
+#: win32\UserInfoBase.h:169
 #, fuzzy
 msgid "Ignore chat"
 msgstr "Ignorar as pesquisas TTH"
@@ -2066,7 +2066,7 @@ msgstr "Ligações"
 msgid "List configuration"
 msgstr "Configuração da lista"
 
-#: win32\SplashWindow.cpp:61
+#: win32\SplashWindow.cpp:63
 #, boost-format
 msgid "Loading DC++, please wait... (%1%)"
 msgstr "A carregar o DC++, por favor espere...(%1%)"
@@ -2149,7 +2149,7 @@ msgstr "Mais baixa"
 msgid "M&odify"
 msgstr "M&odificar"
 
-#: win32\MagnetDlg.cpp:122 win32\WinUtil.cpp:1419
+#: win32\MagnetDlg.cpp:122 win32\WinUtil.cpp:1405
 msgid "MAGNET Link detected"
 msgstr "Detetada uma ligação MAGNET"
 
@@ -2963,7 +2963,7 @@ msgstr "Remover listas lentas"
 msgid "Remove source"
 msgstr "Remover fonte"
 
-#: win32\QueueFrame.cpp:937 win32\WinUtil.cpp:1502 win32\UserInfoBase.h:160
+#: win32\QueueFrame.cpp:937 win32\WinUtil.cpp:1488 win32\UserInfoBase.h:165
 msgid "Remove user from queue"
 msgstr "Remover utilizador da lista de espera"
 
@@ -3547,7 +3547,7 @@ msgstr "U: %1%"
 msgid "U: %1%/s (%2%)"
 msgstr "U: %1%/s (%2%)"
 
-#: win32\UserInfoBase.h:166
+#: win32\UserInfoBase.h:171
 msgid "Un-ignore chat"
 msgstr ""
 
@@ -3870,6 +3870,3 @@ msgstr "s"
 #: win32\BandwidthLimitPage.cpp:100
 msgid "to"
 msgstr "para"
-
-#~ msgid "Copy &nick to clipboard"
-#~ msgstr "Copiar &nome para a área de transferência"

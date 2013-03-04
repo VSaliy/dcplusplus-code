@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-01-30 17:00+0100\n"
+"POT-Creation-Date: 2013-03-04 13:16+0100\n"
 "PO-Revision-Date: 2008-03-13 23:09+0000\n"
 "Last-Translator: Jacek Sieka <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-01-30 15:44+0000\n"
-"X-Generator: Launchpad (build 16455)\n"
+"X-Launchpad-Export-Date: 2013-03-04 12:09+0000\n"
+"X-Generator: Launchpad (build 16514)\n"
 
 #: dcpp\DownloadManager.cpp:360
 #, boost-format
@@ -93,7 +93,7 @@ msgstr "Skrá ekki til"
 msgid "%1% is too old, contact the plugin author for an update"
 msgstr ""
 
-#: dcpp\HashManager.cpp:675
+#: dcpp\HashManager.cpp:698
 #, boost-format
 msgid ""
 "%1% not shared; calculated CRC32 does not match the one found in SFV file."
@@ -178,13 +178,13 @@ msgstr ""
 msgid "Audio"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:1627
+#: dcpp\QueueManager.cpp:1649
 msgid "CRC32 inconsistency (SFV-Check)"
 msgstr ""
 "SFV/CRC32 segir skránna sótta viltaust. Ef sfv/crc32 skráin í sömu möppu "
 "gildir ekki skaltu slökkva á þessum möguleika, en annars sækja hana aftur"
 
-#: dcpp\QueueManager.cpp:1618
+#: dcpp\QueueManager.cpp:1640
 #, fuzzy, boost-format
 msgid "CRC32 inconsistency (SFV-Check): %1%"
 msgstr ""
@@ -322,7 +322,7 @@ msgstr ""
 msgid "Endless redirection loop (%1%)"
 msgstr ""
 
-#: dcpp\HashManager.cpp:523
+#: dcpp\HashManager.cpp:546
 #, boost-format
 msgid "Error creating hash data file: %1%"
 msgstr ""
@@ -343,7 +343,7 @@ msgstr "Villa í afþjöppun"
 msgid "Error generating certificate"
 msgstr ""
 
-#: dcpp\HashManager.cpp:680
+#: dcpp\HashManager.cpp:703
 #, boost-format
 msgid "Error hashing %1%: %2%"
 msgstr ""
@@ -353,7 +353,7 @@ msgstr ""
 msgid "Error loading %1%: %2%"
 msgstr ""
 
-#: dcpp\HashManager.cpp:108 dcpp\HashManager.cpp:315
+#: dcpp\HashManager.cpp:109 dcpp\HashManager.cpp:316
 #, boost-format
 msgid "Error saving hash data: %1%"
 msgstr ""
@@ -419,17 +419,17 @@ msgstr ""
 msgid "File already exists at the target location"
 msgstr "Eins skrá með eins eða stærri stærð er þegar til"
 
-#: dcpp\ShareManager.cpp:833
+#: dcpp\ShareManager.cpp:846
 #, fuzzy, boost-format
 msgid "File list %1% generated"
 msgstr "Endurnýjun skráarlista hafið"
 
-#: dcpp\ShareManager.cpp:713
+#: dcpp\ShareManager.cpp:715
 #, fuzzy, boost-format
 msgid "File list refresh failed: %1%"
 msgstr "Skráarlisti endurnýjaður"
 
-#: dcpp\ShareManager.cpp:761
+#: dcpp\ShareManager.cpp:775
 msgid "File list refresh finished"
 msgstr "Skráarlisti endurnýjaður"
 
@@ -439,21 +439,21 @@ msgid ""
 "refresh again"
 msgstr ""
 
-#: dcpp\ShareManager.cpp:736
+#: dcpp\ShareManager.cpp:743
 msgid "File list refresh initiated"
 msgstr "Endurnýjun skráarlista hafið"
 
-#: dcpp\HashManager.cpp:80
+#: dcpp\HashManager.cpp:81
 #, boost-format
 msgid "Finished hashing: %1%"
 msgstr ""
 
-#: dcpp\HashManager.cpp:74
+#: dcpp\HashManager.cpp:75
 #, boost-format
 msgid "Finished hashing: %1% (%2% at %3%/s)"
 msgstr ""
 
-#: dcpp\HashManager.cpp:77
+#: dcpp\HashManager.cpp:78
 #, boost-format
 msgid "Finished hashing: %1% (%2%)"
 msgstr ""
@@ -474,11 +474,11 @@ msgstr ""
 msgid "Hash database"
 msgstr "Geri TTH auðkenni fyrir skrár í deilingu..."
 
-#: dcpp\HashManager.cpp:602
+#: dcpp\HashManager.cpp:625
 msgid "Hash database rebuilt"
 msgstr "Byrja á TTH auðkenningu"
 
-#: dcpp\HashManager.cpp:67 dcpp\HashManager.cpp:260
+#: dcpp\HashManager.cpp:68 dcpp\HashManager.cpp:261
 #, boost-format
 msgid "Hashing failed: %1%"
 msgstr ""
@@ -550,7 +550,7 @@ msgstr ""
 msgid "Missing dependencies for %1%"
 msgstr ""
 
-#: dcpp\Streams.h:140
+#: dcpp\Streams.h:160
 #, fuzzy
 msgid "More bytes written than requested"
 msgstr "Meira af gögnum var sent en bjóst var við"
@@ -590,7 +590,7 @@ msgstr ""
 
 #: dcpp\ClientManager.cpp:174 dcpp\FinishedManager.cpp:131
 #: dcpp\FinishedManager.cpp:137 dcpp\FinishedManager.cpp:143
-#: dcpp\SearchManager.cpp:256 dcpp\SearchManager.cpp:334 dcpp\Transfer.cpp:81
+#: dcpp\SearchManager.cpp:261 dcpp\SearchManager.cpp:338 dcpp\Transfer.cpp:81
 #: dcpp\Transfer.cpp:85
 msgid "Offline"
 msgstr "Aftengdur"
@@ -786,7 +786,7 @@ msgstr ""
 msgid "Unable to open filelist: %1%"
 msgstr ""
 
-#: dcpp\HashManager.cpp:121
+#: dcpp\HashManager.cpp:122
 #, fuzzy
 msgid "Unable to read hash data file"
 msgstr "Get ekki sett inn þráð"

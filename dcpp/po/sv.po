@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-01-30 17:00+0100\n"
+"POT-Creation-Date: 2013-03-04 13:16+0100\n"
 "PO-Revision-Date: 2012-09-10 17:20+0000\n"
 "Last-Translator: endator <Unknown>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-01-30 15:44+0000\n"
-"X-Generator: Launchpad (build 16455)\n"
+"X-Launchpad-Export-Date: 2013-03-04 12:08+0000\n"
+"X-Generator: Launchpad (build 16514)\n"
 
 #: dcpp\DownloadManager.cpp:360
 #, boost-format
@@ -95,7 +95,7 @@ msgstr ""
 "%1% är för gammal, kontakta utgivaren av pluginmodulen för en uppdaterad "
 "version"
 
-#: dcpp\HashManager.cpp:675
+#: dcpp\HashManager.cpp:698
 #, boost-format
 msgid ""
 "%1% not shared; calculated CRC32 does not match the one found in SFV file."
@@ -182,11 +182,11 @@ msgstr "Valfri"
 msgid "Audio"
 msgstr "Ljud"
 
-#: dcpp\QueueManager.cpp:1627
+#: dcpp\QueueManager.cpp:1649
 msgid "CRC32 inconsistency (SFV-Check)"
 msgstr "CRC32 stämmer ej (kontrollera SFV)"
 
-#: dcpp\QueueManager.cpp:1618
+#: dcpp\QueueManager.cpp:1640
 #, boost-format
 msgid "CRC32 inconsistency (SFV-Check): %1%"
 msgstr "CRC32 inkonsistens (SFV-koll): %1%"
@@ -329,7 +329,7 @@ msgstr "Krypterad överföring"
 msgid "Endless redirection loop (%1%)"
 msgstr "Oändlig hänvisningsloop (%1%)"
 
-#: dcpp\HashManager.cpp:523
+#: dcpp\HashManager.cpp:546
 #, boost-format
 msgid "Error creating hash data file: %1%"
 msgstr "Fel under framställning av hashdatafil: %1%"
@@ -350,7 +350,7 @@ msgstr "Fel under avkomprimering"
 msgid "Error generating certificate"
 msgstr "Fel vid skapandet av ceritikat"
 
-#: dcpp\HashManager.cpp:680
+#: dcpp\HashManager.cpp:703
 #, boost-format
 msgid "Error hashing %1%: %2%"
 msgstr "Fel under hashning %1%: %2%"
@@ -360,7 +360,7 @@ msgstr "Fel under hashning %1%: %2%"
 msgid "Error loading %1%: %2%"
 msgstr "Fel under hashning %1%: %2%"
 
-#: dcpp\HashManager.cpp:108 dcpp\HashManager.cpp:315
+#: dcpp\HashManager.cpp:109 dcpp\HashManager.cpp:316
 #, boost-format
 msgid "Error saving hash data: %1%"
 msgstr "Fel under sparandet av hashdatan: %1%"
@@ -425,17 +425,17 @@ msgstr ""
 msgid "File already exists at the target location"
 msgstr "Filen finns redan på målplatsen"
 
-#: dcpp\ShareManager.cpp:833
+#: dcpp\ShareManager.cpp:846
 #, boost-format
 msgid "File list %1% generated"
 msgstr "Fil listan %1% generarad"
 
-#: dcpp\ShareManager.cpp:713
+#: dcpp\ShareManager.cpp:715
 #, boost-format
 msgid "File list refresh failed: %1%"
 msgstr "Misslyckades uppdatera fillistan: %1%"
 
-#: dcpp\ShareManager.cpp:761
+#: dcpp\ShareManager.cpp:775
 msgid "File list refresh finished"
 msgstr "Uppdatering av fillistan klar"
 
@@ -447,21 +447,21 @@ msgstr ""
 "Uppdatering av fillistan pågår, var god vänta tills den är klar innan du "
 "försöker uppdatera igen"
 
-#: dcpp\ShareManager.cpp:736
+#: dcpp\ShareManager.cpp:743
 msgid "File list refresh initiated"
 msgstr "Uppdatering av fillistan påbörjad"
 
-#: dcpp\HashManager.cpp:80
+#: dcpp\HashManager.cpp:81
 #, boost-format
 msgid "Finished hashing: %1%"
 msgstr "Hashning färdig: %1%"
 
-#: dcpp\HashManager.cpp:74
+#: dcpp\HashManager.cpp:75
 #, boost-format
 msgid "Finished hashing: %1% (%2% at %3%/s)"
 msgstr "Färdiga hashing: %1% (%2% at %3%/s)"
 
-#: dcpp\HashManager.cpp:77
+#: dcpp\HashManager.cpp:78
 #, boost-format
 msgid "Finished hashing: %1% (%2%)"
 msgstr "Färdiga hashing: %1% (%2%)"
@@ -482,11 +482,11 @@ msgstr ""
 msgid "Hash database"
 msgstr "Hashdatabas"
 
-#: dcpp\HashManager.cpp:602
+#: dcpp\HashManager.cpp:625
 msgid "Hash database rebuilt"
 msgstr "Hashdatabasen ombyggd"
 
-#: dcpp\HashManager.cpp:67 dcpp\HashManager.cpp:260
+#: dcpp\HashManager.cpp:68 dcpp\HashManager.cpp:261
 #, boost-format
 msgid "Hashing failed: %1%"
 msgstr "Hashning misslyckades: %1%"
@@ -563,7 +563,7 @@ msgstr "Högsta längden på kommando överstigen"
 msgid "Missing dependencies for %1%"
 msgstr ""
 
-#: dcpp\Streams.h:140
+#: dcpp\Streams.h:160
 msgid "More bytes written than requested"
 msgstr "Skrev fler byte än efterfrågat"
 
@@ -602,7 +602,7 @@ msgstr "Lyssnar inte efter anslutningar - var god starta om %1%"
 
 #: dcpp\ClientManager.cpp:174 dcpp\FinishedManager.cpp:131
 #: dcpp\FinishedManager.cpp:137 dcpp\FinishedManager.cpp:143
-#: dcpp\SearchManager.cpp:256 dcpp\SearchManager.cpp:334 dcpp\Transfer.cpp:81
+#: dcpp\SearchManager.cpp:261 dcpp\SearchManager.cpp:338 dcpp\Transfer.cpp:81
 #: dcpp\Transfer.cpp:85
 msgid "Offline"
 msgstr "Frånkopplad"
@@ -804,7 +804,7 @@ msgstr "Kan inte öppna port %1%. Du måste göra inställningarna manuellt"
 msgid "Unable to open filelist: %1%"
 msgstr "Kan ej öppna fillista: %1%"
 
-#: dcpp\HashManager.cpp:121
+#: dcpp\HashManager.cpp:122
 msgid "Unable to read hash data file"
 msgstr "Kan ej läsa hashdatafilen"
 
