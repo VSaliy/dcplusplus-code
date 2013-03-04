@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-01-30 17:00+0100\n"
+"POT-Creation-Date: 2013-03-04 13:16+0100\n"
 "PO-Revision-Date: 2010-08-06 12:56+0000\n"
 "Last-Translator: gutfeast <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-01-30 15:44+0000\n"
-"X-Generator: Launchpad (build 16455)\n"
+"X-Launchpad-Export-Date: 2013-03-04 12:08+0000\n"
+"X-Generator: Launchpad (build 16514)\n"
 
 #: dcpp\DownloadManager.cpp:360
 #, boost-format
@@ -93,7 +93,7 @@ msgstr "%1%: 파일이 유효하지 않음"
 msgid "%1% is too old, contact the plugin author for an update"
 msgstr ""
 
-#: dcpp\HashManager.cpp:675
+#: dcpp\HashManager.cpp:698
 #, boost-format
 msgid ""
 "%1% not shared; calculated CRC32 does not match the one found in SFV file."
@@ -181,11 +181,11 @@ msgstr "모든 종류"
 msgid "Audio"
 msgstr "오디오 파일"
 
-#: dcpp\QueueManager.cpp:1627
+#: dcpp\QueueManager.cpp:1649
 msgid "CRC32 inconsistency (SFV-Check)"
 msgstr "32-bit CRC 코드 불일치 (SFV-검사)"
 
-#: dcpp\QueueManager.cpp:1618
+#: dcpp\QueueManager.cpp:1640
 #, fuzzy, boost-format
 msgid "CRC32 inconsistency (SFV-Check): %1%"
 msgstr "32-bit CRC 코드 불일치 (SFV-검사)"
@@ -319,7 +319,7 @@ msgstr " 암호화된 전송 포트 (%1% TCP)"
 msgid "Endless redirection loop (%1%)"
 msgstr ""
 
-#: dcpp\HashManager.cpp:523
+#: dcpp\HashManager.cpp:546
 #, boost-format
 msgid "Error creating hash data file: %1%"
 msgstr "Hash(파일 ID) 데이터 파일 생성 오류: %1%"
@@ -340,7 +340,7 @@ msgstr "압축 해제 도중 오류"
 msgid "Error generating certificate"
 msgstr "인증서 생성 오류"
 
-#: dcpp\HashManager.cpp:680
+#: dcpp\HashManager.cpp:703
 #, boost-format
 msgid "Error hashing %1%: %2%"
 msgstr "%1% Hash(파일 ID) 작성 오류: %2%"
@@ -350,7 +350,7 @@ msgstr "%1% Hash(파일 ID) 작성 오류: %2%"
 msgid "Error loading %1%: %2%"
 msgstr "%1% Hash(파일 ID) 작성 오류: %2%"
 
-#: dcpp\HashManager.cpp:108 dcpp\HashManager.cpp:315
+#: dcpp\HashManager.cpp:109 dcpp\HashManager.cpp:316
 #, boost-format
 msgid "Error saving hash data: %1%"
 msgstr "Hash(파일 ID) 데이터 저장 오류: %1%"
@@ -413,17 +413,17 @@ msgstr ""
 msgid "File already exists at the target location"
 msgstr "파일이 이미 대상 위치에 존재합니다"
 
-#: dcpp\ShareManager.cpp:833
+#: dcpp\ShareManager.cpp:846
 #, boost-format
 msgid "File list %1% generated"
 msgstr "파일-목록 %1%이 생성됨"
 
-#: dcpp\ShareManager.cpp:713
+#: dcpp\ShareManager.cpp:715
 #, boost-format
 msgid "File list refresh failed: %1%"
 msgstr "파일-목록 갱신에 실패함: %1%"
 
-#: dcpp\ShareManager.cpp:761
+#: dcpp\ShareManager.cpp:775
 msgid "File list refresh finished"
 msgstr "파일-목록 갱신이 완료됨"
 
@@ -433,21 +433,21 @@ msgid ""
 "refresh again"
 msgstr "파일-목록 갱신이 진행 중이므로 재시도는 완료될 때까지 기다리세요"
 
-#: dcpp\ShareManager.cpp:736
+#: dcpp\ShareManager.cpp:743
 msgid "File list refresh initiated"
 msgstr "파일-목록 갱신 시작..."
 
-#: dcpp\HashManager.cpp:80
+#: dcpp\HashManager.cpp:81
 #, boost-format
 msgid "Finished hashing: %1%"
 msgstr "완료된 Hash(파일 ID) 작성: %1%"
 
-#: dcpp\HashManager.cpp:74
+#: dcpp\HashManager.cpp:75
 #, boost-format
 msgid "Finished hashing: %1% (%2% at %3%/s)"
 msgstr "완료된 Hash(파일 ID) 작성: %1% (%2% at %3%/s)"
 
-#: dcpp\HashManager.cpp:77
+#: dcpp\HashManager.cpp:78
 #, boost-format
 msgid "Finished hashing: %1% (%2%)"
 msgstr "완료된 Hash(파일 ID) 작성: %1% (%2%)"
@@ -468,11 +468,11 @@ msgstr ""
 msgid "Hash database"
 msgstr "Hash 데이터베이스"
 
-#: dcpp\HashManager.cpp:602
+#: dcpp\HashManager.cpp:625
 msgid "Hash database rebuilt"
 msgstr "Hash(파일 ID) 데이터베이스가 모두 완성되었음"
 
-#: dcpp\HashManager.cpp:67 dcpp\HashManager.cpp:260
+#: dcpp\HashManager.cpp:68 dcpp\HashManager.cpp:261
 #, boost-format
 msgid "Hashing failed: %1%"
 msgstr "Hash(파일 ID) 작성이 실패함: %1%"
@@ -546,7 +546,7 @@ msgstr "최대 명령어 길이를 초과함"
 msgid "Missing dependencies for %1%"
 msgstr ""
 
-#: dcpp\Streams.h:140
+#: dcpp\Streams.h:160
 msgid "More bytes written than requested"
 msgstr "요청된 크기 이상의 바이트(byte)가 쓰여짐"
 
@@ -585,7 +585,7 @@ msgstr "연결을 위한 소켓 청취를 하지 않음 - %1%를 재시작하세
 
 #: dcpp\ClientManager.cpp:174 dcpp\FinishedManager.cpp:131
 #: dcpp\FinishedManager.cpp:137 dcpp\FinishedManager.cpp:143
-#: dcpp\SearchManager.cpp:256 dcpp\SearchManager.cpp:334 dcpp\Transfer.cpp:81
+#: dcpp\SearchManager.cpp:261 dcpp\SearchManager.cpp:338 dcpp\Transfer.cpp:81
 #: dcpp\Transfer.cpp:85
 msgid "Offline"
 msgstr "오프라인"
@@ -785,7 +785,7 @@ msgstr ""
 msgid "Unable to open filelist: %1%"
 msgstr "파일-목록을 열 수 없음: %1%"
 
-#: dcpp\HashManager.cpp:121
+#: dcpp\HashManager.cpp:122
 msgid "Unable to read hash data file"
 msgstr "Hash(파일 ID) 데이터 파일을 읽을 수 없음"
 

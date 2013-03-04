@@ -8,23 +8,23 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-01-30 17:00+0100\n"
-"PO-Revision-Date: 2012-09-11 07:26+0000\n"
-"Last-Translator: Hafo <hafo@abv.bg>\n"
+"POT-Creation-Date: 2013-03-04 13:16+0100\n"
+"PO-Revision-Date: 2013-02-27 00:36+0000\n"
+"Last-Translator: Blagovest Petrov <blagovest@petrovs.info>\n"
 "Language-Team: Bulgarian <bg@li.org>\n"
 "Language: bg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-01-30 15:44+0000\n"
-"X-Generator: Launchpad (build 16455)\n"
+"X-Launchpad-Export-Date: 2013-03-04 12:08+0000\n"
+"X-Generator: Launchpad (build 16514)\n"
 "X-Poedit-Country: BULGARIA\n"
 "X-Poedit-Language: Bulgarian\n"
 
 #: dcpp\DownloadManager.cpp:360
-#, fuzzy, boost-format
+#, boost-format
 msgid " - Queued: %1%"
-msgstr " - на опашката: "
+msgstr " - На опашката: %1%"
 
 #: dcpp\Util.cpp:561
 #, c-format, boost-format
@@ -97,7 +97,7 @@ msgid "%1% is too old, contact the plugin author for an update"
 msgstr ""
 "%1% е твърде стара, свържете се с автора на приставката за нейното обновяване"
 
-#: dcpp\HashManager.cpp:675
+#: dcpp\HashManager.cpp:698
 #, boost-format
 msgid ""
 "%1% not shared; calculated CRC32 does not match the one found in SFV file."
@@ -187,11 +187,11 @@ msgstr "Всички типове"
 msgid "Audio"
 msgstr "Аудио"
 
-#: dcpp\QueueManager.cpp:1627
+#: dcpp\QueueManager.cpp:1649
 msgid "CRC32 inconsistency (SFV-Check)"
 msgstr "CRC32 несъвпадение (SFV-проверка)"
 
-#: dcpp\QueueManager.cpp:1618
+#: dcpp\QueueManager.cpp:1640
 #, boost-format
 msgid "CRC32 inconsistency (SFV-Check): %1%"
 msgstr "CRC32 несъответствие (SFV-Проверка): %1%"
@@ -320,7 +320,7 @@ msgstr ""
 
 #: dcpp\DirectoryListing.cpp:196 dcpp\DirectoryListing.cpp:221
 msgid "Duplicate item in the file list"
-msgstr ""
+msgstr "Дублиращ се запис в списъка с файлове"
 
 #: dcpp\QueueManager.cpp:676 dcpp\QueueManager.cpp:680
 #, boost-format
@@ -336,7 +336,7 @@ msgstr "Криптиран трансфер"
 msgid "Endless redirection loop (%1%)"
 msgstr "Безкрайно циклично пренасочване (%1%)"
 
-#: dcpp\HashManager.cpp:523
+#: dcpp\HashManager.cpp:546
 #, boost-format
 msgid "Error creating hash data file: %1%"
 msgstr "Грешка при създаване на хеш файл: %1%"
@@ -357,7 +357,7 @@ msgstr "Грешка при декомпресиране"
 msgid "Error generating certificate"
 msgstr "Грешка при генериране на сертификат"
 
-#: dcpp\HashManager.cpp:680
+#: dcpp\HashManager.cpp:703
 #, boost-format
 msgid "Error hashing %1%: %2%"
 msgstr "Грешка при хеширане %1%: %2%"
@@ -367,7 +367,7 @@ msgstr "Грешка при хеширане %1%: %2%"
 msgid "Error loading %1%: %2%"
 msgstr "Грешка при зареждане на %1%: %2%"
 
-#: dcpp\HashManager.cpp:108 dcpp\HashManager.cpp:315
+#: dcpp\HashManager.cpp:109 dcpp\HashManager.cpp:316
 #, boost-format
 msgid "Error saving hash data: %1%"
 msgstr "Грешка при запазване на хеш данни: %1%"
@@ -433,17 +433,17 @@ msgstr ""
 msgid "File already exists at the target location"
 msgstr "Файла вече съществува на това място"
 
-#: dcpp\ShareManager.cpp:833
+#: dcpp\ShareManager.cpp:846
 #, boost-format
 msgid "File list %1% generated"
 msgstr "Списъка с файлове %1% е генериран"
 
-#: dcpp\ShareManager.cpp:713
+#: dcpp\ShareManager.cpp:715
 #, boost-format
 msgid "File list refresh failed: %1%"
 msgstr "Грешка при обновяване на списъка с файлове: %1%"
 
-#: dcpp\ShareManager.cpp:761
+#: dcpp\ShareManager.cpp:775
 msgid "File list refresh finished"
 msgstr "Обновяването на списъка с файлове завърши"
 
@@ -455,21 +455,21 @@ msgstr ""
 "В момента тече обновяване на списъка с файловете, моля изчакайте преди да "
 "опитате да обновите отново"
 
-#: dcpp\ShareManager.cpp:736
+#: dcpp\ShareManager.cpp:743
 msgid "File list refresh initiated"
 msgstr "Започва обновяване на списъка с файлове"
 
-#: dcpp\HashManager.cpp:80
+#: dcpp\HashManager.cpp:81
 #, boost-format
 msgid "Finished hashing: %1%"
 msgstr "Завършено хеширане: %1%"
 
-#: dcpp\HashManager.cpp:74
+#: dcpp\HashManager.cpp:75
 #, boost-format
 msgid "Finished hashing: %1% (%2% at %3%/s)"
 msgstr "Завършено хеширане: %1% (%2% с %3%/s)"
 
-#: dcpp\HashManager.cpp:77
+#: dcpp\HashManager.cpp:78
 #, boost-format
 msgid "Finished hashing: %1% (%2%)"
 msgstr "Завършено хеширане: %1% (%2%)"
@@ -490,11 +490,11 @@ msgstr "Генеричен"
 msgid "Hash database"
 msgstr "База-данни с хешове"
 
-#: dcpp\HashManager.cpp:602
+#: dcpp\HashManager.cpp:625
 msgid "Hash database rebuilt"
 msgstr "Базата данни с хешове е построена отново"
 
-#: dcpp\HashManager.cpp:67 dcpp\HashManager.cpp:260
+#: dcpp\HashManager.cpp:68 dcpp\HashManager.cpp:261
 #, boost-format
 msgid "Hashing failed: %1%"
 msgstr "Неуспешно хеширане: %1%"
@@ -569,9 +569,9 @@ msgstr "Максималната дължина на командата е пр�
 #: dcpp\PluginManager.cpp:141
 #, boost-format
 msgid "Missing dependencies for %1%"
-msgstr ""
+msgstr "Липсват зависимости за %1%"
 
-#: dcpp\Streams.h:140
+#: dcpp\Streams.h:160
 msgid "More bytes written than requested"
 msgstr "Записани са повече байтове от заявения брой"
 
@@ -610,7 +610,7 @@ msgstr "Не се следи за връзки - моля, рестартира�
 
 #: dcpp\ClientManager.cpp:174 dcpp\FinishedManager.cpp:131
 #: dcpp\FinishedManager.cpp:137 dcpp\FinishedManager.cpp:143
-#: dcpp\SearchManager.cpp:256 dcpp\SearchManager.cpp:334 dcpp\Transfer.cpp:81
+#: dcpp\SearchManager.cpp:261 dcpp\SearchManager.cpp:338 dcpp\Transfer.cpp:81
 #: dcpp\Transfer.cpp:85
 msgid "Offline"
 msgstr "Извън линия"
@@ -717,7 +717,7 @@ msgstr "TLS е изключен, няма дефиниран файл със с�
 
 #: dcpp\SSLSocket.cpp:176
 msgid "TLS error"
-msgstr ""
+msgstr "TLS грешка"
 
 #: dcpp\SearchManager.cpp:44
 msgid "TTH"
@@ -813,7 +813,7 @@ msgstr ""
 msgid "Unable to open filelist: %1%"
 msgstr "Грешка при отваряне на списъка с файлове: %1%"
 
-#: dcpp\HashManager.cpp:121
+#: dcpp\HashManager.cpp:122
 msgid "Unable to read hash data file"
 msgstr "Грешка при четене на хеш файла"
 

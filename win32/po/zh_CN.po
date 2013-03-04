@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: win32\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-01-30 17:00+0100\n"
+"POT-Creation-Date: 2013-03-04 13:16+0100\n"
 "PO-Revision-Date: 2012-11-05 10:20+0000\n"
 "Last-Translator: comet <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,8 +16,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2013-01-30 15:44+0000\n"
-"X-Generator: Launchpad (build 16455)\n"
+"X-Launchpad-Export-Date: 2013-03-04 12:08+0000\n"
+"X-Generator: Launchpad (build 16514)\n"
 
 #: win32\PublicHubsFrame.cpp:420
 msgid " from Coral"
@@ -166,7 +166,7 @@ msgid "%1%/s, %2% left"
 msgstr "%1%/秒, %2% 剩余"
 
 #: win32\DirectoryListingFrame.cpp:833 win32\UserInfoBase.cpp:104
-#: win32\UserInfoBase.cpp:129 win32\WinUtil.cpp:1555
+#: win32\UserInfoBase.cpp:129 win32\WinUtil.cpp:1541
 #, boost-format
 msgid "%1%: %2%"
 msgstr "%1%: %2%"
@@ -181,7 +181,7 @@ msgstr "添加(&A)"
 msgid "&Add folder"
 msgstr "添加目录(&A)"
 
-#: win32\WinUtil.cpp:1487 win32\UserInfoBase.h:150
+#: win32\WinUtil.cpp:1473 win32\UserInfoBase.h:155
 msgid "&Browse file list"
 msgstr "浏览文件列表(&B)"
 
@@ -269,7 +269,7 @@ msgstr "查找(&F)...\tCtrl+F"
 msgid "&Force attempt"
 msgstr "强制重试(&F)"
 
-#: win32\QueueFrame.cpp:905 win32\WinUtil.cpp:1484 win32\UserInfoBase.h:149
+#: win32\QueueFrame.cpp:905 win32\WinUtil.cpp:1470 win32\UserInfoBase.h:154
 msgid "&Get file list"
 msgstr "取得文件列表(&G)"
 
@@ -285,7 +285,7 @@ msgstr "帮助(&H)"
 msgid "&Hide\tCtrl+1"
 msgstr "隐藏(&H)\tCtrl+1"
 
-#: win32\WinUtil.cpp:1490 win32\UserInfoBase.h:151
+#: win32\WinUtil.cpp:1476 win32\UserInfoBase.h:156
 msgid "&Match queue"
 msgstr "匹配队列(&M)"
 
@@ -353,7 +353,7 @@ msgstr "删除(&R)"
 msgid "&Search\tCtrl+S"
 msgstr "搜索(&S)\tCtrl+S"
 
-#: win32\QueueFrame.cpp:912 win32\WinUtil.cpp:1493 win32\UserInfoBase.h:153
+#: win32\QueueFrame.cpp:912 win32\WinUtil.cpp:1479 win32\UserInfoBase.h:158
 msgid "&Send private message"
 msgstr "发送私人消息(&S)"
 
@@ -408,7 +408,7 @@ msgstr "-:--:--"
 msgid "<Information unavailable>"
 msgstr "<信息不可用>"
 
-#: win32\WinUtil.cpp:1418
+#: win32\WinUtil.cpp:1404
 msgid ""
 "A MAGNET link was given to DC++, but it didn't contain a valid file hash for "
 "use on the Direct Connect network.  No action will be taken."
@@ -448,7 +448,7 @@ msgid "Active mode (let DC++ configure my router with NAT-PMP / UPnP)"
 msgstr "主动模式(让DC++使用NAT-PMP/UPnP来配置路由)"
 
 #: win32\HubFrame.cpp:1247 win32\PublicHubsFrame.cpp:336
-#: win32\WinUtil.cpp:1496 win32\UserInfoBase.h:155
+#: win32\WinUtil.cpp:1482 win32\UserInfoBase.h:160
 msgid "Add To &Favorites"
 msgstr "添加到 &收藏夹"
 
@@ -481,7 +481,7 @@ msgstr "服务器地址"
 msgid "Advanced"
 msgstr "高级"
 
-#: win32\QueueFrame.cpp:920 win32\QueueFrame.cpp:929 win32\WinUtil.cpp:1451
+#: win32\QueueFrame.cpp:920 win32\QueueFrame.cpp:929 win32\WinUtil.cpp:1437
 msgid "All"
 msgstr "全部"
 
@@ -490,7 +490,7 @@ msgstr "全部"
 msgid "All %1% users offline"
 msgstr "%1% 用户离线"
 
-#: win32\WinUtil.cpp:1549
+#: win32\WinUtil.cpp:1535
 #, fuzzy
 msgid "All columns"
 msgstr "全部文件"
@@ -709,7 +709,7 @@ msgstr "浏览器主题"
 msgid "Button style"
 msgstr "按钮样式"
 
-#: win32\HubFrame.cpp:66 win32\SearchFrame.cpp:59 win32\UserInfoBase.cpp:131
+#: win32\HubFrame.cpp:66 win32\SearchFrame.cpp:59 win32\UserInfoBase.cpp:132
 #: win32\UserMatchDlg.cpp:223 win32\UserMatchPage.cpp:216
 #: win32\UsersFrame.cpp:59 win32\UsersFrame.cpp:98
 msgid "CID"
@@ -879,7 +879,7 @@ msgstr "连接到收藏夹的hub组"
 msgid "Connect to all hubs in this group"
 msgstr "连接本组的全部站点"
 
-#: win32\UserInfoBase.h:158
+#: win32\UserInfoBase.h:163
 msgid "Connect to hub"
 msgstr "连接到Hub"
 
@@ -917,7 +917,7 @@ msgstr "连接情况"
 msgid "Context"
 msgstr "关联菜单"
 
-#: win32\WinUtil.cpp:1531
+#: win32\WinUtil.cpp:1517
 #, fuzzy
 msgid "Copy"
 msgstr "复制(&C)"
@@ -930,7 +930,7 @@ msgstr "复制 &地址 到剪贴板"
 msgid "Copy magnet link to clipboard"
 msgstr "复制magnet链接"
 
-#: win32\UserInfoBase.h:169
+#: win32\UserInfoBase.h:174
 #, fuzzy
 msgid "Copy user information"
 msgstr "个人信息"
@@ -1659,7 +1659,7 @@ msgstr "GiB"
 msgid "Global application style"
 msgstr "全局程序样式"
 
-#: win32\WinUtil.cpp:1499 win32\UserInfoBase.h:156
+#: win32\WinUtil.cpp:1485 win32\UserInfoBase.h:161
 msgid "Grant &extra slot"
 msgstr "开启额外的通道(&e)"
 
@@ -1864,7 +1864,7 @@ msgstr "认证(不填则使用默认设定)"
 msgid "Idle"
 msgstr "空闲"
 
-#: win32\UserInfoBase.h:164
+#: win32\UserInfoBase.h:169
 msgid "Ignore chat"
 msgstr "忽略聊天信息"
 
@@ -2009,7 +2009,7 @@ msgstr "连接"
 msgid "List configuration"
 msgstr "列出配置"
 
-#: win32\SplashWindow.cpp:61
+#: win32\SplashWindow.cpp:63
 #, boost-format
 msgid "Loading DC++, please wait... (%1%)"
 msgstr "载入DC++中, 请稍候... (%1%)"
@@ -2089,7 +2089,7 @@ msgstr "最低"
 msgid "M&odify"
 msgstr "修改(&o)"
 
-#: win32\MagnetDlg.cpp:122 win32\WinUtil.cpp:1419
+#: win32\MagnetDlg.cpp:122 win32\WinUtil.cpp:1405
 msgid "MAGNET Link detected"
 msgstr "检测到MAGNET链接"
 
@@ -2865,7 +2865,7 @@ msgstr "移除慢速文件列表"
 msgid "Remove source"
 msgstr "删除资源"
 
-#: win32\QueueFrame.cpp:937 win32\WinUtil.cpp:1502 win32\UserInfoBase.h:160
+#: win32\QueueFrame.cpp:937 win32\WinUtil.cpp:1488 win32\UserInfoBase.h:165
 msgid "Remove user from queue"
 msgstr "从队列中删除用户"
 
@@ -3433,7 +3433,7 @@ msgstr "U: %1%"
 msgid "U: %1%/s (%2%)"
 msgstr "U: %1%/s (%2%)"
 
-#: win32\UserInfoBase.h:166
+#: win32\UserInfoBase.h:171
 msgid "Un-ignore chat"
 msgstr "未忽略的聊天"
 
@@ -3754,6 +3754,3 @@ msgstr "秒"
 #: win32\BandwidthLimitPage.cpp:100
 msgid "to"
 msgstr "至"
-
-#~ msgid "Copy &nick to clipboard"
-#~ msgstr "复制 &昵称 到剪贴板"

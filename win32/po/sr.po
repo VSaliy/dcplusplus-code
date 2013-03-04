@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-01-30 17:00+0100\n"
-"PO-Revision-Date: 2012-10-02 18:42+0000\n"
+"POT-Creation-Date: 2013-03-04 13:16+0100\n"
+"PO-Revision-Date: 2013-01-31 06:37+0000\n"
 "Last-Translator: Igor Jerosimić <Unknown>\n"
 "Language-Team: Serbian <sr@li.org>\n"
 "Language: sr\n"
@@ -17,17 +17,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2013-01-30 15:44+0000\n"
-"X-Generator: Launchpad (build 16455)\n"
+"X-Launchpad-Export-Date: 2013-03-04 12:08+0000\n"
+"X-Generator: Launchpad (build 16514)\n"
 
 #: win32\PublicHubsFrame.cpp:420
 msgid " from Coral"
 msgstr " od Corala"
 
 #: win32\TransferView.cpp:725
-#, fuzzy, boost-format
+#, boost-format
 msgid " of %1%"
-msgstr "D: %1%"
+msgstr " od %1%"
 
 #: win32\FinishedFrameBase.h:733
 msgid "% transferred"
@@ -173,7 +173,7 @@ msgid "%1%/s, %2% left"
 msgstr "%1%/s, %2% preostalo"
 
 #: win32\DirectoryListingFrame.cpp:833 win32\UserInfoBase.cpp:104
-#: win32\UserInfoBase.cpp:129 win32\WinUtil.cpp:1555
+#: win32\UserInfoBase.cpp:129 win32\WinUtil.cpp:1541
 #, boost-format
 msgid "%1%: %2%"
 msgstr "%1%: %2%"
@@ -188,7 +188,7 @@ msgstr "&Dodaj"
 msgid "&Add folder"
 msgstr "&Dodaj direktorijum"
 
-#: win32\WinUtil.cpp:1487 win32\UserInfoBase.h:150
+#: win32\WinUtil.cpp:1473 win32\UserInfoBase.h:155
 msgid "&Browse file list"
 msgstr "&Pregledaj listu datoteka"
 
@@ -276,7 +276,7 @@ msgstr "&Pronađi...\tCtrl+F"
 msgid "&Force attempt"
 msgstr "&Prinudni pokušaj"
 
-#: win32\QueueFrame.cpp:905 win32\WinUtil.cpp:1484 win32\UserInfoBase.h:149
+#: win32\QueueFrame.cpp:905 win32\WinUtil.cpp:1470 win32\UserInfoBase.h:154
 msgid "&Get file list"
 msgstr "&Preuzmi listu datoteka"
 
@@ -292,7 +292,7 @@ msgstr "&Pomoć"
 msgid "&Hide\tCtrl+1"
 msgstr "Sakrij\tCtrl+1"
 
-#: win32\WinUtil.cpp:1490 win32\UserInfoBase.h:151
+#: win32\WinUtil.cpp:1476 win32\UserInfoBase.h:156
 msgid "&Match queue"
 msgstr "&Pronađi datoteke u redu"
 
@@ -360,7 +360,7 @@ msgstr "&Ukloni"
 msgid "&Search\tCtrl+S"
 msgstr "&Pretraga\tCtrl+S"
 
-#: win32\QueueFrame.cpp:912 win32\WinUtil.cpp:1493 win32\UserInfoBase.h:153
+#: win32\QueueFrame.cpp:912 win32\WinUtil.cpp:1479 win32\UserInfoBase.h:158
 msgid "&Send private message"
 msgstr "&Pošalji privatnu poruku"
 
@@ -391,7 +391,7 @@ msgstr "&Prozor"
 
 #: win32\MainWindow.cpp:679
 msgid "(No plugin command found)"
-msgstr ""
+msgstr "(Plugin komanda nije pronađena)"
 
 #: win32\MainWindow.cpp:756
 msgid "(No recent item found)"
@@ -415,7 +415,7 @@ msgstr "-:--:--"
 msgid "<Information unavailable>"
 msgstr "<Informacija nedostupna>"
 
-#: win32\WinUtil.cpp:1418
+#: win32\WinUtil.cpp:1404
 msgid ""
 "A MAGNET link was given to DC++, but it didn't contain a valid file hash for "
 "use on the Direct Connect network.  No action will be taken."
@@ -458,7 +458,7 @@ msgid "Active mode (let DC++ configure my router with NAT-PMP / UPnP)"
 msgstr "Aktivni režim (pusti DC++ da podesi moj ruter sa  NAT-PMP / UPnP)"
 
 #: win32\HubFrame.cpp:1247 win32\PublicHubsFrame.cpp:336
-#: win32\WinUtil.cpp:1496 win32\UserInfoBase.h:155
+#: win32\WinUtil.cpp:1482 win32\UserInfoBase.h:160
 msgid "Add To &Favorites"
 msgstr "Dodaj u &omiljene"
 
@@ -476,7 +476,7 @@ msgstr "Dodaj priključak"
 
 #: win32\GeneralPage.cpp:101
 msgid "Add timestamp to the end of away messages"
-msgstr ""
+msgstr "Dodaj vremensku oznaku na kraj poruka za odsutnost"
 
 #: win32\QueueFrame.cpp:57
 msgid "Added"
@@ -491,7 +491,7 @@ msgstr "Adresa"
 msgid "Advanced"
 msgstr "Napredno"
 
-#: win32\QueueFrame.cpp:920 win32\QueueFrame.cpp:929 win32\WinUtil.cpp:1451
+#: win32\QueueFrame.cpp:920 win32\QueueFrame.cpp:929 win32\WinUtil.cpp:1437
 msgid "All"
 msgstr "Sve"
 
@@ -500,10 +500,9 @@ msgstr "Sve"
 msgid "All %1% users offline"
 msgstr "Svih %1% korisnika nisu povezani"
 
-#: win32\WinUtil.cpp:1549
-#, fuzzy
+#: win32\WinUtil.cpp:1535
 msgid "All columns"
-msgstr "Sve datoteke"
+msgstr "Sve kolone"
 
 #: win32\WinUtil.cpp:820 win32\WinUtil.cpp:827
 msgid "All files"
@@ -722,7 +721,7 @@ msgstr "Tema pregledača"
 msgid "Button style"
 msgstr "Stil dugmeta"
 
-#: win32\HubFrame.cpp:66 win32\SearchFrame.cpp:59 win32\UserInfoBase.cpp:131
+#: win32\HubFrame.cpp:66 win32\SearchFrame.cpp:59 win32\UserInfoBase.cpp:132
 #: win32\UserMatchDlg.cpp:223 win32\UserMatchPage.cpp:216
 #: win32\UsersFrame.cpp:59 win32\UsersFrame.cpp:98
 msgid "CID"
@@ -894,7 +893,7 @@ msgstr "Poveži se na omiljeni hab"
 msgid "Connect to all hubs in this group"
 msgstr "Poveži se na sve habove u ovoj grupi"
 
-#: win32\UserInfoBase.h:158
+#: win32\UserInfoBase.h:163
 msgid "Connect to hub"
 msgstr "Poveži se na hab"
 
@@ -932,10 +931,9 @@ msgstr "Povezivost"
 msgid "Context"
 msgstr "Lokacija"
 
-#: win32\WinUtil.cpp:1531
-#, fuzzy
+#: win32\WinUtil.cpp:1517
 msgid "Copy"
-msgstr "&Kopiraj"
+msgstr "Kopiraj"
 
 #: win32\HubFrame.cpp:1251
 msgid "Copy &address to clipboard"
@@ -945,10 +943,9 @@ msgstr "Kopiraj &adresu u clipboard"
 msgid "Copy magnet link to clipboard"
 msgstr "Kopiraj manget adresu u clipboard"
 
-#: win32\UserInfoBase.h:169
-#, fuzzy
+#: win32\UserInfoBase.h:174
 msgid "Copy user information"
-msgstr "Opšti podaci"
+msgstr "Kopiraj korisničke informacije"
 
 #: win32\HubFrame.cpp:64 win32\PublicHubsFrame.cpp:45
 #: win32\TransferView.cpp:59 win32\UserInfoBase.cpp:121
@@ -1548,9 +1545,9 @@ msgid "Files"
 msgstr "Datoteke"
 
 #: win32\DirectoryListingFrame.cpp:1218
-#, fuzzy, boost-format
+#, boost-format
 msgid "Files (total): %1%"
-msgstr "Datoteke: %1%"
+msgstr "Datoteke (ukupno): %1%"
 
 #: win32\DirectoryListingFrame.cpp:1234 win32\QueueFrame.cpp:228
 #, boost-format
@@ -1681,7 +1678,7 @@ msgstr "GiB"
 msgid "Global application style"
 msgstr "Globalni stil programa"
 
-#: win32\WinUtil.cpp:1499 win32\UserInfoBase.h:156
+#: win32\WinUtil.cpp:1485 win32\UserInfoBase.h:161
 msgid "Grant &extra slot"
 msgstr "&Dozvoli dodatni slot"
 
@@ -1810,9 +1807,8 @@ msgid "Hub list downloaded%1% (%2%)"
 msgstr "Skinuta lista habova%1% (%2%)"
 
 #: win32\HubFrame.cpp:560
-#, fuzzy
 msgid "Hub offline"
-msgstr "Korisnik nije povezan"
+msgstr "Hab nije povezan"
 
 #: win32\UserInfoBase.cpp:112
 msgid "Hub operator"
@@ -1888,7 +1884,7 @@ msgstr "Identifikacija (ostavi prazno za podrazumevano)"
 msgid "Idle"
 msgstr "Neaktivan"
 
-#: win32\UserInfoBase.h:164
+#: win32\UserInfoBase.h:169
 msgid "Ignore chat"
 msgstr "Ignoriši čet"
 
@@ -2033,7 +2029,7 @@ msgstr "Linkovi"
 msgid "List configuration"
 msgstr "Konfiguracija liste"
 
-#: win32\SplashWindow.cpp:61
+#: win32\SplashWindow.cpp:63
 #, boost-format
 msgid "Loading DC++, please wait... (%1%)"
 msgstr "Učitavam DC++, molim sačekajte... (%1%)"
@@ -2113,7 +2109,7 @@ msgstr "Najniži"
 msgid "M&odify"
 msgstr "I&zmeni"
 
-#: win32\MagnetDlg.cpp:122 win32\WinUtil.cpp:1419
+#: win32\MagnetDlg.cpp:122 win32\WinUtil.cpp:1405
 msgid "MAGNET Link detected"
 msgstr "Pronađena MAGNET adresa"
 
@@ -2461,7 +2457,7 @@ msgstr "Potvrdi"
 
 #: win32\UsersFrame.cpp:269 win32\UsersFrame.cpp:284 win32\WinUtil.cpp:702
 msgid "Offline"
-msgstr "Nije na mreži"
+msgstr "Isključen"
 
 #: win32\UsersFrame.cpp:186 win32\UsersFrame.cpp:266 win32\UsersFrame.cpp:281
 msgid "Online"
@@ -2895,7 +2891,7 @@ msgstr "Ukloni spore liste datoteka"
 msgid "Remove source"
 msgstr "Ukloni izvor"
 
-#: win32\QueueFrame.cpp:937 win32\WinUtil.cpp:1502 win32\UserInfoBase.h:160
+#: win32\QueueFrame.cpp:937 win32\WinUtil.cpp:1488 win32\UserInfoBase.h:165
 msgid "Remove user from queue"
 msgstr "Ukloni korisnika iz reda"
 
@@ -3143,9 +3139,9 @@ msgid "Size"
 msgstr "Veličina"
 
 #: win32\DirectoryListingFrame.cpp:1219
-#, fuzzy, boost-format
+#, boost-format
 msgid "Size (total): %1%"
-msgstr "Veličina: %1%"
+msgstr "Veličina (ukupno): %1%"
 
 #: win32\ADLSProperties.cpp:97
 msgid "Size Type"
@@ -3362,11 +3358,11 @@ msgstr ""
 
 #: win32\HubFrame.cpp:560
 msgid "The message cannot be delivered because the hub is offline."
-msgstr ""
+msgstr "Poruka nije dostavljena jer hab nije povezan"
 
 #: win32\PrivateFrame.cpp:373
 msgid "The message cannot be delivered because the user is offline."
-msgstr ""
+msgstr "Poruka nije dostavljena jer korisnik nije povezan"
 
 #: win32\HubFrame.cpp:1118
 msgid "This hub is not a favorite hub"
@@ -3471,7 +3467,7 @@ msgstr "U: %1%"
 msgid "U: %1%/s (%2%)"
 msgstr "U: %1%/s (%2%)"
 
-#: win32\UserInfoBase.h:166
+#: win32\UserInfoBase.h:171
 msgid "Un-ignore chat"
 msgstr "Neignoriši čet"
 
@@ -3640,9 +3636,8 @@ msgid "User went offline"
 msgstr "Korisnik više nije na vezi"
 
 #: win32\PrivateFrame.cpp:277
-#, fuzzy
 msgid "User went online"
-msgstr "Korisnik više nije na vezi"
+msgstr "Korisnik se isključio"
 
 #: win32\MainWindow.cpp:431 win32\PublicHubsFrame.cpp:43
 #: win32\QueueFrame.cpp:53 win32\StylesPage.cpp:150 win32\UsersFrame.cpp:108
@@ -3663,9 +3658,8 @@ msgid "Version: "
 msgstr "Verzija: "
 
 #: win32\AppearancePage.cpp:43
-#, fuzzy
 msgid "View status messages in chat"
-msgstr "Pregledaj statusne poruke u glavnom razgovoru"
+msgstr "Prikazuj statusne poruke na četu"
 
 #: win32\TextFrame.cpp:99
 #, boost-format
@@ -3795,6 +3789,3 @@ msgstr "s"
 #: win32\BandwidthLimitPage.cpp:100
 msgid "to"
 msgstr "do"
-
-#~ msgid "Copy &nick to clipboard"
-#~ msgstr "Kopiraj &nadimak u clipboard"

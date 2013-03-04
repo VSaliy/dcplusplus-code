@@ -7,21 +7,21 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-01-30 17:00+0100\n"
-"PO-Revision-Date: 2012-10-02 17:46+0000\n"
+"POT-Creation-Date: 2013-03-04 13:16+0100\n"
+"PO-Revision-Date: 2013-01-31 06:27+0000\n"
 "Last-Translator: Igor Jerosimić <Unknown>\n"
 "Language-Team: Serbian <sr@li.org>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-01-30 15:44+0000\n"
-"X-Generator: Launchpad (build 16455)\n"
+"X-Launchpad-Export-Date: 2013-03-04 12:08+0000\n"
+"X-Generator: Launchpad (build 16514)\n"
 
 #: dcpp\DownloadManager.cpp:360
 #, boost-format
 msgid " - Queued: %1%"
-msgstr ""
+msgstr " - U redu: %1%"
 
 #: dcpp\Util.cpp:561
 #, c-format, boost-format
@@ -94,7 +94,7 @@ msgid "%1% is too old, contact the plugin author for an update"
 msgstr ""
 "%1% je previše star, kontaktirajte autora priključka za ažuriranu verziju"
 
-#: dcpp\HashManager.cpp:675
+#: dcpp\HashManager.cpp:698
 #, boost-format
 msgid ""
 "%1% not shared; calculated CRC32 does not match the one found in SFV file."
@@ -182,11 +182,11 @@ msgstr "Bilo koji"
 msgid "Audio"
 msgstr "Zvuk"
 
-#: dcpp\QueueManager.cpp:1627
+#: dcpp\QueueManager.cpp:1649
 msgid "CRC32 inconsistency (SFV-Check)"
 msgstr "CRC32 neusaglašenost (SFV-Check)"
 
-#: dcpp\QueueManager.cpp:1618
+#: dcpp\QueueManager.cpp:1640
 #, boost-format
 msgid "CRC32 inconsistency (SFV-Check): %1%"
 msgstr "CRC32 neusaglašenost (SFV-Check): %1%"
@@ -313,7 +313,7 @@ msgstr "Dupla datoteka neće biti deljena: %1% (Veličina: %2% B) Duplikat: %3%"
 
 #: dcpp\DirectoryListing.cpp:196 dcpp\DirectoryListing.cpp:221
 msgid "Duplicate item in the file list"
-msgstr ""
+msgstr "Duplikat u listi"
 
 #: dcpp\QueueManager.cpp:676 dcpp\QueueManager.cpp:680
 #, boost-format
@@ -329,7 +329,7 @@ msgstr "Enkriptovani prenos"
 msgid "Endless redirection loop (%1%)"
 msgstr "Beskrajna redirekcija (%1%)"
 
-#: dcpp\HashManager.cpp:523
+#: dcpp\HashManager.cpp:546
 #, boost-format
 msgid "Error creating hash data file: %1%"
 msgstr "Greška pri kreiranju hash podataka za datoteku: %1%"
@@ -350,7 +350,7 @@ msgstr "Greška tokom otpakivanja"
 msgid "Error generating certificate"
 msgstr "Greška pri kreiranju sertifikata"
 
-#: dcpp\HashManager.cpp:680
+#: dcpp\HashManager.cpp:703
 #, boost-format
 msgid "Error hashing %1%: %2%"
 msgstr "Greška pri hashovanju %1%: %2%"
@@ -360,7 +360,7 @@ msgstr "Greška pri hashovanju %1%: %2%"
 msgid "Error loading %1%: %2%"
 msgstr "Greška pri učitavanju %1%: %2%"
 
-#: dcpp\HashManager.cpp:108 dcpp\HashManager.cpp:315
+#: dcpp\HashManager.cpp:109 dcpp\HashManager.cpp:316
 #, boost-format
 msgid "Error saving hash data: %1%"
 msgstr "Greška pri čuvanju hash podataka: %1%"
@@ -425,17 +425,17 @@ msgstr ""
 msgid "File already exists at the target location"
 msgstr "Datoteka već postoji na zadatoj lokaciji"
 
-#: dcpp\ShareManager.cpp:833
+#: dcpp\ShareManager.cpp:846
 #, boost-format
 msgid "File list %1% generated"
 msgstr "Lista deljenih datoteka %1% napravljena"
 
-#: dcpp\ShareManager.cpp:713
+#: dcpp\ShareManager.cpp:715
 #, boost-format
 msgid "File list refresh failed: %1%"
 msgstr "Osvežavanje liste deljenih datoteka nije uspelo: %1%"
 
-#: dcpp\ShareManager.cpp:761
+#: dcpp\ShareManager.cpp:775
 msgid "File list refresh finished"
 msgstr "Osvežavanje liste deljenih datoteka završeno"
 
@@ -447,21 +447,21 @@ msgstr ""
 "Osvežavanje liste deljenih datoteka je u toku, molim sačekajte da se završi "
 "pre ponovnog pokretanja"
 
-#: dcpp\ShareManager.cpp:736
+#: dcpp\ShareManager.cpp:743
 msgid "File list refresh initiated"
 msgstr "Pokrenuto osvežavanje liste deljenih datoteka"
 
-#: dcpp\HashManager.cpp:80
+#: dcpp\HashManager.cpp:81
 #, boost-format
 msgid "Finished hashing: %1%"
 msgstr "Završeno hashovanje: %1%"
 
-#: dcpp\HashManager.cpp:74
+#: dcpp\HashManager.cpp:75
 #, boost-format
 msgid "Finished hashing: %1% (%2% at %3%/s)"
 msgstr "Završeno hashovanje: %1% (%2% at %3%/s)"
 
-#: dcpp\HashManager.cpp:77
+#: dcpp\HashManager.cpp:78
 #, boost-format
 msgid "Finished hashing: %1% (%2%)"
 msgstr "Završeno hashovanje: %1% (%2%)"
@@ -482,11 +482,11 @@ msgstr "Opšte"
 msgid "Hash database"
 msgstr "Hash baze podataka"
 
-#: dcpp\HashManager.cpp:602
+#: dcpp\HashManager.cpp:625
 msgid "Hash database rebuilt"
 msgstr "Obnavaljam hash bazu podataka"
 
-#: dcpp\HashManager.cpp:67 dcpp\HashManager.cpp:260
+#: dcpp\HashManager.cpp:68 dcpp\HashManager.cpp:261
 #, boost-format
 msgid "Hashing failed: %1%"
 msgstr "Hashovanje nije uspelo: %1%"
@@ -562,7 +562,7 @@ msgstr "Prekoračena maksimalna dužina komande"
 msgid "Missing dependencies for %1%"
 msgstr "Nedostaju zavisnosti za %1%"
 
-#: dcpp\Streams.h:140
+#: dcpp\Streams.h:160
 msgid "More bytes written than requested"
 msgstr "Više bajtova zapisano nego što je traženo"
 
@@ -601,7 +601,7 @@ msgstr "Ne osluškujem konekcije - molim restartujte %1%"
 
 #: dcpp\ClientManager.cpp:174 dcpp\FinishedManager.cpp:131
 #: dcpp\FinishedManager.cpp:137 dcpp\FinishedManager.cpp:143
-#: dcpp\SearchManager.cpp:256 dcpp\SearchManager.cpp:334 dcpp\Transfer.cpp:81
+#: dcpp\SearchManager.cpp:261 dcpp\SearchManager.cpp:338 dcpp\Transfer.cpp:81
 #: dcpp\Transfer.cpp:85
 msgid "Offline"
 msgstr "Nije na mreži"
@@ -706,7 +706,7 @@ msgstr "TLS onemogućen, nije izabrana datoteka za sertifikat"
 
 #: dcpp\SSLSocket.cpp:176
 msgid "TLS error"
-msgstr ""
+msgstr "TLS greška"
 
 #: dcpp\SearchManager.cpp:44
 msgid "TTH"
@@ -800,7 +800,7 @@ msgstr ""
 msgid "Unable to open filelist: %1%"
 msgstr "Ne mogu otvoriti listu datoteka: %1%"
 
-#: dcpp\HashManager.cpp:121
+#: dcpp\HashManager.cpp:122
 msgid "Unable to read hash data file"
 msgstr "Ne mogu da pročitam datoteku sa hash podatcima"
 

@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-01-30 17:00+0100\n"
-"PO-Revision-Date: 2013-01-22 20:54+0000\n"
+"POT-Creation-Date: 2013-03-04 13:16+0100\n"
+"PO-Revision-Date: 2013-02-25 10:41+0000\n"
 "Last-Translator: Guybrush88 <Unknown>\n"
 "Language-Team: Italian language <netcelli@gmail.com>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-01-30 15:44+0000\n"
-"X-Generator: Launchpad (build 16455)\n"
+"X-Launchpad-Export-Date: 2013-03-04 12:08+0000\n"
+"X-Generator: Launchpad (build 16514)\n"
 "X-Poedit-Country: ITALY\n"
 "X-Poedit-Language: Italian\n"
 
@@ -96,7 +96,7 @@ msgid "%1% is too old, contact the plugin author for an update"
 msgstr ""
 "%1% è troppo vecchio, contatta l'autore del plugin per un aggiornamento"
 
-#: dcpp\HashManager.cpp:675
+#: dcpp\HashManager.cpp:698
 #, boost-format
 msgid ""
 "%1% not shared; calculated CRC32 does not match the one found in SFV file."
@@ -186,18 +186,18 @@ msgstr "Qualsiasi"
 msgid "Audio"
 msgstr "Audio"
 
-#: dcpp\QueueManager.cpp:1627
+#: dcpp\QueueManager.cpp:1649
 msgid "CRC32 inconsistency (SFV-Check)"
 msgstr "Inconsistenza CRC32 (Controllo SFV)"
 
-#: dcpp\QueueManager.cpp:1618
+#: dcpp\QueueManager.cpp:1640
 #, boost-format
 msgid "CRC32 inconsistency (SFV-Check): %1%"
 msgstr "Inconsistenza CRC32 (SFV-Check): %1%"
 
 #: dcpp\SearchManager.cpp:38
 msgid "Compressed"
-msgstr "Compresso"
+msgstr "Archivio"
 
 #: dcpp\BufferedSocket.cpp:205 dcpp\SSLSocket.cpp:158 dcpp\SSLSocket.cpp:165
 msgid "Connection closed"
@@ -337,7 +337,7 @@ msgstr "Trasferimento cifrato"
 msgid "Endless redirection loop (%1%)"
 msgstr "Ciclo infinito di reindirizzamento (%1%)"
 
-#: dcpp\HashManager.cpp:523
+#: dcpp\HashManager.cpp:546
 #, boost-format
 msgid "Error creating hash data file: %1%"
 msgstr "Errore nella creazione  del file di indice %1%"
@@ -358,7 +358,7 @@ msgstr "Errore durante la decompressione"
 msgid "Error generating certificate"
 msgstr "Errore nel generare il certificato"
 
-#: dcpp\HashManager.cpp:680
+#: dcpp\HashManager.cpp:703
 #, boost-format
 msgid "Error hashing %1%: %2%"
 msgstr "Errore durante l'indicizzazione di %1%: %2%"
@@ -368,7 +368,7 @@ msgstr "Errore durante l'indicizzazione di %1%: %2%"
 msgid "Error loading %1%: %2%"
 msgstr "Errore durante il caricamento di %1%: %2%"
 
-#: dcpp\HashManager.cpp:108 dcpp\HashManager.cpp:315
+#: dcpp\HashManager.cpp:109 dcpp\HashManager.cpp:316
 #, boost-format
 msgid "Error saving hash data: %1%"
 msgstr "Errore durante il salvataggio del file di indice: %1%"
@@ -434,17 +434,17 @@ msgstr ""
 msgid "File already exists at the target location"
 msgstr "Il file esiste già nella destinazione"
 
-#: dcpp\ShareManager.cpp:833
+#: dcpp\ShareManager.cpp:846
 #, boost-format
 msgid "File list %1% generated"
-msgstr "Lista file %1% generata"
+msgstr "Elenco dei file %1% generato"
 
-#: dcpp\ShareManager.cpp:713
+#: dcpp\ShareManager.cpp:715
 #, boost-format
 msgid "File list refresh failed: %1%"
 msgstr "Aggiornamento elenco dei file condivisi fallito: %1%"
 
-#: dcpp\ShareManager.cpp:761
+#: dcpp\ShareManager.cpp:775
 msgid "File list refresh finished"
 msgstr "Aggiornamento dell'elenco dei file condivisi completato"
 
@@ -456,21 +456,21 @@ msgstr ""
 "Aggiornamento elenco file in corso, attendi che il processo termini prima di "
 "riprovare ad aggiornare l'elenco dei file"
 
-#: dcpp\ShareManager.cpp:736
+#: dcpp\ShareManager.cpp:743
 msgid "File list refresh initiated"
 msgstr "Aggiornamento dell'elenco dei file condivisi iniziato"
 
-#: dcpp\HashManager.cpp:80
+#: dcpp\HashManager.cpp:81
 #, boost-format
 msgid "Finished hashing: %1%"
 msgstr "Indicizzazione completata: %1%"
 
-#: dcpp\HashManager.cpp:74
+#: dcpp\HashManager.cpp:75
 #, boost-format
 msgid "Finished hashing: %1% (%2% at %3%/s)"
 msgstr "Indicizzazione completata: %1% (%2% a %3%/s)"
 
-#: dcpp\HashManager.cpp:77
+#: dcpp\HashManager.cpp:78
 #, boost-format
 msgid "Finished hashing: %1% (%2%)"
 msgstr "Indicizzazione completata: %1% (%2%)"
@@ -491,11 +491,11 @@ msgstr "Generico"
 msgid "Hash database"
 msgstr "Database delle indicizzazioni"
 
-#: dcpp\HashManager.cpp:602
+#: dcpp\HashManager.cpp:625
 msgid "Hash database rebuilt"
 msgstr "Ricostruito il database delle indicizzazioni"
 
-#: dcpp\HashManager.cpp:67 dcpp\HashManager.cpp:260
+#: dcpp\HashManager.cpp:68 dcpp\HashManager.cpp:261
 #, boost-format
 msgid "Hashing failed: %1%"
 msgstr "Indicizzazione fallita: %1%"
@@ -571,7 +571,7 @@ msgstr "Massima lunghezza comando superata"
 msgid "Missing dependencies for %1%"
 msgstr "Dipendenze mancanti per %1%"
 
-#: dcpp\Streams.h:140
+#: dcpp\Streams.h:160
 msgid "More bytes written than requested"
 msgstr "Sono stati scritti piu byte del necessario"
 
@@ -610,7 +610,7 @@ msgstr "Nessun ascolto per la connessione - riavviare %1%"
 
 #: dcpp\ClientManager.cpp:174 dcpp\FinishedManager.cpp:131
 #: dcpp\FinishedManager.cpp:137 dcpp\FinishedManager.cpp:143
-#: dcpp\SearchManager.cpp:256 dcpp\SearchManager.cpp:334 dcpp\Transfer.cpp:81
+#: dcpp\SearchManager.cpp:261 dcpp\SearchManager.cpp:338 dcpp\Transfer.cpp:81
 #: dcpp\Transfer.cpp:85
 msgid "Offline"
 msgstr "Non in linea"
@@ -819,7 +819,7 @@ msgstr ""
 msgid "Unable to open filelist: %1%"
 msgstr "Impossibile aprire elenco dei file condivisi :%1%"
 
-#: dcpp\HashManager.cpp:121
+#: dcpp\HashManager.cpp:122
 msgid "Unable to read hash data file"
 msgstr "Impossibile leggere il file di indice"
 
