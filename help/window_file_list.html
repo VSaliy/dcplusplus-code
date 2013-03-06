@@ -40,7 +40,10 @@ list. Its visibility is controlled by the "Find" button.
 <dl style="margin-left: 40px;">
   <dt>Text-box and method selection drop-down (left)</dt>
   <dd cshelp="IDH_FILE_LIST_SEARCH_BOX">Enter your search terms here. The most recent searches can
-  be accessed by unfolding the list contained within this box.</dd>
+  be accessed by unfolding the list contained within this box. Select the desired matching method
+  from the dropdown in the right. Available modes are: excact word match, partial word match or 
+  match a <a href="http://www.regular-expressions.info" target="_blank" class="external">regular 
+  expression</a>.</dd>
   <dt><img src="Left.ico" width="16" height="16" alt="Previous"/> Previous</dt>
   <dd cshelp="IDH_FILE_LIST_FIND_PREV">Find items that match the search strings specified in the
   text-box. The search starts from the current selection and goes backwards.</dd>
@@ -51,7 +54,7 @@ list. Its visibility is controlled by the "Find" button.
 
 <h2>Folder list (left)</h2>
 <p cshelp="IDH_FILE_LIST_DIRS">
-Folders available in the current file list. Left-click on a folder to show the contents of that folder in the window on the right; right-click to open a menu that allows you to download the whole folder.
+Folders available in the current file list. Left-click on a folder to show the contents of that folder in the window on the right; right-click to open a menu that allows you to download the whole folder or access user related menu commands.
 </p>
 
 <h2>Contents (right)</h2>
@@ -82,6 +85,13 @@ Shows the contents of the folder selected in the folder list (window on the left
     <!--#include virtual="commands_viewastext.inc" -->
   </dd>
 </dl>
+<dl style="margin-left: 40px;">
+  <dt>User <b>&gt;</b></dt>
+  <dd>
+    <!--#include virtual="commands_user_general.inc" -->
+  </dd>
+</dl>
+<!--#include virtual="commands_copy.inc" -->
 
 <h2>Status bar (bottom)</h2>
 <dl style="margin-left: 40px;">

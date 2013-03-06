@@ -94,8 +94,8 @@ options(0)
 
 	options = grid->addChild(WinUtil::Seeds::Dialog::optionsTable);
 
-	grid->addChild(Label::Seed(T_("Under construction, restart DC++ to see effects...")));
-	grid->addChild(Label::Seed(T_("Experimental feature, don't consider DC++ secure in any way")));
+	grid->addChild(Label::Seed(T_("These options require that you restart DC++.")));
+	grid->addChild(Label::Seed(T_("Note: TLS might not protect search results and non-keyprinted hubs.")));
 
 	PropPage::read(items);
 	PropPage::read(listItems, options);
