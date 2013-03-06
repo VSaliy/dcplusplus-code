@@ -26,7 +26,9 @@
 	<dt><untranslated>ADLSearch.xml</untranslated></dt>
 	<dd>This file stores your defined ADLSearch queries.</dd>
 	<dt><untranslated>Users.xml</untranslated></dt>
-	<dd>This is a temporary file storing some user nicks to be able to display nicks correctly in the program interface when the users are offline.</dd>
+	<dd>This is a temporary file for storing some user nicks to be able to display nicks correctly in the program interface when the users are offline.</dd>
+	<dt><untranslated>Plugins.xml</untranslated></dt>
+	<dd>This file contains the list of installed plugins and their specific settings.</dd>
 	<dt><untranslated>Notepad.txt</untranslated></dt>
 	<dd>This stores the contents of the <a href="window_notepad.html">Notepad window</a>. Through this file the text can be kept across sessions.</dd>
 	<dt><untranslated>DcppBoot.xml</untranslated></dt>
@@ -66,7 +68,7 @@ The actual location of the files depend on the contents of the file called <i>dc
 </ol>
 <p><u>Warning</u>: do not unpack the portable (zipped) version of DC++ under the Program Files folder if you use <u>Windows Vista or later</u> unless you have the UAC service completely disabled. Doing so may cause loss of settings and/or unfinished downloads due to <a href="http://windowsteamblog.com/windows/b/developers/archive/2009/08/04/user-account-control-data-redirection.aspx" target="_blank" class="external">Microsoft's User Account Control Data Redirection technology</a>.</p>
 
-<h2>How do I move my incomplete downloads and other (temporary) data of DC++ to another installation?</h2>
+<h2>How do I move my incomplete downloads, plugins configuration and other (temporary) data of DC++ to another installation?</h2>
 <p>To be able to continue your unfinished downloads you must copy the unfinished (.dctmp) files to the new installation. The location of these files depend on the <a href="settings_downloads.html#unfdwnlddir">Unfinished downloads directory settings</a>. You must put the unfinished files to the default unfinished folder of the new DC++ installation or copy them to any folder you like and set it as a directory for <a href="settings_downloads.html#unfdwnlddir">Unfinished downloads</a> in DC++ settings. Close DC++ while you copy the files!</p>
 <p><u>Warning</u>: Do not connect to hubs and start downloading before you copied the unfinshed files. This can reset some of your downloads so they'll lost their progress and will start from the beginning. In this case you have to overwrite the newly created unfinished files with the ones from the previous installation and use 'Recheck Integrity' menu command in the Download Queue to get back your progress.</p>
 <p>There are some other data you may want to move to the new installation :</p>
@@ -74,6 +76,7 @@ The actual location of the files depend on the contents of the file called <i>dc
 	<li><u>Security certificates</u> : you may need to move your own or generated certificate files to have them when you log on to secure hubs. Their location is set in the <a href="settings_certs.html">Security Cerificates</a> panel. By default they are in a subfolder named 'Certificates' which located at the same folder as your settings files.</li>
 	<li><u>Cached hublists</u> : its possible that you won't be able to download some of your old hublists with the new installation (they can be permanently unavailable, discontinued, etc...). To avoid loss of your favourite hublists you can copy their cached versions. You can find them in in a subfolder named 'HubLists' located at the DC++ temporary data folder (see below).</li>
 	<li><u>Saved filelists</u> : if you keep downloaded filelists you can move them as well. Just copy the contents of the subfolder named 'FileLists' located at the DC++ temporary data folder (see below).</li>
+	<li><u>Plugin settings</u> : to move the settings specific to your installed plugins you need to copy the file named 'Plugins.xml'. Note that the only way of reusing the plugin settings is to copy every plugin binary file to the very same path as they were before in the old installation.</li>
 </ul>
 <p>The actual location of the temporary data folder corelates with the location of settings files <a href="#location">(described above)</a>: </p>
 <ul>

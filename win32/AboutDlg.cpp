@@ -49,16 +49,16 @@ static const char thanks[] = "Big thanks to all donators and people who have con
 "The following people have contributed code to DC++ (I hope I haven't missed someone, they're "
 "roughly in chronological order...=):\r\n"
 "geoff, carxor, luca rota, dan kline, mike, anton, zc, sarf, farcry, kyrre aalerud, opera, "
-"patbateman, xeroc, fusbar, vladimir marko, kenneth skovhede, ondrea, todd pederzani, who, "
+"patbateman, xeroc, fusbar, vladimir marko, kenneth skovhede, ondrea, who, "
 "sedulus, sandos, henrik engstr\303\266m, dwomac, robert777, saurod, atomicjo, bzbetty, orkblutt, "
 "distiller, citruz, dan fulger, cologic, christer palm, twink, ilkka sepp\303\244l\303\244, johnny, ciber, "
 "theparanoidone, gadget, naga, tremor, joakim tosteberg, pofis, psf8500, lauris ievins, "
 "defr, ullner, fleetcommand, liny, xan, olle svensson, mark gillespie, jeremy huddleston, "
 "bsod, sulan, jonathan stone, tim burton, izzzo, guitarm, paka, nils maier, jens oknelid, yoji, "
 "krzysztof tyszecki, poison, mikejj, pur, bigmuscle, martin, jove, bart vullings, "
-"steven sheehy, tobias nygren, poy, dorian, stephan hohe, mafa_45, mikael eman, james ross, "
+"steven sheehy, tobias nygren, dorian, stephan hohe, mafa_45, mikael eman, james ross, "
 "stanislav maslovski, david grundberg, pavel andreev, yakov suraev, kulmegil, smir, emtee, individ, "
-"pseudonym, crise, ben, ximin luo, radox, razzloss, andrew browne, darkklor, vasily.n, netcelli, "
+"pseudonym, crise, ben, ximin luo, razzloss, andrew browne, darkklor, vasily.n, netcelli, "
 "gennady proskurin, iceman50, flow84, alexander sashnov, yorhel, irainman. Keep it coming!";
 
 AboutDlg::AboutDlg(dwt::Widget* parent) :
@@ -98,7 +98,7 @@ bool AboutDlg::handleInitDialog() {
 		cur->addChild(Label::Seed(WinUtil::createIcon(IDI_DCPP, 48)));
 
 		ls.caption = Text::toT(dcpp::fullVersionString) + _T("\n(c) Copyright 2001-2013 Jacek Sieka\n");
-		ls.caption += T_("Ex-codeveloper: Per Lind\303\251n\nGraphics: Martin Skogevall et al.\nDC++ is licenced under GPL");
+		ls.caption += T_("Leading project contributor: poy\nEx-project contributor: Todd Pederzani\nEx-codeveloper: Per Lind\303\251n\nOriginal DC++ logo design: Martin Skogevall\nGraphics: Radox and various GPL and CC authors\n\nDC++ is licenced under GPL.");
 		cur->addChild(ls);
 
 		cur->addChild(Link::Seed(_T("http://dcplusplus.sourceforge.net/"), true));
