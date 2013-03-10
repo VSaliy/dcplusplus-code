@@ -11,8 +11,9 @@ int dwtMain(dwt::Application& app)
 	window->create();
 	window->onClosing([] { return ::PostQuitMessage(0), true; });
 
-	auto tree = window->addChild(dwt::Tree::Seed());
-	//tree.setHeaderVisible(true);
+	dwt::Tree::Seed seed;
+	seed.style |= TVS_HASBUTTONS | TVS_LINESATROOT;
+	auto tree = window->addChild(seed);
 
 	tree->addColumn(_T("Column 1"), 200, dwt::Column::LEFT);
 	tree->addColumn(_T("Column 2"), 200, dwt::Column::CENTER);

@@ -226,8 +226,14 @@ Rectangle Tree::getItemRect(HTREEITEM item) {
 }
 
 HeaderPtr Tree::getHeader() {
-	if(header == NULL) {
+	if(!header) {
 		header = WidgetCreator<Header>::create(this);
+		header->setFont(getFont());
+
+		// todo if col 0 was dragged, reset texts...
+		header->onRaw([this](WPARAM, LPARAM) -> LRESULT { tree->redraw(); return 0; }, Message(WM_NOTIFY, HDN_ENDDRAG));
+		header->onRaw([this](WPARAM, LPARAM) -> LRESULT { tree->redraw(); return 0; }, Message(WM_NOTIFY, HDN_ITEMCHANGED));
+
 		layout();
 	}
 
@@ -306,12 +312,20 @@ std::vector<Column> Tree::getColumnsImpl() const {
 	for(size_t i = 0; i < ret.size(); ++i) {
 		ret[i] = getColumn(i);
 	}
-
 	return ret;
 }
 
 std::vector<int> Tree::getColumnOrderImpl() const {
-	return std::vector<int>(); // TODO
+	std::vector<int> ret;
+	if(!header) {
+		return ret;
+	}
+	
+	ret.resize(getColumnCount());
+	if(!Header_GetOrderArray(header->handle(), ret.size(), ret.data())) {
+		ret.clear();
+	}
+	return ret;
 }
 
 void Tree::setColumnOrderImpl(const std::vector<int>& columns) {
@@ -319,44 +333,51 @@ void Tree::setColumnOrderImpl(const std::vector<int>& columns) {
 }
 
 std::vector<int> Tree::getColumnWidthsImpl() const {
-	return std::vector<int>(); // TODO
+	std::vector<int> ret;
+	if(!header) {
+		return ret;
+	}
+	
+	ret.resize(getColumnCount());
+	for(size_t i = 0; i < ret.size(); ++i) {
+		ret[i] = header->getWidth(i);
+	}
+	return ret;
 }
 
 void Tree::setColumnWidthImpl(unsigned column, int width) {
 	// TODO
 }
 
-static const int INSET = 3;
-
 LRESULT Tree::prePaint(NMTVCUSTOMDRAW& nmcd) {
 	return CDRF_NOTIFYITEMDRAW | CDRF_NOTIFYPOSTPAINT;
 }
 
 LRESULT Tree::prePaintItem(NMTVCUSTOMDRAW& nmcd) {
-	// Clip the default item drawing to the column width
+	// Clip the default item (column 0) drawing to the column width
 	auto clipRect = nmcd.nmcd.rc;
-	auto w = header->getWidth(0);
+	auto w = header->getWidth(Header_OrderToIndex(header->handle(), 0));
 	clipRect.right = clipRect.left + w;
 
-	auto hRgn = ::CreateRectRgn (clipRect.left, clipRect.top, clipRect.right, clipRect.bottom);
+	Region region { clipRect };
 	POINT pt = { 0 };
 
-	auto hDC = nmcd.nmcd.hdc;
-	::GetWindowOrgEx(hDC, &pt);
-	::OffsetRgn (hRgn, -pt.x, -pt.y);
-	::SelectClipRgn (hDC, hRgn);
-	::DeleteObject (hRgn);
+	FreeCanvas canvas { nmcd.nmcd.hdc };
+	::GetWindowOrgEx(canvas.handle(), &pt);
+	::OffsetRgn(region.handle(), -pt.x, -pt.y);
+	::SelectClipRgn(canvas.handle(), region.handle());
 
-	::SaveDC(hDC);
+	::SaveDC(canvas.handle());
 	return CDRF_DODEFAULT | CDRF_NOTIFYPOSTPAINT;
 }
 
 LRESULT Tree::postPaintItem(NMTVCUSTOMDRAW& nmcd) {
-	auto hDC = nmcd.nmcd.hdc;
-	::RestoreDC (hDC, -1);
+	FreeCanvas canvas { nmcd.nmcd.hdc };
+
+	::RestoreDC(canvas.handle(), -1);
 
 	// Remove previously set clip region
-	::SelectClipRgn(hDC, NULL);
+	::SelectClipRgn(canvas.handle(), nullptr);
 
 	auto item = (HTREEITEM)nmcd.nmcd.dwItemSpec;
 
@@ -364,25 +385,23 @@ LRESULT Tree::postPaintItem(NMTVCUSTOMDRAW& nmcd) {
 
 	auto clientSize = tree->getClientSize();
 
-	int x = header->getWidth(0);
+	int x = header->getWidth(Header_OrderToIndex(header->handle(), 0));
 	auto columns = getColumnCount();
 
-	::SetTextColor(hDC, nmcd.clrText);
-	::SetBkColor(hDC, nmcd.clrTextBk);
+	canvas.setTextColor(nmcd.clrText);
+	canvas.setBkColor(nmcd.clrTextBk);
+	auto selectFont(canvas.select(*getFont()));
 
 	for(size_t i = 1; i < columns; ++i) {
-		auto width = header->getWidth(i);
+		auto index = Header_OrderToIndex(header->handle(), i);
+		auto width = header->getWidth(index);
 
-		RECT rect = { x, nmcd.nmcd.rc.top, x + width, nmcd.nmcd.rc.bottom };
+		if(width > 0) {
+			Rectangle rect { x, nmcd.nmcd.rc.top, width, nmcd.nmcd.rc.bottom - nmcd.nmcd.rc.top };
 
-		rect.left += INSET - 1;
-
-		if (rect.left < rect.right) {
-			auto text = getText(item, i);
-
-			if (!text.empty()) {
-				int flags = DT_NOPREFIX | DT_SINGLELINE | DT_VCENTER | DT_END_ELLIPSIS;
-				::DrawText (hDC, text.c_str(), text.size (), &rect, flags);
+			auto text = getText(item, index);
+			if(!text.empty()) {
+				canvas.drawText(text, rect, DT_SINGLELINE | DT_VCENTER | DT_NOPREFIX | DT_END_ELLIPSIS);
 			}
 		}
 
@@ -398,7 +417,7 @@ LRESULT Tree::postPaint(NMTVCUSTOMDRAW& nmcd) {
 }
 
 LRESULT Tree::draw(NMTVCUSTOMDRAW& nmcd) {
-	if(nmcd.nmcd.rc.left >= nmcd.nmcd.rc.right || nmcd.nmcd.rc.top >= nmcd.nmcd.rc.bottom || getColumnCount() < 2) {
+	if(!header || nmcd.nmcd.rc.left >= nmcd.nmcd.rc.right || nmcd.nmcd.rc.top >= nmcd.nmcd.rc.bottom) {
 		return CDRF_DODEFAULT;
 	}
 

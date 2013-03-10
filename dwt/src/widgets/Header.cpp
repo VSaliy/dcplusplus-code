@@ -36,7 +36,8 @@ namespace dwt {
 const TCHAR Header::windowClass[] = WC_HEADER;
 
 Header::Seed::Seed() :
-BaseType::Seed(WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS)
+	/// @todo add HDS_DRAGDROP when the tree has better support for col ordering
+	BaseType::Seed(WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS)
 {
 }
 
