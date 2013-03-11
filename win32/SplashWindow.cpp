@@ -31,6 +31,7 @@
 
 SplashWindow::SplashWindow() :
 	dwt::Window(0),
+	logoRot(0),
 	progress(0)
 {
 	// 256x icons only work on >= Vista. on failure, try loading a 48x image.
@@ -73,6 +74,7 @@ void SplashWindow::operator()(float progress) {
 void SplashWindow::draw() {
 	auto text = status;
 	if(progress) { text += _T(" [") + Text::toT(Util::toString(progress * 100.)) + _T("%]"); }
+	logoRot = (logoRot + 1) % 4;
 
 	// set up sizes.
 	const long spacing { 6 }; // space between the icon and the text
@@ -80,6 +82,7 @@ void SplashWindow::draw() {
 	const auto textSize = getTextSize(text) + padding + padding;
 	SIZE size { std::max(iconSize, textSize.x), iconSize + spacing + textSize.y };
 	dwt::Rectangle textRect { std::max(iconSize - textSize.x, 0L) / 2, size.cy - textSize.y, textSize.x, textSize.y };
+	dwt::Rectangle iconRect { std::max(textSize.x - iconSize, 0L) / 2, 0, iconSize, iconSize };
 
 	dwt::UpdateCanvas windowCanvas { this };
 	dwt::CompatibleCanvas canvas { windowCanvas.handle() };
@@ -90,8 +93,46 @@ void SplashWindow::draw() {
 	dwt::Bitmap bitmap { ::CreateDIBSection(windowCanvas.handle(), &info, DIB_RGB_COLORS, &reinterpret_cast<void*&>(bits), 0, 0) };
 	auto select(canvas.select(bitmap));
 
+	auto bit = [&](long x, long y) -> RGBQUAD& { return bits[x + y * size.cx]; };
+
 	// draw the icon.
-	canvas.drawIcon(icon, dwt::Rectangle(std::max(textSize.x - iconSize, 0L) / 2, 0, iconSize, iconSize));
+	canvas.drawIcon(icon, iconRect);
+
+	// rotate the icon by swapping its bits, quarter by quarter (just because I can).
+	auto iconBit = [&](long x, long y) -> RGBQUAD& { return bit(iconRect.left() + x, iconRect.top() + y); };
+	for(long y = 0; y < iconSize / 2; ++y) {
+		for(long x = 0; x < iconSize / 2; ++x) {
+			auto &bit1 = iconBit(x, y), &bit3 = iconBit(iconSize - 1 - x, iconSize - 1 - y),
+				&bit2 = iconBit(y, iconSize - 1 - x), &bit4 = iconBit(iconSize - 1 - y, x);
+			switch(logoRot) {
+			case 0: break; // identity
+			case 1: // 90
+				{
+					auto prev = bit1;
+					bit1 = bit2;
+					bit2 = bit3;
+					bit3 = bit4;
+					bit4 = prev;
+					break;
+				}
+			case 2: // 180
+				{
+					std::swap(bit1, bit3);
+					std::swap(bit2, bit4);
+					break;
+				}
+			case 3: // 270
+				{
+					auto prev = bit1;
+					bit1 = bit4;
+					bit4 = bit3;
+					bit3 = bit2;
+					bit2 = prev;
+					break;
+				}
+			}
+		}
+	}
 
 	// draw text borders and fill the text background.
 	::RECT rc = textRect;
@@ -108,10 +149,10 @@ void SplashWindow::draw() {
 	long pos = textRect.left() + progress * static_cast<float>(textRect.width());
 	for(long y = textRect.top(), yn = textRect.bottom(); y < yn; ++y) {
 		for(long x = textRect.left(); x < pos; ++x) {
-			bits[x + y * size.cx].rgbReserved = 191;
+			bit(x, y).rgbReserved = 191;
 		}
 		for(long x = pos, xn = textRect.right(); x < xn; ++x) {
-			bits[x + y * size.cx].rgbReserved = 255;
+			bit(x, y).rgbReserved = 255;
 		}
 	}
 

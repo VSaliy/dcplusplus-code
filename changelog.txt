@@ -1,3 +1,5 @@
+* Rotate the icon while DC++ is loading (poy)
+
 -- 0.811 2013-03-04 --
 * Fix status bar parts when the window is too small (poy)
 * [L#534440] [NMDC] Preserve encodings in some search results (poy)
