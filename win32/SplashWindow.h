@@ -34,6 +34,7 @@ private:
 
 	long iconSize;
 	dwt::IconPtr icon;
+	uint32_t logoRot;
 
 	tstring status;
 	float progress;
