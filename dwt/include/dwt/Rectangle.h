@@ -85,6 +85,8 @@ struct Rectangle {
 
 	long height() const { return size.y; }
 
+	bool contains(const Point& pt) const;
+
 	const Point& upperLeft() const { return pos; }
 
 	/// Return the lower right point of the rectangle.

@@ -49,6 +49,11 @@ Rectangle::operator ::RECT() const {
 	return toRECT();
 }
 
+bool Rectangle::contains(const Point& pt) const {
+	auto rect = toRECT();
+	return ::PtInRect(&rect, pt);
+}
+
 Rectangle Rectangle::subRect( double xFraction, double yFraction,
 				double widthFraction, double heightFraction ) const
 {

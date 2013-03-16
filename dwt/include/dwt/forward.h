@@ -170,6 +170,9 @@ typedef StatusBar* StatusBarPtr;
 class Table;
 typedef Table* TablePtr;
 
+class TableTree;
+typedef TableTree* TableTreePtr;
+
 class TabView;
 typedef TabView* TabViewPtr;
 

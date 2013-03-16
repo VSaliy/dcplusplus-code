@@ -30,7 +30,8 @@ int dwtMain(dwt::Application& app)
 
 	table->insert(rows);
 
-	table->resize(dwt::Rectangle(window->getClientSize()));
+	table->resize(window->getClientSize());
+	window->onSized([=](const dwt::SizedEvent&) { table->resize(window->getClientSize()); });
 
 	app.run();
 

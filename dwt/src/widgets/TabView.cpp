@@ -901,8 +901,7 @@ void TabView::draw(Canvas& canvas, unsigned index, Rectangle&& rect, bool isSele
 
 bool TabView::inCloseRect(const ScreenCoordinate& pos) const {
 	if(closeRect.width() > 0 && closeRect.height() > 0) {
-		::RECT rc(closeRect);
-		return ::PtInRect(&rc, pos.getPoint());
+		return closeRect.contains(pos.getPoint());
 	}
 	return false;
 }
