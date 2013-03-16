@@ -268,7 +268,7 @@ void UserMatchPage::handleEditClicked() {
 }
 
 void UserMatchPage::handleMoveUpClicked() {
-	HoldRedraw hold(table);
+	HoldRedraw hold { table };
 	auto sel = table->getSelection();
 	for(auto i: sel) {
 		if(i > 0) {
@@ -285,7 +285,7 @@ void UserMatchPage::handleMoveUpClicked() {
 }
 
 void UserMatchPage::handleMoveDownClicked() {
-	HoldRedraw hold(table);
+	HoldRedraw hold { table };
 	auto sel = table->getSelection();
 	for(auto i: sel | boost::adaptors::reversed) {
 		if(i < table->size() - 1) {

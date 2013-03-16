@@ -235,7 +235,7 @@ void StringListDlg::handleAddClicked() {
 }
 
 void StringListDlg::handleMoveUpClicked() {
-	HoldRedraw hold(list);
+	HoldRedraw hold { list };
 	auto selected = list->getSelection();
 	for(auto i: selected) {
 		if(i > 0) {
@@ -248,7 +248,7 @@ void StringListDlg::handleMoveUpClicked() {
 }
 
 void StringListDlg::handleMoveDownClicked() {
-	HoldRedraw hold(list);
+	HoldRedraw hold { list };
 	auto selected = list->getSelection();
 	for(auto i: selected | boost::adaptors::reversed) {
 		if(i < list->size() - 1) {

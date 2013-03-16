@@ -610,7 +610,7 @@ void SearchFrame::updateList() {
 	auto filterPrep = filter.prepare();
 	auto filterInfoF = [this, &i](int column) { return Text::fromT(i->getText(column)); };
 
-	HoldRedraw h(results);
+	HoldRedraw h { results };
 	results->clear();
 	for(; i != searchResults.end(); ++i) {
 		if(filter.empty() || filter.match(filterPrep, filterInfoF)) {

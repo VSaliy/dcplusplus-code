@@ -162,8 +162,8 @@ bool QueueFrame::handleKeyDownFiles(int c) {
 }
 
 void QueueFrame::addQueueList(const QueueItem::StringMap& li) {
-	HoldRedraw hold(files);
-	HoldRedraw hold2(dirs);
+	HoldRedraw hold { files };
+	HoldRedraw hold2 { dirs };
 
 	for(auto& i: li) {
 		QueueItem* aQI = i.second;
@@ -274,7 +274,7 @@ void QueueFrame::addQueueItem(QueueItemPtr&& ii, bool single) {
 }
 
 void QueueFrame::updateFiles() {
-	HoldRedraw hold(files);
+	HoldRedraw hold { files };
 
 	files->clear();
 

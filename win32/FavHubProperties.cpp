@@ -207,7 +207,7 @@ void FavHubProperties::handleOKClicked() {
 void FavHubProperties::handleGroups() {
 	FavHubGroupsDlg(this, entry).run();
 
-	HoldRedraw hold(groups);
+	HoldRedraw hold { groups };
 	groups->clear();
 	fillGroups();
 }

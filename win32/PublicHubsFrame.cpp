@@ -291,7 +291,7 @@ void PublicHubsFrame::updateList() {
 	auto filterPrep = filter.prepare();
 	auto filterInfoF = [this, &i](int column) { return getText(*i, column); };
 
-	HoldRedraw hold(hubs);
+	HoldRedraw hold { hubs };
 	hubs->clear();
 	for(; i != iend; ++i) {
 		if(filter.empty() || filter.match(filterPrep, filterInfoF)) {

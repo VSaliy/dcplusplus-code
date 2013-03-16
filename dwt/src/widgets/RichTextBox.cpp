@@ -215,7 +215,7 @@ int RichTextBox::fixupLineEndings(tstring::const_iterator begin, tstring::const_
 
 void RichTextBox::setTextA(const std::string& txt) {
 	{
-		util::HoldRedraw hold(this);
+		util::HoldRedraw hold { this };
 		setTextEx(txt, ST_DEFAULT);
 		sendMessage(WM_VSCROLL, SB_TOP);
 	}
@@ -241,7 +241,7 @@ void RichTextBox::addTextSteady(const tstring& txtRaw) {
 	bool scroll = scrollIsAtEnd();
 
 	{
-		util::HoldRedraw hold(this);
+		util::HoldRedraw hold { this };
 		std::pair<int, int> cr = getCaretPosRange();
 		std::string txt = escapeUnicode(txtRaw);
 
@@ -359,7 +359,7 @@ tstring RichTextBox::rtfEscape(const tstring& str) {
 }
 
 void RichTextBox::updateColors(COLORREF text, COLORREF background, bool updateFont) {
-	util::HoldRedraw hold(this);
+	util::HoldRedraw hold { this };
 
 	/* when changing the global formatting of a Rich Edit, its per-character formatting properties
 	may become funky depending on how they were initially set (the RTF context depth, for example,

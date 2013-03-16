@@ -621,7 +621,7 @@ void HubFrame::execTasks() {
 	updateUsers = false;
 	auto t = tasks.get();
 
-	HoldRedraw hold(users);
+	HoldRedraw hold { users };
 
 	for(auto& i: t) {
 		if(i.first == UPDATE_USER) {
@@ -1147,7 +1147,7 @@ void HubFrame::updateUserList(UserInfo* ui) {
 		}
 
 	} else {
-		HoldRedraw hold(users);
+		HoldRedraw hold { users };
 		users->clear();
 
 		if(filter.empty()) {

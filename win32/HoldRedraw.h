@@ -20,6 +20,6 @@
 #define DCPLUSPLUS_WIN32_HOLDREDRAW_H_
 
 #include <dwt/util/HoldRedraw.h>
-using dwt::util::HoldRedraw;;
+using dwt::util::HoldRedraw;
 
 #endif /*DCPLUSPLUS_WIN32_HOLDREDRAW_H_*/
