@@ -383,10 +383,10 @@ public:
 	std::pair<int, int> hitTest(const ScreenCoordinate& pt);
 
 	/// Returns the rect for the item per code (wraps ListView_GetItemRect)
-	Rectangle getRect(int item, int code);
+	Rectangle getRect(int row, int code);
 
 	/// Returns the rect for the subitem item per code (wraps ListView_GetSubItemRect)
-	Rectangle getRect(int item, int subitem, int code);
+	Rectangle getRect(int row, int col, int code);
 
 	/// Actually creates the Data Grid Control
 	/** You should call WidgetFactory::createTable if you instantiate class
@@ -585,22 +585,6 @@ inline void Table::eraseImpl( int row ) {
 
 inline size_t Table::sizeImpl() const {
 	return ListView_GetItemCount( handle() );
-}
-
-// Calculates the adjustment from the columns of an item.
-
-inline Rectangle Table::getRect( int item, int code )
-{
-	RECT r;
-	ListView_GetItemRect( handle(), item, &r, code );
-	return Rectangle(r);
-}
-
-inline Rectangle Table::getRect( int item, int subitem, int code )
-{
-	RECT r;
-	ListView_GetSubItemRect( handle(), item, subitem, code, &r );
-	return Rectangle(r);
 }
 
 inline bool Table::isAscending() const {

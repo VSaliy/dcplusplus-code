@@ -14,7 +14,8 @@ int dwtMain(dwt::Application& app)
 	split->addChild(dwt::Label::Seed(_T("Second row")));
 	split->addChild(dwt::Label::Seed(_T("Third row")));
 
-	split->resize(dwt::Rectangle(window->getClientSize()));
+	split->resize(window->getClientSize());
+	window->onSized([=](const dwt::SizedEvent&) { split->resize(window->getClientSize()); });
 
 	app.run();
 

@@ -35,7 +35,8 @@ int dwtMain(dwt::Application& app)
 		}
 	}
 
-	tree->resize(dwt::Rectangle(window->getClientSize()));
+	tree->resize(window->getClientSize());
+	window->onSized([=](const dwt::SizedEvent&) { tree->resize(window->getClientSize()); });
 
 	app.run();
 

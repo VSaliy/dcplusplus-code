@@ -642,4 +642,25 @@ void Table::setTooltips(TooltipF f) {
 	});
 }
 
+Rectangle Table::getRect(int row, int code) {
+	::RECT r;
+	ListView_GetItemRect(handle(), row, &r, code);
+	return Rectangle(r);
+}
+
+Rectangle Table::getRect(int row, int col, int code) {
+	::RECT r;
+	ListView_GetSubItemRect(handle(), row, col, code, &r);
+
+	// when asked for the column 0, Windows returns a rect for the whole item.
+	if(col == 0) {
+		::RECT colRect;
+		Header_GetItemRect(ListView_GetHeader(handle()), col, &colRect);
+		r.left = colRect.left;
+		r.right = colRect.right;
+	}
+
+	return Rectangle(r);
+}
+
 }
