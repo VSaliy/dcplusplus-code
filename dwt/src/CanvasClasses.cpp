@@ -132,7 +132,7 @@ void Canvas::line( const Point & start, const Point & end )
 void Canvas::line( const dwt::Rectangle & rect )
 {
 	moveTo( rect.pos );
-	dwt::Point lr( rect.lowRight() );
+	dwt::Point lr { rect.right(), rect.bottom() };
 	lineTo( lr.x, rect.pos.y );
 	lineTo( lr.x, lr.y );
 	lineTo( rect.x(), lr.y );
