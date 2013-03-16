@@ -132,6 +132,7 @@ private:
 		void update();
 
 		SearchResultList srs;
+		SearchInfo* parent;
 
 		tstring columns[COLUMN_LAST];
 	};
@@ -175,13 +176,12 @@ private:
 
 	bool onlyFree;
 	bool hideShared;
-	bool merge;
 
 	typedef TypedTable<HubInfo> WidgetHubs;
 	typedef WidgetHubs* WidgetHubsPtr;
 	WidgetHubsPtr hubs;
 
-	typedef TypedTable<SearchInfo, false> WidgetResults;
+	typedef TypedTable<SearchInfo, false, dwt::TableTree> WidgetResults;
 	typedef WidgetResults* WidgetResultsPtr;
 	WidgetResultsPtr results;
 
@@ -209,7 +209,6 @@ private:
 	void handlePurgeClicked();
 	void handleSlotsClicked();
 	void handleHideSharedClicked();
-	void handleMergeClicked();
 	LRESULT handleHubItemChanged(WPARAM wParam, LPARAM lParam);
 	bool handleKeyDown(int c);
 	bool handleContextMenu(dwt::ScreenCoordinate pt);

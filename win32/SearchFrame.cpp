@@ -31,6 +31,7 @@
 #include <dwt/widgets/FolderDialog.h>
 #include <dwt/widgets/Grid.h>
 #include <dwt/widgets/SplitterContainer.h>
+#include <dwt/widgets/TableTree.h>
 
 #include "HoldRedraw.h"
 #include "resource.h"
@@ -120,7 +121,6 @@ sizeMode(0),
 fileType(0),
 onlyFree(SETTING(SEARCH_ONLY_FREE_SLOTS)),
 hideShared(SETTING(SEARCH_FILTER_SHARED)),
-merge(SETTING(SEARCH_MERGE)),
 hubs(0),
 results(0),
 filter(resultsColumns, COLUMN_LAST, [this] { updateList(); }),
@@ -208,7 +208,7 @@ droppedResults(0)
 		}
 
 		gs.caption = T_("Search options");
-		cur = options->addChild(gs)->addChild(Grid::Seed(3, 1));
+		cur = options->addChild(gs)->addChild(Grid::Seed(2, 1));
 
 		CheckBox::Seed cs = WinUtil::Seeds::checkBox;
 		
@@ -223,12 +223,6 @@ droppedResults(0)
 		box->setHelpId(IDH_SEARCH_SHARE);
 		box->setChecked(hideShared);
 		box->onClicked([this, box] { hideShared = box->getChecked(); });
-
-		cs.caption = T_("Merge results for the same file");
-		box = cur->addChild(cs);
-		box->setHelpId(IDH_SEARCH_MERGE);
-		box->setChecked(merge);
-		box->onClicked([this, box] { merge = box->getChecked(); });
 
 		gs.caption = T_("Hubs");
 		group = options->addChild(gs);
@@ -467,7 +461,7 @@ void SearchFrame::SearchInfo::CheckTTH::operator()(SearchInfo* si) {
 	}
 }
 
-SearchFrame::SearchInfo::SearchInfo(const SearchResultPtr& aSR) {
+SearchFrame::SearchInfo::SearchInfo(const SearchResultPtr& aSR) : parent(nullptr) {
 	srs.push_back(aSR);
 	update();
 }
@@ -560,14 +554,12 @@ void SearchFrame::addResult(SearchResultPtr psr) {
 		return;
 	}
 
-	SearchInfo* si = nullptr;
+	SearchInfo* parent = nullptr;
 
 	// Check previous search results for dupes
-	for(auto i = searchResults.begin(), iend = searchResults.end(); !si && i != iend; ++i) {
-		auto& si2 = *i;
-
-		for(auto& j: si2.srs) {
-			auto& sr2 = *j;
+	for(auto& si2: searchResults) {
+		for(auto& psr2: si2.srs) {
+			auto& sr2 = *psr2;
 
 			bool sameUser = sr.getUser() == sr2.getUser();
 			if(sameUser && sr.getFile() == sr2.getFile()) {
@@ -578,25 +570,29 @@ void SearchFrame::addResult(SearchResultPtr psr) {
 					return; // dupe
 				}
 
-				if(merge) {
-					si2.srs.push_back(psr);
-					si2.update();
-					si = &si2;
-				}
+				si2.srs.push_back(psr);
+				si2.update();
+				parent = &si2;
 				break;
 			}
 		}
+		if(parent) {
+			break;
+		}
 	}
 
-	if(!si) {
-		searchResults.emplace_back(psr);
-		si = &searchResults.back();
-	}
+	searchResults.emplace_back(psr);
+	auto si = &searchResults.back();
+	si->parent = parent;
 
 	auto i = results->find(si);
 	if(filter.empty() || filter.match(filter.prepare(), [this, si](int column) { return Text::fromT(si->getText(column)); })) {
 		if(i == -1) {
-			results->insert(si);
+			if(parent) {
+				results->insertChild(reinterpret_cast<LPARAM>(parent), reinterpret_cast<LPARAM>(si));
+			} else {
+				results->insert(si);
+			}
 		} else {
 			results->update(i);
 		}
@@ -618,7 +614,11 @@ void SearchFrame::updateList() {
 	results->clear();
 	for(; i != searchResults.end(); ++i) {
 		if(filter.empty() || filter.match(filterPrep, filterInfoF)) {
-			results->insert(&*i);
+			if(i->parent) {
+				results->insertChild(reinterpret_cast<LPARAM>(i->parent), reinterpret_cast<LPARAM>(&*i));
+			} else {
+				results->insert(&*i);
+			}
 		}
 	}
 
@@ -753,7 +753,7 @@ void SearchFrame::handleRemove() {
 		auto data = results->getData(i);
 		results->erase(i);
 		if(data) {
-			searchResults.remove_if([data](const SearchInfo& si) { return &si == data; });
+			searchResults.remove_if([data](const SearchInfo& si) { return &si == data || si.parent == data; });
 		}
 	}
 
@@ -904,8 +904,6 @@ void SearchFrame::runSearch() {
 		SettingsManager::getInstance()->set(SettingsManager::SEARCH_ONLY_FREE_SLOTS, onlyFree);
 	if(hideShared != SETTING(SEARCH_FILTER_SHARED))
 		SettingsManager::getInstance()->set(SettingsManager::SEARCH_FILTER_SHARED, hideShared);
-	if(merge != SETTING(SEARCH_MERGE))
-		SettingsManager::getInstance()->set(SettingsManager::SEARCH_MERGE, merge);
 	if(initialType == SearchManager::TYPE_ANY) {
 		string text = Text::fromT(fileType->getText());
 		if(text != SETTING(LAST_SEARCH_TYPE))

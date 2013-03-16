@@ -94,7 +94,7 @@ const string SettingsManager::settingTags[] =
 	"MagnetRegister", "MinimizeToTray", "NoAwayMsgToBots", "NoIpOverride", "OpenUserCmdHelp",
 	"OwnerDrawnMenus", "PopupBotPms", "PopupHubPms", "PopupPMs", "PopunderFilelist", "PopunderPm",
 	"LowestPrio", "PromptPassword", "QueueFrameShowTree", "RequireTLS", "SearchFilterShared",
-	"SearchMerge", "SearchOnlyFreeSlots", "SegmentedDL", "SendBloom", "SendUnknownCommands",
+	"SearchOnlyFreeSlots", "SegmentedDL", "SendBloom", "SendUnknownCommands",
 	"SFVCheck", "ShareHidden", "ShowJoins", "ShowMenuBar", "ShowStatusbar", "ShowToolbar",
 	"ShowTransferview", "SkipZeroByte", "SocksResolve", "SortFavUsersFirst",
 	"StatusInChat", "TimeDependentThrottle", "TimeStamps",
@@ -307,7 +307,6 @@ SettingsManager::SettingsManager()
 	setDefault(CONFIRM_USER_REMOVAL, true);
 	setDefault(CONFIRM_ITEM_REMOVAL, true);
 	setDefault(CONFIRM_ADLS_REMOVAL, true);
-	setDefault(SEARCH_MERGE, true);
 	setDefault(TOOLBAR_SIZE, 20);
 	setDefault(TAB_WIDTH, 150);
 	setDefault(TAB_STYLE, TAB_STYLE_OD | TAB_STYLE_BROWSER);
