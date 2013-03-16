@@ -100,6 +100,10 @@ bool TableTree::handleMessage(const MSG& msg, LRESULT& retVal) {
 void TableTree::insertChild(LPARAM parent, LPARAM child) {
 	items[parent].children.push_back(child);
 	children[child] = parent;
+
+	auto pos = getData(parent);
+	redraw(pos, pos);
+	Control::redraw();
 }
 
 void TableTree::collapse(LPARAM parent) {
@@ -146,34 +150,29 @@ LRESULT TableTree::handleCustomDraw(NMLVCUSTOMDRAW& data) {
 	}
 
 	if(data.nmcd.dwDrawStage == (CDDS_ITEMPREPAINT | CDDS_SUBITEM) && data.dwItemType == LVCDI_ITEM && data.iSubItem == 0) {
-		return CDRF_NOTIFYPOSTPAINT;
-	}
-
-	if(data.nmcd.dwDrawStage == (CDDS_ITEMPOSTPAINT | CDDS_SUBITEM) && data.dwItemType == LVCDI_ITEM && data.iSubItem == 0) {
 		FreeCanvas canvas { data.nmcd.hdc };
 
 		auto rect = getRect(data.nmcd.dwItemSpec, 0, LVIR_BOUNDS);
 
 		{
 			// draw tree lines.
-			auto first = data.nmcd.dwItemSpec == 0, last = data.nmcd.dwItemSpec + 1 == size();
-
 			LOGBRUSH lb { BS_SOLID, Color::predefined(COLOR_GRAYTEXT) };
 			Pen pen { ::ExtCreatePen(PS_COSMETIC | PS_ALTERNATE, 1, &lb, 0, nullptr) };
 			auto selectPen(canvas.select(pen));
 
 			Point mid { rect.left() + indent / 2, rect.top() + indent / 2 };
 
+			auto lastChild = false;
 			if(children.find(data.nmcd.lItemlParam) != children.end()) {
 				// this is a child item; draw a second vertical line to link surrounding parents.
-				canvas.line(mid.x, rect.top(), mid.x, last ? mid.y : rect.bottom()); // vertical
+				canvas.line(mid.x, rect.top(), mid.x, rect.bottom()); // vertical
 				rect.pos.x += indent;
 				mid.x += indent;
-				if(!last) { last = children.find(getData(data.nmcd.dwItemSpec + 1)) == children.end(); }
+				lastChild = children.find(getData(data.nmcd.dwItemSpec + 1)) == children.end();
 			}
 
 			canvas.line(mid, Point(rect.left() + indent, mid.y)); // horizontal
-			canvas.line(mid.x, first ? mid.y : rect.top(), mid.x, last ? mid.y : rect.bottom()); // vertical
+			canvas.line(mid.x, rect.top(), mid.x, lastChild ? mid.y : rect.bottom()); // vertical
 		}
 
 		auto parent = items.find(data.nmcd.lItemlParam);
@@ -203,7 +202,7 @@ LRESULT TableTree::handleCustomDraw(NMLVCUSTOMDRAW& data) {
 				auto selectPen(canvas.select(pen));
 
 				canvas.line(rect.left() + padding, mid.y, rect.right() - padding, mid.y); // horizontal
-				if(parent->second.expanded) {
+				if(!parent->second.expanded) {
 					canvas.line(mid.x, rect.top() + padding, mid.x, rect.bottom() - padding); // vertical
 				}
 
