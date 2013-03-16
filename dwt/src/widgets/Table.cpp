@@ -654,10 +654,12 @@ Rectangle Table::getRect(int row, int col, int code) {
 
 	// when asked for the column 0, Windows returns a rect for the whole item.
 	if(col == 0) {
+		::POINT org;
+		ListView_GetOrigin(handle(), &org);
 		::RECT colRect;
 		Header_GetItemRect(ListView_GetHeader(handle()), col, &colRect);
-		r.left = colRect.left;
-		r.right = colRect.right;
+		r.left = colRect.left - org.x;
+		r.right = colRect.right - org.x;
 	}
 
 	return Rectangle(r);
