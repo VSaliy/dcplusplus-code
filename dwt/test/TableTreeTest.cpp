@@ -9,7 +9,7 @@ using dwt::tstring;
 const size_t COLUMNS = 3;
 const size_t ROWS = 100;
 
-const size_t PARENT = 0;
+const size_t PARENT = 2;
 const size_t CHILDREN = 10;
 
 const auto IMAGE_SIZE = 32;

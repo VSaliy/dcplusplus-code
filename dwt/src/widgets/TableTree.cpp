@@ -279,6 +279,7 @@ void TableTree::handleDelete(int pos) {
 
 	auto parent = items.find(param);
 	if(parent != items.end()) {
+		collapse(param);
 		for(auto child: parent->second.children) {
 			children.erase(child);
 		}

@@ -27,6 +27,10 @@ unless they were removed or marked as "bad" sources before. The filelists of all
 matched for possible other queued files if the <a href="settings_queue.html#automatchqueue">Automatically match queue for search hits</a>
 setting is enabled. Activating that option can generate lots of filelist traffic when large amount of new sources are found for queued files.</p>
 
+<p>Search results with identical hashes are grouped under the same entry. A merged entry can be
+expanded using the +/- glyphs on the left or with left/right keys were one to want to peek at the
+various results received for the same file.</p>
+
 <p>If you often get too few search results or no results at all, refer to the <a href="faq_nosearch.html">Search troubleshooting FAQ</a>.</p>
 
 <h2>Search options (left)</h2>
@@ -51,12 +55,6 @@ setting is enabled. Activating that option can generate lots of filelist traffic
   <dd cshelp="IDH_SEARCH_SLOTS">Filter away files depending on the user's free slots.</dd>
   <dt>Hide files already in share</dt>
   <dd cshelp="IDH_SEARCH_SHARE">Filter away files that are already in share.</dd>
-  <dt>Merge results for the same file</dt>
-  <dd cshelp="IDH_SEARCH_MERGE">
-  If checked (default), when multiple search results are received for the same file (same TTH
-  root), these search results will be merged into 1 entry.<br/>
-  If unchecked, each search result will have its own entry in the search results list.
-  </dd>
   <dt>Hubs</dt>
   <dd cshelp="IDH_SEARCH_HUBS">Search only selected hubs.</dd>
 </dl>
