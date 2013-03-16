@@ -183,7 +183,7 @@ void PluginPage::handleSelectionChanged() {
 
 	ScopedFunctor([&] { pluginInfo->layout(); pluginInfo->redraw(); });
 
-	HoldRedraw hold(pluginInfo);
+	HoldRedraw hold { pluginInfo };
 
 	pluginInfo->clearRows();
 
@@ -288,7 +288,7 @@ void PluginPage::handleMovePluginUp() {
 	auto idx = plugins->getSelected();
 	if(idx == 0)
 		return;
-	HoldRedraw hold(plugins);
+	HoldRedraw hold { plugins };
 	PluginManager::getInstance()->movePlugin(idx, -1);
 	plugins->erase(idx);
 	idx -=1;
@@ -304,7 +304,7 @@ void PluginPage::handleMovePluginDown() {
 	auto idx = plugins->getSelected();
 	if(static_cast<uint32_t>(idx) == plugins->size() - 1)
 		return;
-	HoldRedraw hold(plugins);
+	HoldRedraw hold { plugins };
 	PluginManager::getInstance()->movePlugin(idx, 1);
 	plugins->erase(idx);
 	idx +=1;

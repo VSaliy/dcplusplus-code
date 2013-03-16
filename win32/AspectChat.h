@@ -161,7 +161,7 @@ protected:
 				unsigned lineCount = chat->getLineCount();
 				if(linesToKeep < lineCount) {
 					{
-						HoldRedraw hold(chat);
+						HoldRedraw hold { chat };
 						chat->setSelection(0, chat->lineIndex(lineCount - linesToKeep));
 						chat->replaceSelection(_T(""));
 					}

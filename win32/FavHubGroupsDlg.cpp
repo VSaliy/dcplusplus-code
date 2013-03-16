@@ -188,7 +188,7 @@ bool FavHubGroupsDlg::handleInitDialog() {
 	WinUtil::makeColumns(groups, columns, COLUMN_LAST);
 
 	{
-		HoldRedraw hold(groups);
+		HoldRedraw hold { groups };
 
 		for(auto& i: FavoriteManager::getInstance()->getFavHubGroups())
 			add(i, false);
@@ -243,7 +243,7 @@ void FavHubGroupsDlg::handleSelectionChanged() {
 void FavHubGroupsDlg::handleAdd() {
 	tstring name = edit->getText();
 	if(addable(name)) {
-		HoldRedraw hold(groups);
+		HoldRedraw hold { groups };
 		add(name, getSettings());
 	}
 }
@@ -264,7 +264,7 @@ void FavHubGroupsDlg::handleUpdate() {
 			i->setGroup(Text::fromT(name));
 	}
 
-	HoldRedraw hold(groups);
+	HoldRedraw hold { groups };
 	auto settings = getSettings();
 	groups->erase(selected);
 	add(name, std::move(settings));

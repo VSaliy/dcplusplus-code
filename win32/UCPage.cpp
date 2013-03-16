@@ -155,7 +155,7 @@ void UCPage::handleMoveUpClicked() {
 			return;
 		auto n = commands->getData(i);
 		FavoriteManager::getInstance()->moveUserCommand(n, -1);
-		HoldRedraw hold(commands);
+		HoldRedraw hold { commands };
 		commands->erase(i);
 		UserCommand uc;
 		FavoriteManager::getInstance()->getUserCommand(n, uc);
@@ -172,7 +172,7 @@ void UCPage::handleMoveDownClicked() {
 			return;
 		auto n = commands->getData(i);
 		FavoriteManager::getInstance()->moveUserCommand(n, 1);
-		HoldRedraw hold(commands);
+		HoldRedraw hold { commands };
 		commands->erase(i);
 		UserCommand uc;
 		FavoriteManager::getInstance()->getUserCommand(n, uc);

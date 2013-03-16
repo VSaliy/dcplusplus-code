@@ -536,12 +536,12 @@ private:
 	void updateLists() {
 		auto lock = FinishedManager::getInstance()->lock();
 		{
-			HoldRedraw hold(files);
+			HoldRedraw hold { files };
 			for(auto& i: FinishedManager::getInstance()->getMapByFile(in_UL))
 				addFile(i.first, i.second);
 		}
 		{
-			HoldRedraw hold(users);
+			HoldRedraw hold { users };
 			for(auto& i: FinishedManager::getInstance()->getMapByUser(in_UL))
 				addUser(i.first, i.second);
 		}

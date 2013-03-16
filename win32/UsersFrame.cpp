@@ -339,7 +339,7 @@ void UsersFrame::updateUserInfo() {
 
 	ScopedFunctor([&] { scroll->layout(); userInfo->layout(); userInfo->redraw(); });
 
-	HoldRedraw hold(userInfo);
+	HoldRedraw hold { userInfo };
 
 	// Clear old items
 	auto children = userInfo->getChildren<Control>();
@@ -507,7 +507,7 @@ void UsersFrame::updateList() {
 	auto filterPrep = filter.prepare();
 	auto filterInfoF = [this, &i](int column) { return Text::fromT(i->second.getText(column)); };
 
-	HoldRedraw h(users);
+	HoldRedraw h { users };
 	users->clear();
 	for(; i != userInfos.end(); ++i) {
 		if((filter.empty() || filter.match(filterPrep, filterInfoF)) && show(i->second.getUser(), false)) {

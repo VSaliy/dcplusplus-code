@@ -189,7 +189,7 @@ void ADLSearchFrame::handleProperties() {
 			save = true;
 
 			// Update list control
-			HoldRedraw hold(items);
+			HoldRedraw hold { items };
 			items->erase(i);
 			addEntry(search, i);
 			items->select(i);
@@ -204,7 +204,7 @@ void ADLSearchFrame::handleUp() {
 	ADLSearchManager::SearchCollection& collection = ADLSearchManager::getInstance()->collection;
 	bool save = false;
 
-	HoldRedraw hold(items);
+	HoldRedraw hold { items };
 	auto selected = items->getSelection();
 	for(auto i: selected) {
 		if(i > 0) {
@@ -226,7 +226,7 @@ void ADLSearchFrame::handleDown() {
 	ADLSearchManager::SearchCollection& collection = ADLSearchManager::getInstance()->collection;
 	bool save = false;
 
-	HoldRedraw hold(items);
+	HoldRedraw hold { items };
 	auto selected = items->getSelection();
 	for(auto i: selected | boost::adaptors::reversed) {
 		if(i < items->size() - 1) {

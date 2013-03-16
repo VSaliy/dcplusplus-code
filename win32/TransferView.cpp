@@ -475,8 +475,8 @@ void TransferView::execTasks() {
 	bool sortConn = false;
 	bool sortDown = false;
 
-	HoldRedraw hold(connections, t.size() > 1);
-	HoldRedraw hold2(downloads, t.size() > 1);
+	HoldRedraw hold { connections, t.size() > 1 };
+	HoldRedraw hold2 { downloads, t.size() > 1 };
 
 	for(auto& i: t) {
 		if(i.first == CONNECTIONS_ADD) {

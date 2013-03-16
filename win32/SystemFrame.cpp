@@ -70,11 +70,11 @@ SystemFrame::~SystemFrame() {
 
 void SystemFrame::addLine(time_t t, const tstring& msg) {
 	bool scroll = log->scrollIsAtEnd();
-	HoldRedraw hold(log, !scroll);
+	HoldRedraw hold { log, !scroll };
 
 	size_t limit = log->getTextLimit();
 	if(log->length() + msg.size() > limit) {
-		HoldRedraw hold2(log, scroll);
+		HoldRedraw hold2 { log, scroll };
 		log->setSelection(0, log->lineIndex(log->lineFromChar(limit / 10)));
 		log->replaceSelection(_T(""));
 	}

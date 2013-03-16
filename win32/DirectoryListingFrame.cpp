@@ -806,7 +806,7 @@ void DirectoryListingFrame::handleFindToggle() {
 }
 
 void DirectoryListingFrame::refreshTree(const tstring& root) {
-	HoldRedraw hold(dirs);
+	HoldRedraw hold { dirs };
 	auto ht = findItem(treeRoot, root);
 	if(!ht) {
 		ht = treeRoot;
@@ -1251,7 +1251,7 @@ void DirectoryListingFrame::handleSelectionChanged() {
 		return;
 	}
 
-	HoldRedraw hold(files);
+	HoldRedraw hold { files };
 	changeDir(d);
 
 	if(!d->getComplete()) {
@@ -1420,9 +1420,9 @@ void DirectoryListingFrame::findFile(bool reverse) {
 	tstring finalStatus;
 	ScopedFunctor(([this, &finalStatus] { status->setText(STATUS_STATUS, finalStatus); }));
 
-	HoldRedraw hold(files);
-	HoldRedraw hold2(dirs);
-	HoldRedraw hold3(status);
+	HoldRedraw hold { files };
+	HoldRedraw hold2 { dirs };
+	HoldRedraw hold3 { status };
 
 	auto start = dirs->getSelected();
 	if(!start)
