@@ -68,6 +68,11 @@
 #define TIS_HOT 2
 #define TIS_SELECTED 3
 
+#define VSCLASS_TREEVIEW L"TREEVIEW"
+#define TVP_GLYPH 2
+#define GLPS_CLOSED 1
+#define GLPS_OPENED 2
+
 #define VSCLASS_WINDOW L"WINDOW"
 #define WP_CAPTION 1
 #define CS_ACTIVE 1
