@@ -492,6 +492,7 @@ void SearchFrame::SearchInfo::update() {
 			columns[COLUMN_EXACT_SIZE] = Text::toT(Util::formatExactSize(sr->getSize()));
 		}
 	}
+
 	if(srs.size() > 1) {
 		columns[COLUMN_NICK] = str(TFN_("%1% user", "%1% users", srs.size()) % srs.size());
 		columns[COLUMN_CONNECTION].clear();
@@ -499,10 +500,15 @@ void SearchFrame::SearchInfo::update() {
 		columns[COLUMN_CID].clear();
 
 		std::set<std::string> hubs;
+		int freeSlots = 0, slots = 0;
 		for(auto& i: srs) {
 			hubs.insert(i->getHubName());
+			freeSlots += i->getFreeSlots();
+			slots += i->getSlots();
 		}
 		columns[COLUMN_HUB] = Text::toT(Util::toString(StringList(hubs.begin(), hubs.end())));
+		columns[COLUMN_SLOTS] = Text::toT(Util::toString(freeSlots) + '/' + Util::toString(slots));
+
 	} else {
 		columns[COLUMN_NICK] = WinUtil::getNicks(sr->getUser());
 		columns[COLUMN_CONNECTION] = Text::toT(ClientManager::getInstance()->getConnection(sr->getUser().user->getCID()));
@@ -555,9 +561,14 @@ void SearchFrame::addResult(SearchResultPtr psr) {
 	}
 
 	SearchInfo* parent = nullptr;
+	SearchInfo* dupChild = nullptr;
 
 	// Check previous search results for dupes
 	for(auto& si2: searchResults) {
+		if(si2.parent) {
+			continue;
+		}
+
 		for(auto& psr2: si2.srs) {
 			auto& sr2 = *psr2;
 
@@ -570,9 +581,17 @@ void SearchFrame::addResult(SearchResultPtr psr) {
 					return; // dupe
 				}
 
+				/* found a parent for the new result! if this is the 2nd child, duplicate the
+				previous result so it appears among this parent's children. */
+				parent = &si2;
+				if(si2.srs.size() == 1) {
+					searchResults.emplace_back(psr2);
+					dupChild = &searchResults.back();
+					dupChild->parent = parent;
+				}
 				si2.srs.push_back(psr);
 				si2.update();
-				parent = &si2;
+
 				break;
 			}
 		}
@@ -585,11 +604,25 @@ void SearchFrame::addResult(SearchResultPtr psr) {
 	auto si = &searchResults.back();
 	si->parent = parent;
 
+	{
+		HoldRedraw hold { results };
+
+		if(dupChild) {
+			addToList(dupChild);
+		}
+		addToList(si);
+	}
+
+	updateStatusCount();
+	setDirty(SettingsManager::BOLD_SEARCH);
+}
+
+void SearchFrame::addToList(SearchInfo* si) {
 	auto i = results->find(si);
 	if(filter.empty() || filter.match(filter.prepare(), [this, si](int column) { return Text::fromT(si->getText(column)); })) {
 		if(i == -1) {
-			if(parent) {
-				results->insertChild(reinterpret_cast<LPARAM>(parent), reinterpret_cast<LPARAM>(si));
+			if(si->parent) {
+				results->insertChild(reinterpret_cast<LPARAM>(si->parent), reinterpret_cast<LPARAM>(si));
 			} else {
 				results->insert(si);
 			}
@@ -599,9 +632,6 @@ void SearchFrame::addResult(SearchResultPtr psr) {
 	} else if(i != -1) {
 		results->erase(i);
 	}
-
-	updateStatusCount();
-	setDirty(SettingsManager::BOLD_SEARCH);
 }
 
 void SearchFrame::updateList() {
@@ -610,7 +640,7 @@ void SearchFrame::updateList() {
 	auto filterPrep = filter.prepare();
 	auto filterInfoF = [this, &i](int column) { return Text::fromT(i->getText(column)); };
 
-	HoldRedraw h { results };
+	HoldRedraw hold { results };
 	results->clear();
 	for(; i != searchResults.end(); ++i) {
 		if(filter.empty() || filter.match(filterPrep, filterInfoF)) {

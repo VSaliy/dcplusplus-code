@@ -241,6 +241,7 @@ private:
 	void updateStatusCount();
 	void addDropped();
 	void addResult(SearchResultPtr psr);
+	void addToList(SearchInfo* si);
 	void updateList();
 
 	MenuPtr makeMenu();
