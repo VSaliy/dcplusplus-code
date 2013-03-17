@@ -100,10 +100,6 @@ bool TableTree::handleMessage(const MSG& msg, LRESULT& retVal) {
 void TableTree::insertChild(LPARAM parent, LPARAM child) {
 	items[parent].children.push_back(child);
 	children[child] = parent;
-
-	auto pos = getData(parent);
-	redraw(pos, pos);
-	Control::redraw();
 }
 
 void TableTree::collapse(LPARAM parent) {
@@ -146,7 +142,7 @@ LRESULT TableTree::handleCustomDraw(NMLVCUSTOMDRAW& data) {
 	}
 
 	if(data.nmcd.dwDrawStage == CDDS_ITEMPREPAINT && data.dwItemType == LVCDI_ITEM) {
-		return CDRF_NOTIFYSUBITEMDRAW | CDRF_NOTIFYPOSTPAINT;
+		return CDRF_NOTIFYSUBITEMDRAW;
 	}
 
 	if(data.nmcd.dwDrawStage == (CDDS_ITEMPREPAINT | CDDS_SUBITEM) && data.dwItemType == LVCDI_ITEM && data.iSubItem == 0) {
