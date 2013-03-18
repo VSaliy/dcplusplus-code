@@ -503,6 +503,13 @@ void SettingsManager::load(string const& aFileName)
 				Util::replace("OpenFL", "OpenFL,OpenOwnFL", strSettings[TOOLBAR - STR_FIRST]);
 		}
 
+		if(v <= 0.811) {
+			// reset search columns
+			unset(SEARCHFRAME_ORDER);
+			unset(SEARCHFRAME_WIDTHS);
+			unset(SEARCHFRAME_SORT);
+		}
+
 		if(SETTING(SET_MINISLOT_SIZE) < 512)
 			set(SET_MINISLOT_SIZE, 512);
 		if(SETTING(AUTODROP_INTERVAL) < 1)

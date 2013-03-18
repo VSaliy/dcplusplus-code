@@ -47,11 +47,12 @@ const string& SearchFrame::getId() const { return id; }
 
 static const ColumnInfo resultsColumns[] = {
 	{ N_("File"), 200, false },
+	{ N_("Hits"), 50, true },
 	{ N_("User"), 100, false },
 	{ N_("Type"), 60, false },
 	{ N_("Size"), 80, true },
 	{ N_("Path"), 100, false },
-	{ N_("Slots"), 40, true },
+	{ N_("Slots"), 50, true },
 	{ N_("Connection"), 70, false },
 	{ N_("Hub"), 150, false },
 	{ N_("Exact size"), 100, true },
@@ -77,23 +78,12 @@ int SearchFrame::SearchInfo::getImage(int col) const {
 
 int SearchFrame::SearchInfo::compareItems(const SearchInfo* a, const SearchInfo* b, int col) {
 	switch(col) {
-	case COLUMN_NICK:
-		if(a->srs.size() > 1 && b->srs.size() > 1)
-			return compare(a->srs.size(), b->srs.size());
-		else if (a->srs.size() > 1 || b->srs.size() > 1)
-			return(a->srs.size() > 1) ? -1 : 1;
-		else
-			return compare(a->columns[COLUMN_NICK], b->columns[COLUMN_NICK]);
+	case COLUMN_HITS: return compare(a->srs.size(), b->srs.size());
 	case COLUMN_TYPE:
 		if(a->srs[0]->getType() == b->srs[0]->getType())
 			return compare(a->columns[COLUMN_TYPE], b->columns[COLUMN_TYPE]);
 		else
 			return(a->srs[0]->getType() == SearchResult::TYPE_DIRECTORY) ? -1 : 1;
-	case COLUMN_SLOTS:
-		if(a->srs[0]->getFreeSlots() == b->srs[0]->getFreeSlots())
-			return compare(a->srs[0]->getSlots(), b->srs[0]->getSlots());
-		else
-			return compare(a->srs[0]->getFreeSlots(), b->srs[0]->getFreeSlots());
 	case COLUMN_SIZE: // Fall through
 	case COLUMN_EXACT_SIZE: return compare(a->srs[0]->getSize(), b->srs[0]->getSize());
 	default: return compare(a->getText(col), b->getText(col));
@@ -254,7 +244,7 @@ droppedResults(0)
 		results->setSmallImageList(WinUtil::fileImages);
 
 		WinUtil::makeColumns(results, resultsColumns, COLUMN_LAST, SETTING(SEARCHFRAME_ORDER), SETTING(SEARCHFRAME_WIDTHS));
-		WinUtil::setTableSort(results, COLUMN_LAST, SettingsManager::SEARCHFRAME_SORT, -1);
+		WinUtil::setTableSort(results, COLUMN_LAST, SettingsManager::SEARCHFRAME_SORT, COLUMN_HITS, false);
 
 		results->onDblClicked([this] { handleDownload(); });
 		results->onKeyDown([this](int c) { return handleKeyDown(c); });
@@ -493,19 +483,26 @@ void SearchFrame::SearchInfo::update() {
 		}
 	}
 
+	if(parent) {
+		columns[COLUMN_HITS].clear();
+	} else {
+		columns[COLUMN_HITS] = Text::toT(Util::toString(srs.size())).c_str();
+	}
+
 	if(srs.size() > 1) {
-		columns[COLUMN_NICK] = str(TFN_("%1% user", "%1% users", srs.size()) % srs.size());
 		columns[COLUMN_CONNECTION].clear();
 		columns[COLUMN_IP].clear();
 		columns[COLUMN_CID].clear();
 
-		std::set<std::string> hubs;
+		std::set<std::string> nicks, hubs;
 		int freeSlots = 0, slots = 0;
 		for(auto& i: srs) {
+			nicks.insert(ClientManager::getInstance()->getNicks(i->getUser())[0]);
 			hubs.insert(i->getHubName());
 			freeSlots += i->getFreeSlots();
 			slots += i->getSlots();
 		}
+		columns[COLUMN_NICK] = Text::toT(Util::toString(StringList(nicks.begin(), nicks.end())));
 		columns[COLUMN_HUB] = Text::toT(Util::toString(StringList(hubs.begin(), hubs.end())));
 		columns[COLUMN_SLOTS] = Text::toT(Util::toString(freeSlots) + '/' + Util::toString(slots));
 
@@ -611,6 +608,12 @@ void SearchFrame::addResult(SearchResultPtr psr) {
 			addToList(dupChild);
 		}
 		addToList(si);
+
+		/* single results get inserted at the right position; children, however, may alter their
+		parent's sorting. */
+		if(parent) {
+			results->resort();
+		}
 	}
 
 	updateStatusCount();

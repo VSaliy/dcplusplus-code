@@ -649,20 +649,17 @@ Rectangle Table::getRect(int row, int code) {
 }
 
 Rectangle Table::getRect(int row, int col, int code) {
-	::RECT r;
-	ListView_GetSubItemRect(handle(), row, col, code, &r);
+	/* avoid ListView_GetSubItemRect which returns more or less garbage (depending on the Windows
+	version) when asked for the first column. */
+	auto rect = getRect(row, code);
 
-	// when asked for the column 0, Windows returns a rect for the whole item.
-	if(col == 0) {
-		::POINT org;
-		ListView_GetOrigin(handle(), &org);
-		::RECT colRect;
-		Header_GetItemRect(ListView_GetHeader(handle()), col, &colRect);
-		r.left = colRect.left - org.x;
-		r.right = colRect.right - org.x;
+	::RECT colRect;
+	if(Header_GetItemRect(ListView_GetHeader(handle()), col, &colRect)) {
+		rect.pos.x += colRect.left;
+		rect.size.x = colRect.right - colRect.left;
 	}
 
-	return Rectangle(r);
+	return rect;
 }
 
 }
