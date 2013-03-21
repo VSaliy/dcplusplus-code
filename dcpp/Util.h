@@ -87,8 +87,6 @@ int compare(const std::wstring& a, const std::wstring& b);
 int compare(const char* a, const char* b);
 int compare(const wchar_t* a, const wchar_t* b);
 
-template<typename T> double fraction(T a, T b) { return static_cast<double>(a) / b; }
-
 /** Uses SFINAE to determine whether a type provides a function; stores the result in "value".
 Inspired by <http://stackoverflow.com/a/8752988>.
 Note that checkRet & check could be merged into 1 function, but VS 11 doesn't like having a

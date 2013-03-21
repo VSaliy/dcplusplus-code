@@ -486,7 +486,7 @@ void SearchFrame::SearchInfo::update() {
 	if(parent) {
 		columns[COLUMN_HITS].clear();
 	} else {
-		columns[COLUMN_HITS] = Text::toT(Util::toString(srs.size())).c_str();
+		columns[COLUMN_HITS] = Text::toT(Util::toString(srs.size()));
 	}
 
 	if(srs.size() > 1) {

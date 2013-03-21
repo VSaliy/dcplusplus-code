@@ -172,7 +172,7 @@ LRESULT TableTree::handleCustomDraw(NMLVCUSTOMDRAW& data) {
 		}
 
 		auto parent = items.find(data.nmcd.lItemlParam);
-		if(parent != items.end()) {
+		if(parent != items.end() && !parent->second.children.empty()) {
 			// this is a parent item; draw the +/- glyph.
 
 			if(theme) {
@@ -283,8 +283,13 @@ void TableTree::handleDelete(int pos) {
 
 	auto child = children.find(param);
 	if(child != children.end()) {
-		auto& cont = items[child->second].children;
+		auto& item = items[child->second];
+		auto& cont = item.children;
 		cont.erase(std::remove(cont.begin(), cont.end(), param), cont.end());
+		if(cont.empty()) {
+			item.glyphRect = Rectangle();
+			item.switchExp(*this);
+		}
 		children.erase(child);
 	}
 }

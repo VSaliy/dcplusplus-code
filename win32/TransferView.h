@@ -19,6 +19,8 @@
 #ifndef DCPLUSPLUS_WIN32_TRANSFER_VIEW_H
 #define DCPLUSPLUS_WIN32_TRANSFER_VIEW_H
 
+#include <list>
+
 #include <dcpp/DownloadManagerListener.h>
 #include <dcpp/UploadManagerListener.h>
 #include <dcpp/ConnectionManagerListener.h>
@@ -34,6 +36,8 @@
 
 #include "UserInfoBase.h"
 
+using std::list;
+
 class TransferView :
 	public dwt::Container,
 	private DownloadManagerListener,
@@ -47,47 +51,32 @@ class TransferView :
 
 public:
 	TransferView(dwt::Widget* parent, TabViewPtr mdi_);
+	virtual ~TransferView();
 
 	void prepareClose();
 
-	virtual ~TransferView();
-
 private:
 	enum {
-		DOWNLOAD_COLUMN_FIRST,
-		DOWNLOAD_COLUMN_FILE = DOWNLOAD_COLUMN_FIRST,
-		DOWNLOAD_COLUMN_PATH,
-		DOWNLOAD_COLUMN_STATUS,
-		DOWNLOAD_COLUMN_TIMELEFT,
-		DOWNLOAD_COLUMN_SPEED,
-		DOWNLOAD_COLUMN_DONE,
-		DOWNLOAD_COLUMN_SIZE,
-		DOWNLOAD_COLUMN_LAST
+		COLUMN_FIRST,
+		COLUMN_FILE = COLUMN_FIRST,
+		COLUMN_PATH,
+		COLUMN_STATUS,
+		COLUMN_USER,
+		COLUMN_HUB,
+		COLUMN_TIMELEFT,
+		COLUMN_SPEED,
+		COLUMN_TRANSFERRED,
+		COLUMN_SIZE,
+		COLUMN_CIPHER,
+		COLUMN_IP,
+		COLUMN_COUNTRY,
+		COLUMN_LAST
 	};
 
 	enum {
-		DOWNLOADS_ADD_USER,
-		DOWNLOADS_TICK,
-		DOWNLOADS_REMOVE_USER,
-		DOWNLOADS_REMOVED,
-		CONNECTIONS_ADD,
-		CONNECTIONS_REMOVE,
-		CONNECTIONS_UPDATE
-	};
-
-	enum {
-		CONNECTION_COLUMN_FIRST,
-		CONNECTION_COLUMN_USER = CONNECTION_COLUMN_FIRST,
-		CONNECTION_COLUMN_HUB,
-		CONNECTION_COLUMN_STATUS,
-		CONNECTION_COLUMN_SPEED,
-		CONNECTION_COLUMN_CHUNK,
-		CONNECTION_COLUMN_TRANSFERED,
-		CONNECTION_COLUMN_QUEUED,
-		CONNECTION_COLUMN_CIPHER,
-		CONNECTION_COLUMN_IP,
-		CONNECTION_COLUMN_COUNTRY,
-		CONNECTION_COLUMN_LAST
+		ADD_CONNECTION,
+		UPDATE_CONNECTION,
+		REMOVE_CONNECTION
 	};
 
 	enum {
@@ -95,46 +84,75 @@ private:
 		IMAGE_UPLOAD
 	};
 
+	struct TransferInfo;
 	struct UpdateInfo;
 
-	class ConnectionInfo : public UserInfoBase {
-	public:
+	struct ItemInfo {
+		ItemInfo();
+		virtual ~ItemInfo() { }
+
+		const tstring& getText(int col) const;
+		virtual int getImage(int col) const;
+		static int compareItems(const ItemInfo* a, const ItemInfo* b, int col);
+
+		virtual TransferInfo& transfer() = 0;
+
+		virtual void force() = 0;
+		virtual void disconnect() = 0;
+
+		int64_t timeleft() const;
+
+		double speed;
+		int64_t actual;
+		int64_t transferred;
+		int64_t size;
+
+		tstring columns[COLUMN_LAST];
+	};
+
+	struct ConnectionInfo : public ItemInfo, public UserInfoBase {
 		enum Status {
 			STATUS_RUNNING,		///< Transfering
 			STATUS_WAITING		///< Idle
 		};
 
-		ConnectionInfo(const HintedUser& u, bool aDownload);
+		ConnectionInfo(const HintedUser& u, TransferInfo& parent);
 
-		bool download;
-		bool transferFailed;
+		bool operator==(const ConnectionInfo& other) const;
 
-		Status status;
-
-		int64_t actual;
-		int64_t lastActual;
-		int64_t transfered;
-		int64_t lastTransfered;
-		int64_t queued;
-		int64_t speed;
-		int64_t chunk;
-		int64_t chunkPos;
-
-		tstring columns[CONNECTION_COLUMN_LAST];
 		void update(const UpdateInfo& ui);
 
+		TransferInfo& transfer();
+
+		void force();
 		void disconnect();
 
-		double getRatio() { return (transfered > 0) ? (double)actual / (double)transfered : 1.0; }
+		bool transferFailed;
+		Status status;
+		TransferInfo& parent;
+	};
 
-		const tstring& getText(int col) const {
-			return columns[col];
-		}
-		int getImage(int col) const {
-			return col == 0 ? (download ? IMAGE_DOWNLOAD : IMAGE_UPLOAD) : -1;
-		}
+	struct TransferInfo : public ItemInfo {
+		TransferInfo(const TTHValue& tth, bool download, const string& path);
 
-		static int compareItems(const ConnectionInfo* a, const ConnectionInfo* b, int col);
+		bool operator==(const TransferInfo& other) const;
+
+		int getImage(int col) const;
+
+		void update();
+		void updatePath();
+
+		TransferInfo& transfer();
+
+		void force();
+		void disconnect();
+
+		TTHValue tth;
+		bool download;
+		string path;
+		int64_t startPos;
+
+		list<ConnectionInfo> conns;
 	};
 
 	struct UpdateInfo : public Task {
@@ -142,17 +160,15 @@ private:
 			MASK_STATUS = 1 << 0,
 			MASK_STATUS_STRING = 1 << 1,
 			MASK_SPEED = 1 << 2,
-			MASK_TRANSFERED = 1 << 3,
-			MASK_IP = 1 << 4,
-			MASK_CIPHER = 1 << 5,
-			MASK_CHUNK = 1 << 6,
-			MASK_COUNTRY = 1 << 7
+			MASK_TRANSFERRED = 1 << 3,
+			MASK_CIPHER = 1 << 4,
+			MASK_IP = 1 << 5,
+			MASK_COUNTRY = 1 << 6,
+			MASK_FILE = 1 << 7
 		};
 
-		bool operator==(const ConnectionInfo& ii) { return download == ii.download && user == ii.getUser(); }
-
-		UpdateInfo(const HintedUser& aUser, bool isDownload, bool isTransferFailed = false) :
-		updateMask(0), user(aUser), download(isDownload), transferFailed(isTransferFailed) { }
+		UpdateInfo(const HintedUser& user, bool download, bool transferFailed = false) :
+			updateMask(0), user(user), download(download), transferFailed(transferFailed) { }
 
 		uint32_t updateMask;
 
@@ -160,91 +176,37 @@ private:
 		bool download;
 		bool transferFailed;
 
+		TTHValue tth;
+		string path;
+		void setFile(const TTHValue& tth, const string& path) { this->tth = tth; this->path = path; updateMask |= MASK_FILE; }
+
 		void setStatus(ConnectionInfo::Status aStatus) { status = aStatus; updateMask |= MASK_STATUS; }
 		ConnectionInfo::Status status;
-		void setTransfered(int64_t aTransfered, int64_t aActual) {
-			transfered = aTransfered; actual = aActual; updateMask |= MASK_TRANSFERED;
+		void setTransferred(int64_t aTransferred, int64_t aActual, int64_t aSize) {
+			transferred = aTransferred; actual = aActual; size = aSize; updateMask |= MASK_TRANSFERRED;
 		}
 		int64_t actual;
-		int64_t transfered;
-		void setSpeed(int64_t aSpeed) { speed = aSpeed; updateMask |= MASK_SPEED; }
-		int64_t speed;
+		int64_t transferred;
+		int64_t size;
+		void setSpeed(double aSpeed) { speed = aSpeed; updateMask |= MASK_SPEED; }
+		double speed;
 		void setStatusString(const tstring& aStatusString) { statusString = aStatusString; updateMask |= MASK_STATUS_STRING; }
 		tstring statusString;
-		void setChunk(int64_t aChunkPos, int64_t aChunk) { chunkPos = aChunkPos; chunk = aChunk; updateMask |= MASK_CHUNK; }
-		int64_t chunkPos;
-		int64_t chunk;
 
-		void setCountry(const tstring& aCountry) { country = aCountry; updateMask |= MASK_COUNTRY; }
-		tstring country;
-		void setIP(const tstring& aIp) { ip = aIp; updateMask |= MASK_IP; }
-		tstring ip;
 		void setCipher(const tstring& aCipher) { cipher = aCipher; updateMask |= MASK_CIPHER; }
 		tstring cipher;
+		void setIP(const tstring& aIp) { ip = aIp; updateMask |= MASK_IP; }
+		tstring ip;
+		void setCountry(const tstring& aCountry) { country = aCountry; updateMask |= MASK_COUNTRY; }
+		tstring country;
 	};
 
-	struct TickInfo : public Task {
-		TickInfo(const string& path_) : path(path_), done(0), bps(0) { }
+	typedef TypedTable<ItemInfo, false, dwt::TableTree> WidgetTransfers;
+	typedef WidgetTransfers* WidgetTransfersPtr;
+	WidgetTransfersPtr transfers;
 
-		string path;
-		int64_t done;
-		double bps;
-	};
-
-
-	static int connectionIndexes[CONNECTION_COLUMN_LAST];
-	static int connectionSizes[CONNECTION_COLUMN_LAST];
-
-	class DownloadInfo {
-	public:
-		DownloadInfo(const string& filename, int64_t size, const TTHValue& tth);
-
-		const tstring& getText(int col) const {
-			return columns[col];
-		}
-
-		int getImage(int col) const;
-
-		static int compareItems(const DownloadInfo* a, const DownloadInfo* b, int col) {
-			switch(col) {
-			case DOWNLOAD_COLUMN_STATUS: return compare(fraction(a->size, a->done), fraction(b->size, b->done));
-			case DOWNLOAD_COLUMN_TIMELEFT: return compare(a->timeleft(), b->timeleft());
-			case DOWNLOAD_COLUMN_SPEED: return compare(a->bps, b->bps);
-			case DOWNLOAD_COLUMN_SIZE: return compare(a->size, b->size);
-			case DOWNLOAD_COLUMN_DONE: return compare(a->done, b->done);
-			default: return compare(a->columns[col], b->columns[col]);
-			}
-		}
-
-		void update();
-		void update(const TickInfo& ti);
-
-		int64_t timeleft() const { return bps == 0 ? 0 : (size - done) / bps; }
-		string path;
-		int64_t done;
-		int64_t size;
-		double bps;
-		int users;
-		TTHValue tth;
-
-		tstring columns[DOWNLOAD_COLUMN_LAST];
-	};
-
-
-	static int downloadIndexes[DOWNLOAD_COLUMN_LAST];
-	static int downloadSizes[DOWNLOAD_COLUMN_LAST];
-
-	typedef TypedTable<ConnectionInfo> WidgetConnections;
-	typedef WidgetConnections* WidgetConnectionsPtr;
-	WidgetConnectionsPtr connections;
-	ContainerPtr connectionsWindow;
-
-	typedef TypedTable<DownloadInfo> WidgetDownloads;
-	typedef WidgetDownloads* WidgetDownloadsPtr;
-	WidgetDownloadsPtr downloads;
-	ContainerPtr downloadsWindow;
-
-	TabViewPtr tabs;
+	list<TransferInfo> transferItems; /* the LPARAM data of table entries are direct pointers to
+									  objects stored by this container, hence the std::list. */
 
 	TabViewPtr mdi;
 	dwt::ImageListPtr arrows;
@@ -255,9 +217,8 @@ private:
 
 	ParamMap ucLineParams;
 
-	bool handleConnectionsMenu(dwt::ScreenCoordinate pt);
-	bool handleDownloadsMenu(dwt::ScreenCoordinate pt);
 	void handleDestroy();
+	bool handleContextMenu(dwt::ScreenCoordinate pt);
 	void handleForce();
 	void handleDisconnect();
 	void runUserCommand(const UserCommand& uc);
@@ -265,9 +226,12 @@ private:
 	void handleDblClicked();
 	LRESULT handleCustomDraw(NMLVCUSTOMDRAW& data);
 
-	int find(const string& path);
-
 	void layout();
+
+	ConnectionInfo* findConn(const HintedUser& user, bool download);
+	TransferInfo* findTransfer(const string& path, bool download);
+	void removeConn(ConnectionInfo& conn);
+	void removeTransfer(TransferInfo& transfer);
 
 	// AspectUserInfo
 	UserInfoList selectedUsersImpl() const;
@@ -276,28 +240,28 @@ private:
 	void execTasks();
 
 	virtual void on(ConnectionManagerListener::Added, ConnectionQueueItem* aCqi) noexcept;
-	virtual void on(ConnectionManagerListener::Failed, ConnectionQueueItem* aCqi, const string& aReason) noexcept;
 	virtual void on(ConnectionManagerListener::Removed, ConnectionQueueItem* aCqi) noexcept;
+	virtual void on(ConnectionManagerListener::Failed, ConnectionQueueItem* aCqi, const string& aReason) noexcept;
 	virtual void on(ConnectionManagerListener::StatusChanged, ConnectionQueueItem* aCqi) noexcept;
 
-	virtual void on(DownloadManagerListener::Requesting, Download* aDownload) noexcept;
-	virtual void on(DownloadManagerListener::Complete, Download* aDownload) noexcept;
-	virtual void on(DownloadManagerListener::Failed, Download* aDownload, const string& aReason) noexcept;
-	virtual void on(DownloadManagerListener::Starting, Download* aDownload) noexcept;
-	virtual void on(DownloadManagerListener::Tick, const DownloadList& aDownload) noexcept;
+	virtual void on(DownloadManagerListener::Complete, Download* d) noexcept;
+	virtual void on(DownloadManagerListener::Failed, Download* d, const string& aReason) noexcept;
+	virtual void on(DownloadManagerListener::Starting, Download* d) noexcept;
+	virtual void on(DownloadManagerListener::Tick, const DownloadList& dl) noexcept;
+	virtual void on(DownloadManagerListener::Requesting, Download* d) noexcept;
 
-	virtual void on(UploadManagerListener::Starting, Upload* aUpload) noexcept;
-	virtual void on(UploadManagerListener::Tick, const UploadList& aUpload) noexcept;
-	virtual void on(UploadManagerListener::Complete, Upload* aUpload) noexcept;
+	virtual void on(UploadManagerListener::Complete, Upload* u) noexcept;
+	virtual void on(UploadManagerListener::Starting, Upload* u) noexcept;
+	virtual void on(UploadManagerListener::Tick, const UploadList& ul) noexcept;
 
-	virtual void on(QueueManagerListener::StatusUpdated, QueueItem*) noexcept;
-	virtual void on(QueueManagerListener::Removed, QueueItem*) noexcept;
-	virtual void on(QueueManagerListener::CRCFailed, Download* aDownload, const string& aReason) noexcept;
+	virtual void on(QueueManagerListener::Removed, QueueItem* qi) noexcept;
+	virtual void on(QueueManagerListener::StatusUpdated, QueueItem* qi) noexcept;
+	virtual void on(QueueManagerListener::CRCFailed, Download* d, const string& aReason) noexcept;
 
-	void onTransferTick(Transfer* aTransfer, bool isDownload);
-	void onTransferComplete(Transfer* aTransfer, bool isDownload);
-	void onFailed(Download* aDownload, const string& aReason);
 	void starting(UpdateInfo* ui, Transfer* t);
+	void onTransferTick(Transfer* t, bool download);
+	void onTransferComplete(Transfer* t, bool download);
+	void onFailed(Download* aDownload, const string& aReason);
 };
 
 #endif // !defined(TRANSFER_VIEW_H)
