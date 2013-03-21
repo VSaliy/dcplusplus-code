@@ -651,13 +651,15 @@ Rectangle Table::getRect(int row, int code) {
 Rectangle Table::getRect(int row, int col, int code) {
 	/* avoid ListView_GetSubItemRect which returns more or less garbage (depending on the Windows
 	version) when asked for the first column. */
+
+	dwtassert(ListView_GetHeader(handle()), "Table::getRect: attempt to get a sub rect but there's no header");
+
 	auto rect = getRect(row, code);
 
-	::RECT colRect;
-	if(Header_GetItemRect(ListView_GetHeader(handle()), col, &colRect)) {
-		rect.pos.x += colRect.left;
-		rect.size.x = colRect.right - colRect.left;
-	}
+	::RECT colRect { };
+	Header_GetItemRect(ListView_GetHeader(handle()), col, &colRect);
+	rect.pos.x += colRect.left;
+	rect.size.x = colRect.right - colRect.left;
 
 	return rect;
 }

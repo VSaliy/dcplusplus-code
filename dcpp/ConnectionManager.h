@@ -113,7 +113,7 @@ public:
 	void force(const UserPtr& aUser);
 
 	void disconnect(const UserPtr& aUser); // disconnect downloads and uploads
-	void disconnect(const UserPtr& aUser, int isDownload);
+	void disconnect(const UserPtr& aUser, bool isDownload);
 
 	void shutdown();
 
