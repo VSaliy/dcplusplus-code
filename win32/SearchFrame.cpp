@@ -654,6 +654,7 @@ void SearchFrame::updateList() {
 			}
 		}
 	}
+	results->resort();
 
 	updateStatusCount();
 }

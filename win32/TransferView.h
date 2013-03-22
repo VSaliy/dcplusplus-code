@@ -102,7 +102,7 @@ private:
 
 		int64_t timeleft() const;
 
-		double speed;
+		int64_t speed;
 		int64_t actual;
 		int64_t transferred;
 		int64_t size;
@@ -188,8 +188,8 @@ private:
 		int64_t actual;
 		int64_t transferred;
 		int64_t size;
-		void setSpeed(double aSpeed) { speed = aSpeed; updateMask |= MASK_SPEED; }
-		double speed;
+		void setSpeed(int64_t aSpeed) { speed = aSpeed; updateMask |= MASK_SPEED; }
+		int64_t speed;
 		void setStatusString(const tstring& aStatusString) { statusString = aStatusString; updateMask |= MASK_STATUS_STRING; }
 		tstring statusString;
 

@@ -62,6 +62,8 @@ public:
 
 	virtual bool handleMessage(const MSG& msg, LRESULT& retVal);
 
+	/** Insert a child item.
+	@note The list should be resorted and redrawn for this to take effect. */
 	void insertChild(LPARAM parent, LPARAM child);
 	void collapse(LPARAM parent);
 	void expand(LPARAM parent);
