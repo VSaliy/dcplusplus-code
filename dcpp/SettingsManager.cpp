@@ -85,7 +85,7 @@ const string SettingsManager::settingTags[] =
 	"SettingsSaveInterval", "Slots", "TabStyle", "TabWidth", "ToolbarSize",
 	"SENTRY",
 	// Bools
-	"AddFinishedInstantly", "AdlsBreakOnFirst", "AltSortOrder",
+	"AddFinishedInstantly", "AdlsBreakOnFirst",
 	"AllowUntrustedClients", "AllowUntrustedHubs", "AlwaysTray", "AutoAway",
 	"AutoDetectIncomingConnection", "AutoFollow", "AutoKick", "AutoKickNoFavs", "AutoSearch",
 	"AutoSearchAutoMatch", "AutoDropAll", "AutoDropDisconnect", "AutoDropFilelists",
@@ -293,7 +293,6 @@ SettingsManager::SettingsManager()
 	setDefault(BOLD_SYSTEM_LOG, true);
 	setDefault(AUTO_REFRESH_TIME, 60);
 	setDefault(AUTO_SEARCH_LIMIT, 5);
-	setDefault(ALT_SORT_ORDER, false);
 	setDefault(AUTO_KICK_NO_FAVS, false);
 	setDefault(PROMPT_PASSWORD, false);
 	setDefault(DONT_DL_ALREADY_QUEUED, false);
