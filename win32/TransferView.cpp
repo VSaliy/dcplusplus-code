@@ -120,25 +120,18 @@ int TransferView::ItemInfo::getImage(int col) const {
 }
 
 int TransferView::ItemInfo::compareItems(const ItemInfo* a, const ItemInfo* b, int col) {
-	/* todo
-	if(SETTING(ALT_SORT_ORDER)) {
-		if(a->download == b->download) {
-			if(a->status != b->status) {
-				return (a->status == ConnectionInfo::STATUS_RUNNING) ? -1 : 1;
-			}
-		} else {
-			return a->download ? -1 : 1;
-		}
-	} else {
-		if(a->status == b->status) {
-			if(a->download != b->download) {
-				return a->download ? -1 : 1;
-			}
-		} else {
-			return (a->status == ConnectionInfo::STATUS_RUNNING) ? -1 : 1;
-		}
+	auto ta = dynamic_cast<const TransferInfo*>(a), tb = dynamic_cast<const TransferInfo*>(b);
+	if(ta && tb && ta->download != tb->download) {
+		// sort downloads before uploads.
+		return ta->download ? -1 : 1;
 	}
-	*/
+
+	auto ca = dynamic_cast<const ConnectionInfo*>(a), cb = dynamic_cast<const ConnectionInfo*>(b);
+	if(ca && cb && ca->status != cb->status) {
+		// sort running conns first.
+		return ca->status == ConnectionInfo::STATUS_RUNNING ? -1 : 1;
+	}
+
 	switch(col) {
 	case COLUMN_STATUS:
 		{
