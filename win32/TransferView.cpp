@@ -59,17 +59,15 @@ static const ColumnInfo columns[] = {
 TransferView::TransferView(dwt::Widget* parent, TabViewPtr mdi_) :
 	dwt::Container(parent),
 	transfers(0),
-	mdi(mdi_)
+	mdi(mdi_),
+	downloadIcon(WinUtil::createIcon(IDI_DOWNLOAD, 16)),
+	uploadIcon(WinUtil::createIcon(IDI_UPLOAD, 16))
 {
 	create();
 	setHelpId(IDH_TRANSFERS);
 
 	transfers = addChild(WidgetTransfers::Seed(WinUtil::Seeds::table));
 
-	/*arrows = new dwt::ImageList(dwt::Point(16, 16));
-	arrows->add(*WinUtil::createIcon(IDI_DOWNLOAD, 16));
-	arrows->add(*WinUtil::createIcon(IDI_UPLOAD, 16));
-	transfers->setSmallImageList(arrows);*/
 	transfers->setSmallImageList(WinUtil::fileImages);
 
 	WinUtil::makeColumns(transfers, columns, COLUMN_LAST, SETTING(TRANSFERS_ORDER), SETTING(TRANSFERS_WIDTHS));
@@ -151,7 +149,7 @@ int TransferView::ItemInfo::compareItems(const ItemInfo* a, const ItemInfo* b, i
 }
 
 int64_t TransferView::ItemInfo::timeleft() const {
-	return speed == 0 ? 0 : (size - transferred) / speed;
+	return speed == 0 ? 0 : static_cast<double>(size - transferred) / speed;
 }
 
 TransferView::ConnectionInfo::ConnectionInfo(const HintedUser& u, TransferInfo& parent) :
@@ -171,6 +169,10 @@ TransferView::ConnectionInfo::ConnectionInfo(const HintedUser& u, TransferInfo& 
 
 bool TransferView::ConnectionInfo::operator==(const ConnectionInfo& other) const {
 	return other.parent.download == parent.download && other.getUser() == getUser();
+}
+
+int TransferView::ConnectionInfo::getImage(int col) const {
+	return col == COLUMN_FILE ? WinUtil::TRANSFER_ICON_USER : ItemInfo::getImage(col);
 }
 
 void TransferView::ConnectionInfo::update(const UpdateInfo& ui) {
@@ -266,7 +268,7 @@ bool TransferView::TransferInfo::operator==(const TransferInfo& other) const {
 }
 
 int TransferView::TransferInfo::getImage(int col) const {
-	return col == COLUMN_FILE ? WinUtil::getFileIcon(path) : -1;
+	return col == COLUMN_FILE ? WinUtil::getFileIcon(path) : ItemInfo::getImage(col);
 }
 
 void TransferView::TransferInfo::update() {
@@ -440,7 +442,9 @@ void TransferView::handleDblClicked() {
 	}
 }
 
-namespace { void drawProgress(HDC hdc, const dwt::Rectangle& rcItem, int item, int column, const tstring& text, double pos, bool download) {
+namespace { void drawProgress(HDC hdc, const dwt::Rectangle& rcItem, int item, int column,
+	const dwt::IconPtr& icon, const tstring& text, double pos, bool download)
+{
 	// draw something nice...
 	COLORREF barBase = download ? SETTING(DOWNLOAD_BG_COLOR) : SETTING(UPLOAD_BG_COLOR);
 	COLORREF bgBase = WinUtil::bgColor;
@@ -472,6 +476,19 @@ namespace { void drawProgress(HDC hdc, const dwt::Rectangle& rcItem, int item, i
 	rc.pos.x += 1;
 	rc.size.x -= 2;
 	rc.size.y -= 1;
+
+	{
+		// draw the icon then shift the rect.
+		const long iconSize = 16;
+		const long iconTextSpace = 2;
+
+		dwt::Rectangle iconRect { rc.left(), rc.top() + std::max(rc.height() - iconSize, 0L) / 2, iconSize, iconSize };
+
+		canvas.drawIcon(icon, iconRect);
+
+		rc.pos.x += iconSize + iconTextSpace;
+		rc.size.x -= iconSize + iconTextSpace;
+	}
 
 	dwt::Rectangle textRect;
 
@@ -549,8 +566,10 @@ LRESULT TransferView::handleCustomDraw(NMLVCUSTOMDRAW& data) {
 			auto connInfo = dynamic_cast<const ConnectionInfo*>(&info);
 			if((!connInfo || connInfo->status == ConnectionInfo::STATUS_RUNNING) && info.size > 0 && info.transferred >= 0) {
 				int item = static_cast<int>(data.nmcd.dwItemSpec);
-				drawProgress(data.nmcd.hdc, transfers->getRect(item, col, LVIR_BOUNDS), item, col, info.getText(col),
-					static_cast<double>(info.transferred) / static_cast<double>(info.size), info.transfer().download);
+				drawProgress(data.nmcd.hdc, transfers->getRect(item, col, LVIR_BOUNDS), item, col,
+					info.transfer().download ? downloadIcon : uploadIcon, info.getText(col),
+					static_cast<double>(info.transferred) / static_cast<double>(info.size),
+					info.transfer().download);
 				return CDRF_SKIPDEFAULT;
 			}
 		}

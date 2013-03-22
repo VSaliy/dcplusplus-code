@@ -79,11 +79,6 @@ private:
 		REMOVE_CONNECTION
 	};
 
-	enum {
-		IMAGE_DOWNLOAD = 0,
-		IMAGE_UPLOAD
-	};
-
 	struct TransferInfo;
 	struct UpdateInfo;
 
@@ -119,6 +114,8 @@ private:
 		ConnectionInfo(const HintedUser& u, TransferInfo& parent);
 
 		bool operator==(const ConnectionInfo& other) const;
+
+		int getImage(int col) const;
 
 		void update(const UpdateInfo& ui);
 
@@ -209,7 +206,9 @@ private:
 									  objects stored by this container, hence the std::list. */
 
 	TabViewPtr mdi;
-	dwt::ImageListPtr arrows;
+
+	const dwt::IconPtr downloadIcon;
+	const dwt::IconPtr uploadIcon;
 
 	bool startup;
 

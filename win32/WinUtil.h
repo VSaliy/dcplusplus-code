@@ -82,11 +82,14 @@ struct ColumnInfo {
 class WinUtil {
 public:
 	// pre-defined icon indexes used by the "fileImages" image list - see also getFileIcon.
+	// also contains icons used by the transfer list.
 	enum {
 		DIR_ICON,
 		DIR_ICON_INCOMPLETE,
 
-		FILE_ICON_GENERIC
+		FILE_ICON_GENERIC,
+
+		TRANSFER_ICON_USER
 	};
 
 	// icon indexes to use with the "userImages" image list.
@@ -138,11 +141,9 @@ public:
 	static tstring commands;
 	static dwt::ImageListPtr fileImages;
 	static dwt::ImageListPtr userImages;
+	static unordered_map<string, size_t> fileIndexes;
 	static TStringList lastDirs;
 	static MainWindow* mainWindow;
-
-	typedef unordered_map<string, size_t> ImageMap;
-	static ImageMap fileIndexes;
 
 	struct Seeds {
 		static const Button::Seed button;
