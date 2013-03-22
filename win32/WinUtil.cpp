@@ -106,14 +106,14 @@ COLORREF WinUtil::bgColor = 0;
 dwt::FontPtr WinUtil::font;
 dwt::FontPtr WinUtil::uploadFont;
 dwt::FontPtr WinUtil::downloadFont;
-unordered_map<string, dwt::FontPtr> WinUtil::userMatchFonts;
+decltype(WinUtil::userMatchFonts) WinUtil::userMatchFonts;
 dwt::ImageListPtr WinUtil::fileImages;
 dwt::ImageListPtr WinUtil::userImages;
+decltype(WinUtil::fileIndexes) WinUtil::fileIndexes;
 TStringList WinUtil::lastDirs;
 MainWindow* WinUtil::mainWindow = 0;
 bool WinUtil::urlDcADCRegistered = false;
 bool WinUtil::urlMagnetRegistered = false;
-WinUtil::ImageMap WinUtil::fileIndexes;
 DWORD WinUtil::helpCookie = 0;
 tstring WinUtil::helpPath;
 StringList WinUtil::helpTexts;
@@ -199,6 +199,9 @@ void WinUtil::init() {
 
 	// add the generic file icon (FILE_ICON_GENERIC).
 	fileImages->add(*createIcon(IDI_FILE, 16));
+
+	// add icons used by the transfer list (TRANSFER_ICON_*).
+	fileImages->add(*createIcon(IDI_USER, 16));
 
 	{
 		const dwt::Point size(16, 16);
