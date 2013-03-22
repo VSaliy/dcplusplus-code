@@ -100,13 +100,24 @@ bool TableTree::handleMessage(const MSG& msg, LRESULT& retVal) {
 void TableTree::insertChild(LPARAM parent, LPARAM child) {
 	items[parent].children.push_back(child);
 	children[child] = parent;
+
+	if(items[parent].expanded) {
+		LVITEM item = { LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM | LVIF_INDENT, findData(parent) + 1 };
+		item.pszText = LPSTR_TEXTCALLBACK;
+		item.iImage = I_IMAGECALLBACK;
+		item.lParam = child;
+		item.iIndent = 2;
+		sendMsg(LVM_INSERTITEM, 0, reinterpret_cast<LPARAM>(&item));
+	}
 }
 
 void TableTree::collapse(LPARAM parent) {
 	util::HoldRedraw hold { this };
-	auto pos = findData(parent) + 1;
-	for(size_t i = 0, n = items[parent].children.size(); i < n; ++i) {
-		sendMsg(LVM_DELETEITEM, pos, 0);
+	for(auto child: items[parent].children) {
+		auto pos = findData(child);
+		if(pos != -1) {
+			sendMsg(LVM_DELETEITEM, pos, 0);
+		}
 	}
 	items[parent].switchExp(*this);
 }
@@ -122,6 +133,7 @@ void TableTree::expand(LPARAM parent) {
 		item.lParam = child;
 		sendMsg(LVM_INSERTITEM, 0, reinterpret_cast<LPARAM>(&item));
 	}
+	resort();
 	items[parent].switchExp(*this);
 }
 
@@ -309,7 +321,7 @@ void TableTree::handleInsert(LVITEM& lv) {
 	if((lv.mask & LVIF_INDENT) != LVIF_INDENT) {
 		lv.mask |= LVIF_INDENT;
 	}
-	++lv.iIndent;
+	lv.iIndent = 1;
 }
 
 int TableTree::handleSort(LPARAM& lhs, LPARAM& rhs) {

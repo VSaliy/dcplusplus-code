@@ -142,14 +142,12 @@ int TransferView::ItemInfo::compareItems(const ItemInfo* a, const ItemInfo* b, i
 	switch(col) {
 	case COLUMN_STATUS:
 		{
-			if(!a->transferred && !b->transferred)
-				return compare(a->size, b->size);
-			if(!b->transferred)
-				return -1;
-			if(!a->transferred)
-				return 1;
-			return compare(static_cast<double>(a->size) / static_cast<double>(a->transferred),
-				static_cast<double>(b->size) / static_cast<double>(b->transferred));
+			// avoid returning 0
+			auto ret = !a->transferred && !b->transferred ? compare(a->size, b->size) :
+				!b->transferred ? -1 :
+				!a->transferred ? 1 :
+				compare(a->size / a->transferred, b->size / b->transferred);
+			return ret ? ret : compare(a->getText(COLUMN_PATH), b->getText(COLUMN_PATH));
 		}
 	case COLUMN_TIMELEFT: return compare(a->timeleft(), b->timeleft());
 	case COLUMN_SPEED: return compare(a->speed, b->speed);
@@ -207,16 +205,20 @@ void TransferView::ConnectionInfo::update(const UpdateInfo& ui) {
 		actual = ui.actual;
 		transferred = ui.transferred;
 		size = ui.size;
-		columns[COLUMN_TRANSFERRED] = str(TF_("%1% (%2$0.2f)")
-			% Text::toT(Util::formatBytes(transferred))
-			% (static_cast<double>(actual) / static_cast<double>(transferred)));
+		if(transferred) {
+			columns[COLUMN_TRANSFERRED] = str(TF_("%1% (%2$0.2f)")
+				% Text::toT(Util::formatBytes(transferred))
+				% (static_cast<double>(actual) / static_cast<double>(transferred)));
+		} else {
+			columns[COLUMN_TRANSFERRED].clear();
+		}
 		columns[COLUMN_SIZE] = Text::toT(Util::formatBytes(size));
 	}
 
 	if((ui.updateMask & UpdateInfo::MASK_STATUS) || (ui.updateMask & UpdateInfo::MASK_SPEED)) {
-		speed = ui.speed;
+		speed = std::max(ui.speed, 0LL); // sometimes the speed is negative; avoid problems.
 		if(status == STATUS_RUNNING) {
-			columns[COLUMN_SPEED] = str(TF_("%1%/s") % Text::toT(Util::formatBytes(static_cast<int64_t>(speed))));
+			columns[COLUMN_SPEED] = str(TF_("%1%/s") % Text::toT(Util::formatBytes(speed)));
 		} else {
 			columns[COLUMN_SPEED].clear();
 		}
@@ -224,7 +226,7 @@ void TransferView::ConnectionInfo::update(const UpdateInfo& ui) {
 
 	if((ui.updateMask & UpdateInfo::MASK_STATUS) || (ui.updateMask & UpdateInfo::MASK_TRANSFERRED) || (ui.updateMask & UpdateInfo::MASK_SPEED)) {
 		if(status == STATUS_RUNNING) {
-			columns[COLUMN_TIMELEFT] = Text::toT(Util::formatSeconds(static_cast<int64_t>(timeleft())));
+			columns[COLUMN_TIMELEFT] = Text::toT(Util::formatSeconds(timeleft()));
 		} else {
 			columns[COLUMN_TIMELEFT].clear();
 		}
@@ -278,8 +280,10 @@ void TransferView::TransferInfo::update() {
 	speed = 0; transferred = startPos;
 	set<string> hubs;
 	for(auto& conn: conns) {
-		speed += conn.speed;
-		transferred += conn.transferred;
+		if(conn.status == ConnectionInfo::STATUS_RUNNING) {
+			speed += conn.speed;
+			transferred += conn.transferred;
+		}
 		hubs.insert(conn.getUser().hint);
 	}
 
@@ -291,6 +295,7 @@ void TransferView::TransferInfo::update() {
 	}
 
 	if(conns.empty()) {
+		// this should never happen, but let's play safe.
 		columns[COLUMN_STATUS] = T_("Idle");
 		columns[COLUMN_USER].clear();
 		columns[COLUMN_HUB].clear();
@@ -302,10 +307,18 @@ void TransferView::TransferInfo::update() {
 		columns[COLUMN_STATUS] = download ?
 			str(TFN_("Downloading from %1% user", "Downloading from %1% users", users) % users) :
 			str(TFN_("Uploading to %1% user", "Uploading to %1% users", users) % users);
-		columns[COLUMN_USER] = str(TFN_("%1% user", "%1% users", users) % users);
-		columns[COLUMN_HUB] = str(TFN_("%1% hub", "%1% hubs", hubs.size()) % hubs.size());
-		columns[COLUMN_TIMELEFT] = Text::toT(Util::formatSeconds(static_cast<int64_t>(timeleft())));
-		columns[COLUMN_SPEED] = str(TF_("%1%/s") % Text::toT(Util::formatBytes(static_cast<int64_t>(speed))));
+		if(users == 1) {
+			columns[COLUMN_USER] = conns.front().getText(COLUMN_USER);
+		} else {
+			columns[COLUMN_USER] = str(TF_("%1% users") % users);
+		}
+		if(hubs.size() == 1) {
+			columns[COLUMN_HUB] = conns.front().getText(COLUMN_HUB);
+		} else {
+			columns[COLUMN_HUB] = str(TF_("%1% hubs") % hubs.size());
+		}
+		columns[COLUMN_TIMELEFT] = Text::toT(Util::formatSeconds(timeleft()));
+		columns[COLUMN_SPEED] = str(TF_("%1%/s") % Text::toT(Util::formatBytes(speed)));
 	}
 
 	columns[COLUMN_TRANSFERRED] = Text::toT(Util::formatBytes(transferred));
@@ -637,16 +650,15 @@ void TransferView::execTasks() {
 				TransferInfo* transfer = nullptr;
 				auto conn = findConn(ui.user, ui.download);
 				if(ui.updateMask & UpdateInfo::MASK_FILE) {
-					transfer = conn ? &conn->parent : findTransfer(ui.path, ui.download);
-					if(transfer) {
-						transfer->tth = ui.tth;
-						transfer->download = ui.download;
-						transfer->path = ui.path;
-						transfer->updatePath();
-					} else {
+					transfer = findTransfer(ui.path, ui.download);
+					if(!transfer) {
 						transferItems.emplace_back(ui.tth, ui.download, ui.path);
 						transfer = &transferItems.back();
 						transfers->insert(transfer);
+					}
+					if(conn && &conn->parent != transfer) {
+						removeTransfer(conn->parent);
+						conn = nullptr;
 					}
 					if(ui.download) {
 						QueueManager::getInstance()->getSizeInfo(transfer->size, transfer->startPos, ui.path);
