@@ -133,12 +133,10 @@ int TransferView::ItemInfo::compareItems(const ItemInfo* a, const ItemInfo* b, i
 	switch(col) {
 	case COLUMN_STATUS:
 		{
-			// avoid returning 0
-			auto ret = !a->transferred && !b->transferred ? compare(a->size, b->size) :
+			return !a->transferred && !b->transferred ? compare(a->size, b->size) :
 				!b->transferred ? -1 :
 				!a->transferred ? 1 :
 				compare(a->size / a->transferred, b->size / b->transferred);
-			return ret ? ret : compare(a->getText(COLUMN_PATH), b->getText(COLUMN_PATH));
 		}
 	case COLUMN_TIMELEFT: return compare(a->timeleft(), b->timeleft());
 	case COLUMN_SPEED: return compare(a->speed, b->speed);
@@ -563,7 +561,7 @@ LRESULT TransferView::handleCustomDraw(NMLVCUSTOMDRAW& data) {
 		auto col = data.iSubItem;
 		if(col == COLUMN_STATUS) {
 			auto& info = *reinterpret_cast<ItemInfo*>(data.nmcd.lItemlParam);
-			auto connInfo = dynamic_cast<const ConnectionInfo*>(&info);
+			auto connInfo = dynamic_cast<ConnectionInfo*>(&info);
 			if((!connInfo || connInfo->status == ConnectionInfo::STATUS_RUNNING) && info.size > 0 && info.transferred >= 0) {
 				int item = static_cast<int>(data.nmcd.dwItemSpec);
 				drawProgress(data.nmcd.hdc, transfers->getRect(item, col, LVIR_BOUNDS), item, col,

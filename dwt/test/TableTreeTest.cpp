@@ -6,6 +6,8 @@
 
 using dwt::tstring;
 
+#if 1 // make this 0 to test a redraw problem that occurs when the last parent has 1 child.
+
 const size_t COLUMNS = 3;
 const size_t ROWS = 100;
 
@@ -13,6 +15,18 @@ const size_t PARENT = 2;
 const size_t CHILDREN = 10;
 
 const auto IMAGE_SIZE = 32;
+
+#else
+
+const size_t COLUMNS = 3;
+const size_t ROWS = 10;
+
+const size_t PARENT = 9;
+const size_t CHILDREN = 1;
+
+const auto IMAGE_SIZE = 32;
+
+#endif
 
 struct Item {
 	tstring texts[COLUMNS];

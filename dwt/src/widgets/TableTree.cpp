@@ -113,17 +113,26 @@ void TableTree::insertChild(LPARAM parent, LPARAM child) {
 
 void TableTree::collapse(LPARAM parent) {
 	util::HoldRedraw hold { this };
-	for(auto child: items[parent].children) {
-		auto pos = findData(child);
-		if(pos != -1) {
-			sendMsg(LVM_DELETEITEM, pos, 0);
-		}
+
+	auto pos = findData(parent);
+	auto n = items[parent].children.size();
+
+	// assume children are all at the right pos.
+	for(size_t i = 0; i < n; ++i) {
+		sendMsg(LVM_DELETEITEM, pos + 1, 0);
 	}
+
 	items[parent].switchExp(*this);
+
+	// special case, see TableTreeTest
+	if(n == 1 && pos == static_cast<int>(size()) - 1) {
+		Control::redraw(false);
+	}
 }
 
 void TableTree::expand(LPARAM parent) {
 	util::HoldRedraw hold { this };
+
 	LVITEM item = { LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM | LVIF_INDENT, findData(parent) };
 	item.pszText = LPSTR_TEXTCALLBACK;
 	item.iImage = I_IMAGECALLBACK;
@@ -133,7 +142,9 @@ void TableTree::expand(LPARAM parent) {
 		item.lParam = child;
 		sendMsg(LVM_INSERTITEM, 0, reinterpret_cast<LPARAM>(&item));
 	}
+
 	resort();
+
 	items[parent].switchExp(*this);
 }
 
@@ -272,10 +283,11 @@ bool TableTree::handleKeyDown(int c) {
 
 bool TableTree::handleLeftMouseDown(const MouseEvent& me) {
 	auto hit = hitTest(me.pos);
-	if(hit.second == 0) {
+	if(hit.second == 0) { // first column
 		auto it = items.find(getData(hit.first));
 		if(it != items.end() && it->second.glyphRect.contains(ClientCoordinate(me.pos, this).getPoint())) {
 			it->second.expanded ? collapse(it->first) : expand(it->first);
+			return true;
 		}
 	}
 	return false;
