@@ -50,7 +50,7 @@
 
 2. Compiler
 
-	a. MinGW (GCC 4.7 or later):
+	a. MinGW (GCC 4.8 or later):
 	<http://sourceforge.net/projects/mingw-w64/files/>
 	<http://sourceforge.net/projects/mingw/files/>
 

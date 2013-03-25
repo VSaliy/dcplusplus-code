@@ -21,7 +21,7 @@
 
 // GCC has issues with atomic - see https://bugs.launchpad.net/dcplusplus/+bug/735512
 /// @todo check this again when GCC improves their threading support
-#if defined(__GNUC__)
+#if 0
 
 #include <boost/atomic.hpp>
 
