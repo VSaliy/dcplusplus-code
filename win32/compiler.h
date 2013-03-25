@@ -17,8 +17,8 @@
  */
 
 #if defined(__GNUC__)
-#if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 7)
-#error GCC 4.7 is required
+#if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 8)
+#error GCC 4.8 is required
 #endif
 
 #ifndef HAVE_MINGW64

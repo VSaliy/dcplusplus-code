@@ -5,25 +5,20 @@ EnsureSConsVersion(0, 98, 5)
 import os,sys
 from build_util import Dev, gen_po_name
 
-# force DWARF 4 in order to benefit from the typed DWARF stack (duplicated type info entries are
-# grouped in a new .debug_types section). reduces the pdb size by 15MB and improves type resolution
-# in the crash logger.
-# TODO switch to DWARF 4 in the future when the following bugs are fixed:
-# - ICE when building in release mode
-# - GDB crash: <http://gcc.gnu.org/bugzilla/show_bug.cgi?id=47308>
-
 # TODO the ipa-cp-clone optimization is disabled; it causes a crash when starting a DL.
-
-# TODO add -Og when using GCC 4.8
 
 # TODO enable LTO when it doesn't ICE... (-flto)
 
 # TODO remove -Wno-format when http://cygwin.com/ml/cygwin/2012-01/msg00061.html
 # ("mingw64-i686-gcc-4.5.3-4: -Wformat warnings broken in C++") fixed
 
+# TODO remove -Wno-unused-local-typedefs when boost doesn't trigger it
+
+# TODO add -fdebug-types-section when it doesn't ICE
+
 gcc_flags = {
-	'common': ['-g', '-Wall', '-Wextra', '-Wno-unused-parameter', '-Wno-unused-value', '-Wno-missing-field-initializers', '-Wno-address', '-Wno-unknown-pragmas', '-Wno-format', '-fexceptions', '-mthreads'],
-	'debug': [], 
+	'common': ['-g', '-Wall', '-Wextra', '-Wno-unused-local-typedefs', '-Wno-unused-parameter', '-Wno-unused-value', '-Wno-missing-field-initializers', '-Wno-address', '-Wno-unknown-pragmas', '-Wno-format', '-fexceptions', '-mthreads'],
+	'debug': ['-Og'], 
 	'release' : ['-O3', '-fno-ipa-cp-clone', '-mwindows']
 }
 
@@ -62,7 +57,7 @@ msvc_xxflags = {
 
 gcc_link_flags = {
 	'common' : ['-g', '-static-libgcc', '-static-libstdc++', '-Wl,--no-undefined,--nxcompat,--dynamicbase', '-time', '-mthreads'],
-	'debug' : [],
+	'debug' : ['-Og'],
 	'release' : ['-O3', '-mwindows']
 }
 
