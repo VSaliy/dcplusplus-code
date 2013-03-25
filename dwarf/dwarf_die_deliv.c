@@ -1,7 +1,8 @@
 /*
 
   Copyright (C) 2000-2006 Silicon Graphics, Inc.  All Rights Reserved.
-  Portions Copyright (C) 2007-2011 David Anderson. All Rights Reserved.
+  Portions Copyright (C) 2007-2012 David Anderson. All Rights Reserved.
+  Portions Copyright 2012 SN Systems Ltd. All rights reserved.
 
   This program is free software; you can redistribute it and/or modify it
   under the terms of version 2.1 of the GNU Lesser General Public License 
@@ -218,7 +219,7 @@ _dwarf_make_CU_Context(Dwarf_Debug dbg,
         cu_ptr, sizeof(Dwarf_Half));
     cu_ptr += sizeof(Dwarf_Half);
 
-    READ_UNALIGNED(dbg, abbrev_offset, Dwarf_Signed,
+    READ_UNALIGNED(dbg, abbrev_offset, Dwarf_Unsigned,
         cu_ptr, local_length_size);
     cu_ptr += local_length_size;
     cu_context->cc_abbrev_offset = (Dwarf_Sword) abbrev_offset;
@@ -228,11 +229,11 @@ _dwarf_make_CU_Context(Dwarf_Debug dbg,
     
     
 
-    if(cu_context->cc_address_size  > sizeof(Dwarf_Addr)) {
+    if (cu_context->cc_address_size  > sizeof(Dwarf_Addr)) {
         _dwarf_error(dbg, error, DW_DLE_CU_ADDRESS_SIZE_BAD);
         return (NULL);
     }
-    if(!is_info) {
+    if (!is_info) {
         /* debug_types CU headers have extra header bytes. */
         types_extra_len = sizeof(signaturedata) + local_length_size;
     }
@@ -270,7 +271,7 @@ _dwarf_make_CU_Context(Dwarf_Debug dbg,
         {
             Dwarf_Unsigned cu_len = length - (local_length_size + 
                 local_extension_size);
-            if(typeoffset >= cu_len) {
+            if (typeoffset >= cu_len) {
                 dwarf_dealloc(dbg, cu_context, DW_DLA_CU_CONTEXT);
                 _dwarf_error(dbg, error, DW_DLE_DEBUG_TYPEOFFSET_BAD);
                 return (NULL);
@@ -278,7 +279,7 @@ _dwarf_make_CU_Context(Dwarf_Debug dbg,
         }
     }
 
-    if (abbrev_offset >= dbg->de_debug_abbrev.dss_size) {
+    if ((Dwarf_Unsigned)abbrev_offset >= dbg->de_debug_abbrev.dss_size) {
         dwarf_dealloc(dbg, cu_context, DW_DLA_CU_CONTEXT);
         _dwarf_error(dbg, error, DW_DLE_ABBREV_OFFSET_ERROR);
         return (NULL);
@@ -311,7 +312,7 @@ static int
 reloc_incomplete(Dwarf_Error err)
 {
     int e = dwarf_errno(err);
-    if( e == DW_DLE_RELOC_MISMATCH_INDEX       ||
+    if (e == DW_DLE_RELOC_MISMATCH_INDEX       ||
         e == DW_DLE_RELOC_MISMATCH_RELOC_INDEX  ||
         e == DW_DLE_RELOC_MISMATCH_STRTAB_INDEX ||
         e == DW_DLE_RELOC_SECTION_MISMATCH      ||
@@ -448,7 +449,7 @@ dwarf_next_cu_header_internal(Dwarf_Debug dbg,
                 _dwarf_load_debug_types(dbg,&err2);
 
             if (res != DW_DLV_OK) {
-                if(reloc_incomplete(err2)) {
+                if (reloc_incomplete(err2)) {
                     /*  We will assume all is ok, though it is not. 
                         Relocation errors need not be fatal.  */
                     char msg_buf[200];
@@ -458,7 +459,7 @@ dwarf_next_cu_header_internal(Dwarf_Debug dbg,
                     dwarf_insert_harmless_error(dbg,msg_buf);
                     res = DW_DLV_OK;
                 } else {
-                    if( error) {
+                    if (error) {
                         *error = err2;
                     }
                     return res;
@@ -472,7 +473,6 @@ dwarf_next_cu_header_internal(Dwarf_Debug dbg,
             dis->de_cu_context->cc_length +
             dis->de_cu_context->cc_length_size +
             dis->de_cu_context->cc_extension_size;
-		new_offset = (new_offset + 3) / 4 * 4;
     }
 
     /*  Check that there is room in .debug_info beyond the new offset
@@ -524,18 +524,17 @@ dwarf_next_cu_header_internal(Dwarf_Debug dbg,
     if (extension_size != NULL) {
         *extension_size = cu_context->cc_extension_size;
     }
-    if(!is_info) {  
-        if(signature) {
+    if (!is_info) {  
+        if (signature) {
             *signature = cu_context->cc_signature;
         }
-        if(typeoffset) {
+        if (typeoffset) {
             *typeoffset = cu_context->cc_typeoffset;
         }
     }
 
     new_offset = new_offset + cu_context->cc_length +
         cu_context->cc_length_size + cu_context->cc_extension_size;
-	new_offset = (new_offset + 3) / 4 * 4;
     *next_cu_offset = new_offset;
     return (DW_DLV_OK);
 }
@@ -781,7 +780,7 @@ _dwarf_next_die_info_ptr(Dwarf_Byte_Ptr die_info_ptr,
 static int
 is_cu_tag(int t)
 {
-    if(t == DW_TAG_compile_unit ||
+    if (t == DW_TAG_compile_unit ||
         t == DW_TAG_partial_unit ||
         t == DW_TAG_imported_unit ||
         t == DW_TAG_type_unit) {
@@ -907,7 +906,7 @@ dwarf_siblingof_b(Dwarf_Debug dbg,
             /*  die_info_end is one past end. Do not read it!  
                 A test for ``!= die_info_end''  would work as well,
                 but perhaps < reads more like the meaning. */
-            if(die_info_ptr < die_info_end) { 
+            if (die_info_ptr < die_info_end) { 
                 if ((*die_info_ptr) == 0 && has_child) {
                     die_info_ptr++;
                     has_child = false;
@@ -1036,7 +1035,7 @@ dwarf_child(Dwarf_Die die,
 
     if (!has_die_child) {
         /* Look for end of sibling chain. */
-        while ( dis->de_last_di_ptr < die_info_end) {
+        while (dis->de_last_di_ptr < die_info_end) {
             if (*dis->de_last_di_ptr) {
                 break;
             }
@@ -1061,7 +1060,7 @@ dwarf_child(Dwarf_Die die,
 
     if (abbrev_code == 0) {
         /* Look for end of sibling chain */
-        while ( dis->de_last_di_ptr < die_info_end) {
+        while (dis->de_last_di_ptr < die_info_end) {
             if (*dis->de_last_di_ptr) {
                 break;
             }
