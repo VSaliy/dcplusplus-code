@@ -27,7 +27,10 @@ namespace {
 
 FILE* f;
 
-#if defined(__MINGW32__) && !defined(_WIN64)
+#if defined(__MINGW32__)
+
+/* All MinGW variants (even x64 SEH ones) store debug information as DWARF. We use libdwarf to
+parse it. */
 
 #include <imagehlp.h>
 
@@ -108,12 +111,40 @@ int load_section(void* obj, Dwarf_Half section_index, Dwarf_Small** return_data,
 DIE that specifically describes the enclosing function of the given address. */
 Dwarf_Die browseDIE(Dwarf_Debug dbg, Dwarf_Addr addr, Dwarf_Die die, Dwarf_Error& error) {
 
-	Dwarf_Addr lowpc, highpc;
-	if(dwarf_lowpc(die, &lowpc, &error) == DW_DLV_OK && dwarf_highpc(die, &highpc, &error) == DW_DLV_OK && addr >= lowpc && addr <= highpc) {
-		// found one! make sure it represents a function (section 3.3 of the DWARF 2 spec).
-		Dwarf_Half tag;
-		if(dwarf_tag(die, &tag, &error) == DW_DLV_OK && (tag == DW_TAG_subprogram || tag == DW_TAG_inlined_subroutine)) {
-			return die;
+	/* only care about DIEs that represent functions (section 3.3 of the DWARF 4 spec). */
+	Dwarf_Half tag;
+	if(dwarf_tag(die, &tag, &error) == DW_DLV_OK && (tag == DW_TAG_subprogram || tag == DW_TAG_inlined_subroutine)) {
+
+		/* get the low_pc & high_pc attributes of this DIE to see if it contains the address we are
+		looking for. can't use dwarf_highpc here because that function only accepts absolute
+		high_pc values; however, section 2.17.2 of the DWARF 4 spec mandates that the high_pc value
+		may also be a constant relative to low_pc. */
+		Dwarf_Addr lowpc, highpc;
+		Dwarf_Attribute high_attr;
+		if(dwarf_lowpc(die, &lowpc, &error) == DW_DLV_OK && addr >= lowpc &&
+			dwarf_attr(die, DW_AT_high_pc, &high_attr, &error) == DW_DLV_OK)
+		{
+
+			Dwarf_Half form;
+			if(dwarf_whatform(high_attr, &form, &error) == DW_DLV_OK) {
+				bool got_high = false;
+				if(form == DW_FORM_addr) { // absolute ref, we can use dwarf_highpc.
+					got_high = dwarf_highpc(die, &highpc, &error) == DW_DLV_OK;
+				} else { // relative ref.
+					Dwarf_Unsigned offset;
+					if(dwarf_formudata(high_attr, &offset, &error) == DW_DLV_OK) {
+						highpc = lowpc + offset;
+						got_high = true;
+					}
+				}
+
+				if(got_high && addr < highpc) {
+					dwarf_dealloc(dbg, high_attr, DW_DLA_ATTR);
+					return die;
+				}
+			}
+
+			dwarf_dealloc(dbg, high_attr, DW_DLA_ATTR);
 		}
 	}
 
@@ -399,24 +430,11 @@ void getDebugInfo(string path, DWORD addr, string& file, int& line, int& column,
 	}
 }
 
-// add some x64 defs that MinGW is missing.
-#define DWORD64 DWORD
-#define IMAGEHLP_LINE64 IMAGEHLP_LINE
-#define IMAGEHLP_MODULE64 IMAGEHLP_MODULE
-#define IMAGEHLP_SYMBOL64 IMAGEHLP_SYMBOL
-#define STACKFRAME64 STACKFRAME
-#define StackWalk64 StackWalk
-#define SymFunctionTableAccess64 SymFunctionTableAccess
-#define SymGetLineFromAddr64 SymGetLineFromAddr
-#define SymGetModuleBase64 SymGetModuleBase
-#define SymGetModuleInfo64 SymGetModuleInfo
-#define SymGetSymFromAddr64 SymGetSymFromAddr
-
-#elif defined(_MSC_VER) || defined(__MINGW64__)
+#elif defined(_MSC_VER)
 
 #include <dbghelp.h>
 
-// MSVC & MinGW64 use SEH. Nothing special to add besides that include file.
+// MSVC uses SEH. Nothing special to add besides that include file.
 
 #else
 
@@ -473,7 +491,7 @@ inline void writeBacktrace(LPCONTEXT context) {
 	HANDLE const process = GetCurrentProcess();
 	HANDLE const thread = GetCurrentThread();
 
-#if defined(__MINGW32__) && !defined(_WIN64)
+#if defined(__MINGW32__)
 	SymSetOptions(SYMOPT_DEFERRED_LOADS);
 #else
 	SymSetOptions(SYMOPT_DEFERRED_LOADS | SYMOPT_LOAD_LINES | SYMOPT_UNDNAME);
@@ -528,7 +546,7 @@ inline void writeBacktrace(LPCONTEXT context) {
 			continue;
 		fprintf(f, "%s: ", module.ModuleName);
 
-#if defined(__MINGW32__) && !defined(_WIN64)
+#if defined(__MINGW32__)
 		// read DWARF debugging info if available.
 		if(module.LoadedImageName[0] ||
 			// LoadedImageName is not always correctly filled in XP...
