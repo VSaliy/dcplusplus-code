@@ -19,10 +19,11 @@
 #ifndef DCPLUSPLUS_WIN32_HUB_FRAME_H
 #define DCPLUSPLUS_WIN32_HUB_FRAME_H
 
+#include <functional>
+
 #include <dcpp/forward.h>
 #include <dcpp/OnlineUser.h>
 #include <dcpp/ClientListener.h>
-#include <dcpp/TaskQueue.h>
 #include <dcpp/User.h>
 #include <dcpp/FavoriteManagerListener.h>
 
@@ -32,6 +33,8 @@
 #include "IRecent.h"
 #include "MDIChildFrame.h"
 #include "UserInfoBase.h"
+
+using std::function;
 
 class HubFrame :
 	public MDIChildFrame<HubFrame>,
@@ -101,11 +104,7 @@ private:
 		COLUMN_LAST
 	};
 
-	enum Tasks {
-		UPDATE_USER_JOIN, UPDATE_USER, REMOVE_USER
-	};
-
-	struct UserTask : Task {
+	struct UserTask {
 		UserTask(const OnlineUser& ou);
 
 		HintedUser user;
@@ -137,7 +136,6 @@ private:
 	};
 
 	typedef unordered_map<UserPtr, UserInfo*, User::Hash> UserMap;
-	typedef UserMap::iterator UserMapIter;
 
 	struct CountAvailable {
 		CountAvailable() : available(0) { }
@@ -167,14 +165,14 @@ private:
 
 	Client* client;
 	string url;
-	bool updateUsers;
 	size_t selCount;
 	bool statusDirty;
 	bool waitingForPW;
 	bool resort;
 	bool confirmClose;
 
-	TaskQueue<false> tasks;
+	vector<pair<function<void (const UserTask&)>, unique_ptr<UserTask>>> tasks;
+	bool updateUsers;
 
 	UserInfo* currentUser; /// only for situations when the user list is hidden
 
@@ -185,8 +183,7 @@ private:
 	StringList tabCompleteNicks;
 	bool inTabComplete;
 
-	typedef std::vector<HubFrame*> FrameList;
-	static FrameList frames;
+	static vector<HubFrame*> frames;
 
 	HubFrame(TabViewPtr parent, string&& url, bool connect);
 	virtual ~HubFrame();

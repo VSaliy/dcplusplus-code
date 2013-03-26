@@ -66,7 +66,7 @@ static const ColumnInfo usersColumns[] = {
 	{ N_("CID"), 300, false}
 };
 
-HubFrame::FrameList HubFrame::frames;
+decltype(HubFrame::frames) HubFrame::frames;
 
 void HubFrame::openWindow(TabViewPtr parent, string url, bool activate, bool connect) {
 	Util::sanitizeUrl(url);
@@ -175,12 +175,12 @@ filterOpts(0),
 showUsers(0),
 client(0),
 url(url),
-updateUsers(false),
 selCount(0),
 statusDirty(true),
 waitingForPW(false),
 resort(false),
 confirmClose(true),
+updateUsers(false),
 currentUser(0),
 hubMenu(false),
 inTabComplete(false)
@@ -619,28 +619,14 @@ void HubFrame::addStatus(const tstring& text, bool legitimate /* = true */) {
 
 void HubFrame::execTasks() {
 	updateUsers = false;
-	auto t = tasks.get();
 
 	HoldRedraw hold { users };
 
-	for(auto& i: t) {
-		if(i.first == UPDATE_USER) {
-			updateUser(static_cast<UserTask&>(*i.second));
-		} else if(i.first == UPDATE_USER_JOIN) {
-			UserTask& u = static_cast<UserTask&>(*i.second);
-			if(updateUser(u)) {
-				if(client->get(HubSettings::ShowJoins) || (client->get(HubSettings::FavShowJoins) && FavoriteManager::getInstance()->isFavoriteUser(u.user))) {
-					addStatus(str(TF_("Joins: %1%") % Text::toT(u.identity.getNick())));
-				}
-			}
-		} else if(i.first == REMOVE_USER) {
-			UserTask& u = static_cast<UserTask&>(*i.second);
-			removeUser(u.user);
-			if(client->get(HubSettings::ShowJoins) || (client->get(HubSettings::FavShowJoins) && FavoriteManager::getInstance()->isFavoriteUser(u.user))) {
-				addStatus(str(TF_("Parts: %1%") % Text::toT(u.identity.getNick())));
-			}
-		}
+	for(auto& task: tasks) {
+		task.first(*task.second);
 	}
+	tasks.clear();
+
 	if(resort && showUsers->getChecked()) {
 		users->resort();
 		resort = false;
@@ -889,7 +875,7 @@ int HubFrame::UserInfo::getStyle(HFONT& font, COLORREF& textColor, COLORREF& bgC
 }
 
 HubFrame::UserTask::UserTask(const OnlineUser& ou) :
-user(ou.getUser(), ou.getClient().getHubUrl()),
+user(ou),
 identity(ou.getIdentity())
 {
 }
@@ -932,7 +918,15 @@ void HubFrame::on(Connected, Client*) noexcept {
 void HubFrame::on(ClientListener::UserUpdated, Client*, const OnlineUser& user) noexcept {
 	auto task = new UserTask(user);
 	callAsync([this, task] {
-		tasks.add(UPDATE_USER_JOIN, unique_ptr<Task>(task));
+		tasks.emplace_back([=](const UserTask& u) {
+			if(updateUser(u)) {
+				if(client->get(HubSettings::ShowJoins) ||
+					(client->get(HubSettings::FavShowJoins) && FavoriteManager::getInstance()->isFavoriteUser(u.user)))
+				{
+					addStatus(str(TF_("Joins: %1%") % Text::toT(u.identity.getNick())));
+				}
+			}
+		}, unique_ptr<UserTask>(task));
 		updateUsers = true;
 	});
 }
@@ -940,7 +934,7 @@ void HubFrame::on(ClientListener::UserUpdated, Client*, const OnlineUser& user) 
 void HubFrame::on(UsersUpdated, Client*, const OnlineUserList& aList) noexcept {
 	for(auto& i: aList) {
 		auto task = new UserTask(*i);
-		callAsync([this, task] { tasks.add(UPDATE_USER, unique_ptr<Task>(task)); });
+		callAsync([this, task] { tasks.emplace_back([=](const UserTask& u) { updateUser(u); }, unique_ptr<UserTask>(task)); });
 	}
 	callAsync([this] { updateUsers = true; });
 }
@@ -948,7 +942,14 @@ void HubFrame::on(UsersUpdated, Client*, const OnlineUserList& aList) noexcept {
 void HubFrame::on(ClientListener::UserRemoved, Client*, const OnlineUser& user) noexcept {
 	auto task = new UserTask(user);
 	callAsync([this, task] {
-		tasks.add(REMOVE_USER, unique_ptr<Task>(task));
+		tasks.emplace_back([=](const UserTask& u) {
+			removeUser(u.user);
+			if(client->get(HubSettings::ShowJoins) ||
+				(client->get(HubSettings::FavShowJoins) && FavoriteManager::getInstance()->isFavoriteUser(u.user)))
+			{
+				addStatus(str(TF_("Parts: %1%") % Text::toT(u.identity.getNick())));
+			}
+		}, unique_ptr<UserTask>(task));
 		updateUsers = true;
 	});
 }
