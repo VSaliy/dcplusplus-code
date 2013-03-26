@@ -61,7 +61,8 @@ TransferView::TransferView(dwt::Widget* parent, TabViewPtr mdi_) :
 	transfers(0),
 	mdi(mdi_),
 	downloadIcon(WinUtil::createIcon(IDI_DOWNLOAD, 16)),
-	uploadIcon(WinUtil::createIcon(IDI_UPLOAD, 16))
+	uploadIcon(WinUtil::createIcon(IDI_UPLOAD, 16)),
+	updateList(false)
 {
 	create();
 	setHelpId(IDH_TRANSFERS);
@@ -84,6 +85,8 @@ TransferView::TransferView(dwt::Widget* parent, TabViewPtr mdi_) :
 	noEraseBackground();
 
 	layout();
+
+	setTimer([this] { return handleTimer(); }, 500);
 
 	ConnectionManager::getInstance()->addListener(this);
 	DownloadManager::getInstance()->addListener(this);
@@ -578,8 +581,74 @@ LRESULT TransferView::handleCustomDraw(NMLVCUSTOMDRAW& data) {
 	}
 }
 
+bool TransferView::handleTimer() {
+	if(updateList) {
+		updateList = false;
+		callAsync([this] { execTasks(); });
+	}
+	return true;
+}
+
 void TransferView::layout() {
 	transfers->resize(dwt::Rectangle(getClientSize()));
+}
+
+void TransferView::addConn(const UpdateInfo& ui) {
+	TransferInfo* transfer = nullptr;
+	auto conn = findConn(ui.user, ui.download);
+	if(ui.updateMask & UpdateInfo::MASK_FILE) {
+		transfer = findTransfer(ui.path, ui.download);
+		if(!transfer) {
+			transferItems.emplace_back(ui.tth, ui.download, ui.path);
+			transfer = &transferItems.back();
+			transfers->insert(transfer);
+		}
+		if(conn && &conn->parent != transfer) {
+			removeTransfer(conn->parent);
+			conn = nullptr;
+		}
+		if(ui.download) {
+			QueueManager::getInstance()->getSizeInfo(transfer->size, transfer->startPos, ui.path);
+		} else {
+			transfer->transferred = ui.transferred;
+			transfer->size = ui.size;
+		}
+	} else {
+		if(conn) {
+			removeConn(*conn);
+			conn = nullptr;
+		}
+		// we don't know what file this connection is for yet.
+		transferItems.emplace_back(TTHValue(), ui.download, ui.user.user->getCID().toBase32());
+		transfer = &transferItems.back();
+		transfers->insert(transfer);
+	}
+	if(!conn) {
+		transfer->conns.emplace_back(ui.user, *transfer);
+		conn = &transfer->conns.back();
+		transfers->insertChild(reinterpret_cast<LPARAM>(transfer), reinterpret_cast<LPARAM>(conn));
+	}
+	conn->update(ui);
+	transfer->update();
+}
+
+void TransferView::updateConn(const UpdateInfo& ui) {
+	auto conn = findConn(ui.user, ui.download);
+	if(conn) {
+		conn->update(ui);
+		conn->parent.update();
+	}
+}
+
+void TransferView::removeConn(const UpdateInfo& ui) {
+	auto conn = findConn(ui.user, ui.download);
+	if(conn) {
+		removeConn(*conn);
+	}
+	auto transfer = findTransfer(ui.path, ui.download);
+	if(transfer) {
+		removeTransfer(*transfer);
+	}
 }
 
 TransferView::ConnectionInfo* TransferView::findConn(const HintedUser& user, bool download) {
@@ -640,88 +709,15 @@ TransferView::UserInfoList TransferView::selectedUsersImpl() const {
 	return users;
 }
 
-void TransferView::addTask(int type, Task* ui) {
-	tasks.add(type, unique_ptr<Task>(ui));
-	callAsync([this] { execTasks(); });
-}
-
 void TransferView::execTasks() {
-	auto t = tasks.get();
-	if(t.empty())
-		return;
+	updateList = false;
 
 	HoldRedraw hold { transfers };
 
-	for(auto& i: t) {
-		switch(i.first) {
-		case ADD_CONNECTION:
-			{
-				auto& ui = static_cast<UpdateInfo&>(*i.second);
-				TransferInfo* transfer = nullptr;
-				auto conn = findConn(ui.user, ui.download);
-				if(ui.updateMask & UpdateInfo::MASK_FILE) {
-					transfer = findTransfer(ui.path, ui.download);
-					if(!transfer) {
-						transferItems.emplace_back(ui.tth, ui.download, ui.path);
-						transfer = &transferItems.back();
-						transfers->insert(transfer);
-					}
-					if(conn && &conn->parent != transfer) {
-						removeTransfer(conn->parent);
-						conn = nullptr;
-					}
-					if(ui.download) {
-						QueueManager::getInstance()->getSizeInfo(transfer->size, transfer->startPos, ui.path);
-					} else {
-						transfer->transferred = ui.transferred;
-						transfer->size = ui.size;
-					}
-				} else {
-					if(conn) {
-						removeConn(*conn);
-						conn = nullptr;
-					}
-					// we don't know what file this connection is for yet.
-					transferItems.emplace_back(TTHValue(), ui.download, ui.user.user->getCID().toBase32());
-					transfer = &transferItems.back();
-					transfers->insert(transfer);
-				}
-				if(!conn) {
-					transfer->conns.emplace_back(ui.user, *transfer);
-					conn = &transfer->conns.back();
-					transfers->insertChild(reinterpret_cast<LPARAM>(transfer), reinterpret_cast<LPARAM>(conn));
-				}
-				conn->update(ui);
-				transfer->update();
-				break;
-			}
-
-		case UPDATE_CONNECTION:
-			{
-				auto& ui = static_cast<UpdateInfo&>(*i.second);
-				auto conn = findConn(ui.user, ui.download);
-				if(conn) {
-					conn->update(ui);
-					conn->parent.update();
-				}
-				break;
-			}
-
-		case REMOVE_CONNECTION:
-			{
-				auto& ui = static_cast<UpdateInfo&>(*i.second);
-				auto conn = findConn(ui.user, ui.download);
-				if(conn) {
-					removeConn(*conn);
-				}
-				auto transfer = findTransfer(ui.path, ui.download);
-				if(transfer) {
-					removeTransfer(*transfer);
-				}
-				break;
-			}
-		}
+	for(auto& task: tasks) {
+		task.first(*task.second);
 	}
+	tasks.clear();
 
 	transfers->resort();
 }
@@ -731,11 +727,11 @@ void TransferView::on(ConnectionManagerListener::Added, ConnectionQueueItem* aCq
 	ui->setStatus(ConnectionInfo::STATUS_WAITING);
 	ui->setStatusString(T_("Connecting"));
 
-	addTask(ADD_CONNECTION, ui);
+	addedConn(ui);
 }
 
 void TransferView::on(ConnectionManagerListener::Removed, ConnectionQueueItem* aCqi) noexcept {
-	addTask(REMOVE_CONNECTION, new UpdateInfo(aCqi->getUser(), aCqi->getDownload()));
+	removedConn(new UpdateInfo(aCqi->getUser(), aCqi->getDownload()));
 }
 
 void TransferView::on(ConnectionManagerListener::Failed, ConnectionQueueItem* aCqi, const string& aReason) noexcept {
@@ -744,14 +740,14 @@ void TransferView::on(ConnectionManagerListener::Failed, ConnectionQueueItem* aC
 		T_("Remote client does not fully support TTH - cannot download") :
 		Text::toT(aReason));
 
-	addTask(UPDATE_CONNECTION, ui);
+	updatedConn(ui);
 }
 
 void TransferView::on(ConnectionManagerListener::StatusChanged, ConnectionQueueItem* aCqi) noexcept {
 	auto ui = new UpdateInfo(aCqi->getUser(), aCqi->getDownload());
 	ui->setStatusString((aCqi->getState() == ConnectionQueueItem::CONNECTING) ? T_("Connecting") : T_("Waiting to retry"));
 
-	addTask(UPDATE_CONNECTION, ui);
+	updatedConn(ui);
 }
 
 namespace { tstring getFile(Transfer* t) {
@@ -804,15 +800,13 @@ void TransferView::on(DownloadManagerListener::Starting, Download* d) noexcept {
 	statusString += str(TF_("Downloading %1%") % getFile(d));
 	ui->setStatusString(statusString);
 
-	addTask(UPDATE_CONNECTION, ui);
+	updatedConn(ui);
 }
 
 void TransferView::on(DownloadManagerListener::Tick, const DownloadList& dl) noexcept  {
 	for(auto i: dl) {
 		onTransferTick(i, true);
 	}
-
-	callAsync([this] { execTasks(); });
 }
 
 void TransferView::on(DownloadManagerListener::Requesting, Download* d) noexcept {
@@ -820,7 +814,7 @@ void TransferView::on(DownloadManagerListener::Requesting, Download* d) noexcept
 	starting(ui, d);
 	ui->setStatusString(str(TF_("Requesting %1%") % getFile(d)));
 
-	addTask(ADD_CONNECTION, ui);
+	addedConn(ui);
 }
 
 void TransferView::on(UploadManagerListener::Complete, Upload* u) noexcept {
@@ -848,33 +842,52 @@ void TransferView::on(UploadManagerListener::Starting, Upload* u) noexcept {
 	statusString += str(TF_("Uploading %1%") % getFile(u));
 	ui->setStatusString(statusString);
 
-	addTask(UPDATE_CONNECTION, ui);
+	updatedConn(ui);
 }
 
 void TransferView::on(UploadManagerListener::Tick, const UploadList& ul) noexcept {
 	for(auto i: ul) {
 		onTransferTick(i, false);
 	}
-
-	callAsync([this] { execTasks(); });
 }
 
 void TransferView::on(QueueManagerListener::Removed, QueueItem* qi) noexcept {
-	auto ui = new UpdateInfo(HintedUser(), true);
+	/*auto ui = new UpdateInfo(HintedUser(), true);
 	ui->setFile(qi->getTTH(), qi->getTarget());
-	addTask(REMOVE_CONNECTION, ui);
+	removedConn(ui);*/
 }
 
 void TransferView::on(QueueManagerListener::StatusUpdated, QueueItem* qi) noexcept {
-	if(qi->isFinished() || qi->getPriority() == QueueItem::PAUSED || qi->countOnlineUsers() == 0) {
+	/*if(qi->isFinished() || qi->getPriority() == QueueItem::PAUSED || qi->countOnlineUsers() == 0) {
 		auto ui = new UpdateInfo(HintedUser(), true);
 		ui->setFile(qi->getTTH(), qi->getTarget());
-		addTask(REMOVE_CONNECTION, ui);
-	}
+		removedConn(ui);
+	}*/
 }
 
 void TransferView::on(QueueManagerListener::CRCFailed, Download* d, const string& aReason) noexcept {
 	onFailed(d, aReason);
+}
+
+void TransferView::addedConn(UpdateInfo* ui) {
+	callAsync([this, ui] {
+		tasks.emplace_back([=](const UpdateInfo& ui) { addConn(ui); }, unique_ptr<UpdateInfo>(ui));
+		updateList = true;
+	});
+}
+
+void TransferView::updatedConn(UpdateInfo* ui) {
+	callAsync([this, ui] {
+		tasks.emplace_back([=](const UpdateInfo& ui) { updateConn(ui); }, unique_ptr<UpdateInfo>(ui));
+		updateList = true;
+	});
+}
+
+void TransferView::removedConn(UpdateInfo* ui) {
+	callAsync([this, ui] {
+		tasks.emplace_back([=](const UpdateInfo& ui) { removeConn(ui); }, unique_ptr<UpdateInfo>(ui));
+		updateList = true;
+	});
 }
 
 void TransferView::starting(UpdateInfo* ui, Transfer* t) {
@@ -892,7 +905,7 @@ void TransferView::onTransferTick(Transfer* t, bool download) {
 	ui->setFile(t->getTTH(), t->getPath());
 	ui->setTransferred(t->getPos(), t->getActual(), t->getSize());
 	ui->setSpeed(t->getAverageSpeed());
-	tasks.add(UPDATE_CONNECTION, unique_ptr<Task>(ui));
+	updatedConn(ui);
 }
 
 void TransferView::onTransferComplete(Transfer* t, bool download) {
@@ -902,7 +915,7 @@ void TransferView::onTransferComplete(Transfer* t, bool download) {
 	ui->setStatusString(T_("Idle"));
 	ui->setTransferred(t->getPos(), t->getActual(), t->getSize());
 
-	addTask(UPDATE_CONNECTION, ui);
+	updatedConn(ui);
 }
 
 void TransferView::onFailed(Download* d, const string& aReason) {
@@ -911,5 +924,5 @@ void TransferView::onFailed(Download* d, const string& aReason) {
 	ui->setStatus(ConnectionInfo::STATUS_WAITING);
 	ui->setStatusString(Text::toT(aReason));
 
-	addTask(UPDATE_CONNECTION, ui);
+	updatedConn(ui);
 }

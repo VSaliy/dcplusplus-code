@@ -19,13 +19,13 @@
 #ifndef DCPLUSPLUS_WIN32_TRANSFER_VIEW_H
 #define DCPLUSPLUS_WIN32_TRANSFER_VIEW_H
 
+#include <functional>
 #include <list>
 
 #include <dcpp/DownloadManagerListener.h>
 #include <dcpp/UploadManagerListener.h>
 #include <dcpp/ConnectionManagerListener.h>
 #include <dcpp/QueueManagerListener.h>
-#include <dcpp/TaskQueue.h>
 #include <dcpp/forward.h>
 #include <dcpp/MerkleTree.h>
 #include <dcpp/Util.h>
@@ -36,6 +36,7 @@
 
 #include "UserInfoBase.h"
 
+using std::function;
 using std::list;
 
 class TransferView :
@@ -71,12 +72,6 @@ private:
 		COLUMN_IP,
 		COLUMN_COUNTRY,
 		COLUMN_LAST
-	};
-
-	enum {
-		ADD_CONNECTION,
-		UPDATE_CONNECTION,
-		REMOVE_CONNECTION
 	};
 
 	struct TransferInfo;
@@ -152,7 +147,7 @@ private:
 		list<ConnectionInfo> conns;
 	};
 
-	struct UpdateInfo : public Task {
+	struct UpdateInfo {
 		enum {
 			MASK_STATUS = 1 << 0,
 			MASK_STATUS_STRING = 1 << 1,
@@ -210,9 +205,8 @@ private:
 	const dwt::IconPtr downloadIcon;
 	const dwt::IconPtr uploadIcon;
 
-	bool startup;
-
-	TaskQueue<true> tasks; // todo get rid of TaskQueue
+	vector<pair<function<void (const UpdateInfo&)>, unique_ptr<UpdateInfo>>> tasks;
+	bool updateList;
 
 	ParamMap ucLineParams;
 
@@ -224,8 +218,13 @@ private:
 	bool handleKeyDown(int c);
 	void handleDblClicked();
 	LRESULT handleCustomDraw(NMLVCUSTOMDRAW& data);
+	bool handleTimer();
 
 	void layout();
+
+	void addConn(const UpdateInfo& ui);
+	void updateConn(const UpdateInfo& ui);
+	void removeConn(const UpdateInfo& ui);
 
 	ConnectionInfo* findConn(const HintedUser& user, bool download);
 	TransferInfo* findTransfer(const string& path, bool download);
@@ -235,7 +234,6 @@ private:
 	// AspectUserInfo
 	UserInfoList selectedUsersImpl() const;
 
-	void addTask(int type, Task* ui);
 	void execTasks();
 
 	virtual void on(ConnectionManagerListener::Added, ConnectionQueueItem* aCqi) noexcept;
@@ -256,6 +254,10 @@ private:
 	virtual void on(QueueManagerListener::Removed, QueueItem* qi) noexcept;
 	virtual void on(QueueManagerListener::StatusUpdated, QueueItem* qi) noexcept;
 	virtual void on(QueueManagerListener::CRCFailed, Download* d, const string& aReason) noexcept;
+
+	void addedConn(UpdateInfo* ui);
+	void updatedConn(UpdateInfo* ui);
+	void removedConn(UpdateInfo* ui);
 
 	void starting(UpdateInfo* ui, Transfer* t);
 	void onTransferTick(Transfer* t, bool download);
