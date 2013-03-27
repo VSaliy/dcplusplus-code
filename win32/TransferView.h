@@ -251,8 +251,6 @@ private:
 	virtual void on(UploadManagerListener::Starting, Upload* u) noexcept;
 	virtual void on(UploadManagerListener::Tick, const UploadList& ul) noexcept;
 
-	virtual void on(QueueManagerListener::Removed, QueueItem* qi) noexcept;
-	virtual void on(QueueManagerListener::StatusUpdated, QueueItem* qi) noexcept;
 	virtual void on(QueueManagerListener::CRCFailed, Download* d, const string& aReason) noexcept;
 
 	void addedConn(UpdateInfo* ui);

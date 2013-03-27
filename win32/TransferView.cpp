@@ -121,10 +121,9 @@ int TransferView::ItemInfo::getImage(int col) const {
 }
 
 int TransferView::ItemInfo::compareItems(const ItemInfo* a, const ItemInfo* b, int col) {
-	auto ta = dynamic_cast<const TransferInfo*>(a), tb = dynamic_cast<const TransferInfo*>(b);
-	if(ta && tb && ta->download != tb->download) {
+	if(const_cast<ItemInfo*>(a)->transfer().download != const_cast<ItemInfo*>(b)->transfer().download) {
 		// sort downloads before uploads.
-		return ta->download ? -1 : 1;
+		return const_cast<ItemInfo*>(a)->transfer().download ? -1 : 1;
 	}
 
 	auto ca = dynamic_cast<const ConnectionInfo*>(a), cb = dynamic_cast<const ConnectionInfo*>(b);
@@ -178,12 +177,10 @@ int TransferView::ConnectionInfo::getImage(int col) const {
 
 void TransferView::ConnectionInfo::update(const UpdateInfo& ui) {
 	if(ui.updateMask & UpdateInfo::MASK_FILE) {
-		if(ui.path != parent.path) {
-			parent.path = ui.path;
-			parent.updatePath();
-			columns[COLUMN_FILE] = parent.getText(COLUMN_FILE);
-			columns[COLUMN_PATH] = parent.getText(COLUMN_PATH);
-		}
+		parent.path = ui.path;
+		parent.updatePath();
+		columns[COLUMN_FILE] = parent.getText(COLUMN_FILE);
+		columns[COLUMN_PATH] = parent.getText(COLUMN_PATH);
 	}
 
 	if(ui.updateMask & UpdateInfo::MASK_STATUS) {
@@ -261,7 +258,6 @@ TransferView::TransferInfo::TransferInfo(const TTHValue& tth, bool download, con
 	path(path),
 	startPos(0)
 {
-	updatePath();
 }
 
 bool TransferView::TransferInfo::operator==(const TransferInfo& other) const {
@@ -596,16 +592,17 @@ void TransferView::layout() {
 void TransferView::addConn(const UpdateInfo& ui) {
 	TransferInfo* transfer = nullptr;
 	auto conn = findConn(ui.user, ui.download);
+
 	if(ui.updateMask & UpdateInfo::MASK_FILE) {
+		// adding a connection we know the transfer of.
 		transfer = findTransfer(ui.path, ui.download);
+		if(conn && &conn->parent != transfer) {
+			removeConn(*conn);
+			conn = nullptr;
+		}
 		if(!transfer) {
 			transferItems.emplace_back(ui.tth, ui.download, ui.path);
 			transfer = &transferItems.back();
-			transfers->insert(transfer);
-		}
-		if(conn && &conn->parent != transfer) {
-			removeTransfer(conn->parent);
-			conn = nullptr;
 		}
 		if(ui.download) {
 			QueueManager::getInstance()->getSizeInfo(transfer->size, transfer->startPos, ui.path);
@@ -613,23 +610,41 @@ void TransferView::addConn(const UpdateInfo& ui) {
 			transfer->transferred = ui.transferred;
 			transfer->size = ui.size;
 		}
+
 	} else {
+		// this connection has just been created; we don't know what file it is for yet.
 		if(conn) {
 			removeConn(*conn);
 			conn = nullptr;
 		}
-		// we don't know what file this connection is for yet.
 		transferItems.emplace_back(TTHValue(), ui.download, ui.user.user->getCID().toBase32());
 		transfer = &transferItems.back();
-		transfers->insert(transfer);
 	}
+
+	auto newConn = !conn, newGroup = false;
+
 	if(!conn) {
+		if(transfer->conns.size() == 1) {
+			newGroup = true;
+			transfers->erase(&transfer->conns.front());
+		}
 		transfer->conns.emplace_back(ui.user, *transfer);
 		conn = &transfer->conns.back();
-		transfers->insertChild(reinterpret_cast<LPARAM>(transfer), reinterpret_cast<LPARAM>(conn));
 	}
+
 	conn->update(ui);
 	transfer->update();
+
+	if(newGroup) {
+		transfers->insert(transfer);
+		for(auto& child: transfer->conns) {
+			transfers->insertChild(reinterpret_cast<LPARAM>(transfer), reinterpret_cast<LPARAM>(&child));
+		}
+	} else if(newConn && transfer->conns.size() > 1) {
+		transfers->insertChild(reinterpret_cast<LPARAM>(transfer), reinterpret_cast<LPARAM>(conn));
+	} else if(newConn) {
+		transfers->insert(conn);
+	}
 }
 
 void TransferView::updateConn(const UpdateInfo& ui) {
@@ -643,11 +658,15 @@ void TransferView::updateConn(const UpdateInfo& ui) {
 void TransferView::removeConn(const UpdateInfo& ui) {
 	auto conn = findConn(ui.user, ui.download);
 	if(conn) {
+		auto& parent = conn->parent;
+		auto ungroup = parent.conns.size() == 2;
+
 		removeConn(*conn);
-	}
-	auto transfer = findTransfer(ui.path, ui.download);
-	if(transfer) {
-		removeTransfer(*transfer);
+
+		if(ungroup) {
+			transfers->erase(&parent);
+			transfers->insert(&parent.conns.front());
+		}
 	}
 }
 
@@ -676,10 +695,7 @@ TransferView::TransferInfo* TransferView::findTransfer(const string& path, bool 
 }
 
 void TransferView::removeConn(ConnectionInfo& conn) {
-	auto pos = transfers->find(&conn);
-	if(pos >= 0) {
-		transfers->erase(pos);
-	}
+	transfers->erase(&conn);
 
 	auto& transfer = conn.parent;
 
@@ -851,20 +867,6 @@ void TransferView::on(UploadManagerListener::Tick, const UploadList& ul) noexcep
 	}
 }
 
-void TransferView::on(QueueManagerListener::Removed, QueueItem* qi) noexcept {
-	/*auto ui = new UpdateInfo(HintedUser(), true);
-	ui->setFile(qi->getTTH(), qi->getTarget());
-	removedConn(ui);*/
-}
-
-void TransferView::on(QueueManagerListener::StatusUpdated, QueueItem* qi) noexcept {
-	/*if(qi->isFinished() || qi->getPriority() == QueueItem::PAUSED || qi->countOnlineUsers() == 0) {
-		auto ui = new UpdateInfo(HintedUser(), true);
-		ui->setFile(qi->getTTH(), qi->getTarget());
-		removedConn(ui);
-	}*/
-}
-
 void TransferView::on(QueueManagerListener::CRCFailed, Download* d, const string& aReason) noexcept {
 	onFailed(d, aReason);
 }
@@ -902,7 +904,6 @@ void TransferView::starting(UpdateInfo* ui, Transfer* t) {
 
 void TransferView::onTransferTick(Transfer* t, bool download) {
 	auto ui = new UpdateInfo(t->getHintedUser(), download);
-	ui->setFile(t->getTTH(), t->getPath());
 	ui->setTransferred(t->getPos(), t->getActual(), t->getSize());
 	ui->setSpeed(t->getAverageSpeed());
 	updatedConn(ui);
