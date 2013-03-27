@@ -56,8 +56,12 @@
 
 		We recommend using compilers from the MinGW-w64 project. All you have to do to use one is
 		download it and extract it.
-		Prefer DWARF versions of 32-bit compilers and SEH versions of 64-bit ones. (In short, avoid
-		SJLJ for performance reasons.)
+		Prefer DWARF versions (usually marked with a "-dw") of 32-bit compilers; SJLJ ones should
+		be avoided for performance reasons.
+
+		I am currently using these 2 packages by Ruben Van Boxem:
+		- 32-bit: <http://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/rubenvb/gcc-4.8-dw2-release/>
+		- 64-bit: <http://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/rubenvb/gcc-4.8-release/>
 
 		To install compilers from regular MinGW (not MinGW-w64), the easiest way is to use
 		mingw-get. Extract it to C:\MinGW and run:
@@ -76,6 +80,22 @@
 		Make sure that Cygwin\bin is in your PATH environment variable.
 		Note that building with MinGW compilers provided by Cygwin is not often tested.
 
+	b. Microsoft Visual Studio 2012:
+	<http://msdn.microsoft.com/en-us/visualc/default.aspx>
+
+		Make sure VS is up-to-date; in particular, you will need the Nov 2012 CTP from
+		<http://www.microsoft.com/en-us/download/details.aspx?id=35515>. Use the patch in
+		msvc/nov2012ctp.patch to patch your VC/vcvarsall.bat file to make use of it (if you
+		generate project files and compile from the VS GUI, that won't be necessary).
+
+		To generate project files for MSVC, run "scons" with "msvcproj=1" and "tools=default".
+		The resulting solution file (DCPlusPlus.sln) will be in msvc/[mode-arch]/.
+
+
+3. Additional include files and libraries
+
+	a. HTML Help support (only for MinGW)
+
 		To build a version with HTML Help support, copy the following files from a Windows SDK
 		(Windows SDK path -> DC++ source code path):
 		Include/shared/winapifamily.h -> mingw/include/winapifamily.h
@@ -87,13 +107,7 @@
 		<http://msdn.microsoft.com/en-US/windows/desktop/hh852363>; it installs into
 		"C:\Program Files (x86)\Windows Kits\8.0".
 
-	b. Microsoft Visual Studio 2012:
-	<http://msdn.microsoft.com/en-us/visualc/default.aspx>
-
-		Make sure VS is up-to-date; in particular, you will need the Nov 2012 CTP from
-		<http://www.microsoft.com/en-us/download/details.aspx?id=35515>. Use the patch in
-		msvc/nov2012ctp.patch to patch your VC/vcvarsall.bat file to make use of it (if you
-		generate project files and compile from the VS GUI, that won't be necessary).
+	b. OpenSSL (only for Visual Studio)
 
 		Download OpenSSL from www.openssl.org and compile it. You should get libraries called
 		libeay32.lib and ssleay32.lib; copy them in openssl/lib.
@@ -102,11 +116,10 @@
 		(read their instructions file; it's a matter of adding "debug" in the do_* file you use).
 		Rename debug libraries to libeay32d.lib and ssleay32d.lib; put them in openssl/lib.
 
-		To generate project files for MSVC, run "scons" with "msvcproj=1" and "tools=default".
-		The resulting solution file (DCPlusPlus.sln) will be in msvc/[mode-arch]/.
+		You may also ask around in the DCDev hub; someone might have already built a package.
 
 
-3. Starting the build process
+4. Starting the build process
 
 	Open a command prompt and type "scons" followed by some options:
 
@@ -127,7 +140,7 @@
 		If you have problems, use google. It works for me.
 
 
-4.  Other information and submitting patches
+5.  Other information and submitting patches
 
 		a. With doxygen, graphviz and some luck, you can use the supplied doxygen configuration
 		file to generate some nice docs. Just check that the paths in the doxyfile are correct.
