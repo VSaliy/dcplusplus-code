@@ -198,19 +198,23 @@ void TransferView::ConnectionInfo::update(const UpdateInfo& ui) {
 		actual = ui.actual;
 		transferred = ui.transferred;
 		size = ui.size;
-		if(transferred) {
+		if(transferred > 0) {
 			columns[COLUMN_TRANSFERRED] = str(TF_("%1% (%2$0.2f)")
 				% Text::toT(Util::formatBytes(transferred))
 				% (static_cast<double>(actual) / static_cast<double>(transferred)));
 		} else {
 			columns[COLUMN_TRANSFERRED].clear();
 		}
-		columns[COLUMN_SIZE] = Text::toT(Util::formatBytes(size));
+		if(size > 0) {
+			columns[COLUMN_SIZE] = Text::toT(Util::formatBytes(size));
+		} else {
+			columns[COLUMN_SIZE].clear();
+		}
 	}
 
 	if((ui.updateMask & UpdateInfo::MASK_STATUS) || (ui.updateMask & UpdateInfo::MASK_SPEED)) {
 		speed = std::max(ui.speed, 0LL); // sometimes the speed is negative; avoid problems.
-		if(status == STATUS_RUNNING) {
+		if(status == STATUS_RUNNING && speed > 0) {
 			columns[COLUMN_SPEED] = str(TF_("%1%/s") % Text::toT(Util::formatBytes(speed)));
 		} else {
 			columns[COLUMN_SPEED].clear();
@@ -270,6 +274,15 @@ int TransferView::TransferInfo::getImage(int col) const {
 
 void TransferView::TransferInfo::update() {
 	speed = 0; transferred = startPos;
+
+	if(conns.empty()) {
+		// this should never happen, but let's play safe.
+		for(auto& col: columns) {
+			col.clear();
+		}
+		return;
+	}
+
 	set<string> hubs;
 	for(auto& conn: conns) {
 		if(conn.status == ConnectionInfo::STATUS_RUNNING) {
@@ -281,38 +294,33 @@ void TransferView::TransferInfo::update() {
 
 	if(size == -1) {
 		// this can happen with file lists... get the size of the first connection.
-		if(!conns.empty()) {
-			size = conns.front().size;
-		}
+		size = conns.front().size;
 	}
 
-	if(conns.empty()) {
-		// this should never happen, but let's play safe.
-		columns[COLUMN_STATUS] = T_("Idle");
-		columns[COLUMN_USER].clear();
-		columns[COLUMN_HUB].clear();
-		columns[COLUMN_TIMELEFT].clear();
-		columns[COLUMN_SPEED].clear();
+	if(conns.size() == 1) {
+		auto& conn = conns.front();
+		columns[COLUMN_STATUS] = conn.getText(COLUMN_STATUS);
+		columns[COLUMN_USER] = conn.getText(COLUMN_USER);
+		columns[COLUMN_HUB] = conn.getText(COLUMN_HUB);
+		columns[COLUMN_CIPHER] = conn.getText(COLUMN_CIPHER);
+		columns[COLUMN_IP] = conn.getText(COLUMN_IP);
+		columns[COLUMN_COUNTRY] = conn.getText(COLUMN_COUNTRY);
 
 	} else {
 		auto users = conns.size();
 		columns[COLUMN_STATUS] = download ?
-			str(TFN_("Downloading from %1% user", "Downloading from %1% users", users) % users) :
-			str(TFN_("Uploading to %1% user", "Uploading to %1% users", users) % users);
-		if(users == 1) {
-			columns[COLUMN_USER] = conns.front().getText(COLUMN_USER);
-		} else {
-			columns[COLUMN_USER] = str(TF_("%1% users") % users);
-		}
+			str(TF_("Downloading from %1% users") % users) :
+			str(TF_("Uploading to %1% users") % users);
+		columns[COLUMN_USER] = str(TF_("%1% users") % users);
 		if(hubs.size() == 1) {
 			columns[COLUMN_HUB] = conns.front().getText(COLUMN_HUB);
 		} else {
 			columns[COLUMN_HUB] = str(TF_("%1% hubs") % hubs.size());
 		}
-		columns[COLUMN_TIMELEFT] = Text::toT(Util::formatSeconds(timeleft()));
-		columns[COLUMN_SPEED] = str(TF_("%1%/s") % Text::toT(Util::formatBytes(speed)));
 	}
 
+	columns[COLUMN_TIMELEFT] = Text::toT(Util::formatSeconds(timeleft()));
+	columns[COLUMN_SPEED] = str(TF_("%1%/s") % Text::toT(Util::formatBytes(speed)));
 	columns[COLUMN_TRANSFERRED] = Text::toT(Util::formatBytes(transferred));
 	columns[COLUMN_SIZE] = Text::toT(Util::formatBytes(size));
 }
@@ -433,9 +441,9 @@ bool TransferView::handleKeyDown(int c) {
 }
 
 void TransferView::handleDblClicked() {
-	auto conn = dynamic_cast<ConnectionInfo*>(transfers->getSelectedData());
-	if(conn) {
-		conn->pm(mdi);
+	auto users = selectedUsersImpl();
+	if(users.size() == 1) {
+		users[0]->pm(mdi);
 	}
 }
 
@@ -603,6 +611,7 @@ void TransferView::addConn(const UpdateInfo& ui) {
 		if(!transfer) {
 			transferItems.emplace_back(ui.tth, ui.download, ui.path);
 			transfer = &transferItems.back();
+			transfers->insert(transfer);
 		}
 		if(ui.download) {
 			QueueManager::getInstance()->getSizeInfo(transfer->size, transfer->startPos, ui.path);
@@ -619,32 +628,28 @@ void TransferView::addConn(const UpdateInfo& ui) {
 		}
 		transferItems.emplace_back(TTHValue(), ui.download, ui.user.user->getCID().toBase32());
 		transfer = &transferItems.back();
+		transfers->insert(transfer);
 	}
 
 	auto newConn = !conn, newGroup = false;
 
 	if(!conn) {
-		if(transfer->conns.size() == 1) {
-			newGroup = true;
-			transfers->erase(&transfer->conns.front());
-		}
 		transfer->conns.emplace_back(ui.user, *transfer);
 		conn = &transfer->conns.back();
+
+		// only show the child connection item when there are multiple children.
+		auto connCount = transfer->conns.size();
+		if(connCount > 1) {
+			if(connCount == 2) {
+				// add the previous child.
+				transfers->insertChild(reinterpret_cast<LPARAM>(transfer), reinterpret_cast<LPARAM>(&transfer->conns.front()));
+			}
+			transfers->insertChild(reinterpret_cast<LPARAM>(transfer), reinterpret_cast<LPARAM>(conn));
+		}
 	}
 
 	conn->update(ui);
 	transfer->update();
-
-	if(newGroup) {
-		transfers->insert(transfer);
-		for(auto& child: transfer->conns) {
-			transfers->insertChild(reinterpret_cast<LPARAM>(transfer), reinterpret_cast<LPARAM>(&child));
-		}
-	} else if(newConn && transfer->conns.size() > 1) {
-		transfers->insertChild(reinterpret_cast<LPARAM>(transfer), reinterpret_cast<LPARAM>(conn));
-	} else if(newConn) {
-		transfers->insert(conn);
-	}
 }
 
 void TransferView::updateConn(const UpdateInfo& ui) {
@@ -664,8 +669,7 @@ void TransferView::removeConn(const UpdateInfo& ui) {
 		removeConn(*conn);
 
 		if(ungroup) {
-			transfers->erase(&parent);
-			transfers->insert(&parent.conns.front());
+			transfers->erase(&parent.conns.front());
 		}
 	}
 }
@@ -720,6 +724,11 @@ TransferView::UserInfoList TransferView::selectedUsersImpl() const {
 		auto conn = dynamic_cast<ConnectionInfo*>(ii);
 		if(conn) {
 			users.push_back(conn);
+		} else {
+			auto transfer = dynamic_cast<TransferInfo*>(ii);
+			if(transfer && transfer->conns.size() == 1) {
+				users.push_back(&transfer->conns.front());
+			}
 		}
 	});
 	return users;
