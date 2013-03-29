@@ -87,11 +87,12 @@ private:
 
 		virtual TransferInfo& transfer() = 0;
 
+		virtual double barPos() const = 0;
+
 		virtual void force() = 0;
 		virtual void disconnect() = 0;
 
-		int64_t timeleft() const;
-
+		int64_t timeleft;
 		int64_t speed;
 		int64_t actual;
 		int64_t transferred;
@@ -116,6 +117,8 @@ private:
 
 		TransferInfo& transfer();
 
+		double barPos() const;
+
 		void force();
 		void disconnect();
 
@@ -135,6 +138,8 @@ private:
 		void updatePath();
 
 		TransferInfo& transfer();
+
+		double barPos() const;
 
 		void force();
 		void disconnect();
