@@ -140,16 +140,12 @@ int TransferView::ItemInfo::compareItems(const ItemInfo* a, const ItemInfo* b, i
 				!a->transferred ? 1 :
 				compare(a->size / a->transferred, b->size / b->transferred);
 		}
-	case COLUMN_TIMELEFT: return compare(a->timeleft(), b->timeleft());
+	case COLUMN_TIMELEFT: return compare(a->timeleft, b->timeleft);
 	case COLUMN_SPEED: return compare(a->speed, b->speed);
 	case COLUMN_TRANSFERRED: return compare(a->transferred, b->transferred);
 	case COLUMN_SIZE: return compare(a->size, b->size);
 	default: return compare(a->getText(col), b->getText(col));
 	}
-}
-
-int64_t TransferView::ItemInfo::timeleft() const {
-	return speed == 0 ? 0 : static_cast<double>(size - transferred) / speed;
 }
 
 TransferView::ConnectionInfo::ConnectionInfo(const HintedUser& u, TransferInfo& parent) :
@@ -164,7 +160,6 @@ TransferView::ConnectionInfo::ConnectionInfo(const HintedUser& u, TransferInfo& 
 	columns[COLUMN_USER] = WinUtil::getNicks(u);
 	columns[COLUMN_HUB] = WinUtil::getHubNames(u).first;
 	columns[COLUMN_STATUS] = T_("Idle");
-	columns[COLUMN_TRANSFERRED] = _T("0");
 }
 
 bool TransferView::ConnectionInfo::operator==(const ConnectionInfo& other) const {
@@ -222,9 +217,11 @@ void TransferView::ConnectionInfo::update(const UpdateInfo& ui) {
 	}
 
 	if((ui.updateMask & UpdateInfo::MASK_STATUS) || (ui.updateMask & UpdateInfo::MASK_TRANSFERRED) || (ui.updateMask & UpdateInfo::MASK_SPEED)) {
-		if(status == STATUS_RUNNING) {
-			columns[COLUMN_TIMELEFT] = Text::toT(Util::formatSeconds(timeleft()));
+		if(status == STATUS_RUNNING && size > 0 && speed > 0) {
+			timeleft = static_cast<double>(size - transferred) / speed;
+			columns[COLUMN_TIMELEFT] = Text::toT(Util::formatSeconds(timeleft));
 		} else {
+			timeleft = 0;
 			columns[COLUMN_TIMELEFT].clear();
 		}
 	}
@@ -246,8 +243,14 @@ TransferView::TransferInfo& TransferView::ConnectionInfo::transfer() {
 	return parent;
 }
 
+double TransferView::ConnectionInfo::barPos() const {
+	return status == STATUS_RUNNING && size > 0 && transferred >= 0 ?
+		static_cast<double>(transferred) / static_cast<double>(size) : -1;
+}
+
 void TransferView::ConnectionInfo::force() {
 	columns[COLUMN_STATUS] = T_("Connecting (forced)");
+	parent.update();
 	ConnectionManager::getInstance()->force(user);
 }
 
@@ -273,7 +276,9 @@ int TransferView::TransferInfo::getImage(int col) const {
 }
 
 void TransferView::TransferInfo::update() {
-	speed = 0; transferred = startPos;
+	timeleft = 0;
+	speed = 0;
+	transferred = startPos;
 
 	if(conns.empty()) {
 		// this should never happen, but let's play safe.
@@ -286,6 +291,7 @@ void TransferView::TransferInfo::update() {
 	set<string> hubs;
 	for(auto& conn: conns) {
 		if(conn.status == ConnectionInfo::STATUS_RUNNING) {
+			if(!download) { timeleft += conn.timeleft; }
 			speed += conn.speed;
 			transferred += conn.transferred;
 		}
@@ -295,6 +301,10 @@ void TransferView::TransferInfo::update() {
 	if(size == -1) {
 		// this can happen with file lists... get the size of the first connection.
 		size = conns.front().size;
+	}
+
+	if(download && size > 0 && speed > 0) {
+		timeleft = static_cast<double>(size - transferred) / speed;
 	}
 
 	if(conns.size() == 1) {
@@ -319,7 +329,7 @@ void TransferView::TransferInfo::update() {
 		}
 	}
 
-	columns[COLUMN_TIMELEFT] = Text::toT(Util::formatSeconds(timeleft()));
+	columns[COLUMN_TIMELEFT] = Text::toT(Util::formatSeconds(timeleft));
 	columns[COLUMN_SPEED] = str(TF_("%1%/s") % Text::toT(Util::formatBytes(speed)));
 	columns[COLUMN_TRANSFERRED] = Text::toT(Util::formatBytes(transferred));
 	columns[COLUMN_SIZE] = Text::toT(Util::formatBytes(size));
@@ -332,6 +342,15 @@ void TransferView::TransferInfo::updatePath() {
 
 TransferView::TransferInfo& TransferView::TransferInfo::transfer() {
 	return *this;
+}
+
+double TransferView::TransferInfo::barPos() const {
+	if(conns.size() == 1) {
+		return conns.front().barPos();
+	}
+
+	return download && size > 0 && transferred >= 0 ?
+		static_cast<double>(transferred) / static_cast<double>(size) : -1;
 }
 
 void TransferView::TransferInfo::force() {
@@ -404,6 +423,7 @@ bool TransferView::handleContextMenu(dwt::ScreenCoordinate pt) {
 void TransferView::handleForce() {
 	HoldRedraw hold { transfers };
 	transfers->forEachSelected(&ItemInfo::force);
+	transfers->resort();
 }
 
 void TransferView::handleDisconnect() {
@@ -497,7 +517,9 @@ namespace { void drawProgress(HDC hdc, const dwt::Rectangle& rcItem, int item, i
 
 	dwt::Rectangle textRect;
 
-	{
+	if(pos >= 0) {
+		// the transfer is ongoing; paint a background to represent that.
+
 		dwt::Brush brush { ::CreateSolidBrush(barPal[1]) };
 		auto selectBg(canvas.select(brush));
 
@@ -522,6 +544,9 @@ namespace { void drawProgress(HDC hdc, const dwt::Rectangle& rcItem, int item, i
 			canvas.moveTo(rc.left() + 1, rc.top());
 			canvas.lineTo(rc.right() - 2, rc.top());
 		}
+
+	} else {
+		textRect = rc;
 	}
 
 	// draw status text
@@ -568,15 +593,11 @@ LRESULT TransferView::handleCustomDraw(NMLVCUSTOMDRAW& data) {
 		auto col = data.iSubItem;
 		if(col == COLUMN_STATUS) {
 			auto& info = *reinterpret_cast<ItemInfo*>(data.nmcd.lItemlParam);
-			auto connInfo = dynamic_cast<ConnectionInfo*>(&info);
-			if((!connInfo || connInfo->status == ConnectionInfo::STATUS_RUNNING) && info.size > 0 && info.transferred >= 0) {
-				int item = static_cast<int>(data.nmcd.dwItemSpec);
-				drawProgress(data.nmcd.hdc, transfers->getRect(item, col, LVIR_BOUNDS), item, col,
-					info.transfer().download ? downloadIcon : uploadIcon, info.getText(col),
-					static_cast<double>(info.transferred) / static_cast<double>(info.size),
-					info.transfer().download);
+			auto item = static_cast<int>(data.nmcd.dwItemSpec);
+			drawProgress(data.nmcd.hdc, transfers->getRect(item, col, LVIR_BOUNDS), item, col,
+				info.transfer().download ? downloadIcon : uploadIcon, info.getText(col),
+				info.barPos(), info.transfer().download);
 				return CDRF_SKIPDEFAULT;
-			}
 		}
 	}
 		// Fall through
@@ -616,8 +637,7 @@ void TransferView::addConn(const UpdateInfo& ui) {
 		if(ui.download) {
 			QueueManager::getInstance()->getSizeInfo(transfer->size, transfer->startPos, ui.path);
 		} else {
-			transfer->transferred = ui.transferred;
-			transfer->size = ui.size;
+			transfer->size = File::getSize(ui.path);
 		}
 
 	} else {
@@ -630,8 +650,6 @@ void TransferView::addConn(const UpdateInfo& ui) {
 		transfer = &transferItems.back();
 		transfers->insert(transfer);
 	}
-
-	auto newConn = !conn, newGroup = false;
 
 	if(!conn) {
 		transfer->conns.emplace_back(ui.user, *transfer);
@@ -777,21 +795,13 @@ void TransferView::on(ConnectionManagerListener::StatusChanged, ConnectionQueueI
 
 namespace { tstring getFile(Transfer* t) {
 	if(t->getType() == Transfer::TYPE_TREE) {
-		return str(TF_("TTH: %1%") % Text::toT(Util::getFileName(t->getPath())));
+		return T_("TTH");
 	}
 	if(t->getType() == Transfer::TYPE_FULL_LIST || t->getType() == Transfer::TYPE_PARTIAL_LIST) {
 		return T_("file list");
 	}
-	string path, total;
-	if(dynamic_cast<Upload*>(t)) {
-		path = Util::addBrackets(t->getPath());
-		WinUtil::reducePaths(path);
-		total = str(F_(" of %1%") % Util::formatBytes(File::getSize(t->getPath())));
-	} else {
-		path = Util::getFileName(t->getPath());
-	}
-	return Text::toT(str(F_("%1% (%2%)") % path % (Util::formatBytes(t->getStartPos()) + " - " +
-		Util::formatBytes(t->getStartPos() + t->getSize()) + total)));
+	return Text::toT(str(F_("(%1%)") % (Util::formatBytes(t->getStartPos()) + " - " +
+		Util::formatBytes(t->getStartPos() + t->getSize()))));
 } }
 
 void TransferView::on(DownloadManagerListener::Complete, Download* d) noexcept {
@@ -867,7 +877,7 @@ void TransferView::on(UploadManagerListener::Starting, Upload* u) noexcept {
 	statusString += str(TF_("Uploading %1%") % getFile(u));
 	ui->setStatusString(statusString);
 
-	updatedConn(ui);
+	addedConn(ui);
 }
 
 void TransferView::on(UploadManagerListener::Tick, const UploadList& ul) noexcept {
