@@ -208,8 +208,11 @@ void TransferView::ConnectionInfo::update(const UpdateInfo& ui) {
 		}
 	}
 
-	if((ui.updateMask & UpdateInfo::MASK_STATUS) || (ui.updateMask & UpdateInfo::MASK_SPEED)) {
+	if(ui.updateMask & UpdateInfo::MASK_SPEED) {
 		speed = std::max(ui.speed, 0LL); // sometimes the speed is negative; avoid problems.
+	}
+
+	if((ui.updateMask & UpdateInfo::MASK_STATUS) || (ui.updateMask & UpdateInfo::MASK_SPEED)) {
 		if(status == STATUS_RUNNING && speed > 0) {
 			columns[COLUMN_SPEED] = str(TF_("%1%/s") % Text::toT(Util::formatBytes(speed)));
 		} else {
@@ -250,8 +253,6 @@ double TransferView::ConnectionInfo::barPos() const {
 }
 
 void TransferView::ConnectionInfo::force() {
-	columns[COLUMN_STATUS] = T_("Connecting (forced)");
-	parent.update();
 	ConnectionManager::getInstance()->force(user);
 }
 
@@ -445,9 +446,7 @@ bool TransferView::handleContextMenu(dwt::ScreenCoordinate pt) {
 }
 
 void TransferView::handleForce() {
-	HoldRedraw hold { transfers };
 	transfers->forEachSelected(&ItemInfo::force);
-	transfers->resort();
 }
 
 void TransferView::handleDisconnect() {
@@ -960,7 +959,6 @@ void TransferView::onTransferComplete(Transfer* t, bool download) {
 	ui->setStatus(ConnectionInfo::STATUS_WAITING);
 	ui->setStatusString(T_("Idle"));
 	ui->setTransferred(t->getPos(), t->getActual(), t->getSize());
-	ui->setSpeed(0);
 
 	updatedConn(ui);
 }
@@ -970,7 +968,6 @@ void TransferView::onFailed(Download* d, const string& aReason) {
 	ui->setFile(d->getPath());
 	ui->setStatus(ConnectionInfo::STATUS_WAITING);
 	ui->setStatusString(Text::toT(aReason));
-	ui->setSpeed(0);
 
 	updatedConn(ui);
 }
