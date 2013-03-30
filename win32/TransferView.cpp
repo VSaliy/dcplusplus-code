@@ -294,7 +294,9 @@ void TransferView::TransferInfo::update() {
 	set<string> hubs;
 	for(auto& conn: conns) {
 		if(!download) { timeleft += conn.timeleft; }
-		speed += conn.speed;
+		if(conn.status == ConnectionInfo::STATUS_RUNNING) {
+			speed += conn.speed;
+		}
 		transferred += conn.transferred;
 		hubs.insert(conn.getUser().hint);
 	}
