@@ -128,7 +128,7 @@ private:
 	};
 
 	struct TransferInfo : public ItemInfo {
-		TransferInfo(const TTHValue& tth, bool download, const string& path);
+		TransferInfo(const TTHValue& tth, bool download, const string& path, const string& tempPath);
 
 		bool operator==(const TransferInfo& other) const;
 
@@ -147,6 +147,7 @@ private:
 		TTHValue tth;
 		bool download;
 		string path;
+		string tempPath;
 		int64_t startPos;
 
 		list<ConnectionInfo> conns;
@@ -161,7 +162,7 @@ private:
 			MASK_CIPHER = 1 << 4,
 			MASK_IP = 1 << 5,
 			MASK_COUNTRY = 1 << 6,
-			MASK_FILE = 1 << 7
+			MASK_PATH = 1 << 7
 		};
 
 		UpdateInfo(const HintedUser& user, bool download, bool transferFailed = false) :
@@ -174,8 +175,12 @@ private:
 		bool transferFailed;
 
 		TTHValue tth;
+		void setTTH(const TTHValue& tth) { this->tth = tth; }
 		string path;
-		void setFile(const TTHValue& tth, const string& path) { this->tth = tth; this->path = path; updateMask |= MASK_FILE; }
+		void setFile(const string& path) { this->path = path; updateMask |= MASK_PATH; }
+
+		string tempPath;
+		void setTempPath(const string& path) { tempPath = path; }
 
 		void setStatus(ConnectionInfo::Status aStatus) { status = aStatus; updateMask |= MASK_STATUS; }
 		ConnectionInfo::Status status;

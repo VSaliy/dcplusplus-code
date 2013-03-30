@@ -19,10 +19,14 @@
 #ifndef DCPLUSPLUS_DCPP_QUEUE_MANAGER_LISTENER_H
 #define DCPLUSPLUS_DCPP_QUEUE_MANAGER_LISTENER_H
 
+#include <string>
+
 #include "forward.h"
 #include "noexcept.h"
 
 namespace dcpp {
+
+using std::string;
 
 class QueueManagerListener {
 public:

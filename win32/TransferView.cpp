@@ -34,8 +34,9 @@
 #include <dwt/util/StringUtils.h>
 #include <dwt/widgets/TableTree.h>
 
-#include "resource.h"
 #include "HoldRedraw.h"
+#include "resource.h"
+#include "ShellMenu.h"
 #include "TypedTable.h"
 #include "WinUtil.h"
 
@@ -171,7 +172,7 @@ int TransferView::ConnectionInfo::getImage(int col) const {
 }
 
 void TransferView::ConnectionInfo::update(const UpdateInfo& ui) {
-	if(ui.updateMask & UpdateInfo::MASK_FILE) {
+	if(ui.updateMask & UpdateInfo::MASK_PATH) {
 		parent.path = ui.path;
 		parent.updatePath();
 		columns[COLUMN_FILE] = parent.getText(COLUMN_FILE);
@@ -258,11 +259,12 @@ void TransferView::ConnectionInfo::disconnect() {
 	ConnectionManager::getInstance()->disconnect(user, parent.download);
 }
 
-TransferView::TransferInfo::TransferInfo(const TTHValue& tth, bool download, const string& path) :
+TransferView::TransferInfo::TransferInfo(const TTHValue& tth, bool download, const string& path, const string& tempPath) :
 	ItemInfo(),
 	tth(tth),
 	download(download),
 	path(path),
+	tempPath(tempPath),
 	startPos(0)
 {
 }
@@ -290,11 +292,9 @@ void TransferView::TransferInfo::update() {
 
 	set<string> hubs;
 	for(auto& conn: conns) {
-		if(conn.status == ConnectionInfo::STATUS_RUNNING) {
-			if(!download) { timeleft += conn.timeleft; }
-			speed += conn.speed;
-			transferred += conn.transferred;
-		}
+		if(!download) { timeleft += conn.timeleft; }
+		speed += conn.speed;
+		transferred += conn.transferred;
 		hubs.insert(conn.getUser().hint);
 	}
 
@@ -345,12 +345,12 @@ TransferView::TransferInfo& TransferView::TransferInfo::transfer() {
 }
 
 double TransferView::TransferInfo::barPos() const {
-	if(conns.size() == 1) {
-		return conns.front().barPos();
+	if(download) {
+		return size > 0 && transferred >= 0 ?
+			static_cast<double>(transferred) / static_cast<double>(size) : -1;
+	} else {
+		return conns.size() == 1 ? conns.front().barPos() : -1;
 	}
-
-	return download && size > 0 && transferred >= 0 ?
-		static_cast<double>(transferred) / static_cast<double>(size) : -1;
 }
 
 void TransferView::TransferInfo::force() {
@@ -381,33 +381,56 @@ bool TransferView::handleContextMenu(dwt::ScreenCoordinate pt) {
 		auto selData = (sel.size() == 1) ? transfers->getSelectedData() : nullptr;
 		auto transfer = dynamic_cast<TransferInfo*>(selData);
 
-		auto menu = addChild(WinUtil::Seeds::menu);
+		auto menu = addChild(ShellMenu::Seed(WinUtil::Seeds::menu));
 
-		menu->setTitle(selData ? escapeMenu(selData->getText(transfer ? COLUMN_FILE : COLUMN_USER)) :
-			str(TF_("%1% items") % sel.size()),
-			transfer ? WinUtil::fileImages->getIcon(selData->getImage(COLUMN_FILE)) : nullptr);
+		tstring title;
+		dwt::IconPtr icon;
+		if(selData) {
+			title = escapeMenu(selData->getText(transfer ? COLUMN_FILE : COLUMN_USER));
+			if(title.empty()) {
+				title = escapeMenu(selData->getText(COLUMN_USER));
+				icon = WinUtil::fileImages->getIcon(WinUtil::TRANSFER_ICON_USER);
+			} else {
+				icon = WinUtil::fileImages->getIcon(selData->getImage(COLUMN_FILE));
+			}
+		} else {
+			title = str(TF_("%1% items") % sel.size());
+		}
+		menu->setTitle(title, icon);
+
+		appendUserItems(mdi, menu.get(), false);
 
 		set<TransferInfo*> files;
 		for(auto i: sel) {
-			files.insert(&transfers->getData(i)->transfer());
+			if(!transfer->getText(COLUMN_FILE).empty()) {
+				files.insert(&transfers->getData(i)->transfer());
+			}
 		}
 		if(files.size() == 1) {
+			menu->appendSeparator();
 			transfer = *files.begin();
 			WinUtil::addHashItems(menu.get(), transfer->tth, transfer->getText(COLUMN_FILE), transfer->size);
-			menu->appendSeparator();
 		} else if(!files.empty()) {
+			menu->appendSeparator();
 			for(auto transfer: files) {
 				auto file = transfer->getText(COLUMN_FILE);
 				WinUtil::addHashItems(
 					menu->appendPopup(file, WinUtil::fileImages->getIcon(transfer->getImage(COLUMN_FILE))),
 					transfer->tth, file, transfer->size);
 			}
-			menu->appendSeparator();
 		}
 
-		appendUserItems(mdi, menu.get(), false);
-		menu->appendSeparator();
+		StringList paths;
+		for(auto transfer: files) {
+			if(File::getSize(transfer->path) != -1) {
+				paths.push_back(transfer->path);
+			} else if(!transfer->tempPath.empty() && File::getSize(transfer->tempPath) != -1) {
+				paths.push_back(transfer->tempPath);
+			}
+		}
+		menu->appendShellMenu(paths);
 
+		menu->appendSeparator();
 		menu->appendItem(T_("&Force attempt"), [this] { handleForce(); });
 		menu->appendSeparator();
 		menu->appendItem(T_("&Disconnect"), [this] { handleDisconnect(); });
@@ -622,7 +645,7 @@ void TransferView::addConn(const UpdateInfo& ui) {
 	TransferInfo* transfer = nullptr;
 	auto conn = findConn(ui.user, ui.download);
 
-	if(ui.updateMask & UpdateInfo::MASK_FILE) {
+	if(ui.updateMask & UpdateInfo::MASK_PATH) {
 		// adding a connection we know the transfer of.
 		transfer = findTransfer(ui.path, ui.download);
 		if(conn && &conn->parent != transfer) {
@@ -630,7 +653,7 @@ void TransferView::addConn(const UpdateInfo& ui) {
 			conn = nullptr;
 		}
 		if(!transfer) {
-			transferItems.emplace_back(ui.tth, ui.download, ui.path);
+			transferItems.emplace_back(ui.tth, ui.download, ui.path, ui.tempPath);
 			transfer = &transferItems.back();
 			transfers->insert(transfer);
 		}
@@ -646,7 +669,7 @@ void TransferView::addConn(const UpdateInfo& ui) {
 			removeConn(*conn);
 			conn = nullptr;
 		}
-		transferItems.emplace_back(TTHValue(), ui.download, ui.user.user->getCID().toBase32());
+		transferItems.emplace_back(TTHValue(), ui.download, ui.user.user->getCID().toBase32(), Util::emptyString);
 		transfer = &transferItems.back();
 		transfers->insert(transfer);
 	}
@@ -847,6 +870,7 @@ void TransferView::on(DownloadManagerListener::Tick, const DownloadList& dl) noe
 void TransferView::on(DownloadManagerListener::Requesting, Download* d) noexcept {
 	auto ui = new UpdateInfo(d->getHintedUser(), true);
 	starting(ui, d);
+	ui->setTempPath(d->getTempTarget());
 	ui->setStatusString(str(TF_("Requesting %1%") % getFile(d)));
 
 	addedConn(ui);
@@ -912,7 +936,8 @@ void TransferView::removedConn(UpdateInfo* ui) {
 }
 
 void TransferView::starting(UpdateInfo* ui, Transfer* t) {
-	ui->setFile(t->getTTH(), t->getPath());
+	ui->setTTH(t->getTTH());
+	ui->setFile(t->getPath());
 	ui->setStatus(ConnectionInfo::STATUS_RUNNING);
 	ui->setTransferred(t->getPos(), t->getActual(), t->getSize());
 	const UserConnection& uc = t->getUserConnection();
@@ -930,7 +955,7 @@ void TransferView::onTransferTick(Transfer* t, bool download) {
 
 void TransferView::onTransferComplete(Transfer* t, bool download) {
 	auto ui = new UpdateInfo(t->getHintedUser(), download);
-	ui->setFile(t->getTTH(), t->getPath());
+	ui->setFile(t->getPath());
 	ui->setStatus(ConnectionInfo::STATUS_WAITING);
 	ui->setStatusString(T_("Idle"));
 	ui->setTransferred(t->getPos(), t->getActual(), t->getSize());
@@ -940,7 +965,7 @@ void TransferView::onTransferComplete(Transfer* t, bool download) {
 
 void TransferView::onFailed(Download* d, const string& aReason) {
  	auto ui = new UpdateInfo(d->getHintedUser(), true, true);
-	ui->setFile(d->getTTH(), d->getPath());
+	ui->setFile(d->getPath());
 	ui->setStatus(ConnectionInfo::STATUS_WAITING);
 	ui->setStatusString(Text::toT(aReason));
 
