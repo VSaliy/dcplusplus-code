@@ -20,6 +20,7 @@
 #define DCPLUSPLUS_WIN32_MDI_CHILD_FRAME_H_
 
 #include <functional>
+#include <string>
 
 #include <dcpp/SettingsManager.h>
 #include <dcpp/WindowInfo.h>
@@ -30,6 +31,8 @@
 #include "AspectStatus.h"
 #include "WinUtil.h"
 #include "resource.h"
+
+using std::string;
 
 using dwt::util::escapeMenu;
 

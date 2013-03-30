@@ -19,10 +19,14 @@
 #ifndef DCPLUSPLUS_DCPP_FAVORITEMANAGERLISTENER_H_
 #define DCPLUSPLUS_DCPP_FAVORITEMANAGERLISTENER_H_
 
+#include <string>
+
 #include "forward.h"
 #include "noexcept.h"
 
 namespace dcpp {
+
+using std::string;
 
 class FavoriteManagerListener {
 public:

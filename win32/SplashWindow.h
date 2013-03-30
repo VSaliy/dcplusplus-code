@@ -19,6 +19,8 @@
 #ifndef DCPLUSPLUS_WIN32_SPLASHWINDOW_H
 #define DCPLUSPLUS_WIN32_SPLASHWINDOW_H
 
+#include <dcpp/typedefs.h>
+
 #include <dwt/widgets/Window.h>
 
 class SplashWindow : public dwt::Window  {

@@ -19,12 +19,16 @@
 #ifndef DCPLUSPLUS_WIN32_ABOUT_DLG_H
 #define DCPLUSPLUS_WIN32_ABOUT_DLG_H
 
+#include <memory>
+#include <string>
+
 #include <dcpp/forward.h>
 
 #include <dwt/widgets/ModalDialog.h>
 
 #include "forward.h"
 
+using std::string;
 using std::unique_ptr;
 
 class AboutDlg : public dwt::ModalDialog

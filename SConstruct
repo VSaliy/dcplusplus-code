@@ -264,7 +264,9 @@ if conf.CheckCXXHeader(['windows.h', 'htmlhelp.h'], '<>'):
 # a 32-bit program). the only differentiator is __MINGW64_VERSION_MAJOR.
 if conf.CheckDeclaration('__MINGW64_VERSION_MAJOR', '#include <windows.h>', 'C++'):
 	conf.env.Append(CPPDEFINES='HAVE_MINGW64')
-	conf.env['pch'] = 0 # precompiled headers crash mingw64's gcc...
+	if conf.env['pch']:
+		conf.env['pch'] = 0 # precompiled headers crash mingw64's gcc...
+		conf.env['CPPDEFINES'].remove('HAS_PCH')
 env = conf.Finish()
 
 dev.boost = dev.build('boost/')
