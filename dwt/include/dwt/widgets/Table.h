@@ -374,7 +374,9 @@ public:
 
 	/// obsolete
 	inline void select(int i) { setSelected(i); }
+
 	void selectAll();
+	void checkSel();
 
 	ScreenCoordinate getContextMenuPos();
 

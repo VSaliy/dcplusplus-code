@@ -53,7 +53,6 @@ using namespace dcpp;
 
 #include "RichTextBox.h"
 #include "ShellMenu.h"
-#include "Table.h"
 
 #endif
 

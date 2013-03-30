@@ -402,8 +402,9 @@ bool TransferView::handleContextMenu(dwt::ScreenCoordinate pt) {
 
 		set<TransferInfo*> files;
 		for(auto i: sel) {
-			if(!transfer->getText(COLUMN_FILE).empty()) {
-				files.insert(&transfers->getData(i)->transfer());
+			auto& transfer = transfers->getData(i)->transfer();
+			if(!transfer.getText(COLUMN_FILE).empty()) {
+				files.insert(&transfer);
 			}
 		}
 		if(files.size() == 1) {
@@ -959,6 +960,7 @@ void TransferView::onTransferComplete(Transfer* t, bool download) {
 	ui->setStatus(ConnectionInfo::STATUS_WAITING);
 	ui->setStatusString(T_("Idle"));
 	ui->setTransferred(t->getPos(), t->getActual(), t->getSize());
+	ui->setSpeed(0);
 
 	updatedConn(ui);
 }
@@ -968,6 +970,7 @@ void TransferView::onFailed(Download* d, const string& aReason) {
 	ui->setFile(d->getPath());
 	ui->setStatus(ConnectionInfo::STATUS_WAITING);
 	ui->setStatusString(Text::toT(aReason));
+	ui->setSpeed(0);
 
 	updatedConn(ui);
 }

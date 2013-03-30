@@ -9,7 +9,9 @@ int dwtMain(dwt::Application& app)
 	window->create();
 	window->onClosing([] { return ::PostQuitMessage(0), true; });
 
-	auto table = window->addChild(dwt::Table::Seed());
+	auto seed = dwt::Table::Seed();
+	seed.lvStyle |= LVS_EX_CHECKBOXES;
+	auto table = window->addChild(seed);
 
 	table->addColumn(dwt::Column(_T("Column A")));
 	table->addColumn(dwt::Column(_T("Column B")));
@@ -18,17 +20,22 @@ int dwtMain(dwt::Application& app)
 	table->addColumn(_T("Column C"), dwt::Column::SIZE_TO_HEADER);
 
 	table->setColumnWidth(0, 100);
+	table->setColumnWidth(1, 200);
 
 	auto order = table->getColumnOrder();
 	order[0] = 1;
 	order[1] = 0;
 	table->setColumnOrder(order);
 
-	std::vector<tstring> rows;
-	rows.push_back(_T("A"));
-	rows.push_back(_T("B"));
+	std::vector<tstring> row(2);
 
-	table->insert(rows);
+	row[0] = _T("A1");
+	row[1] = _T("B1");
+	table->insert(row);
+
+	row[0] = _T("A2");
+	row[1] = _T("B2");
+	table->insert(row);
 
 	table->resize(window->getClientSize());
 	window->onSized([=](const dwt::SizedEvent&) { table->resize(window->getClientSize()); });

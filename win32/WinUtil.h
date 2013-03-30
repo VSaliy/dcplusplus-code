@@ -34,12 +34,12 @@
 #include <dwt/widgets/ComboBox.h>
 #include <dwt/widgets/GroupBox.h>
 #include <dwt/widgets/Label.h>
+#include <dwt/widgets/Table.h>
 #include <dwt/widgets/TabView.h>
 #include <dwt/widgets/Tree.h>
 
 #include "forward.h"
 #include "RichTextBox.h"
-#include "Table.h"
 
 using std::unordered_map;
 
@@ -50,6 +50,7 @@ using dwt::GroupBox;
 using dwt::Label;
 using dwt::Menu;
 using dwt::TextBox;
+using dwt::Table;
 using dwt::TabView;
 using dwt::Tree;
 

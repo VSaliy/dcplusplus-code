@@ -36,6 +36,7 @@ using dwt::RebarPtr;
 using dwt::SliderPtr;
 using dwt::SpinnerPtr;
 using dwt::SplitterContainerPtr;
+using dwt::TablePtr;
 using dwt::TabViewPtr;
 using dwt::TextBoxPtr;
 using dwt::ToolBarPtr;
@@ -49,12 +50,9 @@ typedef std::unique_ptr<ShellMenu> ShellMenuPtr;
 class RichTextBox;
 typedef RichTextBox* RichTextBoxPtr;
 
-class Table;
-typedef Table* TablePtr;
-
 class TransferView;
 
-template<typename ContentType, bool managed = true, typename TableType = Table>
+template<typename ContentType, bool managed = true, typename TableType = dwt::Table>
 class TypedTable;
 
 template<typename ContentType, bool managed = true, typename TreeType = dwt::Tree>
