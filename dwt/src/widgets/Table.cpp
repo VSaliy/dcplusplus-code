@@ -91,6 +91,17 @@ Table::Seed::Seed() :
 
 void Table::create( const Seed & cs )
 {
+	/* handle Ctrl+A to select every item. */
+	if((cs.style & LVS_SINGLESEL) != LVS_SINGLESEL) {
+		addAccel(FCONTROL, 'A', [this] { selectAll(); });
+	}
+
+	/* handle the space bar on multi-selection tables with check-boxes (single-sel ones already handle
+	it). */
+	if((cs.lvStyle & LVS_EX_CHECKBOXES) == LVS_EX_CHECKBOXES && (cs.style & LVS_SINGLESEL) != LVS_SINGLESEL) {
+		addAccel(0, VK_SPACE, [this] { checkSel(); });
+	}
+
 	BaseType::create(cs);
 	setFont(cs.font);
 	if(cs.lvStyle != 0)
@@ -151,6 +162,21 @@ void Table::setSelectedImpl(int item) {
 void Table::selectAll() {
 	for(size_t i = 0, n = size(); i < n; ++i)
 		setSelected(i);
+}
+
+void Table::checkSel() {
+	/* check every row, unless they are all already checked; in that case, uncheck them. */
+	auto allChecked = true;
+	auto sel = getSelection();
+	for(auto i: sel) {
+		if(!isChecked(i)) {
+			allChecked = false;
+			break;
+		}
+	}
+	for(auto i: sel) {
+		setChecked(i, !allChecked);
+	}
 }
 
 void Table::clearSelection() {

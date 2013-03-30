@@ -20,7 +20,6 @@
 #define DCPLUSPLUS_WIN32_TYPED_TABLE_H
 
 #include "forward.h"
-#include "Table.h"
 #include "WinUtil.h"
 
 /** Table with an object associated to each item.
