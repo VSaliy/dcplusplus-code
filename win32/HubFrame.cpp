@@ -1250,6 +1250,7 @@ void HubFrame::tabMenuImpl(dwt::Menu* menu) {
 
 	menu->appendItem(T_("&Reconnect\tCtrl+R"), [this] { handleReconnect(); }, WinUtil::menuIcon(IDI_RECONNECT));
 	menu->appendItem(T_("Copy &address to clipboard"), [this] { handleCopyHub(); });
+	menu->appendItem(T_("&Disconnect"), [this] { client->disconnect(true); }, WinUtil::menuIcon(IDI_HUB_OFF));
 
 	prepareMenu(menu, UserCommand::CONTEXT_HUB, url);
 
