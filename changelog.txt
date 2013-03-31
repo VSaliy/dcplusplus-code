@@ -1,6 +1,7 @@
 * Rotate the icon while DC++ is loading (poy)
 * [L#243727] Allow expanding merged search results (poy)
 * Merge connections, downloads and uploads in the same list (poy)
+* Add a command to disconnect a hub (poy)
 
 -- 0.811 2013-03-04 --
 * Fix status bar parts when the window is too small (poy)
