@@ -191,9 +191,14 @@ void TransferView::ConnectionInfo::update(const UpdateInfo& ui) {
 	}
 
 	if(ui.updateMask & UpdateInfo::MASK_TRANSFERRED) {
+		if(parent.download && ui.transferred > transferred) {
+			parent.transferred += ui.transferred - transferred;
+		}
+
 		actual = ui.actual;
 		transferred = ui.transferred;
 		size = ui.size;
+
 		if(transferred > 0) {
 			columns[COLUMN_TRANSFERRED] = str(TF_("%1% (%2$0.2f)")
 				% Text::toT(Util::formatBytes(transferred))
@@ -201,6 +206,7 @@ void TransferView::ConnectionInfo::update(const UpdateInfo& ui) {
 		} else {
 			columns[COLUMN_TRANSFERRED].clear();
 		}
+
 		if(size > 0) {
 			columns[COLUMN_SIZE] = Text::toT(Util::formatBytes(size));
 		} else {
@@ -265,8 +271,7 @@ TransferView::TransferInfo::TransferInfo(const TTHValue& tth, bool download, con
 	tth(tth),
 	download(download),
 	path(path),
-	tempPath(tempPath),
-	startPos(0)
+	tempPath(tempPath)
 {
 }
 
@@ -281,7 +286,7 @@ int TransferView::TransferInfo::getImage(int col) const {
 void TransferView::TransferInfo::update() {
 	timeleft = 0;
 	speed = 0;
-	transferred = startPos;
+	if(!download) { transferred = 0; }
 
 	if(conns.empty()) {
 		// this should never happen, but let's play safe.
@@ -291,13 +296,17 @@ void TransferView::TransferInfo::update() {
 		return;
 	}
 
+	size_t running = 0;
 	set<string> hubs;
 	for(auto& conn: conns) {
-		if(!download) { timeleft += conn.timeleft; }
+		if(!download) {
+			timeleft += conn.timeleft;
+			transferred += conn.transferred;
+		}
 		if(conn.status == ConnectionInfo::STATUS_RUNNING) {
+			++running;
 			speed += conn.speed;
 		}
-		transferred += conn.transferred;
 		hubs.insert(conn.getUser().hint);
 	}
 
@@ -310,7 +319,9 @@ void TransferView::TransferInfo::update() {
 		timeleft = static_cast<double>(size - transferred) / speed;
 	}
 
-	if(conns.size() == 1) {
+	auto users = conns.size();
+
+	if(users == 1) {
 		auto& conn = conns.front();
 		columns[COLUMN_STATUS] = conn.getText(COLUMN_STATUS);
 		columns[COLUMN_USER] = conn.getText(COLUMN_USER);
@@ -320,10 +331,14 @@ void TransferView::TransferInfo::update() {
 		columns[COLUMN_COUNTRY] = conn.getText(COLUMN_COUNTRY);
 
 	} else {
-		auto users = conns.size();
-		columns[COLUMN_STATUS] = download ?
-			str(TF_("Downloading from %1% users") % users) :
-			str(TF_("Uploading to %1% users") % users);
+		if(running > 0) {
+			tstring userStr = Text::toT(Util::toString(running) + "/" + Util::toString(users));
+			columns[COLUMN_STATUS] = download ?
+				str(TF_("Downloading from %1% users") % userStr) :
+				str(TF_("Uploading to %1% users") % userStr);
+		} else {
+			columns[COLUMN_STATUS] = T_("Idle");
+		}
 		columns[COLUMN_USER] = str(TF_("%1% users") % users);
 		if(hubs.size() == 1) {
 			columns[COLUMN_HUB] = conns.front().getText(COLUMN_HUB);
@@ -658,11 +673,11 @@ void TransferView::addConn(const UpdateInfo& ui) {
 			transferItems.emplace_back(ui.tth, ui.download, ui.path, ui.tempPath);
 			transfer = &transferItems.back();
 			transfers->insert(transfer);
-		}
-		if(ui.download) {
-			QueueManager::getInstance()->getSizeInfo(transfer->size, transfer->startPos, ui.path);
-		} else {
-			transfer->size = File::getSize(ui.path);
+			if(ui.download) {
+				QueueManager::getInstance()->getSizeInfo(transfer->size, transfer->transferred, ui.path);
+			} else {
+				transfer->size = File::getSize(ui.path);
+			}
 		}
 
 	} else {
@@ -742,7 +757,7 @@ TransferView::TransferInfo* TransferView::findTransfer(const string& path, bool 
 }
 
 void TransferView::removeConn(ConnectionInfo& conn) {
-	transfers->erase(&conn);
+	transfers->eraseChild(reinterpret_cast<LPARAM>(&conn));
 
 	auto& transfer = conn.parent;
 

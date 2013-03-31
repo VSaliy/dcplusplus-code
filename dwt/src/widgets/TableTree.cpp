@@ -111,6 +111,13 @@ void TableTree::insertChild(LPARAM parent, LPARAM child) {
 	}
 }
 
+void TableTree::eraseChild(LPARAM child) {
+	auto i = children.find(child);
+	if(i != children.end()) {
+		eraseChild(i);
+	}
+}
+
 void TableTree::collapse(LPARAM parent) {
 	util::HoldRedraw hold { this };
 
@@ -307,14 +314,7 @@ void TableTree::handleDelete(int pos) {
 
 	auto child = children.find(param);
 	if(child != children.end()) {
-		auto& item = items[child->second];
-		auto& cont = item.children;
-		cont.erase(std::remove(cont.begin(), cont.end(), param), cont.end());
-		if(cont.empty()) {
-			item.glyphRect = Rectangle();
-			item.switchExp(*this);
-		}
-		children.erase(child);
+		eraseChild(child);
 	}
 }
 
@@ -357,6 +357,24 @@ int TableTree::handleSort(LPARAM& lhs, LPARAM& rhs) {
 	}
 
 	return 0;
+}
+
+#ifndef _MSC_VER /// @todo workaround for VS' sucky decltype
+void TableTree::eraseChild(decltype(children)::iterator& child) {
+#else
+void TableTree::eraseChild(std::unordered_map<LPARAM, LPARAM>::iterator& child) {
+#endif
+	auto& item = items[child->second];
+	auto& cont = item.children;
+	if(item.expanded) {
+		sendMsg(LVM_DELETEITEM, findData(child->first), 0);
+	}
+	cont.erase(std::remove(cont.begin(), cont.end(), child->first), cont.end());
+	if(cont.empty()) {
+		item.glyphRect = Rectangle();
+		item.switchExp(*this);
+	}
+	children.erase(child);
 }
 
 LRESULT TableTree::sendMsg(UINT msg, WPARAM wParam, LPARAM lParam) {

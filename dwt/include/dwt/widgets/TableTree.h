@@ -65,6 +65,7 @@ public:
 	/** Insert a child item.
 	@note The list should be resorted and redrawn for this to take effect. */
 	void insertChild(LPARAM parent, LPARAM child);
+	void eraseChild(LPARAM child);
 	void collapse(LPARAM parent);
 	void expand(LPARAM parent);
 
@@ -99,6 +100,12 @@ private:
 	void handleDelete(int pos);
 	void handleInsert(LVITEM& lv);
 	int handleSort(LPARAM& lhs, LPARAM& rhs);
+
+#ifndef _MSC_VER /// @todo workaround for VS' sucky decltype
+	void eraseChild(decltype(children)::iterator& child);
+#else
+	void eraseChild(std::unordered_map<LPARAM, LPARAM>::iterator& child);
+#endif
 
 	LRESULT sendMsg(UINT msg, WPARAM wParam, LPARAM lParam);
 };
