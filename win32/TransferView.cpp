@@ -456,6 +456,12 @@ bool TransferView::handleContextMenu(dwt::ScreenCoordinate pt) {
 
 		WinUtil::addCopyMenu(menu.get(), transfers);
 
+		set<string> hubs;
+		for(auto& i: selectedUsersImpl()) {
+			hubs.insert(i->getUser().hint);
+		}
+		prepareMenu(menu.get(), UserCommand::CONTEXT_HUB, StringList(hubs.begin(), hubs.end()));
+
 		menu->open(pt);
 		return true;
 	}
@@ -468,28 +474,6 @@ void TransferView::handleForce() {
 
 void TransferView::handleDisconnect() {
 	transfers->forEachSelected(&ItemInfo::disconnect);
-}
-
-void TransferView::runUserCommand(const UserCommand& uc) {
-	if(!WinUtil::getUCParams(this, uc, ucLineParams))
-		return;
-
-	auto ucParams = ucLineParams;
-
-	int i = -1;
-	while((i = transfers->getNext(i, LVNI_SELECTED)) != -1) {
-		auto conn = dynamic_cast<ConnectionInfo*>(transfers->getData(i));
-		if(!conn) { continue; }
-		if(!conn->getUser().user->isOnline()) { continue; }
-
-		auto tmp = ucParams;
-		tmp["fileFN"] = conn->transfer().path;
-
-		// compatibility with 0.674 and earlier
-		ucParams["file"] = ucParams["fileFN"];
-
-		ClientManager::getInstance()->userCommand(conn->getUser(), uc, tmp, true);
-	}
 }
 
 bool TransferView::handleKeyDown(int c) {
@@ -652,6 +636,26 @@ bool TransferView::handleTimer() {
 		callAsync([this] { execTasks(); });
 	}
 	return true;
+}
+
+void TransferView::runUserCommand(const UserCommand& uc) {
+	if(!WinUtil::getUCParams(this, uc, ucLineParams))
+		return;
+
+	set<CID> users;
+
+	for(auto& i: selectedUsersImpl()) {
+		if(!i->getUser().user->isOnline()) { continue; }
+
+		if(uc.once()) {
+			if(users.find(i->getUser().user->getCID()) != users.end())
+				continue;
+			users.insert(i->getUser().user->getCID());
+		}
+
+		auto tmp = ucLineParams;
+		ClientManager::getInstance()->userCommand(i->getUser(), uc, tmp, true);
+	}
 }
 
 void TransferView::layout() {
