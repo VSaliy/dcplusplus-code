@@ -148,7 +148,6 @@ private:
 		bool download;
 		string path;
 		string tempPath;
-		int64_t startPos;
 
 		list<ConnectionInfo> conns;
 	};
