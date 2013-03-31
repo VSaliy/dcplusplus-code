@@ -49,6 +49,7 @@ class TransferView :
 	public AspectUserCommand<TransferView>
 {
 	friend class AspectUserInfo<TransferView>;
+	friend class AspectUserCommand<TransferView>;
 
 public:
 	TransferView(dwt::Widget* parent, TabViewPtr mdi_);
@@ -223,11 +224,12 @@ private:
 	bool handleContextMenu(dwt::ScreenCoordinate pt);
 	void handleForce();
 	void handleDisconnect();
-	void runUserCommand(const UserCommand& uc);
 	bool handleKeyDown(int c);
 	void handleDblClicked();
 	LRESULT handleCustomDraw(NMLVCUSTOMDRAW& data);
 	bool handleTimer();
+
+	void runUserCommand(const UserCommand& uc);
 
 	void layout();
 
