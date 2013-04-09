@@ -430,6 +430,22 @@ void getDebugInfo(string path, DWORD addr, string& file, int& line, int& column,
 	}
 }
 
+/* although the 64-bit functions should just map to the 32-bit ones on a 32-bit OS, this seems to
+fail on XP. */
+#ifndef _WIN64
+#define DWORD64 DWORD
+#define IMAGEHLP_LINE64 IMAGEHLP_LINE
+#define IMAGEHLP_MODULE64 IMAGEHLP_MODULE
+#define IMAGEHLP_SYMBOL64 IMAGEHLP_SYMBOL
+#define STACKFRAME64 STACKFRAME
+#define StackWalk64 StackWalk
+#define SymFunctionTableAccess64 SymFunctionTableAccess
+#define SymGetLineFromAddr64 SymGetLineFromAddr
+#define SymGetModuleBase64 SymGetModuleBase
+#define SymGetModuleInfo64 SymGetModuleInfo
+#define SymGetSymFromAddr64 SymGetSymFromAddr
+#endif
+
 #elif defined(_MSC_VER)
 
 #include <dbghelp.h>
