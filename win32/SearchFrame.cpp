@@ -22,6 +22,7 @@
 #include <boost/range/adaptor/reversed.hpp>
 
 #include <dcpp/ClientManager.h>
+#include <dcpp/Encoder.h>
 #include <dcpp/FavoriteManager.h>
 #include <dcpp/GeoManager.h>
 #include <dcpp/QueueManager.h>
@@ -948,6 +949,19 @@ void SearchFrame::runSearch() {
 	if(s.empty())
 		return;
 
+	int ftype = fileType->getData(fileType->getSelected());
+	if(ftype == SearchManager::TYPE_TTH) {
+		auto s8 = Text::fromT(s);
+		s8.erase(std::remove_if(s8.begin(), s8.end(), [](char c) { return c == ' ' || c == '\t' || c == '\r' || c == '\n'; }), s8.end());
+		if(s8.size() != 39 || !Encoder::isBase32(s8)) {
+			auto text = T_("Invalid input value for TTH search");
+			status->setText(STATUS_STATUS, text);
+			setText(str(TF_("Search - %1%") % text));
+			return;
+		}
+		s = Text::toT(s8);
+	}
+
 	StringList clients;
 	for(size_t i = 0, n = hubs->size(); i < n; ++i) {
 		if(hubs->isChecked(i)) {
@@ -1002,8 +1016,6 @@ void SearchFrame::runSearch() {
 	SearchManager::SizeModes searchMode((SearchManager::SizeModes)mode->getSelected());
 	if(llsize == 0)
 		searchMode = SearchManager::SIZE_DONTCARE;
-
-	int ftype = fileType->getData(fileType->getSelected());
 
 	// Get ADC searchtype extensions if any is selected
 	StringList extList;

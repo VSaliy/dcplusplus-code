@@ -3,6 +3,7 @@
 * Merge connections, downloads and uploads in the same list (poy)
 * [L#249622] Add user commands to transfer menus
 * Add a tab menu command to disconnect a hub (poy)
+* Validate input before trying a TTH search (emtee)
 
 -- 0.811 2013-03-04 --
 * Fix status bar parts when the window is too small (poy)
