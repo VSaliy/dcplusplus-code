@@ -345,6 +345,9 @@ void TransferView::TransferInfo::update() {
 		} else {
 			columns[COLUMN_HUB] = str(TF_("%1% hubs") % hubs.size());
 		}
+		columns[COLUMN_CIPHER].clear();
+		columns[COLUMN_IP].clear();
+		columns[COLUMN_COUNTRY].clear();
 	}
 
 	columns[COLUMN_TIMELEFT] = Text::toT(Util::formatSeconds(timeleft));
