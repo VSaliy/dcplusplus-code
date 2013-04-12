@@ -56,7 +56,7 @@ private:
 
 	HttpConnection* makeConn(string&& url);
 	Conn* findConn(HttpConnection* c);
-	void remove(Conn& conn);
+	void removeLater(HttpConnection* c);
 
 	// HttpConnectionListener
 	void on(HttpConnectionListener::Data, HttpConnection*, const uint8_t*, size_t) noexcept;
