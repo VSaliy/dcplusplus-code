@@ -48,7 +48,7 @@ void UserInfoBase::getList() {
 	}
 }
 void UserInfoBase::browseList() {
-	if(user.user->getCID().isZero())
+	if(!user.user->getCID())
 		return;
 	try {
 		QueueManager::getInstance()->addList(user, QueueItem::FLAG_CLIENT_VIEW | QueueItem::FLAG_PARTIAL_LIST);

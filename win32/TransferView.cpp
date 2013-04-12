@@ -24,6 +24,8 @@
 #include <dcpp/Download.h>
 #include <dcpp/DownloadManager.h>
 #include <dcpp/GeoManager.h>
+#include <dcpp/HttpConnection.h>
+#include <dcpp/HttpManager.h>
 #include <dcpp/QueueManager.h>
 #include <dcpp/SettingsManager.h>
 #include <dcpp/Upload.h>
@@ -93,6 +95,7 @@ TransferView::TransferView(dwt::Widget* parent, TabViewPtr mdi_) :
 	DownloadManager::getInstance()->addListener(this);
 	UploadManager::getInstance()->addListener(this);
 	QueueManager::getInstance()->addListener(this);
+	HttpManager::getInstance()->addListener(this);
 }
 
 TransferView::~TransferView() {
@@ -103,6 +106,7 @@ void TransferView::prepareClose() {
 	ConnectionManager::getInstance()->removeListener(this);
 	DownloadManager::getInstance()->removeListener(this);
 	UploadManager::getInstance()->removeListener(this);
+	HttpManager::getInstance()->removeListener(this);
 }
 
 TransferView::ItemInfo::ItemInfo() :
@@ -130,7 +134,7 @@ int TransferView::ItemInfo::compareItems(const ItemInfo* a, const ItemInfo* b, i
 	auto ca = dynamic_cast<const ConnectionInfo*>(a), cb = dynamic_cast<const ConnectionInfo*>(b);
 	if(ca && cb && ca->status != cb->status) {
 		// sort running conns first.
-		return ca->status == ConnectionInfo::STATUS_RUNNING ? -1 : 1;
+		return ca->status == STATUS_RUNNING ? -1 : 1;
 	}
 
 	switch(col) {
@@ -303,7 +307,7 @@ void TransferView::TransferInfo::update() {
 			timeleft += conn.timeleft;
 			transferred += conn.transferred;
 		}
-		if(conn.status == ConnectionInfo::STATUS_RUNNING) {
+		if(conn.status == STATUS_RUNNING) {
 			++running;
 			speed += conn.speed;
 		}
@@ -386,6 +390,48 @@ void TransferView::TransferInfo::disconnect() {
 	}
 }
 
+TransferView::HttpInfo::HttpInfo(const string& url) :
+	TransferInfo(TTHValue(), true, url, Util::emptyString),
+	status(STATUS_WAITING)
+{
+	columns[COLUMN_PATH] = Text::toT(url);
+	auto slash = columns[COLUMN_PATH].rfind('/');
+	columns[COLUMN_FILE] = slash != tstring::npos ? columns[COLUMN_PATH].substr(slash + 1) : columns[COLUMN_PATH];
+
+	columns[COLUMN_STATUS] = T_("Downloading");
+}
+
+void TransferView::HttpInfo::update(const UpdateInfo& ui) {
+	if(ui.updateMask & UpdateInfo::MASK_STATUS) {
+		status = ui.status;
+	}
+
+	if(ui.updateMask & UpdateInfo::MASK_STATUS_STRING) {
+		columns[COLUMN_STATUS] = ui.statusString;
+	}
+
+	if(ui.updateMask & UpdateInfo::MASK_TRANSFERRED) {
+		transferred = ui.transferred;
+		size = ui.size;
+
+		if(transferred > 0) {
+			columns[COLUMN_TRANSFERRED] = str(TF_("%1%") % Text::toT(Util::formatBytes(transferred)));
+		} else {
+			columns[COLUMN_TRANSFERRED].clear();
+		}
+
+		if(size > 0) {
+			columns[COLUMN_SIZE] = Text::toT(Util::formatBytes(size));
+		} else {
+			columns[COLUMN_SIZE].clear();
+		}
+	}
+}
+
+void TransferView::HttpInfo::disconnect() {
+	HttpManager::getInstance()->disconnect(path);
+}
+
 void TransferView::handleDestroy() {
 	SettingsManager::getInstance()->set(SettingsManager::TRANSFERS_ORDER, WinUtil::toString(transfers->getColumnOrder()));
 	SettingsManager::getInstance()->set(SettingsManager::TRANSFERS_WIDTHS, WinUtil::toString(transfers->getColumnWidths()));
@@ -424,7 +470,7 @@ bool TransferView::handleContextMenu(dwt::ScreenCoordinate pt) {
 		set<TransferInfo*> files;
 		for(auto i: sel) {
 			auto& transfer = transfers->getData(i)->transfer();
-			if(!transfer.getText(COLUMN_FILE).empty()) {
+			if(!dynamic_cast<HttpInfo*>(&transfer) && !transfer.getText(COLUMN_FILE).empty()) {
 				files.insert(&transfer);
 			}
 		}
@@ -782,6 +828,47 @@ void TransferView::removeTransfer(TransferInfo& transfer) {
 	transferItems.remove(transfer);
 }
 
+void TransferView::addHttpConn(const UpdateInfo& ui) {
+	auto item = findHttpItem(ui.path);
+	if(item) {
+		removeHttpItem(*item);
+	}
+
+	httpItems.emplace_back(ui.path);
+	item = &httpItems.back();
+	item->update(ui);
+
+	transfers->insert(item);
+}
+
+void TransferView::updateHttpConn(const UpdateInfo& ui) {
+	auto item = findHttpItem(ui.path);
+	if(item) {
+		item->update(ui);
+	}
+}
+
+void TransferView::removeHttpConn(const UpdateInfo& ui) {
+	auto item = findHttpItem(ui.path);
+	if(item) {
+		removeHttpItem(*item);
+	}
+}
+
+TransferView::HttpInfo* TransferView::findHttpItem(const string& url) {
+	for(auto& item: httpItems) {
+		if(item.path == url) {
+			return &item;
+		}
+	}
+	return nullptr;
+}
+
+void TransferView::removeHttpItem(HttpInfo& item) {
+	transfers->erase(&item);
+	httpItems.remove(item);
+}
+
 TransferView::UserInfoList TransferView::selectedUsersImpl() const {
 	// AspectUserInfo::usersFromTable won't do because not every item represents a user.
 	UserInfoList users;
@@ -814,7 +901,7 @@ void TransferView::execTasks() {
 
 void TransferView::on(ConnectionManagerListener::Added, ConnectionQueueItem* aCqi) noexcept {
 	auto ui = new UpdateInfo(aCqi->getUser(), aCqi->getDownload());
-	ui->setStatus(ConnectionInfo::STATUS_WAITING);
+	ui->setStatus(STATUS_WAITING);
 	ui->setStatusString(T_("Connecting"));
 
 	addedConn(ui);
@@ -938,23 +1025,60 @@ void TransferView::on(QueueManagerListener::CRCFailed, Download* d, const string
 	onFailed(d, aReason);
 }
 
+void TransferView::on(HttpManagerListener::Added, HttpConnection* c) noexcept {
+	auto ui = makeHttpUI(c);
+	ui->setStatus(STATUS_RUNNING);
+	ui->setTransferred(c->getDone(), c->getDone(), c->getSize());
+
+	addedConn(ui);
+}
+
+void TransferView::on(HttpManagerListener::Updated, HttpConnection* c) noexcept {
+	auto ui = makeHttpUI(c);
+	ui->setTransferred(c->getDone(), c->getDone(), c->getSize());
+
+	updatedConn(ui);
+}
+
+void TransferView::on(HttpManagerListener::Failed, HttpConnection* c, const string& str) noexcept {
+	auto ui = makeHttpUI(c);
+	ui->setStatus(STATUS_WAITING);
+	ui->setStatusString(Text::toT(str));
+	ui->setTransferred(c->getDone(), c->getDone(), c->getSize());
+
+	updatedConn(ui);
+}
+
+void TransferView::on(HttpManagerListener::Complete, HttpConnection* c, const string&) noexcept {
+	auto ui = makeHttpUI(c);
+	ui->setStatus(STATUS_WAITING);
+	ui->setStatusString(T_("Idle"));
+	ui->setTransferred(c->getDone(), c->getDone(), c->getSize());
+
+	updatedConn(ui);
+}
+
+void TransferView::on(HttpManagerListener::Removed, HttpConnection* c) noexcept {
+	removedConn(makeHttpUI(c));
+}
+
 void TransferView::addedConn(UpdateInfo* ui) {
 	callAsync([this, ui] {
-		tasks.emplace_back([=](const UpdateInfo& ui) { addConn(ui); }, unique_ptr<UpdateInfo>(ui));
+		tasks.emplace_back([=](const UpdateInfo& ui) { ui.isHttp() ? addHttpConn(ui) : addConn(ui); }, unique_ptr<UpdateInfo>(ui));
 		updateList = true;
 	});
 }
 
 void TransferView::updatedConn(UpdateInfo* ui) {
 	callAsync([this, ui] {
-		tasks.emplace_back([=](const UpdateInfo& ui) { updateConn(ui); }, unique_ptr<UpdateInfo>(ui));
+		tasks.emplace_back([=](const UpdateInfo& ui) { ui.isHttp() ? updateHttpConn(ui) : updateConn(ui); }, unique_ptr<UpdateInfo>(ui));
 		updateList = true;
 	});
 }
 
 void TransferView::removedConn(UpdateInfo* ui) {
 	callAsync([this, ui] {
-		tasks.emplace_back([=](const UpdateInfo& ui) { removeConn(ui); }, unique_ptr<UpdateInfo>(ui));
+		tasks.emplace_back([=](const UpdateInfo& ui) { ui.isHttp() ? removeHttpConn(ui) : removeConn(ui); }, unique_ptr<UpdateInfo>(ui));
 		updateList = true;
 	});
 }
@@ -962,7 +1086,7 @@ void TransferView::removedConn(UpdateInfo* ui) {
 void TransferView::starting(UpdateInfo* ui, Transfer* t) {
 	ui->setTTH(t->getTTH());
 	ui->setFile(t->getPath());
-	ui->setStatus(ConnectionInfo::STATUS_RUNNING);
+	ui->setStatus(STATUS_RUNNING);
 	ui->setTransferred(t->getPos(), t->getActual(), t->getSize());
 	const UserConnection& uc = t->getUserConnection();
 	ui->setCipher(Text::toT(uc.getCipherName()));
@@ -980,7 +1104,7 @@ void TransferView::onTransferTick(Transfer* t, bool download) {
 void TransferView::onTransferComplete(Transfer* t, bool download) {
 	auto ui = new UpdateInfo(t->getHintedUser(), download);
 	ui->setFile(t->getPath());
-	ui->setStatus(ConnectionInfo::STATUS_WAITING);
+	ui->setStatus(STATUS_WAITING);
 	ui->setStatusString(T_("Idle"));
 	ui->setTransferred(t->getPos(), t->getActual(), t->getSize());
 
@@ -990,8 +1114,15 @@ void TransferView::onTransferComplete(Transfer* t, bool download) {
 void TransferView::onFailed(Download* d, const string& aReason) {
  	auto ui = new UpdateInfo(d->getHintedUser(), true, true);
 	ui->setFile(d->getPath());
-	ui->setStatus(ConnectionInfo::STATUS_WAITING);
+	ui->setStatus(STATUS_WAITING);
 	ui->setStatusString(Text::toT(aReason));
 
 	updatedConn(ui);
+}
+
+TransferView::UpdateInfo* TransferView::makeHttpUI(HttpConnection* c) {
+	auto ui = new UpdateInfo(true);
+	ui->setHttp();
+	ui->setFile(c->getUrl());
+	return ui;
 }

@@ -159,7 +159,7 @@ fullSlots(false)
 
 	layout();
 
-	for(auto conn: conns) { conn = nullptr; }
+	for(auto& conn: conns) { conn = nullptr; }
 
 	HttpManager::getInstance()->addListener(this);
 	LogManager::getInstance()->addListener(this);

@@ -44,6 +44,8 @@ public:
 	HttpConnection* download(string url);
 	HttpConnection* download(string url, const StringMap& postData);
 
+	void disconnect(const string& url);
+
 	void shutdown();
 
 private:
