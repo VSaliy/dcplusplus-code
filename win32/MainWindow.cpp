@@ -28,7 +28,7 @@
 #include <dcpp/DownloadManager.h>
 #include <dcpp/FavoriteManager.h>
 #include <dcpp/GeoManager.h>
-#include <dcpp/HttpDownload.h>
+#include <dcpp/HttpManager.h>
 #include <dcpp/LogManager.h>
 #include <dcpp/QueueManager.h>
 #include <dcpp/ResourceManager.h>
@@ -159,8 +159,11 @@ fullSlots(false)
 
 	layout();
 
-	QueueManager::getInstance()->addListener(this);
+	for(auto conn: conns) { conn = nullptr; }
+
+	HttpManager::getInstance()->addListener(this);
 	LogManager::getInstance()->addListener(this);
+	QueueManager::getInstance()->addListener(this);
 
 	onClosing([this] { return handleClosing(); });
 
@@ -175,8 +178,7 @@ fullSlots(false)
 
 	TimerManager::getInstance()->start();
 
-	conns[CONN_VERSION].reset(new HttpDownload("http://dcplusplus.sourceforge.net/version.xml",
-		[this](bool success, const string& result) { callAsync([=] { completeVersionUpdate(success, result); }); }));
+	conns[CONN_VERSION] = HttpManager::getInstance()->download("http://dcplusplus.sourceforge.net/version.xml");
 
 	try {
 		ConnectivityManager::getInstance()->setup(true);
@@ -924,10 +926,6 @@ void MainWindow::statusMessage(time_t t, const string& m) {
 	status->setText(STATUS_STATUS, Text::toT("[" + Util::getShortTimeString(t) + "] " + message));
 }
 
-void MainWindow::on(LogManagerListener::Message, time_t t, const string& m) noexcept {
-	callAsync([=] { statusMessage(t, m); });
-}
-
 bool MainWindow::chooseFavHubGroup(const tstring& title, tstring& group) {
 	set<tstring, noCaseStringLess> groups;
 
@@ -998,15 +996,13 @@ bool MainWindow::handleClosing() {
 			dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION) == IDYES))
 		{
 
-			for(uint8_t i = 0; i < CONN_LAST; ++i)
-				conns[i].reset();
-
 			saveWindowSettings();
 
 			setVisible(false);
 			if(transfers)
 				transfers->prepareClose();
 
+			HttpManager::getInstance()->removeListener(this);
 			LogManager::getInstance()->removeListener(this);
 			QueueManager::getInstance()->removeListener(this);
 
@@ -1355,7 +1351,7 @@ void MainWindow::handleActivate(bool active) {
 void MainWindow::completeVersionUpdate(bool success, const string& result) {
 	if(!conns[CONN_VERSION]) { return; }
 
-	try {
+	if(success) { try {
 		SimpleXML xml;
 		xml.fromXML(result);
 		xml.stepIn();
@@ -1457,9 +1453,9 @@ void MainWindow::completeVersionUpdate(bool success, const string& result) {
 		}
 
 		xml.stepOut();
-	} catch (const Exception&) { }
+	} catch (const Exception&) { } }
 
-	conns[CONN_VERSION].reset();
+	conns[CONN_VERSION] = nullptr;
 
 	// check after the version.xml download in case it contains updated GeoIP links.
 	if(SETTING(GET_USER_COUNTRY)) {
@@ -1499,14 +1495,13 @@ void MainWindow::updateGeo(bool v6) {
 		return;
 
 	LogManager::getInstance()->message(str(F_("Updating the %1% GeoIP database...") % (v6 ? "IPv6" : "IPv4")));
-	conn.reset(new HttpDownload(Text::fromT(v6 ? links.geoip6 : links.geoip4),
-		[this, v6](bool success, const string& result) { callAsync([=] { completeGeoUpdate(v6, success, result); }); }, false));
+	conn = HttpManager::getInstance()->download(Text::fromT(v6 ? links.geoip6 : links.geoip4));
 }
 
 void MainWindow::completeGeoUpdate(bool v6, bool success, const string& result) {
 	auto& conn = conns[v6 ? CONN_GEO_V6 : CONN_GEO_V4];
 	if(!conn) { return; }
-	ScopedFunctor([&conn] { conn.reset(); });
+	ScopedFunctor([&conn] { conn = nullptr; });
 
 	if(success && !result.empty()) {
 		try {
@@ -1751,8 +1746,28 @@ void MainWindow::handleWhatsThis() {
 	sendMessage(WM_SYSCOMMAND, SC_CONTEXTHELP);
 }
 
-void MainWindow::on(PartialList, const HintedUser& aUser, const string& text) noexcept {
-	callAsync([this, aUser, text] { DirectoryListingFrame::openWindow(getTabView(), aUser, text, 0); });
+void MainWindow::on(HttpManagerListener::Failed, HttpConnection* c, const string&) noexcept {
+	if(c == conns[CONN_VERSION]) {
+		callAsync([this] { completeVersionUpdate(false, Util::emptyString); });
+	} else if(c == conns[CONN_GEO_V6]) {
+		callAsync([this] { completeGeoUpdate(true, false, Util::emptyString); });
+	} else if(c == conns[CONN_GEO_V4]) {
+		callAsync([this] { completeGeoUpdate(false, false, Util::emptyString); });
+	}
+}
+
+void MainWindow::on(HttpManagerListener::Complete, HttpConnection* c, const string& buf) noexcept {
+	if(c == conns[CONN_VERSION]) {
+		callAsync([buf, this] { completeVersionUpdate(true, buf); });
+	} else if(c == conns[CONN_GEO_V6]) {
+		callAsync([buf, this] { completeGeoUpdate(true, true, buf); });
+	} else if(c == conns[CONN_GEO_V4]) {
+		callAsync([buf, this] { completeGeoUpdate(false, true, buf); });
+	}
+}
+
+void MainWindow::on(LogManagerListener::Message, time_t t, const string& m) noexcept {
+	callAsync([=] { statusMessage(t, m); });
 }
 
 void MainWindow::on(QueueManagerListener::Finished, QueueItem* qi, const string& dir, int64_t speed) noexcept {
@@ -1783,6 +1798,10 @@ void MainWindow::on(QueueManagerListener::Finished, QueueItem* qi, const string&
 			});
 		});
 	}
+}
+
+void MainWindow::on(QueueManagerListener::PartialList, const HintedUser& aUser, const string& text) noexcept {
+	callAsync([this, aUser, text] { DirectoryListingFrame::openWindow(getTabView(), aUser, text, 0); });
 }
 
 void MainWindow::openWindow(const string& id, const WindowParams& params) {

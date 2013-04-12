@@ -19,8 +19,11 @@
 #ifndef DCPLUSPLUS_DCPP_HTTP_CONNECTION_H
 #define DCPLUSPLUS_DCPP_HTTP_CONNECTION_H
 
+#include <string>
+
 #include "BufferedSocketListener.h"
 #include "HttpConnectionListener.h"
+#include "GetSet.h"
 #include "Speaker.h"
 #include "Util.h"
 
@@ -34,20 +37,23 @@ public:
 	HttpConnection(bool coralize = true, const string& aUserAgent = Util::emptyString);
 	virtual ~HttpConnection();
 
-	void downloadFile(const string& aUrl);
-	void postData(const string& aUrl, const StringMap& aData);
+	void download();
+	void download(const StringMap& postData);
 
 	const string& getMimeType() const { return mimeType; }
 
 	int64_t getSize() const { return size; }
 	int64_t getDone() const { return done; }
 
+	bool coralized() const;
+
+	GETSET(string, url, Url);
+
 private:
 	enum RequestType { TYPE_GET, TYPE_POST };
 	enum ConnectionStates { CONN_UNKNOWN, CONN_OK, CONN_FAILED, CONN_MOVED, CONN_CHUNKED };
 	enum CoralizeStates { CST_DEFAULT, CST_CONNECTED, CST_NOCORALIZE };
 
-	string currentUrl;
 	string userAgent;
 	string method;
 	string file;

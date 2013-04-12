@@ -23,6 +23,7 @@
 #include <string>
 
 #include <dcpp/forward.h>
+#include <dcpp/HttpManagerListener.h>
 
 #include <dwt/widgets/ModalDialog.h>
 
@@ -31,7 +32,7 @@
 using std::string;
 using std::unique_ptr;
 
-class AboutDlg : public dwt::ModalDialog
+class AboutDlg : public dwt::ModalDialog, private HttpManagerListener
 {
 public:
 	AboutDlg(dwt::Widget* parent);
@@ -43,13 +44,17 @@ private:
 	GridPtr grid;
 	LabelPtr version;
 
-	unique_ptr<HttpDownload> c;
+	HttpConnection* c;
 
 	bool handleInitDialog();
 
 	void layout();
 
 	void completeDownload(bool success, const string& result);
+
+	// HttpManagerListener
+	void on(HttpManagerListener::Failed, HttpConnection*, const string&) noexcept;
+	void on(HttpManagerListener::Complete, HttpConnection*, const string&) noexcept;
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_ABOUT_DLG_H)

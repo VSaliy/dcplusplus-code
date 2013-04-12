@@ -21,7 +21,7 @@
 #include "AboutDlg.h"
 
 #include <dcpp/format.h>
-#include <dcpp/HttpDownload.h>
+#include <dcpp/HttpManager.h>
 #include <dcpp/SettingsManager.h>
 #include <dcpp/SimpleXML.h>
 #include <dcpp/version.h>
@@ -64,7 +64,8 @@ static const char thanks[] = "Big thanks to all donators and people who have con
 AboutDlg::AboutDlg(dwt::Widget* parent) :
 dwt::ModalDialog(parent),
 grid(0),
-version(0)
+version(0),
+c(nullptr)
 {
 	onInitDialog([this] { return handleInitDialog(); });
 }
@@ -151,8 +152,9 @@ bool AboutDlg::handleInitDialog() {
 	layout();
 	centerWindow();
 
-	c.reset(new HttpDownload("http://dcplusplus.sourceforge.net/version.xml",
-		[this](bool success, const string& result) { callAsync([=] { completeDownload(success, result); }); }));
+	HttpManager::getInstance()->addListener(this);
+	onDestroy([this] { HttpManager::getInstance()->removeListener(this); });
+	c = HttpManager::getInstance()->download("http://dcplusplus.sourceforge.net/version.xml");
 
 	return false;
 }
@@ -185,5 +187,15 @@ void AboutDlg::completeDownload(bool success, const string& result) {
 
 	version->setText(str.empty() ? Text::toT(result) : str);
 
-	c.reset();
+	c = nullptr;
+}
+
+void AboutDlg::on(HttpManagerListener::Failed, HttpConnection* c, const string& str) noexcept {
+	if(c != this->c) { return; }
+	callAsync([str, this] { completeDownload(false, str); });
+}
+
+void AboutDlg::on(HttpManagerListener::Complete, HttpConnection* c, const string& buf) noexcept {
+	if(c != this->c) { return; }
+	callAsync([buf, this] { completeDownload(true, buf); });
 }

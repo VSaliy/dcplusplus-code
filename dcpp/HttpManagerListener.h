@@ -16,8 +16,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef DCPLUSPLUS_DCPP_HTTP_CONNECTION_LISTENER_H
-#define DCPLUSPLUS_DCPP_HTTP_CONNECTION_LISTENER_H
+#ifndef DCPLUSPLUS_DCPP_HTTP_MANAGER_LISTENER_H
+#define DCPLUSPLUS_DCPP_HTTP_MANAGER_LISTENER_H
 
 #include <string>
 
@@ -28,24 +28,24 @@ namespace dcpp {
 
 using std::string;
 
-class HttpConnectionListener {
+class HttpManagerListener {
 public:
-	virtual ~HttpConnectionListener() { }
+	virtual ~HttpManagerListener() { }
 	template<int I>	struct X { enum { TYPE = I }; };
 
-	typedef X<0> Data;
-	typedef X<1> Failed;
-	typedef X<2> Complete;
-	typedef X<3> Redirected;
-	typedef X<4> Retried;
+	typedef X<0> Added;
+	typedef X<1> Updated;
+	typedef X<2> Failed;
+	typedef X<3> Complete;
+	typedef X<4> Removed;
 
-	virtual void on(Data, HttpConnection*, const uint8_t*, size_t) noexcept = 0;
-	virtual void on(Failed, HttpConnection*, const string&) noexcept = 0;
-	virtual void on(Complete, HttpConnection*) noexcept = 0;
-	virtual void on(Redirected, HttpConnection*) noexcept = 0;
-	virtual void on(Retried, HttpConnection*, bool) noexcept = 0;
+	virtual void on(Added, HttpConnection*) noexcept { }
+	virtual void on(Updated, HttpConnection*) noexcept { }
+	virtual void on(Failed, HttpConnection*, const string&) noexcept { }
+	virtual void on(Complete, HttpConnection*, const string&) noexcept { }
+	virtual void on(Removed, HttpConnection*) noexcept { }
 };
 
 } // namespace dcpp
 
-#endif // !defined(DCPLUSPLUS_DCPP_HTTP_CONNECTION_LISTENER_H)
+#endif
