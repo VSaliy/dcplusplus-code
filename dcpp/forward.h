@@ -73,8 +73,6 @@ struct HintedUser;
 
 class HttpConnection;
 
-struct HttpDownload;
-
 class HubEntry;
 
 class Identity;

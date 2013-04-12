@@ -20,6 +20,7 @@
 #define DCPLUSPLUS_WIN32_MAIN_WINDOW_H
 
 #include <dcpp/forward.h>
+#include <dcpp/HttpManagerListener.h>
 #include <dcpp/LogManagerListener.h>
 #include <dcpp/QueueManagerListener.h>
 #include <dcpp/User.h>
@@ -35,9 +36,10 @@ using std::unique_ptr;
 
 class MainWindow :
 	public dwt::Window,
-	private QueueManagerListener,
+	public AspectStatus<MainWindow>,
+	private HttpManagerListener,
 	private LogManagerListener,
-	public AspectStatus<MainWindow>
+	private QueueManagerListener
 {
 public:
 	enum Status {
@@ -137,7 +139,7 @@ private:
 	actually been created. */
 	static map<tstring, function<void ()>, noCaseStringLess> pluginCommands;
 
-	unique_ptr<HttpDownload> conns[CONN_LAST];
+	HttpConnection* conns[CONN_LAST];
 
 	HANDLE stopperThread;
 
@@ -229,12 +231,16 @@ private:
 
 	static DWORD WINAPI stopper(void* p);
 
+	// HttpManagerListener
+	void on(HttpManagerListener::Failed, HttpConnection*, const string&) noexcept;
+	void on(HttpManagerListener::Complete, HttpConnection*, const string&) noexcept;
+
 	// LogManagerListener
 	void on(LogManagerListener::Message, time_t t, const string& m) noexcept;
 
 	// QueueManagerListener
 	void on(QueueManagerListener::Finished, QueueItem* qi, const string& dir, int64_t speed) noexcept;
-	void on(PartialList, const HintedUser&, const string& text) noexcept;
+	void on(QueueManagerListener::PartialList, const HintedUser&, const string& text) noexcept;
 };
 
 #endif // !defined(MAIN_FRM_H)
