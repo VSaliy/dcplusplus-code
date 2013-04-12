@@ -713,6 +713,7 @@ void FavoriteManager::refresh(bool forceDownload /* = false */) {
 			Lock l(cs);
 			publicListMatrix[publicListServer].clear();
 		}
+		fire(FavoriteManagerListener::DownloadStarting(), publicListServer);
 		c = HttpManager::getInstance()->download(publicListServer);
 		running = true;
 	}

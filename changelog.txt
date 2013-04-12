@@ -4,6 +4,7 @@
 * [L#249622] Add user commands to transfer menus
 * Add a tab menu command to disconnect a hub (poy)
 * Validate input before trying a TTH search (emtee)
+* Display HTTP downloads in the transfer list (poy)
 
 -- 0.811 2013-03-04 --
 * Fix status bar parts when the window is too small (poy)

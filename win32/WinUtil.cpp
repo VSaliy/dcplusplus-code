@@ -764,6 +764,7 @@ void WinUtil::reducePaths(string& message) {
 }
 
 void WinUtil::addHashItems(Menu* menu, const TTHValue& tth, const tstring& filename, int64_t size) {
+	if(!tth) { return; }
 	menu->appendItem(T_("Search for alternates"), [=] { searchHash(tth); }, menuIcon(IDI_SEARCH));
 	menu->appendItem(T_("Lookup TTH at Bitzi.com"), [=] { bitziLink(tth); });
 	menu->appendItem(T_("Copy magnet link to clipboard"), [=] { copyMagnet(tth, filename, size); }, menuIcon(IDI_MAGNET));

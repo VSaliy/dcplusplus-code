@@ -19,6 +19,7 @@
 #include "stdinc.h"
 #include "HttpManager.h"
 
+#include "format.h"
 #include "HttpConnection.h"
 
 namespace dcpp {
@@ -41,6 +42,27 @@ HttpConnection* HttpManager::download(string url, const StringMap& postData) {
 	auto conn = makeConn(move(url));
 	conn->download(postData);
 	return conn;
+}
+
+void HttpManager::disconnect(const string& url) {
+	HttpConnection* c = nullptr;
+
+	{
+		Lock l(cs);
+		conns.erase(std::remove_if(conns.begin(), conns.end(), [&](const Conn& conn) -> bool {
+			if(conn.c->getUrl() == url) {
+				c = conn.c;
+				return true;
+			}
+			return false;
+		}), conns.end());
+	}
+
+	if(c) {
+		fire(HttpManagerListener::Failed(), c, _("Disconnected"));
+		fire(HttpManagerListener::Removed(), c);
+		delete c;
+	}
 }
 
 void HttpManager::shutdown() {
@@ -86,6 +108,7 @@ void HttpManager::on(HttpConnectionListener::Data, HttpConnection* c, const uint
 		buf.append(reinterpret_cast<const char*>(data), len);
 	}
 	fire(HttpManagerListener::Updated(), c);
+	printf("size: %d\n", c->getSize());
 }
 
 void HttpManager::on(HttpConnectionListener::Failed, HttpConnection* c, const string& str) noexcept {
@@ -122,14 +145,16 @@ void HttpManager::on(HttpConnectionListener::Retried, HttpConnection* c, bool co
 void HttpManager::on(TimerManagerListener::Minute, uint64_t tick) noexcept {
 	vector<HttpConnection*> removed;
 
-	Lock l(cs);
-	conns.erase(std::remove_if(conns.begin(), conns.end(), [tick, &removed](const Conn& conn) -> bool {
-		if(conn.remove && tick > conn.remove) {
-			removed.push_back(conn.c);
-			return true;
-		}
-		return false;
-	}), conns.end());
+	{
+		Lock l(cs);
+		conns.erase(std::remove_if(conns.begin(), conns.end(), [tick, &removed](const Conn& conn) -> bool {
+			if(conn.remove && tick > conn.remove) {
+				removed.push_back(conn.c);
+				return true;
+			}
+			return false;
+		}), conns.end());
+	}
 
 	for(auto c: removed) {
 		fire(HttpManagerListener::Removed(), c);

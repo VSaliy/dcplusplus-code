@@ -26,6 +26,7 @@
 #include <dcpp/UploadManagerListener.h>
 #include <dcpp/ConnectionManagerListener.h>
 #include <dcpp/QueueManagerListener.h>
+#include <dcpp/HttpManagerListener.h>
 #include <dcpp/forward.h>
 #include <dcpp/MerkleTree.h>
 #include <dcpp/Util.h>
@@ -45,6 +46,7 @@ class TransferView :
 	private UploadManagerListener,
 	private ConnectionManagerListener,
 	private QueueManagerListener,
+	private HttpManagerListener,
 	public AspectUserInfo<TransferView>,
 	public AspectUserCommand<TransferView>
 {
@@ -75,6 +77,11 @@ private:
 		COLUMN_LAST
 	};
 
+	enum Status {
+		STATUS_RUNNING,		///< Transferring
+		STATUS_WAITING		///< Idle
+	};
+
 	struct TransferInfo;
 	struct UpdateInfo;
 
@@ -103,11 +110,6 @@ private:
 	};
 
 	struct ConnectionInfo : public ItemInfo, public UserInfoBase {
-		enum Status {
-			STATUS_RUNNING,		///< Transfering
-			STATUS_WAITING		///< Idle
-		};
-
 		ConnectionInfo(const HintedUser& u, TransferInfo& parent);
 
 		bool operator==(const ConnectionInfo& other) const;
@@ -120,8 +122,8 @@ private:
 
 		double barPos() const;
 
-		void force();
-		void disconnect();
+		virtual void force();
+		virtual void disconnect();
 
 		bool transferFailed;
 		Status status;
@@ -142,8 +144,8 @@ private:
 
 		double barPos() const;
 
-		void force();
-		void disconnect();
+		virtual void force();
+		virtual void disconnect();
 
 		TTHValue tth;
 		bool download;
@@ -151,6 +153,16 @@ private:
 		string tempPath;
 
 		list<ConnectionInfo> conns;
+	};
+
+	struct HttpInfo : public TransferInfo {
+		HttpInfo(const string& url);
+
+		void update(const UpdateInfo& ui);
+
+		virtual void disconnect();
+
+		Status status;
 	};
 
 	struct UpdateInfo {
@@ -162,11 +174,13 @@ private:
 			MASK_CIPHER = 1 << 4,
 			MASK_IP = 1 << 5,
 			MASK_COUNTRY = 1 << 6,
-			MASK_PATH = 1 << 7
+			MASK_PATH = 1 << 7,
+			MASK_HTTP = 1 << 8
 		};
 
 		UpdateInfo(const HintedUser& user, bool download, bool transferFailed = false) :
 			updateMask(0), user(user), download(download), transferFailed(transferFailed) { }
+		UpdateInfo(bool download) : download(download), transferFailed(false) { }
 
 		uint32_t updateMask;
 
@@ -182,8 +196,8 @@ private:
 		string tempPath;
 		void setTempPath(const string& path) { tempPath = path; }
 
-		void setStatus(ConnectionInfo::Status aStatus) { status = aStatus; updateMask |= MASK_STATUS; }
-		ConnectionInfo::Status status;
+		void setStatus(Status aStatus) { status = aStatus; updateMask |= MASK_STATUS; }
+		Status status;
 		void setTransferred(int64_t aTransferred, int64_t aActual, int64_t aSize) {
 			transferred = aTransferred; actual = aActual; size = aSize; updateMask |= MASK_TRANSFERRED;
 		}
@@ -201,6 +215,9 @@ private:
 		tstring ip;
 		void setCountry(const tstring& aCountry) { country = aCountry; updateMask |= MASK_COUNTRY; }
 		tstring country;
+
+		void setHttp() { updateMask |= MASK_HTTP; }
+		bool isHttp() const { return (updateMask & MASK_HTTP) == MASK_HTTP; }
 	};
 
 	typedef TypedTable<ItemInfo, false, dwt::TableTree> WidgetTransfers;
@@ -209,6 +226,7 @@ private:
 
 	list<TransferInfo> transferItems; /* the LPARAM data of table entries are direct pointers to
 									  objects stored by this container, hence the std::list. */
+	list<HttpInfo> httpItems;
 
 	TabViewPtr mdi;
 
@@ -242,6 +260,13 @@ private:
 	void removeConn(ConnectionInfo& conn);
 	void removeTransfer(TransferInfo& transfer);
 
+	void addHttpConn(const UpdateInfo& ui);
+	void updateHttpConn(const UpdateInfo& ui);
+	void removeHttpConn(const UpdateInfo& ui);
+
+	HttpInfo* findHttpItem(const string& url);
+	void removeHttpItem(HttpInfo& item);
+
 	// AspectUserInfo
 	UserInfoList selectedUsersImpl() const;
 
@@ -264,6 +289,12 @@ private:
 
 	virtual void on(QueueManagerListener::CRCFailed, Download* d, const string& aReason) noexcept;
 
+	virtual void on(HttpManagerListener::Added, HttpConnection*) noexcept;
+	virtual void on(HttpManagerListener::Updated, HttpConnection*) noexcept;
+	virtual void on(HttpManagerListener::Failed, HttpConnection*, const string&) noexcept;
+	virtual void on(HttpManagerListener::Complete, HttpConnection*, const string&) noexcept;
+	virtual void on(HttpManagerListener::Removed, HttpConnection*) noexcept;
+
 	void addedConn(UpdateInfo* ui);
 	void updatedConn(UpdateInfo* ui);
 	void removedConn(UpdateInfo* ui);
@@ -272,6 +303,7 @@ private:
 	void onTransferTick(Transfer* t, bool download);
 	void onTransferComplete(Transfer* t, bool download);
 	void onFailed(Download* aDownload, const string& aReason);
+	UpdateInfo* makeHttpUI(HttpConnection* c);
 };
 
 #endif // !defined(TRANSFER_VIEW_H)
