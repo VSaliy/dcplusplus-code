@@ -50,13 +50,16 @@ void HttpManager::shutdown() {
 }
 
 HttpConnection* HttpManager::makeConn(string&& url) {
-	Lock l(cs);
-	Conn conn { new HttpConnection(), string(), 0 };
-	conns.push_back(move(conn));
-	conn.c->addListener(this);
-	conn.c->setUrl(move(url));
-	fire(HttpManagerListener::Added(), conn.c);
-	return conn.c;
+	auto c = new HttpConnection();
+	{
+		Lock l(cs);
+		Conn conn { c, string(), 0 };
+		conns.push_back(move(conn));
+	}
+	c->addListener(this);
+	c->setUrl(move(url));
+	fire(HttpManagerListener::Added(), c);
+	return c;
 }
 
 HttpManager::Conn* HttpManager::findConn(HttpConnection* c) {
@@ -68,31 +71,40 @@ HttpManager::Conn* HttpManager::findConn(HttpConnection* c) {
 	return nullptr;
 }
 
-void HttpManager::remove(Conn& conn) {
-	conn.remove = GET_TICK() + 60 * 1000;
+void HttpManager::removeLater(HttpConnection* c) {
+	Lock l(cs);
+	findConn(c)->remove = GET_TICK() + 60 * 1000;
 }
 
 void HttpManager::on(HttpConnectionListener::Data, HttpConnection* c, const uint8_t* data, size_t len) noexcept {
-	Lock l(cs);
-	auto& buf = findConn(c)->buf;
-	if(buf.empty() && c->getSize() != -1) {
-		buf.reserve(c->getSize());
+	{
+		Lock l(cs);
+		auto& buf = findConn(c)->buf;
+		if(buf.empty() && c->getSize() != -1) {
+			buf.reserve(c->getSize());
+		}
+		buf.append(reinterpret_cast<const char*>(data), len);
 	}
-	buf.append(reinterpret_cast<const char*>(data), len);
 	fire(HttpManagerListener::Updated(), c);
 }
 
 void HttpManager::on(HttpConnectionListener::Failed, HttpConnection* c, const string& str) noexcept {
-	auto& conn = *findConn(c);
-	conn.buf.clear();
+	{
+		Lock l(cs);
+		findConn(c)->buf.clear();
+	}
 	fire(HttpManagerListener::Failed(), c, str);
-	remove(conn);
+	removeLater(c);
 }
 
 void HttpManager::on(HttpConnectionListener::Complete, HttpConnection* c) noexcept {
-	auto& conn = *findConn(c);
-	fire(HttpManagerListener::Complete(), c, move(conn.buf));
-	remove(conn);
+	string buf;
+	{
+		Lock l(cs);
+		buf = move(findConn(c)->buf);
+	}
+	fire(HttpManagerListener::Complete(), c, move(buf));
+	removeLater(c);
 }
 
 void HttpManager::on(HttpConnectionListener::Redirected, HttpConnection* c) noexcept {
@@ -102,20 +114,27 @@ void HttpManager::on(HttpConnectionListener::Redirected, HttpConnection* c) noex
 
 void HttpManager::on(HttpConnectionListener::Retried, HttpConnection* c, bool connected) noexcept {
 	if(connected) {
+		Lock l(cs);
 		findConn(c)->buf.clear();
 	}
 }
 
 void HttpManager::on(TimerManagerListener::Minute, uint64_t tick) noexcept {
+	vector<HttpConnection*> removed;
+
 	Lock l(cs);
-	conns.erase(std::remove_if(conns.begin(), conns.end(), [tick, this](const Conn& conn) -> bool {
+	conns.erase(std::remove_if(conns.begin(), conns.end(), [tick, &removed](const Conn& conn) -> bool {
 		if(conn.remove && tick > conn.remove) {
-			fire(HttpManagerListener::Removed(), conn.c);
-			delete conn.c;
+			removed.push_back(conn.c);
 			return true;
 		}
 		return false;
 	}), conns.end());
+
+	for(auto c: removed) {
+		fire(HttpManagerListener::Removed(), c);
+		delete c;
+	}
 }
 
 } // namespace dcpp
