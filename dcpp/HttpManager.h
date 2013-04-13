@@ -41,22 +41,26 @@ class HttpManager :
 	private TimerManagerListener
 {
 public:
-	HttpConnection* download(string url);
-	HttpConnection* download(string url, const StringMap& postData);
+	/** Send a GET request to the designated url. If unspecified, the stream defaults to a
+	StringOutputStream. */
+	HttpConnection* download(string url, OutputStream* stream = nullptr);
+	/** Send a POST request to the designated url. If unspecified, the stream defaults to a
+	StringOutputStream. */
+	HttpConnection* download(string url, const StringMap& postData, OutputStream* stream = nullptr);
 
 	void disconnect(const string& url);
 
 	void shutdown();
 
 private:
-	struct Conn { HttpConnection* c; string buf; uint64_t remove; };
+	struct Conn { HttpConnection* c; OutputStream* stream; uint64_t remove; };
 
 	friend class Singleton<HttpManager>;
 
 	HttpManager();
 	virtual ~HttpManager();
 
-	HttpConnection* makeConn(string&& url);
+	HttpConnection* makeConn(string&& url, OutputStream* stream);
 	Conn* findConn(HttpConnection* c);
 	void removeLater(HttpConnection* c);
 
@@ -64,7 +68,7 @@ private:
 	void on(HttpConnectionListener::Data, HttpConnection*, const uint8_t*, size_t) noexcept;
 	void on(HttpConnectionListener::Failed, HttpConnection*, const string&) noexcept;
 	void on(HttpConnectionListener::Complete, HttpConnection*) noexcept;
-	void on(HttpConnectionListener::Redirected, HttpConnection*) noexcept;
+	void on(HttpConnectionListener::Redirected, HttpConnection*, const string&) noexcept;
 	void on(HttpConnectionListener::Retried, HttpConnection*, bool) noexcept;
 
 	// TimerManagerListener

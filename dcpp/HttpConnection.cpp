@@ -22,6 +22,7 @@
 #include "BufferedSocket.h"
 #include "format.h"
 #include "SettingsManager.h"
+#include "TimerManager.h"
 #include "version.h"
 
 namespace dcpp {
@@ -33,6 +34,9 @@ userAgent(aUserAgent),
 port("80"),
 size(-1),
 done(0),
+speed(0),
+lastPos(0),
+lastTick(0),
 connState(CONN_UNKNOWN),
 coralizeState(coralize ? CST_DEFAULT : CST_NOCORALIZE),
 socket(0)
@@ -86,6 +90,10 @@ void HttpConnection::prepareRequest(RequestType type) {
 
 	size = -1;
 	done = 0;
+	speed = 0;
+	lastPos = 0;
+	lastTick = GET_TICK();
+
 	connState = CONN_UNKNOWN;
 	connType = type;
 
@@ -145,6 +153,20 @@ void HttpConnection::abortRequest(bool disconnect) {
 
 	BufferedSocket::putSocket(socket);
 	socket = NULL;
+}
+
+void HttpConnection::updateSpeed() {
+	if(done > lastPos) {
+		auto tick = GET_TICK();
+
+		auto tickDelta = static_cast<double>(tick - lastTick);
+		if(tickDelta > 0) {
+			speed = static_cast<double>(done - lastPos) / tickDelta * 1000.0;
+		}
+
+		lastPos = done;
+		lastTick = tick;
+	}
 }
 
 void HttpConnection::on(BufferedSocketListener::Connected) noexcept {
@@ -237,13 +259,12 @@ void HttpConnection::on(BufferedSocketListener::Line, const string& aLine) noexc
 			fire(HttpConnectionListener::Failed(), this, str(F_("Endless redirection loop (%1%)") % url));
 			return;
 		}
-		url = location;
 
-		fire(HttpConnectionListener::Redirected(), this);
+		fire(HttpConnectionListener::Redirected(), this, location);
 
-		if (coralizeState != CST_NOCORALIZE)
+		if(coralizeState != CST_NOCORALIZE)
 			coralizeState = CST_DEFAULT;
-
+		url = location;
 		download();
 
 	} else if(aLine[0] == 0x0d) {
@@ -297,8 +318,9 @@ void HttpConnection::on(BufferedSocketListener::Data, uint8_t* aBuf, size_t aLen
 		return;
 	}
 
-	fire(HttpConnectionListener::Data(), this, aBuf, aLen);
 	done += aLen;
+	updateSpeed();
+	fire(HttpConnectionListener::Data(), this, aBuf, aLen);
 }
 
 } // namespace dcpp

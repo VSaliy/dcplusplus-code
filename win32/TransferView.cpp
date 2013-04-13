@@ -397,8 +397,6 @@ TransferView::HttpInfo::HttpInfo(const string& url) :
 	columns[COLUMN_PATH] = Text::toT(url);
 	auto slash = columns[COLUMN_PATH].rfind('/');
 	columns[COLUMN_FILE] = slash != tstring::npos ? columns[COLUMN_PATH].substr(slash + 1) : columns[COLUMN_PATH];
-
-	columns[COLUMN_STATUS] = T_("Downloading");
 }
 
 void TransferView::HttpInfo::update(const UpdateInfo& ui) {
@@ -424,6 +422,21 @@ void TransferView::HttpInfo::update(const UpdateInfo& ui) {
 			columns[COLUMN_SIZE] = Text::toT(Util::formatBytes(size));
 		} else {
 			columns[COLUMN_SIZE].clear();
+		}
+	}
+
+	if(ui.updateMask & UpdateInfo::MASK_SPEED) {
+		speed = ui.speed;
+		columns[COLUMN_SPEED] = str(TF_("%1%/s") % Text::toT(Util::formatBytes(speed)));
+	}
+
+	if((ui.updateMask & UpdateInfo::MASK_STATUS) || (ui.updateMask & UpdateInfo::MASK_TRANSFERRED) || (ui.updateMask & UpdateInfo::MASK_SPEED)) {
+		if(status == STATUS_RUNNING && size > 0 && speed > 0) {
+			timeleft = static_cast<double>(size - transferred) / speed;
+			columns[COLUMN_TIMELEFT] = Text::toT(Util::formatSeconds(timeleft));
+		} else {
+			timeleft = 0;
+			columns[COLUMN_TIMELEFT].clear();
 		}
 	}
 }
@@ -1028,6 +1041,7 @@ void TransferView::on(QueueManagerListener::CRCFailed, Download* d, const string
 void TransferView::on(HttpManagerListener::Added, HttpConnection* c) noexcept {
 	auto ui = makeHttpUI(c);
 	ui->setStatus(STATUS_RUNNING);
+	ui->setStatusString(T_("Downloading"));
 	ui->setTransferred(c->getDone(), c->getDone(), c->getSize());
 
 	addedConn(ui);
@@ -1036,6 +1050,7 @@ void TransferView::on(HttpManagerListener::Added, HttpConnection* c) noexcept {
 void TransferView::on(HttpManagerListener::Updated, HttpConnection* c) noexcept {
 	auto ui = makeHttpUI(c);
 	ui->setTransferred(c->getDone(), c->getDone(), c->getSize());
+	ui->setSpeed(c->getSpeed());
 
 	updatedConn(ui);
 }
@@ -1049,10 +1064,10 @@ void TransferView::on(HttpManagerListener::Failed, HttpConnection* c, const stri
 	updatedConn(ui);
 }
 
-void TransferView::on(HttpManagerListener::Complete, HttpConnection* c, const string&) noexcept {
+void TransferView::on(HttpManagerListener::Complete, HttpConnection* c, OutputStream*) noexcept {
 	auto ui = makeHttpUI(c);
 	ui->setStatus(STATUS_WAITING);
-	ui->setStatusString(T_("Idle"));
+	ui->setStatusString(T_("Download finished"));
 	ui->setTransferred(c->getDone(), c->getDone(), c->getSize());
 
 	updatedConn(ui);

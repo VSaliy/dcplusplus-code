@@ -24,6 +24,7 @@
 #include <dcpp/HttpManager.h>
 #include <dcpp/SettingsManager.h>
 #include <dcpp/SimpleXML.h>
+#include <dcpp/Streams.h>
 #include <dcpp/version.h>
 
 #include <dwt/widgets/Grid.h>
@@ -195,7 +196,8 @@ void AboutDlg::on(HttpManagerListener::Failed, HttpConnection* c, const string& 
 	callAsync([str, this] { completeDownload(false, str); });
 }
 
-void AboutDlg::on(HttpManagerListener::Complete, HttpConnection* c, const string& buf) noexcept {
+void AboutDlg::on(HttpManagerListener::Complete, HttpConnection* c, OutputStream* stream) noexcept {
 	if(c != this->c) { return; }
-	callAsync([buf, this] { completeDownload(true, buf); });
+	auto str = static_cast<StringOutputStream*>(stream)->getString();
+	callAsync([str, this] { completeDownload(true, str); });
 }

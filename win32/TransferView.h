@@ -180,7 +180,7 @@ private:
 
 		UpdateInfo(const HintedUser& user, bool download, bool transferFailed = false) :
 			updateMask(0), user(user), download(download), transferFailed(transferFailed) { }
-		UpdateInfo(bool download) : download(download), transferFailed(false) { }
+		UpdateInfo(bool download) : updateMask(0), download(download), transferFailed(false) { }
 
 		uint32_t updateMask;
 
@@ -217,7 +217,7 @@ private:
 		tstring country;
 
 		void setHttp() { updateMask |= MASK_HTTP; }
-		bool isHttp() const { return (updateMask & MASK_HTTP) == MASK_HTTP; }
+		bool isHttp() const { return updateMask & MASK_HTTP; }
 	};
 
 	typedef TypedTable<ItemInfo, false, dwt::TableTree> WidgetTransfers;
@@ -292,7 +292,7 @@ private:
 	virtual void on(HttpManagerListener::Added, HttpConnection*) noexcept;
 	virtual void on(HttpManagerListener::Updated, HttpConnection*) noexcept;
 	virtual void on(HttpManagerListener::Failed, HttpConnection*, const string&) noexcept;
-	virtual void on(HttpManagerListener::Complete, HttpConnection*, const string&) noexcept;
+	virtual void on(HttpManagerListener::Complete, HttpConnection*, OutputStream*) noexcept;
 	virtual void on(HttpManagerListener::Removed, HttpConnection*) noexcept;
 
 	void addedConn(UpdateInfo* ui);

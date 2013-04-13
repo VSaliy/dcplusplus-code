@@ -95,6 +95,9 @@ typedef boost::intrusive_ptr<SearchResult> SearchResultPtr;
 class Socket;
 class SocketException;
 
+class StringOutputStream;
+class StringRefOutputStream;
+
 class StringSearch;
 
 class Tagger;

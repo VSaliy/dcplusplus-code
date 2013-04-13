@@ -1756,13 +1756,16 @@ void MainWindow::on(HttpManagerListener::Failed, HttpConnection* c, const string
 	}
 }
 
-void MainWindow::on(HttpManagerListener::Complete, HttpConnection* c, const string& buf) noexcept {
+void MainWindow::on(HttpManagerListener::Complete, HttpConnection* c, OutputStream* stream) noexcept {
 	if(c == conns[CONN_VERSION]) {
-		callAsync([buf, this] { completeVersionUpdate(true, buf); });
+		auto str = static_cast<StringOutputStream*>(stream)->getString();
+		callAsync([str, this] { completeVersionUpdate(true, str); });
 	} else if(c == conns[CONN_GEO_V6]) {
-		callAsync([buf, this] { completeGeoUpdate(true, true, buf); });
+		auto str = static_cast<StringOutputStream*>(stream)->getString();
+		callAsync([str, this] { completeGeoUpdate(true, true, str); });
 	} else if(c == conns[CONN_GEO_V4]) {
-		callAsync([buf, this] { completeGeoUpdate(false, true, buf); });
+		auto str = static_cast<StringOutputStream*>(stream)->getString();
+		callAsync([str, this] { completeGeoUpdate(false, true, str); });
 	}
 }
 

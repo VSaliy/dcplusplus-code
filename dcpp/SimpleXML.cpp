@@ -200,10 +200,9 @@ void SimpleXML::fromXML(const string& aXML) {
 }
 
 string SimpleXML::toXML() {
-	string tmp;
-	StringOutputStream os(tmp);
+	StringOutputStream os;
 	toXML(&os);
-	return tmp;
+	return os.getString();
 }
 
 } // namespace dcpp

@@ -42,7 +42,7 @@ public:
 	virtual void on(Added, HttpConnection*) noexcept { }
 	virtual void on(Updated, HttpConnection*) noexcept { }
 	virtual void on(Failed, HttpConnection*, const string&) noexcept { }
-	virtual void on(Complete, HttpConnection*, const string&) noexcept { }
+	virtual void on(Complete, HttpConnection*, OutputStream*) noexcept { }
 	virtual void on(Removed, HttpConnection*) noexcept { }
 };
 

@@ -44,6 +44,7 @@ public:
 
 	int64_t getSize() const { return size; }
 	int64_t getDone() const { return done; }
+	double getSpeed() const { return speed; }
 
 	bool coralized() const;
 
@@ -65,6 +66,11 @@ private:
 	string mimeType;
 	int64_t size;
 	int64_t done;
+	double speed;
+
+	// counters to compute a best-effort speed
+	int64_t lastPos;
+	uint64_t lastTick;
 
 	ConnectionStates connState;
 	CoralizeStates coralizeState;
@@ -74,6 +80,8 @@ private:
 
 	void prepareRequest(RequestType type);
 	void abortRequest(bool disconnect);
+
+	void updateSpeed();
 
 	// BufferedSocketListener
 	void on(Connected) noexcept;
