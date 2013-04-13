@@ -54,7 +54,7 @@ private:
 
 	// HttpManagerListener
 	void on(HttpManagerListener::Failed, HttpConnection*, const string&) noexcept;
-	void on(HttpManagerListener::Complete, HttpConnection*, const string&) noexcept;
+	void on(HttpManagerListener::Complete, HttpConnection*, OutputStream*) noexcept;
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_ABOUT_DLG_H)

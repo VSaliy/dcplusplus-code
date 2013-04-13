@@ -761,12 +761,12 @@ UserCommand::List FavoriteManager::getUserCommands(int ctx, const StringList& hu
 	return lst;
 }
 
-void FavoriteManager::on(Added, HttpConnection* c) noexcept {
+void FavoriteManager::on(HttpManagerListener::Added, HttpConnection* c) noexcept {
 	if(c != this->c) { return; }
 	fire(FavoriteManagerListener::DownloadStarting(), c->getUrl());
 }
 
-void FavoriteManager::on(Failed, HttpConnection* c, const string& str) noexcept {
+void FavoriteManager::on(HttpManagerListener::Failed, HttpConnection* c, const string& str) noexcept {
 	if(c != this->c) { return; }
 	this->c = nullptr;
 	lastServer++;
@@ -776,14 +776,14 @@ void FavoriteManager::on(Failed, HttpConnection* c, const string& str) noexcept 
 	}
 }
 
-void FavoriteManager::on(Complete, HttpConnection* c, const string& buf) noexcept {
+void FavoriteManager::on(HttpManagerListener::Complete, HttpConnection* c, OutputStream* stream) noexcept {
 	if(c != this->c) { return; }
 	this->c = nullptr;
 	bool parseSuccess = false;
 	if(useHttp) {
 		if(c->getMimeType() == "application/x-bzip2")
 			listType = TYPE_BZIP2;
-		parseSuccess = onHttpFinished(buf);
+		parseSuccess = onHttpFinished(static_cast<StringOutputStream*>(stream)->getString());
 	}	
 	running = false;
 	if(parseSuccess) {

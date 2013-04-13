@@ -233,7 +233,7 @@ private:
 
 	// HttpManagerListener
 	void on(HttpManagerListener::Failed, HttpConnection*, const string&) noexcept;
-	void on(HttpManagerListener::Complete, HttpConnection*, const string&) noexcept;
+	void on(HttpManagerListener::Complete, HttpConnection*, OutputStream*) noexcept;
 
 	// LogManagerListener
 	void on(LogManagerListener::Message, time_t t, const string& m) noexcept;

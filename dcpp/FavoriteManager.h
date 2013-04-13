@@ -160,9 +160,9 @@ private:
 	void on(UserDisconnected, const UserPtr& user) noexcept;
 
 	// HttpManagerListener
-	void on(Added, HttpConnection*) noexcept;
-	void on(Failed, HttpConnection*, const string&) noexcept;
-	void on(Complete, HttpConnection*, const string&) noexcept;
+	void on(HttpManagerListener::Added, HttpConnection*) noexcept;
+	void on(HttpManagerListener::Failed, HttpConnection*, const string&) noexcept;
+	void on(HttpManagerListener::Complete, HttpConnection*, OutputStream*) noexcept;
 
 	bool onHttpFinished(const string& buf) noexcept;
 

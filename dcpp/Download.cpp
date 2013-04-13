@@ -140,7 +140,7 @@ void Download::open(int64_t bytes, bool z) {
 		output.reset(new File(target, File::WRITE, File::OPEN | File::TRUNCATE | File::CREATE));
 		tempTarget = target;
 	} else if(getType() == Transfer::TYPE_PARTIAL_LIST) {
-		output.reset(new StringOutputStream(pfs));
+		output.reset(new StringRefOutputStream(pfs));
 	} else if(getType() == Transfer::TYPE_TREE) {
 		output.reset(new MerkleTreeOutputStream<TigerTree>(tt));
 	}

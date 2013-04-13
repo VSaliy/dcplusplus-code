@@ -42,7 +42,7 @@ public:
 	virtual void on(Data, HttpConnection*, const uint8_t*, size_t) noexcept = 0;
 	virtual void on(Failed, HttpConnection*, const string&) noexcept = 0;
 	virtual void on(Complete, HttpConnection*) noexcept = 0;
-	virtual void on(Redirected, HttpConnection*) noexcept = 0;
+	virtual void on(Redirected, HttpConnection*, const string&) noexcept = 0;
 	virtual void on(Retried, HttpConnection*, bool) noexcept = 0;
 };
 
