@@ -787,7 +787,7 @@ void FavoriteManager::on(HttpManagerListener::Complete, HttpConnection* c, Outpu
 	}	
 	running = false;
 	if(parseSuccess) {
-		fire(FavoriteManagerListener::DownloadFinished(), c->getUrl(), c->coralized());
+		fire(FavoriteManagerListener::DownloadFinished(), c->getUrl(), c->getCoralized());
 	}
 }
 

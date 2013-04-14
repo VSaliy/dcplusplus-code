@@ -21,6 +21,7 @@
 
 #include "format.h"
 #include "HttpConnection.h"
+#include "SettingsManager.h"
 #include "Streams.h"
 
 namespace dcpp {
@@ -30,31 +31,32 @@ HttpManager::HttpManager() {
 }
 
 HttpManager::~HttpManager() {
-	TimerManager::getInstance()->removeListener(this);
 }
 
 HttpConnection* HttpManager::download(string url, OutputStream* stream) {
-	auto conn = makeConn(move(url), stream);
+	auto conn = makeConn(move(url), SETTING(CORAL), stream);
 	conn->download();
 	return conn;
 }
 
 HttpConnection* HttpManager::download(string url, const StringMap& postData, OutputStream* stream) {
-	auto conn = makeConn(move(url), stream);
+	auto conn = makeConn(move(url), false, stream);
 	conn->download(postData);
 	return conn;
 }
 
 void HttpManager::disconnect(const string& url) {
 	HttpConnection* c = nullptr;
-	OutputStream* stream;
+	OutputStream* stream = nullptr;
 
 	{
 		Lock l(cs);
 		conns.erase(std::remove_if(conns.begin(), conns.end(), [&](const Conn& conn) -> bool {
 			if(conn.c->getUrl() == url) {
 				c = conn.c;
-				stream = conn.stream;
+				if(conn.manageStream) {
+					stream = conn.stream;
+				}
 				return true;
 			}
 			return false;
@@ -65,25 +67,34 @@ void HttpManager::disconnect(const string& url) {
 		fire(HttpManagerListener::Failed(), c, _("Disconnected"));
 		fire(HttpManagerListener::Removed(), c);
 		delete c;
-		delete stream;
+		if(stream) {
+			delete stream;
+		}
 	}
 }
 
 void HttpManager::shutdown() {
+	TimerManager::getInstance()->removeListener(this);
+
 	Lock l(cs);
-	for(auto& conn: conns) { delete conn.c; delete conn.stream; }
-	conns.clear();
+	for(auto& conn: conns) {
+		delete conn.c;
+		if(conn.manageStream) {
+			delete conn.stream;
+		}
+	}
 }
 
-HttpConnection* HttpManager::makeConn(string&& url, OutputStream* stream) {
+HttpConnection* HttpManager::makeConn(string&& url, bool coralized, OutputStream* stream) {
 	auto c = new HttpConnection();
 	{
 		Lock l(cs);
-		Conn conn { c, stream ? stream : new StringOutputStream(), 0 };
+		Conn conn { c, stream ? stream : new StringOutputStream(), !stream, 0 };
 		conns.push_back(move(conn));
 	}
 	c->addListener(this);
 	c->setUrl(move(url));
+	c->setCoralized(coralized);
 	fire(HttpManagerListener::Added(), c);
 	return c;
 }
@@ -97,9 +108,26 @@ HttpManager::Conn* HttpManager::findConn(HttpConnection* c) {
 	return nullptr;
 }
 
+void HttpManager::resetStream(HttpConnection* c) {
+	OutputStream* stream = nullptr;
+	{
+		Lock l(cs);
+		auto conn = findConn(c);
+		if(conn->manageStream) {
+			stream = conn->stream;
+		}
+	}
+	if(stream) {
+		static_cast<StringOutputStream*>(stream)->stringRef().clear();
+	} else {
+		fire(HttpManagerListener::ResetStream(), c);
+	}
+}
+
 void HttpManager::removeLater(HttpConnection* c) {
+	auto later = GET_TICK() + 60 * 1000;
 	Lock l(cs);
-	findConn(c)->remove = GET_TICK() + 60 * 1000;
+	findConn(c)->remove = later;
 }
 
 void HttpManager::on(HttpConnectionListener::Data, HttpConnection* c, const uint8_t* data, size_t len) noexcept {
@@ -113,6 +141,14 @@ void HttpManager::on(HttpConnectionListener::Data, HttpConnection* c, const uint
 }
 
 void HttpManager::on(HttpConnectionListener::Failed, HttpConnection* c, const string& str) noexcept {
+	resetStream(c);
+
+	if(c->getCoralized()) {
+		c->setCoralized(false);
+		c->download();
+		return;
+	}
+
 	fire(HttpManagerListener::Failed(), c, str);
 	removeLater(c);
 }
@@ -130,14 +166,9 @@ void HttpManager::on(HttpConnectionListener::Complete, HttpConnection* c) noexce
 
 void HttpManager::on(HttpConnectionListener::Redirected, HttpConnection* c, const string& redirect) noexcept {
 	fire(HttpManagerListener::Removed(), c);
+	resetStream(c);
 	c->setUrl(redirect);
 	fire(HttpManagerListener::Added(), c);
-}
-
-void HttpManager::on(HttpConnectionListener::Retried, HttpConnection* c, bool connected) noexcept {
-	if(connected) {
-		/// @todo reset / redirect
-	}
 }
 
 void HttpManager::on(TimerManagerListener::Minute, uint64_t tick) noexcept {
@@ -147,7 +178,7 @@ void HttpManager::on(TimerManagerListener::Minute, uint64_t tick) noexcept {
 		Lock l(cs);
 		conns.erase(std::remove_if(conns.begin(), conns.end(), [tick, &removed](const Conn& conn) -> bool {
 			if(conn.remove && tick > conn.remove) {
-				removed.emplace_back(conn.c, conn.stream);
+				removed.emplace_back(conn.c, conn.manageStream ? conn.stream : nullptr);
 				return true;
 			}
 			return false;
@@ -157,7 +188,9 @@ void HttpManager::on(TimerManagerListener::Minute, uint64_t tick) noexcept {
 	for(auto& rem: removed) {
 		fire(HttpManagerListener::Removed(), rem.first);
 		delete rem.first;
-		delete rem.second;
+		if(rem.second) {
+			delete rem.second;
+		}
 	}
 }
 
