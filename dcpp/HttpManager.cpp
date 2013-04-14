@@ -103,10 +103,12 @@ void HttpManager::removeLater(HttpConnection* c) {
 }
 
 void HttpManager::on(HttpConnectionListener::Data, HttpConnection* c, const uint8_t* data, size_t len) noexcept {
+	OutputStream* stream;
 	{
 		Lock l(cs);
-		findConn(c)->stream->write(data, len);
+		stream = findConn(c)->stream;
 	}
+	stream->write(data, len);
 	fire(HttpManagerListener::Updated(), c);
 }
 
@@ -121,6 +123,7 @@ void HttpManager::on(HttpConnectionListener::Complete, HttpConnection* c) noexce
 		Lock l(cs);
 		stream = findConn(c)->stream;
 	}
+	stream->flush();
 	fire(HttpManagerListener::Complete(), c, stream);
 	removeLater(c);
 }

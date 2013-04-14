@@ -187,17 +187,19 @@ void AboutDlg::completeDownload(bool success, const string& result) {
 	}
 
 	version->setText(str.empty() ? Text::toT(result) : str);
-
-	c = nullptr;
 }
 
 void AboutDlg::on(HttpManagerListener::Failed, HttpConnection* c, const string& str) noexcept {
 	if(c != this->c) { return; }
+	c = nullptr;
+
 	callAsync([str, this] { completeDownload(false, str); });
 }
 
 void AboutDlg::on(HttpManagerListener::Complete, HttpConnection* c, OutputStream* stream) noexcept {
 	if(c != this->c) { return; }
+	c = nullptr;
+
 	auto str = static_cast<StringOutputStream*>(stream)->getString();
 	callAsync([str, this] { completeDownload(true, str); });
 }

@@ -1349,8 +1349,6 @@ void MainWindow::handleActivate(bool active) {
 }
 
 void MainWindow::completeVersionUpdate(bool success, const string& result) {
-	if(!conns[CONN_VERSION]) { return; }
-
 	if(success) { try {
 		SimpleXML xml;
 		xml.fromXML(result);
@@ -1455,8 +1453,6 @@ void MainWindow::completeVersionUpdate(bool success, const string& result) {
 		xml.stepOut();
 	} catch (const Exception&) { } }
 
-	conns[CONN_VERSION] = nullptr;
-
 	// check after the version.xml download in case it contains updated GeoIP links.
 	if(SETTING(GET_USER_COUNTRY)) {
 		checkGeoUpdate();
@@ -1499,10 +1495,6 @@ void MainWindow::updateGeo(bool v6) {
 }
 
 void MainWindow::completeGeoUpdate(bool v6, bool success, const string& result) {
-	auto& conn = conns[v6 ? CONN_GEO_V6 : CONN_GEO_V4];
-	if(!conn) { return; }
-	ScopedFunctor([&conn] { conn = nullptr; });
-
 	if(success && !result.empty()) {
 		try {
 			File(GeoManager::getDbPath(v6) + ".gz", File::WRITE, File::CREATE | File::TRUNCATE).write(result);
@@ -1748,22 +1740,35 @@ void MainWindow::handleWhatsThis() {
 
 void MainWindow::on(HttpManagerListener::Failed, HttpConnection* c, const string&) noexcept {
 	if(c == conns[CONN_VERSION]) {
+		conns[CONN_VERSION] = nullptr;
 		callAsync([this] { completeVersionUpdate(false, Util::emptyString); });
+
 	} else if(c == conns[CONN_GEO_V6]) {
+		conns[CONN_GEO_V6] = nullptr;
 		callAsync([this] { completeGeoUpdate(true, false, Util::emptyString); });
+
 	} else if(c == conns[CONN_GEO_V4]) {
+		conns[CONN_GEO_V4] = nullptr;
 		callAsync([this] { completeGeoUpdate(false, false, Util::emptyString); });
 	}
 }
 
 void MainWindow::on(HttpManagerListener::Complete, HttpConnection* c, OutputStream* stream) noexcept {
 	if(c == conns[CONN_VERSION]) {
+		conns[CONN_VERSION] = nullptr;
+
 		auto str = static_cast<StringOutputStream*>(stream)->getString();
 		callAsync([str, this] { completeVersionUpdate(true, str); });
+
 	} else if(c == conns[CONN_GEO_V6]) {
+		conns[CONN_GEO_V6] = nullptr;
+
 		auto str = static_cast<StringOutputStream*>(stream)->getString();
 		callAsync([str, this] { completeGeoUpdate(true, true, str); });
+
 	} else if(c == conns[CONN_GEO_V4]) {
+		conns[CONN_GEO_V4] = nulllptr;
+
 		auto str = static_cast<StringOutputStream*>(stream)->getString();
 		callAsync([str, this] { completeGeoUpdate(false, true, str); });
 	}
