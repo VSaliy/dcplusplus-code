@@ -53,15 +53,16 @@ public:
 	void shutdown();
 
 private:
-	struct Conn { HttpConnection* c; OutputStream* stream; uint64_t remove; };
+	struct Conn { HttpConnection* c; OutputStream* stream; bool manageStream; uint64_t remove; };
 
 	friend class Singleton<HttpManager>;
 
 	HttpManager();
 	virtual ~HttpManager();
 
-	HttpConnection* makeConn(string&& url, OutputStream* stream);
+	HttpConnection* makeConn(string&& url, bool coralized, OutputStream* stream);
 	Conn* findConn(HttpConnection* c);
+	void resetStream(HttpConnection* c);
 	void removeLater(HttpConnection* c);
 
 	// HttpConnectionListener
@@ -69,7 +70,6 @@ private:
 	void on(HttpConnectionListener::Failed, HttpConnection*, const string&) noexcept;
 	void on(HttpConnectionListener::Complete, HttpConnection*) noexcept;
 	void on(HttpConnectionListener::Redirected, HttpConnection*, const string&) noexcept;
-	void on(HttpConnectionListener::Retried, HttpConnection*, bool) noexcept;
 
 	// TimerManagerListener
 	void on(TimerManagerListener::Minute, uint64_t tick) noexcept;

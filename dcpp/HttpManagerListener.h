@@ -37,12 +37,14 @@ public:
 	typedef X<1> Updated;
 	typedef X<2> Failed;
 	typedef X<3> Complete;
-	typedef X<4> Removed;
+	typedef X<4> ResetStream;
+	typedef X<5> Removed;
 
 	virtual void on(Added, HttpConnection*) noexcept { }
 	virtual void on(Updated, HttpConnection*) noexcept { }
 	virtual void on(Failed, HttpConnection*, const string&) noexcept { }
 	virtual void on(Complete, HttpConnection*, OutputStream*) noexcept { }
+	virtual void on(ResetStream, HttpConnection*) noexcept { }
 	virtual void on(Removed, HttpConnection*) noexcept { }
 };
 

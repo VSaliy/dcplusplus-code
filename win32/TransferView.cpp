@@ -980,7 +980,7 @@ void TransferView::on(DownloadManagerListener::Starting, Download* d) noexcept {
 		statusString += _T(" ");
 	}
 	statusString += str(TF_("Downloading %1%") % getFile(d));
-	ui->setStatusString(statusString);
+	ui->setStatusString(move(statusString));
 
 	updatedConn(ui);
 }
@@ -1023,7 +1023,7 @@ void TransferView::on(UploadManagerListener::Starting, Upload* u) noexcept {
 		statusString += _T(" ");
 	}
 	statusString += str(TF_("Uploading %1%") % getFile(u));
-	ui->setStatusString(statusString);
+	ui->setStatusString(move(statusString));
 
 	addedConn(ui);
 }
@@ -1040,8 +1040,13 @@ void TransferView::on(QueueManagerListener::CRCFailed, Download* d, const string
 
 void TransferView::on(HttpManagerListener::Added, HttpConnection* c) noexcept {
 	auto ui = makeHttpUI(c);
+
 	ui->setStatus(STATUS_RUNNING);
-	ui->setStatusString(T_("Downloading"));
+
+	tstring statusString = T_("Downloading");
+	if(c->getCoralized()) { statusString += _T(" [Coral]"); }
+	ui->setStatusString(move(statusString));
+
 	ui->setTransferred(c->getDone(), c->getDone(), c->getSize());
 
 	addedConn(ui);
@@ -1066,8 +1071,13 @@ void TransferView::on(HttpManagerListener::Failed, HttpConnection* c, const stri
 
 void TransferView::on(HttpManagerListener::Complete, HttpConnection* c, OutputStream*) noexcept {
 	auto ui = makeHttpUI(c);
+
 	ui->setStatus(STATUS_WAITING);
-	ui->setStatusString(T_("Download finished"));
+
+	tstring statusString = T_("Download finished");
+	if(c->getCoralized()) { statusString += _T(" [Coral]"); }
+	ui->setStatusString(move(statusString));
+
 	ui->setTransferred(c->getDone(), c->getDone(), c->getSize());
 
 	updatedConn(ui);

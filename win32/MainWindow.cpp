@@ -1767,7 +1767,7 @@ void MainWindow::on(HttpManagerListener::Complete, HttpConnection* c, OutputStre
 		callAsync([str, this] { completeGeoUpdate(true, true, str); });
 
 	} else if(c == conns[CONN_GEO_V4]) {
-		conns[CONN_GEO_V4] = nulllptr;
+		conns[CONN_GEO_V4] = nullptr;
 
 		auto str = static_cast<StringOutputStream*>(stream)->getString();
 		callAsync([str, this] { completeGeoUpdate(false, true, str); });

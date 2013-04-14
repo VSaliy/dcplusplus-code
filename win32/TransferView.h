@@ -206,7 +206,7 @@ private:
 		int64_t size;
 		void setSpeed(int64_t aSpeed) { speed = aSpeed; updateMask |= MASK_SPEED; }
 		int64_t speed;
-		void setStatusString(const tstring& aStatusString) { statusString = aStatusString; updateMask |= MASK_STATUS_STRING; }
+		void setStatusString(tstring&& aStatusString) { statusString = move(aStatusString); updateMask |= MASK_STATUS_STRING; }
 		tstring statusString;
 
 		void setCipher(const tstring& aCipher) { cipher = aCipher; updateMask |= MASK_CIPHER; }

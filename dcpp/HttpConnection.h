@@ -34,7 +34,7 @@ using std::string;
 class HttpConnection : BufferedSocketListener, public Speaker<HttpConnectionListener>, boost::noncopyable
 {
 public:
-	HttpConnection(bool coralize = true, const string& aUserAgent = Util::emptyString);
+	HttpConnection(const string& aUserAgent = Util::emptyString);
 	virtual ~HttpConnection();
 
 	void download();
@@ -46,14 +46,12 @@ public:
 	int64_t getDone() const { return done; }
 	double getSpeed() const { return speed; }
 
-	bool coralized() const;
-
 	GETSET(string, url, Url);
+	GETSET(bool, coralized, Coralized);
 
 private:
 	enum RequestType { TYPE_GET, TYPE_POST };
 	enum ConnectionStates { CONN_UNKNOWN, CONN_OK, CONN_FAILED, CONN_MOVED, CONN_CHUNKED };
-	enum CoralizeStates { CST_DEFAULT, CST_CONNECTED, CST_NOCORALIZE };
 
 	string userAgent;
 	string method;
@@ -73,7 +71,6 @@ private:
 	uint64_t lastTick;
 
 	ConnectionStates connState;
-	CoralizeStates coralizeState;
 	RequestType connType;
 
 	BufferedSocket* socket;
