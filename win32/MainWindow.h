@@ -140,6 +140,7 @@ private:
 	static map<tstring, function<void ()>, noCaseStringLess> pluginCommands;
 
 	HttpConnection* conns[CONN_LAST];
+	unique_ptr<File> geo6File, geo4File;
 
 	HANDLE stopperThread;
 
@@ -222,7 +223,7 @@ private:
 	void checkGeoUpdate(bool v6);
 	void updateGeo();
 	void updateGeo(bool v6);
-	void completeGeoUpdate(bool v6, bool success, const string& result);
+	void completeGeoUpdate(bool v6, bool success);
 
 	bool filter(MSG& msg);
 
@@ -234,6 +235,7 @@ private:
 	// HttpManagerListener
 	void on(HttpManagerListener::Failed, HttpConnection*, const string&) noexcept;
 	void on(HttpManagerListener::Complete, HttpConnection*, OutputStream*) noexcept;
+	void on(HttpManagerListener::ResetStream, HttpConnection*) noexcept;
 
 	// LogManagerListener
 	void on(LogManagerListener::Message, time_t t, const string& m) noexcept;

@@ -1490,20 +1490,25 @@ void MainWindow::updateGeo(bool v6) {
 	if(conn)
 		return;
 
+	auto& file = v6 ? geo6File : geo4File;
+	try {
+		file.reset(new File(GeoManager::getDbPath(v6) + ".gz", File::WRITE, File::CREATE | File::TRUNCATE));
+	} catch(const FileException&) {
+		LogManager::getInstance()->message(str(F_("The %1% GeoIP database could not be updated") % (v6 ? "IPv6" : "IPv4")));
+		return;
+	}
+
 	LogManager::getInstance()->message(str(F_("Updating the %1% GeoIP database...") % (v6 ? "IPv6" : "IPv4")));
-	conn = HttpManager::getInstance()->download(Text::fromT(v6 ? links.geoip6 : links.geoip4));
+	conn = HttpManager::getInstance()->download(Text::fromT(v6 ? links.geoip6 : links.geoip4), file.get());
 }
 
-void MainWindow::completeGeoUpdate(bool v6, bool success, const string& result) {
-	if(success && !result.empty()) {
-		try {
-			File(GeoManager::getDbPath(v6) + ".gz", File::WRITE, File::CREATE | File::TRUNCATE).write(result);
-			GeoManager::getInstance()->update(v6);
-			LogManager::getInstance()->message(str(F_("The %1% GeoIP database has been successfully updated") % (v6 ? "IPv6" : "IPv4")));
-			return;
-		} catch(const FileException&) { }
+void MainWindow::completeGeoUpdate(bool v6, bool success) {
+	if(success) {
+		GeoManager::getInstance()->update(v6);
+		LogManager::getInstance()->message(str(F_("The %1% GeoIP database has been successfully updated") % (v6 ? "IPv6" : "IPv4")));
+	} else {
+		LogManager::getInstance()->message(str(F_("The %1% GeoIP database could not be updated") % (v6 ? "IPv6" : "IPv4")));
 	}
-	LogManager::getInstance()->message(str(F_("The %1% GeoIP database could not be updated") % (v6 ? "IPv6" : "IPv4")));
 }
 
 void MainWindow::parseCommandLine(const tstring& cmdLine)
@@ -1741,15 +1746,20 @@ void MainWindow::handleWhatsThis() {
 void MainWindow::on(HttpManagerListener::Failed, HttpConnection* c, const string&) noexcept {
 	if(c == conns[CONN_VERSION]) {
 		conns[CONN_VERSION] = nullptr;
+
 		callAsync([this] { completeVersionUpdate(false, Util::emptyString); });
 
 	} else if(c == conns[CONN_GEO_V6]) {
 		conns[CONN_GEO_V6] = nullptr;
-		callAsync([this] { completeGeoUpdate(true, false, Util::emptyString); });
+		geo6File.reset();
+
+		callAsync([this] { completeGeoUpdate(true, false); });
 
 	} else if(c == conns[CONN_GEO_V4]) {
 		conns[CONN_GEO_V4] = nullptr;
-		callAsync([this] { completeGeoUpdate(false, false, Util::emptyString); });
+		geo4File.reset();
+
+		callAsync([this] { completeGeoUpdate(false, false); });
 	}
 }
 
@@ -1762,15 +1772,26 @@ void MainWindow::on(HttpManagerListener::Complete, HttpConnection* c, OutputStre
 
 	} else if(c == conns[CONN_GEO_V6]) {
 		conns[CONN_GEO_V6] = nullptr;
+		geo6File.reset();
 
-		auto str = static_cast<StringOutputStream*>(stream)->getString();
-		callAsync([str, this] { completeGeoUpdate(true, true, str); });
+		callAsync([this] { completeGeoUpdate(true, true); });
 
 	} else if(c == conns[CONN_GEO_V4]) {
 		conns[CONN_GEO_V4] = nullptr;
+		geo4File.reset();
 
-		auto str = static_cast<StringOutputStream*>(stream)->getString();
-		callAsync([str, this] { completeGeoUpdate(false, true, str); });
+		callAsync([this] { completeGeoUpdate(false, true); });
+	}
+}
+
+void MainWindow::on(HttpManagerListener::ResetStream, HttpConnection* c) noexcept {
+	if(c == conns[CONN_GEO_V6]) {
+		geo6File->setPos(0);
+		geo6File->setEOF();
+
+	} else if(c == conns[CONN_GEO_V4]) {
+		geo4File->setPos(0);
+		geo4File->setEOF();
 	}
 }
 
