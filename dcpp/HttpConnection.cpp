@@ -25,6 +25,8 @@
 #include "TimerManager.h"
 #include "version.h"
 
+#include <boost/algorithm/string/trim.hpp>
+
 namespace dcpp {
 
 static const std::string CORAL_SUFFIX = ".nyud.net";
@@ -209,7 +211,7 @@ void HttpConnection::on(BufferedSocketListener::Line, const string& aLine) noexc
 		} else {
 			abortRequest(true);
 			connState = CONN_FAILED;
-			fire(HttpConnectionListener::Failed(), this, str(F_("%1% (%2%)") % aLine % url));
+			fire(HttpConnectionListener::Failed(), this, str(F_("%1% (%2%)") % boost::trim_copy(aLine) % url));
 		}
 
 	} else if(connState == CONN_MOVED && Util::findSubString(aLine, "Location") != string::npos) {
@@ -265,7 +267,7 @@ void HttpConnection::on(BufferedSocketListener::Line, const string& aLine) noexc
 void HttpConnection::on(BufferedSocketListener::Failed, const string& aLine) noexcept {
 	abortRequest(false);
 	connState = CONN_FAILED;
-	fire(HttpConnectionListener::Failed(), this, str(F_("%1% (%2%)") % aLine % url));
+	fire(HttpConnectionListener::Failed(), this, str(F_("%1% (%2%)") % boost::trim_copy(aLine) % url));
 }
 
 void HttpConnection::on(BufferedSocketListener::ModeChange) noexcept {
