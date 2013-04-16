@@ -111,10 +111,13 @@ away(false),
 awayIdle(false),
 fullSlots(false)
 {
+	// Don't forget to update version.xml when changing these links!
 	links.homepage = _T("http://dcplusplus.sourceforge.net/");
 	links.downloads = links.homepage + _T("download/");
 	links.geoip6 = _T("http://geolite.maxmind.com/download/geoip/database/GeoIPv6.dat.gz");
 	links.geoip4 = _T("http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz");
+	links.geoip6_city = _T("http://geolite.maxmind.com/download/geoip/database/GeoLiteCityv6-beta/GeoLiteCityv6.dat.gz");
+	links.geoip4_city = _T("http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz");
 	links.faq = links.homepage + _T("faq/");
 	links.help = links.homepage + _T("help/");
 	links.discuss = links.homepage + _T("discussion/");
@@ -1172,6 +1175,7 @@ void MainWindow::handleSettings() {
 	auto prevProxy = CONNSETTING(OUTGOING_CONNECTIONS);
 
 	auto prevGeo = SETTING(GET_USER_COUNTRY);
+	auto prevGeoCity = SETTING(GEO_CITY);
 	auto prevGeoFormat = SETTING(COUNTRY_FORMAT);
 
 	auto prevFont = SETTING(MAIN_FONT);
@@ -1203,10 +1207,14 @@ void MainWindow::handleSettings() {
 		ClientManager::getInstance()->infoUpdated();
 
 		bool rebuildGeo = prevGeo && SETTING(COUNTRY_FORMAT) != prevGeoFormat;
-		if(SETTING(GET_USER_COUNTRY) != prevGeo) {
+		if(SETTING(GET_USER_COUNTRY) != prevGeo || SETTING(GEO_CITY) != prevGeoCity) {
 			if(SETTING(GET_USER_COUNTRY)) {
 				GeoManager::getInstance()->init();
-				checkGeoUpdate();
+				if(SETTING(GEO_CITY) != prevGeoCity) {
+					updateGeo();
+				} else {
+					checkGeoUpdate();
+				}
 			} else {
 				GeoManager::getInstance()->close();
 				rebuildGeo = false;
@@ -1405,6 +1413,14 @@ void MainWindow::completeVersionUpdate(bool success, const string& result) {
 				links.geoip4 = Text::toT(xml.getChildData());
 			}
 			xml.resetCurrentChild();
+			if(xml.findChild("GeoIPv6_City")) {
+				links.geoip6_city = Text::toT(xml.getChildData());
+			}
+			xml.resetCurrentChild();
+			if(xml.findChild("GeoIPv4_City")) {
+				links.geoip4_city = Text::toT(xml.getChildData());
+			}
+			xml.resetCurrentChild();
 			if(xml.findChild("Faq")) {
 				links.faq = Text::toT(xml.getChildData());
 			}
@@ -1485,6 +1501,10 @@ void MainWindow::updateGeo() {
 	}
 }
 
+namespace { string geoType(bool v6) {
+	return str(F_("%1%-level %2%") % (SETTING(GEO_CITY) ? _("city") : _("country")) % (v6 ? "IPv6" : "IPv4"));
+} }
+
 void MainWindow::updateGeo(bool v6) {
 	auto& conn = conns[v6 ? CONN_GEO_V6 : CONN_GEO_V4];
 	if(conn)
@@ -1494,20 +1514,21 @@ void MainWindow::updateGeo(bool v6) {
 	try {
 		file.reset(new File(GeoManager::getDbPath(v6) + ".gz", File::WRITE, File::CREATE | File::TRUNCATE));
 	} catch(const FileException&) {
-		LogManager::getInstance()->message(str(F_("The %1% GeoIP database could not be updated") % (v6 ? "IPv6" : "IPv4")));
+		LogManager::getInstance()->message(str(F_("The %1% GeoIP database could not be updated") % geoType(v6)));
 		return;
 	}
 
-	LogManager::getInstance()->message(str(F_("Updating the %1% GeoIP database...") % (v6 ? "IPv6" : "IPv4")));
-	conn = HttpManager::getInstance()->download(Text::fromT(v6 ? links.geoip6 : links.geoip4), file.get());
+	LogManager::getInstance()->message(str(F_("Updating the %1% GeoIP database...") % geoType(v6)));
+	conn = HttpManager::getInstance()->download(Text::fromT(SETTING(GEO_CITY) ?
+		(v6 ? links.geoip6_city : links.geoip4_city) : (v6 ? links.geoip6 : links.geoip4)), file.get());
 }
 
 void MainWindow::completeGeoUpdate(bool v6, bool success) {
 	if(success) {
 		GeoManager::getInstance()->update(v6);
-		LogManager::getInstance()->message(str(F_("The %1% GeoIP database has been successfully updated") % (v6 ? "IPv6" : "IPv4")));
+		LogManager::getInstance()->message(str(F_("The %1% GeoIP database has been successfully updated") % geoType(v6)));
 	} else {
-		LogManager::getInstance()->message(str(F_("The %1% GeoIP database could not be updated") % (v6 ? "IPv6" : "IPv4")));
+		LogManager::getInstance()->message(str(F_("The %1% GeoIP database could not be updated") % geoType(v6)));
 	}
 }
 

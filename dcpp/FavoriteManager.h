@@ -123,6 +123,8 @@ public:
 	void load();
 	void save();
 
+	void shutdown();
+
 private:
 	FavoriteHubEntryList favoriteHubs;
 	FavHubGroups favHubGroups;

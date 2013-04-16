@@ -19,12 +19,12 @@
 #ifndef DCPLUSPLUS_DCPP_GEO_MANAGER_H
 #define DCPLUSPLUS_DCPP_GEO_MANAGER_H
 
+#include <memory>
+#include <string>
+
 #include "forward.h"
 #include "GeoIP.h"
 #include "Singleton.h"
-
-#include <memory>
-#include <string>
 
 namespace dcpp {
 

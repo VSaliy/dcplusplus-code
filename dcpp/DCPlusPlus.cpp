@@ -143,6 +143,7 @@ void shutdown() {
 	MappingManager::getInstance()->close();
 	GeoManager::getInstance()->close();
 	BufferedSocket::waitShutdown();
+	FavoriteManager::getInstance()->shutdown();
 
 	WindowManager::getInstance()->prepareSave();
 	QueueManager::getInstance()->saveQueue(true);
