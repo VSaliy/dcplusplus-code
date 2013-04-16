@@ -75,7 +75,7 @@ AboutDlg::~AboutDlg() {
 }
 
 int AboutDlg::run() {
-	create(dwt::Point(371, 490));
+	create(dwt::Point(400, 600));
 	return show();
 }
 
@@ -93,7 +93,7 @@ bool AboutDlg::handleInitDialog() {
 	ls.style |= SS_CENTER;
 
 	{
-		auto cur = grid->addChild(gs)->addChild(Grid::Seed(4, 1));
+		auto cur = grid->addChild(gs)->addChild(Grid::Seed(5, 1));
 		cur->column(0).mode = GridInfo::FILL;
 		cur->column(0).align = GridInfo::CENTER;
 
@@ -105,12 +105,34 @@ bool AboutDlg::handleInitDialog() {
 
 		cur->addChild(Link::Seed(_T("http://dcplusplus.sourceforge.net/"), true));
 
+		auto ts = WinUtil::Seeds::Dialog::textBox;
+		ts.style |= ES_READONLY;
+		ts.exStyle &= ~WS_EX_CLIENTEDGE;
+
 		gs.caption = T_("TTH");
-		auto seed = WinUtil::Seeds::Dialog::textBox;
-		seed.style |= ES_READONLY;
-		seed.exStyle &= ~WS_EX_CLIENTEDGE;
-		seed.caption = WinUtil::tth;
-		cur->addChild(gs)->addChild(seed);
+		ts.caption = WinUtil::tth;
+		cur->addChild(gs)->addChild(ts);
+
+		gs.caption = T_("Compiler");
+		// see also CrashLogger.cpp for similar tests.
+#ifdef __MINGW32__
+#ifdef HAVE_MINGW64
+		ts.caption = Text::toT("MinGW-w64's GCC " __VERSION__);
+#else
+		ts.caption = Text::toT("MinGW's GCC " __VERSION__);
+#endif
+#elif defined(_MSC_VER)
+		ts.caption = Text::toT("MS Visual Studio " + Util::toString(_MSC_VER));
+#else
+		ts.caption = _T("Unknown");
+#endif
+#ifdef _DEBUG
+		ts.caption += _T(" (debug)");
+#endif
+#ifdef _WIN64
+		ts.caption += _T(" (x64)");
+#endif
+		cur->addChild(gs)->addChild(ts);
 	}
 
 	{
