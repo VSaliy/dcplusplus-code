@@ -465,10 +465,17 @@ inline void writeAppInfo() {
 	fprintf(f, APPNAME " version: %s\n", fullVersionString.c_str());
 	fprintf(f, "TTH: %S\n", WinUtil::tth.c_str());
 
+	// see also AboutDlg.cpp for similar tests.
 #ifdef __MINGW32__
-	fputs("Compiled with GCC " __VERSION__, f);
+#ifdef HAVE_MINGW64
+	fputs("Compiled with MinGW-w64's GCC " __VERSION__, f);
 #else
+	fputs("Compiled with MinGW's GCC " __VERSION__, f);
+#endif
+#elif defined(_MSC_VER)
 	fprintf(f, "Compiled with MS Visual Studio %d", _MSC_VER);
+#else
+	fputs(f, "Compiled with an unknown compiler");
 #endif
 #ifdef _DEBUG
 	fputs(" (debug)", f);
