@@ -38,16 +38,24 @@ to enable or disable it on already open hubs. <i>On large hubs, you don't want t
 <a href="window_users.html">Favorite Users</a> are shown.</dd>
   <dt>Sort favorite users first</dt>
   <dd cshelp="IDH_SETTINGS_APPEARANCE_SORT_FAVUSERS_FIRST">With this option enabled, those users who are <a href=window_favorite_users.html>favorite users</a> will be sorted first in user lists.</dd>
-  <dt>Use system icons when browsing files (slows browsing down a bit)</dt>
-  <dd cshelp="IDH_SETTINGS_APPEARANCE_USE_SYSTEM_ICONS">If you have this option on, DC++ will use the per-extension icons
-from Windows Explorer. <i>Turning
-on this option slows browsing file lists a bit.</i></dd>
   <dt id="guessip">Guess user country from IP</dt>
   <dd cshelp="IDH_SETTINGS_APPEARANCE_GET_USER_COUNTRY">
   When selected, DC++ displays user country information when available. DC++ uses
   <a href="http://www.maxmind.com/app/geolitecountry" target="_blank" class="external">MaxMind's GeoIP</a>
   databases in order to do so.
   </dd>
+  <dt>City-level geolocation database (allows parameters such as %[city])</dt>
+  <dd cshelp="IDH_SETTINGS_APPEARANCE_GEO_CITY">
+  Use a more detailed geolocation database that contains information such as the city, the region,
+  the latitude and longitude, etc. Compared to the default country-level geolocation database, the
+  city-level one is bigger and consumes more memory.<br/>
+  See <a href="http://www.maxmind.com/en/geolite_city_accuracy" target="_blank" class="external">
+	  GeoLite City Accuracy for Selected Countries</a> for more information.<br/>
+  Additional parameters that can be used in conjunction with the city-level country database:
+  <b>%[areacode]</b>, <b>%[city]</b>, <b>%[lat]</b>, <b>%[long]</b>, <b>%[metrocode]</b>,
+  <b>%[postcode]</b>, <b>%[region]</b>.
+  </dd>
+  <dt>
 </dl>
 <h2>Miscellaneous</h2>
 <dl style="margin-left: 40px;">
@@ -71,6 +79,16 @@ Available variables:
 	an English operating system).</li>
 	<li><b>%[officialname]</b> gets replaced by the localized country official name (eg Federal
 	Republic of Germany, French Republic on an English operating system).</li>
+</ul>
+Additional available variables when using the city-level database:
+<ul>
+	<li><b>%[areacode]</b> gets replaced by the area code (United States only).</li>
+	<li><b>%[city]</b> gets replaced by the city's name.</li>
+	<li><b>%[lat]</b> gets replaced by the latitude.</li>
+	<li><b>%[long]</b> gets replaced by the longitude.</li>
+	<li><b>%[metrocode]</b> gets replaced by the DMA / metro code (United States only).</li>
+	<li><b>%[postcode]</b> gets replaced by the city's postal code.</li>
+	<li><b>%[region]</b> gets replaced by the region's name.</li>
 </ul>
 </dd>
 <dt id="messagelines">Height of the message editing box</dt>

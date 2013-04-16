@@ -57,11 +57,13 @@ FavoriteManager::FavoriteManager() : lastId(0), useHttp(false), running(false), 
 }
 
 FavoriteManager::~FavoriteManager() {
+	for_each(favoriteHubs.begin(), favoriteHubs.end(), DeleteFunction());
+}
+
+void FavoriteManager::shutdown() {
 	ClientManager::getInstance()->removeListener(this);
 	HttpManager::getInstance()->removeListener(this);
 	SettingsManager::getInstance()->removeListener(this);
-
-	for_each(favoriteHubs.begin(), favoriteHubs.end(), DeleteFunction());
 }
 
 UserCommand FavoriteManager::addUserCommand(int type, int ctx, int flags, const string& name, const string& command, const string& to, const string& hub) {

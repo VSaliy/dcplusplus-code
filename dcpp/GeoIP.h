@@ -22,14 +22,14 @@
 #include "CriticalSection.h"
 
 #include <string>
-#include <vector>
+#include <unordered_map>
 
 typedef struct GeoIPTag GeoIP;
 
 namespace dcpp {
 
 using std::string;
-using std::vector;
+using std::unordered_map;
 
 class GeoIP : boost::noncopyable {
 public:
@@ -44,13 +44,16 @@ private:
 	bool decompress() const;
 	void open();
 	void close();
+	void rebuild_cities();
+	void rebuild_countries();
 	bool v6() const;
+	bool city() const;
 
 	mutable CriticalSection cs;
 	::GeoIP* geo;
 
 	const string path;
-	vector<string> cache;
+	unordered_map<int, string> cache;
 };
 
 } // namespace dcpp

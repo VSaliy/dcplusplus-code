@@ -6,6 +6,7 @@
 * Validate input before trying a TTH search (emtee)
 * Display HTTP downloads in the transfer list (poy)
 * [L#190964] Handle more connection errors (poy)
+* Support city-level GeoIP databases - new params such as %[city] (poy)
 
 -- 0.811 2013-03-04 --
 * Fix status bar parts when the window is too small (poy)

@@ -98,6 +98,8 @@ private:
 		tstring downloads;
 		tstring geoip6;
 		tstring geoip4;
+		tstring geoip6_city;
+		tstring geoip4_city;
 		tstring faq;
 		tstring help;
 		tstring discuss;
