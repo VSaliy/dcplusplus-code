@@ -53,5 +53,6 @@ else:
 if 'gcc' in env['TOOLS']:
 	# strip debug info to a separate PDB file
 	env.Command(target + '.pdb', target + '.exe', Action(env['strip'] + ' --only-keep-debug "$SOURCE" -o "$TARGET"', 'Extracting debugging symbols to $TARGET'))
+	env.Command(target + '-stripped.exe', target + '.exe', Action(env['strip'] + ' "$SOURCE" -o "$TARGET"', 'Creating $TARGET'))
 
 Return('ret')

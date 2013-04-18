@@ -281,12 +281,6 @@ def array_remove(array, to_remove):
 	if to_remove in array:
 		array.remove(to_remove)
 
-class scoped_cmd:
-	def __init__(self, cmd):
-		self.cmd = cmd
-	def __del__(self):
-		self.cmd()
-
 def get_lcid(lang):
 	from locale import windows_locale
 

@@ -21,8 +21,6 @@ if env['distro']:
 		raise Exception('makensis.exe not found in PATH - Unicode NSIS is required to build the distro')
 	if env.WhereIs('bzr') is None:
 		raise Exception('"bzr" is required to build the distro; this tree must be under bzr version control')
-	if env.WhereIs(env['strip']) is None:
-		raise Exception('"' + env['strip'] + '" is required to build the distro; it should be part of MinGW / binutils')
 	if env.WhereIs('zip') is None:
 		raise Exception('"zip" is required to build the distro; get the one from MSYS or Cygwin')
 
@@ -46,7 +44,7 @@ for po_node in po_list:
 if nsis is None:
 	Return()
 
-from build_util import get_po_name, scoped_cmd
+from build_util import get_po_name
 import bzrlib
 import codecs
 import os.path
@@ -54,16 +52,24 @@ from xml.dom.minidom import parse
 
 # gather the files necessary to create the installer
 sources = Glob('*.*')
+x64_rename = []
 reg = re.compile('^\W*File.+"([^"]+)"')
 f = codecs.open('DCPlusPlus.nsi', 'rb', 'utf_16_le')
 for line in f:
 	match = reg.search(line)
 	if match:
 		match = match.group(1)
+		if match[:14] == 'DCPlusPlus.exe':
+			match = 'DCPlusPlus-stripped.exe' + match[14:]
 		if env.FindFile(match, '#'):
+			# copy from the root dir
 			match = '#/' + match
+		elif match[-4:] == '-x64':
+			# copy from the x64 build dir
+			match = dev.get_build_root()[:-1] + '-x64/bin/' + match[:-4]
+			x64_rename.append(env.File(match).abspath)
 		else:
-			# file not found in the root; must be a built file
+			# copy from the build dir
 			match = dev.get_build_path('bin') + '/' + match
 		sources.append(match)
 f.close()
@@ -76,7 +82,6 @@ def gen_installer(target, source, env):
 	build_dir = 'build/installer'
 	build_path = build_dir + '/'
 	env.Execute([Delete(build_dir), Mkdir(build_dir)])
-	dir_cleaner = scoped_cmd(lambda: env.Execute(Delete(build_dir)))
 
 	# the file, included by the installer, that lists all available translations
 	f_i18n = codecs.open(build_path + 'i18n.nsh', 'wb', 'utf_16_le')
@@ -86,10 +91,7 @@ def gen_installer(target, source, env):
 	for node in source:
 		name = os.path.basename(node.path)
 
-		if name == 'DCPlusPlus.exe':
-			env.Execute(env['strip'] + ' "' + nixify(node.path) + '" -o "' + build_path + name + '"')
-
-		elif name[-3:] == '.po' or name[-4:] == '.pot':
+		if name[-3:] == '.po' or name[-4:] == '.pot':
 			# find the corresponding name among the NSIS language files
 			name = get_po_name(node)
 			if name is None:
@@ -121,25 +123,36 @@ def gen_installer(target, source, env):
 				env.Execute(Delete(xml_file))
 
 		else:
-			env.Execute(Copy(build_path + name, node))
+			suffix = ''
+			if node.abspath in x64_rename:
+				suffix = '-x64'
+
+			if name == 'DCPlusPlus-stripped.exe':
+				name = 'DCPlusPlus.exe'
+
+			env.Execute(Copy(build_path + name + suffix, node))
 
 	f_i18n.close()
 
 	# create the installer
-	ret = env.Execute('makensis ' + build_path + 'DCPlusPlus.nsi')
+	ret = env.Execute('makensis ' + build_path + 'DCPlusPlus.nsi > ' + build_path + 'makensis.log')
 	if ret:
 		return ret
 	env.Execute(Move(target[0], build_path + os.path.basename(target[0].path)))
 
-	# make the zip binary archive
-	env.Execute('cd "' + build_dir + '" && zip -9 -r "' + nixify(str(target[1].abspath)) + '" . -x "dcppboot.nonlocal.xml" -x "\\*.ico" -x "\\*.nsh" -x "\\*.nsi" && cd "' + env.Dir('#').abspath + '"')
+	# make the zip binary archives
+	zip_cmd = lambda path: env.Execute('cd "' + build_dir + '" && zip -9 -r "' + nixify(path) + '" . -x "\\*-x64" -x "dcppboot.nonlocal.xml" -x "\\*.ico" -x "\\*.log" -x "\\*.nsh" -x "\\*.nsi" > zip.log && cd "' + env.Dir('#').abspath + '"')
+	zip_cmd(target[1].abspath)
+	env.Execute(Move(build_path + 'DCPlusPlus.exe', build_path + 'DCPlusPlus.exe-x64'))
+	env.Execute(Move(build_path + 'DCPlusPlus.pdb', build_path + 'DCPlusPlus.pdb-x64'))
+	zip_cmd(target[2].abspath)
 
 	# use "bzr export" to zip the source
-	env.Execute('bzr export "' + nixify(str(target[2])) + '"')
+	env.Execute('bzr export "' + nixify(str(target[3])) + '"')
 
 	return ret
 
 distro_path = '#/build/distro/'
-ret = env.Command([distro_path + 'DCPlusPlus-xxx.exe', distro_path + 'DCPlusPlus-xxx.zip', distro_path + 'DCPlusPlus-xxx-src.zip'], sources, Action(gen_installer, 'Creating final distro packages ($TARGETS)'))
+ret = env.Command([distro_path + 'DCPlusPlus-xxx.exe', distro_path + 'DCPlusPlus-xxx.zip', distro_path + 'DCPlusPlus-xxx-x64.zip', distro_path + 'DCPlusPlus-xxx-src.zip'], sources, Action(gen_installer, 'Creating final distro packages ($TARGETS)'))
 
 Return('ret')
