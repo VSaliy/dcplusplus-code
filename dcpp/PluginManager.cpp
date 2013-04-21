@@ -63,19 +63,18 @@ PluginInfo::~PluginInfo() {
 }
 
 PluginManager::PluginManager() : dcCore(), shutdown(false), secNum(Util::rand()) {
-	SettingsManager::getInstance()->addListener(this);
 }
 
 PluginManager::~PluginManager() {
-	SettingsManager::getInstance()->removeListener(this);
 }
 
 void PluginManager::loadPlugins(function<void (const string&)> f) {
 	TimerManager::getInstance()->addListener(this);
 	ClientManager::getInstance()->addListener(this);
 	QueueManager::getInstance()->addListener(this);
+	SettingsManager::getInstance()->addListener(this);
 
-	loadSettings(); // workaround for SettingsManager loading memory of this when loading fails
+	loadSettings();
 
 	StringTokenizer<string> st(getPluginSetting("CoreSetup", "Plugins"), ";");
 	auto err = [](const string& str) { LogManager::getInstance()->message(str); };
@@ -148,6 +147,11 @@ bool PluginManager::checkPlugin(const MetaData& info, function<void (const strin
 }
 
 void PluginManager::unloadPlugins() {
+	TimerManager::getInstance()->removeListener(this);
+	ClientManager::getInstance()->removeListener(this);
+	QueueManager::getInstance()->removeListener(this);
+	SettingsManager::getInstance()->removeListener(this);
+
 	Lock l(cs);
 	shutdown = true;
 
@@ -169,9 +173,7 @@ void PluginManager::unloadPlugins() {
 	// Destroy hooks that may have not been correctly freed
 	hooks.clear();
 
-	TimerManager::getInstance()->removeListener(this);
-	ClientManager::getInstance()->removeListener(this);
-	QueueManager::getInstance()->removeListener(this);
+	saveSettings();
 }
 
 void PluginManager::unloadPlugin(size_t index) {
@@ -462,8 +464,8 @@ void PluginManager::loadSettings() noexcept {
 				const string& pluginGuid = xml.getChildAttrib("Guid");
 				xml.stepIn();
 				auto settings = xml.getCurrentChildren();
-				for(auto j = settings.cbegin(); j != settings.cend(); ++j) {
-					setPluginSetting(pluginGuid, j->first, j->second);
+				for(auto& i: settings) {
+					setPluginSetting(pluginGuid, i.first, i.second);
 				}
 				xml.stepOut();
 			}
@@ -474,25 +476,21 @@ void PluginManager::loadSettings() noexcept {
 	}
 }
 
-void PluginManager::on(SettingsManagerListener::Load, SimpleXML& /*xml*/) noexcept {
-	loadSettings();
-}
-
-void PluginManager::on(SettingsManagerListener::Save, SimpleXML& /*xml*/) noexcept {
+void PluginManager::saveSettings() noexcept {
 	Lock l(cs);
 
 	try {
 		SimpleXML xml;
 		xml.addTag("Plugins");
 		xml.stepIn();
-		for(auto i = settings.cbegin(); i != settings.cend(); ++i) {
+		for(auto& i: settings) {
 			xml.addTag("Plugin");
 			xml.stepIn();
-			for(auto j = i->second.cbegin(); j != i->second.cend(); ++j) {
-				xml.addTag(j->first, j->second);			
+			for(auto& j: i.second) {
+				xml.addTag(j.first, j.second);			
 			}
 			xml.stepOut();
-			xml.addChildAttrib("Guid", i->first);
+			xml.addChildAttrib("Guid", i.first);
 		}
 		xml.stepOut();
 
@@ -506,6 +504,14 @@ void PluginManager::on(SettingsManagerListener::Save, SimpleXML& /*xml*/) noexce
 	} catch(const Exception& e) {
 		dcdebug("PluginManager::saveSettings: %s\n", e.getError().c_str());
 	}
+}
+
+void PluginManager::on(SettingsManagerListener::Load, SimpleXML& /*xml*/) noexcept {
+	loadSettings();
+}
+
+void PluginManager::on(SettingsManagerListener::Save, SimpleXML& /*xml*/) noexcept {
+	saveSettings();
 }
 
 } // namespace dcpp
