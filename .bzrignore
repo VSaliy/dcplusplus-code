@@ -24,3 +24,4 @@ openssl/build/openssl*
 ./msvc/debug-*
 ./msvc/release-*
 ./mingw/include/*.h
+./test/data/out/*
