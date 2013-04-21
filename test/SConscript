@@ -28,7 +28,7 @@ if 'HAVE_HTMLHELP_H' in env['CPPDEFINES']:
 
 env.Append(LIBS = ['comctl32', 'ws2_32', 'ole32', 'gdi32', 'comdlg32', 'iphlpapi', 'winmm', 'shlwapi', 'oleaut32', 'uuid'])
 
-env.Append(CPPPATH = ['#/openssl/include', '#/miniupnpc', '#/dwt/include', '#/', '#/bzip2'])
+env.Append(CPPPATH = ['#/openssl/include', '#/bzip2', '#/dwt/include'])
 
 if '-mwindows' in env['CCFLAGS']:
 	env['CCFLAGS'].remove('-mwindows')
@@ -49,7 +49,7 @@ env.Append(LIBPATH = [openssl_lib])
 if env['msvcproj']:
 	ret = dev.build_lib(env, target, sources, dev.cpp_lib)
 else:
-	ret = env.Program(target, [sources, dev.client, dev.dwarf, dev.zlib, dev.boost, dev.bzip2, dev.geoip, dev.miniupnpc, dev.natpmp, dev.intl])
+	ret = env.Program(target, [sources, dev.client, dev.archive, dev.dwarf, dev.zlib, dev.boost, dev.bzip2, dev.geoip, dev.miniupnpc, dev.natpmp, dev.intl])
 	ret = env.Command(dev.get_target(source_path, 'gtest.passed', in_bin=False), ret[0].abspath, runUnitTest)
 
 env.Help("\nYou can run the test suite by running 'scons test'\n")

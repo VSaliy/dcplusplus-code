@@ -269,6 +269,7 @@ if conf.CheckDeclaration('__MINGW64_VERSION_MAJOR', '#include <windows.h>', 'C++
 		conf.env['CPPDEFINES'].remove('HAS_PCH')
 env = conf.Finish()
 
+dev.archive = dev.build('archive/')
 dev.boost = dev.build('boost/')
 dev.dwarf = dev.build('dwarf/')
 dev.zlib = dev.build('zlib/')
