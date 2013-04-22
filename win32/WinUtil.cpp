@@ -114,6 +114,7 @@ TStringList WinUtil::lastDirs;
 MainWindow* WinUtil::mainWindow = 0;
 bool WinUtil::urlDcADCRegistered = false;
 bool WinUtil::urlMagnetRegistered = false;
+bool WinUtil::dcextRegistered = false;
 DWORD WinUtil::helpCookie = 0;
 tstring WinUtil::helpPath;
 StringList WinUtil::helpTexts;
@@ -231,6 +232,7 @@ void WinUtil::init() {
 
 	registerHubHandlers();
 	registerMagnetHandler();
+	registerDcextHandler();
 
 	initHelpPath();
 
@@ -1295,7 +1297,13 @@ COLORREF modBlue(COLORREF col, int16_t mod) {
 	return RGB(r, g, b);
 }
 
-bool registerHandler_(const tstring& name) {
+namespace {
+
+void regChanged() {
+	::SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, nullptr, nullptr);
+}
+
+bool registerHandler_(const tstring& name, const tstring& descr, bool url, const tstring& prefix) {
 	HKEY hk;
 	TCHAR Buf[512];
 	Buf[0] = 0;
@@ -1309,7 +1317,7 @@ bool registerHandler_(const tstring& name) {
 		::RegCloseKey(hk);
 	}
 
-	tstring app = _T("\"") + dwt::Application::instance().getModuleFileName() + _T("\" \"%1\"");
+	tstring app = _T("\"") + dwt::Application::instance().getModuleFileName() + _T("\" \"") + prefix + _T("%1\"");
 	if(Util::stricmp(app.c_str(), Buf) == 0) {
 		// already registered to us
 		return true;
@@ -1317,16 +1325,21 @@ bool registerHandler_(const tstring& name) {
 
 	if(::RegCreateKeyEx(HKEY_CURRENT_USER, (_T("Software\\Classes\\") + name).c_str(),
 		0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hk, NULL) != ERROR_SUCCESS)
+	{
 		return false;
+	}
 
-	TCHAR tmp[] = _T("URL:Direct Connect Protocol");
-	::RegSetValueEx(hk, NULL, 0, REG_SZ, (LPBYTE) tmp, sizeof(TCHAR) * (_tcslen(tmp) + 1));
-	::RegSetValueEx(hk, _T("URL Protocol"), 0, REG_SZ, (LPBYTE) _T(""), sizeof(TCHAR));
+	::RegSetValueEx(hk, NULL, 0, REG_SZ, (LPBYTE) descr.c_str(), sizeof(TCHAR) * (descr.size() + 1));
+	if(url) {
+		::RegSetValueEx(hk, _T("URL Protocol"), 0, REG_SZ, (LPBYTE) _T(""), sizeof(TCHAR));
+	}
 	::RegCloseKey(hk);
 
 	if(::RegCreateKeyEx(HKEY_CURRENT_USER, (_T("Software\\Classes\\") + name + _T("\\Shell\\Open\\Command")).c_str(),
 		0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hk, NULL) != ERROR_SUCCESS)
+	{
 		return false;
+	}
 	bool ret = ::RegSetValueEx(hk, _T(""), 0, REG_SZ, (LPBYTE) app.c_str(), sizeof(TCHAR) * (app.length() + 1)) == ERROR_SUCCESS;
 	::RegCloseKey(hk);
 
@@ -1341,33 +1354,54 @@ bool registerHandler_(const tstring& name) {
 	return ret;
 }
 
-bool registerHandler(const tstring& name) {
-	bool ret = registerHandler_(name);
-	if(!ret)
-		LogManager::getInstance()->message(str(F_("Error registering %1%:// link handler") % Text::fromT(name)));
+/// @todo var template
+bool registerHandler(const tstring& name, const tstring& description, bool url, const tstring& prefix = Util::emptyStringT) {
+	bool ret = registerHandler_(name, description, url, prefix);
+	if(ret) {
+		regChanged();
+	} else {
+		LogManager::getInstance()->message(str(F_("Error registering the %1% handler") % Text::fromT(name)));
+	}
 	return ret;
 }
+
+} // unnamed namespace
 
 void WinUtil::registerHubHandlers() {
 	if(SETTING(URL_HANDLER)) {
 		if(!urlDcADCRegistered) {
-			urlDcADCRegistered = registerHandler(_T("dchub")) && registerHandler(_T("adc")) && registerHandler(_T("adcs"));
+			urlDcADCRegistered = registerHandler(_T("dchub"), _T("URL:Direct Connect Protocol"), true) &&
+				registerHandler(_T("adc"), _T("URL:Direct Connect Protocol"), true) &&
+				registerHandler(_T("adcs"), _T("URL:Direct Connect Protocol"), true);
 		}
 	} else if(urlDcADCRegistered) {
-		urlDcADCRegistered = !(
-		(::SHDeleteKey(HKEY_CURRENT_USER, _T("Software\\Classes\\dchub")) == ERROR_SUCCESS) &&
-		(::SHDeleteKey(HKEY_CURRENT_USER, _T("Software\\Classes\\adc")) == ERROR_SUCCESS) &&
-		(::SHDeleteKey(HKEY_CURRENT_USER, _T("Software\\Classes\\adcs")) == ERROR_SUCCESS));
+		urlDcADCRegistered =
+			::SHDeleteKey(HKEY_CURRENT_USER, _T("Software\\Classes\\dchub")) != ERROR_SUCCESS ||
+			::SHDeleteKey(HKEY_CURRENT_USER, _T("Software\\Classes\\adc")) == ERROR_SUCCESS ||
+			::SHDeleteKey(HKEY_CURRENT_USER, _T("Software\\Classes\\adcs")) == ERROR_SUCCESS;
+		regChanged();
 	}
 }
 
 void WinUtil::registerMagnetHandler() {
 	if(SETTING(MAGNET_REGISTER)) {
 		if(!urlMagnetRegistered) {
-			urlMagnetRegistered = registerHandler(_T("magnet"));
+			urlMagnetRegistered = registerHandler(_T("magnet"), _T("URL:Magnet"), true);
 		}
 	} else if(urlMagnetRegistered) {
 		urlMagnetRegistered = ::SHDeleteKey(HKEY_CURRENT_USER, _T("Software\\Classes\\magnet")) != ERROR_SUCCESS;
+		regChanged();
+	}
+}
+
+void WinUtil::registerDcextHandler() {
+	if(SETTING(DCEXT_REGISTER)) {
+		if(!dcextRegistered) {
+			dcextRegistered = registerHandler(_T(".dcext"), _T("DC plugin"), false, _T("dcext:"));
+		}
+	} else if(dcextRegistered) {
+		dcextRegistered = ::SHDeleteKey(HKEY_CURRENT_USER, _T("Software\\Classes\\.dcext")) != ERROR_SUCCESS;
+		regChanged();
 	}
 }
 

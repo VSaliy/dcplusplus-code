@@ -42,7 +42,6 @@ private:
 	void handleSelectionChanged();
 
 	bool handleContextMenu(dwt::ScreenCoordinate pt);
-	MenuPtr makeMenu();
 
 	void handleAddPlugin();
 	void handleConfigurePlugin();

@@ -92,7 +92,7 @@ const string SettingsManager::settingTags[] =
 	"AwayCompLock", "AwayTimeStamp", "BoldFinishedDownloads", "BoldFinishedUploads", "BoldFL",
 	"BoldHub", "BoldPm", "BoldQueue", "BoldSearch", "BoldSystemLog", "ClearSearch",
 	"CompressTransfers", "ConfirmADLSRemoval", "ConfirmExit", "ConfirmHubClosing",
-	"ConfirmHubRemoval", "ConfirmItemRemoval", "ConfirmUserRemoval", "Coral",
+	"ConfirmHubRemoval", "ConfirmItemRemoval", "ConfirmUserRemoval", "Coral", "DcextRegister",
 	"DontDlAlreadyQueued", "DontDLAlreadyShared", "FavShowJoins", "FilterMessages",
 	"FinishedDLOnlyFull", "FollowLinks", "GeoCity", "GetUserCountry", "GetUserInfo",
 	"HubUserCommands", "IgnoreBotPms", "IgnoreHubPms", "OpenNewWindow", "KeepFinishedFiles",
@@ -250,6 +250,7 @@ SettingsManager::SettingsManager()
 	setDefault(POPUNDER_PM, false);
 	setDefault(POPUNDER_FILELIST, false);
 	setDefault(MAGNET_REGISTER, true);
+	setDefault(DCEXT_REGISTER, true);
 	setDefault(MAGNET_ASK, true);
 	setDefault(MAGNET_ACTION, MAGNET_AUTO_SEARCH);
 	setDefault(ADD_FINISHED_INSTANTLY, false);

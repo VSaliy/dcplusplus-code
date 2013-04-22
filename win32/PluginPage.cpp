@@ -21,6 +21,7 @@
 
 #include "HoldRedraw.h"
 #include "resource.h"
+#include "PluginInfoDlg.h"
 #include "WinUtil.h"
 
 #include <dwt/widgets/Grid.h>
@@ -98,27 +99,22 @@ pluginInfo(0)
 
 				add = buttons->addChild(Button::Seed(T_("&Add")));
 				add->onClicked([this] { handleAddPlugin(); });
-				add->setImage(WinUtil::buttonIcon(IDI_OK));
 				add->setHelpId(IDH_SETTINGS_PLUGINS_ADD);
 
 				configure = buttons->addChild(Button::Seed(T_("&Configure")));
 				configure->onClicked([this] { handleConfigurePlugin(); });
-				configure->setImage(WinUtil::buttonIcon(IDI_SETTINGS));
 				configure->setHelpId(IDH_SETTINGS_PLUGINS_CONFIGURE);
 
-				moveUp = buttons->addChild(Button::Seed(T_("Move &up")));
+				moveUp = buttons->addChild(Button::Seed(T_("Move &Up")));
 				moveUp->onClicked([this] { handleMovePluginUp(); });
-				moveUp->setImage(WinUtil::buttonIcon(IDI_UPLOAD));
 				moveUp->setHelpId(IDH_SETTINGS_PLUGINS_MOVE_UP);
 
-				moveDown = buttons->addChild(Button::Seed(T_("Move &down")));
+				moveDown = buttons->addChild(Button::Seed(T_("Move &Down")));
 				moveDown->onClicked([this] { handleMovePluginDown(); });
-				moveDown->setImage(WinUtil::buttonIcon(IDI_DOWNLOAD));
 				moveDown->setHelpId(IDH_SETTINGS_PLUGINS_MOVE_DOWN);
 
 				remove = buttons->addChild(Button::Seed(T_("&Remove")));
 				remove->onClicked([this] { handleRemovePlugin(); });
-				remove->setImage(WinUtil::buttonIcon(IDI_CANCEL));
 				remove->setHelpId(IDH_SETTINGS_PLUGINS_REMOVE);
 			}
 	}
@@ -203,6 +199,8 @@ void PluginPage::handleSelectionChanged() {
 	infoGrid->column(1).mode = GridInfo::FILL;
 	infoGrid->setSpacing(pluginInfo->getSpacing());
 
+	// similar to PluginInfoDlg.cpp
+
 	enum Type { Name, Version, Description, Author, Website };
 
 	auto addInfo = [this, infoGrid](tstring name, const string& value, Type type) {
@@ -230,44 +228,32 @@ void PluginPage::handleSelectionChanged() {
 }
 
 bool PluginPage::handleContextMenu(dwt::ScreenCoordinate pt) {
-	if(plugins->countSelected() > 0) {
-		if(pt.x() == -1 && pt.y() == -1) {
-			pt = plugins->getContextMenuPos();
-		}
-		MenuPtr contextMenu = makeMenu();
-		contextMenu->open(pt);
-		return true;
+	if(pt.x() == -1 && pt.y() == -1) {
+		pt = plugins->getContextMenuPos();
 	}
-	return false;
-}
 
-MenuPtr PluginPage::makeMenu() {
-	MenuPtr menu = addChild(WinUtil::Seeds::menu);
-	
-	menu->setTitle(T_("Plugin options"), WinUtil::menuIcon(IDI_PLUGINS));
-	menu->appendItem(T_("Add plugin"), [this] { handleAddPlugin(); }, WinUtil::menuIcon(IDI_OK));
-	menu->appendItem(T_("Configure plugin"), [this] { handleConfigurePlugin(); }, WinUtil::menuIcon(IDI_SETTINGS));
+	auto menu = addChild(WinUtil::Seeds::menu);
+
+	menu->setTitle(T_("Plugins"), WinUtil::menuIcon(IDI_PLUGINS));
+	menu->appendItem(T_("&Add"), [this] { handleAddPlugin(); });
+	menu->appendItem(T_("&Configure"), [this] { handleConfigurePlugin(); });
 	menu->appendSeparator();
-	menu->appendItem(T_("Move plugin up"), [this] { handleMovePluginUp(); }, WinUtil::menuIcon(IDI_UPLOAD));
-	menu->appendItem(T_("Move plugin down"), [this] { handleMovePluginDown(); }, WinUtil::menuIcon(IDI_DOWNLOAD));
+	menu->appendItem(T_("Move &Up"), [this] { handleMovePluginUp(); });
+	menu->appendItem(T_("Move &Down"), [this] { handleMovePluginDown(); });
 	menu->appendSeparator();
-	menu->appendItem(T_("Remove plugin"), [this] { handleRemovePlugin(); }, WinUtil::menuIcon(IDI_CANCEL));
-	
-	return menu;
+	menu->appendItem(T_("&Remove"), [this] { handleRemovePlugin(); });
+
+	menu->open(pt);
+	return true;
 }
 
 void PluginPage::handleAddPlugin() {
 	tstring path;
-	if(LoadDialog(this).addFilter(T_("DLL files"), _T("*.dll"))
-		.setInitialDirectory(Text::toT(Util::getPath(Util::PATH_GLOBAL_CONFIG) + "Plugins")).open(path))
+	if(LoadDialog(this).addFilter(T_("dcext files"), _T("*.dcext")).open(path) &&
+		PluginInfoDlg(this, Text::fromT(path)).run() == IDOK)
 	{
-		auto idx = plugins->size();
-		if(PluginManager::getInstance()->loadPlugin(Text::fromT(path), [this, &path](const string& str) {
-			dwt::MessageBox(this).show(Text::toT(str), Text::toT(Util::getFileName(Text::fromT(path))),
-				dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONSTOP);
-		}, true)) {
-			addEntry(idx, PluginManager::getInstance()->getPlugin(idx)->getInfo());
-		}
+		auto pos = plugins->size();
+		addEntry(pos, PluginManager::getInstance()->getPlugin(pos)->getInfo());
 	}
 }
 
@@ -314,6 +300,9 @@ void PluginPage::handleMovePluginDown() {
 }
 
 void PluginPage::handleRemovePlugin() {
+	if(plugins->countSelected() != 1)
+		return;
+
 	auto sel = plugins->getSelected();
 	PluginManager::getInstance()->unloadPlugin(sel);
 	plugins->erase(sel);

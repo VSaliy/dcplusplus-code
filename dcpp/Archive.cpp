@@ -60,25 +60,26 @@ Archive::~Archive() {
 }
 
 void Archive::extract(const string& path) {
-	dcassert(!path.empty() && (*(path.end() - 1) == '/' || *(path.end() - 1) == '\\'));
+	auto isDir = [](const string& path) { return *(path.end() - 1) == '/' || *(path.end() - 1) == '\\'; };
+
+	dcassert(!path.empty() && isDir(path));
 
 	::archive_entry* entry;
-	while(true) {
-		if(check(archive_read_next_header(a, &entry)) == ARCHIVE_EOF) {
-			break;
-		}
+	while(check(archive_read_next_header(a, &entry)) != ARCHIVE_EOF) {
 
-		auto path_out = path + archive_entry_pathname(entry);
+		string path_out(archive_entry_pathname(entry));
+		if(path_out.empty() || isDir(path_out)) {
+			continue;
+		}
+		path_out = path + path_out;
+
 		File::ensureDirectory(path_out);
 		File f_out(path_out, File::WRITE, File::CREATE | File::TRUNCATE);
 
 		const void* buf;
 		size_t size;
 		__LA_INT64_T offset;
-		while(true) {
-			if(check(archive_read_data_block(a, &buf, &size, &offset)) == ARCHIVE_EOF) {
-				break;
-			}
+		while(check(archive_read_data_block(a, &buf, &size, &offset)) != ARCHIVE_EOF) {
 			f_out.write(buf, size);
 		}
 	}

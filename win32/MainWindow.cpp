@@ -53,30 +53,29 @@
 #include <dwt/widgets/SplitterContainer.h>
 #include <dwt/widgets/ToolBar.h>
 
-#include "resource.h"
-
-#include "CrashLogger.h"
-#include "ParamDlg.h"
-#include "HashProgressDlg.h"
-#include "SettingsDialog.h"
-#include "TextFrame.h"
-#include "SingleInstance.h"
 #include "AboutDlg.h"
-#include "TransferView.h"
-#include "HubFrame.h"
-#include "PrivateFrame.h"
-#include "DirectoryListingFrame.h"
-#include "SearchFrame.h"
 #include "ADLSearchFrame.h"
+#include "CrashLogger.h"
+#include "DirectoryListingFrame.h"
 #include "FavHubsFrame.h"
 #include "FinishedDLFrame.h"
 #include "FinishedULFrame.h"
+#include "HashProgressDlg.h"
+#include "HubFrame.h"
 #include "NotepadFrame.h"
+#include "ParamDlg.h"
+#include "PluginInfoDlg.h"
+#include "PrivateFrame.h"
 #include "PublicHubsFrame.h"
 #include "QueueFrame.h"
+#include "resource.h"
 #include "SearchFrame.h"
+#include "SettingsDialog.h"
+#include "SingleInstance.h"
 #include "StatsFrame.h"
 #include "SystemFrame.h"
+#include "TextFrame.h"
+#include "TransferView.h"
 #include "UsersFrame.h"
 
 #ifdef HAVE_HTMLHELP_H
@@ -1186,6 +1185,7 @@ void MainWindow::handleSettings() {
 	auto prevSortFavUsersFirst = SETTING(SORT_FAVUSERS_FIRST);
 	auto prevURLReg = SETTING(URL_HANDLER);
 	auto prevMagnetReg = SETTING(MAGNET_REGISTER);
+	auto prevDcextReg = SETTING(DCEXT_REGISTER);
 	auto prevSettingsSave = SETTING(SETTINGS_SAVE_INTERVAL);
 
 	if(SettingsDialog(this).run() == IDOK) {
@@ -1261,6 +1261,8 @@ void MainWindow::handleSettings() {
 			WinUtil::registerHubHandlers();
 		if(SETTING(MAGNET_REGISTER) != prevMagnetReg)
 			WinUtil::registerMagnetHandler();
+		if(SETTING(DCEXT_REGISTER) != prevDcextReg)
+			WinUtil::registerDcextHandler();
 
 		if(SETTING(SETTINGS_SAVE_INTERVAL) != prevSettingsSave)
 			setSaveTimer();
@@ -1532,21 +1534,27 @@ void MainWindow::completeGeoUpdate(bool v6, bool success) {
 	}
 }
 
-void MainWindow::parseCommandLine(const tstring& cmdLine)
-{
-	string::size_type i;
+void MainWindow::parseCommandLine(const tstring& cmdLine) {
+	// this string may or may not contain the executable's path at the beginning.
 
-	if( (i = cmdLine.find(_T("dchub://"))) != string::npos ||
-		(i = cmdLine.find(_T("adc://"))) != string::npos ||
-		(i = cmdLine.find(_T("adcs://"))) != string::npos ||
-		(i = cmdLine.find(_T("magnet:?"))) != string::npos )
+	tstring::size_type i;
+
+	if( (i = cmdLine.find(_T("dchub://"))) != tstring::npos ||
+		(i = cmdLine.find(_T("adc://"))) != tstring::npos ||
+		(i = cmdLine.find(_T("adcs://"))) != tstring::npos ||
+		(i = cmdLine.find(_T("magnet:?"))) != tstring::npos )
 	{
 		WinUtil::parseLink(cmdLine.substr(i), false);
+
+	} else if((i = cmdLine.find(_T("dcext:"))) != tstring::npos) {
+		auto path = Text::fromT(cmdLine.substr(i + 6));
+		Util::sanitizeUrl(path);
+		PluginInfoDlg(this, path).run();
 	}
 }
 
 LRESULT MainWindow::handleCopyData(LPARAM lParam) {
-	parseCommandLine(dwt::Application::instance().getModuleFileName() + _T(" ") + reinterpret_cast<LPCTSTR>(reinterpret_cast<COPYDATASTRUCT*>(lParam)->lpData));
+	parseCommandLine(reinterpret_cast<LPCTSTR>(reinterpret_cast<COPYDATASTRUCT*>(lParam)->lpData));
 	return TRUE;
 }
 
