@@ -34,6 +34,7 @@ AdvancedPage::ListItem AdvancedPage::listItems[] = {
 	{ SettingsManager::LIST_DUPES, N_("Keep duplicate files in your file list"), IDH_SETTINGS_ADVANCED_LIST_DUPES },
 	{ SettingsManager::URL_HANDLER, N_("Register with Windows to handle dchub://, adc:// and adcs:// URL links"), IDH_SETTINGS_ADVANCED_URL_HANDLER },
 	{ SettingsManager::MAGNET_REGISTER, N_("Register with Windows to handle magnet: URI links"), IDH_SETTINGS_ADVANCED_MAGNET_REGISTER },
+	{ SettingsManager::DCEXT_REGISTER, N_("Register with Windows to handle .dcext files"), IDH_SETTINGS_ADVANCED_DCEXT_REGISTER },
 	{ SettingsManager::KEEP_LISTS, N_("Don't delete file lists when exiting"), IDH_SETTINGS_ADVANCED_KEEP_LISTS },
 	{ SettingsManager::AUTO_KICK, N_("Automatically disconnect users who leave the hub"), IDH_SETTINGS_ADVANCED_AUTO_KICK },
 	{ SettingsManager::SFV_CHECK, N_("Enable automatic SFV checking"), IDH_SETTINGS_ADVANCED_SFV_CHECK },

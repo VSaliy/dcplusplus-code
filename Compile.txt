@@ -184,3 +184,12 @@
 			many have done), and if you're lucky it might become more popular than the original =). Please
 			state explicitly when submitting the patch that you give me copyright over the code if the submission is larger 
 			than trivial.
+
+		f. Developing plugins
+
+			See <https://launchpad.net/dcpp-plugin-sdk-c> and
+			<https://launchpad.net/dcpp-plugin-sdk-cpp> for C and C++ plugin SDKs.
+
+			See dcpp/Plugin* files for implementation details.
+
+			The "Plugin format (dcext).txt" document describes the way plugins are packaged.

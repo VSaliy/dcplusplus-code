@@ -16,33 +16,32 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef DCPLUSPLUS_DCPP_ARCHIVE_H
-#define DCPLUSPLUS_DCPP_ARCHIVE_H
+#ifndef DCPLUSPLUS_WIN32_PLUGININFODLG_H
+#define DCPLUSPLUS_WIN32_PLUGININFODLG_H
 
-#include <string>
+#include <dcpp/typedefs.h>
 
-struct archive;
+#include <dwt/widgets/ModalDialog.h>
 
-namespace dcpp {
+#include "forward.h"
 
-using std::string;
-
-/** Wrappers around libarchive. */
-class Archive {
+class PluginInfoDlg : public dwt::ModalDialog
+{
 public:
-	Archive(const string& path);
-	~Archive();
+	PluginInfoDlg(dwt::Widget* parent, const string& path);
+	virtual ~PluginInfoDlg();
 
-	/** Extract all the files in the archive to the specified directory. Throws on errors. */
-	void extract(const string& path);
+	int run();
 
 private:
-	inline int check(int ret);
+	bool handleInitDialog(const string& path);
+	void handleOK(const string& name, const string& plugin, const StringList& files);
 
-	::archive* a;
-	::FILE* f;
+	void layout();
+
+	void error(const tstring& message, const tstring& title);
+
+	GridPtr grid;
 };
-
-} // namespace dcpp
 
 #endif

@@ -19,9 +19,11 @@
 #include "stdinc.h"
 #include "PluginManager.h"
 
+#include "Archive.h"
 #include "Client.h"
 #include "ClientManager.h"
 #include "ConnectionManager.h"
+#include "File.h"
 #include "LogManager.h"
 #include "QueueManager.h"
 #include "SimpleXML.h"
@@ -66,6 +68,109 @@ PluginManager::PluginManager() : dcCore(), shutdown(false), secNum(Util::rand())
 }
 
 PluginManager::~PluginManager() {
+}
+
+DcextInfo PluginManager::extract(const string& path) {
+	const auto dir = Util::getTempPath() + "dcext" PATH_SEPARATOR_STR;
+	const auto info_path = dir + "info.xml";
+	File::deleteFile(info_path);
+	Archive(path).extract(dir);
+
+	SimpleXML xml;
+	xml.fromXML(File(info_path, File::READ, File::OPEN).read());
+
+	DcextInfo info;
+
+	if(xml.findChild("dcext")) {
+		xml.stepIn();
+
+		auto parse = [&xml](string tag, string& out) {
+			xml.resetCurrentChild();
+			if(xml.findChild(tag)) {
+				out = xml.getChildData();
+			}
+		};
+
+		auto checkArch = [&xml] {
+			auto arch = xml.getChildAttrib("Arch", "x86");
+#if defined(__x86_64__) || defined(_WIN64)
+			return arch == "x64";
+#elif defined(__i386__) || defined(_M_IX86)
+			return arch == "x86";
+#else
+#error Unknown architecture
+#endif
+		};
+
+		string version;
+		parse("ApiVersion", version);
+		if(Util::toInt(version) < DCAPI_CORE_VER) {
+			throw str(F_("%1% is too old, contact the plugin author for an update") % Util::getFileName(path));
+		}
+
+		parse("UUID", info.uuid);
+		parse("Name", info.name);
+		version.clear(); parse("Version", version); info.version = Util::toDouble(version);
+		parse("Author", info.author);
+		parse("Description", info.description);
+		parse("Website", info.website);
+
+		xml.resetCurrentChild();
+		while(xml.findChild("Plugin")) {
+			if(checkArch()) {
+				info.plugin = xml.getChildData();
+			}
+		}
+
+		xml.resetCurrentChild();
+		if(xml.findChild("Files")) {
+			xml.stepIn();
+
+			while(xml.findChild("File")) {
+				if(checkArch()) {
+					info.files.push_back(xml.getChildData());
+				}
+			}
+
+			xml.stepOut();
+		}
+
+		xml.stepOut();
+	}
+
+	if(info.uuid.empty() || info.name.empty() || info.version == 0 || info.plugin.empty()) {
+		throw str(F_("%1% is not a valid DC extension") % Util::getFileName(path));
+	}
+
+	{
+		Lock l(cs);
+
+		if(isLoaded(info.uuid)) {
+			throw str(F_("%1% is already installed") % Util::getFileName(path));
+		}
+	}
+
+	return info;
+}
+
+void PluginManager::install(const string& name, const string& plugin, const StringList& files) {
+	if(name.empty() || plugin.empty()) {
+		throw Exception();
+	}
+
+	const auto source = Util::getTempPath() + "dcext" PATH_SEPARATOR_STR;
+	const auto target = Util::getPath(Util::PATH_USER_LOCAL) + "Plugins" PATH_SEPARATOR_STR + name + PATH_SEPARATOR_STR;
+	const auto lib = target + Util::getFileName(plugin);
+
+	File::ensureDirectory(lib);
+	File::renameFile(source + plugin, lib);
+
+	for(auto& file: files) {
+		File::ensureDirectory(target + file);
+		File::renameFile(source + file, target + file);
+	}
+
+	loadPlugin(lib, [](const string& err) { throw Exception(err); }, true);
 }
 
 void PluginManager::loadPlugins(function<void (const string&)> f) {

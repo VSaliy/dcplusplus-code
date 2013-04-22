@@ -298,9 +298,10 @@ public:
 	static void killHelpTooltip();
 	static pair<bool, string> getHelpText(unsigned id);
 
-	// URL related
+	// file type & protocol associations
 	static void registerHubHandlers();
 	static void registerMagnetHandler();
+	static void registerDcextHandler();
 
 	static void addUserItems(Menu* menu, const HintedUserList& users, TabViewPtr parent, const StringList& dirs = StringList());
 
@@ -323,6 +324,7 @@ private:
 
 	static bool urlDcADCRegistered;
 	static bool urlMagnetRegistered;
+	static bool dcextRegistered;
 };
 
 #endif // !defined(WIN_UTIL_H)

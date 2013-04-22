@@ -87,12 +87,28 @@ private:
 	PluginHandle handle;
 };
 
+/** Information about a dcext-packaged plugin that has just been extracted. */
+struct DcextInfo {
+	string uuid;
+	string name;
+	double version;
+	string author;
+	string description;
+	string website;
+	string plugin;
+	StringList files;
+};
+
 class PluginManager : public Singleton<PluginManager>, private TimerManagerListener,
 	private ClientManagerListener, private QueueManagerListener, private SettingsManagerListener
 {
 public:
 	PluginManager();
 	~PluginManager();
+
+	/** Extract a dcext-packaged plugin. Throws on errors. */
+	DcextInfo extract(const string& path);
+	void install(const string& name, const string& plugin, const StringList& files);
 
 	void loadPlugins(function<void (const string&)> f);
 	bool loadPlugin(const string& fileName, function<void (const string&)> err, bool install = false);
