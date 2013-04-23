@@ -108,10 +108,10 @@ public:
 
 	/** Extract a dcext-packaged plugin. Throws on errors. */
 	DcextInfo extract(const string& path);
-	void install(const string& name, const string& plugin, const StringList& files);
+	void install(const string& uuid, const string& plugin, const StringList& files);
 
 	void loadPlugins(function<void (const string&)> f);
-	bool loadPlugin(const string& fileName, function<void (const string&)> err, bool install = false);
+	void loadPlugin(const string& fileName, bool install = false);
 	bool isLoaded(const string& guid);
 
 	void unloadPlugins();
@@ -179,8 +179,8 @@ private:
 	void loadSettings() noexcept;
 	void saveSettings() noexcept;
 
-	// Check if plugin can be loaded
-	bool checkPlugin(const MetaData& info, function<void (const string&)> err);
+	// Check if the plugin can be loaded; throws if it can't.
+	void checkPlugin(const MetaData& info);
 
 	// Listeners
 	void on(TimerManagerListener::Second, uint64_t ticks) noexcept { runHook(HOOK_TIMER_SECOND, NULL, &ticks); }

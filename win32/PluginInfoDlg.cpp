@@ -100,7 +100,7 @@ bool PluginInfoDlg::handleInitDialog(const string& path) {
 		cur->column(0).align = GridInfo::BOTTOM_RIGHT;
 		cur->setSpacing(grid->getSpacing());
 		WinUtil::addDlgButtons(cur,
-			[this, info] { handleOK(info.name, info.plugin, info.files); },
+			[this, info] { handleOK(info.name, info.uuid, info.plugin, info.files); },
 			[this] { endDialog(IDCANCEL); }).first->setText(T_("Install the plugin"));
 	}
 
@@ -112,9 +112,9 @@ bool PluginInfoDlg::handleInitDialog(const string& path) {
 	return false;
 }
 
-void PluginInfoDlg::handleOK(const string& name, const string& plugin, const StringList& files) {
+void PluginInfoDlg::handleOK(const string& name, const string& uuid, const string& plugin, const StringList& files) {
 	try {
-		PluginManager::getInstance()->install(name, plugin, files);
+		PluginManager::getInstance()->install(uuid, plugin, files);
 		endDialog(IDOK);
 
 	} catch(const Exception& e) {

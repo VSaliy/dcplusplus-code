@@ -26,9 +26,11 @@
 #include "File.h"
 #include "LogManager.h"
 #include "QueueManager.h"
+#include "ScopedFunctor.h"
 #include "SimpleXML.h"
 #include "StringTokenizer.h"
 #include "UserConnection.h"
+#include "version.h"
 
 #include <utility>
 
@@ -91,14 +93,21 @@ DcextInfo PluginManager::extract(const string& path) {
 			}
 		};
 
-		auto checkArch = [&xml] {
-			auto arch = xml.getChildAttrib("Arch", "x86");
-#if defined(__x86_64__) || defined(_WIN64)
-			return arch == "x64";
-#elif defined(__i386__) || defined(_M_IX86)
-			return arch == "x86";
+		auto checkPlatform = [&xml](bool emptyAllowed) {
+			auto platform = xml.getChildAttrib("Platform");
+			if(emptyAllowed && platform.empty()) {
+				return true;
+			}
+#if defined(_WIN32) && defined(_WIN64)
+			return platform == "pe-x64";
+#elif defined(_WIN32)
+			return platform == "pe-x86";
+#elif defined(__x86_64__)
+			return platform == "elf-x64";
+#elif defined(__i386__)
+			return platform == "elf-x86";
 #else
-#error Unknown architecture
+#error Unknown platform
 #endif
 		};
 
@@ -117,7 +126,7 @@ DcextInfo PluginManager::extract(const string& path) {
 
 		xml.resetCurrentChild();
 		while(xml.findChild("Plugin")) {
-			if(checkArch()) {
+			if(checkPlatform(false)) {
 				info.plugin = xml.getChildData();
 			}
 		}
@@ -127,7 +136,7 @@ DcextInfo PluginManager::extract(const string& path) {
 			xml.stepIn();
 
 			while(xml.findChild("File")) {
-				if(checkArch()) {
+				if(checkPlatform(true)) {
 					info.files.push_back(xml.getChildData());
 				}
 			}
@@ -138,28 +147,27 @@ DcextInfo PluginManager::extract(const string& path) {
 		xml.stepOut();
 	}
 
-	if(info.uuid.empty() || info.name.empty() || info.version == 0 || info.plugin.empty()) {
-		throw str(F_("%1% is not a valid DC extension") % Util::getFileName(path));
+	if(info.uuid.empty() || info.name.empty() || info.version == 0) {
+		throw Exception(str(F_("%1% is not a valid plugin") % Util::getFileName(path)));
+	}
+	if(info.plugin.empty()) {
+		throw Exception(str(F_("%1% is not compatible with %2%") % Util::getFileName(path) % APPNAME));
 	}
 
-	{
-		Lock l(cs);
-
-		if(isLoaded(info.uuid)) {
-			throw str(F_("%1% is already installed") % Util::getFileName(path));
-		}
+	if(isLoaded(info.uuid)) {
+		throw Exception(str(F_("%1% is already installed") % Util::getFileName(path)));
 	}
 
 	return info;
 }
 
-void PluginManager::install(const string& name, const string& plugin, const StringList& files) {
-	if(name.empty() || plugin.empty()) {
+void PluginManager::install(const string& uuid, const string& plugin, const StringList& files) {
+	if(uuid.empty() || plugin.empty()) {
 		throw Exception();
 	}
 
 	const auto source = Util::getTempPath() + "dcext" PATH_SEPARATOR_STR;
-	const auto target = Util::getPath(Util::PATH_USER_LOCAL) + "Plugins" PATH_SEPARATOR_STR + name + PATH_SEPARATOR_STR;
+	const auto target = Util::getPath(Util::PATH_USER_LOCAL) + "Plugins" PATH_SEPARATOR_STR + uuid + PATH_SEPARATOR_STR;
 	const auto lib = target + Util::getFileName(plugin);
 
 	File::ensureDirectory(lib);
@@ -170,7 +178,7 @@ void PluginManager::install(const string& name, const string& plugin, const Stri
 		File::renameFile(source + file, target + file);
 	}
 
-	loadPlugin(lib, [](const string& err) { throw Exception(err); }, true);
+	loadPlugin(lib, true);
 }
 
 void PluginManager::loadPlugins(function<void (const string&)> f) {
@@ -182,73 +190,67 @@ void PluginManager::loadPlugins(function<void (const string&)> f) {
 	loadSettings();
 
 	StringTokenizer<string> st(getPluginSetting("CoreSetup", "Plugins"), ";");
-	auto err = [](const string& str) { LogManager::getInstance()->message(str); };
 	for(auto& i: st.getTokens()) {
-		if(!loadPlugin(i, err) || !f) continue;
-		f(Util::getFileName(i));
+		if(f) { f(Util::getFileName(i)); }
+		try { loadPlugin(i); }
+		catch(const Exception& e) { LogManager::getInstance()->message(e.getError()); }
 	}
 }
 
-bool PluginManager::loadPlugin(const string& fileName, function<void (const string&)> err, bool install) {
+void PluginManager::loadPlugin(const string& fileName, bool install) {
 	Lock l(cs);
 
 	dcassert(dcCore.apiVersion != 0);
 
 	PluginHandle hr = LOAD_LIBRARY(fileName);
 	if(!hr) {
-		err(str(F_("Error loading %1%: %2%") % Util::getFileName(fileName) % GET_ERROR()));
-		return false;
+		throw Exception(str(F_("Error loading %1%: %2%") % Util::getFileName(fileName) % GET_ERROR()));
 	}
+	ScopedFunctor([&hr] { if(hr) FREE_LIBRARY(hr); });
 
 	PluginInfo::PLUGIN_INIT pluginInfo = reinterpret_cast<PluginInfo::PLUGIN_INIT>(GET_ADDRESS(hr, "pluginInit"));
+	MetaData info { };
+	DCMAIN dcMain;
+	if(!pluginInfo || !(dcMain = pluginInfo(&info))) {
+		throw Exception(str(F_("%1% is not a valid plugin") % Util::getFileName(fileName)));
+	}
 
-	if(pluginInfo != NULL) {
-		MetaData info = { 0 };
-		DCMAIN dcMain;
-		if((dcMain = pluginInfo(&info))) {
-			if(checkPlugin(info, err)) {
-				if(dcMain((install ? ON_INSTALL : ON_LOAD), &dcCore, NULL) != False) {
-					plugins.emplace_back(new PluginInfo(fileName, hr, info, dcMain));
-					return true;
-				}
-			}
-		}
-	} else err(str(F_("%1% is not a valid plugin") % Util::getFileName(fileName)));
+	checkPlugin(info);
 
-	FREE_LIBRARY(hr);
-	return false;
+	if(dcMain((install ? ON_INSTALL : ON_LOAD), &dcCore, nullptr) == False) {
+		throw Exception(str(F_("Error loading %1%") % Util::getFileName(fileName)));
+	}
+
+	plugins.emplace_back(new PluginInfo(fileName, hr, info, dcMain));
+	hr = nullptr; // bypass the scoped deleter.
 }
 
 bool PluginManager::isLoaded(const string& guid) {
+	Lock l(cs);
 	auto pluginComp = [&guid](const unique_ptr<PluginInfo>& p) -> bool { return strcmp(p->getInfo().guid, guid.c_str()) == 0; };
 	auto i = std::find_if(plugins.begin(), plugins.end(), pluginComp);
 	return (i != plugins.end());
 }
 
-bool PluginManager::checkPlugin(const MetaData& info, function<void (const string&)> err) {
+void PluginManager::checkPlugin(const MetaData& info) {
 	// Check if user is trying to load a duplicate
 	if(isLoaded(info.guid)) {
-		err(str(F_("%1% is already installed") % info.name));
-		return false;
+		throw Exception(str(F_("%1% is already installed") % info.name));
 	}
 
 	// Check API compatibility (this should only block on absolutely wrecking api changes, which generally should not happen)
 	if(info.apiVersion < DCAPI_CORE_VER) {
-		err(str(F_("%1% is too old, contact the plugin author for an update") % info.name));
-		return false;
+		throw Exception(str(F_("%1% is too old, contact the plugin author for an update") % info.name));
 	}
 
 	// Check that all dependencies are loaded
 	if(info.numDependencies != 0) {
 		for(size_t i = 0; i < info.numDependencies; ++i) {
 			if(!isLoaded(info.dependencies[i])) {
-				err(str(F_("Missing dependencies for %1%") % info.name));
-				return false;
+				throw Exception(str(F_("Missing dependencies for %1%") % info.name));
 			}
 		}
 	}
-
-	return true;
 }
 
 void PluginManager::unloadPlugins() {

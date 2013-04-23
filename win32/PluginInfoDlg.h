@@ -35,7 +35,7 @@ public:
 
 private:
 	bool handleInitDialog(const string& path);
-	void handleOK(const string& name, const string& plugin, const StringList& files);
+	void handleOK(const string& name, const string& uuid, const string& plugin, const StringList& files);
 
 	void layout();
 

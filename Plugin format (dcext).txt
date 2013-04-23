@@ -34,13 +34,18 @@ Description of the XML tags:
 - "Description" (optional): Short description of the plugin.
 - "Website" (optional): Plugin website.
 
-- "Plugin" (compulsory): Location of the loadable shared extension within the archive. The optional
-	"Arch" attribute of this tag designates the architecture this plugin has been compiled for. It
-	may be one of "x86", "x64"; "x86" is assumed by default in the absence of this attribute.
-	Multiple "Plugin" tags may be provided for different architectures.
+- "Plugin" (compulsory): Location of the loadable shared extension within the archive. The required
+	"Platform" attribute of this tag must be a value from the "Platform codes" list below. Multiple
+	"Plugin" tags may be provided for different platforms.
 - "Files" (optional): Additional files required by the plugin, each within a "File" tag. "File"
-	tags may contain an "Arch" attribute to specify the architecture the file works on; files are
-	assumed to target every architecture by default.
+	tags may contain an optional "Platform" attribute which must be a value from the "Platform
+	codes" list below; in its absence, files are assumed to be platform-independant by default.
+
+Platform codes:
+- elf-x64: ELF format, x64 architecture.
+- elf-x86: ELF format, x86 architecture.
+- pe-x64: PE format, x64 architecture.
+- pe-x86: PE format, x86 architecture.
 
 Example info.xml:
 
@@ -53,11 +58,13 @@ Example info.xml:
 	<Author>Test team</Author>
 	<Description>Plugin to do X</Description>
 	<Website>http://example.com</Website>
-	<Plugin Arch="x86">x86/TestPlugin.so</Plugin>
-	<Plugin Arch="x64">x64/TestPlugin.so</Plugin>
+	<Plugin Platform="elf-x64">x64/TestPlugin.so</Plugin>
+	<Plugin Platform="elf-x86">x86/TestPlugin.so</Plugin>
+	<Plugin Platform="pe-x64">x64/TestPlugin.dll</Plugin>
+	<Plugin Platform="pe-x86">x86/TestPlugin.dll</Plugin>
 	<Files>
 		<File>icons/TestPlugin.ico</File>
 		<File>fonts/cool.font</File>
-		<File Arch="x64">FasterHash.so</File>
+		<File Platform="elf-x64">FasterHash.so</File>
 	</Files>
 </dcext>
