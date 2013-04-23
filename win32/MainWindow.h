@@ -67,7 +67,7 @@ public:
 
 	void handleSettings();
 
-	static void addPluginCommand(const tstring& text, function<void ()> command);
+	static void addPluginCommand(const tstring& text, function<void ()> command, const tstring& icon);
 	static void removePluginCommand(const tstring& text);
 
 	/** show a balloon popup. refer to the dwt::Notification::addMessage doc for info about parameters. */
@@ -138,8 +138,9 @@ private:
 	bool tray_pm;
 
 	/* sorted list of plugin commands. static because they may be added before the window has
-	actually been created. */
-	static map<tstring, function<void ()>, noCaseStringLess> pluginCommands;
+	actually been created.
+	command name -> pair<callback, icon path> */
+	static map<tstring, pair<function<void ()>, tstring>, noCaseStringLess> pluginCommands;
 
 	HttpConnection* conns[CONN_LAST];
 	unique_ptr<File> geo6File, geo4File;

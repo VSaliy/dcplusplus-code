@@ -29,7 +29,7 @@ public:
 
 private:
 	// Functions for DCUI
-	static void DCAPI addCommand(const char* name, DCCommandFunc command);
+	static void DCAPI addCommand(const char* name, DCCommandFunc command, const char* icon);
 	static void DCAPI removeCommand(const char* name);
 
 	static void DCAPI playSound(const char* path);

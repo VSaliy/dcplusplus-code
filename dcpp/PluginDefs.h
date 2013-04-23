@@ -32,7 +32,7 @@ extern "C" {
 #endif
 
 /* Version of the plugin api (must change if old plugins simply can't be seen as viably working) */
-#define DCAPI_CORE_VER				6
+#define DCAPI_CORE_VER				7
 
 #ifdef _WIN32
 # define DCAPI __stdcall
@@ -58,7 +58,7 @@ extern "C" {
 
 /* Recommended interfaces */
 #define DCINTF_CONFIG				"generic.plugins.DCConfig"	/* Config management */
-#define DCINTF_CONFIG_VER			1
+#define DCINTF_CONFIG_VER			2
 
 #define DCINTF_LOGGING				"generic.plugins.DCLog"		/* Logging functions */
 #define DCINTF_LOGGING_VER			1
@@ -74,10 +74,10 @@ extern "C" {
 #define DCINTF_DCPP_QUEUE_VER		2
 
 #define DCINTF_DCPP_UTILS			"dcpp.utils.DCUtils"		/* Utility and convenience functions */
-#define DCINTF_DCPP_UTILS_VER		2
+#define DCINTF_DCPP_UTILS_VER		1
 
 #define DCINTF_DCPP_TAGGER			"dcpp.xml.DCTagger"			/* Manipulation of an XML tagger */
-#define DCINTF_DCPP_TAGGER_VER		2
+#define DCINTF_DCPP_TAGGER_VER		1
 
 #define DCINTF_DCPP_UI				"dcpp.ui.DCUI"				/* User interface */
 #define DCINTF_DCPP_UI_VER			1
@@ -336,6 +336,9 @@ typedef struct tagDCConfig {
 
 	ConfigValuePtr		(DCAPI *copy)				(const ConfigValuePtr val);
 	void				(DCAPI *release)			(ConfigValuePtr val);
+
+	/* Version 2 functions */
+	ConfigStrPtr	(DCAPI *get_install_path)	(const char* guid);
 } DCConfig, *DCConfigPtr;
 
 /* Logging functions */
@@ -426,10 +429,9 @@ typedef struct tagDCTagger {
 	/* Tagger API version */
 	uint32_t apiVersion;
 
-	void		(DCAPI *add_tag)					(TagDataPtr hTags, size_t start, size_t end, const char* id, const char* attributes);
-
-	/* Version 2 functions */
 	const char*	(DCAPI *get_text)					(TagDataPtr hTags);
+
+	void		(DCAPI *add_tag)					(TagDataPtr hTags, size_t start, size_t end, const char* id, const char* attributes);
 	void		(DCAPI *replace_text)				(TagDataPtr hTags, size_t start, size_t end, const char* replacement);
 } DCTagger, *DCTaggerPtr;
 
@@ -440,7 +442,10 @@ typedef struct DCUI {
 	/* User interface API version */
 	uint32_t apiVersion;
 
-	void		(DCAPI *add_command)				(const char* name, DCCommandFunc command);
+	/* Add a command identified by "name".
+	"icon" is optional; it is the path to an icon file used to illustrate the command. */
+	void		(DCAPI *add_command)				(const char* name, DCCommandFunc command, const char* icon);
+	/* Remove a command previously added with add_command. */
 	void		(DCAPI *remove_command)				(const char* name);
 
 	void		(DCAPI *play_sound)					(const char* path);

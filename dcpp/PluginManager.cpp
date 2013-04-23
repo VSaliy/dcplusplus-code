@@ -167,7 +167,7 @@ void PluginManager::install(const string& uuid, const string& plugin, const Stri
 	}
 
 	const auto source = Util::getTempPath() + "dcext" PATH_SEPARATOR_STR;
-	const auto target = Util::getPath(Util::PATH_USER_LOCAL) + "Plugins" PATH_SEPARATOR_STR + uuid + PATH_SEPARATOR_STR;
+	const auto target = getInstallPath(uuid);
 	const auto lib = target + Util::getFileName(plugin);
 
 	File::ensureDirectory(lib);
@@ -529,6 +529,10 @@ void PluginManager::removePluginSetting(const string& pluginName, const string& 
 		if(j != i->second.end())
 			i->second.erase(j);
 	}
+}
+
+string PluginManager::getInstallPath(const string& uuid) {
+	return Util::getPath(Util::PATH_USER_LOCAL) + "Plugins" PATH_SEPARATOR_STR + uuid + PATH_SEPARATOR_STR;
 }
 
 // Listeners

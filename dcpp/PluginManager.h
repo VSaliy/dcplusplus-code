@@ -175,6 +175,8 @@ public:
 	const string& getPluginSetting(const string& pluginName, const string& setting);
 	void removePluginSetting(const string& pluginName, const string& setting);
 
+	static string getInstallPath(const string& uuid);
+
 private:
 	void loadSettings() noexcept;
 	void saveSettings() noexcept;
