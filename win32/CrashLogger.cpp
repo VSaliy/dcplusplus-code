@@ -467,10 +467,10 @@ inline void writeAppInfo() {
 
 	// see also AboutDlg.cpp for similar tests.
 #ifdef __MINGW32__
-#ifdef HAVE_MINGW64
-	fputs("Compiled with MinGW-w64's GCC " __VERSION__, f);
-#else
+#ifdef HAVE_OLD_MINGW
 	fputs("Compiled with MinGW's GCC " __VERSION__, f);
+#else
+	fputs("Compiled with MinGW-w64's GCC " __VERSION__, f);
 #endif
 #elif defined(_MSC_VER)
 	fprintf(f, "Compiled with MS Visual Studio %d", _MSC_VER);

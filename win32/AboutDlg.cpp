@@ -116,10 +116,10 @@ bool AboutDlg::handleInitDialog() {
 		gs.caption = T_("Compiler");
 		// see also CrashLogger.cpp for similar tests.
 #ifdef __MINGW32__
-#ifdef HAVE_MINGW64
-		ts.caption = Text::toT("MinGW-w64's GCC " __VERSION__);
-#else
+#ifdef HAVE_OLD_MINGW
 		ts.caption = Text::toT("MinGW's GCC " __VERSION__);
+#else
+		ts.caption = Text::toT("MinGW-w64's GCC " __VERSION__);
 #endif
 #elif defined(_MSC_VER)
 		ts.caption = Text::toT("MS Visual Studio " + Util::toString(_MSC_VER));

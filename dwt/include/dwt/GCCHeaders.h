@@ -410,7 +410,7 @@ typedef struct _DTTOPTS
 } DTTOPTS, *PDTTOPTS; 
 #endif
 
-#ifndef HAVE_MINGW64 // mingw64 already has this
+#ifdef HAVE_OLD_MINGW // mingw64 already has this
 typedef struct tagNMTTCUSTOMDRAW
 {
     NMCUSTOMDRAW nmcd;
