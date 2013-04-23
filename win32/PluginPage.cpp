@@ -248,12 +248,30 @@ bool PluginPage::handleContextMenu(dwt::ScreenCoordinate pt) {
 }
 
 void PluginPage::handleAddPlugin() {
-	tstring path;
-	if(LoadDialog(this).addFilter(T_("dcext files"), _T("*.dcext")).open(path) &&
-		PluginInfoDlg(this, Text::fromT(path)).run() == IDOK)
+	tstring path_t;
+	if(LoadDialog(this)
+		.addFilter(str(TF_("%1% files") % _T("dcext")), _T("*.dcext"))
+		.addFilter(str(TF_("%1% files") % _T("dll")), _T("*.dll"))
+		.open(path_t))
 	{
-		auto pos = plugins->size();
-		addEntry(pos, PluginManager::getInstance()->getPlugin(pos)->getInfo());
+		auto path = Text::fromT(path_t);
+		auto added = false;
+		if(Util::getFileExt(path) == ".dcext") {
+			added = PluginInfoDlg(this, path).run() == IDOK;
+		} else {
+			try {
+				PluginManager::getInstance()->loadPlugin(path, true);
+				added = true;
+			} catch(const Exception& e) {
+				dwt::MessageBox(this).show(tstring(T_("Cannot install the plugin:")) + _T("\r\n\r\n") + Text::toT(e.getError()),
+					Text::toT(Util::getFileName(path)), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONSTOP);
+			}
+		}
+
+		if(added) {
+			auto pos = plugins->size();
+			addEntry(pos, PluginManager::getInstance()->getPlugin(pos)->getInfo());
+		}
 	}
 }
 
