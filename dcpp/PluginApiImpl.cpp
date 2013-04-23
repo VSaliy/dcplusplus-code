@@ -95,7 +95,9 @@ DCConfig PluginApiImpl::dcConfig = {
 	&PluginApiImpl::getConfig,
 
 	&PluginApiImpl::copyData,
-	&PluginApiImpl::releaseData
+	&PluginApiImpl::releaseData,
+
+	&PluginApiImpl::getInstallPath
 };
 
 DCLog PluginApiImpl::dcLog = {
@@ -168,9 +170,9 @@ DCUtils PluginApiImpl::dcUtils = {
 DCTagger PluginApiImpl::dcTagger = {
 	DCINTF_DCPP_TAGGER_VER,
 
-	&PluginApiImpl::addTag,
-
 	&PluginApiImpl::getText,
+
+	&PluginApiImpl::addTag,
 	&PluginApiImpl::replaceText
 };
 
@@ -429,6 +431,12 @@ void PluginApiImpl::releaseData(ConfigValuePtr val) {
 	}
 }
 
+ConfigStrPtr DCAPI PluginApiImpl::getInstallPath(const char* guid) {
+	auto str = PluginManager::getInstallPath(guid);
+	ConfigStr value = { CFG_TYPE_STRING, str.c_str() };
+	return reinterpret_cast<ConfigStrPtr>(copyData(reinterpret_cast<ConfigValuePtr>(&value)));
+}
+
 // Functions for DCLog
 void PluginApiImpl::log(const char* msg) {
 	LogManager::getInstance()->message(msg);
@@ -504,12 +512,12 @@ size_t PluginApiImpl::fromBase32(uint8_t* dst, const char* src, size_t n) {
 }
 
 // Functions for DCTagger
-void PluginApiImpl::addTag(TagDataPtr hTags, size_t start, size_t end, const char* id, const char* attributes) {
-	reinterpret_cast<Tagger*>(hTags->object)->addTag(start, end, id, attributes);
-}
-
 const char* PluginApiImpl::getText(TagDataPtr hTags) {
 	return reinterpret_cast<Tagger*>(hTags->object)->getText().c_str();
+}
+
+void PluginApiImpl::addTag(TagDataPtr hTags, size_t start, size_t end, const char* id, const char* attributes) {
+	reinterpret_cast<Tagger*>(hTags->object)->addTag(start, end, id, attributes);
 }
 
 void PluginApiImpl::replaceText(TagDataPtr hTags, size_t start, size_t end, const char* replacement) {

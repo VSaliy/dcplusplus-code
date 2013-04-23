@@ -45,6 +45,7 @@
 #include <dcpp/WindowInfo.h>
 
 #include <dwt/Application.h>
+#include <dwt/DWTException.h>
 #include <dwt/widgets/Grid.h>
 #include <dwt/widgets/MessageBox.h>
 #include <dwt/widgets/Notification.h>
@@ -89,7 +90,7 @@ using dwt::SplitterContainer;
 using dwt::Spinner;
 using dwt::ToolBar;
 
-map<tstring, function<void ()>, noCaseStringLess> MainWindow::pluginCommands;
+decltype(MainWindow::pluginCommands) MainWindow::pluginCommands;
 
 static dwt::IconPtr mainIcon(WinUtil::createIcon(IDI_DCPP, 32));
 static dwt::IconPtr mainSmallIcon(WinUtil::createIcon(IDI_DCPP, 16));
@@ -655,8 +656,8 @@ bool MainWindow::filter(MSG& msg) {
 	return false;
 }
 
-void MainWindow::addPluginCommand(const tstring& text, function<void ()> command) {
-	pluginCommands[text] = command;
+void MainWindow::addPluginCommand(const tstring& text, function<void ()> command, const tstring& icon) {
+	pluginCommands[text] = make_pair(command, icon);
 
 	if(WinUtil::mainWindow && !WinUtil::mainWindow->closing()) {
 		WinUtil::mainWindow->pluginMenu->clear();
@@ -683,7 +684,12 @@ void MainWindow::refreshPluginMenu() {
 		pluginMenu->appendItem(T_("(No plugin command found)"), nullptr, nullptr, false);
 	} else {
 		for(auto& i: pluginCommands) {
-			pluginMenu->appendItem(i.first, i.second);
+			dwt::IconPtr icon;
+			if(!i.second.second.empty()) {
+				try { icon = new dwt::Icon(i.second.second, dwt::Point(16, 16)); }
+				catch(const dwt::DWTException&) { }
+			}
+			pluginMenu->appendItem(i.first, i.second.first, icon);
 		}
 	}
 }

@@ -21,6 +21,7 @@
 
 #include <dcpp/PluginManager.h>
 #include <dcpp/Text.h>
+#include <dcpp/Util.h>
 
 #include "MainWindow.h"
 #include "WinUtil.h"
@@ -39,8 +40,8 @@ void PluginApiWin::init() {
 }
 
 // Functions for DCUI
-void PluginApiWin::addCommand(const char* name, DCCommandFunc command) {
-	MainWindow::addPluginCommand(Text::toT(name), [=] { command(name); });
+void PluginApiWin::addCommand(const char* name, DCCommandFunc command, const char* icon) {
+	MainWindow::addPluginCommand(Text::toT(name), [=] { command(name); }, icon ? Text::toT(icon) : Util::emptyStringT);
 }
 
 void PluginApiWin::removeCommand(const char* name) {

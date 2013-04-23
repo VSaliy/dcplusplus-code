@@ -71,6 +71,8 @@ private:
 	static void DCAPI setConfig(const char* guid, const char* setting, ConfigValuePtr val);
 	static ConfigValuePtr DCAPI getConfig(const char* guid, const char* setting, ConfigType type);
 
+	static ConfigStrPtr DCAPI getInstallPath(const char* guid);
+
 	// Functions for DCLog
 	static void DCAPI log(const char* msg);
 
@@ -92,9 +94,9 @@ private:
 	static size_t DCAPI fromBase32(uint8_t* dst, const char* src, size_t n);
 
 	// Functions for DCTagger
-	static void DCAPI addTag(TagDataPtr hTags, size_t start, size_t end, const char* id, const char* attributes);
-
 	static const char* DCAPI getText(TagDataPtr hTags);
+
+	static void DCAPI addTag(TagDataPtr hTags, size_t start, size_t end, const char* id, const char* attributes);
 	static void DCAPI replaceText(TagDataPtr hTags, size_t start, size_t end, const char* replacement);
 
 	// Functions for DCQueue
