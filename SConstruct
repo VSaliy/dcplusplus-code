@@ -263,10 +263,11 @@ if conf.CheckCXXHeader(['windows.h', 'htmlhelp.h'], '<>'):
 # see whether we're compiling with MinGW or MinGW-w64 (2 different projects that can both build
 # a 32-bit program). the only differentiator is __MINGW64_VERSION_MAJOR.
 if conf.CheckDeclaration('__MINGW64_VERSION_MAJOR', '#include <windows.h>', 'C++'):
-	conf.env.Append(CPPDEFINES='HAVE_MINGW64')
 	if conf.env['pch']:
 		conf.env['pch'] = 0 # precompiled headers crash mingw64's gcc...
 		conf.env['CPPDEFINES'].remove('HAS_PCH')
+else:
+	conf.env.Append(CPPDEFINES='HAVE_OLD_MINGW')
 env = conf.Finish()
 
 dev.archive = dev.build('archive/')
