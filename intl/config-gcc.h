@@ -271,7 +271,7 @@
 
 /* Define to 1 if you have the `mempcpy' function. */
 /* #undef HAVE_MEMPCPY */
-#ifdef HAVE_MINGW64
+#ifndef HAVE_OLD_MINGW
 #define HAVE_MEMPCPY 1
 #endif
 
