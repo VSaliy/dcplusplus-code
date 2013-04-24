@@ -24,7 +24,7 @@
 #error GCC 4.8 is required
 #endif
 
-#ifndef HAVE_MINGW64
+#ifdef HAVE_OLD_MINGW
 #error Regular MinGW has stability problems; use a MinGW package from mingw-w64
 // see <https://bugs.launchpad.net/dcplusplus/+bug/1029629> for details
 #endif
