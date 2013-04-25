@@ -17,7 +17,7 @@ if 'HAVE_HTMLHELP_H' in env['CPPDEFINES']:
 
 env.Append(LIBS = ['comctl32', 'ws2_32', 'ole32', 'gdi32', 'comdlg32', 'iphlpapi', 'winmm', 'shlwapi', 'oleaut32', 'uuid'])
 
-env.Append(CPPPATH = ['#/openssl/include', '#/miniupnpc', '#/dwt/include', '#/', '#/bzip2'])
+env.Append(CPPPATH = ['#/openssl/include', '#/bzip2', '#/dwt/include'])
 
 if '-mwindows' in env['CCFLAGS']:
 	env['CCFLAGS'].remove('-mwindows')
@@ -44,7 +44,7 @@ else:
 	ret = []
 	for f in Glob('*.cpp'):
 		sources = dev.get_sources(source_path, str(f))
-		ret.append(env.Program(dev.get_target(source_path, os.path.basename(str(f)).replace('.cpp', ''), in_bin = False), [sources, dev.client, dev.dwarf, dev.zlib, dev.boost, dev.bzip2, dev.geoip, dev.miniupnpc, dev.natpmp, dev.intl]))
+		ret.append(env.Program(dev.get_target(source_path, os.path.basename(str(f)).replace('.cpp', ''), in_bin = False), [sources, dev.client, dev.archive, dev.dwarf, dev.zlib, dev.boost, dev.bzip2, dev.geoip, dev.miniupnpc, dev.natpmp, dev.intl]))
 
 env.Help("\nYou can build additional utilities by running 'scons utils'\n")
 
