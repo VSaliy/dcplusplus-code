@@ -4,14 +4,14 @@
 	<BACKUP_QUESTION>A previous installation of DC++ has been found; backup settings and queue to '$R0'?</BACKUP_QUESTION>
 	<SECTION_START_MENU>Start menu shortcuts</SECTION_START_MENU>
 	<SECTION_LOCAL>Store settings in the user profile directory</SECTION_LOCAL>
-	<SECTION_ARCH>"Install the 32-bit version"</SECTION_ARCH>
+	<SECTION_ARCH>Install the 32-bit version</SECTION_ARCH>
 	<LOCAL_WARNING>Unchecking this box will make DC++ store its settings in the program directory. This is strongly discouraged on Windows Vista and later; settings or downloads might get lost.</LOCAL_WARNING>
 	<WARNING_LOCALE_ERASED>Warning: the 'locale' directory ($INSTDIR\locale) will be completely erased!</WARNING_LOCALE_ERASED>
 	<SM_DCPP_DESCR>DC++ (file sharing application)</SM_DCPP_DESCR>
 	<SM_LICENSE>License</SM_LICENSE>
 	<SM_HELP>Help</SM_HELP>
 	<SM_CHANGELOG>Change Log</SM_CHANGELOG>
-	<EXECUTE_QUERY>Installation completed. Do you want to run DC++?</EXECUTE_QUERY>
+	<EXECUTE_QUERY>Installation complete. Do you want to run DC++?</EXECUTE_QUERY>
 	<SM_UNINSTALL>Uninstall</SM_UNINSTALL>
 	<UN_REMOVE_QUESTION>Also remove queue, settings and the whole DC++ program directory ($INSTDIR) with all of its sub-directories?</UN_REMOVE_QUESTION>
 </Strings>
