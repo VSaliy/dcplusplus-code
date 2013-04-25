@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-03-04 13:16+0100\n"
+"POT-Creation-Date: 2013-04-25 20:19+0300\n"
 "PO-Revision-Date: 2012-04-30 15:51+0000\n"
 "Last-Translator: poy <Unknown>\n"
 "Language-Team: Finnish <fi@li.org>\n"
@@ -42,50 +42,62 @@ msgstr "Käynnistä-valikon pikakuvakkeet"
 msgid "Store settings in the user profile directory"
 msgstr "Tallenna asetukset käyttäjäprofiilin kansioon"
 
-#. type: Content of: <Strings><LOCAL_WARNING>
+#. type: Content of: <Strings><SECTION_ARCH>
 #: installer/Strings.xml:7
+#, no-wrap
+msgid "Install the 32-bit version"
+msgstr ""
+
+#. type: Content of: <Strings><LOCAL_WARNING>
+#: installer/Strings.xml:8
 #, no-wrap
 msgid "Unchecking this box will make DC++ store its settings in the program directory. This is strongly discouraged on Windows Vista and later; settings or downloads might get lost."
 msgstr ""
 
 #. type: Content of: <Strings><WARNING_LOCALE_ERASED>
-#: installer/Strings.xml:8
+#: installer/Strings.xml:9
 #, no-wrap
 msgid "Warning: the 'locale' directory ($INSTDIR\\locale) will be completely erased!"
 msgstr ""
 
 #. type: Content of: <Strings><SM_DCPP_DESCR>
-#: installer/Strings.xml:9
+#: installer/Strings.xml:10
 #, no-wrap
 msgid "DC++ (file sharing application)"
 msgstr "DC++ (tiedostonjako ohjelma)"
 
 #. type: Content of: <Strings><SM_LICENSE>
-#: installer/Strings.xml:10
+#: installer/Strings.xml:11
 #, no-wrap
 msgid "License"
 msgstr "Lisenssi"
 
 #. type: Content of: <Strings><SM_HELP>
-#: installer/Strings.xml:11
+#: installer/Strings.xml:12
 #, no-wrap
 msgid "Help"
 msgstr "Ohje"
 
 #. type: Content of: <Strings><SM_CHANGELOG>
-#: installer/Strings.xml:12
+#: installer/Strings.xml:13
 #, no-wrap
 msgid "Change Log"
 msgstr "Muutosloki"
 
+#. type: Content of: <Strings><EXECUTE_QUERY>
+#: installer/Strings.xml:14
+#, no-wrap
+msgid "Installation complete. Do you want to run DC++?"
+msgstr ""
+
 #. type: Content of: <Strings><SM_UNINSTALL>
-#: installer/Strings.xml:13
+#: installer/Strings.xml:15
 #, no-wrap
 msgid "Uninstall"
 msgstr "Poista asennus"
 
 #. type: Content of: <Strings><UN_REMOVE_QUESTION>
-#: installer/Strings.xml:14
+#: installer/Strings.xml:16
 #, no-wrap
 msgid "Also remove queue, settings and the whole DC++ program directory ($INSTDIR) with all of its sub-directories?"
 msgstr ""

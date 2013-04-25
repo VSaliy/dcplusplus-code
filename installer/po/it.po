@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-03-04 13:16+0100\n"
+"POT-Creation-Date: 2013-04-25 20:19+0300\n"
 "PO-Revision-Date: 2012-12-20 19:49+0000\n"
 "Last-Translator: Guybrush88 <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
@@ -42,50 +42,62 @@ msgstr "Collegamenti del menu Start"
 msgid "Store settings in the user profile directory"
 msgstr "Salva le impostazioni nella cartella home dell'utente"
 
-#. type: Content of: <Strings><LOCAL_WARNING>
+#. type: Content of: <Strings><SECTION_ARCH>
 #: installer/Strings.xml:7
+#, no-wrap
+msgid "Install the 32-bit version"
+msgstr ""
+
+#. type: Content of: <Strings><LOCAL_WARNING>
+#: installer/Strings.xml:8
 #, no-wrap
 msgid "Unchecking this box will make DC++ store its settings in the program directory. This is strongly discouraged on Windows Vista and later; settings or downloads might get lost."
 msgstr "Deseleziona questa casella per salvare le configurazioni nella cartella del programma. È sconsigliato per sistemi operativi come Windows Vista o successivi; le configurazioni e i download potrebbero andare persi."
 
 #. type: Content of: <Strings><WARNING_LOCALE_ERASED>
-#: installer/Strings.xml:8
+#: installer/Strings.xml:9
 #, no-wrap
 msgid "Warning: the 'locale' directory ($INSTDIR\\locale) will be completely erased!"
 msgstr "Attenzione: la cartella locale ($INSTDIR\\locale) è stata cancellata completamente!"
 
 #. type: Content of: <Strings><SM_DCPP_DESCR>
-#: installer/Strings.xml:9
+#: installer/Strings.xml:10
 #, no-wrap
 msgid "DC++ (file sharing application)"
 msgstr "DC++ (applicazione di condivisione file)"
 
 #. type: Content of: <Strings><SM_LICENSE>
-#: installer/Strings.xml:10
+#: installer/Strings.xml:11
 #, no-wrap
 msgid "License"
 msgstr "Licenza"
 
 #. type: Content of: <Strings><SM_HELP>
-#: installer/Strings.xml:11
+#: installer/Strings.xml:12
 #, no-wrap
 msgid "Help"
 msgstr "Aiuto"
 
 #. type: Content of: <Strings><SM_CHANGELOG>
-#: installer/Strings.xml:12
+#: installer/Strings.xml:13
 #, no-wrap
 msgid "Change Log"
 msgstr "Registro dei cambiamenti"
 
+#. type: Content of: <Strings><EXECUTE_QUERY>
+#: installer/Strings.xml:14
+#, no-wrap
+msgid "Installation complete. Do you want to run DC++?"
+msgstr ""
+
 #. type: Content of: <Strings><SM_UNINSTALL>
-#: installer/Strings.xml:13
+#: installer/Strings.xml:15
 #, no-wrap
 msgid "Uninstall"
 msgstr "Disinstalla"
 
 #. type: Content of: <Strings><UN_REMOVE_QUESTION>
-#: installer/Strings.xml:14
+#: installer/Strings.xml:16
 #, no-wrap
 msgid "Also remove queue, settings and the whole DC++ program directory ($INSTDIR) with all of its sub-directories?"
 msgstr "Rimuovere anche la coda, le configurazioni e tutta la cartella DC++ ($INSTDIR) incluse le sottocartelle?"
