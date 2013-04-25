@@ -132,9 +132,7 @@ pluginInfo(0)
 
 	WinUtil::makeColumns(plugins, columns, 1);
 
-	for(auto& plugin: PluginManager::getInstance()->getPluginList()) {
-		addEntry(plugins->size(), plugin->getInfo());
-	}
+	refreshList();
 
 	handleSelectionChanged();
 
@@ -255,27 +253,25 @@ void PluginPage::handleAddPlugin() {
 		.open(path_t))
 	{
 		auto path = Text::fromT(path_t);
-		auto added = false;
 		if(Util::getFileExt(path) == ".dcext") {
-			added = PluginInfoDlg(this, path).run() == IDOK;
+			PluginInfoDlg(this, path).run();
 		} else {
 			try {
 				PluginManager::getInstance()->loadPlugin(path, true);
-				added = true;
 			} catch(const Exception& e) {
 				dwt::MessageBox(this).show(tstring(T_("Cannot install the plugin:")) + _T("\r\n\r\n") + Text::toT(e.getError()),
 					Text::toT(Util::getFileName(path)), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONSTOP);
 			}
 		}
 
-		if(added) {
-			auto pos = plugins->size();
-			addEntry(pos, PluginManager::getInstance()->getPlugin(pos)->getInfo());
-		}
+		refreshList();
 	}
 }
 
 void PluginPage::handleConfigurePlugin() {
+	if(plugins->countSelected() != 1)
+		return;
+
 	auto sel = plugins->getSelected();
 	const PluginInfo *p = PluginManager::getInstance()->getPlugin(sel);
 	if(!p->dcMain(ON_CONFIGURE, PluginManager::getInstance()->getCore(), this->handle())) {
@@ -324,6 +320,13 @@ void PluginPage::handleRemovePlugin() {
 	auto sel = plugins->getSelected();
 	PluginManager::getInstance()->unloadPlugin(sel);
 	plugins->erase(sel);
+}
+
+void PluginPage::refreshList() {
+	plugins->clear();
+	for(auto& plugin: PluginManager::getInstance()->getPluginList()) {
+		addEntry(plugins->size(), plugin->getInfo());
+	}
 }
 
 void PluginPage::addEntry(size_t idx, const MetaData& info) {

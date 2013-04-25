@@ -100,11 +100,12 @@ bool PluginInfoDlg::handleInitDialog(const string& path) {
 		cur->column(0).align = GridInfo::BOTTOM_RIGHT;
 		cur->setSpacing(grid->getSpacing());
 		WinUtil::addDlgButtons(cur,
-			[this, info] { handleOK(info.name, info.uuid, info.plugin, info.files); },
-			[this] { endDialog(IDCANCEL); }).first->setText(T_("Install the plugin"));
+			[this, info] { handleOK(info); },
+			[this] { endDialog(IDCANCEL); })
+			.first->setText(info.updating ? T_("Update the plugin") : T_("Install the plugin"));
 	}
 
-	setText(T_("Adding a plugin"));
+	setText(info.updating ? T_("Updating a plugin") : T_("Adding a plugin"));
 
 	layout();
 	centerWindow();
@@ -112,13 +113,13 @@ bool PluginInfoDlg::handleInitDialog(const string& path) {
 	return false;
 }
 
-void PluginInfoDlg::handleOK(const string& name, const string& uuid, const string& plugin, const StringList& files) {
+void PluginInfoDlg::handleOK(const DcextInfo& info) {
 	try {
-		PluginManager::getInstance()->install(uuid, plugin, files);
+		PluginManager::getInstance()->install(info);
 		endDialog(IDOK);
 
 	} catch(const Exception& e) {
-		error(Text::toT(e.getError()), Text::toT(name));
+		error(Text::toT(e.getError()), Text::toT(info.name));
 		endDialog(IDCANCEL);
 	}
 }

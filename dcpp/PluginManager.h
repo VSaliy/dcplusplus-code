@@ -89,6 +89,7 @@ private:
 
 /** Information about a dcext-packaged plugin that has just been extracted. */
 struct DcextInfo {
+	DcextInfo() : version(0), updating(false) { }
 	string uuid;
 	string name;
 	double version;
@@ -97,6 +98,7 @@ struct DcextInfo {
 	string website;
 	string plugin;
 	StringList files;
+	bool updating;
 };
 
 class PluginManager : public Singleton<PluginManager>, private TimerManagerListener,
@@ -108,7 +110,7 @@ public:
 
 	/** Extract a dcext-packaged plugin. Throws on errors. */
 	DcextInfo extract(const string& path);
-	void install(const string& uuid, const string& plugin, const StringList& files);
+	void install(const DcextInfo& info);
 
 	void loadPlugins(function<void (const string&)> f);
 	void loadPlugin(const string& fileName, bool install = false);
@@ -181,8 +183,10 @@ private:
 	void loadSettings() noexcept;
 	void saveSettings() noexcept;
 
-	// Check if the plugin can be loaded; throws if it can't.
-	void checkPlugin(const MetaData& info);
+	/** Check if the plugin can be loaded; throws if it can't.
+	@return Whether the plugin is being updated. */
+	bool checkPlugin(const MetaData& info);
+	vector<unique_ptr<PluginInfo>>::iterator findPlugin(const string& guid);
 
 	// Listeners
 	void on(TimerManagerListener::Second, uint64_t ticks) noexcept { runHook(HOOK_TIMER_SECOND, NULL, &ticks); }

@@ -48,6 +48,8 @@ class ConnectionQueueItem;
 
 class CRC32Filter;
 
+struct DcextInfo;
+
 class Download;
 typedef Download* DownloadPtr;
 
