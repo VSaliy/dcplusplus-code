@@ -49,6 +49,7 @@ private:
 	void handleMovePluginDown();	
 	void handleRemovePlugin();
 
+	void refreshList();
 	void addEntry(size_t idx, const MetaData& info);
 };
 

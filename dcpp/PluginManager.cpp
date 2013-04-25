@@ -81,7 +81,7 @@ DcextInfo PluginManager::extract(const string& path) {
 	SimpleXML xml;
 	xml.fromXML(File(info_path, File::READ, File::OPEN).read());
 
-	DcextInfo info;
+	DcextInfo info { };
 
 	if(xml.findChild("dcext")) {
 		xml.stepIn();
@@ -114,7 +114,7 @@ DcextInfo PluginManager::extract(const string& path) {
 		string version;
 		parse("ApiVersion", version);
 		if(Util::toInt(version) < DCAPI_CORE_VER) {
-			throw str(F_("%1% is too old, contact the plugin author for an update") % Util::getFileName(path));
+			throw Exception(str(F_("%1% is too old, contact the plugin author for an update") % Util::getFileName(path)));
 		}
 
 		parse("UUID", info.uuid);
@@ -154,26 +154,32 @@ DcextInfo PluginManager::extract(const string& path) {
 		throw Exception(str(F_("%1% is not compatible with %2%") % Util::getFileName(path) % APPNAME));
 	}
 
-	if(isLoaded(info.uuid)) {
-		throw Exception(str(F_("%1% is already installed") % Util::getFileName(path)));
+	{
+		Lock l(cs);
+
+		auto it = findPlugin(info.uuid);
+		if(it != plugins.end()) {
+			auto& plugin = *it;
+			if(plugin->getInfo().version < info.version) {
+				info.updating = true;
+			} else {
+				throw Exception(str(F_("%1% is already installed") % plugin->getInfo().name));
+			}
+		}
 	}
 
 	return info;
 }
 
-void PluginManager::install(const string& uuid, const string& plugin, const StringList& files) {
-	if(uuid.empty() || plugin.empty()) {
-		throw Exception();
-	}
-
+void PluginManager::install(const DcextInfo& info) {
 	const auto source = Util::getTempPath() + "dcext" PATH_SEPARATOR_STR;
-	const auto target = getInstallPath(uuid);
-	const auto lib = target + Util::getFileName(plugin);
+	const auto target = getInstallPath(info.uuid);
+	const auto lib = target + Util::getFileName(info.plugin);
 
 	File::ensureDirectory(lib);
-	File::renameFile(source + plugin, lib);
+	File::renameFile(source + info.plugin, lib);
 
-	for(auto& file: files) {
+	for(auto& file: info.files) {
 		File::ensureDirectory(target + file);
 		File::renameFile(source + file, target + file);
 	}
@@ -215,7 +221,9 @@ void PluginManager::loadPlugin(const string& fileName, bool install) {
 		throw Exception(str(F_("%1% is not a valid plugin") % Util::getFileName(fileName)));
 	}
 
-	checkPlugin(info);
+	if(checkPlugin(info)) {
+		install = true;
+	}
 
 	if(dcMain((install ? ON_INSTALL : ON_LOAD), &dcCore, nullptr) == False) {
 		throw Exception(str(F_("Error loading %1%") % Util::getFileName(fileName)));
@@ -227,15 +235,24 @@ void PluginManager::loadPlugin(const string& fileName, bool install) {
 
 bool PluginManager::isLoaded(const string& guid) {
 	Lock l(cs);
-	auto pluginComp = [&guid](const unique_ptr<PluginInfo>& p) -> bool { return strcmp(p->getInfo().guid, guid.c_str()) == 0; };
-	auto i = std::find_if(plugins.begin(), plugins.end(), pluginComp);
-	return (i != plugins.end());
+	return findPlugin(guid) != plugins.end();
 }
 
-void PluginManager::checkPlugin(const MetaData& info) {
+bool PluginManager::checkPlugin(const MetaData& info) {
+	auto updating = false;
+
 	// Check if user is trying to load a duplicate
-	if(isLoaded(info.guid)) {
-		throw Exception(str(F_("%1% is already installed") % info.name));
+	auto it = findPlugin(info.guid);
+	if(it != plugins.end()) {
+		auto& plugin = *it;
+		if(plugin->getInfo().version < info.version) {
+			LogManager::getInstance()->message(str(F_("Updating the %1% plugin from version %2% to version %3%") %
+				string(plugin->getInfo().name) % plugin->getInfo().version % info.version));
+			plugins.erase(it);
+			updating = true;
+		} else {
+			throw Exception(str(F_("%1% is already installed") % info.name));
+		}
 	}
 
 	// Check API compatibility (this should only block on absolutely wrecking api changes, which generally should not happen)
@@ -251,6 +268,13 @@ void PluginManager::checkPlugin(const MetaData& info) {
 			}
 		}
 	}
+
+	return updating;
+}
+
+vector<unique_ptr<PluginInfo>>::iterator PluginManager::findPlugin(const string& guid) {
+	return std::find_if(plugins.begin(), plugins.end(), [&guid](const unique_ptr<PluginInfo>& p) {
+		return strcmp(p->getInfo().guid, guid.c_str()) == 0; });
 }
 
 void PluginManager::unloadPlugins() {
