@@ -449,6 +449,7 @@ typedef struct DCUI {
 	void		(DCAPI *remove_command)				(const char* name);
 
 	void		(DCAPI *play_sound)					(const char* path);
+	void		(DCAPI *notify)						(const char* title, const char* message);
 } DCUI, *DCUIPtr;
 
 #ifdef __cplusplus
