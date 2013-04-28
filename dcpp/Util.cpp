@@ -814,10 +814,15 @@ string Util::cssFont(const string& font) {
 	StringTokenizer<string> st(font, ',');
 	auto& l = st.getTokens();
 	if(l.size() >= 4) {
-		std::stringstream stream;
-		stream << (Util::toInt(l[3]) ? "italic" : "normal") << " " << l[2] << " " <<
-			abs(Util::toFloat(l[1])) << "px '" << l[0] << "'";
-		return stream.str();
+		string ret = Util::toInt(l[3]) ? "italic" : "normal";
+		ret += ' ';
+		ret += l[2];
+		ret += ' ';
+		ret += Util::toString(abs(Util::toFloat(l[1])));
+		ret += "px '";
+		ret += l[0];
+		ret += "'";
+		return ret;
 	}
 	return string();
 #else
