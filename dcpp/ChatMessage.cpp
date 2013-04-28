@@ -47,12 +47,11 @@ messageTimestamp(messageTimestamp)
 	string tmp;
 	string xmlTmp;
 
-	auto addSpan = [&xmlTmp](char* id, const string& content, const string& style) -> string {
-		std::stringstream stream;
-		stream << "<span id=\"" << id << "\"";
-		if(!style.empty()) { stream << " style=\"" << SimpleXML::escape(style, xmlTmp, true) << "\""; }
-		stream << ">" << SimpleXML::escape(content, xmlTmp, false) << "</span>";
-		return stream.str();
+	auto addSpan = [&xmlTmp](string id, const string& content, const string& style) -> string {
+		string ret = "<span id=\"" + move(id) + "\"";
+		if(!style.empty()) { ret += " style=\"" + SimpleXML::escape(style, xmlTmp, true) + "\""; }
+		ret += ">" + SimpleXML::escape(content, xmlTmp, false) + "</span>";
+		return ret;
 	};
 
 	htmlMessage += "<span id=\"message\" style=\"white-space: pre-wrap;\">";
