@@ -33,6 +33,7 @@ private:
 	static void DCAPI removeCommand(const char* name);
 
 	static void DCAPI playSound(const char* path);
+	static void DCAPI notify(const char* title, const char* message);
 
 	static DCUI dcUI;
 };

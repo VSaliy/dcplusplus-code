@@ -32,7 +32,8 @@ DCUI PluginApiWin::dcUI = {
 	&PluginApiWin::addCommand,
 	&PluginApiWin::removeCommand,
 
-	&PluginApiWin::playSound
+	&PluginApiWin::playSound,
+	&PluginApiWin::notify
 };
 
 void PluginApiWin::init() {
@@ -50,4 +51,10 @@ void PluginApiWin::removeCommand(const char* name) {
 
 void PluginApiWin::playSound(const char* path) {
 	WinUtil::playSound(Text::toT(path));
+}
+
+void PluginApiWin::notify(const char* title, const char* message) {
+	if(WinUtil::mainWindow) {
+		WinUtil::mainWindow->notify(Text::toT(title), Text::toT(message));
+	}
 }
