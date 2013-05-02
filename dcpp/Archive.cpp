@@ -23,39 +23,20 @@
 #include "File.h"
 #include "Util.h"
 
-#ifndef LIBARCHIVE_STATIC
-#define LIBARCHIVE_STATIC
-#endif
-#include <archive.h>
-#include <archive_entry.h>
+#include <unzip.h>
 
 namespace dcpp {
 
-Archive::Archive(const string& path) : a(nullptr), f(nullptr) {
-	a = archive_read_new();
-	if(!a) {
-		throw Exception(Util::translateError(ERROR_OUTOFMEMORY));
+Archive::Archive(const string& path) {
+	file = unzOpen64(Text::toT(path).c_str());
+	if(!file) {
+		throw Exception(_("Invalid archive"));
 	}
-
-	f = dcpp_fopen(path.c_str(), "rb");
-	if(!f) {
-		throw FileException(Util::translateError(ERROR_FILE_NOT_FOUND));
-	}
-
-	check(archive_read_support_format_tar(a));
-	check(archive_read_support_filter_bzip2(a));
-	check(archive_read_support_filter_gzip(a));
-
-	check(archive_read_open_FILE(a, f));
 }
 
 Archive::~Archive() {
-	if(a) {
-		archive_read_free(a);
-	}
-
-	if(f) {
-		fclose(f);
+	if(file) {
+		unzClose(file);
 	}
 }
 
@@ -64,10 +45,14 @@ void Archive::extract(const string& path) {
 
 	dcassert(!path.empty() && isDir(path));
 
-	::archive_entry* entry;
-	while(check(archive_read_next_header(a, &entry)) != ARCHIVE_EOF) {
+	if(check(unzGoToFirstFile(file)) != UNZ_OK) { return; }
 
-		string path_out(archive_entry_pathname(entry));
+	do {
+		char pathBuf[MAX_PATH];
+		if(check(unzGetCurrentFileInfo(file, nullptr, pathBuf, MAX_PATH, nullptr, 0, nullptr, 0)) != UNZ_OK) { continue; }
+		if(check(unzOpenCurrentFile(file)) != UNZ_OK) { continue; }
+
+		string path_out(pathBuf);
 		if(path_out.empty() || isDir(path_out)) {
 			continue;
 		}
@@ -76,18 +61,28 @@ void Archive::extract(const string& path) {
 		File::ensureDirectory(path_out);
 		File f_out(path_out, File::WRITE, File::CREATE | File::TRUNCATE);
 
-		const void* buf;
-		size_t size;
-		__LA_INT64_T offset;
-		while(check(archive_read_data_block(a, &buf, &size, &offset)) != ARCHIVE_EOF) {
-			f_out.write(buf, size);
+		const size_t BUF_SIZE = 64 * 1024;
+		ByteVector buf(BUF_SIZE);
+		while(true) {
+			auto read = unzReadCurrentFile(file, &buf[0], BUF_SIZE);
+			if(read > 0) {
+				f_out.write(&buf[0], read);
+			} else if(read == UNZ_EOF) {
+				break;
+			} else {
+				check(read);
+			}
 		}
-	}
+
+		// this does the CRC check.
+		check(unzCloseCurrentFile(file));
+
+	} while(check(unzGoToNextFile(file)) == UNZ_OK);
 }
 
 int Archive::check(int ret) {
-	if(ret != ARCHIVE_OK && ret != ARCHIVE_EOF) {
-		throw Exception(archive_error_string(a));
+	if(ret != UNZ_OK && ret != UNZ_END_OF_LIST_OF_FILE && ret != UNZ_EOF) {
+		throw Exception(_("Invalid archive"));
 	}
 	return ret;
 }

@@ -8,17 +8,20 @@ using namespace dcpp;
 
 TEST(testarchive, test_archive)
 {
+	File::deleteFile("test/data/out/gtest.h");
+
 	try {
-		Archive("test/data/gtest_h.tar.gz").extract("test/data/out/");
-	}
-	catch(const Exception& e) {
+		Archive("test/data/gtest_h.zip").extract("test/data/out/");
+
+	} catch(const Exception& e) {
 		FAIL() << e.getError();
 	}
 
 	auto md5 = [](string path) {
 		File f(path, File::READ, File::OPEN);
 		MD5Hash h;
-		h.update(f.read().c_str(), f.getSize());
+		auto buf = f.read();
+		h.update(buf.c_str(), buf.size());
 		return MD5Value(h.finalize());
 	};
 
