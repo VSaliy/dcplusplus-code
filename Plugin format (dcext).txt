@@ -15,13 +15,13 @@ etc). It can then subscribe to interfaces such as DCHooks to catch more events.
 Shared extensions are fine for testing but impractical to distribute and to have users install.
 Therefore, a DC plugin is preferably packaged as a .dcext file.
 
-A .dcext file is a ZIP archive, as defined by PKWARE's APPNOTE, either uncompressed or compressed
-with DEFLATE, with the following restrictions:
+A .dcext file is a ZIP archive, as defined by PKWARE's APPNOTE, either uncompressed (method 0) or
+compressed with DEFLATE (method 8), with the following restrictions:
 - No encryption.
 - No streaming / splitting / spanning.
-- No extension / extra fields.
 - No manifest file.
 - No character outside of the ASCII range in file names.
+- Extensions / extra fields and comments are allowed but shall be ignored.
 
 That archive must contain an XML file named "info.xml" at its root, whose contents shall validate
 against the schemas/dcext.xsd schema.
