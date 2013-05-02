@@ -270,7 +270,6 @@ else:
 	conf.env.Append(CPPDEFINES='HAVE_OLD_MINGW')
 env = conf.Finish()
 
-dev.archive = dev.build('archive/')
 dev.boost = dev.build('boost/')
 dev.dwarf = dev.build('dwarf/')
 dev.zlib = dev.build('zlib/')

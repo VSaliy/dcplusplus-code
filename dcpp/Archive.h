@@ -21,13 +21,13 @@
 
 #include <string>
 
-struct archive;
+typedef void* unzFile;
 
 namespace dcpp {
 
 using std::string;
 
-/** Wrappers around libarchive. */
+/** Extract a ZIP archive. */
 class Archive {
 public:
 	Archive(const string& path);
@@ -39,8 +39,7 @@ public:
 private:
 	inline int check(int ret);
 
-	::archive* a;
-	::FILE* f;
+	::unzFile file;
 };
 
 } // namespace dcpp

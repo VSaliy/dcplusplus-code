@@ -44,7 +44,7 @@ else:
 	ret = []
 	for f in Glob('*.cpp'):
 		sources = dev.get_sources(source_path, str(f))
-		ret.append(env.Program(dev.get_target(source_path, os.path.basename(str(f)).replace('.cpp', ''), in_bin = False), [sources, dev.client, dev.archive, dev.dwarf, dev.zlib, dev.boost, dev.bzip2, dev.geoip, dev.miniupnpc, dev.natpmp, dev.intl]))
+		ret.append(env.Program(dev.get_target(source_path, os.path.basename(str(f)).replace('.cpp', ''), in_bin = False), [sources, dev.client, dev.dwarf, dev.zlib, dev.boost, dev.bzip2, dev.geoip, dev.miniupnpc, dev.natpmp, dev.intl]))
 
 env.Help("\nYou can build additional utilities by running 'scons utils'\n")
 
