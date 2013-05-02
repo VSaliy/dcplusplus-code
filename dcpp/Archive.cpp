@@ -48,8 +48,14 @@ void Archive::extract(const string& path) {
 	if(check(unzGoToFirstFile(file)) != UNZ_OK) { return; }
 
 	do {
+		unz_file_info info;
 		char pathBuf[MAX_PATH];
-		if(check(unzGetCurrentFileInfo(file, nullptr, pathBuf, MAX_PATH, nullptr, 0, nullptr, 0)) != UNZ_OK) { continue; }
+		if(check(unzGetCurrentFileInfo(file, &info, pathBuf, MAX_PATH, nullptr, 0, nullptr, 0)) != UNZ_OK) { continue; }
+
+		if(info.compression_method != 0 /* uncompressed */ && info.compression_method != 8 /* DEFLATE */) {
+			throw Exception(_("Invalid archive"));
+		}
+
 		if(check(unzOpenCurrentFile(file)) != UNZ_OK) { continue; }
 
 		string path_out(pathBuf);
