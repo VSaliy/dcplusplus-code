@@ -169,6 +169,7 @@ private:
 	void handleFavHubsDropDown(const dwt::ScreenCoordinate& pt);
 	void handleRecent(const dwt::ScreenCoordinate& pt);
 	void handleConfigureRecent(const string& id, const tstring& title);
+	void handlePlugins(const dwt::ScreenCoordinate& pt);
 	void handleLimiterMenu(bool upload);
 	void handleQuickConnect();
 	void handleConnectFavHubGroup();
@@ -211,7 +212,7 @@ private:
 	void layout();
 	void updateStatus();
 	void updateAwayStatus();
-	void refreshPluginMenu();
+	void addPluginCommands(Menu* menu);
 	void showPortsError(const string& port);
 	void setSaveTimer();
 	void saveSettings();
