@@ -37,6 +37,12 @@
 #include <algorithm>
 #include <sstream>
 
+#ifdef DWT_SHARED
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/random_generator.hpp>
+#include <boost/uuid/uuid_io.hpp>
+#endif
+
 namespace dwt {
 
 LRESULT CALLBACK WindowProc::initProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
@@ -222,8 +228,12 @@ LPCTSTR Dispatcher::className(const std::string& name) {
 
 #ifdef DWT_SHARED
 	/* in a shared library, classes registered by the lib can't clash with those regged by the host
-	or by other dynamically loaded libs. append a (hopefully unique) string to that end... */
-	stream << &Application::instance();
+	or by other dynamically loaded libs. append a unique string to that end. */
+	static boost::uuids::uuid uuid;
+	if(uuid.is_nil()) {
+		uuid = boost::uuids::random_generator()();
+	}
+	stream << uuid;
 #endif
 
 	classNames.push_back(stream.str());
