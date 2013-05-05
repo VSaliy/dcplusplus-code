@@ -491,10 +491,6 @@ void SettingsManager::load(string const& aFileName)
 			// These were remade completely...
 			unset(USERSFRAME_ORDER);
 			unset(USERSFRAME_WIDTHS);
-
-			// the id has changed
-			if(isSet[TOOLBAR])
-				Util::replace("FavUsers", "Users", strSettings[TOOLBAR - STR_FIRST]);
 		}
 
 		if(v <= 0.791) {
@@ -504,17 +500,14 @@ void SettingsManager::load(string const& aFileName)
 			}
 		}
 
-		if(v <= 0.802) {
-			// added an "open own file list" button; let's see if we can squeeze it next to "open file list"...
-			if(isSet[TOOLBAR])
-				Util::replace("OpenFL", "OpenFL,OpenOwnFL", strSettings[TOOLBAR - STR_FIRST]);
-		}
-
-		if(v <= 0.811) {
+		if(v < 0.820) {
 			// reset search columns
 			unset(SEARCHFRAME_ORDER);
 			unset(SEARCHFRAME_WIDTHS);
 			unset(SEARCHFRAME_SORT);
+
+			// reset the toolbar (new buttons).
+			unset(TOOLBAR);
 		}
 
 		if(SETTING(SET_MINISLOT_SIZE) < 512)
