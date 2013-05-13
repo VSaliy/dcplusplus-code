@@ -58,6 +58,8 @@ public:
 		}
 	}
 
+	static const int pluginPagePos;
+
 private:
 	friend class PropPage;
 

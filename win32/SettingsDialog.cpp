@@ -68,6 +68,8 @@ using dwt::GridInfo;
 
 using dwt::ToolTip;
 
+const int SettingsDialog::pluginPagePos = 22; // remember to change when adding pages...
+
 SettingsDialog::SettingsDialog(dwt::Widget* parent) :
 dwt::ModalDialog(parent),
 currentPage(0),
@@ -192,6 +194,7 @@ bool SettingsDialog::initDialog() {
 		}
 
 		addPage(T_("Plugins"), new PluginPage(container), IDI_PLUGINS, TVI_ROOT);
+		// remember to change pluginPagePos accordingly...
 
 		Grid::Seed gs(1, 1);
 		gs.style |= WS_BORDER;

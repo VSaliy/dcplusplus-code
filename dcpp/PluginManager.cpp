@@ -28,11 +28,12 @@
 #include "QueueManager.h"
 #include "ScopedFunctor.h"
 #include "SimpleXML.h"
-#include "StringTokenizer.h"
 #include "UserConnection.h"
 #include "version.h"
 
 #include <utility>
+
+#include <boost/range/adaptor/reversed.hpp>
 
 #ifdef _WIN32
 # define PLUGIN_EXT "*.dll"
@@ -54,17 +55,6 @@
 namespace dcpp {
 
 using std::swap;
-
-PluginInfo::~PluginInfo() {
-	bool isSafe = true;
-	if(dcMain((PluginManager::getInstance()->getShutdown() ? ON_UNLOAD : ON_UNINSTALL), NULL, NULL) == False) {
-		// Plugin performs operation critical tasks (runtime unload not possible)
-		isSafe = !PluginManager::getInstance()->addInactivePlugin(handle);
-	} if(isSafe && handle != NULL) {
-		FREE_LIBRARY(handle);
-		handle = NULL;
-	}
-}
 
 PluginManager::PluginManager() : dcCore(), shutdown(false), secNum(Util::rand()) {
 }
@@ -157,13 +147,13 @@ DcextInfo PluginManager::extract(const string& path) {
 	{
 		Lock l(cs);
 
-		auto it = findPlugin(info.uuid);
+		auto it = findPluginIter(info.uuid);
 		if(it != plugins.end()) {
 			auto& plugin = *it;
-			if(plugin->getInfo().version < info.version) {
+			if(plugin.version < info.version) {
 				info.updating = true;
 			} else {
-				throw Exception(str(F_("%1% is already installed") % plugin->getInfo().name));
+				throw Exception(str(F_("%1% is already installed") % plugin.name));
 			}
 		}
 	}
@@ -184,7 +174,7 @@ void PluginManager::install(const DcextInfo& info) {
 		File::renameFile(source + file, target + file);
 	}
 
-	loadPlugin(lib, true);
+	addPlugin(lib);
 }
 
 void PluginManager::loadPlugins(function<void (const string&)> f) {
@@ -195,86 +185,12 @@ void PluginManager::loadPlugins(function<void (const string&)> f) {
 
 	loadSettings();
 
-	StringTokenizer<string> st(getPluginSetting("CoreSetup", "Plugins"), ";");
-	for(auto& i: st.getTokens()) {
-		if(f) { f(Util::getFileName(i)); }
-		try { loadPlugin(i); }
+	for(auto& plugin: plugins) {
+		if(!plugin.dcMain) { continue; } // a little trick to avoid an additonal "bool enabled"
+		if(f) { f(plugin.name); }
+		try { enable(plugin, false); }
 		catch(const Exception& e) { LogManager::getInstance()->message(e.getError()); }
 	}
-}
-
-void PluginManager::loadPlugin(const string& fileName, bool install) {
-	Lock l(cs);
-
-	dcassert(dcCore.apiVersion != 0);
-
-	PluginHandle hr = LOAD_LIBRARY(fileName);
-	if(!hr) {
-		throw Exception(str(F_("Error loading %1%: %2%") % Util::getFileName(fileName) % GET_ERROR()));
-	}
-	ScopedFunctor([&hr] { if(hr) FREE_LIBRARY(hr); });
-
-	PluginInfo::PLUGIN_INIT pluginInfo = reinterpret_cast<PluginInfo::PLUGIN_INIT>(GET_ADDRESS(hr, "pluginInit"));
-	MetaData info { };
-	DCMAIN dcMain;
-	if(!pluginInfo || !(dcMain = pluginInfo(&info))) {
-		throw Exception(str(F_("%1% is not a valid plugin") % Util::getFileName(fileName)));
-	}
-
-	if(checkPlugin(info)) {
-		install = true;
-	}
-
-	if(dcMain((install ? ON_INSTALL : ON_LOAD), &dcCore, nullptr) == False) {
-		throw Exception(str(F_("Error loading %1%") % Util::getFileName(fileName)));
-	}
-
-	plugins.emplace_back(new PluginInfo(fileName, hr, info, dcMain));
-	hr = nullptr; // bypass the scoped deleter.
-}
-
-bool PluginManager::isLoaded(const string& guid) {
-	Lock l(cs);
-	return findPlugin(guid) != plugins.end();
-}
-
-bool PluginManager::checkPlugin(const MetaData& info) {
-	auto updating = false;
-
-	// Check if user is trying to load a duplicate
-	auto it = findPlugin(info.guid);
-	if(it != plugins.end()) {
-		auto& plugin = *it;
-		if(plugin->getInfo().version < info.version) {
-			LogManager::getInstance()->message(str(F_("Updating the %1% plugin from version %2% to version %3%") %
-				string(plugin->getInfo().name) % plugin->getInfo().version % info.version));
-			plugins.erase(it);
-			updating = true;
-		} else {
-			throw Exception(str(F_("%1% is already installed") % info.name));
-		}
-	}
-
-	// Check API compatibility (this should only block on absolutely wrecking api changes, which generally should not happen)
-	if(info.apiVersion < DCAPI_CORE_VER) {
-		throw Exception(str(F_("%1% is too old, contact the plugin author for an update") % info.name));
-	}
-
-	// Check that all dependencies are loaded
-	if(info.numDependencies != 0) {
-		for(size_t i = 0; i < info.numDependencies; ++i) {
-			if(!isLoaded(info.dependencies[i])) {
-				throw Exception(str(F_("Missing dependencies for %1%") % info.name));
-			}
-		}
-	}
-
-	return updating;
-}
-
-vector<unique_ptr<PluginInfo>>::iterator PluginManager::findPlugin(const string& guid) {
-	return std::find_if(plugins.begin(), plugins.end(), [&guid](const unique_ptr<PluginInfo>& p) {
-		return strcmp(p->getInfo().guid, guid.c_str()) == 0; });
 }
 
 void PluginManager::unloadPlugins() {
@@ -286,15 +202,14 @@ void PluginManager::unloadPlugins() {
 	Lock l(cs);
 	shutdown = true;
 
-	// Update plugin order
-	string installed;
-	for(auto& i: plugins) {
-		if(!installed.empty()) installed += ";";
-		installed += i->getFile();
-	}
-	setPluginSetting("CoreSetup", "Plugins", installed);
+	saveSettings();
 
 	// Off we go...
+	for(auto& plugin: plugins | boost::adaptors::reversed) {
+		if(plugin.handle) {
+			disable(plugin, false);
+		}
+	}
 	plugins.clear();
 
 	// Really unload plugins that have been flagged inactive (ON_UNLOAD returns False)
@@ -303,40 +218,81 @@ void PluginManager::unloadPlugins() {
 
 	// Destroy hooks that may have not been correctly freed
 	hooks.clear();
-
-	saveSettings();
 }
 
-void PluginManager::unloadPlugin(size_t index) {
+void PluginManager::addPlugin(const string& path) {
 	Lock l(cs);
-	plugins.erase(plugins.begin() + index);
+
+	Plugin plugin { };
+	plugin.name = Util::getFileName(path);
+	plugin.path = path;
+
+	enable(plugin, true);
+
+	plugins.push_back(move(plugin));
 }
 
-bool PluginManager::addInactivePlugin(PluginHandle h) {
-	if(std::find(inactive.begin(), inactive.end(), h) == inactive.end()) {
-		inactive.push_back(h);
-		return true;
+bool PluginManager::configPlugin(const string& guid, dcptr_t data) {
+	Lock l(cs);
+	auto p = findPlugin(guid);
+	if(p && p->handle) {
+		return p->dcMain(ON_CONFIGURE, &dcCore, data);
 	}
 	return false;
 }
 
-void PluginManager::movePlugin(size_t index, int pos) {
+void PluginManager::enablePlugin(const string& guid) {
 	Lock l(cs);
-	auto i = plugins.begin() + index;
-	swap(*i, *(i + pos));
+	auto p = findPlugin(guid);
+	if(p && !p->handle) {
+		enable(*p, false);
+	}
 }
 
-vector<PluginInfo*> PluginManager::getPluginList() const {
+void PluginManager::disablePlugin(const string& guid) {
 	Lock l(cs);
-	vector<PluginInfo*> ret(plugins.size());
-	std::transform(plugins.begin(), plugins.end(), ret.begin(),
-		[](const unique_ptr<PluginInfo>& p) { return p.get(); });
+	auto p = findPlugin(guid);
+	if(p && p->handle) {
+		disable(*p, false);
+	}
+}
+
+void PluginManager::movePlugin(const string& guid, int delta) {
+	Lock l(cs);
+	auto i = findPluginIter(guid);
+	if(i != plugins.end()) {
+		swap(*i, *(i + delta));
+	}
+}
+
+void PluginManager::removePlugin(const string& guid) {
+	Lock l(cs);
+	auto i = findPluginIter(guid);
+	if(i != plugins.end()) {
+		if(i->handle) {
+			disable(*i, true);
+		}
+		plugins.erase(i);
+	}
+}
+
+bool PluginManager::isLoaded(const string& guid) const {
+	Lock l(cs);
+	auto p = findPlugin(guid);
+	return p ? p->handle : false;
+}
+
+StringList PluginManager::getPluginList() const {
+	Lock l(cs);
+	StringList ret(plugins.size());
+	std::transform(plugins.begin(), plugins.end(), ret.begin(), [](const Plugin& p) { return p.guid; });
 	return ret;
 };
 
-const PluginInfo* PluginManager::getPlugin(size_t index) const {
+Plugin PluginManager::getPlugin(const string& guid) const {
 	Lock l(cs);
-	return plugins[index].get();
+	auto p = findPlugin(guid);
+	return p ? *p : Plugin();
 }
 
 // Functions that call the plugin
@@ -510,53 +466,228 @@ size_t PluginManager::releaseHook(HookSubscriber* subscription) {
 }
 
 // Plugin configuration
-bool PluginManager::hasSettings(const string& pluginName) {
+void PluginManager::setPluginSetting(const string& guid, const string& setting, const string& value) {
 	Lock l(cs);
-
-	auto i = settings.find(pluginName);
-	if(i != settings.end())
-		return (i->second.size() > 0);
-	return false;
+	auto p = findPlugin(guid);
+	if(p) {
+		p->settings[setting] = value;
+	}
 }
 
-void PluginManager::processSettings(const string& pluginName, const function<void (StringMap&)>& currentSettings) {
+const string& PluginManager::getPluginSetting(const string& guid, const string& setting) {
 	Lock l(cs);
 
-	auto i = settings.find(pluginName);
-	if(i != settings.end() && currentSettings)
-		currentSettings(i->second);
-}
-
-void PluginManager::setPluginSetting(const string& pluginName, const string& setting, const string& value) {
-	Lock l(cs);
-	settings[pluginName][setting] = value;
-}
-
-const string& PluginManager::getPluginSetting(const string& pluginName, const string& setting) {
-	Lock l(cs);
-
-	auto i = settings.find(pluginName);
-	if(i != settings.end()) {
-		auto j = i->second.find(setting);
-		if(j != i->second.end())
-			return j->second;
+	auto p = findPlugin(guid);
+	if(p) {
+		auto i = p->settings.find(setting);
+		if(i != p->settings.end()) {
+			return i->second;
+		}
 	}
 	return Util::emptyString;
 }
 
-void PluginManager::removePluginSetting(const string& pluginName, const string& setting) {
+void PluginManager::removePluginSetting(const string& guid, const string& setting) {
 	Lock l(cs);
 
-	auto i = settings.find(pluginName);
-	if(i != settings.end()) {
-		auto j = i->second.find(setting);
-		if(j != i->second.end())
-			i->second.erase(j);
+	auto p = findPlugin(guid);
+	if(p) {
+		auto i = p->settings.find(setting);
+		if(i != p->settings.end()) {
+			p->settings.erase(i);
+		}
 	}
 }
 
 string PluginManager::getInstallPath(const string& uuid) {
 	return Util::getPath(Util::PATH_USER_LOCAL) + "Plugins" PATH_SEPARATOR_STR + uuid + PATH_SEPARATOR_STR;
+}
+
+void PluginManager::enable(Plugin& plugin, bool install) {
+	Lock l(cs);
+
+	dcassert(dcCore.apiVersion != 0);
+
+	plugin.handle = LOAD_LIBRARY(plugin.path);
+	if(!plugin.handle) {
+		throw Exception(str(F_("Error loading %1%: %2%") % plugin.name % GET_ERROR()));
+	}
+	bool success = false;
+	ScopedFunctor(([&plugin, &success] { if(!success) { FREE_LIBRARY(plugin.handle); plugin.handle = nullptr; plugin.dcMain = nullptr; } }));
+
+	auto pluginInfo = reinterpret_cast<DCMAIN (DCAPI *)(MetaDataPtr)>(GET_ADDRESS(plugin.handle, "pluginInit"));
+	MetaData info { };
+	if(!pluginInfo || !(plugin.dcMain = pluginInfo(&info))) {
+		throw Exception(str(F_("%1% is not a valid plugin") % plugin.name));
+	}
+
+	if(checkPlugin(info, install)) {
+		install = true;
+	}
+
+	if(plugin.dcMain((install ? ON_INSTALL : ON_LOAD), &dcCore, nullptr) == False) {
+		throw Exception(str(F_("Error loading %1%") % plugin.name));
+	}
+
+	success = true;
+
+	// refresh the info we have on the plugin.
+	plugin.guid = info.guid;
+	plugin.name = info.name;
+	plugin.version = info.version;
+	plugin.author = info.author;
+	plugin.description = info.description;
+	plugin.website = info.web;
+}
+
+void PluginManager::disable(Plugin& plugin, bool uninstall) {
+	bool isSafe = true;
+	if(plugin.dcMain(uninstall ? ON_UNINSTALL : ON_UNLOAD, nullptr, nullptr) == False) {
+		// Plugin performs operation critical tasks (runtime unload not possible)
+		isSafe = std::find(inactive.begin(), inactive.end(), plugin.handle) != inactive.end();
+		if(!isSafe) {
+			inactive.push_back(plugin.handle);
+		}
+	}
+	if(isSafe) {
+		FREE_LIBRARY(plugin.handle);
+		plugin.handle = nullptr;
+		plugin.dcMain = nullptr;
+	}
+}
+
+void PluginManager::loadSettings() noexcept {
+	Lock l(cs);
+
+	plugins.clear();
+
+	try {
+		Util::migrate(Util::getPath(Util::PATH_USER_CONFIG) + "Plugins.xml");
+
+		SimpleXML xml;
+		xml.fromXML(File(Util::getPath(Util::PATH_USER_CONFIG) + "Plugins.xml", File::READ, File::OPEN).read());
+		if(xml.findChild("Plugins")) {
+			xml.stepIn();
+
+			while(xml.findChild("Plugin")) {
+				Plugin plugin { xml.getChildAttrib("Guid"), xml.getChildAttrib("Name"),
+					Util::toDouble(xml.getChildAttrib("Version")), xml.getChildAttrib("Author"),
+					xml.getChildAttrib("Description"), xml.getChildAttrib("Website"),
+					xml.getChildAttrib("Path"), nullptr,
+					reinterpret_cast<DCMAIN>(xml.getBoolChildAttrib("Enabled")) };
+
+				if(plugin.guid.empty() || plugin.path.empty()) { continue; }
+				if(plugin.name.empty()) { plugin.name = Util::getFileName(plugin.path); }
+
+				xml.stepIn();
+				for(auto& i: xml.getCurrentChildren()) {
+					plugin.settings[i.first] = i.second;
+				}
+				xml.stepOut();
+
+				plugins.push_back(move(plugin));
+			}
+
+			xml.stepOut();
+		}
+	} catch(const Exception& e) {
+		dcdebug("PluginManager::loadSettings: %s\n", e.getError().c_str());
+	}
+}
+
+void PluginManager::saveSettings() noexcept {
+	Lock l(cs);
+
+	try {
+		SimpleXML xml;
+		xml.addTag("Plugins");
+		xml.stepIn();
+
+		for(auto& plugin: plugins) {
+			xml.addTag("Plugin");
+
+			xml.addChildAttrib("Guid", plugin.guid);
+			xml.addChildAttrib("Name", plugin.name);
+			xml.addChildAttrib("Version", plugin.version);
+			xml.addChildAttrib("Author", plugin.author);
+			xml.addChildAttrib("Description", plugin.description);
+			xml.addChildAttrib("Website", plugin.website);
+			xml.addChildAttrib("Path", plugin.path);
+			xml.addChildAttrib("Enabled", static_cast<bool>(plugin.handle));
+
+			xml.stepIn();
+			for(auto& i: plugin.settings) {
+				xml.addTag(i.first, i.second);
+			}
+			xml.stepOut();
+		}
+
+		xml.stepOut();
+
+		string fname = Util::getPath(Util::PATH_USER_CONFIG) + "Plugins.xml";
+		File f(fname + ".tmp", File::WRITE, File::CREATE | File::TRUNCATE);
+		f.write(SimpleXML::utf8Header);
+		f.write(xml.toXML());
+		f.close();
+		File::deleteFile(fname);
+		File::renameFile(fname + ".tmp", fname);
+	} catch(const Exception& e) {
+		dcdebug("PluginManager::saveSettings: %s\n", e.getError().c_str());
+	}
+}
+
+bool PluginManager::checkPlugin(const MetaData& info, bool install) {
+	auto updating = false;
+
+	// When installing, check for duplicates and possible updates
+	if(install) {
+		auto it = findPluginIter(info.guid);
+		if(it != plugins.end()) {
+			auto& plugin = *it;
+			if(plugin.version < info.version) {
+				LogManager::getInstance()->message(str(F_("Updating the %1% plugin from version %2% to version %3%") %
+					string(plugin.name) % plugin.version % info.version));
+				plugins.erase(it);
+				updating = true;
+			} else {
+				throw Exception(str(F_("%1% is already installed") % info.name));
+			}
+		}
+	}
+
+	// Check API compatibility (this should only block on absolutely wrecking api changes, which generally should not happen)
+	if(info.apiVersion < DCAPI_CORE_VER) {
+		throw Exception(str(F_("%1% is too old, contact the plugin author for an update") % info.name));
+	}
+
+	// Check that all dependencies are loaded
+	if(info.numDependencies != 0) {
+		for(size_t i = 0; i < info.numDependencies; ++i) {
+			if(!isLoaded(info.dependencies[i])) {
+				throw Exception(str(F_("Missing dependencies for %1%") % info.name));
+			}
+		}
+	}
+
+	return updating;
+}
+
+const Plugin* PluginManager::findPlugin(const string& guid) const {
+	auto it = findPluginIter(guid);
+	return it != plugins.end() ? &*it : nullptr;
+}
+
+Plugin* PluginManager::findPlugin(const string& guid) {
+	auto it = findPluginIter(guid);
+	return it != plugins.end() ? &*it : nullptr;
+}
+
+vector<Plugin>::const_iterator PluginManager::findPluginIter(const string& guid) const {
+	return std::find_if(plugins.begin(), plugins.end(), [&guid](const Plugin& p) { return p.guid == guid; });
+}
+
+vector<Plugin>::iterator PluginManager::findPluginIter(const string& guid) {
+	return std::find_if(plugins.begin(), plugins.end(), [&guid](const Plugin& p) { return p.guid == guid; });
 }
 
 // Listeners
@@ -582,67 +713,6 @@ void PluginManager::on(QueueManagerListener::Removed, QueueItem* qi) noexcept {
 
 void PluginManager::on(QueueManagerListener::Finished, QueueItem* qi, const string& /*dir*/, int64_t /*speed*/) noexcept {
 	runHook(HOOK_QUEUE_FINISHED, qi);
-}
-
-// Load / Save settings
-void PluginManager::loadSettings() noexcept {
-	Lock l(cs);
-
-	try {
-		Util::migrate(Util::getPath(Util::PATH_USER_LOCAL) + "Plugins.xml");
-
-		SimpleXML xml;
-		xml.fromXML(File(Util::getPath(Util::PATH_USER_LOCAL) + "Plugins.xml", File::READ, File::OPEN).read());
-		if(xml.findChild("Plugins")) {
-			xml.stepIn();
-			while(xml.findChild("Plugin")) {
-				const string& pluginGuid = xml.getChildAttrib("Guid");
-				xml.stepIn();
-				auto settings = xml.getCurrentChildren();
-				for(auto& i: settings) {
-					setPluginSetting(pluginGuid, i.first, i.second);
-				}
-				xml.stepOut();
-			}
-			xml.stepOut();
-		}
-	} catch(const Exception& e) {
-		dcdebug("PluginManager::loadSettings: %s\n", e.getError().c_str());
-	}
-}
-
-void PluginManager::saveSettings() noexcept {
-	Lock l(cs);
-
-	try {
-		SimpleXML xml;
-		xml.addTag("Plugins");
-		xml.stepIn();
-		for(auto& i: settings) {
-			xml.addTag("Plugin");
-			xml.stepIn();
-			for(auto& j: i.second) {
-				xml.addTag(j.first, j.second);			
-			}
-			xml.stepOut();
-			xml.addChildAttrib("Guid", i.first);
-		}
-		xml.stepOut();
-
-		string fname = Util::getPath(Util::PATH_USER_LOCAL) + "Plugins.xml";
-		File f(fname + ".tmp", File::WRITE, File::CREATE | File::TRUNCATE);
-		f.write(SimpleXML::utf8Header);
-		f.write(xml.toXML());
-		f.close();
-		File::deleteFile(fname);
-		File::renameFile(fname + ".tmp", fname);
-	} catch(const Exception& e) {
-		dcdebug("PluginManager::saveSettings: %s\n", e.getError().c_str());
-	}
-}
-
-void PluginManager::on(SettingsManagerListener::Load, SimpleXML& /*xml*/) noexcept {
-	loadSettings();
 }
 
 void PluginManager::on(SettingsManagerListener::Save, SimpleXML& /*xml*/) noexcept {

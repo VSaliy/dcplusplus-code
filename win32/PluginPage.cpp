@@ -20,31 +20,31 @@
 #include "PluginPage.h"
 
 #include "HoldRedraw.h"
+#include "PluginApiWin.h"
 #include "resource.h"
-#include "PluginInfoDlg.h"
 #include "WinUtil.h"
 
 #include <dwt/widgets/Grid.h>
 #include <dwt/widgets/Label.h>
 #include <dwt/widgets/Link.h>
-#include <dwt/widgets/LoadDialog.h>
 #include <dwt/widgets/MessageBox.h>
 
 #include <boost/range/algorithm/for_each.hpp>
 
-#include <dcpp/ScopedFunctor.h>
-
 #include <dcpp/format.h>
+#include <dcpp/PluginManager.h>
+#include <dcpp/ScopedFunctor.h>
 #include <dcpp/version.h>
 
 using dwt::Grid;
 using dwt::GridInfo;
 using dwt::Label;
 using dwt::Link;
-using dwt::LoadDialog;
 
-static const ColumnInfo columns[] = {
+enum { COLUMN_PLUGIN, COLUMN_GUID, COLUMN_COUNT };
+static const ColumnInfo columns[COLUMN_COUNT] = {
 	{ "", 100, false },
+	{ "", 0, false } // hidden column to store the GUID
 };
 
 PluginPage::PluginPage(dwt::Widget* parent) :
@@ -52,12 +52,13 @@ PropPage(parent, 3, 1),
 plugins(0),
 add(0),
 configure(0),
+enable(0),
+disable(0),
 moveUp(0),
 moveDown(0),
 remove(0),
 pluginInfo(0)
 {
-
 	setHelpId(IDH_PLUGINPAGE);
 
 	grid->column(0).mode = GridInfo::FILL;
@@ -66,71 +67,74 @@ pluginInfo(0)
 	grid->row(1).mode = GridInfo::FILL;
 	grid->row(1).align = GridInfo::STRETCH;
 	grid->setSpacing(6);
+
 	{
+		auto group = grid->addChild(GroupBox::Seed(T_("Installed Plugins")));
+
+		auto cur = group->addChild(Grid::Seed(3, 1));
+		cur->column(0).mode = GridInfo::FILL;
+		cur->row(0).mode = GridInfo::FILL;
+		cur->row(0).align = GridInfo::STRETCH;
+		cur->setHelpId(IDH_SETTINGS_PLUGINS_LIST);
+		cur->setSpacing(6);
+
+		auto seed = WinUtil::Seeds::Dialog::table;
+		seed.style |= LVS_SINGLESEL | LVS_NOCOLUMNHEADER;
+		plugins = cur->addChild(seed);
+
+		plugins->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleContextMenu(sc); });	
 
 		{
-			auto group = grid->addChild(GroupBox::Seed(T_("Installed Plugins")));
-
-			auto cur = group->addChild(Grid::Seed(2, 1));
-			cur->column(0).mode = GridInfo::FILL;
-			cur->row(0).mode = GridInfo::FILL;
-			cur->row(0).align = GridInfo::STRETCH;
-			cur->setHelpId(IDH_SETTINGS_PLUGINS_LIST);
-			cur->setSpacing(6);
-	
-			auto seed = WinUtil::Seeds::Dialog::table;
-			seed.style |= LVS_SINGLESEL | LVS_NOCOLUMNHEADER;
-			plugins = cur->addChild(seed);
-
-			plugins->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleContextMenu(sc); });	
-
-			{
-				auto buttons = cur->addChild(Grid::Seed(1, 5));	
-				buttons->column(0).mode = GridInfo::FILL;
-				buttons->column(0).align = GridInfo::STRETCH;
-				buttons->column(1).mode = GridInfo::FILL;
-				buttons->column(1).align = GridInfo::STRETCH;
-				buttons->column(2).mode = GridInfo::FILL;
-				buttons->column(2).align = GridInfo::STRETCH;
-				buttons->column(3).mode = GridInfo::FILL;
-				buttons->column(3).align = GridInfo::STRETCH;
-				buttons->column(4).mode = GridInfo::FILL;
-				buttons->column(4).align = GridInfo::STRETCH;
-
-				add = buttons->addChild(Button::Seed(T_("&Add")));
-				add->onClicked([this] { handleAddPlugin(); });
-				add->setHelpId(IDH_SETTINGS_PLUGINS_ADD);
-
-				configure = buttons->addChild(Button::Seed(T_("&Configure")));
-				configure->onClicked([this] { handleConfigurePlugin(); });
-				configure->setHelpId(IDH_SETTINGS_PLUGINS_CONFIGURE);
-
-				moveUp = buttons->addChild(Button::Seed(T_("Move &Up")));
-				moveUp->onClicked([this] { handleMovePluginUp(); });
-				moveUp->setHelpId(IDH_SETTINGS_PLUGINS_MOVE_UP);
-
-				moveDown = buttons->addChild(Button::Seed(T_("Move &Down")));
-				moveDown->onClicked([this] { handleMovePluginDown(); });
-				moveDown->setHelpId(IDH_SETTINGS_PLUGINS_MOVE_DOWN);
-
-				remove = buttons->addChild(Button::Seed(T_("&Remove")));
-				remove->onClicked([this] { handleRemovePlugin(); });
-				remove->setHelpId(IDH_SETTINGS_PLUGINS_REMOVE);
+			auto buttons = cur->addChild(Grid::Seed(2, 4));
+			for(size_t i = 0; i < buttons->columnCount(); ++i) {
+				buttons->column(i).mode = GridInfo::FILL;
 			}
+			buttons->setSpacing(cur->getSpacing());
+
+			add = buttons->addChild(Button::Seed(T_("&Add")));
+			add->onClicked([this] { handleAddPlugin(); });
+			add->setHelpId(IDH_SETTINGS_PLUGINS_ADD);
+
+			configure = buttons->addChild(Button::Seed(T_("&Configure")));
+			configure->onClicked([this] { handleConfigurePlugin(); });
+			configure->setHelpId(IDH_SETTINGS_PLUGINS_CONFIGURE);
+
+			enable = buttons->addChild(Button::Seed(T_("Enable")));
+			enable->onClicked([this] { handleEnable(); });
+			enable->setHelpId(IDH_SETTINGS_PLUGINS_ENABLE);
+
+			disable = buttons->addChild(Button::Seed(T_("Disable")));
+			disable->onClicked([this] { handleDisable(); });
+			disable->setHelpId(IDH_SETTINGS_PLUGINS_DISABLE);
+
+			moveUp = buttons->addChild(Button::Seed(T_("Move &Up")));
+			moveUp->onClicked([this] { handleMovePluginUp(); });
+			moveUp->setHelpId(IDH_SETTINGS_PLUGINS_MOVE_UP);
+			buttons->setWidget(moveUp, 1, 1);
+
+			moveDown = buttons->addChild(Button::Seed(T_("Move &Down")));
+			moveDown->onClicked([this] { handleMovePluginDown(); });
+			moveDown->setHelpId(IDH_SETTINGS_PLUGINS_MOVE_DOWN);
+			buttons->setWidget(moveDown, 1, 2);
+
+			remove = buttons->addChild(Button::Seed(T_("&Remove")));
+			remove->onClicked([this] { handleRemovePlugin(); });
+			remove->setHelpId(IDH_SETTINGS_PLUGINS_REMOVE);
+			buttons->setWidget(remove, 1, 3);
+		}
 	}
 
 	{
-		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Plugin information")));
+		auto group = grid->addChild(GroupBox::Seed(T_("Plugin information")));
 		group->setHelpId(IDH_SETTINGS_PLUGINS_INFO);
 		pluginInfo = group->addChild(Grid::Seed(1, 1));
 		pluginInfo->column(0).mode = GridInfo::FILL;
 		pluginInfo->setSpacing(grid->getSpacing());
 	}
 
-		grid->addChild(Label::Seed(str(TF_("Some plugins may require you to restart %1%") % Text::toT(APPNAME))));
-	}
+	grid->addChild(Label::Seed(str(TF_("Some plugins may require you to restart %1%") % Text::toT(APPNAME))));
 
-	WinUtil::makeColumns(plugins, columns, 1);
+	WinUtil::makeColumns(plugins, columns, COLUMN_COUNT);
 
 	refreshList();
 
@@ -147,7 +151,7 @@ PluginPage::~PluginPage() {
 void PluginPage::layout() {
 	PropPage::layout();
 
-	plugins->setColumnWidth(0, plugins->getWindowSize().x - 20);
+	plugins->setColumnWidth(COLUMN_PLUGIN, plugins->getWindowSize().x - 20);
 }
 
 void PluginPage::handleDoubleClick() {
@@ -169,11 +173,14 @@ bool PluginPage::handleKeyDown(int c) {
 }
 
 void PluginPage::handleSelectionChanged() {
-	auto enable = plugins->hasSelected();
-	configure->setEnabled(enable);
-	moveUp->setEnabled(enable);
-	moveDown->setEnabled(enable);
-	remove->setEnabled(enable);
+	auto selected = plugins->hasSelected();
+	auto enabled = selected ? PluginManager::getInstance()->isLoaded(sel()) : false;
+	configure->setEnabled(selected);
+	enable->setEnabled(selected && !enabled);
+	disable->setEnabled(selected && enabled);
+	moveUp->setEnabled(selected);
+	moveDown->setEnabled(selected);
+	remove->setEnabled(selected);
 
 	ScopedFunctor([&] { pluginInfo->layout(); pluginInfo->redraw(); });
 
@@ -216,13 +223,13 @@ void PluginPage::handleSelectionChanged() {
 		}
 	};
 
-	auto info = reinterpret_cast<MetaData*>(plugins->getData(plugins->getSelected()));
+	auto plugin = PluginManager::getInstance()->getPlugin(sel());
 
-	addInfo(T_("Name: "), info->name, Name);
-	addInfo(T_("Version: "), Util::toString(info->version), Version);
-	addInfo(T_("Description: "), info->description, Description);
-	addInfo(T_("Author: "), info->author, Author);
-	addInfo(T_("Website: "), info->web, Website);
+	addInfo(T_("Name: "), plugin.name, Name);
+	addInfo(T_("Version: "), Util::toString(plugin.version), Version);
+	addInfo(T_("Description: "), plugin.description, Description);
+	addInfo(T_("Author: "), plugin.author, Author);
+	addInfo(T_("Website: "), plugin.website, Website);
 }
 
 bool PluginPage::handleContextMenu(dwt::ScreenCoordinate pt) {
@@ -230,107 +237,115 @@ bool PluginPage::handleContextMenu(dwt::ScreenCoordinate pt) {
 		pt = plugins->getContextMenuPos();
 	}
 
+	auto selected = plugins->hasSelected();
+	auto enabled = selected ? PluginManager::getInstance()->isLoaded(sel()) : false;
+
 	auto menu = addChild(WinUtil::Seeds::menu);
 
 	menu->setTitle(T_("Plugins"), WinUtil::menuIcon(IDI_PLUGINS));
 	menu->appendItem(T_("&Add"), [this] { handleAddPlugin(); });
-	menu->appendItem(T_("&Configure"), [this] { handleConfigurePlugin(); });
 	menu->appendSeparator();
-	menu->appendItem(T_("Move &Up"), [this] { handleMovePluginUp(); });
-	menu->appendItem(T_("Move &Down"), [this] { handleMovePluginDown(); });
+	menu->appendItem(T_("&Configure"), [this] { handleConfigurePlugin(); }, nullptr, selected);
+	menu->appendItem(T_("Enable"), [this] { handleEnable(); }, nullptr, selected && !enabled);
+	menu->appendItem(T_("Disable"), [this] { handleDisable(); }, nullptr, selected && enabled);
 	menu->appendSeparator();
-	menu->appendItem(T_("&Remove"), [this] { handleRemovePlugin(); });
+	menu->appendItem(T_("Move &Up"), [this] { handleMovePluginUp(); }, nullptr, selected);
+	menu->appendItem(T_("Move &Down"), [this] { handleMovePluginDown(); }, nullptr, selected);
+	menu->appendSeparator();
+	menu->appendItem(T_("&Remove"), [this] { handleRemovePlugin(); }, nullptr, selected);
 
 	menu->open(pt);
 	return true;
 }
 
 void PluginPage::handleAddPlugin() {
-	tstring path_t;
-	if(LoadDialog(this)
-		.addFilter(str(TF_("%1% files") % _T("dcext")), _T("*.dcext"))
-		.addFilter(str(TF_("%1% files") % _T("dll")), _T("*.dll"))
-		.open(path_t))
-	{
-		auto path = Text::fromT(path_t);
-		if(Util::getFileExt(path) == ".dcext") {
-			PluginInfoDlg(this, path).run();
-		} else {
-			try {
-				PluginManager::getInstance()->loadPlugin(path, true);
-			} catch(const Exception& e) {
-				dwt::MessageBox(this).show(tstring(T_("Cannot install the plugin:")) + _T("\r\n\r\n") + Text::toT(e.getError()),
-					Text::toT(Util::getFileName(path)), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONSTOP);
-			}
-		}
+	PluginUtils::addPlugin(this);
 
-		refreshList();
-	}
+	refreshList();
 }
 
 void PluginPage::handleConfigurePlugin() {
-	if(plugins->countSelected() != 1)
+	if(!plugins->hasSelected())
 		return;
 
-	auto sel = plugins->getSelected();
-	const PluginInfo *p = PluginManager::getInstance()->getPlugin(sel);
-	if(!p->dcMain(ON_CONFIGURE, PluginManager::getInstance()->getCore(), this->handle())) {
-		dwt::MessageBox(this).show(
-			str(TF_("%1% doesn't need any additional configuration") % Text::toT(p->getInfo().name)),
-			Text::toT(p->getInfo().name), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONINFORMATION);
-	}
+	PluginUtils::configPlugin(sel(), this);
+}
+
+void PluginPage::handleEnable() {
+	if(!plugins->hasSelected())
+		return;
+
+	PluginUtils::enablePlugin(sel(), this);
+
+	handleSelectionChanged();
+}
+
+void PluginPage::handleDisable() {
+	if(!plugins->hasSelected())
+		return;
+
+	PluginUtils::disablePlugin(sel(), this);
+
+	handleSelectionChanged();
 }
 
 void PluginPage::handleMovePluginUp() {
-	if(plugins->countSelected() != 1)
+	if(!plugins->hasSelected())
 		return;
 
 	auto idx = plugins->getSelected();
 	if(idx == 0)
 		return;
 	HoldRedraw hold { plugins };
-	PluginManager::getInstance()->movePlugin(idx, -1);
+	const auto guid = sel();
 	plugins->erase(idx);
-	idx -=1;
-	addEntry(idx, PluginManager::getInstance()->getPlugin(idx)->getInfo());
+	PluginManager::getInstance()->movePlugin(guid, -1);
+	--idx;
+	addEntry(idx, guid);
 	plugins->setSelected(idx);
 	plugins->ensureVisible(idx);
 }
 
 void PluginPage::handleMovePluginDown() {
-	if(plugins->countSelected() != 1)
+	if(!plugins->hasSelected())
 		return;
 
 	auto idx = plugins->getSelected();
-	if(static_cast<uint32_t>(idx) == plugins->size() - 1)
+	if(idx == static_cast<int>(plugins->size()) - 1)
 		return;
 	HoldRedraw hold { plugins };
-	PluginManager::getInstance()->movePlugin(idx, 1);
+	const auto guid = sel();
 	plugins->erase(idx);
-	idx +=1;
-	addEntry(idx, PluginManager::getInstance()->getPlugin(idx)->getInfo());
+	PluginManager::getInstance()->movePlugin(guid, 1);
+	++idx;
+	addEntry(idx, guid);
 	plugins->setSelected(idx);
 	plugins->ensureVisible(idx);
 }
 
 void PluginPage::handleRemovePlugin() {
-	if(plugins->countSelected() != 1)
+	if(!plugins->hasSelected())
 		return;
 
-	auto sel = plugins->getSelected();
-	PluginManager::getInstance()->unloadPlugin(sel);
-	plugins->erase(sel);
+	auto guid = sel();
+	plugins->erase(plugins->getSelected());
+	PluginManager::getInstance()->removePlugin(guid);
 }
 
 void PluginPage::refreshList() {
 	plugins->clear();
-	for(auto& plugin: PluginManager::getInstance()->getPluginList()) {
-		addEntry(plugins->size(), plugin->getInfo());
+	for(auto& guid: PluginManager::getInstance()->getPluginList()) {
+		addEntry(plugins->size(), guid);
 	}
 }
 
-void PluginPage::addEntry(size_t idx, const MetaData& info) {
-	TStringList row;
-	row.push_back(Text::toT(info.name));
-	plugins->insert(row, (LPARAM)&info, idx);
+void PluginPage::addEntry(size_t idx, const string& guid) {
+	TStringList row(COLUMN_COUNT);
+	row[COLUMN_PLUGIN] = Text::toT(PluginManager::getInstance()->getPlugin(guid).name);
+	row[COLUMN_GUID] = Text::toT(guid);
+	plugins->insert(row, 0, idx);
+}
+
+string PluginPage::sel() const {
+	return Text::fromT(plugins->getText(plugins->getSelected(), COLUMN_GUID));
 }

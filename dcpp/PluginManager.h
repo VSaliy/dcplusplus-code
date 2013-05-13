@@ -66,30 +66,24 @@ struct PluginHook {
 	CriticalSection cs;
 };
 
-// Holds a loaded plugin
-class PluginInfo : private boost::noncopyable
-{
-public:
-	typedef	DCMAIN	(DCAPI *PLUGIN_INIT)(MetaDataPtr info);
+/** Information about a registered plugin. It may or may not be loaded. */
+struct Plugin {
+	string guid;
+	string name;
+	double version;
+	string author;
+	string description;
+	string website;
+	string path;
 
-	PluginInfo(const string& aFile, PluginHandle hInst, MetaData aInfo, DCMAIN aMain)
-		: dcMain(aMain), info(aInfo), file(aFile), handle(hInst) { };
-
-	~PluginInfo();
-
+	PluginHandle handle; /// identifies the state (enabled / disabled) of this plugin.
 	DCMAIN dcMain;
-	const MetaData& getInfo() const { return info; }
-	const string& getFile() const { return file; }
 
-private:
-	MetaData info;
-	string file;
-	PluginHandle handle;
+	StringMap settings;
 };
 
 /** Information about a dcext-packaged plugin that has just been extracted. */
 struct DcextInfo {
-	DcextInfo() : version(0), updating(false) { }
 	string uuid;
 	string name;
 	double version;
@@ -113,18 +107,20 @@ public:
 	void install(const DcextInfo& info);
 
 	void loadPlugins(function<void (const string&)> f);
-	void loadPlugin(const string& fileName, bool install = false);
-	bool isLoaded(const string& guid);
-
 	void unloadPlugins();
-	void unloadPlugin(size_t index);
 
-	bool addInactivePlugin(PluginHandle h);
-	bool getShutdown() const { return shutdown; }
+	/** Install a plain plugin (not dcext-packaged). Throws on errors. */
+	void addPlugin(const string& path);
+	bool configPlugin(const string& guid, dcptr_t data);
+	void enablePlugin(const string& guid);
+	void disablePlugin(const string& guid);
+	void movePlugin(const string& guid, int delta);
+	void removePlugin(const string& guid);
 
-	void movePlugin(size_t index, int pos);
-	vector<PluginInfo*> getPluginList() const;
-	const PluginInfo* getPlugin(size_t index) const;
+	bool isLoaded(const string& guid) const;
+
+	StringList getPluginList() const;
+	Plugin getPlugin(const string& guid) const;
 
 	DCCorePtr getCore() { return &dcCore; }
 
@@ -170,23 +166,27 @@ public:
 	size_t releaseHook(HookSubscriber* subscription);
 
 	// Plugin configuration
-	bool hasSettings(const string& pluginName);
-	void processSettings(const string& pluginName, const function<void (StringMap&)>& currentSettings);
-
-	void setPluginSetting(const string& pluginName, const string& setting, const string& value);
-	const string& getPluginSetting(const string& pluginName, const string& setting);
-	void removePluginSetting(const string& pluginName, const string& setting);
+	void setPluginSetting(const string& guid, const string& setting, const string& value);
+	const string& getPluginSetting(const string& guid, const string& setting);
+	void removePluginSetting(const string& guid, const string& setting);
 
 	static string getInstallPath(const string& uuid);
 
 private:
+	void enable(Plugin& plugin, bool install);
+	void disable(Plugin& plugin, bool uninstall);
+
 	void loadSettings() noexcept;
 	void saveSettings() noexcept;
 
 	/** Check if the plugin can be loaded; throws if it can't.
 	@return Whether the plugin is being updated. */
-	bool checkPlugin(const MetaData& info);
-	vector<unique_ptr<PluginInfo>>::iterator findPlugin(const string& guid);
+	bool checkPlugin(const MetaData& info, bool install);
+
+	const Plugin* findPlugin(const string& guid) const;
+	Plugin* findPlugin(const string& guid);
+	vector<Plugin>::const_iterator findPluginIter(const string& guid) const;
+	vector<Plugin>::iterator findPluginIter(const string& guid);
 
 	// Listeners
 	void on(TimerManagerListener::Second, uint64_t ticks) noexcept { runHook(HOOK_TIMER_SECOND, NULL, &ticks); }
@@ -200,16 +200,13 @@ private:
 	void on(QueueManagerListener::Removed, QueueItem* qi) noexcept;
 	void on(QueueManagerListener::Finished, QueueItem* qi, const string& /*dir*/, int64_t /*speed*/) noexcept;
 
-	void on(SettingsManagerListener::Load, SimpleXML& /*xml*/) noexcept;
 	void on(SettingsManagerListener::Save, SimpleXML& /*xml*/) noexcept;
 
-	vector<unique_ptr<PluginInfo>> plugins;
+	vector<Plugin> plugins;
 	vector<PluginHandle> inactive;
 
 	map<string, unique_ptr<PluginHook>> hooks;
 	map<string, dcptr_t> interfaces;
-
-	map<string, StringMap> settings;
 
 	DCCore dcCore;
 	mutable CriticalSection cs, csHook;

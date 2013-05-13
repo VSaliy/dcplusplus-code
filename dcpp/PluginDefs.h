@@ -444,9 +444,9 @@ typedef struct DCUI {
 
 	/* Add a command identified by "name".
 	"icon" is optional; it is the path to an icon file used to illustrate the command. */
-	void		(DCAPI *add_command)				(const char* name, DCCommandFunc command, const char* icon);
+	void		(DCAPI *add_command)				(const char* guid, const char* name, DCCommandFunc command, const char* icon);
 	/* Remove a command previously added with add_command. */
-	void		(DCAPI *remove_command)				(const char* name);
+	void		(DCAPI *remove_command)				(const char* guid, const char* name);
 
 	void		(DCAPI *play_sound)					(const char* path);
 	void		(DCAPI *notify)						(const char* title, const char* message);
