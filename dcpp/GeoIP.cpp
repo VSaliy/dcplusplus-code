@@ -165,8 +165,7 @@ void GeoIP::rebuild_cities() {
 			auto country = GeoIP_code_by_id(record->country);
 			auto region = record->region;
 			if(country && region) {
-				auto str = GeoIP_region_name_by_code(country, region);
-				if(str) { return str; }
+				// todo
 			}
 			return forwardRet(region);
 		};
