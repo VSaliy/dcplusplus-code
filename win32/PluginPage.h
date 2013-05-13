@@ -20,7 +20,6 @@
 #define DCPLUSPLUS_WIN32_PLUGIN_PAGE_H
 
 #include "PropPage.h"
-#include <dcpp/PluginManager.h>
 
 class PluginPage : public PropPage
 {
@@ -33,7 +32,7 @@ public:
 private:
 	TablePtr plugins;
 
-	ButtonPtr add, configure, moveUp, moveDown, remove;
+	ButtonPtr add, configure, enable, disable, moveUp, moveDown, remove;
 
 	GridPtr pluginInfo;
 
@@ -45,12 +44,15 @@ private:
 
 	void handleAddPlugin();
 	void handleConfigurePlugin();
+	void handleEnable();
+	void handleDisable();
 	void handleMovePluginUp();
-	void handleMovePluginDown();	
+	void handleMovePluginDown();
 	void handleRemovePlugin();
 
 	void refreshList();
-	void addEntry(size_t idx, const MetaData& info);
+	void addEntry(size_t idx, const string& guid);
+	string sel() const;
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_PLUGIN_PAGE_H)

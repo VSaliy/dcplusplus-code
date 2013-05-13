@@ -67,8 +67,8 @@ public:
 
 	void handleSettings();
 
-	static void addPluginCommand(const tstring& text, function<void ()> command, const tstring& icon);
-	static void removePluginCommand(const tstring& text);
+	static void addPluginCommand(const string& guid, const tstring& text, function<void ()> command, const tstring& icon);
+	static void removePluginCommand(const string& guid, const tstring& text);
 
 	/** show a balloon popup. refer to the dwt::Notification::addMessage doc for info about parameters. */
 	void notify(const tstring& title, const tstring& message, function<void ()> callback = nullptr, const dwt::IconPtr& balloonIcon = nullptr);
@@ -139,8 +139,8 @@ private:
 
 	/* sorted list of plugin commands. static because they may be added before the window has
 	actually been created.
-	command name -> pair<callback, icon path> */
-	static map<tstring, pair<function<void ()>, tstring>, noCaseStringLess> pluginCommands;
+	plugin GUID -> { command name -> pair<callback, icon path> } */
+	static unordered_map<string, map<tstring, pair<function<void ()>, tstring>, noCaseStringLess>> pluginCommands;
 
 	HttpConnection* conns[CONN_LAST];
 	unique_ptr<File> geo6File, geo4File;
@@ -170,6 +170,7 @@ private:
 	void handleRecent(const dwt::ScreenCoordinate& pt);
 	void handleConfigureRecent(const string& id, const tstring& title);
 	void handlePlugins(const dwt::ScreenCoordinate& pt);
+	void handlePluginSettings();
 	void handleLimiterMenu(bool upload);
 	void handleQuickConnect();
 	void handleConnectFavHubGroup();

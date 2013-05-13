@@ -23,19 +23,28 @@
 
 #include <dcpp/PluginDefs.h>
 
+#include <dwt/forward.h>
+
 class PluginApiWin {
 public:
 	static void init();
 
 private:
 	// Functions for DCUI
-	static void DCAPI addCommand(const char* name, DCCommandFunc command, const char* icon);
-	static void DCAPI removeCommand(const char* name);
+	static void DCAPI addCommand(const char* guid, const char* name, DCCommandFunc command, const char* icon);
+	static void DCAPI removeCommand(const char* guid, const char* name);
 
 	static void DCAPI playSound(const char* path);
 	static void DCAPI notify(const char* title, const char* message);
 
 	static DCUI dcUI;
+};
+
+struct PluginUtils {
+	static void addPlugin(dwt::Widget* w);
+	static void configPlugin(const string& guid, dwt::Widget* w);
+	static void enablePlugin(const string& guid, dwt::Widget* w);
+	static void disablePlugin(const string& guid, dwt::Widget*);
 };
 
 #endif

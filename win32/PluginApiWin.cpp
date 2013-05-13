@@ -19,11 +19,16 @@
 #include "stdafx.h"
 #include "PluginApiWin.h"
 
+#include <dcpp/format.h>
 #include <dcpp/PluginManager.h>
 #include <dcpp/Text.h>
 #include <dcpp/Util.h>
+#include <dcpp/version.h>
+
+#include <dwt/widgets/LoadDialog.h>
 
 #include "MainWindow.h"
+#include "PluginInfoDlg.h"
 #include "WinUtil.h"
 
 DCUI PluginApiWin::dcUI = {
@@ -41,12 +46,12 @@ void PluginApiWin::init() {
 }
 
 // Functions for DCUI
-void PluginApiWin::addCommand(const char* name, DCCommandFunc command, const char* icon) {
-	MainWindow::addPluginCommand(Text::toT(name), [=] { command(name); }, icon ? Text::toT(icon) : Util::emptyStringT);
+void PluginApiWin::addCommand(const char* guid, const char* name, DCCommandFunc command, const char* icon) {
+	MainWindow::addPluginCommand(guid, Text::toT(name), [=] { command(name); }, icon ? Text::toT(icon) : Util::emptyStringT);
 }
 
-void PluginApiWin::removeCommand(const char* name) {
-	MainWindow::removePluginCommand(Text::toT(name));
+void PluginApiWin::removeCommand(const char* guid, const char* name) {
+	MainWindow::removePluginCommand(guid, Text::toT(name));
 }
 
 void PluginApiWin::playSound(const char* path) {
@@ -57,4 +62,46 @@ void PluginApiWin::notify(const char* title, const char* message) {
 	if(WinUtil::mainWindow) {
 		WinUtil::mainWindow->notify(Text::toT(title), Text::toT(message));
 	}
+}
+
+void PluginUtils::addPlugin(dwt::Widget* w) {
+	tstring path_t;
+	if(dwt::LoadDialog(w)
+		.addFilter(str(TF_("%1% files") % _T("dcext")), _T("*.dcext"))
+		.addFilter(str(TF_("%1% files") % _T("dll")), _T("*.dll"))
+		.open(path_t))
+	{
+		auto path = Text::fromT(path_t);
+		if(Util::getFileExt(path) == ".dcext") {
+			PluginInfoDlg(w, path).run();
+		} else {
+			try {
+				PluginManager::getInstance()->addPlugin(path);
+			} catch(const Exception& e) {
+				dwt::MessageBox(w).show(tstring(T_("Cannot install the plugin:")) + _T("\r\n\r\n") + Text::toT(e.getError()),
+					Text::toT(Util::getFileName(path)), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONSTOP);
+			}
+		}
+	}
+}
+
+void PluginUtils::configPlugin(const string& guid, dwt::Widget* w) {
+	if(!PluginManager::getInstance()->configPlugin(guid, w->handle())) {
+		dwt::MessageBox(w).show(
+			str(TF_("%1% doesn't need any additional configuration") % Text::toT(PluginManager::getInstance()->getPlugin(guid).name)),
+			_T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONINFORMATION);
+	}
+}
+
+void PluginUtils::enablePlugin(const string& guid, dwt::Widget* w) {
+	try {
+		PluginManager::getInstance()->enablePlugin(guid);
+	} catch(const Exception& e) {
+		dwt::MessageBox(w).show(tstring(T_("Cannot enable the plugin:")) + _T("\r\n\r\n") + Text::toT(e.getError()),
+			Text::toT(PluginManager::getInstance()->getPlugin(guid).name), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONSTOP);
+	}
+}
+
+void PluginUtils::disablePlugin(const string& guid, dwt::Widget*) {
+	PluginManager::getInstance()->disablePlugin(guid);
 }

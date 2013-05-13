@@ -65,6 +65,7 @@
 #include "HubFrame.h"
 #include "NotepadFrame.h"
 #include "ParamDlg.h"
+#include "PluginApiWin.h"
 #include "PluginInfoDlg.h"
 #include "PrivateFrame.h"
 #include "PublicHubsFrame.h"
@@ -460,7 +461,8 @@ void MainWindow::initToolbar() {
 	toolbar->addButton("Refresh", WinUtil::toolbarIcon(IDI_REFRESH), 0, T_("Refresh file list"), false,
 		IDH_TOOLBAR_REFRESH, [this] { handleRefreshFileList(); });
 	toolbar->addButton("Plugins", WinUtil::toolbarIcon(IDI_PLUGINS), 0, T_("Plugins"), false,
-		IDH_TOOLBAR_PLUGINS, nullptr, [this](const dwt::ScreenCoordinate& pt) { handlePlugins(pt); });
+		IDH_TOOLBAR_PLUGINS, [this] { handlePluginSettings(); },
+		[this](const dwt::ScreenCoordinate& pt) { handlePlugins(pt); });
 	toolbar->addButton("CSHelp", WinUtil::toolbarIcon(IDI_WHATS_THIS), 0, T_("What's This?"), false,
 		IDH_TOOLBAR_WHATS_THIS, [this] { handleWhatsThis(); });
 
@@ -660,8 +662,8 @@ bool MainWindow::filter(MSG& msg) {
 	return false;
 }
 
-void MainWindow::addPluginCommand(const tstring& text, function<void ()> command, const tstring& icon) {
-	pluginCommands[text] = make_pair(command, icon);
+void MainWindow::addPluginCommand(const string& guid, const tstring& text, function<void ()> command, const tstring& icon) {
+	pluginCommands[guid][text] = make_pair(command, icon);
 
 	if(WinUtil::mainWindow && !WinUtil::mainWindow->closing()) {
 		WinUtil::mainWindow->pluginMenu->clear();
@@ -669,31 +671,57 @@ void MainWindow::addPluginCommand(const tstring& text, function<void ()> command
 	}
 }
 
-void MainWindow::removePluginCommand(const tstring& text) {
-	auto i = pluginCommands.find(text);
-	if(i == pluginCommands.end()) return;
-	auto index = std::distance(pluginCommands.begin(), i);
-	pluginCommands.erase(i);
+void MainWindow::removePluginCommand(const string& guid, const tstring& text) {
+	auto commandIt = pluginCommands.find(guid);
+	if(commandIt == pluginCommands.end()) { return; }
+	auto& commands = commandIt->second;
+
+	auto i = commands.find(text);
+	if(i == commands.end()) { return; }
+
+	auto index = std::distance(commands.begin(), i);
+	commands.erase(i);
+
+	if(commands.empty()) {
+		pluginCommands.erase(commandIt);
+	}
 
 	if(WinUtil::mainWindow && !WinUtil::mainWindow->closing()) {
-		WinUtil::mainWindow->pluginMenu->remove(index + 1 /* account for the menu title */);
-		if(pluginCommands.empty()) {
-			WinUtil::mainWindow->addPluginCommands(WinUtil::mainWindow->pluginMenu);
-		}
+		WinUtil::mainWindow->pluginMenu->clear();
+		WinUtil::mainWindow->addPluginCommands(WinUtil::mainWindow->pluginMenu);
 	}
 }
 
 void MainWindow::addPluginCommands(Menu* menu) {
-	if(pluginCommands.empty()) {
-		menu->appendItem(T_("(No plugin command found)"), nullptr, nullptr, false);
-	} else {
-		for(auto& i: pluginCommands) {
-			dwt::IconPtr icon;
-			if(!i.second.second.empty()) {
-				try { icon = new dwt::Icon(i.second.second, dwt::Point(16, 16)); }
-				catch(const dwt::DWTException&) { }
+	menu->appendItem(T_("Add"), [this] { PluginUtils::addPlugin(this); });
+	menu->appendItem(T_("Configure"), [this] { handlePluginSettings(); });
+
+	const auto plugins = PluginManager::getInstance()->getPluginList();
+	if(!plugins.empty()) {
+		menu->appendSeparator();
+	}
+
+	for(auto& guid: plugins) {
+		auto sub = menu->appendPopup(Text::toT(PluginManager::getInstance()->getPlugin(guid).name));
+		sub->appendItem(T_("Configure"), [this, guid] { PluginUtils::configPlugin(guid, this); });
+		if(PluginManager::getInstance()->isLoaded(guid)) {
+			sub->appendItem(T_("Disable"), [this, guid] { PluginUtils::disablePlugin(guid, this); });
+		} else {
+			sub->appendItem(T_("Enable"), [this, guid] { PluginUtils::enablePlugin(guid, this); });
+		}
+
+		auto commandIt = pluginCommands.find(guid);
+		if(commandIt != pluginCommands.end()) {
+			sub->appendSeparator();
+
+			for(auto& i: commandIt->second) {
+				dwt::IconPtr icon;
+				if(!i.second.second.empty()) {
+					try { icon = new dwt::Icon(i.second.second, dwt::Point(16, 16)); }
+					catch(const dwt::DWTException&) { }
+				}
+				sub->appendItem(i.first, i.second.first, icon);
 			}
-			menu->appendItem(i.first, i.second.first, icon);
 		}
 	}
 }
@@ -815,9 +843,15 @@ void MainWindow::handleConfigureRecent(const string& id, const tstring& title) {
 void MainWindow::handlePlugins(const dwt::ScreenCoordinate& pt) {
 	auto menu = addChild(WinUtil::Seeds::menu);
 
+	menu->setTitle(T_("Plugins"));
 	addPluginCommands(menu.get());
 
 	menu->open(pt);
+}
+
+void MainWindow::handlePluginSettings() {
+	SettingsManager::getInstance()->set(SettingsManager::SETTINGS_PAGE, SettingsDialog::pluginPagePos);
+	handleSettings();
 }
 
 void MainWindow::fillLimiterMenu(Menu* menu, bool upload) {
@@ -1284,6 +1318,9 @@ void MainWindow::handleSettings() {
 
 		if(SETTING(SETTINGS_SAVE_INTERVAL) != prevSettingsSave)
 			setSaveTimer();
+
+		pluginMenu->clear();
+		addPluginCommands(pluginMenu);
 	}
 }
 
