@@ -70,4 +70,8 @@ string GeoManager::getDbPath(bool v6) {
 	return Util::getPath(Util::PATH_USER_LOCAL) + (v6 ? "GeoIPv6.dat" : "GeoIP.dat");
 }
 
+string GeoManager::getRegionDbPath() {
+	return Util::getPath(Util::PATH_USER_LOCAL) + "GeoIP_Regions.csv";
+}
+
 } // namespace dcpp

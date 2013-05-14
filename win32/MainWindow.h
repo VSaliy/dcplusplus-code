@@ -20,6 +20,7 @@
 #define DCPLUSPLUS_WIN32_MAIN_WINDOW_H
 
 #include <dcpp/forward.h>
+#include <dcpp/atomic.h>
 #include <dcpp/HttpManagerListener.h>
 #include <dcpp/LogManagerListener.h>
 #include <dcpp/QueueManagerListener.h>
@@ -100,6 +101,7 @@ private:
 		tstring geoip4;
 		tstring geoip6_city;
 		tstring geoip4_city;
+		tstring geoip_regions;
 		tstring faq;
 		tstring help;
 		tstring discuss;
@@ -142,8 +144,9 @@ private:
 	plugin GUID -> { command name -> pair<callback, icon path> } */
 	static unordered_map<string, map<tstring, pair<function<void ()>, tstring>, noCaseStringLess>> pluginCommands;
 
-	HttpConnection* conns[CONN_LAST];
+	atomic<HttpConnection*> conns[CONN_LAST];
 	unique_ptr<File> geo6File, geo4File;
+	enum { GeoRegion_Idle, GeoRegion_FromV4, GeoRegion_FromV6 } geoRegion;
 
 	HANDLE stopperThread;
 

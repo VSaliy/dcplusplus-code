@@ -104,6 +104,7 @@ transfers(0),
 toolbar(0),
 tabs(0),
 tray_pm(false),
+geoRegion(GeoRegion_Idle),
 stopperThread(NULL),
 lastUp(0),
 lastDown(0),
@@ -119,6 +120,7 @@ fullSlots(false)
 	links.geoip4 = _T("http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz");
 	links.geoip6_city = _T("http://geolite.maxmind.com/download/geoip/database/GeoLiteCityv6-beta/GeoLiteCityv6.dat.gz");
 	links.geoip4_city = _T("http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz");
+	links.geoip_regions = _T("http://dev.maxmind.com/static/csv/codes/maxmind/region.csv");
 	links.faq = links.homepage + _T("faq/");
 	links.help = links.homepage + _T("help/");
 	links.discuss = links.homepage + _T("discussion/");
@@ -678,8 +680,6 @@ void MainWindow::removePluginCommand(const string& guid, const tstring& text) {
 
 	auto i = commands.find(text);
 	if(i == commands.end()) { return; }
-
-	auto index = std::distance(commands.begin(), i);
 	commands.erase(i);
 
 	if(commands.empty()) {
@@ -843,7 +843,7 @@ void MainWindow::handleConfigureRecent(const string& id, const tstring& title) {
 void MainWindow::handlePlugins(const dwt::ScreenCoordinate& pt) {
 	auto menu = addChild(WinUtil::Seeds::menu);
 
-	menu->setTitle(T_("Plugins"));
+	menu->setTitle(T_("Plugins"), WinUtil::menuIcon(IDI_PLUGINS));
 	addPluginCommands(menu.get());
 
 	menu->open(pt);
@@ -1227,6 +1227,7 @@ void MainWindow::handleSettings() {
 
 	auto prevGeo = SETTING(GET_USER_COUNTRY);
 	auto prevGeoCity = SETTING(GEO_CITY);
+	auto prevGeoRegion = SETTING(GEO_REGION);
 	auto prevGeoFormat = SETTING(COUNTRY_FORMAT);
 
 	auto prevFont = SETTING(MAIN_FONT);
@@ -1259,10 +1260,10 @@ void MainWindow::handleSettings() {
 		ClientManager::getInstance()->infoUpdated();
 
 		bool rebuildGeo = prevGeo && SETTING(COUNTRY_FORMAT) != prevGeoFormat;
-		if(SETTING(GET_USER_COUNTRY) != prevGeo || SETTING(GEO_CITY) != prevGeoCity) {
+		if(SETTING(GET_USER_COUNTRY) != prevGeo || SETTING(GEO_CITY) != prevGeoCity || SETTING(GEO_REGION) != prevGeoRegion) {
 			if(SETTING(GET_USER_COUNTRY)) {
 				GeoManager::getInstance()->init();
-				if(SETTING(GEO_CITY) != prevGeoCity) {
+				if(SETTING(GEO_CITY) != prevGeoCity || (SETTING(GEO_CITY) && SETTING(GEO_REGION) != prevGeoRegion)) {
 					updateGeo();
 				} else {
 					checkGeoUpdate();
@@ -1478,6 +1479,10 @@ void MainWindow::completeVersionUpdate(bool success, const string& result) {
 				links.geoip4_city = Text::toT(xml.getChildData());
 			}
 			xml.resetCurrentChild();
+			if(xml.findChild("GeoIP_Regions")) {
+				links.geoip_regions = Text::toT(xml.getChildData());
+			}
+			xml.resetCurrentChild();
 			if(xml.findChild("Faq")) {
 				links.faq = Text::toT(xml.getChildData());
 			}
@@ -1564,7 +1569,7 @@ namespace { string geoType(bool v6) {
 
 void MainWindow::updateGeo(bool v6) {
 	auto& conn = conns[v6 ? CONN_GEO_V6 : CONN_GEO_V4];
-	if(conn)
+	if(static_cast<HttpConnection*>(conn))
 		return;
 
 	auto& file = v6 ? geo6File : geo4File;
@@ -1581,10 +1586,56 @@ void MainWindow::updateGeo(bool v6) {
 }
 
 void MainWindow::completeGeoUpdate(bool v6, bool success) {
+	/* careful, no GUI call here! this runs in the socket thread so as not to freeze the GUI while
+	regenerating GeoIP caches. */
+
 	if(success) {
+
+		/* this is tricky: the region file covers both v6 & v4 databases so we try our best to
+		download it only once. both databases are refreshed after a succesful region download. */
+		if(SETTING(GEO_CITY) && SETTING(GEO_REGION)) {
+
+			if(geoRegion == (v6 ? GeoRegion_FromV6 : GeoRegion_FromV4)) {
+				geoRegion = GeoRegion_Idle;
+
+				try {
+					File::renameFile(GeoManager::getRegionDbPath() + ".tmp", GeoManager::getRegionDbPath());
+				} catch(const FileException&) { }
+
+				GeoManager::getInstance()->update(true);
+				LogManager::getInstance()->message(str(F_("The %1% GeoIP database has been successfully updated") % geoType(true)));
+				GeoManager::getInstance()->update(false);
+				LogManager::getInstance()->message(str(F_("The %1% GeoIP database has been successfully updated") % geoType(false)));
+
+			} else if(geoRegion == GeoRegion_Idle) {
+
+				/* do nothing if the other download is running - regions will be downloaded and
+				both databases will be refreshed once it completes. */
+				if(static_cast<HttpConnection*>(conns[v6 ? CONN_GEO_V4 : CONN_GEO_V6]))
+					return;
+
+				geoRegion = v6 ? GeoRegion_FromV6 : GeoRegion_FromV4;
+				auto& file = v6 ? geo6File : geo4File;
+				try {
+					file.reset(new File(GeoManager::getRegionDbPath() + ".tmp", File::WRITE, File::CREATE | File::TRUNCATE));
+					conns[v6 ? CONN_GEO_V6 : CONN_GEO_V4] = HttpManager::getInstance()->download(Text::fromT(links.geoip_regions), file.get());
+				} catch(const FileException&) {
+					geoRegion = GeoRegion_Idle;
+				}
+			}
+
+			return;
+		}
+
 		GeoManager::getInstance()->update(v6);
+
 		LogManager::getInstance()->message(str(F_("The %1% GeoIP database has been successfully updated") % geoType(v6)));
+
 	} else {
+		if(geoRegion == (v6 ? GeoRegion_FromV6 : GeoRegion_FromV4)) {
+			geoRegion = GeoRegion_Idle;
+		}
+
 		LogManager::getInstance()->message(str(F_("The %1% GeoIP database could not be updated") % geoType(v6)));
 	}
 }
@@ -1837,13 +1888,13 @@ void MainWindow::on(HttpManagerListener::Failed, HttpConnection* c, const string
 		conns[CONN_GEO_V6] = nullptr;
 		geo6File.reset();
 
-		callAsync([this] { completeGeoUpdate(true, false); });
+		completeGeoUpdate(true, false);
 
 	} else if(c == conns[CONN_GEO_V4]) {
 		conns[CONN_GEO_V4] = nullptr;
 		geo4File.reset();
 
-		callAsync([this] { completeGeoUpdate(false, false); });
+		completeGeoUpdate(false, false);
 	}
 }
 
@@ -1858,13 +1909,13 @@ void MainWindow::on(HttpManagerListener::Complete, HttpConnection* c, OutputStre
 		conns[CONN_GEO_V6] = nullptr;
 		geo6File.reset();
 
-		callAsync([this] { completeGeoUpdate(true, true); });
+		completeGeoUpdate(true, true);
 
 	} else if(c == conns[CONN_GEO_V4]) {
 		conns[CONN_GEO_V4] = nullptr;
 		geo4File.reset();
 
-		callAsync([this] { completeGeoUpdate(false, true); });
+		completeGeoUpdate(false, true);
 	}
 }
 

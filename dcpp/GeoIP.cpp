@@ -21,6 +21,7 @@
 
 #include "File.h"
 #include "format.h"
+#include "GeoManager.h"
 #include "SettingsManager.h"
 #include "Util.h"
 #include "ZUtils.h"
@@ -140,12 +141,50 @@ void countryParams(ParamMap& params, int id) {
 #endif
 }
 
+inline uint32_t regionCode(char country0, char country1, char region0, char region1) {
+	union { char chars[4]; uint32_t i; } u = { country0, country1, region0, region1 };
+	return u.i;
+}
+
+unordered_map<uint32_t, string> getRegions() {
+	unordered_map<uint32_t, string> ret;
+	if(!SETTING(GEO_REGION))
+		return ret;
+	if(SETTING(COUNTRY_FORMAT).find("%[region]") == string::npos)
+		return ret;
+	try {
+		auto regions = File(GeoManager::getRegionDbPath(), File::READ, File::OPEN).read();
+		size_t begin = 0, end;
+		while((end = regions.find('\n', begin)) != string::npos) {
+			if(begin + 9 > end) { break; } // corrupted file
+			auto country0 = regions[begin++];
+			auto country1 = regions[begin++];
+			++begin; // comma
+			auto region0 = regions[begin++];
+			auto region1 = regions[begin++];
+			++begin; // comma
+			++begin; // begin quote
+			--end; // end quote
+			ret[regionCode(country0, country1, region0, region1)] = regions.substr(begin, end - begin);
+			begin = end + 2; // end quote + new line
+		}
+	} catch (const FileException&) { }
+	return ret;
+}
+
+string regionName(const unordered_map<uint32_t, string>& regions, const char* country, const char* region) {
+	auto i = regions.find(regionCode(country[0], country[1], region[0], region[1]));
+	return i != regions.cend() ? i->second : string();
+}
+
 } // unnamed namespace
 
 void GeoIP::rebuild_cities() {
 	cache.clear();
 
 	const auto& setting = SETTING(COUNTRY_FORMAT);
+
+	const auto regions = getRegions();
 
 	GeoIPRecord* record = nullptr;
 	auto id = GeoIP_init_record_iter(geo);
@@ -161,11 +200,11 @@ void GeoIP::rebuild_cities() {
 		params["long"] = [record] { return Util::toString(record->longitude); };
 		params["metrocode"] = [record] { return Util::toString(record->metro_code); };
 		params["postcode"] = [record] { return forwardRet(record->postal_code); };
-		params["region"] = [record]() -> string {
+		params["region"] = [record, &regions]() -> string {
 			auto country = GeoIP_code_by_id(record->country);
 			auto region = record->region;
 			if(country && region) {
-				// todo
+				return regionName(regions, country, region);
 			}
 			return forwardRet(region);
 		};

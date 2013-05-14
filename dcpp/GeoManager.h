@@ -49,6 +49,7 @@ public:
 	const string& getCountry(const string& ip, int flags = V6 | V4);
 
 	static string getDbPath(bool v6);
+	static string getRegionDbPath();
 
 private:
 	friend class Singleton<GeoManager>;
