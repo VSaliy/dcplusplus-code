@@ -21,9 +21,12 @@
 #ifndef DCPLUSPLUS_WIN32_PLUGINAPIWIN_H
 #define DCPLUSPLUS_WIN32_PLUGINAPIWIN_H
 
+#include <string>
+
 #include <dcpp/PluginDefs.h>
 
-#include <dwt/forward.h>
+using std::string;
+namespace dwt { class Widget; }
 
 class PluginApiWin {
 public:
