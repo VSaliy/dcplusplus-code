@@ -26,6 +26,7 @@
 #include <dcpp/version.h>
 
 #include <dwt/widgets/LoadDialog.h>
+#include <dwt/widgets/MessageBox.h>
 
 #include "MainWindow.h"
 #include "PluginInfoDlg.h"
