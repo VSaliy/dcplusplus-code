@@ -296,6 +296,12 @@ Plugin PluginManager::getPlugin(const string& guid) const {
 }
 
 // Functions that call the plugin
+bool PluginManager::onUDP(bool out, const string& ip, const string& port, const string& data) {
+	UDPData udp = { ip.c_str(), Util::toInt(port) };
+	return runHook(out ? HOOK_NETWORK_UDP_OUT : HOOK_NETWORK_UDP_IN, &udp,
+		reinterpret_cast<dcptr_t>(const_cast<char*>(data.c_str())));
+}
+
 bool PluginManager::onChatTags(Tagger& tagger, OnlineUser* from) {
 	TagData data = { reinterpret_cast<dcptr_t>(&tagger), True };
 	return runHook(HOOK_UI_CHAT_TAGS, from, &data);

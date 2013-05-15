@@ -463,7 +463,7 @@ void NmdcHub::onLine(const string& aLine) noexcept {
 			}
 		}
 	} else if(cmd == "$SR") {
-		SearchManager::getInstance()->onSearchResult(aLine);
+		SearchManager::getInstance()->onData(aLine);
 	} else if(cmd == "$HubName") {
 		// If " - " found, the first part goes to hub name, rest to description
 		// If no " - " found, first word goes to hub name, rest to description

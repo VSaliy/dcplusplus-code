@@ -35,7 +35,7 @@ public:
 	PluginEntity() : pod() {
 		pod.isManaged = True;
 	}
-	virtual ~PluginEntity() { psCache.clear(); }
+	virtual ~PluginEntity() { }
 
 	PluginType* copyPluginObject() {
 		Lock l(cs);
