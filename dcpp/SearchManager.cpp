@@ -26,7 +26,7 @@
 #include "ConnectivityManager.h"
 #include "format.h"
 #include "LogManager.h"
-#include "UploadManager.h"
+#include "PluginManager.h"
 #include "SearchResult.h"
 #include "ShareManager.h"
 
@@ -130,9 +130,15 @@ int SearchManager::run() {
 			}
 
 			if((len = socket->read(&buf[0], BUFSIZE, remoteAddr)) > 0) {
-				onData(&buf[0], len, remoteAddr);
+				string data(reinterpret_cast<char*>(&buf[0]), len);
+
+				if(PluginManager::getInstance()->onUDP(false, remoteAddr, port, data))
+					continue;
+
+				onData(data, remoteAddr);
 				continue;
 			}
+
 		} catch(const SocketException& e) {
 			dcdebug("SearchManager::run Error: %s\n", e.getError().c_str());
 		}
@@ -165,8 +171,7 @@ int SearchManager::run() {
 	return 0;
 }
 
-void SearchManager::onData(const uint8_t* buf, size_t aLen, const string& remoteIp) {
-	string x((char*)buf, aLen);
+void SearchManager::onData(const string& x, const string& remoteIp) {
 	if(x.compare(0, 4, "$SR ") == 0) {
 		string::size_type i, j;
 		// Directories: $SR <nick><0x20><directory><0x20><free slots>/<total slots><0x05><Hubname><0x20>(<Hubip:port>)

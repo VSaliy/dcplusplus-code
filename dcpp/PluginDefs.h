@@ -100,6 +100,8 @@ extern "C" {
 #define HOOK_NETWORK_HUB_OUT		"dcpp.network.onHubDataOut"		/* Outgoing protocol message to hub (obj: HubData) */
 #define HOOK_NETWORK_CONN_IN		"dcpp.network.onClientDataIn"	/* Incoming client<->client protocol message (obj: ConnectionData) */
 #define HOOK_NETWORK_CONN_OUT		"dcpp.network.onClientDataOut"	/* Outgoing client<->client protocol message (obj: ConnectionData) */
+#define HOOK_NETWORK_UDP_IN			"dcpp.network.onUDPDataIn"		/* Incoming UDP data (obj: UDPData) */
+#define HOOK_NETWORK_UDP_OUT		"dcpp.network.onUDPDataOut"		/* Outgoing UDP data (obj: UDPData) */
 
 #define HOOK_QUEUE_ADDED			"dcpp.queue.onAdded"			/* (New) item has been added to download queue (obj: QueueData) */
 #define HOOK_QUEUE_MOVED			"dcpp.queue.onMoved"			/* Download queue item has been moved to new location (obj: QueueData) */
@@ -245,6 +247,12 @@ typedef struct tagConnectionData {
 	Bool isSecure;												/* True for TLS encrypted connections */
 	Bool isManaged;												/* Always True (Plugins can not lookup, or track the scope of, a specific instance) */
 } ConnectionData, *ConnectionDataPtr;
+
+/* UDP */
+typedef struct tagUDPData {
+	const char* ip;												/* The ip address (remote) for this connection */
+	uint16_t port;												/* The port for this connection */
+} UDPData, *UDPDataPtr;
 
 /* Queue items and files */
 typedef struct tagQueueData {

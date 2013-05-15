@@ -441,11 +441,18 @@ void ClientManager::sendUDP(AdcCommand& cmd, const OnlineUser& user) {
 		cmd.setTo(user.getIdentity().getSID());
 		const_cast<Client&>(user.getClient()).send(cmd);
 	} else {
-		try {
-			udp.writeTo(user.getIdentity().getIp(), user.getIdentity().getUdpPort(), cmd.toString(getMe()->getCID()));
-		} catch(const SocketException&) {
-			dcdebug("Socket exception sending ADC UDP command\n");
-		}
+		sendUDP(user.getIdentity().getIp(), user.getIdentity().getUdpPort(), cmd.toString(getMe()->getCID()));
+	}
+}
+
+void ClientManager::sendUDP(const string& ip, const string& port, const string& data) {
+	if(PluginManager::getInstance()->onUDP(true, ip, port, data))
+		return;
+
+	try {
+		udp.writeTo(ip, port, data);
+	} catch(const SocketException&) {
+		dcdebug("Socket exception when sending UDP data to %s:%s\n", ip.c_str(), port.c_str());
 	}
 }
 
@@ -487,20 +494,18 @@ void ClientManager::on(NmdcSearch, Client* aClient, const string& aSeeker, int a
 				aClient->send(str);
 
 		} else {
-			try {
-				string ip, port, file, proto, query, fragment;
+			string ip, port, file, proto, query, fragment;
+			Util::decodeUrl(aSeeker, proto, ip, port, file, query, fragment);
 
-				Util::decodeUrl(aSeeker, proto, ip, port, file, query, fragment);
-				ip = Socket::resolve(ip, AF_INET);
-				if(static_cast<NmdcHub*>(aClient)->isProtectedIP(ip))
-					return;
-				if(port.empty())
-					port = "412";
-				for(const auto& sr: l) {
-					udp.writeTo(ip, port, sr->toSR(*aClient));
-				}
-			} catch(const SocketException& /* e */) {
-				dcdebug("Search caught error\n");
+			ip = Socket::resolve(ip, AF_INET);
+			if(static_cast<NmdcHub*>(aClient)->isProtectedIP(ip))
+				return;
+
+			if(port.empty())
+				port = "412";
+
+			for(const auto& sr: l) {
+				sendUDP(ip, port, sr->toSR(*aClient));
 			}
 		}
 	}

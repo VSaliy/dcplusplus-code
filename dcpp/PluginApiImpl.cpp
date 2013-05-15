@@ -42,7 +42,7 @@
 
 namespace dcpp {
 
-#define IMPL_HOOKS_COUNT 21
+#define IMPL_HOOKS_COUNT 23
 
 static const char* hookGuids[IMPL_HOOKS_COUNT] = {
 	HOOK_CHAT_IN,
@@ -60,6 +60,8 @@ static const char* hookGuids[IMPL_HOOKS_COUNT] = {
 	HOOK_NETWORK_HUB_OUT,
 	HOOK_NETWORK_CONN_IN,
 	HOOK_NETWORK_CONN_OUT,
+	HOOK_NETWORK_UDP_IN,
+	HOOK_NETWORK_UDP_OUT,
 
 	HOOK_QUEUE_ADDED,
 	HOOK_QUEUE_MOVED,

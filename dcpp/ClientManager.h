@@ -183,6 +183,8 @@ private:
 	*/
 	OnlineUser* findOnlineUserHint(const CID& cid, const string& hintUrl, OnlinePairC& p) const;
 
+	void sendUDP(const string& ip, const string& port, const string& data);
+
 	string getUsersFile() const { return Util::getPath(Util::PATH_USER_LOCAL) + "Users.xml"; }
 
 	// ClientListener

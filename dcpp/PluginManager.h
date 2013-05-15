@@ -125,6 +125,7 @@ public:
 	DCCorePtr getCore() { return &dcCore; }
 
 	// Functions that call the plugin
+	bool onUDP(bool out, const string& ip, const string& port, const string& data);
 	bool onChatTags(Tagger& tagger, OnlineUser* from = nullptr);
 	bool onChatDisplay(string& htmlMessage, OnlineUser* from = nullptr);
 	bool onChatCommand(Client* client, const string& line);
@@ -149,7 +150,7 @@ public:
 
 	template<class T>
 	bool runHook(const string& guid, PluginEntity<T>* entity, const string& data) {
-		return runHook<T>(guid, entity, (dcptr_t)data.c_str());
+		return runHook<T>(guid, entity, reinterpret_cast<dcptr_t>(const_cast<char*>(data.c_str())));
 	}
 
 	// Plugin interface registry

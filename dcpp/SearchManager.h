@@ -75,10 +75,8 @@ public:
 
 	void listen();
 	void disconnect() noexcept;
-	void onSearchResult(const string& aLine) {
-		onData((const uint8_t*)aLine.data(), aLine.length(), Util::emptyString);
-	}
 
+	void onData(const string& data, const string& remoteIp = Util::emptyString);
 	void onRES(const AdcCommand& cmd, const UserPtr& from, const string& removeIp = Util::emptyString);
 
 	int32_t timeToSearch() {
@@ -103,7 +101,6 @@ private:
 	virtual int run();
 
 	virtual ~SearchManager();
-	void onData(const uint8_t* buf, size_t aLen, const string& address);
 };
 
 } // namespace dcpp
