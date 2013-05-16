@@ -113,22 +113,6 @@ static voidpf ZCALLBACK fopen_file_func (voidpf opaque, const char* filename, in
 static voidpf ZCALLBACK fopen64_file_func (voidpf opaque, const void* filename, int mode)
 {
     FILE* file = NULL;
-
-#if defined(_WIN32) && defined(_UNICODE)
-    const wchar_t* mode_fopen = NULL;
-    if ((mode & ZLIB_FILEFUNC_MODE_READWRITEFILTER)==ZLIB_FILEFUNC_MODE_READ)
-        mode_fopen = L"rb";
-    else
-    if (mode & ZLIB_FILEFUNC_MODE_EXISTING)
-        mode_fopen = L"r+b";
-    else
-    if (mode & ZLIB_FILEFUNC_MODE_CREATE)
-        mode_fopen = L"wb";
-
-    if ((filename!=NULL) && (mode_fopen != NULL))
-        file = _wfopen((const wchar_t*)filename, mode_fopen);
-
-#else
     const char* mode_fopen = NULL;
     if ((mode & ZLIB_FILEFUNC_MODE_READWRITEFILTER)==ZLIB_FILEFUNC_MODE_READ)
         mode_fopen = "rb";
@@ -141,9 +125,6 @@ static voidpf ZCALLBACK fopen64_file_func (voidpf opaque, const void* filename, 
 
     if ((filename!=NULL) && (mode_fopen != NULL))
         file = FOPEN_FUNC((const char*)filename, mode_fopen);
-
-#endif
-
     return file;
 }
 
