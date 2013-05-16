@@ -46,9 +46,7 @@ socket(0)
 }
 
 HttpConnection::~HttpConnection() {
-	if(socket) {
-		abortRequest(true);
-	}
+	abort();
 }
 
 /**
@@ -75,6 +73,12 @@ void HttpConnection::download(const StringMap& postData) {
 
 	if (!requestBody.empty()) requestBody = requestBody.substr(1);
 	prepareRequest(TYPE_POST);
+}
+
+void HttpConnection::abort() {
+	if(socket) {
+		abortRequest(true);
+	}
 }
 
 void HttpConnection::prepareRequest(RequestType type) {

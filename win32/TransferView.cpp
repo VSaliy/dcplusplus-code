@@ -413,7 +413,7 @@ void TransferView::HttpInfo::update(const UpdateInfo& ui) {
 		size = ui.size;
 
 		if(transferred > 0) {
-			columns[COLUMN_TRANSFERRED] = str(TF_("%1%") % Text::toT(Util::formatBytes(transferred)));
+			columns[COLUMN_TRANSFERRED] = Text::toT(Util::formatBytes(transferred));
 		} else {
 			columns[COLUMN_TRANSFERRED].clear();
 		}
@@ -439,6 +439,10 @@ void TransferView::HttpInfo::update(const UpdateInfo& ui) {
 			columns[COLUMN_TIMELEFT].clear();
 		}
 	}
+}
+
+void TransferView::HttpInfo::force() {
+	HttpManager::getInstance()->force(path);
 }
 
 void TransferView::HttpInfo::disconnect() {

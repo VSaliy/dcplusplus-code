@@ -49,6 +49,7 @@ public:
 	HttpConnection* download(string url, const StringMap& postData, OutputStream* stream = nullptr);
 
 	void disconnect(const string& url);
+	void force(const string& url);
 
 	void shutdown();
 
