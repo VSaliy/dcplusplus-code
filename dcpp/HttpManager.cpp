@@ -47,29 +47,47 @@ HttpConnection* HttpManager::download(string url, const StringMap& postData, Out
 
 void HttpManager::disconnect(const string& url) {
 	HttpConnection* c = nullptr;
-	OutputStream* stream = nullptr;
 
 	{
 		Lock l(cs);
-		conns.erase(std::remove_if(conns.begin(), conns.end(), [&](const Conn& conn) -> bool {
+		for(auto& conn: conns) {
 			if(conn.c->getUrl() == url) {
-				c = conn.c;
-				if(conn.manageStream) {
-					stream = conn.stream;
+				if(!conn.remove) {
+					c = conn.c;
 				}
-				return true;
+				break;
 			}
-			return false;
-		}), conns.end());
+		}
 	}
 
 	if(c) {
+		c->abort();
+		resetStream(c);
 		fire(HttpManagerListener::Failed(), c, _("Disconnected"));
-		fire(HttpManagerListener::Removed(), c);
-		delete c;
-		if(stream) {
-			delete stream;
+		removeLater(c);
+	}
+}
+
+void HttpManager::force(const string& url) {
+	HttpConnection* c = nullptr;
+
+	{
+		Lock l(cs);
+		for(auto& conn: conns) {
+			if(conn.c->getUrl() == url) {
+				if(conn.remove) {
+					conn.remove = 0;
+					c = conn.c;
+				}
+				break;
+			}
 		}
+	}
+
+	if(c) {
+		fire(HttpManagerListener::Removed(), c);
+		fire(HttpManagerListener::Added(), c);
+		c->download();
 	}
 }
 
@@ -144,7 +162,9 @@ void HttpManager::on(HttpConnectionListener::Failed, HttpConnection* c, const st
 	resetStream(c);
 
 	if(c->getCoralized()) {
+		fire(HttpManagerListener::Removed(), c);
 		c->setCoralized(false);
+		fire(HttpManagerListener::Added(), c);
 		c->download();
 		return;
 	}
@@ -165,8 +185,9 @@ void HttpManager::on(HttpConnectionListener::Complete, HttpConnection* c) noexce
 }
 
 void HttpManager::on(HttpConnectionListener::Redirected, HttpConnection* c, const string& redirect) noexcept {
-	fire(HttpManagerListener::Removed(), c);
 	resetStream(c);
+
+	fire(HttpManagerListener::Removed(), c);
 	c->setUrl(redirect);
 	fire(HttpManagerListener::Added(), c);
 }

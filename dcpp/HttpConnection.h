@@ -40,6 +40,8 @@ public:
 	void download();
 	void download(const StringMap& postData);
 
+	void abort();
+
 	const string& getMimeType() const { return mimeType; }
 
 	int64_t getSize() const { return size; }

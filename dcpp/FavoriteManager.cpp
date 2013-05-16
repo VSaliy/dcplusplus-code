@@ -675,7 +675,7 @@ void FavoriteManager::refresh(bool forceDownload /* = false */) {
 	}
 
 	publicListServer = sl[(lastServer) % sl.size()];
-	if(Util::strnicmp(publicListServer.c_str(), "http://", 7) != 0) {
+	if(Util::findSubString(publicListServer, "http://") != 0 && Util::findSubString(publicListServer, "https://") != 0) {
 		lastServer++;
 		fire(FavoriteManagerListener::DownloadFailed(), str(F_("Invalid URL: %1%") % Util::addBrackets(publicListServer)));
 		return;
