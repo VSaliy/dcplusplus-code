@@ -165,6 +165,9 @@ if dev.is_win32():
 	# boost defines
 	env.Append(CPPDEFINES = ['BOOST_ALL_NO_LIB', 'BOOST_USE_WINDOWS_H'])
 
+	# zlib defines
+	env.Append(CPPDEFINES = ['CASESENSITIVITYDEFAULT_YES', 'ZLIB_WINAPI'])
+
 if 'gcc' in env['TOOLS']:
 	if env['savetemps']:
 		env.Append(CCFLAGS = ['-save-temps', '-fverbose-asm'])

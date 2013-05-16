@@ -24,11 +24,20 @@
 #include "Util.h"
 
 #include <unzip.h>
+#ifdef _WIN32
+#include <iowin32.h>
+#endif
 
 namespace dcpp {
 
 Archive::Archive(const string& path) {
-	file = unzOpen64(Text::toT(path).c_str());
+#ifdef _WIN32
+	zlib_filefunc64_def funcs;
+	fill_win32_filefunc64(&funcs);
+	file = unzOpen2_64(Text::toT(path).c_str(), &funcs);
+#else
+	file = unzOpen64(path.c_str());
+#endif
 	if(!file) {
 		throw Exception(_("Invalid archive"));
 	}
