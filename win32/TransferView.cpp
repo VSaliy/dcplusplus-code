@@ -441,10 +441,6 @@ void TransferView::HttpInfo::update(const UpdateInfo& ui) {
 	}
 }
 
-void TransferView::HttpInfo::force() {
-	HttpManager::getInstance()->force(path);
-}
-
 void TransferView::HttpInfo::disconnect() {
 	HttpManager::getInstance()->disconnect(path);
 }
@@ -485,12 +481,17 @@ bool TransferView::handleContextMenu(dwt::ScreenCoordinate pt) {
 		appendUserItems(mdi, menu.get(), false);
 
 		set<TransferInfo*> files;
+		auto onlyHttp = true;
 		for(auto i: sel) {
 			auto& transfer = transfers->getData(i)->transfer();
-			if(!dynamic_cast<HttpInfo*>(&transfer) && !transfer.getText(COLUMN_FILE).empty()) {
-				files.insert(&transfer);
+			if(!dynamic_cast<HttpInfo*>(&transfer)) {
+				onlyHttp = false;
+				if(!transfer.getText(COLUMN_FILE).empty()) {
+					files.insert(&transfer);
+				}
 			}
 		}
+
 		if(files.size() == 1) {
 			menu->appendSeparator();
 			transfer = *files.begin();
@@ -515,9 +516,11 @@ bool TransferView::handleContextMenu(dwt::ScreenCoordinate pt) {
 		}
 		menu->appendShellMenu(paths);
 
-		menu->appendSeparator();
-		menu->appendItem(T_("&Force attempt"), [this] { handleForce(); });
-		menu->appendSeparator();
+		if(!onlyHttp) {
+			menu->appendSeparator();
+			menu->appendItem(T_("&Force attempt"), [this] { handleForce(); });
+			menu->appendSeparator();
+		}
 		menu->appendItem(T_("&Disconnect"), [this] { handleDisconnect(); });
 
 		WinUtil::addCopyMenu(menu.get(), transfers);

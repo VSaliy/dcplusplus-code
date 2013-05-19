@@ -49,12 +49,11 @@ public:
 	HttpConnection* download(string url, const StringMap& postData, OutputStream* stream = nullptr);
 
 	void disconnect(const string& url);
-	void force(const string& url);
 
 	void shutdown();
 
 private:
-	struct Conn { HttpConnection* c; OutputStream* stream; bool manageStream; bool success; uint64_t remove; };
+	struct Conn { HttpConnection* c; OutputStream* stream; bool manageStream; uint64_t remove; };
 
 	friend class Singleton<HttpManager>;
 
