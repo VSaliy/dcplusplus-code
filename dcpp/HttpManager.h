@@ -54,7 +54,7 @@ public:
 	void shutdown();
 
 private:
-	struct Conn { HttpConnection* c; OutputStream* stream; bool manageStream; uint64_t remove; };
+	struct Conn { HttpConnection* c; OutputStream* stream; bool manageStream; bool success; uint64_t remove; };
 
 	friend class Singleton<HttpManager>;
 
