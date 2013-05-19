@@ -68,29 +68,6 @@ void HttpManager::disconnect(const string& url) {
 	}
 }
 
-void HttpManager::force(const string& url) {
-	HttpConnection* c = nullptr;
-
-	{
-		Lock l(cs);
-		for(auto& conn: conns) {
-			if(conn.c->getUrl() == url) {
-				if(conn.remove && !conn.success) {
-					conn.remove = 0;
-					c = conn.c;
-				}
-				break;
-			}
-		}
-	}
-
-	if(c) {
-		fire(HttpManagerListener::Removed(), c);
-		fire(HttpManagerListener::Added(), c);
-		c->download();
-	}
-}
-
 void HttpManager::shutdown() {
 	TimerManager::getInstance()->removeListener(this);
 
@@ -107,7 +84,7 @@ HttpConnection* HttpManager::makeConn(string&& url, bool coralized, OutputStream
 	auto c = new HttpConnection();
 	{
 		Lock l(cs);
-		Conn conn { c, stream ? stream : new StringOutputStream(), !stream, false, 0 };
+		Conn conn { c, stream ? stream : new StringOutputStream(), !stream, 0 };
 		conns.push_back(move(conn));
 	}
 	c->addListener(this);
@@ -177,9 +154,7 @@ void HttpManager::on(HttpConnectionListener::Complete, HttpConnection* c) noexce
 	OutputStream* stream;
 	{
 		Lock l(cs);
-		auto conn = findConn(c);
-		conn->success = true;
-		stream = conn->stream;
+		stream = findConn(c)->stream;
 	}
 	stream->flush();
 	fire(HttpManagerListener::Complete(), c, stream);

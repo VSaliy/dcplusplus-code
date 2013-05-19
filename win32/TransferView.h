@@ -160,7 +160,6 @@ private:
 
 		void update(const UpdateInfo& ui);
 
-		virtual void force();
 		virtual void disconnect();
 
 		Status status;
