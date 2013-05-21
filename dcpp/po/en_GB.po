@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-03-04 13:16+0100\n"
+"POT-Creation-Date: 2013-05-21 19:34+0200\n"
 "PO-Revision-Date: 2013-01-22 00:43+0000\n"
 "Last-Translator: Andi Chandler <Unknown>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-04 12:09+0000\n"
-"X-Generator: Launchpad (build 16514)\n"
+"X-Launchpad-Export-Date: 2013-05-21 16:57+0000\n"
+"X-Generator: Launchpad (build 16626)\n"
 
 #: dcpp\DownloadManager.cpp:360
 #, boost-format
@@ -63,7 +63,8 @@ msgstr "%1% %2% (added by %3%)"
 msgid "%1% %2% port (%3% %4%)"
 msgstr "%1% %2% port (%3% %4%)"
 
-#: dcpp\HttpConnection.cpp:205 dcpp\HttpConnection.cpp:271
+#: dcpp\HttpConnection.cpp:143 dcpp\HttpConnection.cpp:218
+#: dcpp\HttpConnection.cpp:274
 #, boost-format
 msgid "%1% (%2%)"
 msgstr "%1% (%2%)"
@@ -78,17 +79,22 @@ msgstr "%1% (%2%) has same CID {%3%} as %4% (%5%), ignoring"
 msgid "%1% (Nick unknown)"
 msgstr "%1% (Nick unknown)"
 
-#: dcpp\PluginManager.cpp:127
+#: dcpp\PluginManager.cpp:156 dcpp\PluginManager.cpp:659
 #, boost-format
 msgid "%1% is already installed"
 msgstr "%1% is already installed"
 
-#: dcpp\PluginManager.cpp:112
+#: dcpp\PluginManager.cpp:141 dcpp\PluginManager.cpp:527
 #, boost-format
 msgid "%1% is not a valid plugin"
 msgstr "%1% is not a valid plug-in"
 
-#: dcpp\PluginManager.cpp:133
+#: dcpp\PluginManager.cpp:144
+#, boost-format
+msgid "%1% is not compatible with %2%"
+msgstr ""
+
+#: dcpp\PluginManager.cpp:107 dcpp\PluginManager.cpp:666
 #, boost-format
 msgid "%1% is too old, contact the plugin author for an update"
 msgstr "%1% is too old, contact the plug-in author for an update"
@@ -258,7 +264,7 @@ msgstr "Could not open port for listening"
 msgid "Could not open target file: %1%"
 msgstr "Could not open target file: %1%"
 
-#: dcpp\DCPlusPlus.cpp:129
+#: dcpp\DCPlusPlus.cpp:131
 msgid "Country information"
 msgstr "Country information"
 
@@ -286,7 +292,7 @@ msgstr "Directory missing name attribute"
 msgid "Discard"
 msgstr "Discard"
 
-#: dcpp\BufferedSocket.cpp:475
+#: dcpp\BufferedSocket.cpp:475 dcpp\HttpManager.cpp:66
 msgid "Disconnected"
 msgstr "Disconnected"
 
@@ -299,7 +305,7 @@ msgstr "Disconnected user leaving the hub: %1%"
 msgid "Document"
 msgstr "Document"
 
-#: dcpp\DCPlusPlus.cpp:125
+#: dcpp\DCPlusPlus.cpp:127
 msgid "Download Queue"
 msgstr "Download Queue"
 
@@ -325,7 +331,7 @@ msgstr "Duplicate source: %1%"
 msgid "Encrypted transfer"
 msgstr "Encrypted transfer"
 
-#: dcpp\HttpConnection.cpp:233
+#: dcpp\HttpConnection.cpp:245
 #, boost-format
 msgid "Endless redirection loop (%1%)"
 msgstr "Endless redirection loop (%1%)"
@@ -356,7 +362,12 @@ msgstr "Error generating certificate"
 msgid "Error hashing %1%: %2%"
 msgstr "Error hashing %1%: %2%"
 
-#: dcpp\PluginManager.cpp:95
+#: dcpp\PluginManager.cpp:535
+#, fuzzy, boost-format
+msgid "Error loading %1%"
+msgstr "Error loading %1%: %2%"
+
+#: dcpp\PluginManager.cpp:519
 #, boost-format
 msgid "Error loading %1%: %2%"
 msgstr "Error loading %1%: %2%"
@@ -479,7 +490,7 @@ msgstr "Generated new TLS certificate"
 msgid "Generic"
 msgstr "Generic"
 
-#: dcpp\DCPlusPlus.cpp:119
+#: dcpp\DCPlusPlus.cpp:121
 msgid "Hash database"
 msgstr "Hash database"
 
@@ -504,10 +515,15 @@ msgstr ""
 msgid "Ignore"
 msgstr "Ignore"
 
-#: dcpp\FavoriteManager.cpp:683
+#: dcpp\FavoriteManager.cpp:680
 #, boost-format
 msgid "Invalid URL: %1%"
 msgstr "Invalid URL: %1%"
+
+#: dcpp\Archive.cpp:42 dcpp\Archive.cpp:94
+#, fuzzy
+msgid "Invalid archive"
+msgstr "Invalid size"
 
 #: dcpp\UserConnection.cpp:52 dcpp\UserConnection.cpp:70
 #: dcpp\UserConnection.cpp:138
@@ -528,7 +544,7 @@ msgstr "Invalid file name found while hashing folder %1%"
 msgid "Invalid regular expression: %1%"
 msgstr "Invalid regular expression: %1%"
 
-#: dcpp\SettingsManager.cpp:626
+#: dcpp\SettingsManager.cpp:633
 msgid "Invalid search type name"
 msgstr "Invalid search type name"
 
@@ -544,7 +560,7 @@ msgstr ""
 "Invalid target file (missing directory, check default download directory "
 "setting)"
 
-#: dcpp\FavoriteManager.cpp:426
+#: dcpp\FavoriteManager.cpp:423
 msgid "Kick user(s)"
 msgstr "Kick user(s)"
 
@@ -556,7 +572,7 @@ msgstr "Local network with possible NAT detected, trying to map the ports..."
 msgid "Maximum command length exceeded"
 msgstr "Maximum command length exceeded"
 
-#: dcpp\PluginManager.cpp:141
+#: dcpp\PluginManager.cpp:673
 #, boost-format
 msgid "Missing dependencies for %1%"
 msgstr "Missing dependencies for %1%"
@@ -585,7 +601,7 @@ msgstr "No private key file chosen"
 msgid "No slots available"
 msgstr "No slots available"
 
-#: dcpp\SettingsManager.cpp:684
+#: dcpp\SettingsManager.cpp:691
 msgid "No such search type"
 msgstr "No such search type"
 
@@ -600,7 +616,7 @@ msgstr "Not listening for connections - please restart %1%"
 
 #: dcpp\ClientManager.cpp:174 dcpp\FinishedManager.cpp:131
 #: dcpp\FinishedManager.cpp:137 dcpp\FinishedManager.cpp:143
-#: dcpp\SearchManager.cpp:261 dcpp\SearchManager.cpp:338 dcpp\Transfer.cpp:81
+#: dcpp\SearchManager.cpp:266 dcpp\SearchManager.cpp:343 dcpp\Transfer.cpp:81
 #: dcpp\Transfer.cpp:85
 msgid "Offline"
 msgstr "Offline"
@@ -628,7 +644,7 @@ msgid ""
 msgstr ""
 "Public IP address detected, selecting active mode with direct connection"
 
-#: dcpp\FavoriteManager.cpp:430
+#: dcpp\FavoriteManager.cpp:427
 msgid "Redirect user(s)"
 msgstr "Redirect user(s)"
 
@@ -648,25 +664,25 @@ msgstr "Search"
 msgid "Search (UDP)"
 msgstr "Search (UDP)"
 
-#: dcpp\SearchManager.cpp:154
+#: dcpp\SearchManager.cpp:160
 #, boost-format
 msgid "Search disabled: %1%"
 msgstr "Search disabled: %1%"
 
-#: dcpp\SearchManager.cpp:146
+#: dcpp\SearchManager.cpp:152
 msgid "Search enabled again"
 msgstr "Search enabled again"
 
-#: dcpp\DCPlusPlus.cpp:116
+#: dcpp\DCPlusPlus.cpp:118
 msgid "Security certificates"
 msgstr "Security certificates"
 
-#: dcpp\ChatMessage.cpp:66
+#: dcpp\ChatMessage.cpp:65
 #, boost-format
 msgid "Sent %1%"
 msgstr "Sent %1%"
 
-#: dcpp\DCPlusPlus.cpp:122
+#: dcpp\DCPlusPlus.cpp:124
 msgid "Shared Files"
 msgstr "Shared Files"
 
@@ -760,9 +776,14 @@ msgstr ""
 "This hub is trying to use your client to spam %1%, please urge hub owner to "
 "fix this"
 
-#: dcpp\SettingsManager.cpp:630 dcpp\SettingsManager.cpp:652
+#: dcpp\SettingsManager.cpp:637 dcpp\SettingsManager.cpp:659
 msgid "This search type already exists"
 msgstr "This search type already exists"
+
+#: dcpp\HttpConnection.cpp:289
+#, boost-format
+msgid "Too much data in response body (%1%)"
+msgstr ""
 
 #: dcpp\MappingManager.cpp:121 dcpp\MappingManager.cpp:164
 msgid "Transfer"
@@ -771,6 +792,11 @@ msgstr "Transfer"
 #: dcpp\ConnectivityManager.cpp:274
 msgid "Transfer (TCP)"
 msgstr "Transfer (TCP)"
+
+#: dcpp\HttpConnection.cpp:206
+#, boost-format
+msgid "Transfer-encoding error (%1%)"
+msgstr ""
 
 #: dcpp\UserMatchManager.cpp:132
 msgid "Un-ignore"
@@ -821,7 +847,12 @@ msgstr "Unknown error: 0x%1$x"
 msgid "Unknown protocol %d"
 msgstr "Unknown protocol %d"
 
-#: dcpp\DCPlusPlus.cpp:110
+#: dcpp\PluginManager.cpp:654
+#, boost-format
+msgid "Updating the %1% plugin from version %2% to version %3%"
+msgstr ""
+
+#: dcpp\DCPlusPlus.cpp:112
 msgid "Users"
 msgstr "Users"
 
@@ -837,7 +868,7 @@ msgstr "You're trying to download from yourself!"
 msgid "disabled"
 msgstr "disabled"
 
-#: dcpp\SettingsManager.cpp:193 dcpp\SettingsManager.cpp:194
+#: dcpp\SettingsManager.cpp:199 dcpp\SettingsManager.cpp:200
 msgid "downloaded from"
 msgstr "downloaded from"
 
@@ -850,6 +881,6 @@ msgstr "enabled - %1%"
 msgid "undefined"
 msgstr "Undefined"
 
-#: dcpp\SettingsManager.cpp:195
+#: dcpp\SettingsManager.cpp:201
 msgid "uploaded to"
 msgstr "uploaded to"

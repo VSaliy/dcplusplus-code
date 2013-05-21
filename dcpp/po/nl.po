@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-03-04 13:16+0100\n"
+"POT-Creation-Date: 2013-05-21 19:34+0200\n"
 "PO-Revision-Date: 2012-03-04 17:40+0000\n"
 "Last-Translator: FlipFlop™ <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-04 12:09+0000\n"
-"X-Generator: Launchpad (build 16514)\n"
+"X-Launchpad-Export-Date: 2013-05-21 16:57+0000\n"
+"X-Generator: Launchpad (build 16626)\n"
 
 #: dcpp\DownloadManager.cpp:360
 #, boost-format
@@ -63,7 +63,8 @@ msgstr ""
 msgid "%1% %2% port (%3% %4%)"
 msgstr ""
 
-#: dcpp\HttpConnection.cpp:205 dcpp\HttpConnection.cpp:271
+#: dcpp\HttpConnection.cpp:143 dcpp\HttpConnection.cpp:218
+#: dcpp\HttpConnection.cpp:274
 #, boost-format
 msgid "%1% (%2%)"
 msgstr ""
@@ -78,17 +79,22 @@ msgstr "%1% (%2%) heeft dezelfde CID {%3%} als %4% (%5%), negeren"
 msgid "%1% (Nick unknown)"
 msgstr "%1% (Nick onbekend)"
 
-#: dcpp\PluginManager.cpp:127
+#: dcpp\PluginManager.cpp:156 dcpp\PluginManager.cpp:659
 #, boost-format
 msgid "%1% is already installed"
 msgstr ""
 
-#: dcpp\PluginManager.cpp:112
+#: dcpp\PluginManager.cpp:141 dcpp\PluginManager.cpp:527
 #, fuzzy, boost-format
 msgid "%1% is not a valid plugin"
 msgstr "%1%: Bestand niet beschikbaar"
 
-#: dcpp\PluginManager.cpp:133
+#: dcpp\PluginManager.cpp:144
+#, boost-format
+msgid "%1% is not compatible with %2%"
+msgstr ""
+
+#: dcpp\PluginManager.cpp:107 dcpp\PluginManager.cpp:666
 #, boost-format
 msgid "%1% is too old, contact the plugin author for an update"
 msgstr ""
@@ -245,7 +251,7 @@ msgstr "Doelbestand kon niet geopend worden: %1%"
 msgid "Could not open target file: %1%"
 msgstr "Doelbestand kon niet geopend worden: %1%"
 
-#: dcpp\DCPlusPlus.cpp:129
+#: dcpp\DCPlusPlus.cpp:131
 msgid "Country information"
 msgstr ""
 
@@ -273,7 +279,7 @@ msgstr "Attribuut directory heeft geen name"
 msgid "Discard"
 msgstr "Verwijderen"
 
-#: dcpp\BufferedSocket.cpp:475
+#: dcpp\BufferedSocket.cpp:475 dcpp\HttpManager.cpp:66
 msgid "Disconnected"
 msgstr "Verbroken"
 
@@ -286,7 +292,7 @@ msgstr "Verbroken gebruiker verlaat de hub: %1%"
 msgid "Document"
 msgstr "Documenten"
 
-#: dcpp\DCPlusPlus.cpp:125
+#: dcpp\DCPlusPlus.cpp:127
 msgid "Download Queue"
 msgstr "Download wachtrij"
 
@@ -313,7 +319,7 @@ msgstr "Kopie van bron: %1%"
 msgid "Encrypted transfer"
 msgstr " Versleutelde overdrachtspoort (%1% TCP)"
 
-#: dcpp\HttpConnection.cpp:233
+#: dcpp\HttpConnection.cpp:245
 #, boost-format
 msgid "Endless redirection loop (%1%)"
 msgstr ""
@@ -344,7 +350,12 @@ msgstr "Fout bij genereren van certificaat"
 msgid "Error hashing %1%: %2%"
 msgstr "Fout tijdens hashen %1%: %2%"
 
-#: dcpp\PluginManager.cpp:95
+#: dcpp\PluginManager.cpp:535
+#, fuzzy, boost-format
+msgid "Error loading %1%"
+msgstr "Fout tijdens hashen %1%: %2%"
+
+#: dcpp\PluginManager.cpp:519
 #, fuzzy, boost-format
 msgid "Error loading %1%: %2%"
 msgstr "Fout tijdens hashen %1%: %2%"
@@ -466,7 +477,7 @@ msgstr "Nieuw TLS certificaat gegenereerd"
 msgid "Generic"
 msgstr ""
 
-#: dcpp\DCPlusPlus.cpp:119
+#: dcpp\DCPlusPlus.cpp:121
 msgid "Hash database"
 msgstr "Hash-Database"
 
@@ -491,10 +502,15 @@ msgstr ""
 msgid "Ignore"
 msgstr ""
 
-#: dcpp\FavoriteManager.cpp:683
+#: dcpp\FavoriteManager.cpp:680
 #, fuzzy, boost-format
 msgid "Invalid URL: %1%"
 msgstr "Zoeken uitgeschakeld: %1%"
+
+#: dcpp\Archive.cpp:42 dcpp\Archive.cpp:94
+#, fuzzy
+msgid "Invalid archive"
+msgstr "Ongeldige grootte"
 
 #: dcpp\UserConnection.cpp:52 dcpp\UserConnection.cpp:70
 #: dcpp\UserConnection.cpp:138
@@ -515,7 +531,7 @@ msgstr "Ongeldige bestandsnaam gevonden tijdens het hashen van directory %1%"
 msgid "Invalid regular expression: %1%"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:626
+#: dcpp\SettingsManager.cpp:633
 msgid "Invalid search type name"
 msgstr "Ongeldige naam voor zoektype"
 
@@ -531,7 +547,7 @@ msgstr ""
 "Ongeldig doelbestand (Map niet aanwezig, controleer standaard downloadmap "
 "instellingen)"
 
-#: dcpp\FavoriteManager.cpp:426
+#: dcpp\FavoriteManager.cpp:423
 msgid "Kick user(s)"
 msgstr "Blokkeer Gebruiker(s)"
 
@@ -543,7 +559,7 @@ msgstr ""
 msgid "Maximum command length exceeded"
 msgstr "Maximum aantal karakters overschreden"
 
-#: dcpp\PluginManager.cpp:141
+#: dcpp\PluginManager.cpp:673
 #, boost-format
 msgid "Missing dependencies for %1%"
 msgstr ""
@@ -572,7 +588,7 @@ msgstr "Geen vertrouwde sleutelfile gekozen"
 msgid "No slots available"
 msgstr "Geen Slots beschikbaar"
 
-#: dcpp\SettingsManager.cpp:684
+#: dcpp\SettingsManager.cpp:691
 msgid "No such search type"
 msgstr "Zoektype bestaat niet"
 
@@ -587,7 +603,7 @@ msgstr "Niet reageren op verbinding - s.v.p. herstarten %1%"
 
 #: dcpp\ClientManager.cpp:174 dcpp\FinishedManager.cpp:131
 #: dcpp\FinishedManager.cpp:137 dcpp\FinishedManager.cpp:143
-#: dcpp\SearchManager.cpp:261 dcpp\SearchManager.cpp:338 dcpp\Transfer.cpp:81
+#: dcpp\SearchManager.cpp:266 dcpp\SearchManager.cpp:343 dcpp\Transfer.cpp:81
 #: dcpp\Transfer.cpp:85
 msgid "Offline"
 msgstr "Offline"
@@ -616,7 +632,7 @@ msgstr ""
 "Openbaar IP-adres gedetecteerd. Actieve modus met directe verbinding wordt "
 "geselecteerd"
 
-#: dcpp\FavoriteManager.cpp:430
+#: dcpp\FavoriteManager.cpp:427
 msgid "Redirect user(s)"
 msgstr "Gebruiker omleiden"
 
@@ -637,26 +653,26 @@ msgstr ""
 msgid "Search (UDP)"
 msgstr " Zoekpoort (%1% UDP)"
 
-#: dcpp\SearchManager.cpp:154
+#: dcpp\SearchManager.cpp:160
 #, boost-format
 msgid "Search disabled: %1%"
 msgstr "Zoeken uitgeschakeld: %1%"
 
-#: dcpp\SearchManager.cpp:146
+#: dcpp\SearchManager.cpp:152
 msgid "Search enabled again"
 msgstr "Zoeken weer hervat"
 
-#: dcpp\DCPlusPlus.cpp:116
+#: dcpp\DCPlusPlus.cpp:118
 #, fuzzy
 msgid "Security certificates"
 msgstr "Fout bij genereren van certificaat"
 
-#: dcpp\ChatMessage.cpp:66
+#: dcpp\ChatMessage.cpp:65
 #, boost-format
 msgid "Sent %1%"
 msgstr ""
 
-#: dcpp\DCPlusPlus.cpp:122
+#: dcpp\DCPlusPlus.cpp:124
 msgid "Shared Files"
 msgstr "Gedeelde bestanden"
 
@@ -746,9 +762,14 @@ msgstr ""
 "Deze hub probeert je client %1% te spammen, dring er bij de hubeigenaar op "
 "aan dit op te lossen"
 
-#: dcpp\SettingsManager.cpp:630 dcpp\SettingsManager.cpp:652
+#: dcpp\SettingsManager.cpp:637 dcpp\SettingsManager.cpp:659
 msgid "This search type already exists"
 msgstr "Dit zoektype bestaat al"
+
+#: dcpp\HttpConnection.cpp:289
+#, boost-format
+msgid "Too much data in response body (%1%)"
+msgstr ""
 
 #: dcpp\MappingManager.cpp:121 dcpp\MappingManager.cpp:164
 msgid "Transfer"
@@ -758,6 +779,11 @@ msgstr ""
 #, fuzzy
 msgid "Transfer (TCP)"
 msgstr " Overdrachtspoort (%1% TCP)"
+
+#: dcpp\HttpConnection.cpp:206
+#, boost-format
+msgid "Transfer-encoding error (%1%)"
+msgstr ""
 
 #: dcpp\UserMatchManager.cpp:132
 msgid "Un-ignore"
@@ -809,7 +835,12 @@ msgstr "Onbekende fout: 0x%1$x"
 msgid "Unknown protocol %d"
 msgstr "Onbekende fout: 0x%1$x"
 
-#: dcpp\DCPlusPlus.cpp:110
+#: dcpp\PluginManager.cpp:654
+#, boost-format
+msgid "Updating the %1% plugin from version %2% to version %3%"
+msgstr ""
+
+#: dcpp\DCPlusPlus.cpp:112
 msgid "Users"
 msgstr "Gebruikers"
 
@@ -825,7 +856,7 @@ msgstr "U probeert Uw eigen bestand te downloaden!"
 msgid "disabled"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:193 dcpp\SettingsManager.cpp:194
+#: dcpp\SettingsManager.cpp:199 dcpp\SettingsManager.cpp:200
 msgid "downloaded from"
 msgstr "gedownload van"
 
@@ -838,6 +869,6 @@ msgstr "Zoeken uitgeschakeld: %1%"
 msgid "undefined"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:195
+#: dcpp\SettingsManager.cpp:201
 msgid "uploaded to"
 msgstr "geupload naar"

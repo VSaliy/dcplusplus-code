@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-03-04 13:16+0100\n"
-"PO-Revision-Date: 2013-02-25 10:41+0000\n"
+"POT-Creation-Date: 2013-05-21 19:34+0200\n"
+"PO-Revision-Date: 2013-05-15 09:33+0000\n"
 "Last-Translator: Guybrush88 <Unknown>\n"
 "Language-Team: Italian language <netcelli@gmail.com>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-04 12:08+0000\n"
-"X-Generator: Launchpad (build 16514)\n"
+"X-Launchpad-Export-Date: 2013-05-21 16:57+0000\n"
+"X-Generator: Launchpad (build 16626)\n"
 "X-Poedit-Country: ITALY\n"
 "X-Poedit-Language: Italian\n"
 
@@ -65,7 +65,8 @@ msgstr "%1% %2% (aggiunti da %3%)"
 msgid "%1% %2% port (%3% %4%)"
 msgstr "Porta %1% %2% (%3% %4%)"
 
-#: dcpp\HttpConnection.cpp:205 dcpp\HttpConnection.cpp:271
+#: dcpp\HttpConnection.cpp:143 dcpp\HttpConnection.cpp:218
+#: dcpp\HttpConnection.cpp:274
 #, boost-format
 msgid "%1% (%2%)"
 msgstr "%1% (%2%)"
@@ -80,17 +81,22 @@ msgstr "%1% (%2%) ha lo stesso CID {%3%} di %4% (%5%), ignora"
 msgid "%1% (Nick unknown)"
 msgstr "%1% (Soprannome sconosciuto)"
 
-#: dcpp\PluginManager.cpp:127
+#: dcpp\PluginManager.cpp:156 dcpp\PluginManager.cpp:659
 #, boost-format
 msgid "%1% is already installed"
 msgstr "%1% è già installato"
 
-#: dcpp\PluginManager.cpp:112
+#: dcpp\PluginManager.cpp:141 dcpp\PluginManager.cpp:527
 #, boost-format
 msgid "%1% is not a valid plugin"
 msgstr "%1% non è un plugin valido"
 
-#: dcpp\PluginManager.cpp:133
+#: dcpp\PluginManager.cpp:144
+#, boost-format
+msgid "%1% is not compatible with %2%"
+msgstr "%1% non è compatibile con %2%"
+
+#: dcpp\PluginManager.cpp:107 dcpp\PluginManager.cpp:666
 #, boost-format
 msgid "%1% is too old, contact the plugin author for an update"
 msgstr ""
@@ -265,7 +271,7 @@ msgstr "Non è stato possibile aprire la porta per l'ascolto"
 msgid "Could not open target file: %1%"
 msgstr "Impossibile aprire il file di destinazione: %1%"
 
-#: dcpp\DCPlusPlus.cpp:129
+#: dcpp\DCPlusPlus.cpp:131
 msgid "Country information"
 msgstr "Informazioni sul paese"
 
@@ -293,7 +299,7 @@ msgstr "La cartella è senza nome"
 msgid "Discard"
 msgstr "Annulla"
 
-#: dcpp\BufferedSocket.cpp:475
+#: dcpp\BufferedSocket.cpp:475 dcpp\HttpManager.cpp:66
 msgid "Disconnected"
 msgstr "Disconnesso"
 
@@ -306,7 +312,7 @@ msgstr "L'utente si è disconesso lasciando l'hub: %1%"
 msgid "Document"
 msgstr "Documento"
 
-#: dcpp\DCPlusPlus.cpp:125
+#: dcpp\DCPlusPlus.cpp:127
 msgid "Download Queue"
 msgstr "Coda dei download"
 
@@ -332,7 +338,7 @@ msgstr "Sorgente duplicata: %1%"
 msgid "Encrypted transfer"
 msgstr "Trasferimento cifrato"
 
-#: dcpp\HttpConnection.cpp:233
+#: dcpp\HttpConnection.cpp:245
 #, boost-format
 msgid "Endless redirection loop (%1%)"
 msgstr "Ciclo infinito di reindirizzamento (%1%)"
@@ -363,7 +369,12 @@ msgstr "Errore nel generare il certificato"
 msgid "Error hashing %1%: %2%"
 msgstr "Errore durante l'indicizzazione di %1%: %2%"
 
-#: dcpp\PluginManager.cpp:95
+#: dcpp\PluginManager.cpp:535
+#, boost-format
+msgid "Error loading %1%"
+msgstr "Errore durante il caricamento di %1%"
+
+#: dcpp\PluginManager.cpp:519
 #, boost-format
 msgid "Error loading %1%: %2%"
 msgstr "Errore durante il caricamento di %1%: %2%"
@@ -487,7 +498,7 @@ msgstr "È stato creato un nuovo certificato TLS"
 msgid "Generic"
 msgstr "Generico"
 
-#: dcpp\DCPlusPlus.cpp:119
+#: dcpp\DCPlusPlus.cpp:121
 msgid "Hash database"
 msgstr "Database delle indicizzazioni"
 
@@ -512,10 +523,14 @@ msgstr ""
 msgid "Ignore"
 msgstr "Ignora"
 
-#: dcpp\FavoriteManager.cpp:683
+#: dcpp\FavoriteManager.cpp:680
 #, boost-format
 msgid "Invalid URL: %1%"
 msgstr "URL non valido: %1%"
+
+#: dcpp\Archive.cpp:42 dcpp\Archive.cpp:94
+msgid "Invalid archive"
+msgstr "Archivio non valido"
 
 #: dcpp\UserConnection.cpp:52 dcpp\UserConnection.cpp:70
 #: dcpp\UserConnection.cpp:138
@@ -536,7 +551,7 @@ msgstr "Nome di file non valido trovato facendo l'hashing della cartella %1%"
 msgid "Invalid regular expression: %1%"
 msgstr "Espressione regolare non valida: %1%"
 
-#: dcpp\SettingsManager.cpp:626
+#: dcpp\SettingsManager.cpp:633
 msgid "Invalid search type name"
 msgstr "NOme del tipo di file da ricercare non valido"
 
@@ -552,7 +567,7 @@ msgstr ""
 "File di destinazione non valido (cartella mancante, verificare la cartella "
 "di download predefinita nelle impostazioni)"
 
-#: dcpp\FavoriteManager.cpp:426
+#: dcpp\FavoriteManager.cpp:423
 msgid "Kick user(s)"
 msgstr "Kikka utente(i)"
 
@@ -566,7 +581,7 @@ msgstr ""
 msgid "Maximum command length exceeded"
 msgstr "Massima lunghezza comando superata"
 
-#: dcpp\PluginManager.cpp:141
+#: dcpp\PluginManager.cpp:673
 #, boost-format
 msgid "Missing dependencies for %1%"
 msgstr "Dipendenze mancanti per %1%"
@@ -595,7 +610,7 @@ msgstr "Nessun file di chiave privata scelto"
 msgid "No slots available"
 msgstr "Nessuno slot disponibile"
 
-#: dcpp\SettingsManager.cpp:684
+#: dcpp\SettingsManager.cpp:691
 msgid "No such search type"
 msgstr "Tipo di ricerca inesistente"
 
@@ -610,7 +625,7 @@ msgstr "Nessun ascolto per la connessione - riavviare %1%"
 
 #: dcpp\ClientManager.cpp:174 dcpp\FinishedManager.cpp:131
 #: dcpp\FinishedManager.cpp:137 dcpp\FinishedManager.cpp:143
-#: dcpp\SearchManager.cpp:261 dcpp\SearchManager.cpp:338 dcpp\Transfer.cpp:81
+#: dcpp\SearchManager.cpp:266 dcpp\SearchManager.cpp:343 dcpp\Transfer.cpp:81
 #: dcpp\Transfer.cpp:85
 msgid "Offline"
 msgstr "Non in linea"
@@ -639,7 +654,7 @@ msgstr ""
 "Rilevato indirizzo IP pubblico, seleziono la modalità attiva con connessione "
 "diretta"
 
-#: dcpp\FavoriteManager.cpp:430
+#: dcpp\FavoriteManager.cpp:427
 msgid "Redirect user(s)"
 msgstr "Reindirizza utente(i)"
 
@@ -659,25 +674,25 @@ msgstr "Cerca"
 msgid "Search (UDP)"
 msgstr "Cerca (UDP)"
 
-#: dcpp\SearchManager.cpp:154
+#: dcpp\SearchManager.cpp:160
 #, boost-format
 msgid "Search disabled: %1%"
 msgstr "Ricerca disabilitata: %1%"
 
-#: dcpp\SearchManager.cpp:146
+#: dcpp\SearchManager.cpp:152
 msgid "Search enabled again"
 msgstr "Ricerca nuovamente abilitata"
 
-#: dcpp\DCPlusPlus.cpp:116
+#: dcpp\DCPlusPlus.cpp:118
 msgid "Security certificates"
 msgstr "Certificati di sicurezza"
 
-#: dcpp\ChatMessage.cpp:66
+#: dcpp\ChatMessage.cpp:65
 #, boost-format
 msgid "Sent %1%"
 msgstr "Inviato %1%"
 
-#: dcpp\DCPlusPlus.cpp:122
+#: dcpp\DCPlusPlus.cpp:124
 msgid "Shared Files"
 msgstr "File Condivisi"
 
@@ -775,9 +790,14 @@ msgstr ""
 "Questo hub sta cercando di usare il tuo client per spammare %1%, avvisa il "
 "proprietario dell'hub per correggere il problema"
 
-#: dcpp\SettingsManager.cpp:630 dcpp\SettingsManager.cpp:652
+#: dcpp\SettingsManager.cpp:637 dcpp\SettingsManager.cpp:659
 msgid "This search type already exists"
 msgstr "Questo tipo di ricerca è già presente"
+
+#: dcpp\HttpConnection.cpp:289
+#, boost-format
+msgid "Too much data in response body (%1%)"
+msgstr "Troppi dati nel corpo di risposta (%1%)"
 
 #: dcpp\MappingManager.cpp:121 dcpp\MappingManager.cpp:164
 msgid "Transfer"
@@ -786,6 +806,11 @@ msgstr "Trasferimento"
 #: dcpp\ConnectivityManager.cpp:274
 msgid "Transfer (TCP)"
 msgstr "Trasferimento (TCP)"
+
+#: dcpp\HttpConnection.cpp:206
+#, boost-format
+msgid "Transfer-encoding error (%1%)"
+msgstr "Errore di trasferimento-codifica (%1%)"
 
 #: dcpp\UserMatchManager.cpp:132
 msgid "Un-ignore"
@@ -838,7 +863,12 @@ msgstr "Errore sconosciuto: 0x%1$x"
 msgid "Unknown protocol %d"
 msgstr "Protocollo %d sconosciuto"
 
-#: dcpp\DCPlusPlus.cpp:110
+#: dcpp\PluginManager.cpp:654
+#, boost-format
+msgid "Updating the %1% plugin from version %2% to version %3%"
+msgstr "Aggiornamento del plugin %1% dalla versione %2% alla versione %3%"
+
+#: dcpp\DCPlusPlus.cpp:112
 msgid "Users"
 msgstr "Utenti"
 
@@ -854,7 +884,7 @@ msgstr "Stai cercando di scaricare da te stesso!"
 msgid "disabled"
 msgstr "disabilitato"
 
-#: dcpp\SettingsManager.cpp:193 dcpp\SettingsManager.cpp:194
+#: dcpp\SettingsManager.cpp:199 dcpp\SettingsManager.cpp:200
 msgid "downloaded from"
 msgstr "scaricato da"
 
@@ -867,6 +897,6 @@ msgstr "abilitato - %1%"
 msgid "undefined"
 msgstr "non definito"
 
-#: dcpp\SettingsManager.cpp:195
+#: dcpp\SettingsManager.cpp:201
 msgid "uploaded to"
 msgstr "upload eseguito da"

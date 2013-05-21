@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-03-04 13:16+0100\n"
+"POT-Creation-Date: 2013-05-21 19:34+0200\n"
 "PO-Revision-Date: 2010-09-05 14:21+0000\n"
 "Last-Translator: Tarmo Ilves <tarmo.ilves.001@mail.ee>\n"
 "Language-Team: Estonian <et@li.org>\n"
@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-04 12:09+0000\n"
-"X-Generator: Launchpad (build 16514)\n"
+"X-Launchpad-Export-Date: 2013-05-21 16:57+0000\n"
+"X-Generator: Launchpad (build 16626)\n"
 
 #: dcpp\DownloadManager.cpp:360
 #, boost-format
@@ -63,7 +63,8 @@ msgstr ""
 msgid "%1% %2% port (%3% %4%)"
 msgstr ""
 
-#: dcpp\HttpConnection.cpp:205 dcpp\HttpConnection.cpp:271
+#: dcpp\HttpConnection.cpp:143 dcpp\HttpConnection.cpp:218
+#: dcpp\HttpConnection.cpp:274
 #, boost-format
 msgid "%1% (%2%)"
 msgstr ""
@@ -78,17 +79,22 @@ msgstr "%1% (%2%) omab sama CID {%3%} as %4% (%5%), ignoreerin"
 msgid "%1% (Nick unknown)"
 msgstr "%1% (Tundmatu hüüdnimi)"
 
-#: dcpp\PluginManager.cpp:127
+#: dcpp\PluginManager.cpp:156 dcpp\PluginManager.cpp:659
 #, boost-format
 msgid "%1% is already installed"
 msgstr ""
 
-#: dcpp\PluginManager.cpp:112
+#: dcpp\PluginManager.cpp:141 dcpp\PluginManager.cpp:527
 #, fuzzy, boost-format
 msgid "%1% is not a valid plugin"
 msgstr "%1%: Fail pole kättesaadav"
 
-#: dcpp\PluginManager.cpp:133
+#: dcpp\PluginManager.cpp:144
+#, boost-format
+msgid "%1% is not compatible with %2%"
+msgstr ""
+
+#: dcpp\PluginManager.cpp:107 dcpp\PluginManager.cpp:666
 #, boost-format
 msgid "%1% is too old, contact the plugin author for an update"
 msgstr ""
@@ -244,7 +250,7 @@ msgstr "Sihtfaili pole võimalik avada: %1%"
 msgid "Could not open target file: %1%"
 msgstr "Sihtfaili pole võimalik avada: %1%"
 
-#: dcpp\DCPlusPlus.cpp:129
+#: dcpp\DCPlusPlus.cpp:131
 msgid "Country information"
 msgstr ""
 
@@ -272,7 +278,7 @@ msgstr "Kaustal puudub nimi"
 msgid "Discard"
 msgstr "Unusta"
 
-#: dcpp\BufferedSocket.cpp:475
+#: dcpp\BufferedSocket.cpp:475 dcpp\HttpManager.cpp:66
 msgid "Disconnected"
 msgstr "Ühendus katkestatud"
 
@@ -285,7 +291,7 @@ msgstr "Katkestatud lahkunud kasutaja: %1%"
 msgid "Document"
 msgstr "Dokument"
 
-#: dcpp\DCPlusPlus.cpp:125
+#: dcpp\DCPlusPlus.cpp:127
 msgid "Download Queue"
 msgstr "Allalaadimiste järjekord"
 
@@ -310,7 +316,7 @@ msgstr "Topelt allikad: %1%"
 msgid "Encrypted transfer"
 msgstr " Krüpteeritud edastuse port (%1% TCP)"
 
-#: dcpp\HttpConnection.cpp:233
+#: dcpp\HttpConnection.cpp:245
 #, boost-format
 msgid "Endless redirection loop (%1%)"
 msgstr ""
@@ -341,7 +347,12 @@ msgstr "Sertifikaadi loomise viga"
 msgid "Error hashing %1%: %2%"
 msgstr "Viga hashimisel %1%: %2%"
 
-#: dcpp\PluginManager.cpp:95
+#: dcpp\PluginManager.cpp:535
+#, fuzzy, boost-format
+msgid "Error loading %1%"
+msgstr "Viga hashimisel %1%: %2%"
+
+#: dcpp\PluginManager.cpp:519
 #, fuzzy, boost-format
 msgid "Error loading %1%: %2%"
 msgstr "Viga hashimisel %1%: %2%"
@@ -461,7 +472,7 @@ msgstr "Loodud uus TLS sertifikaat"
 msgid "Generic"
 msgstr ""
 
-#: dcpp\DCPlusPlus.cpp:119
+#: dcpp\DCPlusPlus.cpp:121
 msgid "Hash database"
 msgstr "Hashi andmebaas"
 
@@ -484,10 +495,15 @@ msgstr "Hub kasutab ilmselt vanemat ADC versiooni, palu hubi omanikul uuendada"
 msgid "Ignore"
 msgstr ""
 
-#: dcpp\FavoriteManager.cpp:683
+#: dcpp\FavoriteManager.cpp:680
 #, fuzzy, boost-format
 msgid "Invalid URL: %1%"
 msgstr "Otsing keelatud: %1%"
+
+#: dcpp\Archive.cpp:42 dcpp\Archive.cpp:94
+#, fuzzy
+msgid "Invalid archive"
+msgstr "Vigane suurus"
 
 #: dcpp\UserConnection.cpp:52 dcpp\UserConnection.cpp:70
 #: dcpp\UserConnection.cpp:138
@@ -508,7 +524,7 @@ msgstr ""
 msgid "Invalid regular expression: %1%"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:626
+#: dcpp\SettingsManager.cpp:633
 msgid "Invalid search type name"
 msgstr ""
 
@@ -522,7 +538,7 @@ msgid ""
 "setting)"
 msgstr "Vigane sihtfail (kaust puudub, kontrolli vaikimisi allalaadimiskausta)"
 
-#: dcpp\FavoriteManager.cpp:426
+#: dcpp\FavoriteManager.cpp:423
 msgid "Kick user(s)"
 msgstr "Löö Kasutajat"
 
@@ -534,7 +550,7 @@ msgstr ""
 msgid "Maximum command length exceeded"
 msgstr "Maksimaalne käsu pikkus ületatud"
 
-#: dcpp\PluginManager.cpp:141
+#: dcpp\PluginManager.cpp:673
 #, boost-format
 msgid "Missing dependencies for %1%"
 msgstr ""
@@ -563,7 +579,7 @@ msgstr "Privaatvõtme fail valimata"
 msgid "No slots available"
 msgstr "Kõik slotid on hõivatud"
 
-#: dcpp\SettingsManager.cpp:684
+#: dcpp\SettingsManager.cpp:691
 msgid "No such search type"
 msgstr ""
 
@@ -578,7 +594,7 @@ msgstr "Ühendusi ei kuulata - palun taaskäivita %1%"
 
 #: dcpp\ClientManager.cpp:174 dcpp\FinishedManager.cpp:131
 #: dcpp\FinishedManager.cpp:137 dcpp\FinishedManager.cpp:143
-#: dcpp\SearchManager.cpp:261 dcpp\SearchManager.cpp:338 dcpp\Transfer.cpp:81
+#: dcpp\SearchManager.cpp:266 dcpp\SearchManager.cpp:343 dcpp\Transfer.cpp:81
 #: dcpp\Transfer.cpp:85
 msgid "Offline"
 msgstr "Ühenduseta"
@@ -605,7 +621,7 @@ msgid ""
 "Public IP address detected, selecting active mode with direct connection"
 msgstr ""
 
-#: dcpp\FavoriteManager.cpp:430
+#: dcpp\FavoriteManager.cpp:427
 msgid "Redirect user(s)"
 msgstr "Suuna kasutaja(d) ümber"
 
@@ -626,26 +642,26 @@ msgstr ""
 msgid "Search (UDP)"
 msgstr " Otsingu port (%1% UDP)"
 
-#: dcpp\SearchManager.cpp:154
+#: dcpp\SearchManager.cpp:160
 #, boost-format
 msgid "Search disabled: %1%"
 msgstr "Otsing keelatud: %1%"
 
-#: dcpp\SearchManager.cpp:146
+#: dcpp\SearchManager.cpp:152
 msgid "Search enabled again"
 msgstr "Otsing uuesti lubatud"
 
-#: dcpp\DCPlusPlus.cpp:116
+#: dcpp\DCPlusPlus.cpp:118
 #, fuzzy
 msgid "Security certificates"
 msgstr "Sertifikaadi loomise viga"
 
-#: dcpp\ChatMessage.cpp:66
+#: dcpp\ChatMessage.cpp:65
 #, boost-format
 msgid "Sent %1%"
 msgstr ""
 
-#: dcpp\DCPlusPlus.cpp:122
+#: dcpp\DCPlusPlus.cpp:124
 msgid "Shared Files"
 msgstr "Jagatud failid"
 
@@ -733,8 +749,13 @@ msgid ""
 "fix this"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:630 dcpp\SettingsManager.cpp:652
+#: dcpp\SettingsManager.cpp:637 dcpp\SettingsManager.cpp:659
 msgid "This search type already exists"
+msgstr ""
+
+#: dcpp\HttpConnection.cpp:289
+#, boost-format
+msgid "Too much data in response body (%1%)"
 msgstr ""
 
 #: dcpp\MappingManager.cpp:121 dcpp\MappingManager.cpp:164
@@ -745,6 +766,11 @@ msgstr ""
 #, fuzzy
 msgid "Transfer (TCP)"
 msgstr " Ülekande port (%1% TCP)"
+
+#: dcpp\HttpConnection.cpp:206
+#, boost-format
+msgid "Transfer-encoding error (%1%)"
+msgstr ""
 
 #: dcpp\UserMatchManager.cpp:132
 msgid "Un-ignore"
@@ -794,7 +820,12 @@ msgstr "Tundmatu viga: 0x%1$x"
 msgid "Unknown protocol %d"
 msgstr "Tundmatu viga: 0x%1$x"
 
-#: dcpp\DCPlusPlus.cpp:110
+#: dcpp\PluginManager.cpp:654
+#, boost-format
+msgid "Updating the %1% plugin from version %2% to version %3%"
+msgstr ""
+
+#: dcpp\DCPlusPlus.cpp:112
 msgid "Users"
 msgstr "Kasutajad"
 
@@ -810,7 +841,7 @@ msgstr "Proovid alla laadida iseendalt!"
 msgid "disabled"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:193 dcpp\SettingsManager.cpp:194
+#: dcpp\SettingsManager.cpp:199 dcpp\SettingsManager.cpp:200
 msgid "downloaded from"
 msgstr "alla laetud:"
 
@@ -823,6 +854,6 @@ msgstr "Otsing keelatud: %1%"
 msgid "undefined"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:195
+#: dcpp\SettingsManager.cpp:201
 msgid "uploaded to"
 msgstr "üles laetud:"

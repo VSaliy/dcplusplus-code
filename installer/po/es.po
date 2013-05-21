@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2013-04-25 20:19+0300\n"
-"PO-Revision-Date: 2011-01-01 16:14+0000\n"
-"Last-Translator: Adolfo Jayme Barrientos <fitoschido@gmail.com>\n"
+"PO-Revision-Date: 2013-04-18 16:33+0000\n"
+"Last-Translator: poy <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-04 12:10+0000\n"
-"X-Generator: Launchpad (build 16514)\n"
+"X-Launchpad-Export-Date: 2013-05-21 16:58+0000\n"
+"X-Generator: Launchpad (build 16626)\n"
 
 #. type: Content of: <Strings><SECTION_DCPP>
 #: installer/Strings.xml:3
@@ -58,7 +58,7 @@ msgstr "Al dejar la casilla sin marcar DC++ guardará la configuración en el di
 #: installer/Strings.xml:9
 #, no-wrap
 msgid "Warning: the 'locale' directory ($INSTDIR\\locale) will be completely erased!"
-msgstr "Advertencia: el directorio 'local' ($INSTDIR\\locale) sera eliminado totalmente!"
+msgstr "Advertencia: el directorio 'locale' ($INSTDIR\\locale) sera eliminado totalmente!"
 
 #. type: Content of: <Strings><SM_DCPP_DESCR>
 #: installer/Strings.xml:10
