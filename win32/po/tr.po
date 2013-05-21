@@ -54,8 +54,7 @@ msgstr "%1% (%2%)"
 #: win32\SearchFrame.cpp:1064
 #, boost-format
 msgid "%1% / %2% item"
-msgid_plural "%1% / %2% items"
-msgstr[0] "%1% / %2% nesne"
+msgstr ""
 
 #: win32\SearchFrame.cpp:1095
 #, boost-format
@@ -97,8 +96,7 @@ msgstr "%1% merkez"
 #: win32\SearchFrame.cpp:1062 win32\FinishedFrameBase.h:572
 #, boost-format
 msgid "%1% item"
-msgid_plural "%1% items"
-msgstr[0] "%1% adet"
+msgstr ""
 
 #: win32\ADLSearchFrame.cpp:318 win32\DirectoryListingFrame.cpp:877
 #: win32\TransferView.cpp:477
@@ -134,8 +132,7 @@ msgstr "%1% kaynak eklendi"
 #: win32\HubFrame.cpp:363
 #, boost-format
 msgid "%1% user"
-msgid_plural "%1% users"
-msgstr[0] "%1% kullanıcı"
+msgstr ""
 
 #: win32\HubFrame.cpp:1230 win32\TransferView.cpp:346 win32\UsersFrame.cpp:462
 #: win32\FinishedFrameBase.h:490
@@ -2195,8 +2192,7 @@ msgstr "Kuyruğu eşleştir"
 #: win32\DirectoryListingFrame.cpp:756
 #, boost-format
 msgid "Matched %1% file"
-msgid_plural "Matched %1% files"
-msgstr[0] "%1% dosya eşlendi"
+msgstr ""
 
 #: win32\ADLSProperties.cpp:91
 msgid "Max FileSize"
@@ -3038,8 +3034,7 @@ msgstr "Aranıyor: %1%"
 #: win32\SearchFrame.cpp:1050 win32\SearchFrame.cpp:1080
 #, boost-format
 msgid "Searching too soon, next search in %1% second"
-msgid_plural "Searching too soon, next search in %1% seconds"
-msgstr[0] "Aramanız %1% saniye içerisinde başlayacak"
+msgstr ""
 
 #: win32\BandwidthLimitPage.cpp:84
 msgid "Secondary Transfer Rate Limiting"
