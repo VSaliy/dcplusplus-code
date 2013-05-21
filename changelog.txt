@@ -11,6 +11,7 @@
 * Package plugins as .dcext files (poy)
 * Toolbar button to access plugin commands (poy)
 * Update zlib to version 1.2.8
+* Update MiniUPnPc to version 1.8
 
 -- 0.811 2013-03-04 --
 * Fix status bar parts when the window is too small (poy)
