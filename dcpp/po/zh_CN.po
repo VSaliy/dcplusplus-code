@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-03-04 13:16+0100\n"
+"POT-Creation-Date: 2013-05-21 19:34+0200\n"
 "PO-Revision-Date: 2012-10-19 07:10+0000\n"
 "Last-Translator: comet <Unknown>\n"
 "Language-Team: Simplified Chinese <zh_CN@li.org>\n"
@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-04 12:08+0000\n"
-"X-Generator: Launchpad (build 16514)\n"
+"X-Launchpad-Export-Date: 2013-05-21 16:57+0000\n"
+"X-Generator: Launchpad (build 16626)\n"
 
 #: dcpp\DownloadManager.cpp:360
 #, boost-format
@@ -63,7 +63,8 @@ msgstr "%1% %2% (由%3%添加)"
 msgid "%1% %2% port (%3% %4%)"
 msgstr "%1% %2% 端口 (%3% %4%)"
 
-#: dcpp\HttpConnection.cpp:205 dcpp\HttpConnection.cpp:271
+#: dcpp\HttpConnection.cpp:143 dcpp\HttpConnection.cpp:218
+#: dcpp\HttpConnection.cpp:274
 #, boost-format
 msgid "%1% (%2%)"
 msgstr "%1% (%2%)"
@@ -78,17 +79,22 @@ msgstr "%1% (%2%) 和 %4% (%5%)有相同的CID {%3%}，忽略"
 msgid "%1% (Nick unknown)"
 msgstr "%1% (未知昵称)"
 
-#: dcpp\PluginManager.cpp:127
+#: dcpp\PluginManager.cpp:156 dcpp\PluginManager.cpp:659
 #, boost-format
 msgid "%1% is already installed"
 msgstr "%1% 已安装"
 
-#: dcpp\PluginManager.cpp:112
+#: dcpp\PluginManager.cpp:141 dcpp\PluginManager.cpp:527
 #, boost-format
 msgid "%1% is not a valid plugin"
 msgstr "%1% 不是有效的插件"
 
-#: dcpp\PluginManager.cpp:133
+#: dcpp\PluginManager.cpp:144
+#, boost-format
+msgid "%1% is not compatible with %2%"
+msgstr ""
+
+#: dcpp\PluginManager.cpp:107 dcpp\PluginManager.cpp:666
 #, boost-format
 msgid "%1% is too old, contact the plugin author for an update"
 msgstr "%1% 太旧了，联系插件作者获取更新"
@@ -254,7 +260,7 @@ msgstr "无法打开监听端口"
 msgid "Could not open target file: %1%"
 msgstr "无法打开目标文件：%1%"
 
-#: dcpp\DCPlusPlus.cpp:129
+#: dcpp\DCPlusPlus.cpp:131
 msgid "Country information"
 msgstr "国家信息"
 
@@ -282,7 +288,7 @@ msgstr "路径无名称属性"
 msgid "Discard"
 msgstr "丢弃"
 
-#: dcpp\BufferedSocket.cpp:475
+#: dcpp\BufferedSocket.cpp:475 dcpp\HttpManager.cpp:66
 msgid "Disconnected"
 msgstr "已断开"
 
@@ -295,7 +301,7 @@ msgstr "已断开离线用户：%1%"
 msgid "Document"
 msgstr "文档"
 
-#: dcpp\DCPlusPlus.cpp:125
+#: dcpp\DCPlusPlus.cpp:127
 msgid "Download Queue"
 msgstr "下载队列"
 
@@ -319,7 +325,7 @@ msgstr "重复的源：%1%"
 msgid "Encrypted transfer"
 msgstr "加密传输"
 
-#: dcpp\HttpConnection.cpp:233
+#: dcpp\HttpConnection.cpp:245
 #, boost-format
 msgid "Endless redirection loop (%1%)"
 msgstr "无限重定向循环 (%1%)"
@@ -350,7 +356,12 @@ msgstr "生成证书发生错误"
 msgid "Error hashing %1%: %2%"
 msgstr "对 %1% 进行哈希出错：%2%"
 
-#: dcpp\PluginManager.cpp:95
+#: dcpp\PluginManager.cpp:535
+#, fuzzy, boost-format
+msgid "Error loading %1%"
+msgstr "载入错误%1%： %2%"
+
+#: dcpp\PluginManager.cpp:519
 #, boost-format
 msgid "Error loading %1%: %2%"
 msgstr "载入错误%1%： %2%"
@@ -468,7 +479,7 @@ msgstr "生成新 TLS 证书"
 msgid "Generic"
 msgstr "常规"
 
-#: dcpp\DCPlusPlus.cpp:119
+#: dcpp\DCPlusPlus.cpp:121
 msgid "Hash database"
 msgstr "Hash 数据库"
 
@@ -491,10 +502,15 @@ msgstr "站点大部分用户使用旧版本的ADC，请鼓励用户升级"
 msgid "Ignore"
 msgstr "忽略"
 
-#: dcpp\FavoriteManager.cpp:683
+#: dcpp\FavoriteManager.cpp:680
 #, boost-format
 msgid "Invalid URL: %1%"
 msgstr "无效的URL： %1%"
+
+#: dcpp\Archive.cpp:42 dcpp\Archive.cpp:94
+#, fuzzy
+msgid "Invalid archive"
+msgstr "无效的尺寸"
 
 #: dcpp\UserConnection.cpp:52 dcpp\UserConnection.cpp:70
 #: dcpp\UserConnection.cpp:138
@@ -515,7 +531,7 @@ msgstr "当hashing %1%文件夹时发现无效的文件名"
 msgid "Invalid regular expression: %1%"
 msgstr "无效的正则表达式：%1%"
 
-#: dcpp\SettingsManager.cpp:626
+#: dcpp\SettingsManager.cpp:633
 msgid "Invalid search type name"
 msgstr "无效的搜索类型名称"
 
@@ -529,7 +545,7 @@ msgid ""
 "setting)"
 msgstr "目标文件无法访问(目录已被删除, 请检查缺省的下载地址设置)"
 
-#: dcpp\FavoriteManager.cpp:426
+#: dcpp\FavoriteManager.cpp:423
 msgid "Kick user(s)"
 msgstr "踢出该用户"
 
@@ -541,7 +557,7 @@ msgstr "本地网络可能是NAT，尝试端口映射..."
 msgid "Maximum command length exceeded"
 msgstr "超出最大命令长度"
 
-#: dcpp\PluginManager.cpp:141
+#: dcpp\PluginManager.cpp:673
 #, boost-format
 msgid "Missing dependencies for %1%"
 msgstr "丢失 %1% 信赖"
@@ -570,7 +586,7 @@ msgstr "未选择密钥文件"
 msgid "No slots available"
 msgstr "对方上传通道都已经满了"
 
-#: dcpp\SettingsManager.cpp:684
+#: dcpp\SettingsManager.cpp:691
 msgid "No such search type"
 msgstr "无此搜索类型"
 
@@ -585,7 +601,7 @@ msgstr "未监听连接 - 请重启 %1%"
 
 #: dcpp\ClientManager.cpp:174 dcpp\FinishedManager.cpp:131
 #: dcpp\FinishedManager.cpp:137 dcpp\FinishedManager.cpp:143
-#: dcpp\SearchManager.cpp:261 dcpp\SearchManager.cpp:338 dcpp\Transfer.cpp:81
+#: dcpp\SearchManager.cpp:266 dcpp\SearchManager.cpp:343 dcpp\Transfer.cpp:81
 #: dcpp\Transfer.cpp:85
 msgid "Offline"
 msgstr "离线"
@@ -612,7 +628,7 @@ msgid ""
 "Public IP address detected, selecting active mode with direct connection"
 msgstr "检测到外部IP，选择直接连接的主动模式"
 
-#: dcpp\FavoriteManager.cpp:430
+#: dcpp\FavoriteManager.cpp:427
 msgid "Redirect user(s)"
 msgstr "重定向用户"
 
@@ -632,25 +648,25 @@ msgstr "搜索"
 msgid "Search (UDP)"
 msgstr "搜索 (UDP)"
 
-#: dcpp\SearchManager.cpp:154
+#: dcpp\SearchManager.cpp:160
 #, boost-format
 msgid "Search disabled: %1%"
 msgstr "禁止搜索：%1%"
 
-#: dcpp\SearchManager.cpp:146
+#: dcpp\SearchManager.cpp:152
 msgid "Search enabled again"
 msgstr "再次允许搜索"
 
-#: dcpp\DCPlusPlus.cpp:116
+#: dcpp\DCPlusPlus.cpp:118
 msgid "Security certificates"
 msgstr "安全证书"
 
-#: dcpp\ChatMessage.cpp:66
+#: dcpp\ChatMessage.cpp:65
 #, boost-format
 msgid "Sent %1%"
 msgstr "已经发送 %1%"
 
-#: dcpp\DCPlusPlus.cpp:122
+#: dcpp\DCPlusPlus.cpp:124
 msgid "Shared Files"
 msgstr "共享文件"
 
@@ -740,9 +756,14 @@ msgid ""
 msgstr ""
 "这个站点在尝试利用你的客户端去发送垃圾信息%1%，请让站点管理员去修复这个问题"
 
-#: dcpp\SettingsManager.cpp:630 dcpp\SettingsManager.cpp:652
+#: dcpp\SettingsManager.cpp:637 dcpp\SettingsManager.cpp:659
 msgid "This search type already exists"
 msgstr "此搜索类型已存在"
+
+#: dcpp\HttpConnection.cpp:289
+#, boost-format
+msgid "Too much data in response body (%1%)"
+msgstr ""
 
 #: dcpp\MappingManager.cpp:121 dcpp\MappingManager.cpp:164
 msgid "Transfer"
@@ -751,6 +772,11 @@ msgstr "传输"
 #: dcpp\ConnectivityManager.cpp:274
 msgid "Transfer (TCP)"
 msgstr "传输(TCP)"
+
+#: dcpp\HttpConnection.cpp:206
+#, boost-format
+msgid "Transfer-encoding error (%1%)"
+msgstr ""
 
 #: dcpp\UserMatchManager.cpp:132
 msgid "Un-ignore"
@@ -800,7 +826,12 @@ msgstr "未知错误：0x%1$x"
 msgid "Unknown protocol %d"
 msgstr "未知的协议 %d"
 
-#: dcpp\DCPlusPlus.cpp:110
+#: dcpp\PluginManager.cpp:654
+#, boost-format
+msgid "Updating the %1% plugin from version %2% to version %3%"
+msgstr ""
+
+#: dcpp\DCPlusPlus.cpp:112
 msgid "Users"
 msgstr "用户"
 
@@ -816,7 +847,7 @@ msgstr "不能下载自己!"
 msgid "disabled"
 msgstr "已禁用"
 
-#: dcpp\SettingsManager.cpp:193 dcpp\SettingsManager.cpp:194
+#: dcpp\SettingsManager.cpp:199 dcpp\SettingsManager.cpp:200
 msgid "downloaded from"
 msgstr "下载自"
 
@@ -829,6 +860,6 @@ msgstr "已启用 - %1%"
 msgid "undefined"
 msgstr "未定义"
 
-#: dcpp\SettingsManager.cpp:195
+#: dcpp\SettingsManager.cpp:201
 msgid "uploaded to"
 msgstr "上传至"

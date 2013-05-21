@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libdcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-05-13 20:41+0200\n"
+"POT-Creation-Date: 2013-05-21 19:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -62,8 +62,8 @@ msgstr ""
 msgid "%1% %2% port (%3% %4%)"
 msgstr ""
 
-#: dcpp\HttpConnection.cpp:139 dcpp\HttpConnection.cpp:214
-#: dcpp\HttpConnection.cpp:270
+#: dcpp\HttpConnection.cpp:143 dcpp\HttpConnection.cpp:218
+#: dcpp\HttpConnection.cpp:274
 #, boost-format
 msgid "%1% (%2%)"
 msgstr ""
@@ -78,12 +78,12 @@ msgstr ""
 msgid "%1% (Nick unknown)"
 msgstr ""
 
-#: dcpp\PluginManager.cpp:156 dcpp\PluginManager.cpp:653
+#: dcpp\PluginManager.cpp:156 dcpp\PluginManager.cpp:659
 #, boost-format
 msgid "%1% is already installed"
 msgstr ""
 
-#: dcpp\PluginManager.cpp:141 dcpp\PluginManager.cpp:521
+#: dcpp\PluginManager.cpp:141 dcpp\PluginManager.cpp:527
 #, boost-format
 msgid "%1% is not a valid plugin"
 msgstr ""
@@ -93,7 +93,7 @@ msgstr ""
 msgid "%1% is not compatible with %2%"
 msgstr ""
 
-#: dcpp\PluginManager.cpp:107 dcpp\PluginManager.cpp:660
+#: dcpp\PluginManager.cpp:107 dcpp\PluginManager.cpp:666
 #, boost-format
 msgid "%1% is too old, contact the plugin author for an update"
 msgstr ""
@@ -271,7 +271,7 @@ msgstr ""
 msgid "Discard"
 msgstr ""
 
-#: dcpp\BufferedSocket.cpp:475 dcpp\HttpManager.cpp:67
+#: dcpp\BufferedSocket.cpp:475 dcpp\HttpManager.cpp:66
 msgid "Disconnected"
 msgstr ""
 
@@ -306,7 +306,7 @@ msgstr ""
 msgid "Encrypted transfer"
 msgstr ""
 
-#: dcpp\HttpConnection.cpp:241
+#: dcpp\HttpConnection.cpp:245
 #, boost-format
 msgid "Endless redirection loop (%1%)"
 msgstr ""
@@ -337,12 +337,12 @@ msgstr ""
 msgid "Error hashing %1%: %2%"
 msgstr ""
 
-#: dcpp\PluginManager.cpp:529
+#: dcpp\PluginManager.cpp:535
 #, boost-format
 msgid "Error loading %1%"
 msgstr ""
 
-#: dcpp\PluginManager.cpp:513
+#: dcpp\PluginManager.cpp:519
 #, boost-format
 msgid "Error loading %1%: %2%"
 msgstr ""
@@ -481,7 +481,7 @@ msgstr ""
 msgid "Invalid URL: %1%"
 msgstr ""
 
-#: dcpp\Archive.cpp:33 dcpp\Archive.cpp:85
+#: dcpp\Archive.cpp:42 dcpp\Archive.cpp:94
 msgid "Invalid archive"
 msgstr ""
 
@@ -528,7 +528,7 @@ msgstr ""
 msgid "Maximum command length exceeded"
 msgstr ""
 
-#: dcpp\PluginManager.cpp:667
+#: dcpp\PluginManager.cpp:673
 #, boost-format
 msgid "Missing dependencies for %1%"
 msgstr ""
@@ -572,7 +572,7 @@ msgstr ""
 
 #: dcpp\ClientManager.cpp:174 dcpp\FinishedManager.cpp:131
 #: dcpp\FinishedManager.cpp:137 dcpp\FinishedManager.cpp:143
-#: dcpp\SearchManager.cpp:261 dcpp\SearchManager.cpp:338 dcpp\Transfer.cpp:81
+#: dcpp\SearchManager.cpp:266 dcpp\SearchManager.cpp:343 dcpp\Transfer.cpp:81
 #: dcpp\Transfer.cpp:85
 msgid "Offline"
 msgstr ""
@@ -618,12 +618,12 @@ msgstr ""
 msgid "Search (UDP)"
 msgstr ""
 
-#: dcpp\SearchManager.cpp:154
+#: dcpp\SearchManager.cpp:160
 #, boost-format
 msgid "Search disabled: %1%"
 msgstr ""
 
-#: dcpp\SearchManager.cpp:146
+#: dcpp\SearchManager.cpp:152
 msgid "Search enabled again"
 msgstr ""
 
@@ -722,7 +722,7 @@ msgstr ""
 msgid "This search type already exists"
 msgstr ""
 
-#: dcpp\HttpConnection.cpp:285
+#: dcpp\HttpConnection.cpp:289
 #, boost-format
 msgid "Too much data in response body (%1%)"
 msgstr ""
@@ -735,7 +735,7 @@ msgstr ""
 msgid "Transfer (TCP)"
 msgstr ""
 
-#: dcpp\HttpConnection.cpp:202
+#: dcpp\HttpConnection.cpp:206
 #, boost-format
 msgid "Transfer-encoding error (%1%)"
 msgstr ""
@@ -787,7 +787,7 @@ msgstr ""
 msgid "Unknown protocol %d"
 msgstr ""
 
-#: dcpp\PluginManager.cpp:648
+#: dcpp\PluginManager.cpp:654
 #, boost-format
 msgid "Updating the %1% plugin from version %2% to version %3%"
 msgstr ""

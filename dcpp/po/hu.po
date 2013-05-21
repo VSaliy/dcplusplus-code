@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-03-04 13:16+0100\n"
-"PO-Revision-Date: 2013-01-22 22:23+0000\n"
+"POT-Creation-Date: 2013-05-21 19:34+0200\n"
+"PO-Revision-Date: 2013-05-16 17:55+0000\n"
 "Last-Translator: eMTee <Unknown>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-04 12:08+0000\n"
-"X-Generator: Launchpad (build 16514)\n"
+"X-Launchpad-Export-Date: 2013-05-21 16:57+0000\n"
+"X-Generator: Launchpad (build 16626)\n"
 
 #: dcpp\DownloadManager.cpp:360
 #, boost-format
@@ -63,7 +63,8 @@ msgstr "%1% %2% (%3% által felvéve)"
 msgid "%1% %2% port (%3% %4%)"
 msgstr "%1% %2% port (%3% %4%)"
 
-#: dcpp\HttpConnection.cpp:205 dcpp\HttpConnection.cpp:271
+#: dcpp\HttpConnection.cpp:143 dcpp\HttpConnection.cpp:218
+#: dcpp\HttpConnection.cpp:274
 #, boost-format
 msgid "%1% (%2%)"
 msgstr "%1% (%2%)"
@@ -78,17 +79,22 @@ msgstr "%1% (%2%) CID-je {%3%} ugyanaz, mint %4% (%5%)-é, kihagyva"
 msgid "%1% (Nick unknown)"
 msgstr "%1% (Ismeretlen nick)"
 
-#: dcpp\PluginManager.cpp:127
+#: dcpp\PluginManager.cpp:156 dcpp\PluginManager.cpp:659
 #, boost-format
 msgid "%1% is already installed"
 msgstr "A(z) %1% már telepítve van"
 
-#: dcpp\PluginManager.cpp:112
+#: dcpp\PluginManager.cpp:141 dcpp\PluginManager.cpp:527
 #, boost-format
 msgid "%1% is not a valid plugin"
 msgstr "Érvénytelen bővítmény: %1%"
 
-#: dcpp\PluginManager.cpp:133
+#: dcpp\PluginManager.cpp:144
+#, boost-format
+msgid "%1% is not compatible with %2%"
+msgstr "%1% nem kompatibilis %2%-val"
+
+#: dcpp\PluginManager.cpp:107 dcpp\PluginManager.cpp:666
 #, boost-format
 msgid "%1% is too old, contact the plugin author for an update"
 msgstr ""
@@ -260,7 +266,7 @@ msgstr "A port nem nyitható meg"
 msgid "Could not open target file: %1%"
 msgstr "Nem sikerült megnyitni a célfájlt a következő miatt: %1%"
 
-#: dcpp\DCPlusPlus.cpp:129
+#: dcpp\DCPlusPlus.cpp:131
 msgid "Country information"
 msgstr "Ország információk"
 
@@ -288,7 +294,7 @@ msgstr "Hiányzik a könyvtár név attribútuma"
 msgid "Discard"
 msgstr "Elvet"
 
-#: dcpp\BufferedSocket.cpp:475
+#: dcpp\BufferedSocket.cpp:475 dcpp\HttpManager.cpp:66
 msgid "Disconnected"
 msgstr "Szétkapcsolva"
 
@@ -301,7 +307,7 @@ msgstr "A hubról kilépő felhasználó szétkapcsolva: %1%"
 msgid "Document"
 msgstr "Dokumentum"
 
-#: dcpp\DCPlusPlus.cpp:125
+#: dcpp\DCPlusPlus.cpp:127
 msgid "Download Queue"
 msgstr "Letöltési Sor"
 
@@ -327,7 +333,7 @@ msgstr "Dupla forrás: %1%"
 msgid "Encrypted transfer"
 msgstr "Titkosított átvitel"
 
-#: dcpp\HttpConnection.cpp:233
+#: dcpp\HttpConnection.cpp:245
 #, boost-format
 msgid "Endless redirection loop (%1%)"
 msgstr "Végtelen átirányítási ciklus (%1%)"
@@ -358,7 +364,12 @@ msgstr "Hiba a tanúsítvány készítésekor"
 msgid "Error hashing %1%: %2%"
 msgstr "Hiba a következő hashelésekor: %1%: %2%"
 
-#: dcpp\PluginManager.cpp:95
+#: dcpp\PluginManager.cpp:535
+#, boost-format
+msgid "Error loading %1%"
+msgstr "Hiba %1% betöltésekor"
+
+#: dcpp\PluginManager.cpp:519
 #, boost-format
 msgid "Error loading %1%: %2%"
 msgstr "Probléma a (z) %1% betöltésekor: %2%"
@@ -484,7 +495,7 @@ msgstr "Új TLS tanúsítvány generálva"
 msgid "Generic"
 msgstr "Általános"
 
-#: dcpp\DCPlusPlus.cpp:119
+#: dcpp\DCPlusPlus.cpp:121
 msgid "Hash database"
 msgstr "Hash adatbázis"
 
@@ -509,10 +520,14 @@ msgstr ""
 msgid "Ignore"
 msgstr "Mellőzés"
 
-#: dcpp\FavoriteManager.cpp:683
+#: dcpp\FavoriteManager.cpp:680
 #, boost-format
 msgid "Invalid URL: %1%"
 msgstr "Érvénytelen URL: %1%"
+
+#: dcpp\Archive.cpp:42 dcpp\Archive.cpp:94
+msgid "Invalid archive"
+msgstr "Érvénytelen archívum"
 
 #: dcpp\UserConnection.cpp:52 dcpp\UserConnection.cpp:70
 #: dcpp\UserConnection.cpp:138
@@ -533,7 +548,7 @@ msgstr "Érvénytelen fájlnév a %1% könyvtár hash-elése közben"
 msgid "Invalid regular expression: %1%"
 msgstr "Érvénytelen reguláris kifejezés : %1%"
 
-#: dcpp\SettingsManager.cpp:626
+#: dcpp\SettingsManager.cpp:633
 msgid "Invalid search type name"
 msgstr "Érvénytelen keresés típus név"
 
@@ -549,7 +564,7 @@ msgstr ""
 "Érvénytelen célfájl (hiányzó könyvtár, ellenőrizd az alapértelmezett "
 "letöltési könyvtár beállításait)"
 
-#: dcpp\FavoriteManager.cpp:426
+#: dcpp\FavoriteManager.cpp:423
 msgid "Kick user(s)"
 msgstr "Felhasználó(k) kirúgása"
 
@@ -563,7 +578,7 @@ msgstr ""
 msgid "Maximum command length exceeded"
 msgstr "A maximális parancs hossz túllépve"
 
-#: dcpp\PluginManager.cpp:141
+#: dcpp\PluginManager.cpp:673
 #, boost-format
 msgid "Missing dependencies for %1%"
 msgstr "Hiányzó függőségek a(z) %1%-hez"
@@ -592,7 +607,7 @@ msgstr "Nincs kiválasztva privát kulcs fájl"
 msgid "No slots available"
 msgstr "Nincs szabad slot"
 
-#: dcpp\SettingsManager.cpp:684
+#: dcpp\SettingsManager.cpp:691
 msgid "No such search type"
 msgstr "Nincs ilyen keresés típus"
 
@@ -607,7 +622,7 @@ msgstr "Nem figyel kapcsolatokra - kérlek, indítsd újra a %1%-t"
 
 #: dcpp\ClientManager.cpp:174 dcpp\FinishedManager.cpp:131
 #: dcpp\FinishedManager.cpp:137 dcpp\FinishedManager.cpp:143
-#: dcpp\SearchManager.cpp:261 dcpp\SearchManager.cpp:338 dcpp\Transfer.cpp:81
+#: dcpp\SearchManager.cpp:266 dcpp\SearchManager.cpp:343 dcpp\Transfer.cpp:81
 #: dcpp\Transfer.cpp:85
 msgid "Offline"
 msgstr "Kilépett"
@@ -635,7 +650,7 @@ msgid ""
 msgstr ""
 "Publikus IP-cím észlelve, az aktív mód beállítva közvetlen kapcsolattal"
 
-#: dcpp\FavoriteManager.cpp:430
+#: dcpp\FavoriteManager.cpp:427
 msgid "Redirect user(s)"
 msgstr "Felhasználó(k) átirányítása"
 
@@ -655,25 +670,25 @@ msgstr "Keresés"
 msgid "Search (UDP)"
 msgstr "Keresés (UDP)"
 
-#: dcpp\SearchManager.cpp:154
+#: dcpp\SearchManager.cpp:160
 #, boost-format
 msgid "Search disabled: %1%"
 msgstr "Keresés tiltva:%1%"
 
-#: dcpp\SearchManager.cpp:146
+#: dcpp\SearchManager.cpp:152
 msgid "Search enabled again"
 msgstr "Keresés ismét engedélyezve"
 
-#: dcpp\DCPlusPlus.cpp:116
+#: dcpp\DCPlusPlus.cpp:118
 msgid "Security certificates"
 msgstr "Biztonsági tanúsítványok"
 
-#: dcpp\ChatMessage.cpp:66
+#: dcpp\ChatMessage.cpp:65
 #, boost-format
 msgid "Sent %1%"
 msgstr "Elküldve %1%"
 
-#: dcpp\DCPlusPlus.cpp:122
+#: dcpp\DCPlusPlus.cpp:124
 msgid "Shared Files"
 msgstr "Megosztott fájlok"
 
@@ -770,9 +785,14 @@ msgstr ""
 "Ez a hub megpróbálja a kliensedet arra használni, hogy spamelje a következő "
 "címet : %1%, figyelmeztesd a hub tulajdonosát hogy javítsa ezt"
 
-#: dcpp\SettingsManager.cpp:630 dcpp\SettingsManager.cpp:652
+#: dcpp\SettingsManager.cpp:637 dcpp\SettingsManager.cpp:659
 msgid "This search type already exists"
 msgstr "Ez a keresés típus már létezik"
+
+#: dcpp\HttpConnection.cpp:289
+#, boost-format
+msgid "Too much data in response body (%1%)"
+msgstr "Túl sok adat a választörzsben (%1%)"
 
 #: dcpp\MappingManager.cpp:121 dcpp\MappingManager.cpp:164
 msgid "Transfer"
@@ -781,6 +801,11 @@ msgstr "Átvitel"
 #: dcpp\ConnectivityManager.cpp:274
 msgid "Transfer (TCP)"
 msgstr "Átvitel (TCP)"
+
+#: dcpp\HttpConnection.cpp:206
+#, boost-format
+msgid "Transfer-encoding error (%1%)"
+msgstr "Átvitel kódolási hiba (%1%)"
 
 #: dcpp\UserMatchManager.cpp:132
 msgid "Un-ignore"
@@ -836,7 +861,12 @@ msgstr "Ismeretlen hiba: 0x%1$x"
 msgid "Unknown protocol %d"
 msgstr "Ismeretlen protokoll %d"
 
-#: dcpp\DCPlusPlus.cpp:110
+#: dcpp\PluginManager.cpp:654
+#, boost-format
+msgid "Updating the %1% plugin from version %2% to version %3%"
+msgstr "A(z) %1% bővítmény frissítése %2% verzióról %3% verzióra"
+
+#: dcpp\DCPlusPlus.cpp:112
 msgid "Users"
 msgstr "Felhasználók"
 
@@ -852,7 +882,7 @@ msgstr "Saját magadtól próbálsz meg letölteni!"
 msgid "disabled"
 msgstr "tiltva"
 
-#: dcpp\SettingsManager.cpp:193 dcpp\SettingsManager.cpp:194
+#: dcpp\SettingsManager.cpp:199 dcpp\SettingsManager.cpp:200
 msgid "downloaded from"
 msgstr "letöltve innen:"
 
@@ -865,6 +895,6 @@ msgstr "engedélyezve - %1%"
 msgid "undefined"
 msgstr "nem meghatározott"
 
-#: dcpp\SettingsManager.cpp:195
+#: dcpp\SettingsManager.cpp:201
 msgid "uploaded to"
 msgstr "feltöltve ide:"

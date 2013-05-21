@@ -1,3 +1,4 @@
+-- 0.820 2013-05-21 --
 * Rotate the icon while DC++ is loading (poy)
 * [L#243727] Allow expanding merged search results (poy)
 * Merge connections, downloads and uploads in the same list (poy)

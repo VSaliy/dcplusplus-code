@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-03-04 13:16+0100\n"
+"POT-Creation-Date: 2013-05-21 19:34+0200\n"
 "PO-Revision-Date: 2010-08-06 12:56+0000\n"
 "Last-Translator: gutfeast <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-04 12:08+0000\n"
-"X-Generator: Launchpad (build 16514)\n"
+"X-Launchpad-Export-Date: 2013-05-21 16:57+0000\n"
+"X-Generator: Launchpad (build 16626)\n"
 
 #: dcpp\DownloadManager.cpp:360
 #, boost-format
@@ -63,7 +63,8 @@ msgstr ""
 msgid "%1% %2% port (%3% %4%)"
 msgstr ""
 
-#: dcpp\HttpConnection.cpp:205 dcpp\HttpConnection.cpp:271
+#: dcpp\HttpConnection.cpp:143 dcpp\HttpConnection.cpp:218
+#: dcpp\HttpConnection.cpp:274
 #, boost-format
 msgid "%1% (%2%)"
 msgstr ""
@@ -78,17 +79,22 @@ msgstr "%1% (%2%)가 %4% (%5%)와 동일한 CID {%3%}를 가지고 있음, 무�
 msgid "%1% (Nick unknown)"
 msgstr "%1% (알 수 없는 닉네임)"
 
-#: dcpp\PluginManager.cpp:127
+#: dcpp\PluginManager.cpp:156 dcpp\PluginManager.cpp:659
 #, boost-format
 msgid "%1% is already installed"
 msgstr ""
 
-#: dcpp\PluginManager.cpp:112
+#: dcpp\PluginManager.cpp:141 dcpp\PluginManager.cpp:527
 #, fuzzy, boost-format
 msgid "%1% is not a valid plugin"
 msgstr "%1%: 파일이 유효하지 않음"
 
-#: dcpp\PluginManager.cpp:133
+#: dcpp\PluginManager.cpp:144
+#, boost-format
+msgid "%1% is not compatible with %2%"
+msgstr ""
+
+#: dcpp\PluginManager.cpp:107 dcpp\PluginManager.cpp:666
 #, boost-format
 msgid "%1% is too old, contact the plugin author for an update"
 msgstr ""
@@ -248,7 +254,7 @@ msgstr "대상 파일을 열 수 없음: %1%"
 msgid "Could not open target file: %1%"
 msgstr "대상 파일을 열 수 없음: %1%"
 
-#: dcpp\DCPlusPlus.cpp:129
+#: dcpp\DCPlusPlus.cpp:131
 msgid "Country information"
 msgstr ""
 
@@ -276,7 +282,7 @@ msgstr "디렉터리가 이름 속성이 없음"
 msgid "Discard"
 msgstr "버리기"
 
-#: dcpp\BufferedSocket.cpp:475
+#: dcpp\BufferedSocket.cpp:475 dcpp\HttpManager.cpp:66
 msgid "Disconnected"
 msgstr "끊어짐"
 
@@ -289,7 +295,7 @@ msgstr "허브를 떠난 사용자와 연결을 끊었음: %1%"
 msgid "Document"
 msgstr "문서 파일"
 
-#: dcpp\DCPlusPlus.cpp:125
+#: dcpp\DCPlusPlus.cpp:127
 msgid "Download Queue"
 msgstr "다운로드-큐"
 
@@ -314,7 +320,7 @@ msgstr "중복된 소스: %1%"
 msgid "Encrypted transfer"
 msgstr " 암호화된 전송 포트 (%1% TCP)"
 
-#: dcpp\HttpConnection.cpp:233
+#: dcpp\HttpConnection.cpp:245
 #, boost-format
 msgid "Endless redirection loop (%1%)"
 msgstr ""
@@ -345,7 +351,12 @@ msgstr "인증서 생성 오류"
 msgid "Error hashing %1%: %2%"
 msgstr "%1% Hash(파일 ID) 작성 오류: %2%"
 
-#: dcpp\PluginManager.cpp:95
+#: dcpp\PluginManager.cpp:535
+#, fuzzy, boost-format
+msgid "Error loading %1%"
+msgstr "%1% Hash(파일 ID) 작성 오류: %2%"
+
+#: dcpp\PluginManager.cpp:519
 #, fuzzy, boost-format
 msgid "Error loading %1%: %2%"
 msgstr "%1% Hash(파일 ID) 작성 오류: %2%"
@@ -464,7 +475,7 @@ msgstr "새 TLS 인증서를 생성함"
 msgid "Generic"
 msgstr ""
 
-#: dcpp\DCPlusPlus.cpp:119
+#: dcpp\DCPlusPlus.cpp:121
 msgid "Hash database"
 msgstr "Hash 데이터베이스"
 
@@ -489,10 +500,15 @@ msgstr ""
 msgid "Ignore"
 msgstr ""
 
-#: dcpp\FavoriteManager.cpp:683
+#: dcpp\FavoriteManager.cpp:680
 #, fuzzy, boost-format
 msgid "Invalid URL: %1%"
 msgstr "검색이 불가능하게 됨: %1%"
+
+#: dcpp\Archive.cpp:42 dcpp\Archive.cpp:94
+#, fuzzy
+msgid "Invalid archive"
+msgstr "잘못된 크기"
 
 #: dcpp\UserConnection.cpp:52 dcpp\UserConnection.cpp:70
 #: dcpp\UserConnection.cpp:138
@@ -513,7 +529,7 @@ msgstr ""
 msgid "Invalid regular expression: %1%"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:626
+#: dcpp\SettingsManager.cpp:633
 msgid "Invalid search type name"
 msgstr "유효하지 않은 검색 유형의 이름"
 
@@ -529,7 +545,7 @@ msgstr ""
 "대상 파일이 유효하지 않음 (저장하려는 디렉터리가 없음, '기본 다운로드 디렉터"
 "리' 설정을 확인하세요)"
 
-#: dcpp\FavoriteManager.cpp:426
+#: dcpp\FavoriteManager.cpp:423
 msgid "Kick user(s)"
 msgstr "추방하기"
 
@@ -541,7 +557,7 @@ msgstr ""
 msgid "Maximum command length exceeded"
 msgstr "최대 명령어 길이를 초과함"
 
-#: dcpp\PluginManager.cpp:141
+#: dcpp\PluginManager.cpp:673
 #, boost-format
 msgid "Missing dependencies for %1%"
 msgstr ""
@@ -570,7 +586,7 @@ msgstr "아무런 개인 키 파일도 선택되지 않았음"
 msgid "No slots available"
 msgstr "남은 슬롯이 없음"
 
-#: dcpp\SettingsManager.cpp:684
+#: dcpp\SettingsManager.cpp:691
 msgid "No such search type"
 msgstr "그러한 검색 유형은 없음"
 
@@ -585,7 +601,7 @@ msgstr "연결을 위한 소켓 청취를 하지 않음 - %1%를 재시작하세
 
 #: dcpp\ClientManager.cpp:174 dcpp\FinishedManager.cpp:131
 #: dcpp\FinishedManager.cpp:137 dcpp\FinishedManager.cpp:143
-#: dcpp\SearchManager.cpp:261 dcpp\SearchManager.cpp:338 dcpp\Transfer.cpp:81
+#: dcpp\SearchManager.cpp:266 dcpp\SearchManager.cpp:343 dcpp\Transfer.cpp:81
 #: dcpp\Transfer.cpp:85
 msgid "Offline"
 msgstr "오프라인"
@@ -612,7 +628,7 @@ msgid ""
 "Public IP address detected, selecting active mode with direct connection"
 msgstr ""
 
-#: dcpp\FavoriteManager.cpp:430
+#: dcpp\FavoriteManager.cpp:427
 msgid "Redirect user(s)"
 msgstr "접속-전환(Redirect)할 허브 제안하기..."
 
@@ -633,26 +649,26 @@ msgstr ""
 msgid "Search (UDP)"
 msgstr " 검색 포트 (%1% UDP)"
 
-#: dcpp\SearchManager.cpp:154
+#: dcpp\SearchManager.cpp:160
 #, boost-format
 msgid "Search disabled: %1%"
 msgstr "검색이 불가능하게 됨: %1%"
 
-#: dcpp\SearchManager.cpp:146
+#: dcpp\SearchManager.cpp:152
 msgid "Search enabled again"
 msgstr "검색이 다시 가능하게 됨"
 
-#: dcpp\DCPlusPlus.cpp:116
+#: dcpp\DCPlusPlus.cpp:118
 #, fuzzy
 msgid "Security certificates"
 msgstr "인증서 생성 오류"
 
-#: dcpp\ChatMessage.cpp:66
+#: dcpp\ChatMessage.cpp:65
 #, boost-format
 msgid "Sent %1%"
 msgstr ""
 
-#: dcpp\DCPlusPlus.cpp:122
+#: dcpp\DCPlusPlus.cpp:124
 msgid "Shared Files"
 msgstr "공유 파일"
 
@@ -742,9 +758,14 @@ msgstr ""
 "이 허브가 %1%을 스팸하도록 당신의 클라이언트 이용하려고 시도합니다, 허브 주인"
 "에게 이를 시정하도록 요구하세요"
 
-#: dcpp\SettingsManager.cpp:630 dcpp\SettingsManager.cpp:652
+#: dcpp\SettingsManager.cpp:637 dcpp\SettingsManager.cpp:659
 msgid "This search type already exists"
 msgstr "같은 이름의 검색 유형이 이미 존재합니다"
+
+#: dcpp\HttpConnection.cpp:289
+#, boost-format
+msgid "Too much data in response body (%1%)"
+msgstr ""
 
 #: dcpp\MappingManager.cpp:121 dcpp\MappingManager.cpp:164
 msgid "Transfer"
@@ -754,6 +775,11 @@ msgstr ""
 #, fuzzy
 msgid "Transfer (TCP)"
 msgstr " 전송 포트 (%1% TCP)"
+
+#: dcpp\HttpConnection.cpp:206
+#, boost-format
+msgid "Transfer-encoding error (%1%)"
+msgstr ""
 
 #: dcpp\UserMatchManager.cpp:132
 msgid "Un-ignore"
@@ -804,7 +830,12 @@ msgstr "알 수 없는 오류: 0x%1$x"
 msgid "Unknown protocol %d"
 msgstr "알 수 없는 오류: 0x%1$x"
 
-#: dcpp\DCPlusPlus.cpp:110
+#: dcpp\PluginManager.cpp:654
+#, boost-format
+msgid "Updating the %1% plugin from version %2% to version %3%"
+msgstr ""
+
+#: dcpp\DCPlusPlus.cpp:112
 msgid "Users"
 msgstr "사용자"
 
@@ -820,7 +851,7 @@ msgstr "자신의 파일을 다운로드할 수 없음"
 msgid "disabled"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:193 dcpp\SettingsManager.cpp:194
+#: dcpp\SettingsManager.cpp:199 dcpp\SettingsManager.cpp:200
 msgid "downloaded from"
 msgstr "downloaded from"
 
@@ -833,6 +864,6 @@ msgstr "검색이 불가능하게 됨: %1%"
 msgid "undefined"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:195
+#: dcpp\SettingsManager.cpp:201
 msgid "uploaded to"
 msgstr "uploaded to"

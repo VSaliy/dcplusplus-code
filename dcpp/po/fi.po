@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-03-04 13:16+0100\n"
+"POT-Creation-Date: 2013-05-21 19:34+0200\n"
 "PO-Revision-Date: 2009-02-26 20:55+0000\n"
 "Last-Translator: maksis <maksis@adrenaline-network.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-04 12:08+0000\n"
-"X-Generator: Launchpad (build 16514)\n"
+"X-Launchpad-Export-Date: 2013-05-21 16:57+0000\n"
+"X-Generator: Launchpad (build 16626)\n"
 
 #: dcpp\DownloadManager.cpp:360
 #, boost-format
@@ -63,7 +63,8 @@ msgstr ""
 msgid "%1% %2% port (%3% %4%)"
 msgstr ""
 
-#: dcpp\HttpConnection.cpp:205 dcpp\HttpConnection.cpp:271
+#: dcpp\HttpConnection.cpp:143 dcpp\HttpConnection.cpp:218
+#: dcpp\HttpConnection.cpp:274
 #, boost-format
 msgid "%1% (%2%)"
 msgstr ""
@@ -79,17 +80,22 @@ msgstr ""
 msgid "%1% (Nick unknown)"
 msgstr "%1% (nimimerkki tuntematon)"
 
-#: dcpp\PluginManager.cpp:127
+#: dcpp\PluginManager.cpp:156 dcpp\PluginManager.cpp:659
 #, boost-format
 msgid "%1% is already installed"
 msgstr ""
 
-#: dcpp\PluginManager.cpp:112
+#: dcpp\PluginManager.cpp:141 dcpp\PluginManager.cpp:527
 #, fuzzy, boost-format
 msgid "%1% is not a valid plugin"
 msgstr "%1%: Tiedosto ei ole saatavilla"
 
-#: dcpp\PluginManager.cpp:133
+#: dcpp\PluginManager.cpp:144
+#, boost-format
+msgid "%1% is not compatible with %2%"
+msgstr ""
+
+#: dcpp\PluginManager.cpp:107 dcpp\PluginManager.cpp:666
 #, boost-format
 msgid "%1% is too old, contact the plugin author for an update"
 msgstr ""
@@ -248,7 +254,7 @@ msgstr "Kohdetiedostoa %1% ei voi avata."
 msgid "Could not open target file: %1%"
 msgstr "Kohdetiedostoa %1% ei voi avata."
 
-#: dcpp\DCPlusPlus.cpp:129
+#: dcpp\DCPlusPlus.cpp:131
 msgid "Country information"
 msgstr ""
 
@@ -278,7 +284,7 @@ msgstr "Kansiolta puuttuu nimiattribuutti"
 msgid "Discard"
 msgstr "Hylkää"
 
-#: dcpp\BufferedSocket.cpp:475
+#: dcpp\BufferedSocket.cpp:475 dcpp\HttpManager.cpp:66
 msgid "Disconnected"
 msgstr "Yhteys katkaistu"
 
@@ -291,7 +297,7 @@ msgstr "Katkaistiin yhteys hubista lähteneeseen käyttäjään %1%"
 msgid "Document"
 msgstr ""
 
-#: dcpp\DCPlusPlus.cpp:125
+#: dcpp\DCPlusPlus.cpp:127
 msgid "Download Queue"
 msgstr "Latausjono"
 
@@ -315,7 +321,7 @@ msgstr "Sama lähde: %1%"
 msgid "Encrypted transfer"
 msgstr ""
 
-#: dcpp\HttpConnection.cpp:233
+#: dcpp\HttpConnection.cpp:245
 #, boost-format
 msgid "Endless redirection loop (%1%)"
 msgstr ""
@@ -346,7 +352,12 @@ msgstr "Sertifikaatin luominen epäonnistui"
 msgid "Error hashing %1%: %2%"
 msgstr "Virhe tarkistussumman luonnissa tiedostolle %1%: %2%"
 
-#: dcpp\PluginManager.cpp:95
+#: dcpp\PluginManager.cpp:535
+#, fuzzy, boost-format
+msgid "Error loading %1%"
+msgstr "Virhe tarkistussumman luonnissa tiedostolle %1%: %2%"
+
+#: dcpp\PluginManager.cpp:519
 #, fuzzy, boost-format
 msgid "Error loading %1%: %2%"
 msgstr "Virhe tarkistussumman luonnissa tiedostolle %1%: %2%"
@@ -470,7 +481,7 @@ msgstr "Uusi TLS-serfifikaatti luotu"
 msgid "Generic"
 msgstr ""
 
-#: dcpp\DCPlusPlus.cpp:119
+#: dcpp\DCPlusPlus.cpp:121
 msgid "Hash database"
 msgstr "Tarkistussummatietokanta"
 
@@ -495,10 +506,15 @@ msgstr ""
 msgid "Ignore"
 msgstr ""
 
-#: dcpp\FavoriteManager.cpp:683
+#: dcpp\FavoriteManager.cpp:680
 #, fuzzy, boost-format
 msgid "Invalid URL: %1%"
 msgstr "Haku poissa käytöstä: %1%"
+
+#: dcpp\Archive.cpp:42 dcpp\Archive.cpp:94
+#, fuzzy
+msgid "Invalid archive"
+msgstr "Virheellinen koko"
 
 #: dcpp\UserConnection.cpp:52 dcpp\UserConnection.cpp:70
 #: dcpp\UserConnection.cpp:138
@@ -520,7 +536,7 @@ msgstr ""
 msgid "Invalid regular expression: %1%"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:626
+#: dcpp\SettingsManager.cpp:633
 msgid "Invalid search type name"
 msgstr ""
 
@@ -536,7 +552,7 @@ msgstr ""
 "Kohdetiedosto ei kelpaa (hakemistoa ei ole, tarkista lataushakemisto "
 "asetuksista)"
 
-#: dcpp\FavoriteManager.cpp:426
+#: dcpp\FavoriteManager.cpp:423
 msgid "Kick user(s)"
 msgstr "Potkaise käyttäjä(t)"
 
@@ -548,7 +564,7 @@ msgstr ""
 msgid "Maximum command length exceeded"
 msgstr "Suurin komennon pituus ylitettiin"
 
-#: dcpp\PluginManager.cpp:141
+#: dcpp\PluginManager.cpp:673
 #, boost-format
 msgid "Missing dependencies for %1%"
 msgstr ""
@@ -577,7 +593,7 @@ msgstr "Yksityisavaintiedostoa ei ole valittu"
 msgid "No slots available"
 msgstr "Ei vapaita latauspaikkoja"
 
-#: dcpp\SettingsManager.cpp:684
+#: dcpp\SettingsManager.cpp:691
 msgid "No such search type"
 msgstr ""
 
@@ -592,7 +608,7 @@ msgstr "Yhteyksien kuunteleminen epäonnistui, %1% on käynnistettävä uudestaa
 
 #: dcpp\ClientManager.cpp:174 dcpp\FinishedManager.cpp:131
 #: dcpp\FinishedManager.cpp:137 dcpp\FinishedManager.cpp:143
-#: dcpp\SearchManager.cpp:261 dcpp\SearchManager.cpp:338 dcpp\Transfer.cpp:81
+#: dcpp\SearchManager.cpp:266 dcpp\SearchManager.cpp:343 dcpp\Transfer.cpp:81
 #: dcpp\Transfer.cpp:85
 msgid "Offline"
 msgstr "Tavoittamattomissa"
@@ -619,7 +635,7 @@ msgid ""
 "Public IP address detected, selecting active mode with direct connection"
 msgstr ""
 
-#: dcpp\FavoriteManager.cpp:430
+#: dcpp\FavoriteManager.cpp:427
 msgid "Redirect user(s)"
 msgstr "Uudelleenohjaa käyttäjä(t)"
 
@@ -639,26 +655,26 @@ msgstr ""
 msgid "Search (UDP)"
 msgstr ""
 
-#: dcpp\SearchManager.cpp:154
+#: dcpp\SearchManager.cpp:160
 #, boost-format
 msgid "Search disabled: %1%"
 msgstr "Haku poissa käytöstä: %1%"
 
-#: dcpp\SearchManager.cpp:146
+#: dcpp\SearchManager.cpp:152
 msgid "Search enabled again"
 msgstr "Haku jälleen käytössä"
 
-#: dcpp\DCPlusPlus.cpp:116
+#: dcpp\DCPlusPlus.cpp:118
 #, fuzzy
 msgid "Security certificates"
 msgstr "Sertifikaatin luominen epäonnistui"
 
-#: dcpp\ChatMessage.cpp:66
+#: dcpp\ChatMessage.cpp:65
 #, boost-format
 msgid "Sent %1%"
 msgstr ""
 
-#: dcpp\DCPlusPlus.cpp:122
+#: dcpp\DCPlusPlus.cpp:124
 msgid "Shared Files"
 msgstr "Jaetut tiedostot"
 
@@ -750,8 +766,13 @@ msgid ""
 "fix this"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:630 dcpp\SettingsManager.cpp:652
+#: dcpp\SettingsManager.cpp:637 dcpp\SettingsManager.cpp:659
 msgid "This search type already exists"
+msgstr ""
+
+#: dcpp\HttpConnection.cpp:289
+#, boost-format
+msgid "Too much data in response body (%1%)"
 msgstr ""
 
 #: dcpp\MappingManager.cpp:121 dcpp\MappingManager.cpp:164
@@ -760,6 +781,11 @@ msgstr ""
 
 #: dcpp\ConnectivityManager.cpp:274
 msgid "Transfer (TCP)"
+msgstr ""
+
+#: dcpp\HttpConnection.cpp:206
+#, boost-format
+msgid "Transfer-encoding error (%1%)"
 msgstr ""
 
 #: dcpp\UserMatchManager.cpp:132
@@ -810,7 +836,12 @@ msgstr "Tuntematon virhe: 0x%1$x"
 msgid "Unknown protocol %d"
 msgstr "Tuntematon virhe: 0x%1$x"
 
-#: dcpp\DCPlusPlus.cpp:110
+#: dcpp\PluginManager.cpp:654
+#, boost-format
+msgid "Updating the %1% plugin from version %2% to version %3%"
+msgstr ""
+
+#: dcpp\DCPlusPlus.cpp:112
 msgid "Users"
 msgstr ""
 
@@ -826,7 +857,7 @@ msgstr "Yrität ladata itseltäsi!"
 msgid "disabled"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:193 dcpp\SettingsManager.cpp:194
+#: dcpp\SettingsManager.cpp:199 dcpp\SettingsManager.cpp:200
 msgid "downloaded from"
 msgstr "ladattu käyttäjältä"
 
@@ -839,6 +870,6 @@ msgstr "Haku poissa käytöstä: %1%"
 msgid "undefined"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:195
+#: dcpp\SettingsManager.cpp:201
 msgid "uploaded to"
 msgstr "lähetetty käyttäjälle"
