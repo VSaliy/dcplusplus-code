@@ -174,15 +174,11 @@ public:
 	static string getInstallPath(const string& uuid);
 
 private:
-	void enable(Plugin& plugin, bool install);
+	void enable(Plugin& plugin, bool install, bool runtime);
 	void disable(Plugin& plugin, bool uninstall);
 
 	void loadSettings() noexcept;
 	void saveSettings() noexcept;
-
-	/** Check if the plugin can be loaded; throws if it can't.
-	@return Whether the plugin is being updated. */
-	bool checkPlugin(const MetaData& info, bool install);
 
 	const Plugin* findPlugin(const string& guid) const;
 	Plugin* findPlugin(const string& guid);
