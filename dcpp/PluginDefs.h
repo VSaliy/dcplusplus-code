@@ -32,7 +32,7 @@ extern "C" {
 #endif
 
 /* Version of the plugin api (must change if old plugins simply can't be seen as viably working) */
-#define DCAPI_CORE_VER				7
+#define DCAPI_CORE_VER				8
 
 #ifdef _WIN32
 # define DCAPI __stdcall
@@ -117,10 +117,11 @@ extern "C" {
 /* Main hook events (returned by pluginInit) */
 typedef enum tagPluginState {
 	ON_INSTALL = 0,												/* Replaces ON_LOAD for the very first loading of the plugin */
-	ON_UNINSTALL,												/* Replaces ON_UNLOAD when plugin is being uninstalled */
-	ON_LOAD,													/* Sent after successful call to pluginInit (obj: DCCore) */
-	ON_UNLOAD,													/* Sent right before plugin is unloaded (no params) */
-	ON_CONFIGURE												/* Sent when user wants to configure the plugin (obj: DCCore, data: impl. dependant) */
+	ON_LOAD,													/* Loading the plugin at program start; sent after the pluginInit call (obj: DCCore) */
+	ON_LOAD_RUNTIME,											/* Replaces ON_LOAD when loading the plugin at runtime */
+	ON_CONFIGURE,												/* The user wants to configure the plugin (obj: DCCore, data: impl. dependant) */
+	ON_UNLOAD,													/* The plugin is going to be unloaded (no params) */
+	ON_UNINSTALL												/* Replaces ON_UNLOAD when the plugin is being uninstalled */
 } PluginState;
 
 /* Argument types */

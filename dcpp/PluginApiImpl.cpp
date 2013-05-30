@@ -232,7 +232,7 @@ intfHandle PluginApiImpl::registerInterface(const char* guid, dcptr_t pInterface
 DCInterfacePtr PluginApiImpl::queryInterface(const char* guid, uint32_t version) {
 	// we only return the registered interface if it is same or newer than requested
 	DCInterface* dci = (DCInterface*)PluginManager::getInstance()->queryInterface(guid);
-	return (!dci || dci->apiVersion >= version) ? dci : NULL;
+	return (!dci || dci->apiVersion >= version) ? dci : nullptr;
 }
 
 Bool PluginApiImpl::releaseInterface(intfHandle hInterface) {

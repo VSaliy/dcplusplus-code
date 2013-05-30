@@ -103,8 +103,8 @@ DcextInfo PluginManager::extract(const string& path) {
 
 		string version;
 		parse("ApiVersion", version);
-		if(Util::toInt(version) < DCAPI_CORE_VER) {
-			throw Exception(str(F_("%1% is too old, contact the plugin author for an update") % Util::getFileName(path)));
+		if(Util::toInt(version) != DCAPI_CORE_VER) {
+			throw Exception(str(F_("%1% is not compatible with %2%") % Util::getFileName(path) % APPNAME));
 		}
 
 		parse("UUID", info.uuid);
@@ -147,13 +147,12 @@ DcextInfo PluginManager::extract(const string& path) {
 	{
 		Lock l(cs);
 
-		auto it = findPluginIter(info.uuid);
-		if(it != plugins.end()) {
-			auto& plugin = *it;
-			if(plugin.version < info.version) {
+		auto dupe = findPlugin(info.uuid);
+		if(dupe) {
+			if(dupe->version < info.version) {
 				info.updating = true;
 			} else {
-				throw Exception(str(F_("%1% is already installed") % plugin.name));
+				throw Exception(str(F_("%1% is already installed") % dupe->name));
 			}
 		}
 	}
@@ -162,6 +161,22 @@ DcextInfo PluginManager::extract(const string& path) {
 }
 
 void PluginManager::install(const DcextInfo& info) {
+	{
+		Lock l(cs);
+
+		auto dupe = findPlugin(info.uuid);
+		if(dupe) {
+			if(dupe->version < info.version) {
+				// disable when updating or the file copy will fail...
+				if(dupe->handle) {
+					disable(*dupe, false);
+				}
+			} else {
+				throw Exception(str(F_("%1% is already installed") % dupe->name));
+			}
+		}
+	}
+
 	const auto source = Util::getTempPath() + "dcext" PATH_SEPARATOR_STR;
 	const auto target = getInstallPath(info.uuid);
 	const auto lib = target + Util::getFileName(info.plugin);
@@ -188,7 +203,7 @@ void PluginManager::loadPlugins(function<void (const string&)> f) {
 	for(auto& plugin: plugins) {
 		if(!plugin.dcMain) { continue; } // a little trick to avoid an additonal "bool enabled"
 		if(f) { f(plugin.name); }
-		try { enable(plugin, false); }
+		try { enable(plugin, false, false); }
 		catch(const Exception& e) { LogManager::getInstance()->message(e.getError()); }
 	}
 }
@@ -227,9 +242,7 @@ void PluginManager::addPlugin(const string& path) {
 	plugin.name = Util::getFileName(path);
 	plugin.path = path;
 
-	enable(plugin, true);
-
-	plugins.push_back(move(plugin));
+	enable(plugin, true, true);
 }
 
 bool PluginManager::configPlugin(const string& guid, dcptr_t data) {
@@ -245,7 +258,7 @@ void PluginManager::enablePlugin(const string& guid) {
 	Lock l(cs);
 	auto p = findPlugin(guid);
 	if(p && !p->handle) {
-		enable(*p, false);
+		enable(*p, false, true);
 	}
 }
 
@@ -509,7 +522,7 @@ string PluginManager::getInstallPath(const string& uuid) {
 	return Util::getPath(Util::PATH_USER_LOCAL) + "Plugins" PATH_SEPARATOR_STR + uuid + PATH_SEPARATOR_STR;
 }
 
-void PluginManager::enable(Plugin& plugin, bool install) {
+void PluginManager::enable(Plugin& plugin, bool install, bool runtime) {
 	Lock l(cs);
 
 	dcassert(dcCore.apiVersion != 0);
@@ -518,8 +531,8 @@ void PluginManager::enable(Plugin& plugin, bool install) {
 	if(!plugin.handle) {
 		throw Exception(str(F_("Error loading %1%: %2%") % plugin.name % GET_ERROR()));
 	}
-	bool success = false;
-	ScopedFunctor(([&plugin, &success] { if(!success) { FREE_LIBRARY(plugin.handle); plugin.handle = nullptr; plugin.dcMain = nullptr; } }));
+	bool unload = true;
+	ScopedFunctor(([&plugin, &unload] { if(unload) { FREE_LIBRARY(plugin.handle); plugin.handle = nullptr; plugin.dcMain = nullptr; } }));
 
 	auto pluginInfo = reinterpret_cast<DCMAIN (DCAPI *)(MetaDataPtr)>(GET_ADDRESS(plugin.handle, "pluginInit"));
 	MetaData info { };
@@ -527,23 +540,76 @@ void PluginManager::enable(Plugin& plugin, bool install) {
 		throw Exception(str(F_("%1% is not a valid plugin") % plugin.name));
 	}
 
-	if(checkPlugin(info, install)) {
-		install = true;
+	// Check API compatibility (this should only block on absolutely wrecking api changes, which generally should not happen)
+	if(info.apiVersion != DCAPI_CORE_VER) {
+		throw Exception(str(F_("%1% is not compatible with %2%") % info.name % APPNAME));
 	}
 
-	if(plugin.dcMain((install ? ON_INSTALL : ON_LOAD), &dcCore, nullptr) == False) {
-		throw Exception(str(F_("Error loading %1%") % plugin.name));
+	// Check that all dependencies are loaded
+	for(decltype(info.numDependencies) i = 0; i < info.numDependencies; ++i) {
+		if(!isLoaded(info.dependencies[i])) {
+			throw Exception(str(F_("Missing dependencies for %1%") % info.name));
+		}
 	}
 
-	success = true;
+	auto pluginPtr = &plugin;
 
-	// refresh the info we have on the plugin.
-	plugin.guid = info.guid;
-	plugin.name = info.name;
-	plugin.version = info.version;
-	plugin.author = info.author;
-	plugin.description = info.description;
-	plugin.website = info.web;
+	// When installing, check for duplicates and possible updates
+	if(install) {
+		auto dupe = findPlugin(info.guid);
+		if(dupe) {
+
+			if(dupe->version < info.version) {
+				// in-place updating to keep settings etc.
+
+				LogManager::getInstance()->message(str(F_("Updating the %1% plugin from version %2% to version %3%") %
+					string(dupe->name) % dupe->version % info.version));
+
+				if(dupe->handle) {
+					disable(*dupe, false);
+				}
+				dupe->handle = plugin.handle;
+				dupe->dcMain = plugin.dcMain;
+				pluginPtr = dupe;
+
+				install = false;
+
+			} else {
+				throw Exception(str(F_("%1% is already installed") % info.name));
+			}
+
+		} else {
+			// add to the list before executing dcMain, to guarantee a correct state (eg for settings).
+			plugins.push_back(move(plugin));
+			pluginPtr = &plugins.back();
+		}
+	}
+
+	{ // scope to change the plugin ref
+		auto& plugin = *pluginPtr;
+
+		if(plugin.dcMain(install ? ON_INSTALL : runtime ? ON_LOAD_RUNTIME : ON_LOAD, &dcCore, nullptr) == False) {
+
+			if(install) {
+				// remove from the list.
+				FREE_LIBRARY(plugin.handle);
+				plugins.pop_back();
+				unload = false;
+			}
+
+			throw Exception(str(F_("Error loading %1%") % plugin.name));
+		}
+
+		unload = false;
+
+		// refresh the info we have on the plugin.
+		plugin.guid = info.guid;
+		plugin.name = info.name;
+		plugin.version = info.version;
+		plugin.author = info.author;
+		plugin.description = info.description;
+		plugin.website = info.web;
+	}
 }
 
 void PluginManager::disable(Plugin& plugin, bool uninstall) {
@@ -640,42 +706,6 @@ void PluginManager::saveSettings() noexcept {
 	} catch(const Exception& e) {
 		dcdebug("PluginManager::saveSettings: %s\n", e.getError().c_str());
 	}
-}
-
-bool PluginManager::checkPlugin(const MetaData& info, bool install) {
-	auto updating = false;
-
-	// When installing, check for duplicates and possible updates
-	if(install) {
-		auto it = findPluginIter(info.guid);
-		if(it != plugins.end()) {
-			auto& plugin = *it;
-			if(plugin.version < info.version) {
-				LogManager::getInstance()->message(str(F_("Updating the %1% plugin from version %2% to version %3%") %
-					string(plugin.name) % plugin.version % info.version));
-				plugins.erase(it);
-				updating = true;
-			} else {
-				throw Exception(str(F_("%1% is already installed") % info.name));
-			}
-		}
-	}
-
-	// Check API compatibility (this should only block on absolutely wrecking api changes, which generally should not happen)
-	if(info.apiVersion < DCAPI_CORE_VER) {
-		throw Exception(str(F_("%1% is too old, contact the plugin author for an update") % info.name));
-	}
-
-	// Check that all dependencies are loaded
-	if(info.numDependencies != 0) {
-		for(size_t i = 0; i < info.numDependencies; ++i) {
-			if(!isLoaded(info.dependencies[i])) {
-				throw Exception(str(F_("Missing dependencies for %1%") % info.name));
-			}
-		}
-	}
-
-	return updating;
 }
 
 const Plugin* PluginManager::findPlugin(const string& guid) const {
