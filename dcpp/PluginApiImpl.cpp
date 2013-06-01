@@ -92,14 +92,15 @@ DCConfig PluginApiImpl::dcConfig = {
 	DCINTF_CONFIG_VER,
 
 	&PluginApiImpl::getPath,
+	&PluginApiImpl::getInstallPath,
 
 	&PluginApiImpl::setConfig,
 	&PluginApiImpl::getConfig,
 
-	&PluginApiImpl::copyData,
-	&PluginApiImpl::releaseData,
+	&PluginApiImpl::getLanguage,
 
-	&PluginApiImpl::getInstallPath
+	&PluginApiImpl::copyData,
+	&PluginApiImpl::releaseData
 };
 
 DCLog PluginApiImpl::dcLog = {
@@ -149,11 +150,10 @@ DCQueue PluginApiImpl::dcQueue = {
 	&PluginApiImpl::removeDownload,
 
 	&PluginApiImpl::setPriority,
+	&PluginApiImpl::pause,
 
 	&PluginApiImpl::copyData,
-	&PluginApiImpl::releaseData,
-
-	&PluginApiImpl::pause
+	&PluginApiImpl::releaseData
 };
 
 DCUtils PluginApiImpl::dcUtils = {
@@ -275,6 +275,12 @@ const char* DCAPI PluginApiImpl::getPath(PathType type) {
 	return Util::getPath(static_cast<Util::Paths>(type)).c_str();
 }
 
+ConfigStrPtr DCAPI PluginApiImpl::getInstallPath(const char* guid) {
+	auto str = PluginManager::getInstallPath(guid);
+	ConfigStr value = { CFG_TYPE_STRING, str.c_str() };
+	return reinterpret_cast<ConfigStrPtr>(copyData(reinterpret_cast<ConfigValuePtr>(&value)));
+}
+
 void PluginApiImpl::setConfig(const char* guid, const char* setting, ConfigValuePtr val) {
 	PluginManager* pm = PluginManager::getInstance();
 	switch(val->type) {
@@ -364,6 +370,12 @@ ConfigValuePtr PluginApiImpl::getConfig(const char* guid, const char* setting, C
 	return NULL;
 }
 
+ConfigStrPtr DCAPI PluginApiImpl::getLanguage() {
+	auto str = Util::getIETFLang();
+	ConfigStr value = { CFG_TYPE_STRING, str.c_str() };
+	return reinterpret_cast<ConfigStrPtr>(copyData(reinterpret_cast<ConfigValuePtr>(&value)));
+}
+
 ConfigValuePtr PluginApiImpl::copyData(const ConfigValuePtr val) {
 	switch(val->type) {
 		case CFG_TYPE_STRING: {
@@ -431,12 +443,6 @@ void PluginApiImpl::releaseData(ConfigValuePtr val) {
 		default:
 			dcassert(0);
 	}
-}
-
-ConfigStrPtr DCAPI PluginApiImpl::getInstallPath(const char* guid) {
-	auto str = PluginManager::getInstallPath(guid);
-	ConfigStr value = { CFG_TYPE_STRING, str.c_str() };
-	return reinterpret_cast<ConfigStrPtr>(copyData(reinterpret_cast<ConfigValuePtr>(&value)));
 }
 
 // Functions for DCLog

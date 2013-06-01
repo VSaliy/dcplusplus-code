@@ -151,6 +151,9 @@ public:
 	/** Notepad filename */
 	static string getNotepadFile() { return getPath(PATH_NOTEPAD); }
 
+	/** IETF language tag of the language currently in use. */
+	static string getIETFLang();
+
 	static string translateError(int aError);
 
 	static string getFilePath(const string& path, char separator = PATH_SEPARATOR) {

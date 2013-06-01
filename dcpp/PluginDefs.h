@@ -58,20 +58,20 @@ extern "C" {
 
 /* Recommended interfaces */
 #define DCINTF_CONFIG				"generic.plugins.DCConfig"	/* Config management */
-#define DCINTF_CONFIG_VER			2
+#define DCINTF_CONFIG_VER			1
 
 #define DCINTF_LOGGING				"generic.plugins.DCLog"		/* Logging functions */
 #define DCINTF_LOGGING_VER			1
 
 /* Optional interfaces */
 #define DCINTF_DCPP_CONNECTIONS		"dcpp.network.DCConnection"	/* Peer connections */
-#define DCINTF_DCPP_CONNECTIONS_VER	2
+#define DCINTF_DCPP_CONNECTIONS_VER	1
 
 #define DCINTF_DCPP_HUBS			"dcpp.network.DCHub"		/* Hubs */
 #define DCINTF_DCPP_HUBS_VER		1
 
 #define DCINTF_DCPP_QUEUE			"dcpp.queue.DCQueue"		/* Download Queue */
-#define DCINTF_DCPP_QUEUE_VER		2
+#define DCINTF_DCPP_QUEUE_VER		1
 
 #define DCINTF_DCPP_UTILS			"dcpp.utils.DCUtils"		/* Utility and convenience functions */
 #define DCINTF_DCPP_UTILS_VER		1
@@ -339,15 +339,16 @@ typedef struct tagDCConfig {
 	uint32_t apiVersion;
 
 	const char*			(DCAPI *get_path)			(PathType type);
+	ConfigStrPtr		(DCAPI *get_install_path)	(const char* guid);
 
 	void				(DCAPI *set_cfg)			(const char* guid, const char* setting, ConfigValuePtr val);
 	ConfigValuePtr		(DCAPI *get_cfg)			(const char* guid, const char* setting, ConfigType type);
 
+	/* Return the language used by the host as an IETF language tag. */
+	ConfigStrPtr		(DCAPI *get_language)		();
+
 	ConfigValuePtr		(DCAPI *copy)				(const ConfigValuePtr val);
 	void				(DCAPI *release)			(ConfigValuePtr val);
-
-	/* Version 2 functions */
-	ConfigStrPtr	(DCAPI *get_install_path)	(const char* guid);
 } DCConfig, *DCConfigPtr;
 
 /* Logging functions */
@@ -369,7 +370,6 @@ typedef struct tagDCConnection {
 	void			(DCAPI *send_protocol_cmd)		(ConnectionDataPtr hConn, const char* cmd);
 	void			(DCAPI *terminate_conn)			(ConnectionDataPtr hConn, Bool graceless);
 
-	/* Version 2 functions */
 	UserDataPtr		(DCAPI *get_user)				(ConnectionDataPtr hConn);
 } DCConnection, *DCConnectionPtr;
 
@@ -408,12 +408,10 @@ typedef struct tagDCQueue {
 	void			(DCAPI *remove_download)		(QueueDataPtr hItem);
 
 	void			(DCAPI *set_priority)			(QueueDataPtr hItem, QueuePrio priority);
+	Bool			(DCAPI *pause)					(QueueDataPtr hItem);
 
 	QueueDataPtr	(DCAPI *copy)					(const QueueDataPtr hItem);
 	void			(DCAPI *release)				(QueueDataPtr hCopy);
-
-	/* Version 2 functions */
-	Bool			(DCAPI *pause)					(QueueDataPtr hItem);
 } DCQueue, *DCQueuePtr;
 
 /* Utility and convenience functions */

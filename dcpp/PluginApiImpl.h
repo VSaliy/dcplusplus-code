@@ -68,10 +68,10 @@ private:
 
 	// Functions For DCConfig
 	static const char* DCAPI getPath(PathType type);
+	static ConfigStrPtr DCAPI getInstallPath(const char* guid);
 	static void DCAPI setConfig(const char* guid, const char* setting, ConfigValuePtr val);
 	static ConfigValuePtr DCAPI getConfig(const char* guid, const char* setting, ConfigType type);
-
-	static ConfigStrPtr DCAPI getInstallPath(const char* guid);
+	static ConfigStrPtr DCAPI getLanguage();
 
 	// Functions for DCLog
 	static void DCAPI log(const char* msg);
@@ -106,7 +106,6 @@ private:
 	static void DCAPI removeDownload(QueueDataPtr qi);
 
 	static void DCAPI setPriority(QueueDataPtr qi, QueuePrio priority);
-
 	static Bool DCAPI pause(QueueDataPtr qi);
 
 	// Functions for DCHub

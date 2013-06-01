@@ -76,6 +76,9 @@ extern "C" void bz_internal_error(int errcode) {
 	dcdebug("bzip2 internal error: %d\n", errcode);
 }
 
+// def taken from <gettextP.h>
+extern "C" const char *_nl_locale_name_default(void);
+
 #ifdef _WIN32
 
 typedef HRESULT (WINAPI* _SHGetKnownFolderPath)(GUID& rfid, DWORD dwFlags, HANDLE hToken, PWSTR *ppszPath);
@@ -245,6 +248,25 @@ void Util::loadBootConfig() {
 	} catch(const Exception& ) {
 		// Unable to load boot settings...
 	}
+}
+
+string Util::getIETFLang() {
+	auto lang = SETTING(LANGUAGE);
+	if(lang.empty()) {
+		lang = _nl_locale_name_default();
+	}
+	if(lang.empty() || lang == "C") {
+		lang = "en-US";
+	}
+
+	// replace separation signs by hyphens.
+	size_t i = 0;
+	while((i = lang.find_first_of("_@.", i)) != string::npos) {
+		lang[i] = '-';
+		++i;
+	}
+
+	return lang;
 }
 
 #ifdef _WIN32

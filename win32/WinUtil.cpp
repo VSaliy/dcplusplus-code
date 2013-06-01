@@ -88,9 +88,6 @@ using dwt::LoadDialog;
 using dwt::SaveDialog;
 using dwt::Widget;
 
-// def taken from <gettextP.h>
-extern "C" const char *_nl_locale_name_default(void);
-
 WinUtil::Notification WinUtil::notifications[NOTIFICATION_LAST] = {
 	{ SettingsManager::SOUND_FINISHED_DL, SettingsManager::BALLOON_FINISHED_DL, N_("Download finished"), IDI_DOWNLOAD },
 	{ SettingsManager::SOUND_FINISHED_FL, SettingsManager::BALLOON_FINISHED_FL, N_("File list downloaded"), IDI_DIRECTORY },
@@ -336,20 +333,18 @@ void WinUtil::initSeeds() {
 
 void WinUtil::initHelpPath() {
 	// find the current locale
-	string lang = SETTING(LANGUAGE);
-	if(lang.empty())
-		lang = _nl_locale_name_default();
+	auto lang = Util::getIETFLang();
 
 	// find the path to the help file
 	string path;
-	if(!lang.empty() && lang != "C") {
+	if(lang != "en" && lang != "en-US") {
 		while(true) {
 			path = Util::getPath(Util::PATH_LOCALE) + lang
 				+ PATH_SEPARATOR_STR "help" PATH_SEPARATOR_STR "DCPlusPlus.chm";
 			if(File::getSize(path) != -1)
 				break;
-			// if the lang has extra information (after '_' or '@'), try to remove it
-			string::size_type pos = lang.find_last_of("_@");
+			// if the lang has extra information, try to remove it
+			string::size_type pos = lang.rfind('-');
 			if(pos == string::npos)
 				break;
 			lang = lang.substr(0, pos);
