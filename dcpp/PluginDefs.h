@@ -338,7 +338,7 @@ typedef struct tagDCConfig {
 	/* Config API version */
 	uint32_t apiVersion;
 
-	const char*			(DCAPI *get_path)			(PathType type);
+	ConfigStrPtr		(DCAPI *get_path)			(PathType type);
 	ConfigStrPtr		(DCAPI *get_install_path)	(const char* guid);
 
 	void				(DCAPI *set_cfg)			(const char* guid, const char* setting, ConfigValuePtr val);

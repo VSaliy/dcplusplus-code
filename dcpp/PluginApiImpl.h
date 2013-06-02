@@ -67,7 +67,7 @@ private:
 	static size_t DCAPI releaseHook(subsHandle hHook);
 
 	// Functions For DCConfig
-	static const char* DCAPI getPath(PathType type);
+	static ConfigStrPtr DCAPI getPath(PathType type);
 	static ConfigStrPtr DCAPI getInstallPath(const char* guid);
 	static void DCAPI setConfig(const char* guid, const char* setting, ConfigValuePtr val);
 	static ConfigValuePtr DCAPI getConfig(const char* guid, const char* setting, ConfigType type);

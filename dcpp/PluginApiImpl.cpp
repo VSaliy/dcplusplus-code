@@ -271,8 +271,10 @@ size_t PluginApiImpl::releaseHook(subsHandle hHook) {
 }
 
 // Functions for DCConfig
-const char* DCAPI PluginApiImpl::getPath(PathType type) {
-	return Util::getPath(static_cast<Util::Paths>(type)).c_str();
+ConfigStrPtr DCAPI PluginApiImpl::getPath(PathType type) {
+	auto str = Util::getPath(static_cast<Util::Paths>(type));
+	ConfigStr value = { CFG_TYPE_STRING, str.c_str() };
+	return reinterpret_cast<ConfigStrPtr>(copyData(reinterpret_cast<ConfigValuePtr>(&value)));
 }
 
 ConfigStrPtr DCAPI PluginApiImpl::getInstallPath(const char* guid) {
