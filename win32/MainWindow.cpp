@@ -668,8 +668,7 @@ void MainWindow::addPluginCommand(const string& guid, const tstring& text, funct
 	pluginCommands[guid][text] = make_pair(command, icon);
 
 	if(WinUtil::mainWindow && !WinUtil::mainWindow->closing()) {
-		WinUtil::mainWindow->pluginMenu->clear();
-		WinUtil::mainWindow->addPluginCommands(WinUtil::mainWindow->pluginMenu);
+		WinUtil::mainWindow->refreshPluginMenu();
 	}
 }
 
@@ -687,9 +686,13 @@ void MainWindow::removePluginCommand(const string& guid, const tstring& text) {
 	}
 
 	if(WinUtil::mainWindow && !WinUtil::mainWindow->closing()) {
-		WinUtil::mainWindow->pluginMenu->clear();
-		WinUtil::mainWindow->addPluginCommands(WinUtil::mainWindow->pluginMenu);
+		WinUtil::mainWindow->refreshPluginMenu();
 	}
+}
+
+void MainWindow::refreshPluginMenu() {
+	pluginMenu->clear();
+	addPluginCommands(pluginMenu);
 }
 
 void MainWindow::addPluginCommands(Menu* menu) {
@@ -703,12 +706,13 @@ void MainWindow::addPluginCommands(Menu* menu) {
 
 	for(auto& guid: plugins) {
 		auto sub = menu->appendPopup(Text::toT(PluginManager::getInstance()->getPlugin(guid).name));
-		sub->appendItem(T_("Configure"), [this, guid] { PluginUtils::configPlugin(guid, this); });
-		if(PluginManager::getInstance()->isLoaded(guid)) {
-			sub->appendItem(T_("Disable"), [this, guid] { PluginUtils::disablePlugin(guid, this); });
-		} else {
-			sub->appendItem(T_("Enable"), [this, guid] { PluginUtils::enablePlugin(guid, this); });
-		}
+
+		const auto enabled = PluginManager::getInstance()->isLoaded(guid);
+		sub->appendItem(T_("Enable"), [this, guid] { PluginUtils::enablePlugin(guid, this); }, nullptr, !enabled);
+		sub->appendItem(T_("Disable"), [this, guid] { PluginUtils::disablePlugin(guid, this); }, nullptr, enabled);
+
+		sub->appendSeparator();
+		sub->appendItem(T_("Configure"), [this, guid] { PluginUtils::configPlugin(guid, this); }, nullptr, enabled);
 
 		auto commandIt = pluginCommands.find(guid);
 		if(commandIt != pluginCommands.end()) {
@@ -1320,8 +1324,7 @@ void MainWindow::handleSettings() {
 		if(SETTING(SETTINGS_SAVE_INTERVAL) != prevSettingsSave)
 			setSaveTimer();
 
-		pluginMenu->clear();
-		addPluginCommands(pluginMenu);
+		refreshPluginMenu();
 	}
 }
 

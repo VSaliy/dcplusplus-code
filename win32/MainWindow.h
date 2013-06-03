@@ -70,6 +70,7 @@ public:
 
 	static void addPluginCommand(const string& guid, const tstring& text, function<void ()> command, const tstring& icon);
 	static void removePluginCommand(const string& guid, const tstring& text);
+	void refreshPluginMenu();
 
 	/** show a balloon popup. refer to the dwt::Notification::addMessage doc for info about parameters. */
 	void notify(const tstring& title, const tstring& message, function<void ()> callback = nullptr, const dwt::IconPtr& balloonIcon = nullptr);

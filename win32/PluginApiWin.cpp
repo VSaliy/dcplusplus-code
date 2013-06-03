@@ -75,6 +75,7 @@ void PluginUtils::addPlugin(dwt::Widget* w) {
 		auto path = Text::fromT(path_t);
 		if(Util::getFileExt(path) == ".dcext") {
 			PluginInfoDlg(w, path).run();
+			WinUtil::mainWindow->refreshPluginMenu();
 		} else {
 			try {
 				PluginManager::getInstance()->addPlugin(path);
@@ -91,12 +92,15 @@ void PluginUtils::configPlugin(const string& guid, dwt::Widget* w) {
 		dwt::MessageBox(w).show(
 			str(TF_("%1% doesn't need any additional configuration") % Text::toT(PluginManager::getInstance()->getPlugin(guid).name)),
 			_T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONINFORMATION);
+		return;
 	}
+	WinUtil::mainWindow->refreshPluginMenu();
 }
 
 void PluginUtils::enablePlugin(const string& guid, dwt::Widget* w) {
 	try {
 		PluginManager::getInstance()->enablePlugin(guid);
+		WinUtil::mainWindow->refreshPluginMenu();
 	} catch(const Exception& e) {
 		dwt::MessageBox(w).show(tstring(T_("Cannot enable the plugin:")) + _T("\r\n\r\n") + Text::toT(e.getError()),
 			Text::toT(PluginManager::getInstance()->getPlugin(guid).name), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONSTOP);
@@ -105,4 +109,5 @@ void PluginUtils::enablePlugin(const string& guid, dwt::Widget* w) {
 
 void PluginUtils::disablePlugin(const string& guid, dwt::Widget*) {
 	PluginManager::getInstance()->disablePlugin(guid);
+	WinUtil::mainWindow->refreshPluginMenu();
 }
