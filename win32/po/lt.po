@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: win32\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-05-21 19:34+0200\n"
+"POT-Creation-Date: 2013-06-03 14:15+0200\n"
 "PO-Revision-Date: 2012-05-16 01:15+0000\n"
 "Last-Translator: Launchpad Translations Administrators <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,8 +17,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
 "%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2013-05-21 16:56+0000\n"
-"X-Generator: Launchpad (build 16626)\n"
+"X-Launchpad-Export-Date: 2013-06-03 11:41+0000\n"
+"X-Generator: Launchpad (build 16660)\n"
 
 #: win32\PublicHubsFrame.cpp:420
 msgid " from Coral"
@@ -28,7 +28,7 @@ msgstr ""
 msgid "% transferred"
 msgstr "% perduota"
 
-#: win32\MainWindow.cpp:1443
+#: win32\MainWindow.cpp:1446
 #, boost-format
 msgid ""
 "%1%\n"
@@ -64,7 +64,7 @@ msgstr[1] ""
 msgid "%1% / %2% sources ignored: %3%"
 msgstr "%1% / %2% ignoruojami šaltiniai: %3%"
 
-#: win32\PluginApiWin.cpp:92
+#: win32\PluginApiWin.cpp:93
 #, boost-format
 msgid "%1% doesn't need any additional configuration"
 msgstr ""
@@ -75,7 +75,7 @@ msgid "%1% dropped"
 msgstr "%1% filtruota"
 
 #: win32\PluginApiWin.cpp:71 win32\PluginApiWin.cpp:72
-#: win32\QueueFrame.cpp:869 win32\WinUtil.cpp:823
+#: win32\QueueFrame.cpp:869 win32\WinUtil.cpp:818
 #: win32\FinishedFrameBase.h:461
 #, boost-format
 msgid "%1% files"
@@ -86,7 +86,7 @@ msgstr "%1% bylos(-ų)"
 msgid "%1% files/h, %2% files left"
 msgstr "%1% bylų/h, %2% bylos liko"
 
-#: win32\MainWindow.cpp:1147
+#: win32\MainWindow.cpp:1151
 #, boost-format
 msgid "%1% free slots of %2% total upload slots - Click to adjust"
 msgstr ""
@@ -120,7 +120,7 @@ msgstr "%1% liko"
 msgid "%1% port"
 msgstr "%1% liko"
 
-#: win32\MainWindow.cpp:837
+#: win32\MainWindow.cpp:841
 #, boost-format
 msgid "%1% recent items will be saved from now on."
 msgstr ""
@@ -149,19 +149,19 @@ msgstr[2] "%1% naudotojų"
 msgid "%1% users"
 msgstr "%1% vartotojas"
 
-#: win32\MainWindow.cpp:1567
+#: win32\MainWindow.cpp:1570
 #, fuzzy, boost-format
 msgid "%1%-level %2%"
 msgstr "%1%/s, %2% liko"
 
-#: win32\MainWindow.cpp:1146 win32\UserInfoBase.cpp:128
+#: win32\MainWindow.cpp:1150 win32\UserInfoBase.cpp:128
 #, fuzzy, boost-format
 msgid "%1%/%2%"
 msgstr "%1%/s"
 
-#: win32\MainWindow.cpp:882 win32\MainWindow.cpp:1162
-#: win32\MainWindow.cpp:1166 win32\MainWindow.cpp:1170
-#: win32\MainWindow.cpp:1174 win32\TransferView.cpp:227
+#: win32\MainWindow.cpp:886 win32\MainWindow.cpp:1166
+#: win32\MainWindow.cpp:1170 win32\MainWindow.cpp:1174
+#: win32\MainWindow.cpp:1178 win32\TransferView.cpp:227
 #: win32\TransferView.cpp:358 win32\TransferView.cpp:430
 #: win32\UsersFrame.cpp:73 win32\FinishedFrameBase.h:574
 #, boost-format
@@ -174,7 +174,7 @@ msgid "%1%/s, %2% left"
 msgstr "%1%/s, %2% liko"
 
 #: win32\DirectoryListingFrame.cpp:833 win32\UserInfoBase.cpp:104
-#: win32\UserInfoBase.cpp:129 win32\WinUtil.cpp:1579
+#: win32\UserInfoBase.cpp:129 win32\WinUtil.cpp:1574
 #, fuzzy, boost-format
 msgid "%1%: %2%"
 msgstr "%1%/s, %2% liko"
@@ -189,7 +189,7 @@ msgstr "&Pridėti"
 msgid "&Add folder"
 msgstr "&Pridėti katalogą"
 
-#: win32\WinUtil.cpp:1511 win32\UserInfoBase.h:155
+#: win32\WinUtil.cpp:1506 win32\UserInfoBase.h:155
 msgid "&Browse file list"
 msgstr "&Naršyti bylų sąrašą"
 
@@ -212,7 +212,7 @@ msgstr "&Uždaryti"
 msgid "&Configure"
 msgstr "&Konfigūruoti"
 
-#: win32\MainWindow.cpp:791
+#: win32\MainWindow.cpp:795
 msgid "&Configure..."
 msgstr "&Derinti..."
 
@@ -229,7 +229,7 @@ msgstr "&Kopijuoti"
 msgid "&Copy\tCtrl+C"
 msgstr "Kopijuoti\tCtrl+C"
 
-#: win32\MainWindow.cpp:1707
+#: win32\MainWindow.cpp:1710
 msgid "&Customize\tDouble-click"
 msgstr ""
 
@@ -281,7 +281,7 @@ msgstr "&Ieškoti...\tF3"
 msgid "&Force attempt"
 msgstr "&Bandyti priverstinai"
 
-#: win32\QueueFrame.cpp:905 win32\WinUtil.cpp:1508 win32\UserInfoBase.h:154
+#: win32\QueueFrame.cpp:905 win32\WinUtil.cpp:1503 win32\UserInfoBase.h:154
 msgid "&Get file list"
 msgstr "&Gauti bylų sąrašą"
 
@@ -293,12 +293,12 @@ msgstr "&Eiti į katalogą"
 msgid "&Help"
 msgstr "&Pagalba"
 
-#: win32\MainWindow.cpp:1723
+#: win32\MainWindow.cpp:1726
 #, fuzzy
 msgid "&Hide\tCtrl+1"
 msgstr "&Ieškoti\tCtrl+S"
 
-#: win32\WinUtil.cpp:1514 win32\UserInfoBase.h:156
+#: win32\WinUtil.cpp:1509 win32\UserInfoBase.h:156
 msgid "&Match queue"
 msgstr "&Sutikti su eile"
 
@@ -366,7 +366,7 @@ msgstr "&Pašalinti"
 msgid "&Search\tCtrl+S"
 msgstr "&Ieškoti\tCtrl+S"
 
-#: win32\QueueFrame.cpp:912 win32\WinUtil.cpp:1517 win32\UserInfoBase.h:158
+#: win32\QueueFrame.cpp:912 win32\WinUtil.cpp:1512 win32\UserInfoBase.h:158
 msgid "&Send private message"
 msgstr "&Siųsti asmeninę žinutę"
 
@@ -401,7 +401,7 @@ msgstr "&Langas"
 msgid "(%1%)"
 msgstr ""
 
-#: win32\MainWindow.cpp:798
+#: win32\MainWindow.cpp:802
 msgid "(No recent item found)"
 msgstr ""
 
@@ -425,7 +425,7 @@ msgstr "-:--:-- liko"
 msgid "<Information unavailable>"
 msgstr "Byla neprieinama"
 
-#: win32\WinUtil.cpp:1442
+#: win32\WinUtil.cpp:1437
 msgid ""
 "A MAGNET link was given to DC++, but it didn't contain a valid file hash for "
 "use on the Direct Connect network.  No action will be taken."
@@ -466,13 +466,13 @@ msgstr ""
 msgid "Active mode (let DC++ configure my router with NAT-PMP / UPnP)"
 msgstr ""
 
-#: win32\MainWindow.cpp:696
+#: win32\MainWindow.cpp:699
 #, fuzzy
 msgid "Add"
 msgstr "&Pridėti"
 
 #: win32\HubFrame.cpp:1248 win32\PublicHubsFrame.cpp:336
-#: win32\WinUtil.cpp:1520 win32\UserInfoBase.h:160
+#: win32\WinUtil.cpp:1515 win32\UserInfoBase.h:160
 msgid "Add To &Favorites"
 msgstr "Pridėti Į &mėgstamus"
 
@@ -506,7 +506,7 @@ msgstr "Adresas"
 msgid "Advanced"
 msgstr "Išsamiau"
 
-#: win32\QueueFrame.cpp:920 win32\QueueFrame.cpp:929 win32\WinUtil.cpp:1475
+#: win32\QueueFrame.cpp:920 win32\QueueFrame.cpp:929 win32\WinUtil.cpp:1470
 msgid "All"
 msgstr "Visi"
 
@@ -515,12 +515,12 @@ msgstr "Visi"
 msgid "All %1% users offline"
 msgstr "Visi %1% vartotojai atsijungę"
 
-#: win32\WinUtil.cpp:1573
+#: win32\WinUtil.cpp:1568
 #, fuzzy
 msgid "All columns"
 msgstr "Visos bylos"
 
-#: win32\WinUtil.cpp:826 win32\WinUtil.cpp:833
+#: win32\WinUtil.cpp:821 win32\WinUtil.cpp:828
 msgid "All files"
 msgstr "Visos bylos"
 
@@ -666,11 +666,11 @@ msgstr ""
 msgid "Away mode"
 msgstr ""
 
-#: win32\WinUtil.cpp:617 win32\WinUtil.cpp:626
+#: win32\WinUtil.cpp:612 win32\WinUtil.cpp:621
 msgid "Away mode off"
 msgstr "NĖRA išjungtas:"
 
-#: win32\WinUtil.cpp:622
+#: win32\WinUtil.cpp:617
 #, boost-format
 msgid "Away mode on: %1%"
 msgstr "NĖRA išjungtas: %1%"
@@ -756,15 +756,15 @@ msgstr "CRC32 neatitikimas (SFV patikra)"
 msgid "Cached hub list is corrupted or unsupported"
 msgstr ""
 
-#: win32\WinUtil.cpp:1098
+#: win32\WinUtil.cpp:1093
 msgid "Cancel"
 msgstr "Atšaukti"
 
-#: win32\PluginApiWin.cpp:101
+#: win32\PluginApiWin.cpp:105
 msgid "Cannot enable the plugin:"
 msgstr ""
 
-#: win32\PluginApiWin.cpp:82 win32\PluginInfoDlg.cpp:133
+#: win32\PluginApiWin.cpp:83 win32\PluginInfoDlg.cpp:133
 msgid "Cannot install the plugin:"
 msgstr ""
 
@@ -827,7 +827,7 @@ msgstr "Uždaryti visus failo sąrašo langus"
 msgid "Close all hubs"
 msgstr "Uždaryti visus privačių žinučių langus"
 
-#: win32\MainWindow.cpp:371 win32\MainWindow.cpp:1673
+#: win32\MainWindow.cpp:371 win32\MainWindow.cpp:1676
 msgid "Close all hubs of a favorite group"
 msgstr ""
 
@@ -844,7 +844,7 @@ msgstr "Uždaryti visus paieškos langus"
 msgid "Close disconnected hubs"
 msgstr "Uždaryk atjungtus"
 
-#: win32\MainWindow.cpp:372 win32\MainWindow.cpp:1673
+#: win32\MainWindow.cpp:372 win32\MainWindow.cpp:1676
 msgid "Close hubs not in a favorite group"
 msgstr ""
 
@@ -864,7 +864,7 @@ msgstr ""
 msgid "Compiler"
 msgstr ""
 
-#: win32\MainWindow.cpp:697 win32\MainWindow.cpp:706
+#: win32\MainWindow.cpp:700 win32\MainWindow.cpp:715
 #, fuzzy
 msgid "Configure"
 msgstr "&Konfigūruoti"
@@ -917,12 +917,12 @@ msgstr "Patvirtink siuntimo pašalinimą iš eilės"
 msgid "Connect to a favorite hub &group...\tCtrl+G"
 msgstr ""
 
-#: win32\MainWindow.cpp:932
+#: win32\MainWindow.cpp:936
 #, fuzzy
 msgid "Connect to a favorite hub group"
 msgstr "Patvirtink mėgstamo hub'o pašalinimą"
 
-#: win32\MainWindow.cpp:770
+#: win32\MainWindow.cpp:774
 msgid "Connect to all hubs in this group"
 msgstr ""
 
@@ -957,7 +957,7 @@ msgstr "Prisijungti"
 msgid "Context"
 msgstr "Kontekstas"
 
-#: win32\WinUtil.cpp:1555
+#: win32\WinUtil.cpp:1550
 #, fuzzy
 msgid "Copy"
 msgstr "&Kopijuoti"
@@ -966,7 +966,7 @@ msgstr "&Kopijuoti"
 msgid "Copy &address to clipboard"
 msgstr "Kopijuoti &adresą į iškarpinę"
 
-#: win32\WinUtil.cpp:772
+#: win32\WinUtil.cpp:767
 msgid "Copy magnet link to clipboard"
 msgstr "Kopijuok magnet sąsają"
 
@@ -1020,28 +1020,28 @@ msgstr ""
 msgid "Custom text color"
 msgstr ""
 
-#: win32\MainWindow.cpp:891
+#: win32\MainWindow.cpp:895
 msgid "Custom..."
 msgstr ""
 
-#: win32\MainWindow.cpp:1155
+#: win32\MainWindow.cpp:1159
 #, boost-format
 msgid "D: %1%"
 msgstr ""
 
-#: win32\MainWindow.cpp:1163
+#: win32\MainWindow.cpp:1167
 #, boost-format
 msgid "D: %1%/s (%2%)"
 msgstr ""
 
-#: win32\MainWindow.cpp:1870
+#: win32\MainWindow.cpp:1873
 #, boost-format
 msgid ""
 "D: %1%/s (%2%)\r\n"
 "U: %3%/s (%4%)"
 msgstr ""
 
-#: win32\MainWindow.cpp:730
+#: win32\MainWindow.cpp:734
 #, boost-format
 msgid "DC++ - %1%"
 msgstr ""
@@ -1053,7 +1053,7 @@ msgid ""
 msgstr ""
 
 #: win32\AppearancePage.cpp:142 win32\AppearancePage.cpp:175
-#: win32\WinUtil.cpp:1142
+#: win32\WinUtil.cpp:1137
 msgid "Default"
 msgstr "Numatytasis"
 
@@ -1115,12 +1115,12 @@ msgstr "Katalogas"
 msgid "Directory or directory name already exists"
 msgstr "Katalogas jau egzistuoja"
 
-#: win32\MainWindow.cpp:708 win32\PluginPage.cpp:106 win32\PluginPage.cpp:250
+#: win32\MainWindow.cpp:712 win32\PluginPage.cpp:106 win32\PluginPage.cpp:250
 #, fuzzy
 msgid "Disable"
 msgstr "Įjungta"
 
-#: win32\MainWindow.cpp:882
+#: win32\MainWindow.cpp:886
 #, fuzzy
 msgid "Disabled"
 msgstr "Įjungta"
@@ -1214,7 +1214,7 @@ msgstr "Siuntimų eilė"
 msgid "Download failed: %1%"
 msgstr "Siuntimas nutrūko: %1%"
 
-#: win32\TransferView.cpp:1084 win32\WinUtil.cpp:95
+#: win32\TransferView.cpp:1084 win32\WinUtil.cpp:92
 #, fuzzy
 msgid "Download finished"
 msgstr "Atsiųsta"
@@ -1223,27 +1223,27 @@ msgstr "Atsiųsta"
 msgid "Download full list"
 msgstr ""
 
-#: win32\MainWindow.cpp:858 win32\MainWindow.cpp:1851
+#: win32\MainWindow.cpp:862 win32\MainWindow.cpp:1854
 #, fuzzy
 msgid "Download limit"
 msgstr "Siuntimai"
 
-#: win32\WinUtil.cpp:654
+#: win32\WinUtil.cpp:649
 #, fuzzy
 msgid "Download limit disabled"
 msgstr "Siuntimai"
 
-#: win32\WinUtil.cpp:654
+#: win32\WinUtil.cpp:649
 #, fuzzy, boost-format
 msgid "Download limit set to %1% KiB/s"
 msgstr "Siuntimai"
 
-#: win32\MainWindow.cpp:1171
+#: win32\MainWindow.cpp:1175
 #, fuzzy, boost-format
 msgid "Download limit: %1%/s - Click to adjust"
 msgstr "Siuntimai"
 
-#: win32\WinUtil.cpp:602
+#: win32\WinUtil.cpp:597
 #, fuzzy
 msgid "Download slots set"
 msgstr "Siuntimai"
@@ -1351,7 +1351,7 @@ msgstr "El. paštas"
 msgid "Empty hub address specified"
 msgstr ""
 
-#: win32\MainWindow.cpp:710 win32\PluginPage.cpp:102 win32\PluginPage.cpp:249
+#: win32\MainWindow.cpp:711 win32\PluginPage.cpp:102 win32\PluginPage.cpp:249
 #, fuzzy
 msgid "Enable"
 msgstr "Įjungta"
@@ -1412,7 +1412,7 @@ msgstr ""
 msgid "Error processing version information"
 msgstr "Asmeninė informacija"
 
-#: win32\WinUtil.cpp:1363
+#: win32\WinUtil.cpp:1358
 #, boost-format
 msgid "Error registering the %1% handler"
 msgstr ""
@@ -1425,7 +1425,7 @@ msgstr "Klaidos"
 msgid "Event"
 msgstr ""
 
-#: win32\UserMatchPage.cpp:217 win32\WinUtil.cpp:1137
+#: win32\UserMatchPage.cpp:217 win32\WinUtil.cpp:1132
 msgid "Exact match"
 msgstr ""
 
@@ -1438,7 +1438,7 @@ msgstr "Tikslus dydis"
 msgid "Example hub tab"
 msgstr ""
 
-#: win32\MainWindow.cpp:1854
+#: win32\MainWindow.cpp:1857
 msgid "Exit"
 msgstr ""
 
@@ -1518,7 +1518,7 @@ msgstr "Pavadinimas"
 msgid "Favorite user added"
 msgstr "Pridėtas mėgstamas naudotojas"
 
-#: win32\WinUtil.cpp:463
+#: win32\WinUtil.cpp:458
 #, boost-format
 msgid "Favorite users (added by %1%)"
 msgstr ""
@@ -1546,7 +1546,7 @@ msgstr ""
 msgid "File List"
 msgstr "Sąrašo meniu"
 
-#: win32\QueueFrame.cpp:456 win32\WinUtil.cpp:833
+#: win32\QueueFrame.cpp:456 win32\WinUtil.cpp:828
 #, fuzzy
 msgid "File Lists"
 msgstr "Sąrašo meniu"
@@ -1556,7 +1556,7 @@ msgstr "Sąrašo meniu"
 msgid "File is already finished"
 msgstr "Nesiųsk failų, jau esančių sąraše"
 
-#: win32\WinUtil.cpp:96
+#: win32\WinUtil.cpp:93
 #, fuzzy
 msgid "File list downloaded"
 msgstr "Baigti siuntimai"
@@ -1740,7 +1740,7 @@ msgstr "GiB"
 msgid "Global application style"
 msgstr "Patvirtink išjungimą"
 
-#: win32\WinUtil.cpp:1523 win32\UserInfoBase.h:161
+#: win32\WinUtil.cpp:1518 win32\UserInfoBase.h:161
 msgid "Grant &extra slot"
 msgstr ""
 
@@ -1782,7 +1782,7 @@ msgstr "HTTP Proxy (tik hub'ų sąrašui)"
 msgid "Height of the message editing box"
 msgstr ""
 
-#: win32\WinUtil.cpp:1110
+#: win32\WinUtil.cpp:1105
 msgid "Help"
 msgstr ""
 
@@ -1866,7 +1866,7 @@ msgstr ""
 msgid "Hub address cannot be empty"
 msgstr ""
 
-#: win32\MainWindow.cpp:921
+#: win32\MainWindow.cpp:925
 msgid "Hub address or Magnet link"
 msgstr ""
 
@@ -1918,7 +1918,7 @@ msgstr "Hub'ų"
 msgid "Hubs (registered)"
 msgstr ""
 
-#: win32\MainWindow.cpp:1142 win32\PublicHubsFrame.cpp:246
+#: win32\MainWindow.cpp:1146 win32\PublicHubsFrame.cpp:246
 #: win32\UserInfoBase.cpp:94
 #, fuzzy, boost-format
 msgid "Hubs: %1%"
@@ -1944,7 +1944,7 @@ msgstr ""
 msgid "IP (v6)"
 msgstr ""
 
-#: win32\MainWindow.cpp:1561
+#: win32\MainWindow.cpp:1564
 msgid ""
 "IP -> country mappings are disabled. Turn them back on via Settings > "
 "Appearance."
@@ -2011,7 +2011,7 @@ msgstr ""
 msgid "Invalid extension: %1%"
 msgstr ""
 
-#: win32\MainWindow.cpp:1343
+#: win32\MainWindow.cpp:1346
 msgid "Invalid file list name"
 msgstr ""
 
@@ -2019,7 +2019,7 @@ msgstr ""
 msgid "Invalid input value for TTH search"
 msgstr ""
 
-#: win32\WinUtil.cpp:596 win32\WinUtil.cpp:604
+#: win32\WinUtil.cpp:591 win32\WinUtil.cpp:599
 msgid "Invalid number of slots"
 msgstr "Netinkamas vietų skaičius"
 
@@ -2198,7 +2198,7 @@ msgstr "Vardas"
 msgid "Logs"
 msgstr "Vardas"
 
-#: win32\WinUtil.cpp:771
+#: win32\WinUtil.cpp:766
 msgid "Lookup TTH at Bitzi.com"
 msgstr "Ieškok TTH per Bitzi.com"
 
@@ -2218,7 +2218,7 @@ msgstr "Visai nesvarbu"
 msgid "M&odify"
 msgstr ""
 
-#: win32\MagnetDlg.cpp:122 win32\WinUtil.cpp:1443
+#: win32\MagnetDlg.cpp:122 win32\WinUtil.cpp:1438
 msgid "MAGNET Link detected"
 msgstr "Aptikta MAGNET sąsaja"
 
@@ -2227,7 +2227,7 @@ msgstr "Aptikta MAGNET sąsaja"
 msgid "MB"
 msgstr "MiB"
 
-#: win32\WinUtil.cpp:97
+#: win32\WinUtil.cpp:94
 #, fuzzy
 msgid "Main chat message received"
 msgstr "Suzyzk gavęs asmeninę žinutę"
@@ -2321,7 +2321,7 @@ msgstr "Daugiausia vienalaikių siuntimų (0 = neribota)"
 msgid "Maximum Upload Rate (KiB/s) (0 = infinite)"
 msgstr "Daugiausia vienalaikių siuntimų (0 = neribota)"
 
-#: win32\HistoryPage.cpp:86 win32\MainWindow.cpp:833
+#: win32\HistoryPage.cpp:86 win32\MainWindow.cpp:837
 msgid "Maximum number of recent items to save"
 msgstr ""
 
@@ -2444,7 +2444,7 @@ msgstr "Vidutiniškai: %1%"
 msgid "Network Statistics"
 msgstr "Tinklo statistika"
 
-#: win32\MainWindow.cpp:893
+#: win32\MainWindow.cpp:897
 #, fuzzy
 msgid "New limit (KiB/s) (0 = infinite)"
 msgstr "Daugiausia vienalaikių siuntimų (0 = neribota)"
@@ -2476,12 +2476,12 @@ msgid "Nicks"
 msgstr "Vardas"
 
 #: win32\ADLSearchFrame.cpp:331 win32\NotificationsPage.cpp:281
-#: win32\NotificationsPage.cpp:287 win32\WinUtil.cpp:1144
+#: win32\NotificationsPage.cpp:287 win32\WinUtil.cpp:1139
 #: win32\FinishedFrameBase.h:263
 msgid "No"
 msgstr ""
 
-#: win32\WinUtil.cpp:622
+#: win32\WinUtil.cpp:617
 msgid "No away message"
 msgstr ""
 
@@ -2489,7 +2489,7 @@ msgstr ""
 msgid "No errors"
 msgstr "Klaidų nėra"
 
-#: win32\MainWindow.cpp:988
+#: win32\MainWindow.cpp:992
 #, fuzzy
 msgid "No favorite hub group found"
 msgstr "Pridėtas mėgstamas hub'as"
@@ -2499,7 +2499,7 @@ msgstr "Pridėtas mėgstamas hub'as"
 msgid "No full tree available"
 msgstr "Byla neprieinama"
 
-#: win32\WinUtil.cpp:1075
+#: win32\WinUtil.cpp:1070
 #, fuzzy
 msgid "No help information available"
 msgstr "Byla neprieinama"
@@ -2571,11 +2571,11 @@ msgstr "Notepad"
 msgid "Notifications"
 msgstr ""
 
-#: win32\WinUtil.cpp:1090
+#: win32\WinUtil.cpp:1085
 msgid "OK"
 msgstr ""
 
-#: win32\UsersFrame.cpp:269 win32\UsersFrame.cpp:284 win32\WinUtil.cpp:707
+#: win32\UsersFrame.cpp:269 win32\UsersFrame.cpp:284 win32\WinUtil.cpp:702
 msgid "Offline"
 msgstr "Atsijungęs"
 
@@ -2614,7 +2614,7 @@ msgstr ""
 msgid "Open crash log"
 msgstr ""
 
-#: win32\MainWindow.cpp:311 win32\MainWindow.cpp:1848
+#: win32\MainWindow.cpp:311 win32\MainWindow.cpp:1851
 msgid "Open downloads directory"
 msgstr "Atverk siuntimų katalogą"
 
@@ -2657,7 +2657,7 @@ msgstr "Atverk nuosavus AŽ langus"
 msgid "Open private messages in their own window"
 msgstr "Atverk nuosavus AŽ langus"
 
-#: win32\WinUtil.cpp:474
+#: win32\WinUtil.cpp:469
 #, boost-format
 msgid "Operators (added by %1%)"
 msgstr ""
@@ -2691,7 +2691,7 @@ msgstr ""
 msgid "Partial file list loaded"
 msgstr ""
 
-#: win32\UserMatchPage.cpp:217 win32\WinUtil.cpp:1137
+#: win32\UserMatchPage.cpp:217 win32\WinUtil.cpp:1132
 msgid "Partial match"
 msgstr ""
 
@@ -2760,7 +2760,7 @@ msgstr ""
 msgid "Play a sound"
 msgstr "Spalvos ir garsai"
 
-#: win32\WinUtil.cpp:518
+#: win32\WinUtil.cpp:513
 msgid "Please enter a nickname in the settings dialog!"
 msgstr "Įrašyk vardą nustatymuose!"
 
@@ -2779,7 +2779,7 @@ msgstr ""
 msgid "Plugin information"
 msgstr "Asmeninė informacija"
 
-#: win32\MainWindow.cpp:321 win32\MainWindow.cpp:465 win32\MainWindow.cpp:846
+#: win32\MainWindow.cpp:321 win32\MainWindow.cpp:465 win32\MainWindow.cpp:850
 #: win32\PluginPage.cpp:245 win32\SettingsDialog.cpp:196
 msgid "Plugins"
 msgstr ""
@@ -2822,12 +2822,12 @@ msgstr ""
 msgid "Private message from %1%: %2%"
 msgstr ""
 
-#: win32\WinUtil.cpp:98
+#: win32\WinUtil.cpp:95
 #, fuzzy
 msgid "Private message received"
 msgstr "&Siųsti privačią žinutę"
 
-#: win32\WinUtil.cpp:99
+#: win32\WinUtil.cpp:96
 #, fuzzy
 msgid "Private message window opened"
 msgstr "Suzyzk atsidarius AŽ langui"
@@ -2873,7 +2873,7 @@ msgstr ""
 msgid "Queued files"
 msgstr ""
 
-#: win32\MainWindow.cpp:921
+#: win32\MainWindow.cpp:925
 msgid "Quick Connect"
 msgstr "Greitas sujungimas"
 
@@ -2923,7 +2923,7 @@ msgstr "Tikrai pašalinti?"
 msgid "Really close?"
 msgstr "Tikrai pašalinti?"
 
-#: win32\MainWindow.cpp:1049
+#: win32\MainWindow.cpp:1053
 msgid "Really exit?"
 msgstr "Tikrai nori išeiti?"
 
@@ -2937,16 +2937,16 @@ msgstr "Tikrai pašalinti?"
 msgid "Received a redirect request to %1%, click here to follow it"
 msgstr ""
 
-#: win32\HistoryPage.cpp:92 win32\MainWindow.cpp:825
+#: win32\HistoryPage.cpp:92 win32\MainWindow.cpp:829
 msgid "Recent PMs"
 msgstr ""
 
-#: win32\HistoryPage.cpp:95 win32\MainWindow.cpp:826
+#: win32\HistoryPage.cpp:95 win32\MainWindow.cpp:830
 #, fuzzy
 msgid "Recent file lists"
 msgstr "&Gauti failų sąrašą"
 
-#: win32\HistoryPage.cpp:89 win32\MainWindow.cpp:824
+#: win32\HistoryPage.cpp:89 win32\MainWindow.cpp:828
 msgid "Recent hubs"
 msgstr ""
 
@@ -3001,7 +3001,7 @@ msgid "Register with Windows to handle magnet: URI links"
 msgstr "Valdyk magnet: URI"
 
 #: win32\ADLSearchFrame.cpp:45 win32\ADLSProperties.cpp:68
-#: win32\UserMatchPage.cpp:217 win32\WinUtil.cpp:1137
+#: win32\UserMatchPage.cpp:217 win32\WinUtil.cpp:1132
 msgid "Regular Expression"
 msgstr ""
 
@@ -3029,7 +3029,7 @@ msgstr ""
 msgid "Remove source"
 msgstr "Pašalink šaltinį"
 
-#: win32\QueueFrame.cpp:937 win32\WinUtil.cpp:1526 win32\UserInfoBase.h:165
+#: win32\QueueFrame.cpp:937 win32\WinUtil.cpp:1521 win32\UserInfoBase.h:165
 msgid "Remove user from queue"
 msgstr "Pašalinti naudotoją iš eilės"
 
@@ -3099,7 +3099,7 @@ msgstr "Paieškos eilutė"
 msgid "Search for"
 msgstr "Ieškok..."
 
-#: win32\WinUtil.cpp:770
+#: win32\WinUtil.cpp:765
 msgid "Search for alternates"
 msgstr "Ieškok alternatyvų"
 
@@ -3170,7 +3170,7 @@ msgstr "Naudotojo sertifikatas nepatikimas"
 msgid "Select &All\tCtrl+A"
 msgstr ""
 
-#: win32\MainWindow.cpp:996
+#: win32\MainWindow.cpp:1000
 msgid "Select a favorite hub group"
 msgstr ""
 
@@ -3210,7 +3210,7 @@ msgstr "Visai nesvarbu"
 msgid "Set priority"
 msgstr "Nustatyk svarbą"
 
-#: win32\MainWindow.cpp:459 win32\MainWindow.cpp:1850
+#: win32\MainWindow.cpp:459 win32\MainWindow.cpp:1853
 #: win32\SettingsDialog.cpp:369
 msgid "Settings"
 msgstr "Nustatymai"
@@ -3259,7 +3259,7 @@ msgstr ""
 msgid "Shell menus"
 msgstr ""
 
-#: win32\MainWindow.cpp:1847
+#: win32\MainWindow.cpp:1850
 msgid "Show"
 msgstr "Rodyk"
 
@@ -3276,7 +3276,7 @@ msgstr ""
 msgid "Show timestamps in chat by default"
 msgstr "Rodyk laiką PK"
 
-#: win32\DirectoryListingFrame.cpp:66 win32\MainWindow.cpp:1711
+#: win32\DirectoryListingFrame.cpp:66 win32\MainWindow.cpp:1714
 #: win32\QueueFrame.cpp:50 win32\SearchFrame.cpp:54 win32\SearchFrame.cpp:161
 #: win32\TransferView.cpp:56 win32\UploadPage.cpp:48
 msgid "Size"
@@ -3309,7 +3309,7 @@ msgstr "Vieta suteikta"
 msgid "Slots"
 msgstr "Vietos"
 
-#: win32\WinUtil.cpp:594
+#: win32\WinUtil.cpp:589
 msgid "Slots set"
 msgstr "Vietos nustatytos"
 
@@ -3348,7 +3348,7 @@ msgstr ""
 msgid "Source too slow"
 msgstr ""
 
-#: win32\WinUtil.cpp:641
+#: win32\WinUtil.cpp:636
 msgid "Specify a URL"
 msgstr ""
 
@@ -3356,7 +3356,7 @@ msgstr ""
 msgid "Specify a name for this user matching definition"
 msgstr ""
 
-#: win32\WinUtil.cpp:610 win32\WinUtil.cpp:629 win32\WinUtil.cpp:635
+#: win32\WinUtil.cpp:605 win32\WinUtil.cpp:624 win32\WinUtil.cpp:630
 msgid "Specify a search string"
 msgstr "Įvesk paieškos eilutę"
 
@@ -3405,11 +3405,11 @@ msgstr "Paskutinįkart matytas"
 msgid "Status bar\tCtrl+3"
 msgstr ""
 
-#: win32\MainWindow.cpp:1181
+#: win32\MainWindow.cpp:1185
 msgid "Status: Available - Double-click to switch to Away"
 msgstr ""
 
-#: win32\MainWindow.cpp:1180
+#: win32\MainWindow.cpp:1184
 msgid "Status: Away - Double-click to switch to Available"
 msgstr ""
 
@@ -3463,13 +3463,13 @@ msgstr ""
 msgid "Tag"
 msgstr "Žyma"
 
-#: win32\MainWindow.cpp:1579 win32\MainWindow.cpp:1639
+#: win32\MainWindow.cpp:1582 win32\MainWindow.cpp:1642
 #, fuzzy, boost-format
 msgid "The %1% GeoIP database could not be updated"
 msgstr "GeoIP duomenų bazės atnaujinimai"
 
-#: win32\MainWindow.cpp:1606 win32\MainWindow.cpp:1608
-#: win32\MainWindow.cpp:1632
+#: win32\MainWindow.cpp:1609 win32\MainWindow.cpp:1611
+#: win32\MainWindow.cpp:1635
 #, boost-format
 msgid "The %1% GeoIP database has been successfully updated"
 msgstr ""
@@ -3485,7 +3485,7 @@ msgid ""
 "group."
 msgstr ""
 
-#: win32\MainWindow.cpp:1742
+#: win32\MainWindow.cpp:1745
 msgid ""
 "The menu bar is now hidden. Press Alt or F10 to temporarily bring it back "
 "into view."
@@ -3543,7 +3543,7 @@ msgstr ""
 msgid "Toggle window when selecting an active tab"
 msgstr "Paspaudimu ant kortelės iškelk / grąžink langą"
 
-#: win32\MainWindow.cpp:1705
+#: win32\MainWindow.cpp:1708
 msgid "Toolbar"
 msgstr ""
 
@@ -3599,12 +3599,12 @@ msgstr ""
 msgid "Type"
 msgstr "Tipas"
 
-#: win32\MainWindow.cpp:1159
+#: win32\MainWindow.cpp:1163
 #, boost-format
 msgid "U: %1%"
 msgstr ""
 
-#: win32\MainWindow.cpp:1167
+#: win32\MainWindow.cpp:1171
 #, boost-format
 msgid "U: %1%/s (%2%)"
 msgstr ""
@@ -3613,7 +3613,7 @@ msgstr ""
 msgid "Un-ignore chat"
 msgstr ""
 
-#: win32\MainWindow.cpp:1330
+#: win32\MainWindow.cpp:1333
 #, boost-format
 msgid ""
 "Unable to open %1% port. Searching or file transfers will not work correctly "
@@ -3659,7 +3659,7 @@ msgstr "Pašalink šaltinį"
 msgid "Updating a plugin"
 msgstr ""
 
-#: win32\MainWindow.cpp:1583
+#: win32\MainWindow.cpp:1586
 #, boost-format
 msgid "Updating the %1% GeoIP database..."
 msgstr ""
@@ -3669,27 +3669,27 @@ msgstr ""
 msgid "Upload Slots"
 msgstr "Vietos"
 
-#: win32\MainWindow.cpp:858 win32\MainWindow.cpp:1852
+#: win32\MainWindow.cpp:862 win32\MainWindow.cpp:1855
 #, fuzzy
 msgid "Upload limit"
 msgstr "Vietos"
 
-#: win32\WinUtil.cpp:650
+#: win32\WinUtil.cpp:645
 #, fuzzy
 msgid "Upload limit disabled"
 msgstr "Vietos"
 
-#: win32\WinUtil.cpp:650
+#: win32\WinUtil.cpp:645
 #, fuzzy, boost-format
 msgid "Upload limit set to %1% KiB/s"
 msgstr "Siuntimai"
 
-#: win32\MainWindow.cpp:1175
+#: win32\MainWindow.cpp:1179
 #, boost-format
 msgid "Upload limit: %1%/s - Click to adjust"
 msgstr ""
 
-#: win32\MainWindow.cpp:1811 win32\UploadPage.cpp:123
+#: win32\MainWindow.cpp:1814 win32\UploadPage.cpp:123
 msgid "Upload slots"
 msgstr "Vietos"
 
@@ -3875,7 +3875,7 @@ msgid "Write buffer size"
 msgstr "Buferio dydis"
 
 #: win32\ADLSearchFrame.cpp:331 win32\NotificationsPage.cpp:288
-#: win32\WinUtil.cpp:1143 win32\FinishedFrameBase.h:263
+#: win32\WinUtil.cpp:1138 win32\FinishedFrameBase.h:263
 msgid "Yes"
 msgstr ""
 
@@ -3908,11 +3908,11 @@ msgstr "Komanda"
 msgid "beginning"
 msgstr ""
 
-#: win32\MainWindow.cpp:1567
+#: win32\MainWindow.cpp:1570
 msgid "city"
 msgstr ""
 
-#: win32\MainWindow.cpp:1567
+#: win32\MainWindow.cpp:1570
 #, fuzzy
 msgid "country"
 msgstr "Šalis"

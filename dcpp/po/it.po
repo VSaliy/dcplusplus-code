@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-05-21 19:34+0200\n"
+"POT-Creation-Date: 2013-06-03 14:15+0200\n"
 "PO-Revision-Date: 2013-05-15 09:33+0000\n"
 "Last-Translator: Guybrush88 <Unknown>\n"
 "Language-Team: Italian language <netcelli@gmail.com>\n"
@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-05-21 16:57+0000\n"
-"X-Generator: Launchpad (build 16626)\n"
+"X-Launchpad-Export-Date: 2013-06-03 11:41+0000\n"
+"X-Generator: Launchpad (build 16660)\n"
 "X-Poedit-Country: ITALY\n"
 "X-Poedit-Language: Italian\n"
 
@@ -25,32 +25,32 @@ msgstr ""
 msgid " - Queued: %1%"
 msgstr " - Accodati: %1%"
 
-#: dcpp\Util.cpp:561
+#: dcpp\Util.cpp:583
 #, c-format, boost-format
 msgid "%'lld B"
 msgstr "%'lld B"
 
-#: dcpp\Util.cpp:523
+#: dcpp\Util.cpp:545
 #, c-format, boost-format
 msgid "%.02f GiB"
 msgstr "%.02f GiB"
 
-#: dcpp\Util.cpp:519
+#: dcpp\Util.cpp:541
 #, c-format, boost-format
 msgid "%.02f KiB"
 msgstr "%.02f KiB"
 
-#: dcpp\Util.cpp:521
+#: dcpp\Util.cpp:543
 #, c-format, boost-format
 msgid "%.02f MiB"
 msgstr "%.02f MiB"
 
-#: dcpp\Util.cpp:527
+#: dcpp\Util.cpp:549
 #, c-format, boost-format
 msgid "%.02f PiB"
 msgstr "%.02f PiB"
 
-#: dcpp\Util.cpp:525
+#: dcpp\Util.cpp:547
 #, c-format, boost-format
 msgid "%.02f TiB"
 msgstr "%.02f TiB"
@@ -81,26 +81,22 @@ msgstr "%1% (%2%) ha lo stesso CID {%3%} di %4% (%5%), ignora"
 msgid "%1% (Nick unknown)"
 msgstr "%1% (Soprannome sconosciuto)"
 
-#: dcpp\PluginManager.cpp:156 dcpp\PluginManager.cpp:659
+#: dcpp\PluginManager.cpp:155 dcpp\PluginManager.cpp:175
+#: dcpp\PluginManager.cpp:578
 #, boost-format
 msgid "%1% is already installed"
 msgstr "%1% è già installato"
 
-#: dcpp\PluginManager.cpp:141 dcpp\PluginManager.cpp:527
+#: dcpp\PluginManager.cpp:141 dcpp\PluginManager.cpp:540
 #, boost-format
 msgid "%1% is not a valid plugin"
 msgstr "%1% non è un plugin valido"
 
-#: dcpp\PluginManager.cpp:144
+#: dcpp\PluginManager.cpp:107 dcpp\PluginManager.cpp:144
+#: dcpp\PluginManager.cpp:545
 #, boost-format
 msgid "%1% is not compatible with %2%"
 msgstr "%1% non è compatibile con %2%"
-
-#: dcpp\PluginManager.cpp:107 dcpp\PluginManager.cpp:666
-#, boost-format
-msgid "%1% is too old, contact the plugin author for an update"
-msgstr ""
-"%1% è troppo vecchio, contatta l'autore del plugin per un aggiornamento"
 
 #: dcpp\HashManager.cpp:698
 #, boost-format
@@ -130,12 +126,12 @@ msgstr "%1%/s"
 msgid "%1%: File not available"
 msgstr "%1%: File non disponibile"
 
-#: dcpp\Util.cpp:517
+#: dcpp\Util.cpp:539
 #, c-format, boost-format
 msgid "%d B"
 msgstr "%d B"
 
-#: dcpp\Util.cpp:557
+#: dcpp\Util.cpp:579
 #, c-format, boost-format
 msgid "%s B"
 msgstr "%s B"
@@ -369,12 +365,12 @@ msgstr "Errore nel generare il certificato"
 msgid "Error hashing %1%: %2%"
 msgstr "Errore durante l'indicizzazione di %1%: %2%"
 
-#: dcpp\PluginManager.cpp:535
+#: dcpp\PluginManager.cpp:600
 #, boost-format
 msgid "Error loading %1%"
 msgstr "Errore durante il caricamento di %1%"
 
-#: dcpp\PluginManager.cpp:519
+#: dcpp\PluginManager.cpp:532
 #, boost-format
 msgid "Error loading %1%: %2%"
 msgstr "Errore durante il caricamento di %1%: %2%"
@@ -581,7 +577,7 @@ msgstr ""
 msgid "Maximum command length exceeded"
 msgstr "Massima lunghezza comando superata"
 
-#: dcpp\PluginManager.cpp:673
+#: dcpp\PluginManager.cpp:551
 #, boost-format
 msgid "Missing dependencies for %1%"
 msgstr "Dipendenze mancanti per %1%"
@@ -863,7 +859,7 @@ msgstr "Errore sconosciuto: 0x%1$x"
 msgid "Unknown protocol %d"
 msgstr "Protocollo %d sconosciuto"
 
-#: dcpp\PluginManager.cpp:654
+#: dcpp\PluginManager.cpp:565
 #, boost-format
 msgid "Updating the %1% plugin from version %2% to version %3%"
 msgstr "Aggiornamento del plugin %1% dalla versione %2% alla versione %3%"
@@ -900,3 +896,7 @@ msgstr "non definito"
 #: dcpp\SettingsManager.cpp:201
 msgid "uploaded to"
 msgstr "upload eseguito da"
+
+#~ msgid "%1% is too old, contact the plugin author for an update"
+#~ msgstr ""
+#~ "%1% è troppo vecchio, contatta l'autore del plugin per un aggiornamento"

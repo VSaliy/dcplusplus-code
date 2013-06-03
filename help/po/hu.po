@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-05-13 20:41+0300\n"
-"PO-Revision-Date: 2013-05-20 18:26+0000\n"
+"POT-Creation-Date: 2013-06-03 14:15+0300\n"
+"PO-Revision-Date: 2013-05-28 20:22+0000\n"
 "Last-Translator: eMTee <Unknown>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-05-21 16:57+0000\n"
-"X-Generator: Launchpad (build 16626)\n"
+"X-Launchpad-Export-Date: 2013-06-03 11:42+0000\n"
+"X-Generator: Launchpad (build 16660)\n"
 
 #. type: Content of: <html><body><ul><li><div><placeholder><a>
 #: help/chat_commands.html:9 help/index.html:143
@@ -7595,6 +7595,7 @@ msgstr ""
 #: help/settings_appearance.html:47
 msgid "City-level geolocation database (allows parameters such as %[city])"
 msgstr ""
+"Helység-szintű geolokációs adabázis (pl. %[city] paraméter használatához)"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_appearance.html:49
@@ -7604,6 +7605,11 @@ msgid ""
 "default country-level geolocation database, the city-level one is bigger and "
 "consumes more memory."
 msgstr ""
+"Ezt engedélyezve a DC++ egy részletesebb földrajzi helymeghatárózó "
+"adatbázist használ, amely információkat tartalmaz a helységről, régióról, "
+"földrajzi szélességről és hosszúságról, stb... Az alapértelmezett ország "
+"szintű geolokációs adatbázishoz képest a helység szintű adatbázis nagyobb és "
+"több memóriát foglal."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_appearance.html:52
@@ -7611,6 +7617,8 @@ msgid ""
 "See <a po4a-id=0> GeoLite City Accuracy for Selected Countries</a> for more "
 "information."
 msgstr ""
+"További információk <a po4a-id=0>A GeoLite helység szintű pontossága az "
+"egyes országok esetében</a> c. dokumentumban találhatóak (angolul)."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_appearance.html:54
@@ -7619,11 +7627,15 @@ msgid ""
 "geolocation database: <b>%[areacode]</b>, <b>%[city]</b>, <b>%[lat]</b>, <b>"
 "%[long]</b>, <b>%[metrocode]</b>, <b>%[postcode]</b>, <b>%[region]</b>."
 msgstr ""
+"A helység szintű adatbázis használatának engedélyezésével a következő "
+"további paraméterek használhatók: <b>%[areacode]</b>, <b>%[city]</b>, <b>"
+"%[lat]</b>, <b>%[long]</b>, <b>%[metrocode]</b>, <b>%[postcode]</b>, <b>"
+"%[region]</b>."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_appearance.html:58
 msgid "Region name geolocation database (allows %[region])"
-msgstr ""
+msgstr "Régiós geolokációs adatbázis (%[region] használatához)"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_appearance.html:60
@@ -7634,6 +7646,12 @@ msgid ""
 "enable this setting to download a database that will be used to translate "
 "these codes into more understandable region names."
 msgstr ""
+"Régióneveket tartalmazó kiegészítés használatát engedélyezi a helység szintű "
+"geolokációs adatbázishoz. Alapértelmezetten a helység szintű adatbázis <b>"
+"%[region]</b> paramétere csak kódokat tartalmaz amiket elég nehéz a "
+"tényleges régióhoz kapcsolni. Ezen beállítás engedélyezése egy további "
+"adatbázis letöltését eredményezi, amely a régiós kódok tényleges "
+"régiónevekre történő lefordítását teszi lehetővé."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_appearance.html:68
@@ -7730,26 +7748,28 @@ msgstr ""
 #: help/settings_appearance.html:89
 msgid "Additional available variables when using the city-level database:"
 msgstr ""
+"A helység szintű adatbázis használatának engedélyezésével a következő "
+"további paraméterek használhatók:"
 
 #. type: Content of: <html><body><dl><dd><ul><li>
 #: help/settings_appearance.html:91
 msgid "<b>%[areacode]</b> gets replaced by the area code (United States only)."
-msgstr ""
+msgstr "<b>%[areacode]</b> a területi kódot helyettesíti be (csak USA esetén)."
 
 #. type: Content of: <html><body><dl><dd><ul><li>
 #: help/settings_appearance.html:92
 msgid "<b>%[city]</b> gets replaced by the city's name."
-msgstr ""
+msgstr "<b>%[city]</b> a helység nevét helyettesíti be."
 
 #. type: Content of: <html><body><dl><dd><ul><li>
 #: help/settings_appearance.html:93
 msgid "<b>%[lat]</b> gets replaced by the latitude."
-msgstr ""
+msgstr "<b>%[lat]</b> a földrajzi szélességet helyettesíti be."
 
 #. type: Content of: <html><body><dl><dd><ul><li>
 #: help/settings_appearance.html:94
 msgid "<b>%[long]</b> gets replaced by the longitude."
-msgstr ""
+msgstr "<b>%[long]</b> a földrajzi hosszúságot helyettesíti be."
 
 #. type: Content of: <html><body><dl><dd><ul><li>
 #: help/settings_appearance.html:95
@@ -7757,16 +7777,18 @@ msgid ""
 "<b>%[metrocode]</b> gets replaced by the DMA / metro code (United States "
 "only)."
 msgstr ""
+"<b>%[metrocode]</b> DMA / metro kódot helyettesít be (csak USA esetén)."
 
 #. type: Content of: <html><body><dl><dd><ul><li>
 #: help/settings_appearance.html:96
 msgid "<b>%[postcode]</b> gets replaced by the city's postal code."
 msgstr ""
+"<b>%[postcode]</b> a helység postai irányítószámát (kódját) helyettesíti be."
 
 #. type: Content of: <html><body><dl><dd><ul><li>
 #: help/settings_appearance.html:97
 msgid "<b>%[region]</b> gets replaced by the region's name."
-msgstr ""
+msgstr "<b>%[region]</b> a régió nevét helyettesíti be."
 
 #. type: Content of: <html><body><p><div><placeholder><a>
 #: help/settings_appearance.html:100 help/window_hub.html:91
@@ -10166,6 +10188,8 @@ msgid ""
 "This page is for individual configuration, addition and removal of plugins "
 "made for DC++."
 msgstr ""
+"Ez a panel a DC++-hoz készített bővítmények egyenkénti konfigurálására, "
+"hozzáadására és eltávolítására szolgál."
 
 #. type: Content of: <html><body><h2>
 #: help/settings_plugins.html:13
@@ -10183,11 +10207,13 @@ msgid ""
 "Open a file selection dialog and offer to install the selected plugin if it "
 "is compatible with DC++."
 msgstr ""
+"Megnyit egy fájl-választó párbeszédablakot és telepíti a kiválasztott "
+"bővítményt, feltéve ha a kiválasztott bővítmény kompatibilis a DC++-al."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_plugins.html:23
 msgid "Some plugins may require you to restart DC++."
-msgstr ""
+msgstr "Egyes bővítmények hozzáadása után szükséges lehet a DC++ újraindítása."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_plugins.html:26
@@ -10200,41 +10226,43 @@ msgid ""
 "Open the selected plugin's own configuration page in order to edit its "
 "properties."
 msgstr ""
+"Megnyitja a bővítmény saját beállítási ablakát ahol beállíthatóak a "
+"bővítmény tulajdonságai."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_plugins.html:31
 msgid "Enable"
-msgstr ""
+msgstr "Engedélyezés"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_plugins.html:33
 msgid "Enable the selected plugin."
-msgstr ""
+msgstr "Engedélyezi a kiválasztott bővítményt."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_plugins.html:36
 msgid "Disable"
-msgstr ""
+msgstr "Tiltás"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_plugins.html:38
 msgid "Disable the selected plugin."
-msgstr ""
+msgstr "Tiltja a kiválasztott bővítményt."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_plugins.html:43
 msgid "Move the selected plugin upwards in the list."
-msgstr ""
+msgstr "A kiválasztott bővítményt felfelé mozgatja a listában."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_plugins.html:48
 msgid "Move the selected plugin downwards in the list."
-msgstr ""
+msgstr "A kiválasztott bővítményt lefelé mozgatja a listában."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_plugins.html:53
 msgid "Disable and uninstall the selected plugin."
-msgstr ""
+msgstr "Tiltja és törli a kiválasztott bővítményt."
 
 #. type: Content of: <html><body><h1>
 #: help/settings_plugins.html:57
@@ -10245,6 +10273,7 @@ msgstr "Bővítmény információ"
 #: help/settings_plugins.html:59
 msgid "This panel shows information about the selected plugin."
 msgstr ""
+"Ez a panel mutatja a kiválasztott bővítményről elérhető összes információt."
 
 #. type: Content of: <html><body><h1>
 #: help/settings_proxy.html:9
@@ -14343,22 +14372,26 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd><p>
 #: help/window_main.html:292
 msgid "Open the <placeholder id=0/> configuration page."
-msgstr ""
+msgstr "Megnyitja a <placeholder id=0/> konfigurációs panelt."
 
 #. type: Content of: <html><body><dl><dd><p>
 #: help/window_main.html:296
 msgid "Use the arrow placed on the right of the icon to manage plugins:"
-msgstr ""
+msgstr "Kattints az ikon mellett jobbra lévő nyílra a bővítmények kezeléséhez:"
 
 #. type: Content of: <html><body><dl><dd><ul><li>
 #: help/window_main.html:300
 msgid "\"Add\" displays a file selection dialog to install a new plugin."
 msgstr ""
+"A \"Hozzáadás\" menüvel új bővítmény telepítése lehetséges egy fájl-választó "
+"ablakon keresztül."
 
 #. type: Content of: <html><body><dl><dd><ul><li>
 #: help/window_main.html:303
 msgid "\"Configure\" opens the <placeholder id=0/> configuration page."
 msgstr ""
+"A \"Beállítások\" menü megnyítja a <placeholder id=0/> konifigurációs "
+"ablakot."
 
 #. type: Content of: <html><body><dl><dd><ul><li>
 #: help/window_main.html:307
@@ -14368,6 +14401,11 @@ msgid ""
 "behavior of which is plugin-dependant). Plugins are also allowed to add "
 "additional commands in that sub-menu."
 msgstr ""
+"Ezen kívül a menü a telepített bővítményeket is listázza, ahol a bővítmények "
+"a hozzájuk tartozó almenüben egyenként ki- v. bekapcsolhatók, továbbá egy "
+"\"Beállítások\" nevű almenü is elérhető minden olyan bővítményhez, amely ezt "
+"támogatja. A bővítmények további saját parancsokat is adhatnak ehhez az "
+"almenühöz."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:316

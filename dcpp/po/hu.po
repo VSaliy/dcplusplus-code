@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-05-21 19:34+0200\n"
+"POT-Creation-Date: 2013-06-03 14:15+0200\n"
 "PO-Revision-Date: 2013-05-16 17:55+0000\n"
 "Last-Translator: eMTee <Unknown>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -15,40 +15,40 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-05-21 16:57+0000\n"
-"X-Generator: Launchpad (build 16626)\n"
+"X-Launchpad-Export-Date: 2013-06-03 11:41+0000\n"
+"X-Generator: Launchpad (build 16660)\n"
 
 #: dcpp\DownloadManager.cpp:360
 #, boost-format
 msgid " - Queued: %1%"
 msgstr " - a sorban: %1%."
 
-#: dcpp\Util.cpp:561
+#: dcpp\Util.cpp:583
 #, c-format, boost-format
 msgid "%'lld B"
 msgstr "%'lld B"
 
-#: dcpp\Util.cpp:523
+#: dcpp\Util.cpp:545
 #, c-format, boost-format
 msgid "%.02f GiB"
 msgstr "%.02f GiB"
 
-#: dcpp\Util.cpp:519
+#: dcpp\Util.cpp:541
 #, c-format, boost-format
 msgid "%.02f KiB"
 msgstr "%.02f KiB"
 
-#: dcpp\Util.cpp:521
+#: dcpp\Util.cpp:543
 #, c-format, boost-format
 msgid "%.02f MiB"
 msgstr "%.02f MiB"
 
-#: dcpp\Util.cpp:527
+#: dcpp\Util.cpp:549
 #, c-format, boost-format
 msgid "%.02f PiB"
 msgstr "%.02f PiB"
 
-#: dcpp\Util.cpp:525
+#: dcpp\Util.cpp:547
 #, c-format, boost-format
 msgid "%.02f TiB"
 msgstr "%.02f TiB"
@@ -79,26 +79,22 @@ msgstr "%1% (%2%) CID-je {%3%} ugyanaz, mint %4% (%5%)-é, kihagyva"
 msgid "%1% (Nick unknown)"
 msgstr "%1% (Ismeretlen nick)"
 
-#: dcpp\PluginManager.cpp:156 dcpp\PluginManager.cpp:659
+#: dcpp\PluginManager.cpp:155 dcpp\PluginManager.cpp:175
+#: dcpp\PluginManager.cpp:578
 #, boost-format
 msgid "%1% is already installed"
 msgstr "A(z) %1% már telepítve van"
 
-#: dcpp\PluginManager.cpp:141 dcpp\PluginManager.cpp:527
+#: dcpp\PluginManager.cpp:141 dcpp\PluginManager.cpp:540
 #, boost-format
 msgid "%1% is not a valid plugin"
 msgstr "Érvénytelen bővítmény: %1%"
 
-#: dcpp\PluginManager.cpp:144
+#: dcpp\PluginManager.cpp:107 dcpp\PluginManager.cpp:144
+#: dcpp\PluginManager.cpp:545
 #, boost-format
 msgid "%1% is not compatible with %2%"
 msgstr "%1% nem kompatibilis %2%-val"
-
-#: dcpp\PluginManager.cpp:107 dcpp\PluginManager.cpp:666
-#, boost-format
-msgid "%1% is too old, contact the plugin author for an update"
-msgstr ""
-"A(z) %1% bővítmény túl régi, keresd meg a fejlesztőt frissítés céljából"
 
 #: dcpp\HashManager.cpp:698
 #, boost-format
@@ -127,12 +123,12 @@ msgstr "%1%/s"
 msgid "%1%: File not available"
 msgstr "%1%: A fájl nem elérhető"
 
-#: dcpp\Util.cpp:517
+#: dcpp\Util.cpp:539
 #, c-format, boost-format
 msgid "%d B"
 msgstr "%d B"
 
-#: dcpp\Util.cpp:557
+#: dcpp\Util.cpp:579
 #, c-format, boost-format
 msgid "%s B"
 msgstr "%s B"
@@ -364,12 +360,12 @@ msgstr "Hiba a tanúsítvány készítésekor"
 msgid "Error hashing %1%: %2%"
 msgstr "Hiba a következő hashelésekor: %1%: %2%"
 
-#: dcpp\PluginManager.cpp:535
+#: dcpp\PluginManager.cpp:600
 #, boost-format
 msgid "Error loading %1%"
 msgstr "Hiba %1% betöltésekor"
 
-#: dcpp\PluginManager.cpp:519
+#: dcpp\PluginManager.cpp:532
 #, boost-format
 msgid "Error loading %1%: %2%"
 msgstr "Probléma a (z) %1% betöltésekor: %2%"
@@ -578,7 +574,7 @@ msgstr ""
 msgid "Maximum command length exceeded"
 msgstr "A maximális parancs hossz túllépve"
 
-#: dcpp\PluginManager.cpp:673
+#: dcpp\PluginManager.cpp:551
 #, boost-format
 msgid "Missing dependencies for %1%"
 msgstr "Hiányzó függőségek a(z) %1%-hez"
@@ -861,7 +857,7 @@ msgstr "Ismeretlen hiba: 0x%1$x"
 msgid "Unknown protocol %d"
 msgstr "Ismeretlen protokoll %d"
 
-#: dcpp\PluginManager.cpp:654
+#: dcpp\PluginManager.cpp:565
 #, boost-format
 msgid "Updating the %1% plugin from version %2% to version %3%"
 msgstr "A(z) %1% bővítmény frissítése %2% verzióról %3% verzióra"
@@ -898,3 +894,7 @@ msgstr "nem meghatározott"
 #: dcpp\SettingsManager.cpp:201
 msgid "uploaded to"
 msgstr "feltöltve ide:"
+
+#~ msgid "%1% is too old, contact the plugin author for an update"
+#~ msgstr ""
+#~ "A(z) %1% bővítmény túl régi, keresd meg a fejlesztőt frissítés céljából"
