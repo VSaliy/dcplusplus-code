@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-05-21 19:34+0200\n"
+"POT-Creation-Date: 2013-06-03 14:15+0200\n"
 "PO-Revision-Date: 2012-05-16 01:15+0000\n"
 "Last-Translator: Launchpad Translations Administrators <Unknown>\n"
 "Language-Team: Estonian <et@li.org>\n"
@@ -16,8 +16,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2013-05-21 16:56+0000\n"
-"X-Generator: Launchpad (build 16626)\n"
+"X-Launchpad-Export-Date: 2013-06-03 11:41+0000\n"
+"X-Generator: Launchpad (build 16660)\n"
 
 #: win32\PublicHubsFrame.cpp:420
 msgid " from Coral"
@@ -27,7 +27,7 @@ msgstr ""
 msgid "% transferred"
 msgstr "% edastatud"
 
-#: win32\MainWindow.cpp:1443
+#: win32\MainWindow.cpp:1446
 #, boost-format
 msgid ""
 "%1%\n"
@@ -63,7 +63,7 @@ msgstr[1] ""
 msgid "%1% / %2% sources ignored: %3%"
 msgstr "%1% / %2% allikad ignoreeritud: %3%"
 
-#: win32\PluginApiWin.cpp:92
+#: win32\PluginApiWin.cpp:93
 #, boost-format
 msgid "%1% doesn't need any additional configuration"
 msgstr ""
@@ -74,7 +74,7 @@ msgid "%1% dropped"
 msgstr "%1% filtreeritud"
 
 #: win32\PluginApiWin.cpp:71 win32\PluginApiWin.cpp:72
-#: win32\QueueFrame.cpp:869 win32\WinUtil.cpp:823
+#: win32\QueueFrame.cpp:869 win32\WinUtil.cpp:818
 #: win32\FinishedFrameBase.h:461
 #, boost-format
 msgid "%1% files"
@@ -85,7 +85,7 @@ msgstr "%1% failid"
 msgid "%1% files/h, %2% files left"
 msgstr "%1% faili/h, %2% faili jäänud"
 
-#: win32\MainWindow.cpp:1147
+#: win32\MainWindow.cpp:1151
 #, boost-format
 msgid "%1% free slots of %2% total upload slots - Click to adjust"
 msgstr ""
@@ -118,7 +118,7 @@ msgstr "%1% jäänud"
 msgid "%1% port"
 msgstr "%1% jäänud"
 
-#: win32\MainWindow.cpp:837
+#: win32\MainWindow.cpp:841
 #, boost-format
 msgid "%1% recent items will be saved from now on."
 msgstr ""
@@ -146,19 +146,19 @@ msgstr[1] "%1% kasutajat"
 msgid "%1% users"
 msgstr "%1% kasutaja"
 
-#: win32\MainWindow.cpp:1567
+#: win32\MainWindow.cpp:1570
 #, fuzzy, boost-format
 msgid "%1%-level %2%"
 msgstr "A: %1%/s (%2%)"
 
-#: win32\MainWindow.cpp:1146 win32\UserInfoBase.cpp:128
+#: win32\MainWindow.cpp:1150 win32\UserInfoBase.cpp:128
 #, fuzzy, boost-format
 msgid "%1%/%2%"
 msgstr "%1%/s"
 
-#: win32\MainWindow.cpp:882 win32\MainWindow.cpp:1162
-#: win32\MainWindow.cpp:1166 win32\MainWindow.cpp:1170
-#: win32\MainWindow.cpp:1174 win32\TransferView.cpp:227
+#: win32\MainWindow.cpp:886 win32\MainWindow.cpp:1166
+#: win32\MainWindow.cpp:1170 win32\MainWindow.cpp:1174
+#: win32\MainWindow.cpp:1178 win32\TransferView.cpp:227
 #: win32\TransferView.cpp:358 win32\TransferView.cpp:430
 #: win32\UsersFrame.cpp:73 win32\FinishedFrameBase.h:574
 #, boost-format
@@ -171,7 +171,7 @@ msgid "%1%/s, %2% left"
 msgstr "%1%/s, %2% jäänud"
 
 #: win32\DirectoryListingFrame.cpp:833 win32\UserInfoBase.cpp:104
-#: win32\UserInfoBase.cpp:129 win32\WinUtil.cpp:1579
+#: win32\UserInfoBase.cpp:129 win32\WinUtil.cpp:1574
 #, fuzzy, boost-format
 msgid "%1%: %2%"
 msgstr "A: %1%/s (%2%)"
@@ -186,7 +186,7 @@ msgstr "&Lisa"
 msgid "&Add folder"
 msgstr "&Lisa kaust"
 
-#: win32\WinUtil.cpp:1511 win32\UserInfoBase.h:155
+#: win32\WinUtil.cpp:1506 win32\UserInfoBase.h:155
 msgid "&Browse file list"
 msgstr "&Sirvi faile"
 
@@ -209,7 +209,7 @@ msgstr "&Sulge"
 msgid "&Configure"
 msgstr "&Seadista"
 
-#: win32\MainWindow.cpp:791
+#: win32\MainWindow.cpp:795
 msgid "&Configure..."
 msgstr "&Seadista..."
 
@@ -226,7 +226,7 @@ msgstr "&Kopeeri"
 msgid "&Copy\tCtrl+C"
 msgstr "&Kopeeri\tCtrl+C"
 
-#: win32\MainWindow.cpp:1707
+#: win32\MainWindow.cpp:1710
 msgid "&Customize\tDouble-click"
 msgstr ""
 
@@ -277,7 +277,7 @@ msgstr "&Otsi...\tF3"
 msgid "&Force attempt"
 msgstr "Ürita &jõuga"
 
-#: win32\QueueFrame.cpp:905 win32\WinUtil.cpp:1508 win32\UserInfoBase.h:154
+#: win32\QueueFrame.cpp:905 win32\WinUtil.cpp:1503 win32\UserInfoBase.h:154
 msgid "&Get file list"
 msgstr "Tõmba &faililist"
 
@@ -289,12 +289,12 @@ msgstr "Mine &kausta"
 msgid "&Help"
 msgstr "&Abi"
 
-#: win32\MainWindow.cpp:1723
+#: win32\MainWindow.cpp:1726
 #, fuzzy
 msgid "&Hide\tCtrl+1"
 msgstr "&Otsi\tCtrl+S"
 
-#: win32\WinUtil.cpp:1514 win32\UserInfoBase.h:156
+#: win32\WinUtil.cpp:1509 win32\UserInfoBase.h:156
 msgid "&Match queue"
 msgstr "&Sobita järjekord"
 
@@ -363,7 +363,7 @@ msgstr "&Eemalda"
 msgid "&Search\tCtrl+S"
 msgstr "&Otsi\tCtrl+S"
 
-#: win32\QueueFrame.cpp:912 win32\WinUtil.cpp:1517 win32\UserInfoBase.h:158
+#: win32\QueueFrame.cpp:912 win32\WinUtil.cpp:1512 win32\UserInfoBase.h:158
 msgid "&Send private message"
 msgstr "&Saada privaatsõnum"
 
@@ -399,7 +399,7 @@ msgstr "A&ken"
 msgid "(%1%)"
 msgstr ""
 
-#: win32\MainWindow.cpp:798
+#: win32\MainWindow.cpp:802
 msgid "(No recent item found)"
 msgstr ""
 
@@ -423,7 +423,7 @@ msgstr "-:--:-- jäänud"
 msgid "<Information unavailable>"
 msgstr "Fail pole kättesaadav"
 
-#: win32\WinUtil.cpp:1442
+#: win32\WinUtil.cpp:1437
 msgid ""
 "A MAGNET link was given to DC++, but it didn't contain a valid file hash for "
 "use on the Direct Connect network.  No action will be taken."
@@ -462,13 +462,13 @@ msgstr ""
 msgid "Active mode (let DC++ configure my router with NAT-PMP / UPnP)"
 msgstr ""
 
-#: win32\MainWindow.cpp:696
+#: win32\MainWindow.cpp:699
 #, fuzzy
 msgid "Add"
 msgstr "&Lisa"
 
 #: win32\HubFrame.cpp:1248 win32\PublicHubsFrame.cpp:336
-#: win32\WinUtil.cpp:1520 win32\UserInfoBase.h:160
+#: win32\WinUtil.cpp:1515 win32\UserInfoBase.h:160
 msgid "Add To &Favorites"
 msgstr "Lisa Lemmikute &Alla"
 
@@ -501,7 +501,7 @@ msgstr "Aadress"
 msgid "Advanced"
 msgstr "Laiendatud"
 
-#: win32\QueueFrame.cpp:920 win32\QueueFrame.cpp:929 win32\WinUtil.cpp:1475
+#: win32\QueueFrame.cpp:920 win32\QueueFrame.cpp:929 win32\WinUtil.cpp:1470
 msgid "All"
 msgstr "Kõik"
 
@@ -510,12 +510,12 @@ msgstr "Kõik"
 msgid "All %1% users offline"
 msgstr "Kõik %1% kasutajat välja loginud"
 
-#: win32\WinUtil.cpp:1573
+#: win32\WinUtil.cpp:1568
 #, fuzzy
 msgid "All columns"
 msgstr "Kõik failid"
 
-#: win32\WinUtil.cpp:826 win32\WinUtil.cpp:833
+#: win32\WinUtil.cpp:821 win32\WinUtil.cpp:828
 msgid "All files"
 msgstr "Kõik failid"
 
@@ -660,11 +660,11 @@ msgstr ""
 msgid "Away mode"
 msgstr ""
 
-#: win32\WinUtil.cpp:617 win32\WinUtil.cpp:626
+#: win32\WinUtil.cpp:612 win32\WinUtil.cpp:621
 msgid "Away mode off"
 msgstr "Eemal Moodus Väljas"
 
-#: win32\WinUtil.cpp:622
+#: win32\WinUtil.cpp:617
 #, boost-format
 msgid "Away mode on: %1%"
 msgstr "Eemal Moodus Sees: %1%"
@@ -749,15 +749,15 @@ msgstr "CRC32 ebakõla (SFV-kontroll)"
 msgid "Cached hub list is corrupted or unsupported"
 msgstr ""
 
-#: win32\WinUtil.cpp:1098
+#: win32\WinUtil.cpp:1093
 msgid "Cancel"
 msgstr "Tühista"
 
-#: win32\PluginApiWin.cpp:101
+#: win32\PluginApiWin.cpp:105
 msgid "Cannot enable the plugin:"
 msgstr ""
 
-#: win32\PluginApiWin.cpp:82 win32\PluginInfoDlg.cpp:133
+#: win32\PluginApiWin.cpp:83 win32\PluginInfoDlg.cpp:133
 msgid "Cannot install the plugin:"
 msgstr ""
 
@@ -820,7 +820,7 @@ msgstr "Sulge kõik faililisti aknad"
 msgid "Close all hubs"
 msgstr "Sulge kõik PS aknad"
 
-#: win32\MainWindow.cpp:371 win32\MainWindow.cpp:1673
+#: win32\MainWindow.cpp:371 win32\MainWindow.cpp:1676
 msgid "Close all hubs of a favorite group"
 msgstr ""
 
@@ -837,7 +837,7 @@ msgstr "Sulge kõik otsinguaknad"
 msgid "Close disconnected hubs"
 msgstr "Sulge ühenduseta"
 
-#: win32\MainWindow.cpp:372 win32\MainWindow.cpp:1673
+#: win32\MainWindow.cpp:372 win32\MainWindow.cpp:1676
 msgid "Close hubs not in a favorite group"
 msgstr ""
 
@@ -857,7 +857,7 @@ msgstr ""
 msgid "Compiler"
 msgstr ""
 
-#: win32\MainWindow.cpp:697 win32\MainWindow.cpp:706
+#: win32\MainWindow.cpp:700 win32\MainWindow.cpp:715
 #, fuzzy
 msgid "Configure"
 msgstr "&Seadista"
@@ -910,12 +910,12 @@ msgstr "Küsi faili eemaldamisel järjekorrast"
 msgid "Connect to a favorite hub &group...\tCtrl+G"
 msgstr ""
 
-#: win32\MainWindow.cpp:932
+#: win32\MainWindow.cpp:936
 #, fuzzy
 msgid "Connect to a favorite hub group"
 msgstr "Küsi lemmikhubi eemaldamisel"
 
-#: win32\MainWindow.cpp:770
+#: win32\MainWindow.cpp:774
 msgid "Connect to all hubs in this group"
 msgstr ""
 
@@ -950,7 +950,7 @@ msgstr "Ühendus"
 msgid "Context"
 msgstr "Kontekst"
 
-#: win32\WinUtil.cpp:1555
+#: win32\WinUtil.cpp:1550
 #, fuzzy
 msgid "Copy"
 msgstr "&Kopeeri"
@@ -959,7 +959,7 @@ msgstr "&Kopeeri"
 msgid "Copy &address to clipboard"
 msgstr "Kopeeri &aadress"
 
-#: win32\WinUtil.cpp:772
+#: win32\WinUtil.cpp:767
 msgid "Copy magnet link to clipboard"
 msgstr "Kopeeri magneti link"
 
@@ -1013,21 +1013,21 @@ msgstr ""
 msgid "Custom text color"
 msgstr ""
 
-#: win32\MainWindow.cpp:891
+#: win32\MainWindow.cpp:895
 msgid "Custom..."
 msgstr ""
 
-#: win32\MainWindow.cpp:1155
+#: win32\MainWindow.cpp:1159
 #, boost-format
 msgid "D: %1%"
 msgstr "A: %1%"
 
-#: win32\MainWindow.cpp:1163
+#: win32\MainWindow.cpp:1167
 #, boost-format
 msgid "D: %1%/s (%2%)"
 msgstr "A: %1%/s (%2%)"
 
-#: win32\MainWindow.cpp:1870
+#: win32\MainWindow.cpp:1873
 #, boost-format
 msgid ""
 "D: %1%/s (%2%)\r\n"
@@ -1036,7 +1036,7 @@ msgstr ""
 "A: %1%/s (%2%)\r\n"
 "Ü: %3%/s (%4%)"
 
-#: win32\MainWindow.cpp:730
+#: win32\MainWindow.cpp:734
 #, fuzzy, boost-format
 msgid "DC++ - %1%"
 msgstr "A: %1%"
@@ -1049,7 +1049,7 @@ msgstr ""
 "DC++ tuvastas MAGNETi lingi, mida saab otsida DC võrgust. Mida soovid teha?"
 
 #: win32\AppearancePage.cpp:142 win32\AppearancePage.cpp:175
-#: win32\WinUtil.cpp:1142
+#: win32\WinUtil.cpp:1137
 msgid "Default"
 msgstr "Vaikimisi"
 
@@ -1111,12 +1111,12 @@ msgstr "Kataloog"
 msgid "Directory or directory name already exists"
 msgstr "Kaust või kausta nimi on juba olemas"
 
-#: win32\MainWindow.cpp:708 win32\PluginPage.cpp:106 win32\PluginPage.cpp:250
+#: win32\MainWindow.cpp:712 win32\PluginPage.cpp:106 win32\PluginPage.cpp:250
 #, fuzzy
 msgid "Disable"
 msgstr "Lubatud"
 
-#: win32\MainWindow.cpp:882
+#: win32\MainWindow.cpp:886
 #, fuzzy
 msgid "Disabled"
 msgstr "Lubatud"
@@ -1209,7 +1209,7 @@ msgstr "Allalaadimised"
 msgid "Download failed: %1%"
 msgstr "Allalaadimine ebaõnnestus: %1%"
 
-#: win32\TransferView.cpp:1084 win32\WinUtil.cpp:95
+#: win32\TransferView.cpp:1084 win32\WinUtil.cpp:92
 #, fuzzy
 msgid "Download finished"
 msgstr "Allalaetud"
@@ -1218,27 +1218,27 @@ msgstr "Allalaetud"
 msgid "Download full list"
 msgstr ""
 
-#: win32\MainWindow.cpp:858 win32\MainWindow.cpp:1851
+#: win32\MainWindow.cpp:862 win32\MainWindow.cpp:1854
 #, fuzzy
 msgid "Download limit"
 msgstr "Allalaadimised"
 
-#: win32\WinUtil.cpp:654
+#: win32\WinUtil.cpp:649
 #, fuzzy
 msgid "Download limit disabled"
 msgstr "Allalaadimised"
 
-#: win32\WinUtil.cpp:654
+#: win32\WinUtil.cpp:649
 #, fuzzy, boost-format
 msgid "Download limit set to %1% KiB/s"
 msgstr "Allalaadimised"
 
-#: win32\MainWindow.cpp:1171
+#: win32\MainWindow.cpp:1175
 #, fuzzy, boost-format
 msgid "Download limit: %1%/s - Click to adjust"
 msgstr "Allalaadimised"
 
-#: win32\WinUtil.cpp:602
+#: win32\WinUtil.cpp:597
 #, fuzzy
 msgid "Download slots set"
 msgstr "Allalaadimised"
@@ -1345,7 +1345,7 @@ msgstr "E-post"
 msgid "Empty hub address specified"
 msgstr ""
 
-#: win32\MainWindow.cpp:710 win32\PluginPage.cpp:102 win32\PluginPage.cpp:249
+#: win32\MainWindow.cpp:711 win32\PluginPage.cpp:102 win32\PluginPage.cpp:249
 #, fuzzy
 msgid "Enable"
 msgstr "Lubatud"
@@ -1405,7 +1405,7 @@ msgstr ""
 msgid "Error processing version information"
 msgstr "Versiooniinfo töötlemise viga"
 
-#: win32\WinUtil.cpp:1363
+#: win32\WinUtil.cpp:1358
 #, boost-format
 msgid "Error registering the %1% handler"
 msgstr ""
@@ -1418,7 +1418,7 @@ msgstr "Vead"
 msgid "Event"
 msgstr ""
 
-#: win32\UserMatchPage.cpp:217 win32\WinUtil.cpp:1137
+#: win32\UserMatchPage.cpp:217 win32\WinUtil.cpp:1132
 msgid "Exact match"
 msgstr ""
 
@@ -1431,7 +1431,7 @@ msgstr "Täpne suurus"
 msgid "Example hub tab"
 msgstr ""
 
-#: win32\MainWindow.cpp:1854
+#: win32\MainWindow.cpp:1857
 msgid "Exit"
 msgstr "Välju"
 
@@ -1509,7 +1509,7 @@ msgstr "Lemmiknimi"
 msgid "Favorite user added"
 msgstr "Lemmikkasutaja lisatud"
 
-#: win32\WinUtil.cpp:463
+#: win32\WinUtil.cpp:458
 #, boost-format
 msgid "Favorite users (added by %1%)"
 msgstr ""
@@ -1535,7 +1535,7 @@ msgstr "Faili hash:"
 msgid "File List"
 msgstr "Faililoend"
 
-#: win32\QueueFrame.cpp:456 win32\WinUtil.cpp:833
+#: win32\QueueFrame.cpp:456 win32\WinUtil.cpp:828
 msgid "File Lists"
 msgstr "Faili Listid"
 
@@ -1543,7 +1543,7 @@ msgstr "Faili Listid"
 msgid "File is already finished"
 msgstr "Fail on juba lõpetatud"
 
-#: win32\WinUtil.cpp:96
+#: win32\WinUtil.cpp:93
 #, fuzzy
 msgid "File list downloaded"
 msgstr "Hub'i leht Alla Laetud... (%1%)"
@@ -1724,7 +1724,7 @@ msgstr "GiB"
 msgid "Global application style"
 msgstr "Küsi programmi sulgemisel"
 
-#: win32\WinUtil.cpp:1523 win32\UserInfoBase.h:161
+#: win32\WinUtil.cpp:1518 win32\UserInfoBase.h:161
 msgid "Grant &extra slot"
 msgstr "Anna &lisa slot"
 
@@ -1764,7 +1764,7 @@ msgstr "HTTP puhverserver (ainult hubi nimekirja)"
 msgid "Height of the message editing box"
 msgstr ""
 
-#: win32\WinUtil.cpp:1110
+#: win32\WinUtil.cpp:1105
 msgid "Help"
 msgstr "Abi"
 
@@ -1846,7 +1846,7 @@ msgstr ""
 msgid "Hub address cannot be empty"
 msgstr "Hubi aadress ei tohi olla tühi"
 
-#: win32\MainWindow.cpp:921
+#: win32\MainWindow.cpp:925
 #, fuzzy
 msgid "Hub address or Magnet link"
 msgstr "Hubi aadress ei tohi olla tühi"
@@ -1898,7 +1898,7 @@ msgstr "Hubid"
 msgid "Hubs (registered)"
 msgstr ""
 
-#: win32\MainWindow.cpp:1142 win32\PublicHubsFrame.cpp:246
+#: win32\MainWindow.cpp:1146 win32\PublicHubsFrame.cpp:246
 #: win32\UserInfoBase.cpp:94
 #, boost-format
 msgid "Hubs: %1%"
@@ -1924,7 +1924,7 @@ msgstr ""
 msgid "IP (v6)"
 msgstr ""
 
-#: win32\MainWindow.cpp:1561
+#: win32\MainWindow.cpp:1564
 msgid ""
 "IP -> country mappings are disabled. Turn them back on via Settings > "
 "Appearance."
@@ -1989,7 +1989,7 @@ msgstr "Terviklikkuse kontroll: %1% (%2%)"
 msgid "Invalid extension: %1%"
 msgstr ""
 
-#: win32\MainWindow.cpp:1343
+#: win32\MainWindow.cpp:1346
 msgid "Invalid file list name"
 msgstr "Vigane faililisti nimi"
 
@@ -1997,7 +1997,7 @@ msgstr "Vigane faililisti nimi"
 msgid "Invalid input value for TTH search"
 msgstr ""
 
-#: win32\WinUtil.cpp:596 win32\WinUtil.cpp:604
+#: win32\WinUtil.cpp:591 win32\WinUtil.cpp:599
 msgid "Invalid number of slots"
 msgstr "Vale slot'ide number"
 
@@ -2173,7 +2173,7 @@ msgstr "Logi sisse"
 msgid "Logs"
 msgstr "Logid"
 
-#: win32\WinUtil.cpp:771
+#: win32\WinUtil.cpp:766
 msgid "Lookup TTH at Bitzi.com"
 msgstr "Otsi TTH Bitzi.com-ist"
 
@@ -2193,7 +2193,7 @@ msgstr "Madalaim"
 msgid "M&odify"
 msgstr "&Muuda"
 
-#: win32\MagnetDlg.cpp:122 win32\WinUtil.cpp:1443
+#: win32\MagnetDlg.cpp:122 win32\WinUtil.cpp:1438
 msgid "MAGNET Link detected"
 msgstr "MAGNET link tuvastatud"
 
@@ -2202,7 +2202,7 @@ msgstr "MAGNET link tuvastatud"
 msgid "MB"
 msgstr "MiB"
 
-#: win32\WinUtil.cpp:97
+#: win32\WinUtil.cpp:94
 #, fuzzy
 msgid "Main chat message received"
 msgstr "Iga põhivestluse sõnumi saabumisel"
@@ -2290,7 +2290,7 @@ msgstr "Suurim laadimis kiirus (KB/s) (0=lõpmatu)"
 msgid "Maximum Upload Rate (KiB/s) (0 = infinite)"
 msgstr "Suurim üleslaadimis kiirus (KB/s) (0=lõpmatu)"
 
-#: win32\HistoryPage.cpp:86 win32\MainWindow.cpp:833
+#: win32\HistoryPage.cpp:86 win32\MainWindow.cpp:837
 msgid "Maximum number of recent items to save"
 msgstr ""
 
@@ -2406,7 +2406,7 @@ msgstr "Keskmine: %1%"
 msgid "Network Statistics"
 msgstr "Võrgustatistika"
 
-#: win32\MainWindow.cpp:893
+#: win32\MainWindow.cpp:897
 #, fuzzy
 msgid "New limit (KiB/s) (0 = infinite)"
 msgstr "Suurim üleslaadimis kiirus (KB/s) (0=lõpmatu)"
@@ -2436,12 +2436,12 @@ msgid "Nicks"
 msgstr "Nimed"
 
 #: win32\ADLSearchFrame.cpp:331 win32\NotificationsPage.cpp:281
-#: win32\NotificationsPage.cpp:287 win32\WinUtil.cpp:1144
+#: win32\NotificationsPage.cpp:287 win32\WinUtil.cpp:1139
 #: win32\FinishedFrameBase.h:263
 msgid "No"
 msgstr "Ei"
 
-#: win32\WinUtil.cpp:622
+#: win32\WinUtil.cpp:617
 msgid "No away message"
 msgstr ""
 
@@ -2449,7 +2449,7 @@ msgstr ""
 msgid "No errors"
 msgstr "Vigu pole"
 
-#: win32\MainWindow.cpp:988
+#: win32\MainWindow.cpp:992
 #, fuzzy
 msgid "No favorite hub group found"
 msgstr "Lemmikjaotur eemaldatud"
@@ -2458,7 +2458,7 @@ msgstr "Lemmikjaotur eemaldatud"
 msgid "No full tree available"
 msgstr "Kogu puu pole saadaval"
 
-#: win32\WinUtil.cpp:1075
+#: win32\WinUtil.cpp:1070
 #, fuzzy
 msgid "No help information available"
 msgstr "Fail pole kättesaadav"
@@ -2531,11 +2531,11 @@ msgstr "Märkmik"
 msgid "Notifications"
 msgstr "Teavitusheli"
 
-#: win32\WinUtil.cpp:1090
+#: win32\WinUtil.cpp:1085
 msgid "OK"
 msgstr "Nõus"
 
-#: win32\UsersFrame.cpp:269 win32\UsersFrame.cpp:284 win32\WinUtil.cpp:707
+#: win32\UsersFrame.cpp:269 win32\UsersFrame.cpp:284 win32\WinUtil.cpp:702
 msgid "Offline"
 msgstr "Ühenduseta"
 
@@ -2573,7 +2573,7 @@ msgstr "Ava &kataloog"
 msgid "Open crash log"
 msgstr ""
 
-#: win32\MainWindow.cpp:311 win32\MainWindow.cpp:1848
+#: win32\MainWindow.cpp:311 win32\MainWindow.cpp:1851
 msgid "Open downloads directory"
 msgstr "Ava allalaadimise kataloog"
 
@@ -2613,7 +2613,7 @@ msgstr "Hubi privaatsõnumid avatakse eraldi aknas"
 msgid "Open private messages in their own window"
 msgstr "Privaatsõnumid avatakse uues aknas"
 
-#: win32\WinUtil.cpp:474
+#: win32\WinUtil.cpp:469
 #, boost-format
 msgid "Operators (added by %1%)"
 msgstr ""
@@ -2646,7 +2646,7 @@ msgstr "Parameetrid"
 msgid "Partial file list loaded"
 msgstr ""
 
-#: win32\UserMatchPage.cpp:217 win32\WinUtil.cpp:1137
+#: win32\UserMatchPage.cpp:217 win32\WinUtil.cpp:1132
 msgid "Partial match"
 msgstr ""
 
@@ -2715,7 +2715,7 @@ msgstr ""
 msgid "Play a sound"
 msgstr "Värvid ja helid"
 
-#: win32\WinUtil.cpp:518
+#: win32\WinUtil.cpp:513
 msgid "Please enter a nickname in the settings dialog!"
 msgstr "Sisesta nimi seadete dialoogi!"
 
@@ -2736,7 +2736,7 @@ msgstr ""
 msgid "Plugin information"
 msgstr "Isiklik teave"
 
-#: win32\MainWindow.cpp:321 win32\MainWindow.cpp:465 win32\MainWindow.cpp:846
+#: win32\MainWindow.cpp:321 win32\MainWindow.cpp:465 win32\MainWindow.cpp:850
 #: win32\PluginPage.cpp:245 win32\SettingsDialog.cpp:196
 msgid "Plugins"
 msgstr ""
@@ -2779,12 +2779,12 @@ msgstr "Privaatsõnum"
 msgid "Private message from %1%: %2%"
 msgstr "Privaatsõnum kasutajalt %1%: %2%"
 
-#: win32\WinUtil.cpp:98
+#: win32\WinUtil.cpp:95
 #, fuzzy
 msgid "Private message received"
 msgstr "Privaatsõnum"
 
-#: win32\WinUtil.cpp:99
+#: win32\WinUtil.cpp:96
 #, fuzzy
 msgid "Private message window opened"
 msgstr "Kui privaatsõnumi aken avatakse"
@@ -2831,7 +2831,7 @@ msgstr "Järjekorras"
 msgid "Queued files"
 msgstr "Järjekorras"
 
-#: win32\MainWindow.cpp:921
+#: win32\MainWindow.cpp:925
 msgid "Quick Connect"
 msgstr "Kiirühendus"
 
@@ -2879,7 +2879,7 @@ msgstr "Tõesti sulgeda?"
 msgid "Really close?"
 msgstr "Tõesti sulgeda?"
 
-#: win32\MainWindow.cpp:1049
+#: win32\MainWindow.cpp:1053
 msgid "Really exit?"
 msgstr "Väljuda?"
 
@@ -2893,15 +2893,15 @@ msgstr "Kustutada?"
 msgid "Received a redirect request to %1%, click here to follow it"
 msgstr ""
 
-#: win32\HistoryPage.cpp:92 win32\MainWindow.cpp:825
+#: win32\HistoryPage.cpp:92 win32\MainWindow.cpp:829
 msgid "Recent PMs"
 msgstr "Viimased PS-id"
 
-#: win32\HistoryPage.cpp:95 win32\MainWindow.cpp:826
+#: win32\HistoryPage.cpp:95 win32\MainWindow.cpp:830
 msgid "Recent file lists"
 msgstr "Viimased faililistid"
 
-#: win32\HistoryPage.cpp:89 win32\MainWindow.cpp:824
+#: win32\HistoryPage.cpp:89 win32\MainWindow.cpp:828
 msgid "Recent hubs"
 msgstr "Viimased hubid"
 
@@ -2954,7 +2954,7 @@ msgid "Register with Windows to handle magnet: URI links"
 msgstr "Windows registreeritakse käsitlema MAGNET linke"
 
 #: win32\ADLSearchFrame.cpp:45 win32\ADLSProperties.cpp:68
-#: win32\UserMatchPage.cpp:217 win32\WinUtil.cpp:1137
+#: win32\UserMatchPage.cpp:217 win32\WinUtil.cpp:1132
 msgid "Regular Expression"
 msgstr ""
 
@@ -2983,7 +2983,7 @@ msgstr "Eemalda aeglased faililistid"
 msgid "Remove source"
 msgstr "Eemalda Allikas"
 
-#: win32\QueueFrame.cpp:937 win32\WinUtil.cpp:1526 win32\UserInfoBase.h:165
+#: win32\QueueFrame.cpp:937 win32\WinUtil.cpp:1521 win32\UserInfoBase.h:165
 msgid "Remove user from queue"
 msgstr "Eemalda kasutaja järjekorrast"
 
@@ -3052,7 +3052,7 @@ msgstr "Otsingusõna"
 msgid "Search for"
 msgstr "Otsi"
 
-#: win32\WinUtil.cpp:770
+#: win32\WinUtil.cpp:765
 msgid "Search for alternates"
 msgstr "Otsi alternatiive"
 
@@ -3121,7 +3121,7 @@ msgstr "Turvasertifikaadid"
 msgid "Select &All\tCtrl+A"
 msgstr "Märgi &kõik\tCtrl+A"
 
-#: win32\MainWindow.cpp:996
+#: win32\MainWindow.cpp:1000
 msgid "Select a favorite hub group"
 msgstr ""
 
@@ -3164,7 +3164,7 @@ msgstr ""
 msgid "Set priority"
 msgstr "Prioriteedi muutmine"
 
-#: win32\MainWindow.cpp:459 win32\MainWindow.cpp:1850
+#: win32\MainWindow.cpp:459 win32\MainWindow.cpp:1853
 #: win32\SettingsDialog.cpp:369
 msgid "Settings"
 msgstr "Seaded"
@@ -3212,7 +3212,7 @@ msgstr "Kesta menüü"
 msgid "Shell menus"
 msgstr "Shelli menüü"
 
-#: win32\MainWindow.cpp:1847
+#: win32\MainWindow.cpp:1850
 msgid "Show"
 msgstr "Näita"
 
@@ -3229,7 +3229,7 @@ msgstr ""
 msgid "Show timestamps in chat by default"
 msgstr "Ajatempleid näidatakse vestluses vaikimisi"
 
-#: win32\DirectoryListingFrame.cpp:66 win32\MainWindow.cpp:1711
+#: win32\DirectoryListingFrame.cpp:66 win32\MainWindow.cpp:1714
 #: win32\QueueFrame.cpp:50 win32\SearchFrame.cpp:54 win32\SearchFrame.cpp:161
 #: win32\TransferView.cpp:56 win32\UploadPage.cpp:48
 msgid "Size"
@@ -3262,7 +3262,7 @@ msgstr "Pesa antud"
 msgid "Slots"
 msgstr "Pesad"
 
-#: win32\WinUtil.cpp:594
+#: win32\WinUtil.cpp:589
 msgid "Slots set"
 msgstr ""
 
@@ -3301,7 +3301,7 @@ msgstr "Allika tüüp"
 msgid "Source too slow"
 msgstr "Allikas liiga aeglane"
 
-#: win32\WinUtil.cpp:641
+#: win32\WinUtil.cpp:636
 msgid "Specify a URL"
 msgstr "Määra URL"
 
@@ -3309,7 +3309,7 @@ msgstr "Määra URL"
 msgid "Specify a name for this user matching definition"
 msgstr ""
 
-#: win32\WinUtil.cpp:610 win32\WinUtil.cpp:629 win32\WinUtil.cpp:635
+#: win32\WinUtil.cpp:605 win32\WinUtil.cpp:624 win32\WinUtil.cpp:630
 msgid "Specify a search string"
 msgstr "Määra otsingusõna"
 
@@ -3356,11 +3356,11 @@ msgstr "Viimati nähtud"
 msgid "Status bar\tCtrl+3"
 msgstr ""
 
-#: win32\MainWindow.cpp:1181
+#: win32\MainWindow.cpp:1185
 msgid "Status: Available - Double-click to switch to Away"
 msgstr ""
 
-#: win32\MainWindow.cpp:1180
+#: win32\MainWindow.cpp:1184
 msgid "Status: Away - Double-click to switch to Available"
 msgstr ""
 
@@ -3415,13 +3415,13 @@ msgstr "Sakid"
 msgid "Tag"
 msgstr "Silt"
 
-#: win32\MainWindow.cpp:1579 win32\MainWindow.cpp:1639
+#: win32\MainWindow.cpp:1582 win32\MainWindow.cpp:1642
 #, fuzzy, boost-format
 msgid "The %1% GeoIP database could not be updated"
 msgstr "GeoIP andmebaasi uuendus"
 
-#: win32\MainWindow.cpp:1606 win32\MainWindow.cpp:1608
-#: win32\MainWindow.cpp:1632
+#: win32\MainWindow.cpp:1609 win32\MainWindow.cpp:1611
+#: win32\MainWindow.cpp:1635
 #, boost-format
 msgid "The %1% GeoIP database has been successfully updated"
 msgstr ""
@@ -3437,7 +3437,7 @@ msgid ""
 "group."
 msgstr ""
 
-#: win32\MainWindow.cpp:1742
+#: win32\MainWindow.cpp:1745
 msgid ""
 "The menu bar is now hidden. Press Alt or F10 to temporarily bring it back "
 "into view."
@@ -3495,7 +3495,7 @@ msgstr "Saaja"
 msgid "Toggle window when selecting an active tab"
 msgstr "Aktiivse tabi valimisel lülita akent"
 
-#: win32\MainWindow.cpp:1705
+#: win32\MainWindow.cpp:1708
 msgid "Toolbar"
 msgstr "Tööriistariba"
 
@@ -3551,12 +3551,12 @@ msgstr "Usaldusväärsete sertifikaatide asukoht"
 msgid "Type"
 msgstr "Tüüp"
 
-#: win32\MainWindow.cpp:1159
+#: win32\MainWindow.cpp:1163
 #, boost-format
 msgid "U: %1%"
 msgstr "Ü: %1%"
 
-#: win32\MainWindow.cpp:1167
+#: win32\MainWindow.cpp:1171
 #, boost-format
 msgid "U: %1%/s (%2%)"
 msgstr "Ü: %1%/s (%2%)"
@@ -3565,7 +3565,7 @@ msgstr "Ü: %1%/s (%2%)"
 msgid "Un-ignore chat"
 msgstr ""
 
-#: win32\MainWindow.cpp:1330
+#: win32\MainWindow.cpp:1333
 #, fuzzy, boost-format
 msgid ""
 "Unable to open %1% port. Searching or file transfers will not work correctly "
@@ -3613,7 +3613,7 @@ msgstr "Eemalda &kõik"
 msgid "Updating a plugin"
 msgstr ""
 
-#: win32\MainWindow.cpp:1583
+#: win32\MainWindow.cpp:1586
 #, boost-format
 msgid "Updating the %1% GeoIP database..."
 msgstr ""
@@ -3623,26 +3623,26 @@ msgstr ""
 msgid "Upload Slots"
 msgstr "Üleslaadimised"
 
-#: win32\MainWindow.cpp:858 win32\MainWindow.cpp:1852
+#: win32\MainWindow.cpp:862 win32\MainWindow.cpp:1855
 #, fuzzy
 msgid "Upload limit"
 msgstr "Üleslaadimised"
 
-#: win32\WinUtil.cpp:650
+#: win32\WinUtil.cpp:645
 msgid "Upload limit disabled"
 msgstr ""
 
-#: win32\WinUtil.cpp:650
+#: win32\WinUtil.cpp:645
 #, fuzzy, boost-format
 msgid "Upload limit set to %1% KiB/s"
 msgstr "Allalaadimised"
 
-#: win32\MainWindow.cpp:1175
+#: win32\MainWindow.cpp:1179
 #, boost-format
 msgid "Upload limit: %1%/s - Click to adjust"
 msgstr ""
 
-#: win32\MainWindow.cpp:1811 win32\UploadPage.cpp:123
+#: win32\MainWindow.cpp:1814 win32\UploadPage.cpp:123
 msgid "Upload slots"
 msgstr "Üleslaadimise pesad"
 
@@ -3828,7 +3828,7 @@ msgid "Write buffer size"
 msgstr "Kirjutamise puhvri suurus"
 
 #: win32\ADLSearchFrame.cpp:331 win32\NotificationsPage.cpp:288
-#: win32\WinUtil.cpp:1143 win32\FinishedFrameBase.h:263
+#: win32\WinUtil.cpp:1138 win32\FinishedFrameBase.h:263
 msgid "Yes"
 msgstr "Jah"
 
@@ -3860,11 +3860,11 @@ msgstr "ja"
 msgid "beginning"
 msgstr ""
 
-#: win32\MainWindow.cpp:1567
+#: win32\MainWindow.cpp:1570
 msgid "city"
 msgstr ""
 
-#: win32\MainWindow.cpp:1567
+#: win32\MainWindow.cpp:1570
 #, fuzzy
 msgid "country"
 msgstr "Riik"

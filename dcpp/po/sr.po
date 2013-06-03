@@ -7,48 +7,48 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-05-21 19:34+0200\n"
-"PO-Revision-Date: 2013-01-31 06:27+0000\n"
+"POT-Creation-Date: 2013-06-03 14:15+0200\n"
+"PO-Revision-Date: 2013-05-26 09:35+0000\n"
 "Last-Translator: Igor Jerosimić <Unknown>\n"
 "Language-Team: Serbian <sr@li.org>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-05-21 16:57+0000\n"
-"X-Generator: Launchpad (build 16626)\n"
+"X-Launchpad-Export-Date: 2013-06-03 11:41+0000\n"
+"X-Generator: Launchpad (build 16660)\n"
 
 #: dcpp\DownloadManager.cpp:360
 #, boost-format
 msgid " - Queued: %1%"
 msgstr " - U redu: %1%"
 
-#: dcpp\Util.cpp:561
+#: dcpp\Util.cpp:583
 #, c-format, boost-format
 msgid "%'lld B"
 msgstr "%'lld B"
 
-#: dcpp\Util.cpp:523
+#: dcpp\Util.cpp:545
 #, c-format, boost-format
 msgid "%.02f GiB"
 msgstr "%.02f GiB"
 
-#: dcpp\Util.cpp:519
+#: dcpp\Util.cpp:541
 #, c-format, boost-format
 msgid "%.02f KiB"
 msgstr "%.02f KiB"
 
-#: dcpp\Util.cpp:521
+#: dcpp\Util.cpp:543
 #, c-format, boost-format
 msgid "%.02f MiB"
 msgstr "%.02f MiB"
 
-#: dcpp\Util.cpp:527
+#: dcpp\Util.cpp:549
 #, c-format, boost-format
 msgid "%.02f PiB"
 msgstr "%.02f PiB"
 
-#: dcpp\Util.cpp:525
+#: dcpp\Util.cpp:547
 #, c-format, boost-format
 msgid "%.02f TiB"
 msgstr "%.02f TiB"
@@ -79,26 +79,22 @@ msgstr "%1% (%2%) ima isti CID {%3%} as %4% (%5%), ignorišem"
 msgid "%1% (Nick unknown)"
 msgstr "%1% (Nepoznat nadimak)"
 
-#: dcpp\PluginManager.cpp:156 dcpp\PluginManager.cpp:659
+#: dcpp\PluginManager.cpp:155 dcpp\PluginManager.cpp:175
+#: dcpp\PluginManager.cpp:578
 #, boost-format
 msgid "%1% is already installed"
 msgstr "%1% je već instaliran"
 
-#: dcpp\PluginManager.cpp:141 dcpp\PluginManager.cpp:527
+#: dcpp\PluginManager.cpp:141 dcpp\PluginManager.cpp:540
 #, boost-format
 msgid "%1% is not a valid plugin"
 msgstr "%1% nije ispravan priključak"
 
-#: dcpp\PluginManager.cpp:144
+#: dcpp\PluginManager.cpp:107 dcpp\PluginManager.cpp:144
+#: dcpp\PluginManager.cpp:545
 #, boost-format
 msgid "%1% is not compatible with %2%"
-msgstr ""
-
-#: dcpp\PluginManager.cpp:107 dcpp\PluginManager.cpp:666
-#, boost-format
-msgid "%1% is too old, contact the plugin author for an update"
-msgstr ""
-"%1% je previše star, kontaktirajte autora priključka za ažuriranu verziju"
+msgstr "%1% nije kompatibilno sa %2%"
 
 #: dcpp\HashManager.cpp:698
 #, boost-format
@@ -127,12 +123,12 @@ msgstr "%1%/s"
 msgid "%1%: File not available"
 msgstr "%1%: Datoteka nije dostupna"
 
-#: dcpp\Util.cpp:517
+#: dcpp\Util.cpp:539
 #, c-format, boost-format
 msgid "%d B"
 msgstr "%d B"
 
-#: dcpp\Util.cpp:557
+#: dcpp\Util.cpp:579
 #, c-format, boost-format
 msgid "%s B"
 msgstr "%s B"
@@ -361,12 +357,12 @@ msgstr "Greška pri kreiranju sertifikata"
 msgid "Error hashing %1%: %2%"
 msgstr "Greška pri hashovanju %1%: %2%"
 
-#: dcpp\PluginManager.cpp:535
-#, fuzzy, boost-format
+#: dcpp\PluginManager.cpp:600
+#, boost-format
 msgid "Error loading %1%"
-msgstr "Greška pri učitavanju %1%: %2%"
+msgstr "Greška pri učitavanju %1%"
 
-#: dcpp\PluginManager.cpp:519
+#: dcpp\PluginManager.cpp:532
 #, boost-format
 msgid "Error loading %1%: %2%"
 msgstr "Greška pri učitavanju %1%: %2%"
@@ -520,9 +516,8 @@ msgid "Invalid URL: %1%"
 msgstr "Neispravan URL: %1%"
 
 #: dcpp\Archive.cpp:42 dcpp\Archive.cpp:94
-#, fuzzy
 msgid "Invalid archive"
-msgstr "Pogrešna veličina"
+msgstr "Neispravna arhiva"
 
 #: dcpp\UserConnection.cpp:52 dcpp\UserConnection.cpp:70
 #: dcpp\UserConnection.cpp:138
@@ -573,7 +568,7 @@ msgstr ""
 msgid "Maximum command length exceeded"
 msgstr "Prekoračena maksimalna dužina komande"
 
-#: dcpp\PluginManager.cpp:673
+#: dcpp\PluginManager.cpp:551
 #, boost-format
 msgid "Missing dependencies for %1%"
 msgstr "Nedostaju zavisnosti za %1%"
@@ -781,7 +776,7 @@ msgstr "Ovaj tip pretrage već postoji"
 #: dcpp\HttpConnection.cpp:289
 #, boost-format
 msgid "Too much data in response body (%1%)"
-msgstr ""
+msgstr "Previše podataka u telu odgovora (%1%)"
 
 #: dcpp\MappingManager.cpp:121 dcpp\MappingManager.cpp:164
 msgid "Transfer"
@@ -794,7 +789,7 @@ msgstr "Prenos (TCP)"
 #: dcpp\HttpConnection.cpp:206
 #, boost-format
 msgid "Transfer-encoding error (%1%)"
-msgstr ""
+msgstr "Greška u prenosnom kodiranju (%1%)"
 
 #: dcpp\UserMatchManager.cpp:132
 msgid "Un-ignore"
@@ -845,10 +840,10 @@ msgstr "Nepoznata greška: 0x%1$x"
 msgid "Unknown protocol %d"
 msgstr "Nepoznat protokol %d"
 
-#: dcpp\PluginManager.cpp:654
+#: dcpp\PluginManager.cpp:565
 #, boost-format
 msgid "Updating the %1% plugin from version %2% to version %3%"
-msgstr ""
+msgstr "Ažuriram priključak %1% sa verzije %2% na verziju %3%"
 
 #: dcpp\DCPlusPlus.cpp:112
 msgid "Users"
@@ -882,3 +877,7 @@ msgstr "neodređen"
 #: dcpp\SettingsManager.cpp:201
 msgid "uploaded to"
 msgstr "poslato do"
+
+#~ msgid "%1% is too old, contact the plugin author for an update"
+#~ msgstr ""
+#~ "%1% je previše star, kontaktirajte autora priključka za ažuriranu verziju"

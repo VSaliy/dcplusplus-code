@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-05-13 20:41+0300\n"
-"PO-Revision-Date: 2013-04-16 21:40+0000\n"
+"POT-Creation-Date: 2013-06-03 14:15+0300\n"
+"PO-Revision-Date: 2013-05-28 10:31+0000\n"
 "Last-Translator: Guybrush88 <Unknown>\n"
 "Language-Team: Bulgarian <bg@li.org>\n"
 "Language: bg_BG\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-05-21 16:57+0000\n"
-"X-Generator: Launchpad (build 16626)\n"
+"X-Launchpad-Export-Date: 2013-06-03 11:42+0000\n"
+"X-Generator: Launchpad (build 16660)\n"
 
 #. type: Content of: <html><body><ul><li><div><placeholder><a>
 #: help/chat_commands.html:9 help/index.html:143
@@ -10029,7 +10029,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_plugins.html:31
 msgid "Enable"
-msgstr ""
+msgstr "Включи"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_plugins.html:33
@@ -10039,7 +10039,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_plugins.html:36
 msgid "Disable"
-msgstr ""
+msgstr "Изключи"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_plugins.html:38
@@ -15178,7 +15178,7 @@ msgstr "Име на файла."
 #. type: Content of: <html><body><dl><dt>
 #: help/window_search.html:66
 msgid "Hits"
-msgstr ""
+msgstr "Резултати"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_search.html:67

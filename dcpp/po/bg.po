@@ -8,16 +8,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-05-21 19:34+0200\n"
-"PO-Revision-Date: 2013-02-27 00:36+0000\n"
-"Last-Translator: Blagovest Petrov <blagovest@petrovs.info>\n"
+"POT-Creation-Date: 2013-06-03 14:15+0200\n"
+"PO-Revision-Date: 2013-05-26 11:32+0000\n"
+"Last-Translator: Hafo <hafo@abv.bg>\n"
 "Language-Team: Bulgarian <bg@li.org>\n"
 "Language: bg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-05-21 16:57+0000\n"
-"X-Generator: Launchpad (build 16626)\n"
+"X-Launchpad-Export-Date: 2013-06-03 11:41+0000\n"
+"X-Generator: Launchpad (build 16660)\n"
 "X-Poedit-Country: BULGARIA\n"
 "X-Poedit-Language: Bulgarian\n"
 
@@ -26,32 +26,32 @@ msgstr ""
 msgid " - Queued: %1%"
 msgstr " - На опашката: %1%"
 
-#: dcpp\Util.cpp:561
+#: dcpp\Util.cpp:583
 #, c-format, boost-format
 msgid "%'lld B"
 msgstr "%'lld B"
 
-#: dcpp\Util.cpp:523
+#: dcpp\Util.cpp:545
 #, c-format, boost-format
 msgid "%.02f GiB"
 msgstr "%.02f GiB"
 
-#: dcpp\Util.cpp:519
+#: dcpp\Util.cpp:541
 #, c-format, boost-format
 msgid "%.02f KiB"
 msgstr "%.02f KiB"
 
-#: dcpp\Util.cpp:521
+#: dcpp\Util.cpp:543
 #, c-format, boost-format
 msgid "%.02f MiB"
 msgstr "%.02f MiB"
 
-#: dcpp\Util.cpp:527
+#: dcpp\Util.cpp:549
 #, c-format, boost-format
 msgid "%.02f PiB"
 msgstr "%.02f PiB"
 
-#: dcpp\Util.cpp:525
+#: dcpp\Util.cpp:547
 #, c-format, boost-format
 msgid "%.02f TiB"
 msgstr "%.02f TiB"
@@ -82,26 +82,22 @@ msgstr "%1% (%2%) има същия CID {%3%} като %4% (%5%), игнорир
 msgid "%1% (Nick unknown)"
 msgstr "%1% (неизвестен псевдоним)"
 
-#: dcpp\PluginManager.cpp:156 dcpp\PluginManager.cpp:659
+#: dcpp\PluginManager.cpp:155 dcpp\PluginManager.cpp:175
+#: dcpp\PluginManager.cpp:578
 #, boost-format
 msgid "%1% is already installed"
 msgstr "%1% вече е инсталиран"
 
-#: dcpp\PluginManager.cpp:141 dcpp\PluginManager.cpp:527
+#: dcpp\PluginManager.cpp:141 dcpp\PluginManager.cpp:540
 #, boost-format
 msgid "%1% is not a valid plugin"
 msgstr "%1% не е валидна приставка"
 
-#: dcpp\PluginManager.cpp:144
+#: dcpp\PluginManager.cpp:107 dcpp\PluginManager.cpp:144
+#: dcpp\PluginManager.cpp:545
 #, boost-format
 msgid "%1% is not compatible with %2%"
 msgstr ""
-
-#: dcpp\PluginManager.cpp:107 dcpp\PluginManager.cpp:666
-#, boost-format
-msgid "%1% is too old, contact the plugin author for an update"
-msgstr ""
-"%1% е твърде стара, свържете се с автора на приставката за нейното обновяване"
 
 #: dcpp\HashManager.cpp:698
 #, boost-format
@@ -131,12 +127,12 @@ msgstr "%1%/s"
 msgid "%1%: File not available"
 msgstr "%1%: Файла не е достъпен"
 
-#: dcpp\Util.cpp:517
+#: dcpp\Util.cpp:539
 #, c-format, boost-format
 msgid "%d B"
 msgstr "%d B"
 
-#: dcpp\Util.cpp:557
+#: dcpp\Util.cpp:579
 #, c-format, boost-format
 msgid "%s B"
 msgstr "%s B"
@@ -368,12 +364,12 @@ msgstr "Грешка при генериране на сертификат"
 msgid "Error hashing %1%: %2%"
 msgstr "Грешка при хеширане %1%: %2%"
 
-#: dcpp\PluginManager.cpp:535
+#: dcpp\PluginManager.cpp:600
 #, fuzzy, boost-format
 msgid "Error loading %1%"
 msgstr "Грешка при зареждане на %1%: %2%"
 
-#: dcpp\PluginManager.cpp:519
+#: dcpp\PluginManager.cpp:532
 #, boost-format
 msgid "Error loading %1%: %2%"
 msgstr "Грешка при зареждане на %1%: %2%"
@@ -570,7 +566,7 @@ msgstr ""
 
 #: dcpp\FavoriteManager.cpp:423
 msgid "Kick user(s)"
-msgstr "Изгони потребител(и)"
+msgstr "Изгони потребителя(ите)"
 
 #: dcpp\ConnectivityManager.cpp:131
 msgid "Local network with possible NAT detected, trying to map the ports..."
@@ -582,7 +578,7 @@ msgstr ""
 msgid "Maximum command length exceeded"
 msgstr "Максималната дължина на командата е превишена"
 
-#: dcpp\PluginManager.cpp:673
+#: dcpp\PluginManager.cpp:551
 #, boost-format
 msgid "Missing dependencies for %1%"
 msgstr "Липсват зависимости за %1%"
@@ -655,7 +651,7 @@ msgstr "Открит е публичен IP адрес. Изберете акт�
 
 #: dcpp\FavoriteManager.cpp:427
 msgid "Redirect user(s)"
-msgstr "Пренасочване на потребител(и)"
+msgstr "Пренасочване на потребителя(ите)"
 
 #: dcpp\ShareManager.cpp:407
 msgid "Remove all subdirectories before adding this one"
@@ -858,7 +854,7 @@ msgstr "Неизвестна грешка: 0x%1$x"
 msgid "Unknown protocol %d"
 msgstr "Неизвестен протокол %d"
 
-#: dcpp\PluginManager.cpp:654
+#: dcpp\PluginManager.cpp:565
 #, boost-format
 msgid "Updating the %1% plugin from version %2% to version %3%"
 msgstr ""
@@ -895,3 +891,8 @@ msgstr "неопределен"
 #: dcpp\SettingsManager.cpp:201
 msgid "uploaded to"
 msgstr "качен на"
+
+#~ msgid "%1% is too old, contact the plugin author for an update"
+#~ msgstr ""
+#~ "%1% е твърде стара, свържете се с автора на приставката за нейното "
+#~ "обновяване"
