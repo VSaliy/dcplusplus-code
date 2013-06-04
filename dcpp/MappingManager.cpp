@@ -145,7 +145,7 @@ int MappingManager::run() {
 
 		ScopedFunctor([&mapper] { mapper.uninit(); });
 		if(!mapper.init()) {
-			log(str(F_("Failed to initalize the %1% interface") % mapper.getName()));
+			log(str(F_("Failed to initialize the %1% interface") % mapper.getName()));
 			continue;
 		}
 

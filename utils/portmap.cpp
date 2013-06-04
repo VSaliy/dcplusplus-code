@@ -84,10 +84,10 @@ int main(int argc, char* argv[]) {
 
 	ScopedFunctor([&mapper] { mapper.uninit(); });
 	if(!mapper.init()) {
-		cout << "Failed to initalize the " << mapper.getName() << " interface." << endl;
+		cout << "Failed to initialize the " << mapper.getName() << " interface." << endl;
 		return 2;
 	}
-	cout << "Successfully initalized the " << mapper.getName() << " interface." << endl;
+	cout << "Successfully initialized the " << mapper.getName() << " interface." << endl;
 
 	if(!mapper.open(argv[Port], tcp ? Mapper::PROTOCOL_TCP : Mapper::PROTOCOL_UDP, argv[Description])) {
 		cout << "Failed to map the " << argv[Port] << " " << (tcp ? "TCP" : "UDP") << " port with the " << mapper.getName() << " interface." << endl;
