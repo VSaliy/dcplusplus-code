@@ -54,6 +54,10 @@
 			Note that this operation is automatically run every 16 days.<br/>
 			<a href="http://www.maxmind.com/app/geolitecountry" target="_blank" class="external">MaxMind's GeoIP</a>
 			databases are used by DC++ to get information about user countries.</dd>
+			<dt><img src="Plugins.ico" width="16" height="16" alt="Plugins"/> Plugins</dt>
+			<dd><p>Opens the <placeholder><a href="settings_plugins.html">Plugins</a></placeholder> configuration submenu containing the following commands:</p>
+			<!--#include virtual="menu_plugins.inc" -->
+			</dd>
 			<dt><img src="Exit.ico" width="16" height="16" alt="Exit"/> Exit</dt>
 			<dd>Closes DC++.</dd>
 		</dl>
@@ -295,20 +299,7 @@ add, remove and group the buttons using the following toolbar customization func
 	<p>
 	Use the arrow placed on the right of the icon to manage plugins:
 	</p>
-	<ul>
-		<li>
-		"Add" displays a file selection dialog to install a new plugin.
-		</li>
-		<li>
-		"Configure" opens the
-		<placeholder><a href="settings_plugins.html">Plugins</a></placeholder> configuration page.
-		</li>
-		<li>
-		Installed plugins are listed below. They can be selectively enabled or disabled. A
-		"Configure" command is also available for each of them (the behavior of which is
-		plugin-dependant). Plugins are also allowed to add additional commands in that sub-menu.
-		</li>
-	</ul>
+	<!--#include virtual="menu_plugins.inc" -->
 	</dd>
 
     <dt id="tb_whats_this">What's This?</dt>
@@ -379,10 +370,10 @@ The main status bar is always visible in the bottom of the DC++ window. You can 
 	<dd cshelp="IDH_MAIN_UP_DIFF"><div>Shows the current overall upload speed and the number of current upload connections in parentheses (updated in every second).</div>
 	<div>Double-click to open the <placeholder><a href="window_network_stats.html">Network Statistics</a></placeholder> window.</div></dd>
 
-    <dt>Current download limit</dt>
+    <dt><img src="Dlimit.ico" width="16" height="16" alt="Download speed limit"/> Current download limit</dt>
 	<dd cshelp="IDH_MAIN_DOWN_LIMIT">Shows the current maximum download rate. Zero speed value means that download limiting is disabled.</dd>
 
-    <dt>Current upload limit</dt>
+    <dt><img src="Ulimit.ico" width="16" height="16" alt="Upload speed limit"/> Current upload limit</dt>
 	<dd cshelp="IDH_MAIN_UP_LIMIT">Shows the current maximum upload rate. Zero speed value means that upload limiting is disabled.</dd>
 </dl>
 
