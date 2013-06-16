@@ -59,7 +59,7 @@ int dwtMain(dwt::Application& app)
 	table->setSort(0, dwt::Table::SORT_CALLBACK);
 
 	dwt::ImageListPtr images(new dwt::ImageList(dwt::Point(IMAGE_SIZE, IMAGE_SIZE)));
-	images->add(dwt::Icon(L"../../../../res/File.ico", dwt::Point(IMAGE_SIZE, IMAGE_SIZE)));
+	images->add(dwt::Icon(::LoadIcon(nullptr, IDI_INFORMATION), false));
 	table->setSmallImageList(images);
 
 	for(size_t i = 0; i < COLUMNS; ++i) {
