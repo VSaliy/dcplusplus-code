@@ -85,6 +85,7 @@ bool UploadManager::prepareFile(UserConnection& aSource, const string& aType, co
 			miniSlot = true;
 
 		} else if(aType == Transfer::names[Transfer::TYPE_PARTIAL_LIST]) {
+			sourceFile = _("Partial file list");
 			type = Transfer::TYPE_PARTIAL_LIST;
 			miniSlot = true;
 

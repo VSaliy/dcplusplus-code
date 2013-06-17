@@ -1,3 +1,5 @@
+* [L#1191099] Group partial file list uploads to avoid a crash (poy)
+
 -- 0.822 2013-06-03 --
 * Improve plugin management
 
