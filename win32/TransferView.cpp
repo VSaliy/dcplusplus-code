@@ -737,6 +737,7 @@ void TransferView::addConn(const UpdateInfo& ui) {
 
 	if(ui.updateMask & UpdateInfo::MASK_PATH) {
 		// adding a connection we know the transfer of.
+		dcassert(!ui.path.empty()); // transfers are indexed by path; it can't be empty.
 		transfer = findTransfer(ui.path, ui.download);
 		if(conn && &conn->parent != transfer) {
 			removeConn(*conn);
@@ -820,7 +821,6 @@ TransferView::ConnectionInfo* TransferView::findConn(const HintedUser& user, boo
 }
 
 TransferView::TransferInfo* TransferView::findTransfer(const string& path, bool download) {
-	if(path.empty()) { return nullptr; }
 	for(auto& transfer: transferItems) {
 		if(transfer.download == download && transfer.path == path) {
 			return &transfer;
