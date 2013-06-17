@@ -463,15 +463,19 @@ void AdcHub::handle(AdcCommand::STA, AdcCommand& c) noexcept {
 
 	case AdcCommand::ERROR_BAD_PASSWORD:
 		{
-			setPassword(Util::emptyString);
+			if(c.getType() == AdcCommand::TYPE_INFO) {
+				setPassword(Util::emptyString);
+			}
 			break;
 		}
 
 	case AdcCommand::ERROR_COMMAND_ACCESS:
 		{
-			string tmp;
-			if(c.getParam("FC", 1, tmp) && tmp.size() == 4)
-				forbiddenCommands.insert(AdcCommand::toFourCC(tmp.c_str()));
+			if(c.getType() == AdcCommand::TYPE_INFO) {
+				string tmp;
+				if(c.getParam("FC", 1, tmp) && tmp.size() == 4)
+					forbiddenCommands.insert(AdcCommand::toFourCC(tmp.c_str()));
+			}
 			break;
 		}
 
@@ -633,19 +637,23 @@ void AdcHub::handle(AdcCommand::RNT, AdcCommand& c) noexcept {
 }
 
 void AdcHub::handle(AdcCommand::ZON, AdcCommand& c) noexcept {
-	try {
+	if(c.getType() == AdcCommand::TYPE_INFO) {
+		try {
 			sock->setMode(BufferedSocket::MODE_ZPIPE);
 		} catch (const Exception& e) {
 			dcdebug("AdcHub::handleZON failed with error: %s\n", e.getError().c_str());
 		}
+	}
 }
 
 void AdcHub::handle(AdcCommand::ZOF, AdcCommand& c) noexcept {
-	try {
+	if(c.getType() == AdcCommand::TYPE_INFO) {
+		try {
 			sock->setMode(BufferedSocket::MODE_LINE);
 		} catch (const Exception& e) {
 			dcdebug("AdcHub::handleZOF failed with error: %s\n", e.getError().c_str());
 		}
+	}
 }
 
 void AdcHub::connect(const OnlineUser& user, const string& token) {
