@@ -140,6 +140,9 @@ int dwtMain(dwt::Application& app) {
 		startup();
 		PluginApiWin::init();
 
+		bindtextdomain(PACKAGE, LOCALEDIR);
+		textdomain(PACKAGE);
+
 		// load in a separate thread to avoid freezing the GUI thread.
 		struct Loader : Thread {
 			Loader(SplashWindow& splash) : Thread(), splash(splash) { }
@@ -149,9 +152,6 @@ int dwtMain(dwt::Application& app) {
 				splash(Text::fromT(_T(APPNAME)));
 
 				dwt::Application::instance().callAsync([this] {
-					bindtextdomain(PACKAGE, LOCALEDIR);
-					textdomain(PACKAGE);
-
 					if(ResourceManager::getInstance()->isRTL()) {
 						SetProcessDefaultLayout(LAYOUT_RTL);
 					}

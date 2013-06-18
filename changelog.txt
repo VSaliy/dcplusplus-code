@@ -1,3 +1,5 @@
+* Translation fixes
+
 -- 0.825 2013-06-18 --
 * [L#1191099] Group partial file list uploads to avoid a crash (poy)
 * [L#1189975] [ADC] Disallow some malevolent messages (maksis)
