@@ -1,6 +1,7 @@
 * Translation fixes
 * [L#1194299] Prevent races when sending INF/MyINFO (maksis, poy)
 * [L#1194299] Prevent races when closing a connection (maksis, poy)
+* [ADC] Send the LC (locale) parameter in INF
 
 -- 0.825 2013-06-18 --
 * [L#1191099] Group partial file list uploads to avoid a crash (poy)

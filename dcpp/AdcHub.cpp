@@ -1012,6 +1012,8 @@ void AdcHub::infoImpl() {
 		addParam(lastInfoMap, c, "US", Util::toString((long)(Util::toDouble(SETTING(UPLOAD_SPEED))*1024*1024/8)));
 	}
 
+	addParam(lastInfoMap, c, "LC", Util::getIETFLang());
+
 	string su(SEGA_FEATURE);
 
 	if(CryptoManager::getInstance()->TLSOk()) {
