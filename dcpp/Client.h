@@ -54,7 +54,8 @@ public:
 	virtual void sendUserCmd(const UserCommand& command, const ParamMap& params) = 0;
 	virtual void search(int aSizeMode, int64_t aSize, int aFileType, const string& aString, const string& aToken, const StringList& aExtList) = 0;
 	virtual void password(const string& pwd) = 0;
-	virtual void info(bool force) = 0;
+	/** Send new information about oneself. Thread-safe. */
+	void info();
 
 	virtual size_t getUserCount() const = 0;
 	virtual int64_t getAvailable() const = 0;
@@ -133,6 +134,7 @@ protected:
 
 	BufferedSocket *sock;
 
+	/** Update hub counts. Thread-safe. */
 	void updateCounts(bool aRemove);
 	void updateActivity() { lastActivity = GET_TICK(); }
 
@@ -159,6 +161,7 @@ protected:
 
 private:
 	virtual OnlineUserList getUsers() const = 0;
+	virtual void infoImpl() = 0;
 
 	string hubUrl;
 	string address;
