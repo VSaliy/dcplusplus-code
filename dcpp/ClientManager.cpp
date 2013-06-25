@@ -460,7 +460,7 @@ void ClientManager::infoUpdated() {
 	Lock l(cs);
 	for(auto i: clients) {
 		if(i->isConnected()) {
-			i->info(false);
+			i->info();
 		}
 	}
 }
@@ -551,7 +551,9 @@ void ClientManager::on(TimerManagerListener::Minute, uint64_t /* aTick */) noexc
 	}
 
 	for(auto j: clients) {
-		j->info(false);
+		if(j->isConnected()) {
+			j->info();
+		}
 	}
 }
 
