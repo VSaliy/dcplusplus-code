@@ -126,6 +126,10 @@ void Client::connect() {
 	updateActivity();
 }
 
+void Client::info() {
+	sock->callAsync([this] { infoImpl(); });
+}
+
 void Client::send(const char* aMessage, size_t aLen) {
 	if(!isConnected()) {
 		dcassert(0);
