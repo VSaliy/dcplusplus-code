@@ -454,7 +454,7 @@ bool BufferedSocket::checkEvents() {
 			return false;
 
 		} else if(p.first == ASYNC_CALL) {
-			if(!disconnecting) { static_cast<CallData*>(p.second.get())->f(); }
+			if(!disconnecting) { Lock l(cs); static_cast<CallData*>(p.second.get())->f(); }
 			continue;
 		}
 
