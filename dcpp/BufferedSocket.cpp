@@ -452,8 +452,9 @@ bool BufferedSocket::checkEvents() {
 
 		if(p.first == SHUTDOWN) {
 			return false;
+
 		} else if(p.first == ASYNC_CALL) {
-			static_cast<CallData*>(p.second.get())->f();
+			if(!disconnecting) { static_cast<CallData*>(p.second.get())->f(); }
 			continue;
 		}
 
@@ -524,8 +525,9 @@ void BufferedSocket::fail(const string& aError) {
 }
 
 void BufferedSocket::shutdown() {
-	Lock l(cs);
 	disconnecting = true;
+
+	Lock l(cs);
 	addTask(SHUTDOWN, 0);
 }
 

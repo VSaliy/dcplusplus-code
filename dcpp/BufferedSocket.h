@@ -165,7 +165,7 @@ private:
 
 	std::unique_ptr<Socket> sock;
 	State state;
-	bool disconnecting;
+	atomic<bool> disconnecting;
 	bool v4only;
 
 	virtual int run();
