@@ -114,7 +114,7 @@ void TableTree::insertChild(LPARAM parent, LPARAM child) {
 void TableTree::eraseChild(LPARAM child) {
 	auto i = children.find(child);
 	if(i != children.end()) {
-		eraseChild(i);
+		eraseChild(i, false);
 	}
 }
 
@@ -305,7 +305,9 @@ void TableTree::handleDelete(int pos) {
 
 	auto parent = items.find(param);
 	if(parent != items.end()) {
-		collapse(param);
+		if(parent->second.expanded) {
+			collapse(param);
+		}
 		for(auto child: parent->second.children) {
 			children.erase(child);
 		}
@@ -314,7 +316,7 @@ void TableTree::handleDelete(int pos) {
 
 	auto child = children.find(param);
 	if(child != children.end()) {
-		eraseChild(child);
+		eraseChild(child, true);
 	}
 }
 
@@ -360,13 +362,13 @@ int TableTree::handleSort(LPARAM& lhs, LPARAM& rhs) {
 }
 
 #ifndef _MSC_VER /// @todo workaround for VS' sucky decltype
-void TableTree::eraseChild(decltype(children)::iterator& child) {
+void TableTree::eraseChild(decltype(children)::iterator& child, bool deleting) {
 #else
-void TableTree::eraseChild(std::unordered_map<LPARAM, LPARAM>::iterator& child) {
+void TableTree::eraseChild(std::unordered_map<LPARAM, LPARAM>::iterator& child, bool deleting) {
 #endif
 	auto& item = items[child->second];
 	auto& cont = item.children;
-	if(item.expanded) {
+	if(!deleting && item.expanded) {
 		sendMsg(LVM_DELETEITEM, findData(child->first), 0);
 	}
 	cont.erase(std::remove(cont.begin(), cont.end(), child->first), cont.end());

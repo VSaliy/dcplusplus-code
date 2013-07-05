@@ -102,9 +102,9 @@ private:
 	int handleSort(LPARAM& lhs, LPARAM& rhs);
 
 #ifndef _MSC_VER /// @todo workaround for VS' sucky decltype
-	void eraseChild(decltype(children)::iterator& child);
+	void eraseChild(decltype(children)::iterator& child, bool deleting);
 #else
-	void eraseChild(std::unordered_map<LPARAM, LPARAM>::iterator& child);
+	void eraseChild(std::unordered_map<LPARAM, LPARAM>::iterator& child, bool deleting);
 #endif
 
 	LRESULT sendMsg(UINT msg, WPARAM wParam, LPARAM lParam);
