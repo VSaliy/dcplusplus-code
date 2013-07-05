@@ -58,6 +58,17 @@ int dwtMain(dwt::Application& app)
 	});
 	table->setSort(0, dwt::Table::SORT_CALLBACK);
 
+	table->onKeyDown([table](int c) -> bool {
+		if(c == VK_DELETE) {
+			int i = -1;
+			while((i = table->getNext(-1, LVNI_SELECTED)) != -1) {
+				table->erase(i);
+			}
+			return true;
+		}
+		return false;
+	});
+
 	dwt::ImageListPtr images(new dwt::ImageList(dwt::Point(IMAGE_SIZE, IMAGE_SIZE)));
 	images->add(dwt::Icon(::LoadIcon(nullptr, IDI_INFORMATION), false));
 	table->setSmallImageList(images);
