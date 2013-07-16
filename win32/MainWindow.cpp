@@ -450,6 +450,8 @@ void MainWindow::initToolbar() {
 		IDH_TOOLBAR_ADL_SEARCH, [this] { ADLSearchFrame::openWindow(getTabView()); });
 	toolbar->addButton(StatsFrame::id, WinUtil::toolbarIcon(IDI_NET_STATS), 0, T_("Network Statistics"), false,
 		IDH_TOOLBAR_NET_STATS, [this] { StatsFrame::openWindow(getTabView()); });
+	toolbar->addButton("OpenDlDir", WinUtil::toolbarIcon(IDI_OPEN_DL_DIR), 0, T_("Open downloads directory"), false,
+		IDH_TOOLBAR_DOWNLOADS_DIR, [this] { handleOpenDownloadsDir(); });
 	toolbar->addButton("OpenFL", WinUtil::toolbarIcon(IDI_OPEN_FILE_LIST), 0, T_("Open file list..."), false,
 		IDH_TOOLBAR_FILE_LIST, [this] { handleOpenFileList(); });
 	toolbar->addButton("OpenOwnFL", WinUtil::toolbarIcon(IDI_OPEN_OWN_FILE_LIST), 0, T_("Open own list"), false,
@@ -487,6 +489,7 @@ void MainWindow::initToolbar() {
 			comma +
 			StatsFrame::id + comma +
 			comma +
+			"OpenDlDir" + comma +
 			"OpenFL" + comma +
 			"OpenOwnFL" + comma +
 			"Refresh" + comma +
