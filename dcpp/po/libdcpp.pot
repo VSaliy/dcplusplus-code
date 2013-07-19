@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libdcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-06-03 14:15+0200\n"
+"POT-Creation-Date: 2013-07-19 18:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -268,11 +268,11 @@ msgstr ""
 msgid "Discard"
 msgstr ""
 
-#: dcpp\BufferedSocket.cpp:475 dcpp\HttpManager.cpp:66
+#: dcpp\BufferedSocket.cpp:476 dcpp\HttpManager.cpp:66
 msgid "Disconnected"
 msgstr ""
 
-#: dcpp\UploadManager.cpp:544
+#: dcpp\UploadManager.cpp:545
 #, boost-format
 msgid "Disconnected user leaving the hub: %1%"
 msgstr ""
@@ -363,7 +363,7 @@ msgstr ""
 
 #: dcpp\MappingManager.cpp:148
 #, boost-format
-msgid "Failed to initalize the %1% interface"
+msgid "Failed to initialize the %1% interface"
 msgstr ""
 
 #: dcpp\CryptoManager.cpp:225 dcpp\CryptoManager.cpp:229
@@ -562,7 +562,7 @@ msgstr ""
 msgid "Non-UTF-8 data in an ADC connection"
 msgstr ""
 
-#: dcpp\AdcHub.cpp:678
+#: dcpp\AdcHub.cpp:686
 #, boost-format
 msgid "Not listening for connections - please restart %1%"
 msgstr ""
@@ -574,7 +574,7 @@ msgstr ""
 msgid "Offline"
 msgstr ""
 
-#: dcpp\Upload.cpp:38
+#: dcpp\UploadManager.cpp:88
 msgid "Partial file list"
 msgstr ""
 
@@ -769,7 +769,7 @@ msgstr ""
 msgid "Unable to read hash data file"
 msgstr ""
 
-#: dcpp\UploadManager.cpp:209
+#: dcpp\UploadManager.cpp:210
 #, boost-format
 msgid "Unable to send file %1%: %2%"
 msgstr ""
