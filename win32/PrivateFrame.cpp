@@ -142,7 +142,6 @@ BaseType(parent, _T(""), IDH_PM, IDI_PRIVATE, false),
 grid(0),
 hubGrid(0),
 hubBox(0),
-initialHub(replyTo_.hint),
 replyTo(replyTo_),
 online(replyTo.getUser().user->isOnline())
 {
@@ -160,7 +159,8 @@ online(replyTo.getUser().user->isOnline())
 	}
 	hubBox = hubGrid->addChild(WinUtil::Seeds::comboBox);
 	addWidget(hubBox);
-	hubBox->onSelectionChanged([this] {
+	auto initialHub = replyTo.getUser().hint;
+	hubBox->onSelectionChanged([this, initialHub] {
 		replyTo.getUser().hint = hubs[hubBox->getSelected()].first;
 		if(replyTo.getUser().hint.empty())
 			replyTo.getUser().hint = initialHub;
