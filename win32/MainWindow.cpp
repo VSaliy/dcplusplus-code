@@ -708,11 +708,13 @@ void MainWindow::addPluginCommands(Menu* menu) {
 	}
 
 	for(auto& guid: plugins) {
-		auto sub = menu->appendPopup(Text::toT(PluginManager::getInstance()->getPlugin(guid).name));
-
 		const auto enabled = PluginManager::getInstance()->isLoaded(guid);
-		sub->appendItem(T_("Enable"), [this, guid] { PluginUtils::enablePlugin(guid, this); }, nullptr, !enabled);
-		sub->appendItem(T_("Disable"), [this, guid] { PluginUtils::disablePlugin(guid, this); }, nullptr, enabled);
+
+		auto sub = menu->appendPopup(Text::toT(PluginManager::getInstance()->getPlugin(guid).name),
+			WinUtil::menuIcon(enabled ? IDI_GREEN_BALL : IDI_RED_BALL));
+
+		sub->appendItem(T_("Enable"), [this, guid] { PluginUtils::enablePlugin(guid, this); }, WinUtil::menuIcon(IDI_GREEN_BALL), !enabled);
+		sub->appendItem(T_("Disable"), [this, guid] { PluginUtils::disablePlugin(guid, this); }, WinUtil::menuIcon(IDI_RED_BALL), enabled);
 
 		sub->appendSeparator();
 		sub->appendItem(T_("Configure"), [this, guid] { PluginUtils::configPlugin(guid, this); }, nullptr, enabled);

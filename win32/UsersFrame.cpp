@@ -127,8 +127,8 @@ selected(-1)
 			userIcons = dwt::ImageListPtr(new dwt::ImageList(size));
 			userIcons->add(dwt::Icon(IDI_FAVORITE_USER_OFF, size));
 			userIcons->add(dwt::Icon(IDI_FAVORITE_USER_ON, size));
-			userIcons->add(dwt::Icon(IDI_GRANT_SLOT_OFF, size));
-			userIcons->add(dwt::Icon(IDI_GRANT_SLOT_ON, size));
+			userIcons->add(dwt::Icon(IDI_RED_BALL, size));
+			userIcons->add(dwt::Icon(IDI_GREEN_BALL, size));
 		}
 
 		WidgetUsers::Seed cs(WinUtil::Seeds::table);
