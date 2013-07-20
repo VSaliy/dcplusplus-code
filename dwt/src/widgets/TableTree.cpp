@@ -129,7 +129,8 @@ void TableTree::collapse(LPARAM parent) {
 		sendMsg(LVM_DELETEITEM, pos + 1, 0);
 	}
 
-	items[parent].switchExp(*this);
+	items[parent].expanded = false;
+	items[parent].redrawGlyph(*this);
 
 	// special case, see TableTreeTest
 	if(n == 1 && pos == static_cast<int>(size()) - 1) {
@@ -152,16 +153,15 @@ void TableTree::expand(LPARAM parent) {
 
 	resort();
 
-	items[parent].switchExp(*this);
+	items[parent].expanded = true;
+	items[parent].redrawGlyph(*this);
 }
 
 TableTree::Item::Item() : expanded(false)
 {
 }
 
-void TableTree::Item::switchExp(TableTree& w) {
-	expanded = !expanded;
-
+void TableTree::Item::redrawGlyph(TableTree& w) {
 	::RECT rect = glyphRect;
 	::InvalidateRect(w.handle(), &rect, FALSE);
 }
@@ -373,8 +373,9 @@ void TableTree::eraseChild(std::unordered_map<LPARAM, LPARAM>::iterator& child, 
 	}
 	cont.erase(std::remove(cont.begin(), cont.end(), child->first), cont.end());
 	if(cont.empty()) {
+		item.expanded = false;
 		item.glyphRect = Rectangle();
-		item.switchExp(*this);
+		item.redrawGlyph(*this);
 	}
 	children.erase(child);
 }

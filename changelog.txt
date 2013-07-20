@@ -3,6 +3,7 @@
 * [L#1194299] Prevent races when closing a connection (maksis, poy)
 * [ADC] Send the LC (locale) parameter in INF
 * [L#1197557] Fix collateral row deletions in transfers & searches (poy)
+* Fix duplicate user rows in transfers (poy)
 * Icons in the plugin menu to show whether they are enabled (poy)
 
 -- 0.825 2013-06-18 --

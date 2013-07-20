@@ -86,7 +86,7 @@ private:
 		bool expanded;
 		Rectangle glyphRect;
 		Item();
-		void switchExp(TableTree& w);
+		void redrawGlyph(TableTree& w);
 	};
 	std::unordered_map<LPARAM, Item> items;
 	std::unordered_map<LPARAM, LPARAM> children; // child -> parent cache

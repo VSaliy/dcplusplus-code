@@ -801,7 +801,7 @@ void TransferView::removeConn(const UpdateInfo& ui) {
 		removeConn(*conn);
 
 		if(ungroup) {
-			transfers->erase(&parent.conns.front());
+			transfers->eraseChild(reinterpret_cast<LPARAM>(&parent.conns.front()));
 		}
 	}
 }
