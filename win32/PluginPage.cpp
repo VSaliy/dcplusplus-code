@@ -327,9 +327,13 @@ void PluginPage::handleRemovePlugin() {
 	if(!plugins->hasSelected())
 		return;
 
-	auto guid = sel();
-	plugins->erase(plugins->getSelected());
-	PluginManager::getInstance()->removePlugin(guid);
+	if(dwt::MessageBox(this).show(T_("Really remove?"), T_("Plugins"), dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION) == IDYES) {
+		int i;
+		while((i = plugins->getNext(-1, LVNI_SELECTED)) != -1) {
+			PluginManager::getInstance()->removePlugin(Text::fromT(plugins->getText(i, COLUMN_GUID)));
+			plugins->erase(i);
+		}
+	}
 }
 
 void PluginPage::refreshList() {
