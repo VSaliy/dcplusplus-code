@@ -709,9 +709,10 @@ void MainWindow::addPluginCommands(Menu* menu) {
 
 	for(auto& guid: plugins) {
 		const auto enabled = PluginManager::getInstance()->isLoaded(guid);
+		const auto name = Text::toT(PluginManager::getInstance()->getPlugin(guid).name);
 
-		auto sub = menu->appendPopup(Text::toT(PluginManager::getInstance()->getPlugin(guid).name),
-			WinUtil::menuIcon(enabled ? IDI_GREEN_BALL : IDI_RED_BALL));
+		auto sub = menu->appendPopup(name, WinUtil::menuIcon(enabled ? IDI_GREEN_BALL : IDI_RED_BALL), false);
+		sub->setTitle(name); // don't want the enabled/disabled icon repeated there
 
 		sub->appendItem(T_("Enable"), [this, guid] { PluginUtils::enablePlugin(guid, this); }, WinUtil::menuIcon(IDI_GREEN_BALL), !enabled);
 		sub->appendItem(T_("Disable"), [this, guid] { PluginUtils::disablePlugin(guid, this); }, WinUtil::menuIcon(IDI_RED_BALL), enabled);
