@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-06-03 14:15+0200\n"
+"POT-Creation-Date: 2013-07-19 18:26+0200\n"
 "PO-Revision-Date: 2011-03-06 17:12+0000\n"
 "Last-Translator: Sergey Basalaev <SBasalaev@gmail.com>\n"
 "Language-Team: Russian <ru_GB@li.org>\n"
@@ -10,8 +10,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-06-03 11:41+0000\n"
-"X-Generator: Launchpad (build 16660)\n"
+"X-Launchpad-Export-Date: 2013-07-23 12:37+0000\n"
+"X-Generator: Launchpad (build 16700)\n"
 
 #: dcpp\DownloadManager.cpp:360
 #, boost-format
@@ -273,11 +273,11 @@ msgstr "Отсутствует имя каталога"
 msgid "Discard"
 msgstr "Отклонить"
 
-#: dcpp\BufferedSocket.cpp:475 dcpp\HttpManager.cpp:66
+#: dcpp\BufferedSocket.cpp:476 dcpp\HttpManager.cpp:66
 msgid "Disconnected"
 msgstr "Отключён"
 
-#: dcpp\UploadManager.cpp:544
+#: dcpp\UploadManager.cpp:545
 #, boost-format
 msgid "Disconnected user leaving the hub: %1%"
 msgstr "Отключённый пользователь покинул хаб: %1%"
@@ -371,8 +371,8 @@ msgid "Failed to get external IP"
 msgstr "Не удалось получить внешний IP-адрес"
 
 #: dcpp\MappingManager.cpp:148
-#, boost-format
-msgid "Failed to initalize the %1% interface"
+#, fuzzy, boost-format
+msgid "Failed to initialize the %1% interface"
 msgstr "Не удалось инициализировать интерфейс %1%"
 
 #: dcpp\CryptoManager.cpp:225 dcpp\CryptoManager.cpp:229
@@ -588,7 +588,7 @@ msgstr "Нет такого вида поиска"
 msgid "Non-UTF-8 data in an ADC connection"
 msgstr "Не UTF-8 данные в ADC соединении"
 
-#: dcpp\AdcHub.cpp:678
+#: dcpp\AdcHub.cpp:686
 #, boost-format
 msgid "Not listening for connections - please restart %1%"
 msgstr "Соединения не обрабатываются — пожалуйста перезапустите %1%"
@@ -600,7 +600,7 @@ msgstr "Соединения не обрабатываются — пожалу�
 msgid "Offline"
 msgstr "Отключён"
 
-#: dcpp\Upload.cpp:38
+#: dcpp\UploadManager.cpp:88
 msgid "Partial file list"
 msgstr ""
 
@@ -812,7 +812,7 @@ msgstr "Не удалось открыть список файлов: %1%"
 msgid "Unable to read hash data file"
 msgstr "Не удалось прочитать файл данных хеша"
 
-#: dcpp\UploadManager.cpp:209
+#: dcpp\UploadManager.cpp:210
 #, boost-format
 msgid "Unable to send file %1%: %2%"
 msgstr "Не удалось передать файл %1%: %2%"
