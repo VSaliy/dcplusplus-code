@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-06-03 14:15+0200\n"
+"POT-Creation-Date: 2013-07-19 18:26+0200\n"
 "PO-Revision-Date: 2011-02-08 09:31+0000\n"
 "Last-Translator: sujay <Unknown>\n"
 "Language-Team: Hindi <hi@li.org>\n"
@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-06-03 11:41+0000\n"
-"X-Generator: Launchpad (build 16660)\n"
+"X-Launchpad-Export-Date: 2013-07-23 12:37+0000\n"
+"X-Generator: Launchpad (build 16700)\n"
 
 #: dcpp\DownloadManager.cpp:360
 #, boost-format
@@ -273,11 +273,11 @@ msgstr ""
 msgid "Discard"
 msgstr ""
 
-#: dcpp\BufferedSocket.cpp:475 dcpp\HttpManager.cpp:66
+#: dcpp\BufferedSocket.cpp:476 dcpp\HttpManager.cpp:66
 msgid "Disconnected"
 msgstr ""
 
-#: dcpp\UploadManager.cpp:544
+#: dcpp\UploadManager.cpp:545
 #, boost-format
 msgid "Disconnected user leaving the hub: %1%"
 msgstr ""
@@ -370,7 +370,7 @@ msgstr ""
 
 #: dcpp\MappingManager.cpp:148
 #, boost-format
-msgid "Failed to initalize the %1% interface"
+msgid "Failed to initialize the %1% interface"
 msgstr ""
 
 #: dcpp\CryptoManager.cpp:225 dcpp\CryptoManager.cpp:229
@@ -579,7 +579,7 @@ msgstr ""
 msgid "Non-UTF-8 data in an ADC connection"
 msgstr ""
 
-#: dcpp\AdcHub.cpp:678
+#: dcpp\AdcHub.cpp:686
 #, boost-format
 msgid "Not listening for connections - please restart %1%"
 msgstr ""
@@ -591,7 +591,7 @@ msgstr ""
 msgid "Offline"
 msgstr "ऑफ़लाइन"
 
-#: dcpp\Upload.cpp:38
+#: dcpp\UploadManager.cpp:88
 msgid "Partial file list"
 msgstr ""
 
@@ -796,7 +796,7 @@ msgstr "फ़ाइल सूची खोलने में असमर्�
 msgid "Unable to read hash data file"
 msgstr "हैश डेटा फ़ाइल पढ़ने में असमर्थ"
 
-#: dcpp\UploadManager.cpp:209
+#: dcpp\UploadManager.cpp:210
 #, boost-format
 msgid "Unable to send file %1%: %2%"
 msgstr "फ़ाइल %1%: %2% को भेजने में असमर्थ"

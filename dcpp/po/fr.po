@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-06-03 14:15+0200\n"
-"PO-Revision-Date: 2013-05-18 13:44+0000\n"
+"POT-Creation-Date: 2013-07-19 18:26+0200\n"
+"PO-Revision-Date: 2013-07-19 16:36+0000\n"
 "Last-Translator: poy <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-06-03 11:41+0000\n"
-"X-Generator: Launchpad (build 16660)\n"
+"X-Launchpad-Export-Date: 2013-07-23 12:37+0000\n"
+"X-Generator: Launchpad (build 16700)\n"
 
 #: dcpp\DownloadManager.cpp:360
 #, boost-format
@@ -297,11 +297,11 @@ msgstr "Dossier sans nom"
 msgid "Discard"
 msgstr "Abandonner"
 
-#: dcpp\BufferedSocket.cpp:475 dcpp\HttpManager.cpp:66
+#: dcpp\BufferedSocket.cpp:476 dcpp\HttpManager.cpp:66
 msgid "Disconnected"
 msgstr "Déconnecté"
 
-#: dcpp\UploadManager.cpp:544
+#: dcpp\UploadManager.cpp:545
 #, boost-format
 msgid "Disconnected user leaving the hub: %1%"
 msgstr "Déconnexion de l'utilisateur : %1% (sorti du hub)"
@@ -395,7 +395,7 @@ msgstr "Impossible d'obtenir l'IP externe"
 
 #: dcpp\MappingManager.cpp:148
 #, boost-format
-msgid "Failed to initalize the %1% interface"
+msgid "Failed to initialize the %1% interface"
 msgstr "Impossible d'initialiser l'interface %1%"
 
 #: dcpp\CryptoManager.cpp:225 dcpp\CryptoManager.cpp:229
@@ -613,7 +613,7 @@ msgstr "Aucune catégorie de recherche trouvée"
 msgid "Non-UTF-8 data in an ADC connection"
 msgstr "Données non-UTF-8 dans une connexion ADC"
 
-#: dcpp\AdcHub.cpp:678
+#: dcpp\AdcHub.cpp:686
 #, boost-format
 msgid "Not listening for connections - please restart %1%"
 msgstr "Échec dans l'écoute des connexions - veuillez relancer %1%"
@@ -625,7 +625,7 @@ msgstr "Échec dans l'écoute des connexions - veuillez relancer %1%"
 msgid "Offline"
 msgstr "Déconnecté"
 
-#: dcpp\Upload.cpp:38
+#: dcpp\UploadManager.cpp:88
 msgid "Partial file list"
 msgstr "Liste de fichiers partielle"
 
@@ -840,7 +840,7 @@ msgstr "Impossible d'ouvrir la liste de fichiers : %1%"
 msgid "Unable to read hash data file"
 msgstr "Impossible de lire la base de données des clés"
 
-#: dcpp\UploadManager.cpp:209
+#: dcpp\UploadManager.cpp:210
 #, boost-format
 msgid "Unable to send file %1%: %2%"
 msgstr "Impossible d'envoyer le fichier %1% : %2%"
@@ -892,7 +892,3 @@ msgstr "non défini"
 #: dcpp\SettingsManager.cpp:201
 msgid "uploaded to"
 msgstr "envoyé à"
-
-#~ msgid "%1% is too old, contact the plugin author for an update"
-#~ msgstr ""
-#~ "%1% est trop vieux, contactez l'auteur du plugin pour une mise à jour"

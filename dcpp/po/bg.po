@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-06-03 14:15+0200\n"
+"POT-Creation-Date: 2013-07-19 18:26+0200\n"
 "PO-Revision-Date: 2013-05-26 11:32+0000\n"
 "Last-Translator: Hafo <hafo@abv.bg>\n"
 "Language-Team: Bulgarian <bg@li.org>\n"
@@ -16,8 +16,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-06-03 11:41+0000\n"
-"X-Generator: Launchpad (build 16660)\n"
+"X-Launchpad-Export-Date: 2013-07-23 12:37+0000\n"
+"X-Generator: Launchpad (build 16700)\n"
 "X-Poedit-Country: BULGARIA\n"
 "X-Poedit-Language: Bulgarian\n"
 
@@ -294,11 +294,11 @@ msgstr "Липсва атрибут за име на директорията"
 msgid "Discard"
 msgstr "Отхвърляне"
 
-#: dcpp\BufferedSocket.cpp:475 dcpp\HttpManager.cpp:66
+#: dcpp\BufferedSocket.cpp:476 dcpp\HttpManager.cpp:66
 msgid "Disconnected"
 msgstr "Връзката е прекъсната"
 
-#: dcpp\UploadManager.cpp:544
+#: dcpp\UploadManager.cpp:545
 #, boost-format
 msgid "Disconnected user leaving the hub: %1%"
 msgstr "Изключен потребител при напускане на хъба: %1%"
@@ -392,8 +392,8 @@ msgid "Failed to get external IP"
 msgstr "Грешка при взимане на външен IP адрес"
 
 #: dcpp\MappingManager.cpp:148
-#, boost-format
-msgid "Failed to initalize the %1% interface"
+#, fuzzy, boost-format
+msgid "Failed to initialize the %1% interface"
 msgstr "Неуспешно инициализиране на %1% интерфейса"
 
 #: dcpp\CryptoManager.cpp:225 dcpp\CryptoManager.cpp:229
@@ -615,7 +615,7 @@ msgstr "Няма такъв тип търсене"
 msgid "Non-UTF-8 data in an ADC connection"
 msgstr "Не-UTF-8 данни в ADC връзка"
 
-#: dcpp\AdcHub.cpp:678
+#: dcpp\AdcHub.cpp:686
 #, boost-format
 msgid "Not listening for connections - please restart %1%"
 msgstr "Не се следи за връзки - моля, рестартирайте %1%"
@@ -627,7 +627,7 @@ msgstr "Не се следи за връзки - моля, рестартира�
 msgid "Offline"
 msgstr "Извън линия"
 
-#: dcpp\Upload.cpp:38
+#: dcpp\UploadManager.cpp:88
 msgid "Partial file list"
 msgstr "Непълен файлов списък"
 
@@ -839,7 +839,7 @@ msgstr "Грешка при отваряне на списъка с файлов
 msgid "Unable to read hash data file"
 msgstr "Грешка при четене на хеш файла"
 
-#: dcpp\UploadManager.cpp:209
+#: dcpp\UploadManager.cpp:210
 #, boost-format
 msgid "Unable to send file %1%: %2%"
 msgstr "Не може да се изпрати файлът %1%: %2%"
@@ -891,8 +891,3 @@ msgstr "неопределен"
 #: dcpp\SettingsManager.cpp:201
 msgid "uploaded to"
 msgstr "качен на"
-
-#~ msgid "%1% is too old, contact the plugin author for an update"
-#~ msgstr ""
-#~ "%1% е твърде стара, свържете се с автора на приставката за нейното "
-#~ "обновяване"

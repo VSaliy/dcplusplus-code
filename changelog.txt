@@ -1,3 +1,4 @@
+-- 0.828 2013-07-23 --
 * Translation fixes
 * [L#1194299] Prevent races when sending INF/MyINFO (maksis, poy)
 * [L#1194299] Prevent races when closing a connection (maksis, poy)
@@ -5,6 +6,7 @@
 * [L#1197557] Fix collateral row deletions in transfers & searches (poy)
 * Fix duplicate user rows in transfers (poy)
 * Icons in the plugin menu to show whether they are enabled (poy)
+* Toolbar button to open the download directory (emtee)
 
 -- 0.825 2013-06-18 --
 * [L#1191099] Group partial file list uploads to avoid a crash (poy)

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-06-03 14:15+0200\n"
+"POT-Creation-Date: 2013-07-19 18:26+0200\n"
 "PO-Revision-Date: 2008-11-09 08:26+0000\n"
 "Last-Translator: Yaron <sh.yaron@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-06-03 11:41+0000\n"
-"X-Generator: Launchpad (build 16660)\n"
+"X-Launchpad-Export-Date: 2013-07-23 12:37+0000\n"
+"X-Generator: Launchpad (build 16700)\n"
 
 #: dcpp\DownloadManager.cpp:360
 #, boost-format
@@ -278,11 +278,11 @@ msgstr "לתיקייה חסר מאפיין השם"
 msgid "Discard"
 msgstr "השלך"
 
-#: dcpp\BufferedSocket.cpp:475 dcpp\HttpManager.cpp:66
+#: dcpp\BufferedSocket.cpp:476 dcpp\HttpManager.cpp:66
 msgid "Disconnected"
 msgstr "מנותק"
 
-#: dcpp\UploadManager.cpp:544
+#: dcpp\UploadManager.cpp:545
 #, boost-format
 msgid "Disconnected user leaving the hub: %1%"
 msgstr "משתמש מנותק עוזב את הרכזת: %1%"
@@ -377,7 +377,7 @@ msgstr ""
 
 #: dcpp\MappingManager.cpp:148
 #, fuzzy, boost-format
-msgid "Failed to initalize the %1% interface"
+msgid "Failed to initialize the %1% interface"
 msgstr "רענון רשימת הקבצים החל"
 
 #: dcpp\CryptoManager.cpp:225 dcpp\CryptoManager.cpp:229
@@ -591,7 +591,7 @@ msgstr ""
 msgid "Non-UTF-8 data in an ADC connection"
 msgstr ""
 
-#: dcpp\AdcHub.cpp:678
+#: dcpp\AdcHub.cpp:686
 #, boost-format
 msgid "Not listening for connections - please restart %1%"
 msgstr "לא מתבצעת האזנת חיבורים - אנא הפעל מחדש את %1%"
@@ -603,7 +603,7 @@ msgstr "לא מתבצעת האזנת חיבורים - אנא הפעל מחדש �
 msgid "Offline"
 msgstr "מנותק"
 
-#: dcpp\Upload.cpp:38
+#: dcpp\UploadManager.cpp:88
 msgid "Partial file list"
 msgstr ""
 
@@ -808,7 +808,7 @@ msgstr "לא ניתן לפתוח את רשימת הקבצים: %1%"
 msgid "Unable to read hash data file"
 msgstr "לא ניתן לקרוא את קובץ נתוני הגיבוב"
 
-#: dcpp\UploadManager.cpp:209
+#: dcpp\UploadManager.cpp:210
 #, boost-format
 msgid "Unable to send file %1%: %2%"
 msgstr "לא ניתן לשלוח את הקובץ %1%: %2%"
