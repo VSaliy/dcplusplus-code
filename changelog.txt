@@ -1,3 +1,5 @@
+* [L#1010996] Correct search responses (maksis, poy)
+
 -- 0.828 2013-07-23 --
 * Translation fixes
 * [L#1194299] Prevent races when sending INF/MyINFO (maksis, poy)

@@ -85,8 +85,8 @@ public:
 	void refresh(bool dirs = false, bool aUpdate = true, bool block = false, function<void (float)> progressF = nullptr) noexcept;
 	void setDirty() { xmlDirty = true; }
 
-	void search(SearchResultList& l, const string& aString, int aSearchType, int64_t aSize, int aFileType, Client* aClient, StringList::size_type maxResults) noexcept;
-	void search(SearchResultList& l, const StringList& params, StringList::size_type maxResults) noexcept;
+	SearchResultList search(const StringList& adcParams, size_t maxResults) noexcept;
+	SearchResultList search(const string& nmdcString, int searchType, int64_t size, int fileType, size_t maxResults) noexcept;
 
 	StringPairList getDirectories() const noexcept;
 
@@ -126,8 +126,10 @@ public:
 
 	GETSET(uint32_t, hits, Hits);
 	GETSET(string, bzXmlFile, BZXmlFile);
+
 private:
-	struct AdcSearch;
+	struct SearchQuery;
+
 	class Directory : public FastAlloc<Directory>, public intrusive_ptr_base<Directory>, boost::noncopyable {
 	public:
 		typedef boost::intrusive_ptr<Directory> Ptr;
@@ -173,11 +175,6 @@ private:
 
 		static Ptr create(const string& aName, const Ptr& aParent = Ptr()) { return Ptr(new Directory(aName, aParent)); }
 
-		bool hasType(uint32_t type) const noexcept {
-			return ( (type == SearchManager::TYPE_ANY) || (fileTypes & (1 << type)) );
-		}
-		void addType(uint32_t type) noexcept;
-
 		const string& getRealName() const noexcept;
 		template<typename SetT> void setRealName(SetT&& realName) noexcept { this->realName = std::forward<SetT>(realName); }
 
@@ -191,8 +188,7 @@ private:
 
 		int64_t getSize() const noexcept;
 
-		void search(SearchResultList& aResults, StringSearch::List& aStrings, int aSearchType, int64_t aSize, int aFileType, Client* aClient, StringList::size_type maxResults) const noexcept;
-		void search(SearchResultList& aResults, AdcSearch& aStrings, StringList::size_type maxResults) const noexcept;
+		void search(SearchResultList& results, SearchQuery& query, size_t maxResults) const noexcept;
 
 		/// @param level -1 to include all levels, or the current level.
 		void toXml(OutputStream& xmlFile, string& indent, string& tmp2, int8_t level) const;
@@ -212,9 +208,6 @@ private:
 		~Directory() { }
 
 		optional<string> realName; // only defined if this directory had to be renamed to avoid duplication.
-
-		/** Set of flags that say which SearchManager::TYPE_* a directory contains */
-		uint32_t fileTypes;
 	};
 
 	friend class Directory;
@@ -225,14 +218,16 @@ private:
 
 	virtual ~ShareManager();
 
-	struct AdcSearch {
-		AdcSearch(const StringList& params);
+	struct SearchQuery {
+		SearchQuery();
+		SearchQuery(const StringList& adcParams);
+		SearchQuery(const string& nmdcString, int searchType, int64_t size, int fileType);
 
 		bool isExcluded(const string& str);
 		bool hasExt(const string& name);
 
 		StringSearch::List* include;
-		StringSearch::List includeX;
+		StringSearch::List includeInit;
 		StringSearch::List exclude;
 		StringList ext;
 		StringList noExt;
@@ -291,6 +286,8 @@ private:
 	void generateXmlList();
 	pair<Directory::Ptr, string> splitVirtual(const string& virtualPath) const;
 	string findRealRoot(const string& virtualRoot, const string& virtualLeaf) const;
+
+	SearchResultList search(SearchQuery&& query, size_t maxResults) noexcept;
 
 	/** Get the directory pointer corresponding to a given real path (on disk). Note that only
 	directories are considered here but not the file's base name. */
