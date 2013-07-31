@@ -57,8 +57,6 @@ public:
 	}
 
 	vector<T>& getTokens() { return tokens; }
-
-	~StringTokenizer() { }
 };
 
 } // namespace dcpp
