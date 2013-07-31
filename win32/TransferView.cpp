@@ -732,17 +732,17 @@ void TransferView::layout() {
 }
 
 void TransferView::addConn(const UpdateInfo& ui) {
-	TransferInfo* transfer = nullptr;
 	auto conn = findConn(ui.user, ui.download);
+	if(conn) {
+		removeConn(*conn);
+	}
+
+	TransferInfo* transfer = nullptr;
 
 	if(ui.updateMask & UpdateInfo::MASK_PATH) {
 		// adding a connection we know the transfer of.
 		dcassert(!ui.path.empty()); // transfers are indexed by path; it can't be empty.
 		transfer = findTransfer(ui.path, ui.download);
-		if(conn && &conn->parent != transfer) {
-			removeConn(*conn);
-			conn = nullptr;
-		}
 		if(!transfer) {
 			transferItems.emplace_back(ui.tth, ui.download, ui.path, ui.tempPath);
 			transfer = &transferItems.back();
@@ -756,28 +756,22 @@ void TransferView::addConn(const UpdateInfo& ui) {
 
 	} else {
 		// this connection has just been created; we don't know what file it is for yet.
-		if(conn) {
-			removeConn(*conn);
-			conn = nullptr;
-		}
 		transferItems.emplace_back(TTHValue(), ui.download, ui.user.user->getCID().toBase32(), Util::emptyString);
 		transfer = &transferItems.back();
 		transfers->insert(transfer);
 	}
 
-	if(!conn) {
-		transfer->conns.emplace_back(ui.user, *transfer);
-		conn = &transfer->conns.back();
+	transfer->conns.emplace_back(ui.user, *transfer);
+	conn = &transfer->conns.back();
 
-		// only show the child connection item when there are multiple children.
-		auto connCount = transfer->conns.size();
-		if(connCount > 1) {
-			if(connCount == 2) {
-				// add the previous child.
-				transfers->insertChild(reinterpret_cast<LPARAM>(transfer), reinterpret_cast<LPARAM>(&transfer->conns.front()));
-			}
-			transfers->insertChild(reinterpret_cast<LPARAM>(transfer), reinterpret_cast<LPARAM>(conn));
+	// only show the child connection item when there are multiple children.
+	auto connCount = transfer->conns.size();
+	if(connCount > 1) {
+		if(connCount == 2) {
+			// add the previous child.
+			transfers->insertChild(reinterpret_cast<LPARAM>(transfer), reinterpret_cast<LPARAM>(&transfer->conns.front()));
 		}
+		transfers->insertChild(reinterpret_cast<LPARAM>(transfer), reinterpret_cast<LPARAM>(conn));
 	}
 
 	conn->update(ui);

@@ -1,4 +1,5 @@
 * [L#1010996] Correct search responses (maksis, poy)
+* [L#1206658] Fix transfer painting issues (poy)
 
 -- 0.828 2013-07-23 --
 * Translation fixes
