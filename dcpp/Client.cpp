@@ -127,7 +127,9 @@ void Client::connect() {
 }
 
 void Client::info() {
-	sock->callAsync([this] { infoImpl(); });
+	if(isConnected()) {
+		sock->callAsync([this] { infoImpl(); });
+	}
 }
 
 void Client::send(const char* aMessage, size_t aLen) {

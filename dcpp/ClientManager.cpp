@@ -458,10 +458,8 @@ void ClientManager::sendUDP(const string& ip, const string& port, const string& 
 
 void ClientManager::infoUpdated() {
 	Lock l(cs);
-	for(auto i: clients) {
-		if(i->isConnected()) {
-			i->info();
-		}
+	for(auto client: clients) {
+		client->info();
 	}
 }
 
@@ -475,8 +473,7 @@ void ClientManager::on(NmdcSearch, Client* aClient, const string& aSeeker, int a
 		return;
 	}
 
-	SearchResultList l;
-	ShareManager::getInstance()->search(l, aString, aSearchType, aSize, aFileType, aClient, isPassive ? 5 : 10);
+	auto l = ShareManager::getInstance()->search(aString, aSearchType, aSize, aFileType, isPassive ? 5 : 10);
 //		dcdebug("Found %d items (%s)\n", l.size(), aString.c_str());
 	if(!l.empty()) {
 		if(isPassive) {
@@ -550,10 +547,8 @@ void ClientManager::on(TimerManagerListener::Minute, uint64_t /* aTick */) noexc
 		}
 	}
 
-	for(auto j: clients) {
-		if(j->isConnected()) {
-			j->info();
-		}
+	for(auto client: clients) {
+		client->info();
 	}
 }
 
