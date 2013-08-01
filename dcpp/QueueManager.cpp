@@ -705,7 +705,7 @@ void QueueManager::addDirectory(const string& aDir, const HintedUser& aUser, con
 		auto dp = directories.equal_range(aUser);
 
 		for(auto i = dp.first; i != dp.second; ++i) {
-			if(Util::stricmp(aTarget.c_str(), i->second->getName().c_str()) == 0)
+			if(Util::stricmp(aDir.c_str(), i->second->getName().c_str()) == 0)
 				return;
 		}
 
