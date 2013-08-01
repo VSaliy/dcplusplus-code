@@ -1007,7 +1007,8 @@ ShareManager::SearchQuery::SearchQuery(const string& nmdcString, int searchType,
 		root = TTHValue(nmdcString.substr(4));
 
 	} else {
-		for(auto& term: StringTokenizer<string>(Text::toLower(nmdcString), '$').getTokens()) {
+		StringTokenizer<string> tok(Text::toLower(nmdcString), '$');
+		for(auto& term: tok.getTokens()) {
 			if(!term.empty()) {
 				includeInit.emplace_back(term);
 			}
@@ -1068,7 +1069,7 @@ void ShareManager::Directory::search(SearchResultList& results, SearchQuery& que
 	unique_ptr<StringSearch::List> newTerms;
 
 	for(auto& term: *query.include) {
-		if(term.match(name) && !query.isExcluded(name)) {
+		if(term.match(name)) {
 			if(!newTerms) {
 				newTerms.reset(new StringSearch::List(*query.include));
 			}
