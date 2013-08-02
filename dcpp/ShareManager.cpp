@@ -47,6 +47,11 @@
 
 #include <limits>
 
+// define this to 1 to measure the time taken by searches to complete.
+#ifndef DCPP_TIME_SEARCHES
+#define DCPP_TIME_SEARCHES 0
+#endif
+
 namespace dcpp {
 
 using std::numeric_limits;
@@ -982,12 +987,12 @@ ShareManager::SearchQuery::SearchQuery(const StringList& adcParams) :
 		} else if(toCode('N', 'O') == cmd) {
 			exclude.emplace_back(p.substr(2));
 		} else if(toCode('E', 'X') == cmd) {
-			ext.push_back(p.substr(2));
+			ext.push_back(Text::toLower(p.substr(2)));
 		} else if(toCode('G', 'R') == cmd) {
 			auto exts = AdcHub::parseSearchExts(Util::toInt(p.substr(2)));
 			ext.insert(ext.begin(), exts.begin(), exts.end());
 		} else if(toCode('R', 'X') == cmd) {
-			noExt.push_back(p.substr(2));
+			noExt.push_back(Text::toLower(p.substr(2)));
 		} else if(toCode('G', 'E') == cmd) {
 			gt = Util::toInt64(p.substr(2));
 		} else if(toCode('L', 'E') == cmd) {
@@ -1047,11 +1052,8 @@ bool ShareManager::SearchQuery::hasExt(const string& name) {
 		ext = StringList(ext.begin(), set_difference(ext.begin(), ext.end(), noExt.begin(), noExt.end(), ext.begin()));
 		noExt.clear();
 	}
-	for(auto& i: ext) {
-		if(name.size() >= i.size() && Util::stricmp(name.c_str() + name.size() - i.size(), i.c_str()) == 0)
-			return true;
-	}
-	return false;
+	auto fileExt = Util::getFileExt(name);
+	return !fileExt.empty() && std::find(ext.cbegin(), ext.cend(), Text::toLower(fileExt.substr(1))) != ext.cend();
 }
 
 /**
@@ -1160,10 +1162,24 @@ SearchResultList ShareManager::search(SearchQuery&& query, size_t maxResults) no
 }
 
 SearchResultList ShareManager::search(const StringList& adcParams, size_t maxResults) noexcept {
+#if DCPP_TIME_SEARCHES
+	auto start = GET_TICK();
+	ScopedFunctor(([start] {
+		LogManager::getInstance()->message("The ADC search took " + Util::toString(GET_TICK() - start) + " ms");
+	}));
+#endif
+
 	return search(SearchQuery(adcParams), maxResults);
 }
 
 SearchResultList ShareManager::search(const string& nmdcString, int searchType, int64_t size, int fileType, size_t maxResults) noexcept {
+#if DCPP_TIME_SEARCHES
+	auto start = GET_TICK();
+	ScopedFunctor(([start] {
+		LogManager::getInstance()->message("The NMDC search took " + Util::toString(GET_TICK() - start) + " ms");
+	}));
+#endif
+
 	return search(SearchQuery(nmdcString, searchType, size, fileType), maxResults);
 }
 
