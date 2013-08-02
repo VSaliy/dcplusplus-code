@@ -1,6 +1,7 @@
 * [L#1010996] Correct search responses (maksis, poy)
 * [L#1206658] Fix transfer painting issues (poy)
 * [L#1206855] Fix a bug with duplicate directory downloads (maksis)
+* Optimize searches with multiple extensions (emtee, poy)
 
 -- 0.828 2013-07-23 --
 * Translation fixes
