@@ -291,7 +291,7 @@ void PrivateFrame::updateOnlineStatus() {
 		}
 
 		for_each(hubs, [&](const StringPair &hub) {
-			auto idx = hubBox->addValue(Text::toT(hub.second));
+			auto idx = hubBox->addValue(Text::toT(hub.second) + _T(" - ") + Text::toT(hub.first));
 			if(hub.first == replyTo.getUser().hint) {
 				hubBox->setSelected(idx);
 			}
