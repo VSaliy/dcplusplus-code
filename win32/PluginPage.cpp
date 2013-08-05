@@ -132,7 +132,13 @@ pluginInfo(0)
 		pluginInfo->setSpacing(grid->getSpacing());
 	}
 
-	grid->addChild(Label::Seed(str(TF_("Some plugins may require you to restart %1%") % Text::toT(APPNAME))));
+	{
+		auto cur = grid->addChild(Grid::Seed(1, 2));
+		cur->column(0).mode = GridInfo::FILL;
+		cur->column(1).align = GridInfo::BOTTOM_RIGHT;
+		cur->addChild(Label::Seed(str(TF_("Some plugins may require you to restart %1%") % Text::toT(APPNAME))));
+		cur->addChild(Link::Seed(_T("<a href=\"http://dcplusplus.sourceforge.net/plugins/\">") + T_("Visit the DC plugin repository") + _T("</a>")));
+	}
 
 	WinUtil::makeColumns(plugins, columns, COLUMN_COUNT);
 
@@ -193,29 +199,29 @@ void PluginPage::handleSelectionChanged() {
 	auto children = pluginInfo->getChildren<Control>();
 	boost::for_each(std::vector<Control*>(children.first, children.second), [](Control* w) { w->close(); });
 
+	pluginInfo->addRow(GridInfo(0, GridInfo::FILL, GridInfo::STRETCH));
+
 	if(plugins->countSelected() != 1) {
-		pluginInfo->addRow(GridInfo(0, GridInfo::FILL, GridInfo::STRETCH));
 		pluginInfo->addChild(Label::Seed(T_("No plugin has been selected")));
 		return;
 	}
 
-	pluginInfo->addRow(GridInfo(0, GridInfo::FILL, GridInfo::STRETCH));
 	auto infoGrid = pluginInfo->addChild(Grid::Seed(0, 2));
 	infoGrid->column(1).mode = GridInfo::FILL;
 	infoGrid->setSpacing(pluginInfo->getSpacing());
 
 	// similar to PluginInfoDlg.cpp
 
-	enum Type { Name, Version, Description, Author, Website };
+	enum Type { Name, Version, Description, Author, Website, FileName, Path };
 
 	auto addInfo = [this, infoGrid](tstring name, const string& value, Type type) {
-		if(type == Description) {
+		if(type == Description || type == Path) {
 			infoGrid->addRow(GridInfo(0, GridInfo::FILL, GridInfo::STRETCH));
 		} else {
 			infoGrid->addRow();
 		}
 		infoGrid->addChild(Label::Seed(name));
-		if(type == Website && !value.empty()) {
+		if((type == Website || type == Path) && !value.empty()) {
 			infoGrid->addChild(Link::Seed(Text::toT(value), true));
 		} else {
 			infoGrid->addChild(Label::Seed(value.empty() ?
@@ -230,6 +236,8 @@ void PluginPage::handleSelectionChanged() {
 	addInfo(T_("Description: "), plugin.description, Description);
 	addInfo(T_("Author: "), plugin.author, Author);
 	addInfo(T_("Website: "), plugin.website, Website);
+	addInfo(T_("File name: "), Util::getFileName(plugin.path), FileName);
+	addInfo(T_("Installation path: "), Util::getFilePath(plugin.path), Path);
 }
 
 bool PluginPage::handleContextMenu(dwt::ScreenCoordinate pt) {
