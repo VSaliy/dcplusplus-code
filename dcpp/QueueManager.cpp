@@ -498,7 +498,15 @@ void QueueManager::on(TimerManagerListener::Minute, uint64_t aTick) noexcept {
 				searchString = qi->getTTH().toBase32();
 				online = qi->hasOnlineUsers();
 				recent.push_back(qi->getTarget());
-				nextSearch = aTick + (online ? 120000 : 300000);
+
+				// Previously, this code used a static difference between the online and offline interval.
+				// This difference was 180 seconds (online = 120, offline = 300).
+				uint64_t intervalDiff = 180;
+
+				uint64_t onlineInterval = (SETTING(AUTO_SEARCH_INTERVAL) * 1000);
+				uint64_t offlineInterval = ((SETTING(AUTO_SEARCH_INTERVAL) + intervalDiff)  * 1000);
+
+				nextSearch = aTick + (online ? onlineInterval : offlineInterval );
 			}
 		}
 	}
