@@ -267,7 +267,7 @@ pot_bld = Builder (action = Action([pot_args], 'Extracting messages to $TARGET f
 env.Append(BUILDERS = {'PotBuild' : pot_bld})
 
 def CheckFlag(context, flag):
-	context.Message('Checking support for the ' + flag + ' flag...')
+	context.Message('Checking support for the ' + flag + ' flag... ')
 	prevFlags = context.env['CCFLAGS']
 	context.env.Append(CCFLAGS = [flag])
 	ret = context.TryCompile('int main() {}', '.cpp')
@@ -307,15 +307,21 @@ dev.geoip = dev.build('geoip/')
 dev.intl = dev.build('intl/') if dev.is_win32() else []
 dev.miniupnpc = dev.build('miniupnpc/')
 dev.natpmp = dev.build('natpmp/')
+dev.client = dev.build('dcpp/')
+
 dev.dwt = dev.build('dwt/src/') if dev.is_win32() else []
 if dev.is_win32():
 	dev.build('dwt/test/')
-dev.client = dev.build('dcpp/')
+
 if dev.is_win32():
 	dev.build('help/')
+
 dev.build('test/')
 dev.build('utils/')
+
 if dev.is_win32():
 	dev.build('win32/')
+
 	dev.build('installer/')
+
 dev.finalize()

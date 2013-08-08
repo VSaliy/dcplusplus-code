@@ -6,6 +6,7 @@ env = dev.env.Clone()
 
 dev.add_boost(env)
 dev.add_dcpp(env)
+dev.add_intl(env)
 dev.add_openssl(env)
 
 dev.force_console(env)

@@ -15,6 +15,7 @@ env, target, sources = dev.prepare_build(source_path, 'gtest', source_glob="*.cp
 dev.add_boost(env)
 dev.add_crashlog(env)
 dev.add_dcpp(env)
+dev.add_intl(env)
 dev.add_openssl(env)
 
 dev.force_console(env)

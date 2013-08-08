@@ -7,15 +7,15 @@ env, target, sources = dev.prepare_build(source_path, 'DCPlusPlus', precompiled_
 dev.add_boost(env)
 dev.add_crashlog(env)
 dev.add_dcpp(env)
+dev.add_intl(env)
 dev.add_openssl(env)
 
 if dev.is_win32():
+	env.Append(CPPPATH = ['#/dwt/include'])
 	env.Append(LIBS = ['comctl32', 'comdlg32', 'oleaut32', 'shlwapi', 'uuid', 'uxtheme', 'winmm', 'wtsapi32'])
 
 if 'HAVE_HTMLHELP_H' in env['CPPDEFINES']:
 	env.Append(LIBS = ['htmlhelp'])
-
-env.Append(CPPPATH = ['#/bzip2', '#/dwt/include'])
 
 prog_sources = sources
 
