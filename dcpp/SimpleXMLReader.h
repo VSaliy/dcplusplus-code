@@ -133,6 +133,8 @@ private:
 
 		STATE_CONTENT,
 
+		STATE_CDATA,
+
 		STATE_END
 	};
 
@@ -177,6 +179,7 @@ private:
 	bool elementAttrValue();
 
 	bool comment();
+	bool cdata();
 
 	bool content();
 

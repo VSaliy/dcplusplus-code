@@ -92,6 +92,20 @@ TEST(testxml, test_comment)
     ASSERT_EQ(collector.endTags["root"], 1);
 }
 
+TEST(testxml, test_cdata)
+{
+	Collector collector;
+	SimpleXMLReader reader(&collector);
+
+    const char xml[] = "<root><![CDATA[Within this Character Data block I can use double dashes as much as I want (along with <, &, ', and \") ... however, I can't use the CEND sequence (if I need to use it I must escape one of the brackets or the greater-than sign).]]></root>";
+    for(size_t i = 0, iend = sizeof(xml); i < iend; ++i) {
+    	reader.parse(xml + i, 1);
+    }
+
+    ASSERT_EQ(collector.startTags["root"], 1);
+    ASSERT_EQ(collector.endTags["root"], 1);
+}
+
 #include <dcpp/File.h>
 
 TEST(testxml, test_file)
