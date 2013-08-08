@@ -43,6 +43,7 @@ PropPage(parent, 6, 2)
 	addItem(T_("Max hash speed"), SettingsManager::MAX_HASH_SPEED, true, IDH_SETTINGS_EXPERT_MAX_HASH_SPEED, T_("MiB/s"));
 	addItem(T_("Write buffer size"), SettingsManager::BUFFER_SIZE, true, IDH_SETTINGS_EXPERT_BUFFERSIZE, T_("KiB"));
 	addItem(T_("Auto-search limit"), SettingsManager::AUTO_SEARCH_LIMIT, true, IDH_SETTINGS_EXPERT_AUTO_SEARCH_LIMIT);
+	addItem(T_("Auto-search interval"), SettingsManager::AUTO_SEARCH_INTERVAL, true, IDH_SETTINGS_EXPERT_AUTO_SEARCH_INTERVAL, T_("seconds"));
 	addItem(T_("Mini slot size"), SettingsManager::SET_MINISLOT_SIZE, true, IDH_SETTINGS_EXPERT_MINISLOT_SIZE, T_("KiB"));
 	addItem(T_("Max filelist size"), SettingsManager::MAX_FILELIST_SIZE, true, IDH_SETTINGS_EXPERT_MAX_FILELIST_SIZE, T_("MiB"));
 	addItem(T_("PID"), SettingsManager::PRIVATE_ID, false, IDH_SETTINGS_EXPERT_PRIVATE_ID);
@@ -68,6 +69,9 @@ void ExpertsPage::write() {
 		settings->set(SettingsManager::AUTO_SEARCH_LIMIT, 5);
 	else if(SETTING(AUTO_SEARCH_LIMIT) < 1)
 		settings->set(SettingsManager::AUTO_SEARCH_LIMIT, 1);
+
+	if(SETTING(AUTO_SEARCH_INTERVAL) < 120)
+		settings->set(SettingsManager::AUTO_SEARCH_INTERVAL, 120);
 }
 
 void ExpertsPage::addItem(const tstring& text, int setting, bool isInt, unsigned helpId, const tstring& text2) {

@@ -82,7 +82,7 @@ const string SettingsManager::settingTags[] =
 	"HubLastLogLines", "MagnetAction", "MaxCommandLength", "MaxCompression", "MaxDownloadSpeed",
 	"MaxFilelistSize", "MaxHashSpeed", "MaxMessageLines", "MaxPMWindows", "MinMessageLines",
 	"MinUploadSpeed", "PMLastLogLines", "SearchHistory", "SetMinislotSize",
-	"SettingsSaveInterval", "Slots", "TabStyle", "TabWidth", "ToolbarSize",
+	"SettingsSaveInterval", "Slots", "TabStyle", "TabWidth", "ToolbarSize", "AutoSearchInterval",
 	"SENTRY",
 	// Bools
 	"AddFinishedInstantly", "AdlsBreakOnFirst",
@@ -174,6 +174,7 @@ SettingsManager::SettingsManager()
 	setDefault(MINIMIZE_TRAY, true);
 	setDefault(ALWAYS_TRAY, true);
 	setDefault(AUTO_SEARCH, false);
+	setDefault(AUTO_SEARCH_INTERVAL, 120);
 	setDefault(TIME_STAMPS, true);
 	setDefault(POPUP_HUB_PMS, true);
 	setDefault(POPUP_BOT_PMS, true);
@@ -521,6 +522,9 @@ void SettingsManager::load(string const& aFileName)
 			set(AUTO_SEARCH_LIMIT, 5);
 		else if(SETTING(AUTO_SEARCH_LIMIT) < 1)
 			set(AUTO_SEARCH_LIMIT, 1);
+
+		if(SETTING(AUTO_SEARCH_INTERVAL) < 120)
+			set(AUTO_SEARCH_INTERVAL, 120);
 
 #ifdef DCPP_REGEN_CID
 		set(PRIVATE_ID, CID::generate().toBase32());
