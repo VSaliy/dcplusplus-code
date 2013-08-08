@@ -19,6 +19,8 @@
 #include "stdinc.h"
 #include "File.h"
 
+#include <boost/scoped_array.hpp>
+
 namespace dcpp {
 
 #ifdef _WIN32

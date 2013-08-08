@@ -23,12 +23,15 @@
 
 #ifdef _WIN32
 #include "w.h"
+#define PATH_MAX MAX_PATH
+
 #else
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <errno.h>
 #include <dirent.h>
 #include <fnmatch.h>
+#include <climits> // PATH_MAX
 #endif
 
 namespace dcpp {

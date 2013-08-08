@@ -20,6 +20,9 @@
 #define DCPLUSPLUS_DCPP_COMPILER_H
 
 #if defined(__GNUC__)
+
+#ifdef _WIN32
+
 #if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 8)
 #error GCC 4.8 is required
 #endif
@@ -28,6 +31,14 @@
 #error Regular MinGW has stability problems; use a MinGW package from mingw-w64
 // see <https://bugs.launchpad.net/dcplusplus/+bug/1029629> for details
 #endif
+
+#else // _WIN32
+
+#if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 7)
+#error GCC 4.7 is required
+#endif
+
+#endif // _WIN32
 
 #elif defined(_MSC_VER)
 #if _MSC_VER < 1700 || _MSC_FULL_VER < 170051025

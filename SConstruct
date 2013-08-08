@@ -17,9 +17,9 @@ from build_util import Dev, gen_po_name
 # TODO add -fdebug-types-section when it doesn't ICE
 
 gcc_flags = {
-	'common': ['-g', '-Wall', '-Wextra', '-Wno-unused-local-typedefs', '-Wno-unused-parameter', '-Wno-unused-value', '-Wno-missing-field-initializers', '-Wno-address', '-Wno-unknown-pragmas', '-Wno-format', '-fexceptions', '-mthreads'],
-	'debug': ['-Og'], 
-	'release' : ['-O3', '-fno-ipa-cp-clone', '-mwindows']
+	'common': ['-g', '-Wall', '-Wextra', '-Wno-unused-local-typedefs', '-Wno-unused-parameter', '-Wno-unused-value', '-Wno-missing-field-initializers', '-Wno-address', '-Wno-unknown-pragmas', '-Wno-format', '-fexceptions'],
+	'debug': [], 
+	'release' : ['-O3', '-fno-ipa-cp-clone']
 }
 
 gcc_xxflags = {
@@ -56,9 +56,9 @@ msvc_xxflags = {
 }
 
 gcc_link_flags = {
-	'common' : ['-g', '-static-libgcc', '-static-libstdc++', '-Wl,--no-undefined,--nxcompat,--dynamicbase', '-time', '-mthreads'],
-	'debug' : ['-Og'],
-	'release' : ['-O3', '-mwindows']
+	'common' : ['-g', '-Wl,--no-undefined,--nxcompat,--dynamicbase', '-time'],
+	'debug' : [],
+	'release' : ['-O3']
 }
 
 msvc_link_flags = {
@@ -84,13 +84,19 @@ gcc_defs = {
 # Environment has been created
 defEnv = Environment(ENV = os.environ)
 opts = Variables('custom.py', ARGUMENTS)
+
+if sys.platform == 'win32':
+	tooldef = 'mingw'
+else:
+	tooldef = 'default'
+
 opts.AddVariables(
-	EnumVariable('tools', 'Toolset to compile with, default = platform default (msvc under windows)', 'mingw', ['mingw', 'default']),
+	EnumVariable('tools', 'Toolset to compile with, default = platform default (msvc under windows)', tooldef, ['mingw', 'default']),
 	EnumVariable('mode', 'Compile mode', 'debug', ['debug', 'release']),
-	BoolVariable('pch', 'Use precompiled headers', 'yes'),
+	BoolVariable('pch', 'Use precompiled headers', 'no'),
 	BoolVariable('verbose', 'Show verbose command lines', 'no'),
 	BoolVariable('savetemps', 'Save intermediate compilation files (assembly output)', 'no'),
-	BoolVariable('unicode', 'Build a Unicode version which fully supports international characters', 'yes'),
+	BoolVariable('unicode', 'Build a Unicode version on Windows', 'yes'),
 	BoolVariable('stdatomic', 'Use a standard implementation of <atomic> (turn off to switch to Boost.Atomic)', 'no'),
 	BoolVariable('i18n', 'Rebuild i18n files', 'no'),
 	BoolVariable('help', 'Build help files (requires i18n=1)', 'yes'),
@@ -122,9 +128,6 @@ if TARGET_ARCH == 'x64':
 env = Environment(ENV = os.environ, tools = [defEnv['tools']], options = opts,
 		TARGET_ARCH = TARGET_ARCH, MSVS_ARCH = TARGET_ARCH)
 
-if 'mingw' not in env['TOOLS'] and 'gcc' in env['TOOLS']:
-	raise Exception('Non-mingw gcc builds not supported')
-
 if env['distro']:
 	env['tools'] = 'mingw'
 	env['mode'] = 'release'
@@ -150,7 +153,7 @@ dev.prepare()
 
 env.SConsignFile()
 
-env.Append(CPPPATH = ['#/', '#/boost/', '#/intl/'])
+env.Append(CPPPATH = ['#/'])
 
 if dev.is_win32():
 	# Windows header defines <http://msdn.microsoft.com/en-us/library/aa383745(VS.85).aspx>
@@ -161,6 +164,9 @@ if dev.is_win32():
 
 		# other defs that influence Windows headers
 		'NOMINMAX', 'STRICT', 'WIN32_LEAN_AND_MEAN'])
+
+	if env['unicode']:
+		env.Append(CPPDEFINES = ['UNICODE', '_UNICODE'])
 
 	# boost defines
 	env.Append(CPPDEFINES = ['BOOST_ALL_NO_LIB', 'BOOST_USE_WINDOWS_H'])
@@ -182,8 +188,22 @@ if 'gcc' in env['TOOLS']:
 if env['pch']:
 	env.Append(CPPDEFINES = ['HAS_PCH'])
 
-if env['unicode']:
-	env.Append(CPPDEFINES = ['UNICODE', '_UNICODE'])
+if 'mingw' in env['TOOLS']:
+	env.Append(CCFLAGS = ['-mthreads'])
+	env.Append(LINKFLAGS = ['-static-libgcc', '-static-libstdc++', '-mthreads'])
+
+	import sys
+	if env['mode'] == 'release' or sys.platform == 'win32':
+		env.Append(CCFLAGS = ['-mwindows'])
+		env.Append(LINKFLAGS = ['-mwindows'])
+	else:
+		env.Append(CPPDEFINES = ['CONSOLE'])
+
+	env.Append(CPPPATH = ['#/mingw/preload/', '#/mingw/include/'])
+	mingw_lib = '#/mingw/lib/'
+	if env['arch'] != 'x86':
+		mingw_lib = mingw_lib + env['arch'] + '/'
+	env.Append(LIBPATH = [mingw_lib])
 
 if 'msvc' in env['TOOLS']:
 	flags = msvc_flags
@@ -199,21 +219,7 @@ else:
 	link_flags = gcc_link_flags
 	defs = gcc_defs
 
-	if env['mode'] == 'debug':
-		import sys
-		if sys.platform == 'win32':
-			env.Append(CCFLAGS = ['-mwindows'])
-			env.Append(LINKFLAGS = ['-mwindows'])
-		else:
-			env.Append(CPPDEFINES = ['CONSOLE'])
-
 	env.Tool("gch", toolpath=".")
-
-	env.Append(CPPPATH = ['#/mingw/preload/', '#/mingw/include/'])
-	mingw_lib = '#/mingw/lib/'
-	if env['arch'] != 'x86':
-		mingw_lib = mingw_lib + env['arch'] + '/'
-	env.Append(LIBPATH = [mingw_lib])
 
 env.Append(CPPDEFINES = defs[env['mode']])
 env.Append(CPPDEFINES = defs['common'])
@@ -260,33 +266,56 @@ pot_args = ['xgettext', '--from-code=UTF-8', '--foreign-user', '--package-name=$
 pot_bld = Builder (action = Action([pot_args], 'Extracting messages to $TARGET from $SOURCES'))
 env.Append(BUILDERS = {'PotBuild' : pot_bld})
 
-conf = Configure(env, conf_dir = dev.get_build_path('.sconf_temp'), log_file = dev.get_build_path('config.log'), clean = False, help = False)
-if conf.CheckCXXHeader(['windows.h', 'htmlhelp.h'], '<>'):
-	conf.env.Append(CPPDEFINES='HAVE_HTMLHELP_H')
-# see whether we're compiling with MinGW or MinGW-w64 (2 different projects that can both build
-# a 32-bit program). the only differentiator is __MINGW64_VERSION_MAJOR.
-if conf.CheckDeclaration('__MINGW64_VERSION_MAJOR', '#include <windows.h>', 'C++'):
-	if conf.env['pch']:
-		conf.env['pch'] = 0 # precompiled headers crash mingw64's gcc...
-		conf.env['CPPDEFINES'].remove('HAS_PCH')
-else:
-	conf.env.Append(CPPDEFINES='HAVE_OLD_MINGW')
+def CheckFlag(context, flag):
+	context.Message('Checking support for the ' + flag + ' flag...')
+	prevFlags = context.env['CCFLAGS']
+	context.env.Append(CCFLAGS = [flag])
+	ret = context.TryCompile('int main() {}', '.cpp')
+	context.env.Replace(CCFLAGS = prevFlags)
+	context.Result(ret)
+	return ret
+
+conf = Configure(env, custom_tests = { 'CheckFlag': CheckFlag }, conf_dir = dev.get_build_path('.sconf_temp'), log_file = dev.get_build_path('config.log'), clean = False, help = False)
+
+if dev.is_win32():
+	if conf.CheckCXXHeader(['windows.h', 'htmlhelp.h'], '<>'):
+		conf.env.Append(CPPDEFINES='HAVE_HTMLHELP_H')
+
+	# see whether we're compiling with MinGW or MinGW-w64 (2 different projects that can both build
+	# a 32-bit program). the only differentiator is __MINGW64_VERSION_MAJOR.
+	if conf.CheckDeclaration('__MINGW64_VERSION_MAJOR', '#include <windows.h>', 'C++'):
+		if conf.env['pch']:
+			conf.env['pch'] = 0 # precompiled headers crash mingw64's gcc...
+			conf.env['CPPDEFINES'].remove('HAS_PCH')
+	else:
+		conf.env.Append(CPPDEFINES='HAVE_OLD_MINGW')
+
+if 'gcc' in conf.env['TOOLS'] and conf.env['mode'] == 'debug':
+	if conf.CheckFlag('-Og'):
+		conf.env.Append(CCFLAGS = ['-Og'])
+		conf.env.Append(LINKFLAGS = ['-Og'])
+
 env = conf.Finish()
 
-dev.boost = dev.build('boost/')
+# TODO run config tests to determine which libs to build
+
+dev.boost = dev.build('boost/') if dev.is_win32() else []
 dev.dwarf = dev.build('dwarf/')
 dev.zlib = dev.build('zlib/')
-dev.bzip2 = dev.build('bzip2/')
+dev.bzip2 = dev.build('bzip2/') if dev.is_win32() else []
 dev.geoip = dev.build('geoip/')
-dev.intl = dev.build('intl/')
+dev.intl = dev.build('intl/') if dev.is_win32() else []
 dev.miniupnpc = dev.build('miniupnpc/')
 dev.natpmp = dev.build('natpmp/')
-dev.dwt = dev.build('dwt/src/')
-dev.dwt_test = dev.build('dwt/test/')
+dev.dwt = dev.build('dwt/src/') if dev.is_win32() else []
+if dev.is_win32():
+	dev.build('dwt/test/')
 dev.client = dev.build('dcpp/')
-dev.help = dev.build('help/')
-dev.test = dev.build('test/')
-dev.utils = dev.build('utils/')
-dev.win32 = dev.build('win32/')
-dev.installer = dev.build('installer/')
+if dev.is_win32():
+	dev.build('help/')
+dev.build('test/')
+dev.build('utils/')
+if dev.is_win32():
+	dev.build('win32/')
+	dev.build('installer/')
 dev.finalize()

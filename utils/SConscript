@@ -4,36 +4,11 @@ Import('dev source_path')
 
 env = dev.env.Clone()
 
-if 'msvc' in env['TOOLS']:
-	if env['mode'] == 'debug':
-		env.Prepend(LIBS = ['ssleay32d', 'libeay32d'])
-	else:
-		env.Prepend(LIBS = ['ssleay32', 'libeay32'])
-else:
-	env.Prepend(LIBS = ['ssl', 'crypto'])
+dev.add_boost(env)
+dev.add_dcpp(env)
+dev.add_openssl(env)
 
-if 'HAVE_HTMLHELP_H' in env['CPPDEFINES']:
-	env.Append(LIBS='htmlhelp')
-
-env.Append(LIBS = ['comctl32', 'ws2_32', 'ole32', 'gdi32', 'comdlg32', 'iphlpapi', 'winmm', 'shlwapi', 'oleaut32', 'uuid'])
-
-env.Append(CPPPATH = ['#/openssl/include', '#/bzip2', '#/dwt/include'])
-
-if '-mwindows' in env['CCFLAGS']:
-	env['CCFLAGS'].remove('-mwindows')
-	env.Append(CCFLAGS = ['-mconsole'])
-
-if '-mwindows' in env['LINKFLAGS']:
-	env['LINKFLAGS'].remove('-mwindows')
-	env.Append(LINKFLAGS = ['-mconsole'])
-
-if '/SUBSYSTEM:WINDOWS' in env['LINKFLAGS']:
-	env['LINKFLAGS'].remove('/SUBSYSTEM:WINDOWS')
-
-openssl_lib = '#/openssl/lib/'
-if env['arch'] != 'x86':
-	openssl_lib += env['arch'] + '/'
-env.Append(LIBPATH = [openssl_lib])
+dev.force_console(env)
 
 # imitate build_util's prepare_build
 env.VariantDir(dev.get_build_path(source_path), '.', duplicate = 0)
@@ -44,7 +19,7 @@ else:
 	ret = []
 	for f in Glob('*.cpp'):
 		sources = dev.get_sources(source_path, str(f))
-		ret.append(env.Program(dev.get_target(source_path, os.path.basename(str(f)).replace('.cpp', ''), in_bin = False), [sources, dev.client, dev.dwarf, dev.zlib, dev.boost, dev.bzip2, dev.geoip, dev.miniupnpc, dev.natpmp, dev.intl]))
+		ret.append(dev.build_program(env, dev.get_target(source_path, os.path.basename(str(f)).replace('.cpp', ''), in_bin = False), sources))
 
 env.Help("\nYou can build additional utilities by running 'scons utils'\n")
 
