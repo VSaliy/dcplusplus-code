@@ -23,7 +23,10 @@
 
 #ifdef _WIN32
 #include "w.h"
+
+#ifndef PATH_MAX
 #define PATH_MAX MAX_PATH
+#endif
 
 #else
 #include <sys/stat.h>

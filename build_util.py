@@ -251,9 +251,19 @@ class Dev:
 
 	def add_dcpp(self, env):
 		if self.is_win32():
+			env.Append(CPPPATH = ['#/bzip2'])
+		env.Append(CPPPATH = ['#/geoip', '#/zlib'])
+
+		if self.is_win32():
 			env.Append(LIBS = ['gdi32', 'iphlpapi', 'ole32', 'ws2_32'])
 		else:
-			env.Append(LIBS = ['bz2', 'c', 'iconv', 'intl'])
+			env.Append(LIBS = ['bz2', 'c', 'iconv'])
+
+	def add_intl(self, env):
+		if self.is_win32():
+			env.Append(CPPPATH = ['#/intl'])
+		else:
+			env.Append(LIBS = ['intl'])
 
 	def add_openssl(self, env):
 		if self.is_win32():
