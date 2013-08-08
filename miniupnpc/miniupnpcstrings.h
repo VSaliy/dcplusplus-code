@@ -10,10 +10,11 @@
 
 #ifdef _WIN32
 #define OS_STRING "MSWindows/6.1.7601"
-#define MINIUPNPC_VERSION_STRING "1.8"
 #else
-#error TODO gen from the makefile
+#define OS_STRING "Generic/1"
 #endif
+
+#define MINIUPNPC_VERSION_STRING "1.8"
 
 #endif
 

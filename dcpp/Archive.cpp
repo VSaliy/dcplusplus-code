@@ -57,8 +57,8 @@ void Archive::extract(const string& path) {
 	if(check(unzGoToFirstFile(file)) != UNZ_OK) { return; }
 
 	do {
-		char pathBuf[MAX_PATH];
-		if(check(unzGetCurrentFileInfo(file, nullptr, pathBuf, MAX_PATH, nullptr, 0, nullptr, 0)) != UNZ_OK) { continue; }
+		char pathBuf[PATH_MAX];
+		if(check(unzGetCurrentFileInfo(file, nullptr, pathBuf, PATH_MAX, nullptr, 0, nullptr, 0)) != UNZ_OK) { continue; }
 		if(check(unzOpenCurrentFile(file)) != UNZ_OK) { continue; }
 
 		string path_out(pathBuf);

@@ -3,7 +3,17 @@
 
 1.	Application and Dependency versions needed
 
-		* A modern C++ compiler; see #2.
+		Some tools can be found on <http://sourceforge.net/projects/dcplusplus/files/Dev/>,
+		although I recommend getting them directly from their hosts.
+
+		* A modern C++ compiler. I am currently using these 2 packages by the MinGW-builds project:
+		- 64-bit: <http://sourceforge.net/projects/mingwbuilds/files/host-windows/releases/4.8.1/64-bit/threads-win32/seh/>
+		- 32-bit: <http://sourceforge.net/projects/mingwbuilds/files/host-windows/releases/4.8.1/32-bit/threads-win32/dwarf/>
+
+		Make sure that the compiler's "bin" directory is in your PATH environment variable.
+
+		Have a look at section 2 for additional steps to configure the compiler.
+		Have a look at section 4 for alternative compilers.
 
 		* Python - 2.5.x
 		<http://www.python.org>
@@ -48,9 +58,58 @@
 		Make sure that zip is in your PATH environment variable.
 
 
-2. Compiler
+2. Specific configuration of the compiler
 
-	a. MinGW (GCC 4.8 or later):
+	a. HTML Help support (only for MinGW)
+
+		To build a version with HTML Help support, copy the following files from a Windows SDK
+		(Windows SDK path -> DC++ source code path):
+		Include/shared/winapifamily.h -> mingw/include/winapifamily.h
+		Include/um/HtmlHelp.h -> mingw/include/htmlhelp.h
+		Lib/win8/um/x86/Htmlhelp.Lib -> mingw/lib/htmlhelp.lib
+		Lib/win8/um/x64/Htmlhelp.Lib -> mingw/lib/x64/htmlhelp.lib
+
+		The latest Windows SDK is currently at
+		<http://msdn.microsoft.com/en-US/windows/desktop/hh852363>; it installs into
+		"C:\Program Files (x86)\Windows Kits\8.0".
+
+	b. OpenSSL (only for Visual Studio)
+
+		Download OpenSSL from www.openssl.org and compile it. You should get libraries called
+		libeay32.lib and ssleay32.lib; copy them in openssl/lib.
+
+		To compile DC++ in debug mode, OpenSSL libraries have to be compiled in debug mode too
+		(read their instructions file; it's a matter of adding "debug" in the do_* file you use).
+		Rename debug libraries to libeay32d.lib and ssleay32d.lib; put them in openssl/lib.
+
+		You may also ask around in the DCDev hub; someone might have already built a package.
+
+
+3. Starting the build process
+
+	Open a command prompt and type "scons" followed by some options:
+
+		"tools=mingw" - Use mingw for building (default)
+		"tools=default" - Use msvc for building (yes, the option value is strange)
+		"mode=debug" - Compile a debug build (default)
+		"mode=release" - Compile an optimized release build
+		"arch=x64" - Compile a 64-bit build
+
+		To see more options, type "scons -h".
+
+		Tip: You can create a file custom.py and put your options in there.
+
+		You can choose which targets to build; eg:
+		  scons build/debug-mingw/dwt
+		will only build DWT with MinGW in debug mode. By default, when no target is specified, SCons builds all targets.
+		For more possible arguments, consult the SCons manual.
+
+		If you have problems, use google. It works for me.
+
+
+4. Alternative compilers
+
+	a. Various versions of MinGW (GCC 4.8 or later):
 	<http://sourceforge.net/projects/mingwbuilds/files/>
 	<http://sourceforge.net/projects/mingw-w64/files/>
 	<http://sourceforge.net/projects/mingw/files/>
@@ -91,54 +150,6 @@
 
 		To generate project files for MSVC, run "scons" with "msvcproj=1" and "tools=default".
 		The resulting solution file (DCPlusPlus.sln) will be in msvc/[mode-arch]/.
-
-
-3. Additional include files and libraries
-
-	a. HTML Help support (only for MinGW)
-
-		To build a version with HTML Help support, copy the following files from a Windows SDK
-		(Windows SDK path -> DC++ source code path):
-		Include/shared/winapifamily.h -> mingw/include/winapifamily.h
-		Include/um/HtmlHelp.h -> mingw/include/htmlhelp.h
-		Lib/win8/um/x86/Htmlhelp.Lib -> mingw/lib/htmlhelp.lib
-		Lib/win8/um/x64/Htmlhelp.Lib -> mingw/lib/x64/htmlhelp.lib
-
-		The latest Windows SDK is currently at
-		<http://msdn.microsoft.com/en-US/windows/desktop/hh852363>; it installs into
-		"C:\Program Files (x86)\Windows Kits\8.0".
-
-	b. OpenSSL (only for Visual Studio)
-
-		Download OpenSSL from www.openssl.org and compile it. You should get libraries called
-		libeay32.lib and ssleay32.lib; copy them in openssl/lib.
-
-		To compile DC++ in debug mode, OpenSSL libraries have to be compiled in debug mode too
-		(read their instructions file; it's a matter of adding "debug" in the do_* file you use).
-		Rename debug libraries to libeay32d.lib and ssleay32d.lib; put them in openssl/lib.
-
-		You may also ask around in the DCDev hub; someone might have already built a package.
-
-
-4. Starting the build process
-
-	Open a command prompt and type "scons" followed by some options:
-
-		"tools=mingw" - Use mingw for building (default)
-		"tools=default" - Use msvc for building (yes, the option value is strange)
-		"mode=debug" - Compile a debug build (default)
-		"mode=release" - Compile an optimized release build
-
-		To see more options, type "scons -h".
-
-		Tip: You can create a file custom.py and put your options in there.
-
-		You can choose which targets to build; eg:
-		  scons build/debug-mingw/dwt
-		will only build DWT with MinGW in debug mode. By default, when no target is specified, SCons builds all targets.
-		For more possible arguments, consult the SCons manual.
-
-		If you have problems, use google. It works for me.
 
 
 5.  Other information and submitting patches

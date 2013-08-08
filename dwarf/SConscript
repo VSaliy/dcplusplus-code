@@ -1,9 +1,5 @@
 Import('dev source_path')
 
-# only for MinGW
-if 'gcc' not in dev.env['TOOLS']:
-	Return()
-
 env, target, sources = dev.prepare_build(source_path, 'dwarf', source_glob = '*.c', in_bin = False)
 
 if dev.is_win32():

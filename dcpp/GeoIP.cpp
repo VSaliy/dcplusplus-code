@@ -86,7 +86,7 @@ void GeoIP::open() {
 #ifdef _WIN32
 	geo = GeoIP_open(Text::toT(path).c_str(), GEOIP_STANDARD);
 #else
-	geo = GeoIP_open(path, GEOIP_STANDARD);
+	geo = GeoIP_open(path.c_str(), GEOIP_STANDARD);
 #endif
 	if(geo) {
 		GeoIP_set_charset(geo, GEOIP_CHARSET_UTF8);
@@ -142,7 +142,7 @@ void countryParams(ParamMap& params, int id) {
 }
 
 inline uint32_t regionCode(char country0, char country1, char region0, char region1) {
-	union { char chars[4]; uint32_t i; } u = { country0, country1, region0, region1 };
+	union { char chars[4]; uint32_t i; } u = { { country0, country1, region0, region1 } };
 	return u.i;
 }
 
