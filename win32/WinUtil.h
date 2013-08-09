@@ -140,6 +140,7 @@ private:
 	static unordered_map<string, dwt::FontPtr> userMatchFonts; // use getUserMatchFont to access
 public:
 	static tstring commands;
+	static tstring descriptive_commands;
 	static dwt::ImageListPtr fileImages;
 	static dwt::ImageListPtr userImages;
 	static unordered_map<string, size_t> fileIndexes;
