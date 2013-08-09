@@ -512,11 +512,53 @@ void HubFrame::enterImpl(const tstring& s) {
 		} else if(Util::stricmp(cmd.c_str(), _T("topic")) == 0) {
 			addChat(str(TF_("Current hub topic: %1%") % Text::toT(client->getHubDescription())));
 		} else if(Util::stricmp(cmd.c_str(), _T("help")) == 0) {
-			addChat(_T("*** ") + WinUtil::commands +
-				_T(", /join <hub-ip>, /showjoins, /favshowjoins, /close, /userlist, ")
-				_T("/conn[ection], /fav[orite], /removefav[orite], /info, ")
-				_T("/pm <user> [message], /getlist <user>, /ignore <user>, /unignore <user>, ")
-				_T("/log <status, system, downloads, uploads>, /topic"));
+			bool bShowBriefCommands = !param.empty() && (Util::stricmp(param.c_str(), _T("brief")) == 0);
+
+			if(bShowBriefCommands)
+			{
+				addChat(T_("*** Keyboard commands:") + _T("\r\n") + 
+						WinUtil::commands +
+						_T(", /join <hub-ip>, /showjoins, /favshowjoins, /close, /userlist, ")
+						_T("/conn[ection], /fav[orite], /removefav[orite], /info, ")
+						_T("/pm <user> [message], /getlist <user>, /ignore <user>, /unignore <user>, ")
+						_T("/log <status, system, downloads, uploads>, /topic")
+					   );
+			}
+			else
+			{
+				addChat(T_("*** Keyboard commands:") + _T("\r\n") + 
+						WinUtil::descriptive_commands
+						+ _T("\r\n") _T("/join <hub-ip>")
+						+ _T("\r\n\t") + T_("Joins <hub-ip>. See also Open new window when using /join.")
+						+ _T("\r\n") _T("/showjoins")
+						+ _T("\r\n\t") + T_("Toggles the displaying of users joining the hub. This only takes effect for freshly-arriving users.")
+						+ _T("\r\n") _T("/favshowjoins")
+						+ _T("\r\n\t") + T_("Toggles the displaying of favorite users joining the hub. Does not require /showjoins to be enabled.")
+						+ _T("\r\n") _T("/userlist")
+						+ _T("\r\n\t") + T_("Toggles visibility of the list of users for the current hub.")
+						+ _T("\r\n") _T("/connection")
+						+ _T("\r\n") _T("/conn")
+						+ _T("\r\n\t") + T_("Displays the connectivity status information, auto detected or manually chosen connection mode, IP and ports that DC++ is currently using for connections with all users.")
+						+ _T("\r\n") _T("/favorite")
+						+ _T("\r\n") _T("/fav")
+						+ _T("\r\n\t") + T_("Adds the current hub (along with your nickname and password, if used) to the list of Favorite Hubs.")
+						+ _T("\r\n") _T("/removefavorite")
+						+ _T("\r\n") _T("/removefav")
+						+ _T("\r\n\t") + T_("Removes the current hub from the list of Favorite Hubs.")
+						+ _T("\r\n") _T("/pm <user> [message]")
+						+ _T("\r\n\t") + T_("Opens a private message window to the user, and optionally sends the message, if one was specified.")
+						+ _T("\r\n") _T("/getlist <user>")
+						+ _T("\r\n\t") + T_("Adds the user's list to the Download Queue.")
+						+ _T("\r\n") _T("/ignore <user>")
+						+ _T("\r\n\t") + T_("Adds a user matching definition (or modifies an existing one, if possible) to ignore chat messages from the specified user.")
+						+ _T("\r\n") _T("/unignore <user>")
+						+ _T("\r\n\t") + T_("Adds a user matching definition (or modifies an existing one, if possible) to stop ignoring chat messages from the specified user.")
+						+ _T("\r\n") _T("/topic")
+						+ _T("\r\n\t") + T_("Prints the current hub's topic. Useful if you want to copy the topic or it contains a link you'd like to easily open.")
+
+					);
+			}
+			
 		} else if(Util::stricmp(cmd.c_str(), _T("pm")) == 0) {
 			string::size_type j = param.find(_T(' '));
 			if(j != string::npos) {

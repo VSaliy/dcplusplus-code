@@ -137,6 +137,7 @@ const TextBox::Seed WinUtil::Seeds::Dialog::intTextBox;
 const RichTextBox::Seed WinUtil::Seeds::Dialog::richTextBox;
 const Table::Seed WinUtil::Seeds::Dialog::table;
 const Table::Seed WinUtil::Seeds::Dialog::optionsTable;
+const CheckBox::Seed WinUtil::Seeds::Dialog::checkBox;
 
 void WinUtil::init() {
 
@@ -547,6 +548,42 @@ const TCHAR
 		_T("\r\n-- My client supports browsing file lists, does yours?\r\n") LINE2 };
 
 #define MSGS 19
+
+tstring 
+	WinUtil::descriptive_commands = 
+		_T("\r\n") _T("/refresh")
+		_T("\r\n\t") + T_("Manually refreshes DC++'s share list by going through the shared directories and adding new folders and files. DC++ automatically refreshes once an hour by default, and also refreshes after the list of shared directories is changed.")
+		+ _T("\r\n") _T("/slots <number>")
+		+ _T("\r\n\t") + T_("Sets the current number of upload slots to the number you specify. If this is less than the current number of slots, no uploads are cancelled.")
+		+ _T("\r\n") _T("/dslots <number>")
+		+ _T("\r\n\t") + T_("Sets the current number of download slots to the number you specify. If this is less than the current number of slots, no downloads are cancelled.")
+		+ _T("\r\n") _T("/search <string>")
+		+ _T("\r\n\t") + T_("Opens a new search window with the specified search string. It does not automatically send the search.")
+		+ _T("\r\n") _T("/close")
+		+ _T("\r\n\t") + T_("Closes the current window.")
+		+ _T("\r\n") _T("/clear [lines to keep]")
+		+ _T("\r\n\t") + T_("Clears the current window of all text. Optionally, you can specify how many of the latest (most recent) lines should be kept.")
+		+ _T("\r\n") _T("/dc++")
+		+ _T("\r\n\t") + T_("Sends a random DC++ advertising message to the chat, including a link to the DC++ homepage and the version number.")
+		+ _T("\r\n") _T("/away [message]")
+		+ _T("\r\n\t") + T_("Sets Away status. New private message windows will be responded to, once, with the message you specified, or the default away message configured in the Personal information settings page.")
+		+ _T("\r\n") _T("/back")
+		+ _T("\r\n\t") + T_("Un-sets Away status.")
+		+ _T("\r\n") _T("/g <search string>")
+		+ _T("\r\n\t") + T_("Launches your default web browser to the Google search engine with the specified search.")
+		+ _T("\r\n") _T("/imdb <imdb query>")
+		+ _T("\r\n\t") + T_("Launches your default web browser to the Internet Movie Database (imdb) with the specified query.")
+		+ _T("\r\n") _T("/rebuild")
+		+ _T("\r\n\t") + T_("Rebuilds the HashIndex.xml and HashData.dat files, removing entries to files that are no longer shared, or old hashes for files that have since changed. This runs in the main DC++ thread, so the interface will freeze until the rebuild is finished.")
+		+ _T("\r\n") _T("/log <status, system, downloads, uploads>")
+		+ _T("\r\n\t") + T_("If no parameter is specified, it launches the log for the hub or private chat with the associated application in Windows. If one of the parameters is specified it opens that log file. The status log is available only in the hub frame.")
+		+ _T("\r\n") _T("/help")
+		+ _T("\r\n\t") + T_("Displays available commands. (The ones listed on this page.) Optionally, you can specify &quot;brief&quot; to have a brief listing.")
+		+ _T("\r\n") _T("/u <url>")
+		+ _T("\r\n\t") + T_("Launches your default web browser with the given URL.")
+		+ _T("\r\n") _T("/f <search string>")
+		+ _T("\r\n\t") + T_("Highlights the last occourrence of the specified search string in the chat window.")
+	;
 
 tstring
 	WinUtil::commands =

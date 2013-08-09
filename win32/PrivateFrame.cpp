@@ -354,7 +354,32 @@ void PrivateFrame::enterImpl(const tstring& s) {
 		} else if(Util::stricmp(cmd.c_str(), _T("log")) == 0) {
 			openLog();
 		} else if(Util::stricmp(cmd.c_str(), _T("help")) == 0) {
-			addChat(_T("*** ") + WinUtil::commands + _T(", /getlist, /grant, /close, /favorite, /ignore, /unignore, /log <system, downloads, uploads>"));
+			bool bShowBriefCommands = !param.empty() && (Util::stricmp(param.c_str(), _T("brief")) == 0);
+
+			if(bShowBriefCommands)
+			{
+				addChat(T_("*** Keyboard commands:") + _T("\r\n") + 
+						WinUtil::commands + 
+						_T(", /getlist, /grant, /close, /favorite, /ignore, /unignore, /log <system, downloads, uploads>")
+						);
+			}
+			else
+			{
+				addChat(T_("*** Keyboard commands:") + _T("\r\n") +
+						WinUtil::descriptive_commands +
+						+ _T("\r\n") _T("/getlist")
+						+ _T("\r\n\t") + T_("Adds the current user's list to the Download Queue.")
+						+ _T("\r\n") _T("/grant")
+						+ _T("\r\n\t") + T_("Grants the remote user a slot. Once they connect, or if they don't connect in 10 minutes, the granted slot is removed.")
+						+ _T("\r\n") _T("/favorite")
+						+ _T("\r\n") _T("/fav")
+						+ _T("\r\n\t") + T_("Adds the current user to the list of Favorite Users.")
+						+ _T("\r\n") _T("/ignore")
+						+ _T("\r\n\t") + T_("Adds a user matching definition (or modifies an existing one, if possible) to ignore chat messages from the current user.")
+						+ _T("\r\n") _T("/unignore")
+						+ _T("\r\n\t") + T_("Adds a user matching definition (or modifies an existing one, if possible) to stop ignoring chat messages from the current user.")
+						);
+			}
 
 		} else if(SETTING(SEND_UNKNOWN_COMMANDS)) {
 			send = true;

@@ -4,6 +4,7 @@
 * Optimize searches with multiple extensions (emtee, poy)
 * [L#1032153] Added CDATA parsing to XML parser (crise)
 * [L#233798] Added option to set automatic search interval (ullner)
+* [L#1033249] The text in the /help-command now lists the description of each command. (ullner)
 
 -- 0.828 2013-07-23 --
 * Translation fixes
