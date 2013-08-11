@@ -111,6 +111,7 @@ private:
 		tstring donate;
 		tstring blog;
 		tstring community;
+		tstring pluginrepo;
 	} links;
 
 	enum {

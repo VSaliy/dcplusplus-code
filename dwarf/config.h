@@ -10,5 +10,14 @@
 #define HAVE_SYS_STAT_H 1
 #define HAVE_SYS_TYPES_H 1
 #define HAVE_UNISTD_H 1
-#define HAVE_WINDOWS_PATH 1
 #define STDC_HEADERS 1
+
+#ifdef _WIN32
+
+#define HAVE_WINDOWS_PATH 1
+
+#else
+
+#define HAVE_ELF_H 1
+
+#endif

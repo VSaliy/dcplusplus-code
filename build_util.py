@@ -198,6 +198,9 @@ class Dev:
 
 		return env.SharedLibrary(target, sources) if shared else env.StaticLibrary(target, sources)
 
+	def build_program(self, env, target, sources):
+		return env.Program(target, [sources, self.client, self.dwarf, self.zlib, self.boost, self.bzip2, self.geoip, self.miniupnpc, self.natpmp, self.dwt, self.intl])
+
 	def i18n (self, source_path, buildenv, sources, name):
 		if not self.env['i18n']:
 			return
@@ -224,6 +227,71 @@ class Dev:
 #			installenv.Alias('install', installenv.InstallAs (os.path.join (modir, moname), lang + '.mo'))
 
 		return ret
+
+	def add_boost(self, env):
+		if self.is_win32():
+			env.Append(CPPPATH = ['#/boost'])
+
+		else:
+			import sys
+			boost_libs = ['atomic', 'filesystem', 'regex', 'system', 'thread']
+			boost_libs = ['boost_' + lib for lib in boost_libs]
+			if sys.platform == 'cygwin':
+				boost_libs = [ lib + '-mt' for lib in boost_libs]
+			env.Append(LIBS = boost_libs)
+
+	def add_crashlog(self, env):
+		if 'mingw' in env['TOOLS']:
+			env.Append(CPPPATH = ['#/dwarf'])
+			env.Append(LIBS = ['imagehlp'])
+		elif 'msvc' in env['TOOLS']:
+			env.Append(LIBS = ['dbghelp'])
+		elif not self.is_win32():
+			env.Append(CPPPATH = ['#/dwarf'])
+
+	def add_dcpp(self, env):
+		if self.is_win32():
+			env.Append(CPPPATH = ['#/bzip2'])
+		env.Append(CPPPATH = ['#/geoip', '#/zlib'])
+
+		if self.is_win32():
+			env.Append(LIBS = ['gdi32', 'iphlpapi', 'ole32', 'ws2_32'])
+		else:
+			env.Append(LIBS = ['bz2', 'c', 'iconv'])
+
+	def add_intl(self, env):
+		if self.is_win32():
+			env.Append(CPPPATH = ['#/intl'])
+		else:
+			env.Append(LIBS = ['intl'])
+
+	def add_openssl(self, env):
+		if self.is_win32():
+			env.Append(CPPPATH = ['#/openssl/include'])
+			openssl_lib = '#/openssl/lib/'
+			if env['arch'] != 'x86':
+				openssl_lib += env['arch'] + '/'
+			env.Append(LIBPATH = [openssl_lib])
+
+		if 'msvc' in env['TOOLS']:
+			if env['mode'] == 'debug':
+				env.Prepend(LIBS = ['ssleay32d', 'libeay32d'])
+			else:
+				env.Prepend(LIBS = ['ssleay32', 'libeay32'])
+		else:
+			env.Prepend(LIBS = ['ssl', 'crypto'])
+
+	def force_console(self, env):
+		if '-mwindows' in env['CCFLAGS']:
+			env['CCFLAGS'].remove('-mwindows')
+			env.Append(CCFLAGS = ['-mconsole'])
+
+		if '-mwindows' in env['LINKFLAGS']:
+			env['LINKFLAGS'].remove('-mwindows')
+			env.Append(LINKFLAGS = ['-mconsole'])
+
+		if '/SUBSYSTEM:WINDOWS' in env['LINKFLAGS']:
+			env['LINKFLAGS'].remove('/SUBSYSTEM:WINDOWS')
 
 	# support installs that only have an asciidoc.py file but no executable
 	def get_asciidoc(self):

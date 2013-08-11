@@ -21,6 +21,8 @@
 
 #include <bzlib.h>
 
+#include <cstddef>
+
 namespace dcpp {
 
 class BZFilter {

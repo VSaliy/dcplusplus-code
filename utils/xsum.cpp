@@ -20,11 +20,22 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
-	char x[_MAX_PATH] = { 0 };
-	if(!_fullpath(x, argv[1], _MAX_PATH)) {
+#ifdef _WIN32
+	char pathBuf[_MAX_PATH] = { 0 };
+	if(!_fullpath(pathBuf, argv[1], _MAX_PATH)) {
 		cout << "Can't get full path" << endl;
 		return 1;
 	}
+	string x(pathBuf);
+#else
+	char* pathBuf = realpath(argv[1], 0);
+	if(!pathBuf) {
+		cout << "Can't get full path" << endl;
+		return 1;
+	}
+	string x(pathBuf);
+	free(pathBuf);
+#endif
 
 	auto direct = argc < 3 ? true : argv[2][0] == '0';
 	auto bufSize = argc < 4 ? 0 : Util::toInt(argv[3]);

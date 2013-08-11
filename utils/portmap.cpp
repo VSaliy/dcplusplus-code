@@ -9,7 +9,16 @@
 #include <dcpp/Mapper_NATPMP.h>
 #include <dcpp/ScopedFunctor.h>
 #include <dcpp/Util.h>
+
+#ifdef _WIN32
 #include <dcpp/w.h>
+
+#else
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+#endif
 
 using namespace std;
 using namespace dcpp;
