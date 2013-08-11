@@ -138,6 +138,7 @@ const RichTextBox::Seed WinUtil::Seeds::Dialog::richTextBox;
 const Table::Seed WinUtil::Seeds::Dialog::table;
 const Table::Seed WinUtil::Seeds::Dialog::optionsTable;
 const CheckBox::Seed WinUtil::Seeds::Dialog::checkBox;
+const Button::Seed WinUtil::Seeds::Dialog::button;
 
 void WinUtil::init() {
 
