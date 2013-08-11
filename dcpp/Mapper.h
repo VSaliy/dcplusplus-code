@@ -19,6 +19,7 @@
 #ifndef DCPLUSPLUS_DCPP_MAPPER_H
 #define DCPLUSPLUS_DCPP_MAPPER_H
 
+#include <cstdint>
 #include <string>
 #include <set>
 #include <utility>

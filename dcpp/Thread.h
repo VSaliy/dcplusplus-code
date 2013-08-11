@@ -28,6 +28,8 @@
 #include <unistd.h>
 #endif
 
+#include <cstdint>
+
 #include <boost/noncopyable.hpp>
 #include "Exception.h"
 

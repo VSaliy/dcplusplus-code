@@ -19,6 +19,7 @@
 #ifndef DCPLUSPLUS_DCPP_ENCODER_H
 #define DCPLUSPLUS_DCPP_ENCODER_H
 
+#include <cstdint>
 #include <string>
 
 namespace dcpp {
