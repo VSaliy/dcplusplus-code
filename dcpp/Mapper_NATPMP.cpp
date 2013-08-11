@@ -21,6 +21,12 @@
 
 #include "Util.h"
 
+#ifndef _WIN32
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#endif
+
 extern "C" {
 #ifndef STATICLIB
 #define STATICLIB

@@ -3,53 +3,33 @@
 Import('dev source_path')
 
 def runUnitTest(env,target,source):
-	import sys
-	if sys.platform != 'win32':
-		open(str(target[0]),'w').write("SKIPPED\n")
-		return
-		
 	import subprocess
 	app = str(source[0].abspath)
 	if not subprocess.call(app):
 		open(str(target[0]),'w').write("PASSED\n")
-		
+
 env, target, sources = dev.prepare_build(source_path, 'gtest', source_glob="*.cpp", in_bin=False)
 
-if 'msvc' in env['TOOLS']:
-	if env['mode'] == 'debug':
-		env.Prepend(LIBS = ['ssleay32d', 'libeay32d'])
-	else:
-		env.Prepend(LIBS = ['ssleay32', 'libeay32'])
-else:
-	env.Prepend(LIBS = ['ssl', 'crypto'])
+# not every lib is strictly required here but we want to match the main program as much as possible.
+
+dev.add_boost(env)
+dev.add_crashlog(env)
+dev.add_dcpp(env)
+dev.add_intl(env)
+dev.add_openssl(env)
+
+dev.force_console(env)
+
+if dev.is_win32():
+	env.Append(LIBS = ['comctl32', 'comdlg32', 'oleaut32', 'shlwapi', 'uuid', 'uxtheme', 'winmm', 'wtsapi32'])
 
 if 'HAVE_HTMLHELP_H' in env['CPPDEFINES']:
-	env.Append(LIBS='htmlhelp')
-
-env.Append(LIBS = ['comctl32', 'ws2_32', 'ole32', 'gdi32', 'comdlg32', 'iphlpapi', 'winmm', 'shlwapi', 'oleaut32', 'uuid'])
-
-env.Append(CPPPATH = ['#/openssl/include', '#/bzip2', '#/dwt/include'])
-
-if '-mwindows' in env['CCFLAGS']:
-	env['CCFLAGS'].remove('-mwindows')
-	env.Append(CCFLAGS = ['-mconsole'])
-
-if '-mwindows' in env['LINKFLAGS']:
-	env['LINKFLAGS'].remove('-mwindows')
-	env.Append(LINKFLAGS = ['-mconsole'])
-
-if '/SUBSYSTEM:WINDOWS' in env['LINKFLAGS']:
-	env['LINKFLAGS'].remove('/SUBSYSTEM:WINDOWS')
-
-openssl_lib = '#/openssl/lib/'
-if env['arch'] != 'x86':
-	openssl_lib += env['arch'] + '/'
-env.Append(LIBPATH = [openssl_lib])
+	env.Append(LIBS = ['htmlhelp'])
 
 if env['msvcproj']:
 	ret = dev.build_lib(env, target, sources, dev.cpp_lib)
 else:
-	ret = env.Program(target, [sources, dev.client, dev.dwarf, dev.zlib, dev.boost, dev.bzip2, dev.geoip, dev.miniupnpc, dev.natpmp, dev.intl])
+	ret = dev.build_program(env, target, sources)
 	ret = env.Command(dev.get_target(source_path, 'gtest.passed', in_bin=False), ret[0].abspath, runUnitTest)
 
 env.Help("\nYou can run the test suite by running 'scons test'\n")

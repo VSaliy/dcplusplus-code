@@ -22,6 +22,7 @@
 
 #include "debug.h"
 #include "File.h"
+#include "TimerManager.h"
 #include "Text.h"
 #include "Util.h"
 

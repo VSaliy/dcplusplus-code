@@ -40,10 +40,6 @@
 #include "version.h"
 #include "ZUtils.h"
 
-#if !defined(_WIN32) && !defined(PATH_MAX) // Extra PATH_MAX check for Mac OS X
-#include <sys/syslimits.h>
-#endif
-
 #ifdef ff
 #undef ff
 #endif
@@ -645,19 +641,17 @@ void QueueManager::setDirty() {
 }
 
 string QueueManager::checkTarget(const string& aTarget, bool checkExistence) {
-#ifdef _WIN32
-	if(aTarget.length() > MAX_PATH) {
+	if(aTarget.length() > PATH_MAX) {
 		throw QueueException(_("Target filename too long"));
 	}
+
+#ifdef _WIN32
 	// Check that target starts with a drive or is an UNC path
 	if( (aTarget[1] != ':' || aTarget[2] != '\\') &&
 		(aTarget[0] != '\\' && aTarget[1] != '\\') ) {
 		throw QueueException(_("Invalid target file (missing directory, check default download directory setting)"));
 	}
 #else
-	if(aTarget.length() > PATH_MAX) {
-		throw QueueException(_("Target filename too long"));
-	}
 	// Check that target contains at least one directory...we don't want headless files...
 	if(aTarget[0] != '/') {
 		throw QueueException(_("Invalid target file (missing directory, check default download directory setting)"));

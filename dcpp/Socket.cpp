@@ -77,7 +77,7 @@ template<typename F>
 inline auto check(F f, bool blockOk = false) -> decltype(f()) {
 	for(;;) {
 		auto ret = f();
-		if(ret != static_cast<decltype(ret)>(-1))) {
+		if(ret != -1) {
 			return ret;
 		}
 
@@ -862,7 +862,11 @@ void Socket::socksUpdated() {
 
 			udpAddr.sa.sa_family = AF_INET;
 			udpAddr.sai.sin_port = *((uint16_t*)(&connStr[8]));
+#ifdef _WIN32
 			udpAddr.sai.sin_addr.S_un.S_addr = *((long*)(&connStr[4]));
+#else
+			udpAddr.sai.sin_addr.s_addr = *((long*)(&connStr[4]));
+#endif
 			udpAddrLen = sizeof(udpAddr.sai);
 		} catch(const SocketException&) {
 			dcdebug("Socket: Failed to register with socks server\n");
