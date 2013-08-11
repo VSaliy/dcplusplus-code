@@ -170,6 +170,8 @@ public:
 			static const RichTextBox::Seed richTextBox;
 			static const Table::Seed table;
 			static const Table::Seed optionsTable;
+			static const CheckBox::Seed checkBox;
+			static const Button::Seed button;
 		};
 	};
 
