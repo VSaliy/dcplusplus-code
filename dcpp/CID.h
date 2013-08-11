@@ -19,8 +19,9 @@
 #ifndef DCPLUSPLUS_DCPP_CID_H
 #define DCPLUSPLUS_DCPP_CID_H
 
-#include <cstring>
 #include <algorithm>
+#include <cstdint>
+#include <cstring>
 
 #include "Encoder.h"
 

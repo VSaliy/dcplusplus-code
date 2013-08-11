@@ -19,6 +19,7 @@
 #ifndef DCPLUSPLUS_DCPP_FILE_READER_H
 #define DCPLUSPLUS_DCPP_FILE_READER_H
 
+#include <cstdint>
 #include <functional>
 #include <string>
 #include <vector>

@@ -19,6 +19,7 @@
 #ifndef DCPLUSPLUS_DCPP_BUFFEREDSOCKETLISTENER_H_
 #define DCPLUSPLUS_DCPP_BUFFEREDSOCKETLISTENER_H_
 
+#include <cstdint>
 #include "noexcept.h"
 #include <string>
 

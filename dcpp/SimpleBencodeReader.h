@@ -19,6 +19,7 @@
 #ifndef DCPLUSPLUS_DCPP_SIMPLEBENCODEREADER_H_
 #define DCPLUSPLUS_DCPP_SIMPLEBENCODEREADER_H_
 
+#include <cstdint>
 #include <string>
 #include <boost/noncopyable.hpp>
 

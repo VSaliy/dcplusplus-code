@@ -185,6 +185,8 @@ if 'gcc' in env['TOOLS']:
 	if env['arch'] == 'x86':
 		env.Append(CCFLAGS = ['-march=i686'])
 
+if 'msvc' in env['TOOLS']:
+	env['pch'] = True
 if env['pch']:
 	env.Append(CPPDEFINES = ['HAS_PCH'])
 
@@ -281,13 +283,10 @@ if dev.is_win32():
 	if conf.CheckCXXHeader(['windows.h', 'htmlhelp.h'], '<>'):
 		conf.env.Append(CPPDEFINES='HAVE_HTMLHELP_H')
 
+if 'mingw' in env['TOOLS']:
 	# see whether we're compiling with MinGW or MinGW-w64 (2 different projects that can both build
 	# a 32-bit program). the only differentiator is __MINGW64_VERSION_MAJOR.
-	if conf.CheckDeclaration('__MINGW64_VERSION_MAJOR', '#include <windows.h>', 'C++'):
-		if conf.env['pch']:
-			conf.env['pch'] = 0 # precompiled headers crash mingw64's gcc...
-			conf.env['CPPDEFINES'].remove('HAS_PCH')
-	else:
+	if not conf.CheckDeclaration('__MINGW64_VERSION_MAJOR', '#include <windows.h>', 'C++'):
 		conf.env.Append(CPPDEFINES='HAVE_OLD_MINGW')
 
 if 'gcc' in conf.env['TOOLS'] and conf.env['mode'] == 'debug':
