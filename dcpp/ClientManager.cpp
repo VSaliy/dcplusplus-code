@@ -80,27 +80,7 @@ size_t ClientManager::getUserCount() const {
 	return onlineUsers.size();
 }
 
-StringList ClientManager::getHubUrls(const CID& cid, const string& hintUrl) {
-	Lock l(cs);
-	StringList lst;
-	OnlinePairC op = onlineUsers.equal_range(cid);
-	for(auto i = op.first; i != op.second; ++i) {
-		lst.push_back(i->second->getClient().getHubUrl());
-	}
-	return lst;
-}
-
-StringList ClientManager::getHubNames(const CID& cid, const string& hintUrl) {
-	Lock l(cs);
-	StringList lst;
-	OnlinePairC op = onlineUsers.equal_range(cid);
-	for(auto i = op.first; i != op.second; ++i) {
-		lst.push_back(i->second->getClient().getHubName());
-	}
-	return lst;
-}
-
-StringList ClientManager::getNicks(const CID& cid, const string& hintUrl) {
+StringList ClientManager::getNicks(const CID& cid) const {
 	Lock l(cs);
 	StringSet ret;
 
@@ -110,24 +90,38 @@ StringList ClientManager::getNicks(const CID& cid, const string& hintUrl) {
 	}
 
 	if(ret.empty()) {
-		// offline
-		auto i = nicks.find(cid);
-		if(i != nicks.end()) {
-			ret.insert(i->second.first);
-		} else {
-			ret.insert('{' + cid.toBase32() + '}');
-		}
+		ret.insert(getOfflineNick(cid));
 	}
 
 	return StringList(ret.begin(), ret.end());
 }
 
-StringPairList ClientManager::getHubs(const CID& cid, const string& hintUrl) {
+StringPairList ClientManager::getHubs(const CID& cid) const {
 	Lock l(cs);
 	StringPairList lst;
 	auto op = onlineUsers.equal_range(cid);
 	for(auto i = op.first; i != op.second; ++i) {
 		lst.push_back(make_pair(i->second->getClient().getHubUrl(), i->second->getClient().getHubName()));
+	}
+	return lst;
+}
+
+StringList ClientManager::getHubNames(const CID& cid) const {
+	Lock l(cs);
+	StringList lst;
+	OnlinePairC op = onlineUsers.equal_range(cid);
+	for(auto i = op.first; i != op.second; ++i) {
+		lst.push_back(i->second->getClient().getHubName());
+	}
+	return lst;
+}
+
+StringList ClientManager::getHubUrls(const CID& cid) const {
+	Lock l(cs);
+	StringList lst;
+	OnlinePairC op = onlineUsers.equal_range(cid);
+	for(auto i = op.first; i != op.second; ++i) {
+		lst.push_back(i->second->getClient().getHubUrl());
 	}
 	return lst;
 }
@@ -141,6 +135,18 @@ vector<Identity> ClientManager::getIdentities(const UserPtr &u) const {
 	}
 
 	return ret;
+}
+
+string ClientManager::getNick(const HintedUser& user) const {
+	Lock l(cs);
+	auto ou = findOnlineUserHint(user);
+	return ou ? ou->getIdentity().getNick() : getOfflineNick(user.user->getCID());
+}
+
+string ClientManager::getHubName(const HintedUser& user) const {
+	Lock l(cs);
+	auto ou = findOnlineUserHint(user);
+	return ou ? ou->getClient().getHubName() : _("Offline");
 }
 
 string ClientManager::getField(const CID& cid, const string& hint, const char* field) const {
@@ -172,6 +178,11 @@ string ClientManager::getConnection(const CID& cid) const {
 		return i->second->getIdentity().getConnection();
 	}
 	return _("Offline");
+}
+
+string ClientManager::getOfflineNick(const CID& cid) const {
+	auto i = nicks.find(cid);
+	return i != nicks.end() ? i->second.first : '{' + cid.toBase32() + '}';
 }
 
 int64_t ClientManager::getAvailable() const {

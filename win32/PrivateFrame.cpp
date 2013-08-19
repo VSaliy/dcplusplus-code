@@ -19,27 +19,22 @@
 #include "stdafx.h"
 #include "PrivateFrame.h"
 
-#include <boost/range/algorithm/for_each.hpp>
-
-#include <dwt/widgets/Grid.h>
-
 #include "HoldRedraw.h"
 #include "MainWindow.h"
 #include "resource.h"
 
+#include <dcpp/AdcHub.h>
 #include <dcpp/ChatMessage.h>
 #include <dcpp/ClientManager.h>
 #include <dcpp/Client.h>
+#include <dcpp/ConnectionManager.h>
 #include <dcpp/LogManager.h>
 #include <dcpp/PluginManager.h>
 #include <dcpp/User.h>
+#include <dcpp/UserConnection.h>
 #include <dcpp/WindowInfo.h>
 
-using dwt::Grid;
-using dwt::GridInfo;
-using dwt::Label;
-	
-using boost::range::for_each;
+#include <dwt/util/StringUtils.h>
 
 const string PrivateFrame::id = "PM";
 const string& PrivateFrame::getId() const { return id; }
@@ -57,10 +52,9 @@ void PrivateFrame::openWindow(TabViewPtr parent, const HintedUser& replyTo_, con
 		frame->sendMessage(msg);
 }
 
-bool PrivateFrame::gotMessage(TabViewPtr parent, const UserPtr& from, const UserPtr& to, const UserPtr& replyTo,
-	const ChatMessage& message, const string& hubHint, bool fromBot)
-{
-	const UserPtr& user = (replyTo == ClientManager::getInstance()->getMe()) ? to : replyTo;
+bool PrivateFrame::gotMessage(TabViewPtr parent, const ChatMessage& message, const string& hubHint, bool fromBot) {
+	auto& user = (message.replyTo == ClientManager::getInstance()->getMe()) ? message.to : message.replyTo;
+
 	auto i = frames.find(user);
 	if(i == frames.end()) {
 		// creating a new window
@@ -138,38 +132,12 @@ bool PrivateFrame::isFavorite(const WindowParams& params) {
 }
 
 PrivateFrame::PrivateFrame(TabViewPtr parent, const HintedUser& replyTo_, const string& logPath) :
-BaseType(parent, _T(""), IDH_PM, IDI_PRIVATE, false),
-grid(0),
-hubGrid(0),
-hubBox(0),
+BaseType(parent, _T(""), IDH_PM, IDI_PRIVATE_OFF, false),
 replyTo(replyTo_),
-online(replyTo.getUser().user->isOnline())
+online(false),
+conn(nullptr)
 {
-	grid = addChild(Grid::Seed(2, 1));
-	grid->column(0).mode = GridInfo::FILL;
-	grid->row(1).mode = GridInfo::FILL;
-	grid->row(1).align = GridInfo::STRETCH;
-
-	hubGrid = grid->addChild(Grid::Seed(1, 2));
-	hubGrid->setHelpId(IDH_PM_HUB);
-	{
-		auto seed = WinUtil::Seeds::label;
-		seed.caption = T_("Hub to send messages through:");
-		hubGrid->addChild(seed);
-	}
-	hubBox = hubGrid->addChild(WinUtil::Seeds::comboBox);
-	addWidget(hubBox);
-	auto initialHub = replyTo.getUser().hint;
-	hubBox->onSelectionChanged([this, initialHub] {
-		replyTo.getUser().hint = hubs[hubBox->getSelected()].first;
-		if(replyTo.getUser().hint.empty())
-			replyTo.getUser().hint = initialHub;
-	});
-
-	hubGrid->setEnabled(false);
-	hubGrid->setVisible(false);
-
-	createChat(grid);
+	createChat(this);
 	chat->setHelpId(IDH_PM_CHAT);
 	addWidget(chat);
 	chat->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleChatContextMenu(sc); });
@@ -184,15 +152,32 @@ online(replyTo.getUser().user->isOnline())
 
 	status->onDblClicked(STATUS_STATUS, [this] { openLog(); });
 
+	{
+		auto f = [this] { handleChannelMenu(); };
+		status->onClicked(STATUS_CHANNEL, f);
+		status->onRightClicked(STATUS_CHANNEL, f);
+	}
+
+	status->setToolTip(STATUS_CHANNEL, T_("Current communication channel - click to change"));
+
+	status->setHelpId(STATUS_STATUS, IDH_PM_STATUS);
+	status->setHelpId(STATUS_CHANNEL, IDH_PM_CHANNEL);
+
 	initAccels();
 
 	layout();
 
 	readLog(logPath, SETTING(PM_LAST_LOG_LINES));
 
+	ConnectionManager::getInstance()->addListener(this);
+	{
+		Lock l(mutex);
+		conn = WinUtil::mainWindow->getPMConn(replyTo.getUser(), this);
+	}
+
 	callAsync([this] {
 		ClientManager::getInstance()->addListener(this);
-		updateOnlineStatus();
+		updateOnlineStatus(true);
 	});
 
 	frames.emplace(replyTo.getUser(), this);
@@ -226,6 +211,13 @@ void PrivateFrame::addStatus(const tstring& text) {
 
 bool PrivateFrame::preClosing() {
 	ClientManager::getInstance()->removeListener(this);
+	ConnectionManager::getInstance()->removeListener(this);
+
+	{
+		Lock l(mutex);
+		if(conn) { conn->removeListener(this); }
+	}
+	ConnectionManager::getInstance()->disconnect(replyTo.getUser(), ConnectionQueueItem::TYPE_PM);
 
 	frames.erase(replyTo.getUser());
 	return true;
@@ -242,10 +234,10 @@ void PrivateFrame::openLog() {
 }
 
 void PrivateFrame::fillLogParams(ParamMap& params) const {
-	params["hubNI"] = [this] { return Text::fromT(hubName); };
+	params["hubNI"] = [this] { return ClientManager::getInstance()->getHubName(replyTo.getUser()); };
 	params["hubURL"] = [this] { return replyTo.getUser().hint; };
 	params["userCID"] = [this] { return replyTo.getUser().user->getCID().toBase32(); };
-	params["userNI"] = [this] { return ClientManager::getInstance()->getNicks(replyTo.getUser())[0]; };
+	params["userNI"] = [this] { return ClientManager::getInstance()->getNick(replyTo.getUser()); };
 	params["myCID"] = [] { return ClientManager::getInstance()->getMe()->getCID().toBase32(); };
 }
 
@@ -261,54 +253,84 @@ void PrivateFrame::layout() {
 	message->resize(rm);
 
 	r.size.y -= rm.size.y + border;
-	grid->resize(r);
+	chat->resize(r);
 }
 
-void PrivateFrame::updateOnlineStatus() {
-	const CID& cid = replyTo.getUser().user->getCID();
-	const string& hint = replyTo.getUser().hint;
+void PrivateFrame::updateOnlineStatus(bool newChannel) {
+	auto hubs = ClientManager::getInstance()->getHubUrls(replyTo.getUser());
 
-	pair<tstring, bool> hubNames = WinUtil::getHubNames(cid, hint);
+	if(newChannel || online != !hubs.empty()) {
+		online = !hubs.empty();
 
-	setText(WinUtil::getNicks(cid, hint) + _T(" - ") + hubNames.first);
-	hubName = move(hubNames.first);
-
-	if(hubNames.second != online) {
-		addStatus(hubNames.second ? T_("User went online") : T_("User went offline"));
+		if(!newChannel) {
+			addStatus(online ? T_("User went online") : T_("User went offline"));
+		}
+		setIcon(online ? IDI_PRIVATE : IDI_PRIVATE_OFF);
+		status->setIcon(STATUS_CHANNEL, WinUtil::statusIcon(ccReady() ? IDI_SECURE : online ? IDI_HUB : IDI_HUB_OFF));
+		newChannel = true;
 	}
-	online = hubNames.second;
-	setIcon(online ? IDI_PRIVATE : IDI_PRIVATE_OFF);
 
-	hubs = ClientManager::getInstance()->getHubs(cid, hint);
-	hubBox->clear();
+	if(online && find(hubs.begin(), hubs.end(), replyTo.getUser().hint) == hubs.end()) {
+		replyTo.getUser().hint = hubs.front();
+		newChannel = true;
+	}
 
-	if(online && !replyTo.getUser().user->isNMDC() && !hubs.empty()) {
-		if(!hubGrid->hasStyle(WS_VISIBLE)) {
-			hubGrid->setEnabled(true);
-			hubGrid->setVisible(true);
+	setText(WinUtil::getNick(replyTo.getUser()) + _T(" - ") + WinUtil::getHubName(replyTo.getUser()));
 
-			grid->layout();
+	if(newChannel) {
+		updateChannel();
+
+		if(online && SETTING(ALWAYS_CCPM) && !ccReady()) {
+			startCC();
+		}
+	}
+}
+
+void PrivateFrame::updateChannel() {
+	auto channel = ccReady() ? T_("Direct encrypted channel") : WinUtil::getHubName(replyTo.getUser());
+	dwt::util::cutStr(channel, 26);
+	status->setText(STATUS_CHANNEL, channel, true);
+}
+
+void PrivateFrame::startCC() {
+	if(ccReady()) {
+		addStatus(T_("A direct encrypted channel is already available"));
+		return;
+	}
+
+	{
+		auto lock = ClientManager::getInstance()->lock();
+		auto ou = ClientManager::getInstance()->findOnlineUser(replyTo.getUser());
+		if(!ou) {
+			addStatus(T_("User offline"));
+			return;
 		}
 
-		for_each(hubs, [&](const StringPair &hub) {
-			auto idx = hubBox->addValue(Text::toT(hub.second) + _T(" - ") + Text::toT(hub.first));
-			if(hub.first == replyTo.getUser().hint) {
-				hubBox->setSelected(idx);
-			}
-		});
-
-		if(hubBox->getSelected() == -1) {
-			hubBox->setSelected(0);
+		tstring err = ou->getUser()->isNMDC() ? T_("A secure ADC hub is required; this feature is not supported on NMDC hubs") :
+			!ou->getClient().isSecure() ? T_("The connection to the ADC hub used to initiate the channel must be encrypted") :
+			!ou->getIdentity().supports(AdcHub::CCPM_FEATURE) ? T_("The user does not support the CCPM ADC extension") : _T("");
+		if(!err.empty()) {
+			addStatus(str(TF_("Cannot start the direct encrypted channel: %1%") % err));
+			return;
 		}
-
-		hubGrid->layout();
-
-	} else if(hubGrid->hasStyle(WS_VISIBLE)) {
-		hubGrid->setEnabled(false);
-		hubGrid->setVisible(false);
-
-		grid->layout();
 	}
+
+	addStatus(T_("Establishing a direct encrypted channel..."));
+	ClientManager::getInstance()->connect(replyTo.getUser(), ConnectionManager::pmToken);
+}
+
+void PrivateFrame::closeCC() {
+	if(ccReady()) {
+		addStatus(T_("Disconnecting the direct encrypted channel..."));
+		ConnectionManager::getInstance()->disconnect(replyTo.getUser(), ConnectionQueueItem::TYPE_PM);
+	} else {
+		addStatus(T_("No direct encrypted channel available"));
+	}
+}
+
+bool PrivateFrame::ccReady() const {
+	Lock l(mutex);
+	return conn;
 }
 
 void PrivateFrame::enterImpl(const tstring& s) {
@@ -342,6 +364,8 @@ void PrivateFrame::enterImpl(const tstring& s) {
 			addStatus(T_("Slot granted"));
 		} else if(Util::stricmp(cmd.c_str(), _T("close")) == 0) {
 			postMessage(WM_CLOSE);
+		} else if(Util::stricmp(cmd.c_str(), _T("direct")) == 0 || Util::stricmp(cmd.c_str(), _T("encrypted")) == 0) {
+			startCC();
 		} else if((Util::stricmp(cmd.c_str(), _T("favorite")) == 0) || (Util::stricmp(cmd.c_str(), _T("fav")) == 0)) {
 			handleAddFavorite();
 			addStatus(T_("Favorite user added"));
@@ -360,13 +384,16 @@ void PrivateFrame::enterImpl(const tstring& s) {
 			{
 				addChat(T_("*** Keyboard commands:") + _T("\r\n") + 
 						WinUtil::commands + 
-						_T(", /getlist, /grant, /close, /favorite, /ignore, /unignore, /log <system, downloads, uploads>")
+						_T(", /direct, /encrypted, /getlist, /grant, /close, /favorite, /ignore, /unignore, /log <system, downloads, uploads>")
 						);
 			}
 			else
 			{
 				addChat(T_("*** Keyboard commands:") + _T("\r\n") +
 						WinUtil::descriptive_commands +
+						+ _T("\r\n") _T("/direct")
+						+ _T("\r\n") _T("/encrypted")
+						+ _T("\r\n\t") + T_("Starts a direct encrypted communication channel to avoid spying on your private messages.")
 						+ _T("\r\n") _T("/getlist")
 						+ _T("\r\n\t") + T_("Adds the current user's list to the Download Queue.")
 						+ _T("\r\n") _T("/grant")
@@ -392,7 +419,7 @@ void PrivateFrame::enterImpl(const tstring& s) {
 	}
 
 	if(send) {
-		if(online) {
+		if(online || ccReady()) {
 			sendMessage(s);
 		} else {
 			message->showPopup(T_("User offline"), T_("The message cannot be delivered because the user is offline."), TTI_ERROR);
@@ -405,24 +432,21 @@ void PrivateFrame::enterImpl(const tstring& s) {
 }
 
 void PrivateFrame::sendMessage(const tstring& msg, bool thirdPerson) {
-	ClientManager::getInstance()->privateMessage(replyTo.getUser(), Text::fromT(msg), thirdPerson);
+	auto msg8 = Text::fromT(msg);
+
+	{
+		Lock l(mutex);
+		if(conn) {
+			conn->pm(msg8, thirdPerson);
+			return;
+		}
+	}
+
+	ClientManager::getInstance()->privateMessage(replyTo.getUser(), msg8, thirdPerson);
 }
 
 PrivateFrame::UserInfoList PrivateFrame::selectedUsersImpl() {
 	return UserInfoList(1, &replyTo);
-}
-
-void PrivateFrame::on(ClientManagerListener::UserUpdated, const OnlineUser& aUser) noexcept {
-	if(replyTo.getUser() == aUser.getUser())
-		callAsync([this] { updateOnlineStatus(); });
-}
-void PrivateFrame::on(ClientManagerListener::UserConnected, const UserPtr& aUser) noexcept {
-	if(replyTo.getUser() == aUser)
-		callAsync([this] { updateOnlineStatus(); });
-}
-void PrivateFrame::on(ClientManagerListener::UserDisconnected, const UserPtr& aUser) noexcept {
-	if(replyTo.getUser() == aUser)
-		callAsync([this] { updateOnlineStatus(); });
 }
 
 void PrivateFrame::tabMenuImpl(dwt::Menu* menu) {
@@ -446,10 +470,99 @@ bool PrivateFrame::handleChatContextMenu(dwt::ScreenCoordinate pt) {
 	return true;
 }
 
+void PrivateFrame::handleChannelMenu() {
+	auto menu = addChild(WinUtil::Seeds::menu);
+
+	menu->setTitle(T_("Communication channel"));
+
+	auto hubs = ClientManager::getInstance()->getHubs(replyTo.getUser());
+
+	if(hubs.empty()) {
+		menu->appendItem(T_("(User offline)"), nullptr, nullptr, false);
+
+	} else {
+		for(auto& hub: hubs) {
+			auto url = hub.first;
+			auto current = url == replyTo.getUser().hint;
+			auto pos = menu->appendItem(dwt::util::escapeMenu(Text::toT(hub.second)),
+				[this, url] { replyTo.getUser().hint = url; updateChannel(); }, nullptr, !current);
+			if(current) {
+				menu->checkItem(pos);
+			}
+		}
+
+		if(SETTING(ENABLE_CCPM)) {
+			menu->appendSeparator();
+
+			if(ccReady()) {
+				menu->appendItem(T_("Disconnect the direct encrypted channel"), [this] { closeCC(); });
+			} else {
+				menu->appendItem(T_("Start a direct encrypted channel"), [this] { startCC(); }, WinUtil::menuIcon(IDI_SECURE));
+			}
+		}
+	}
+
+	menu->open();
+}
+
 void PrivateFrame::runUserCommand(const UserCommand& uc) {
 	if(!WinUtil::getUCParams(this, uc, ucLineParams))
 		return;
 
 	auto ucParams = ucLineParams;
 	ClientManager::getInstance()->userCommand(replyTo.getUser(), uc, ucParams, true);
+}
+
+void PrivateFrame::on(ClientManagerListener::UserConnected, const UserPtr& aUser) noexcept {
+	if(replyTo.getUser() == aUser)
+		callAsync([this] { updateOnlineStatus(); });
+}
+
+void PrivateFrame::on(ClientManagerListener::UserUpdated, const OnlineUser& aUser) noexcept {
+	if(replyTo.getUser() == aUser.getUser())
+		callAsync([this] { updateOnlineStatus(); });
+}
+
+void PrivateFrame::on(ClientManagerListener::UserDisconnected, const UserPtr& aUser) noexcept {
+	if(replyTo.getUser() == aUser)
+		callAsync([this] { updateOnlineStatus(); });
+}
+
+void PrivateFrame::on(ConnectionManagerListener::Connected, ConnectionQueueItem* cqi, UserConnection* uc) noexcept {
+	if(cqi->getType() == ConnectionQueueItem::TYPE_PM && cqi->getUser() == replyTo.getUser()) {
+		{
+			Lock l(mutex);
+			if(conn) {
+				conn->removeListener(this);
+			}
+			conn = uc;
+			conn->addListener(this);
+		}
+		callAsync([this] {
+			updateOnlineStatus(true);
+			addStatus(T_("A direct encrypted channel has been established"));
+		});
+	}
+}
+
+void PrivateFrame::on(ConnectionManagerListener::Removed, ConnectionQueueItem* cqi) noexcept {
+	if(cqi->getType() == ConnectionQueueItem::TYPE_PM && cqi->getUser() == replyTo.getUser()) {
+		{
+			Lock l(mutex);
+			conn = nullptr;
+		}
+		callAsync([this] {
+			updateOnlineStatus(true);
+			addStatus(T_("The direct encrypted channel has been disconnected"));
+		});
+	}
+}
+
+void PrivateFrame::on(UserConnectionListener::PrivateMessage, UserConnection* uc, const ChatMessage& message) noexcept {
+	auto user = uc->getHintedUser();
+	callAsync([this, message, user] {
+		addChat(message);
+		WinUtil::notify(WinUtil::NOTIFICATION_PM, Text::toT(message.message), [user] { activateWindow(user); });
+		WinUtil::mainWindow->TrayPM();
+	});
 }

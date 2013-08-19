@@ -339,7 +339,7 @@ void SearchManager::onRES(const AdcCommand& cmd, const UserPtr& from, const stri
 	}
 	token.erase(0, slash + 1);
 
-	StringList names = ClientManager::getInstance()->getHubNames(from->getCID(), hubUrl);
+	StringList names = ClientManager::getInstance()->getHubNames(from->getCID());
 	string hubName = names.empty() ? _("Offline") : Util::toString(names);
 
 	/// @todo Something about the slots

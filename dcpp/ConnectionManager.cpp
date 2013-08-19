@@ -31,7 +31,13 @@
 
 namespace dcpp {
 
-ConnectionManager::ConnectionManager() : floodCounter(0), shuttingDown(false) {
+const string ConnectionManager::pmToken = "PM";
+
+ConnectionManager::ConnectionManager() :
+	downloads(cqis[ConnectionQueueItem::TYPE_DOWNLOAD]),
+	floodCounter(0),
+	shuttingDown(false)
+{
 	TimerManager::getInstance()->addListener(this);
 
 	features.push_back(UserConnection::FEATURE_MINISLOTS);
@@ -56,6 +62,16 @@ void ConnectionManager::listen() {
 	secureServer.reset(new Server(true, Util::toString(CONNSETTING(TLS_PORT)), CONNSETTING(BIND_ADDRESS)));
 }
 
+ConnectionQueueItem::ConnectionQueueItem(const HintedUser& user, Type type) :
+	token(Util::toString(Util::rand())),
+	lastAttempt(0),
+	errors(0),
+	state(WAITING),
+	type(type),
+	user(user)
+{
+}
+
 /**
  * Request a connection for downloading.
  * DownloadManager::addConnection will be called as soon as the connection is ready
@@ -68,22 +84,19 @@ void ConnectionManager::getDownloadConnection(const HintedUser& aUser) {
 		Lock l(cs);
 		auto i = find(downloads.begin(), downloads.end(), aUser.user);
 		if(i == downloads.end()) {
-			getCQI(aUser, true);
+			getCQI(aUser, ConnectionQueueItem::TYPE_DOWNLOAD);
 		} else {
 			DownloadManager::getInstance()->checkIdle(aUser.user);
 		}
 	}
 }
 
-ConnectionQueueItem* ConnectionManager::getCQI(const HintedUser& aUser, bool download) {
-	ConnectionQueueItem* cqi = new ConnectionQueueItem(aUser, download);
-	if(download) {
-		dcassert(find(downloads.begin(), downloads.end(), aUser.user) == downloads.end());
-		downloads.push_back(cqi);
-	} else {
-		dcassert(find(uploads.begin(), uploads.end(), aUser.user) == uploads.end());
-		uploads.push_back(cqi);
-	}
+ConnectionQueueItem* ConnectionManager::getCQI(const HintedUser& user, Type type) {
+	auto cqi = new ConnectionQueueItem(user, type);
+
+	auto& container = cqis[type];
+	dcassert(find(container.begin(), container.end(), user.user) == container.end());
+	container.push_back(cqi);
 
 	fire(ConnectionManagerListener::Added(), cqi);
 	return cqi;
@@ -91,13 +104,11 @@ ConnectionQueueItem* ConnectionManager::getCQI(const HintedUser& aUser, bool dow
 
 void ConnectionManager::putCQI(ConnectionQueueItem* cqi) {
 	fire(ConnectionManagerListener::Removed(), cqi);
-	if(cqi->getDownload()) {
-		dcassert(find(downloads.begin(), downloads.end(), cqi) != downloads.end());
-		downloads.erase(remove(downloads.begin(), downloads.end(), cqi), downloads.end());
-	} else {
-		dcassert(find(uploads.begin(), uploads.end(), cqi) != uploads.end());
-		uploads.erase(remove(uploads.begin(), uploads.end(), cqi), uploads.end());
-	}
+
+	auto& container = cqis[cqi->getType()];
+	dcassert(find(container.begin(), container.end(), cqi) != container.end());
+	container.erase(remove(container.begin(), container.end(), cqi), container.end());
+
 	delete cqi;
 }
 
@@ -554,7 +565,6 @@ void ConnectionManager::on(UserConnectionListener::Direction, UserConnection* aS
 }
 
 void ConnectionManager::addDownloadConnection(UserConnection* uc) {
-	dcassert(uc->isSet(UserConnection::FLAG_DOWNLOAD));
 	bool addConn = false;
 	{
 		Lock l(cs);
@@ -566,7 +576,7 @@ void ConnectionManager::addDownloadConnection(UserConnection* uc) {
 				cqi->setState(ConnectionQueueItem::ACTIVE);
 				uc->setFlag(UserConnection::FLAG_ASSOCIATED);
 
-				fire(ConnectionManagerListener::Connected(), cqi);
+				fire(ConnectionManagerListener::Connected(), cqi, uc);
 
 				dcdebug("ConnectionManager::addDownloadConnection, leaving to downloadmanager\n");
 				addConn = true;
@@ -581,29 +591,30 @@ void ConnectionManager::addDownloadConnection(UserConnection* uc) {
 	}
 }
 
-void ConnectionManager::addUploadConnection(UserConnection* uc) {
-	dcassert(uc->isSet(UserConnection::FLAG_UPLOAD));
-
+void ConnectionManager::addNewConnection(UserConnection* uc, Type type) {
 	bool addConn = false;
-	{
+	if(type != ConnectionQueueItem::TYPE_PM || SETTING(ENABLE_CCPM)) {
 		Lock l(cs);
 
-		auto i = find(uploads.begin(), uploads.end(), uc->getUser());
-		if(i == uploads.end()) {
-			ConnectionQueueItem* cqi = getCQI(uc->getHintedUser(), false);
+		auto& container = cqis[type];
+		auto i = find(container.begin(), container.end(), uc->getUser());
+		if(i == container.end()) {
+			auto cqi = getCQI(uc->getHintedUser(), type);
 
 			cqi->setState(ConnectionQueueItem::ACTIVE);
 			uc->setFlag(UserConnection::FLAG_ASSOCIATED);
 
-			fire(ConnectionManagerListener::Connected(), cqi);
+			fire(ConnectionManagerListener::Connected(), cqi, uc);
 
-			dcdebug("ConnectionManager::addUploadConnection, leaving to uploadmanager\n");
+			dcdebug("ConnectionManager::addNewConnection, leaving to uploadmanager or PM handler\n");
 			addConn = true;
 		}
 	}
 
 	if(addConn) {
-		UploadManager::getInstance()->addConnection(uc);
+		if(type == ConnectionQueueItem::TYPE_UPLOAD) {
+			UploadManager::getInstance()->addConnection(uc);
+		}
 	} else {
 		putConnection(uc);
 	}
@@ -620,7 +631,7 @@ void ConnectionManager::on(UserConnectionListener::Key, UserConnection* aSource,
 	if(aSource->isSet(UserConnection::FLAG_DOWNLOAD)) {
 		addDownloadConnection(aSource);
 	} else {
-		addUploadConnection(aSource);
+		addNewConnection(aSource, ConnectionQueueItem::TYPE_UPLOAD);
 	}
 }
 
@@ -653,45 +664,37 @@ void ConnectionManager::on(AdcCommand::INF, UserConnection* aSource, const AdcCo
 		return;
 	}
 
-	string token;
 	if(aSource->isSet(UserConnection::FLAG_INCOMING)) {
+		string token;
 		if(!cmd.getParam("TO", 0, token)) {
-			aSource->send(AdcCommand(AdcCommand::SEV_FATAL, AdcCommand::ERROR_GENERIC, "TO missing"));
+			aSource->send(AdcCommand(AdcCommand::SEV_FATAL, AdcCommand::ERROR_PROTOCOL_GENERIC, "TO missing"));
 			putConnection(aSource);
 			return;
 		}
-	} else {
-		token = aSource->getToken();
-	}
+		aSource->setToken(token);
 
-	if(aSource->isSet(UserConnection::FLAG_INCOMING)) {
 		aSource->inf(false);
 	}
 
-	bool down = false;
-	{
-		Lock l(cs);
-		auto i = find(downloads.begin(), downloads.end(), aSource->getUser());
-
-		if(i != downloads.end()) {
-			(*i)->setErrors(0);
-
-			const string& to = (*i)->getToken();
-
-			if(to == token) {
-				down = true;
-			}
+	switch(checkToken(aSource)) {
+	case ConnectionQueueItem::TYPE_DOWNLOAD:
+		{
+			aSource->setFlag(UserConnection::FLAG_DOWNLOAD);
+			addDownloadConnection(aSource);
+			break;
 		}
-		/** @todo check tokens for upload connections */
-	}
-
-	aSource->setToken(token);
-	if(down) {
-		aSource->setFlag(UserConnection::FLAG_DOWNLOAD);
-		addDownloadConnection(aSource);
-	} else {
-		aSource->setFlag(UserConnection::FLAG_UPLOAD);
-		addUploadConnection(aSource);
+	case ConnectionQueueItem::TYPE_UPLOAD:
+		{
+			aSource->setFlag(UserConnection::FLAG_UPLOAD);
+			addNewConnection(aSource, ConnectionQueueItem::TYPE_UPLOAD);
+			break;
+		}
+	case ConnectionQueueItem::TYPE_PM:
+		{
+			aSource->setFlag(UserConnection::FLAG_PM);
+			addNewConnection(aSource, ConnectionQueueItem::TYPE_PM);
+			break;
+		}
 	}
 }
 
@@ -706,7 +709,7 @@ void ConnectionManager::force(const UserPtr& aUser) {
 	(*i)->setLastAttempt(0);
 }
 
-bool ConnectionManager::checkKeyprint(UserConnection *aSource) {
+bool ConnectionManager::checkKeyprint(const UserConnection* aSource) const {
 	dcassert(aSource->getUser());
 
 	auto kp = aSource->getKeyprint();
@@ -737,10 +740,31 @@ bool ConnectionManager::checkKeyprint(UserConnection *aSource) {
 	return true;
 }
 
+ConnectionQueueItem::Type ConnectionManager::checkToken(const UserConnection* uc) const {
+	auto& user = uc->getUser();
+	auto& token = uc->getToken();
+
+	if(token == pmToken) {
+		return ConnectionQueueItem::TYPE_PM;
+	}
+
+	Lock l(cs);
+
+	auto d = find(downloads.begin(), downloads.end(), user);
+	if(d != downloads.end() && (*d)->getToken() == token) {
+		(*d)->setErrors(0);
+		return ConnectionQueueItem::TYPE_DOWNLOAD;
+	}
+
+	// by default, assume it's an upload.
+	return ConnectionQueueItem::TYPE_UPLOAD;
+}
+
 void ConnectionManager::failed(UserConnection* aSource, const string& aError, bool protocolError) {
 	Lock l(cs);
 
 	if(aSource->isSet(UserConnection::FLAG_ASSOCIATED)) {
+
 		if(aSource->isSet(UserConnection::FLAG_DOWNLOAD)) {
 			auto i = find(downloads.begin(), downloads.end(), aSource->getUser());
 			dcassert(i != downloads.end());
@@ -749,13 +773,20 @@ void ConnectionManager::failed(UserConnection* aSource, const string& aError, bo
 			cqi->setLastAttempt(GET_TICK());
 			cqi->setErrors(protocolError ? -1 : (cqi->getErrors() + 1));
 			fire(ConnectionManagerListener::Failed(), cqi, aError);
-		} else if(aSource->isSet(UserConnection::FLAG_UPLOAD)) {
-			auto i = find(uploads.begin(), uploads.end(), aSource->getUser());
-			dcassert(i != uploads.end());
-			ConnectionQueueItem* cqi = *i;
-			putCQI(cqi);
+
+		} else {
+			Type type = aSource->isSet(UserConnection::FLAG_UPLOAD) ? ConnectionQueueItem::TYPE_UPLOAD :
+				aSource->isSet(UserConnection::FLAG_PM) ? ConnectionQueueItem::TYPE_PM : ConnectionQueueItem::TYPE_LAST;
+			if(type != ConnectionQueueItem::TYPE_LAST) {
+				auto& container = cqis[type];
+				auto i = find(container.begin(), container.end(), aSource->getUser());
+				dcassert(i != container.end());
+				ConnectionQueueItem* cqi = *i;
+				putCQI(cqi);
+			}
 		}
 	}
+
 	putConnection(aSource);
 }
 
@@ -767,18 +798,20 @@ void ConnectionManager::on(UserConnectionListener::ProtocolError, UserConnection
 	failed(aSource, aError, true);
 }
 
-void ConnectionManager::disconnect(const UserPtr& aUser) {
+void ConnectionManager::disconnect(const UserPtr& user) {
 	Lock l(cs);
 	for(auto uc: userConnections) {
-		if(uc->getUser() == aUser)
+		if(uc->getUser() == user)
 			uc->disconnect(true);
 	}
 }
 
-void ConnectionManager::disconnect(const UserPtr& aUser, bool isDownload) {
+void ConnectionManager::disconnect(const UserPtr& user, Type type) {
 	Lock l(cs);
 	for(auto uc: userConnections) {
-		if(uc->getUser() == aUser && uc->isSet(isDownload ? UserConnection::FLAG_DOWNLOAD : UserConnection::FLAG_UPLOAD)) {
+		if(uc->getUser() == user && uc->isSet(type == ConnectionQueueItem::TYPE_DOWNLOAD ? UserConnection::FLAG_DOWNLOAD :
+			type == ConnectionQueueItem::TYPE_UPLOAD ? UserConnection::FLAG_UPLOAD : UserConnection::FLAG_PM))
+		{
 			uc->disconnect(true);
 			break;
 		}

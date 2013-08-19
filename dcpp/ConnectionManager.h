@@ -50,14 +50,15 @@ public:
 		ACTIVE						// In one up/downmanager
 	};
 
-	ConnectionQueueItem(const HintedUser& aUser, bool aDownload) : token(Util::toString(Util::rand())),
-		lastAttempt(0), errors(0), state(WAITING), download(aDownload), user(aUser) { }
+	enum Type { TYPE_DOWNLOAD, TYPE_UPLOAD, TYPE_PM, TYPE_LAST };
+
+	ConnectionQueueItem(const HintedUser& user, Type type);
 
 	GETSET(string, token, Token);
 	GETSET(uint64_t, lastAttempt, LastAttempt);
 	GETSET(int, errors, Errors); // Number of connection errors, or -1 after a protocol error
 	GETSET(State, state, State);
-	GETSET(bool, download, Download);
+	GETSET(Type, type, Type);
 
 	const HintedUser& getUser() const { return user; }
 
@@ -101,6 +102,8 @@ class ConnectionManager : public Speaker<ConnectionManagerListener>,
 	public Singleton<ConnectionManager>
 {
 public:
+	typedef ConnectionQueueItem::Type Type;
+
 	void nmdcExpect(const string& aNick, const string& aMyNick, const string& aHubUrl) {
 		expectedConnections.add(aNick, aMyNick, aHubUrl);
 	}
@@ -112,8 +115,8 @@ public:
 	void getDownloadConnection(const HintedUser& aUser);
 	void force(const UserPtr& aUser);
 
-	void disconnect(const UserPtr& aUser); // disconnect downloads and uploads
-	void disconnect(const UserPtr& aUser, bool isDownload);
+	void disconnect(const UserPtr& user); // disconnect downloads and uploads
+	void disconnect(const UserPtr& user, Type type);
 
 	void shutdown();
 
@@ -123,6 +126,8 @@ public:
 
 	const string& getPort() const;
 	const string& getSecurePort() const;
+
+	static const string pmToken;
 
 private:
 
@@ -144,11 +149,11 @@ private:
 
 	friend class Server;
 
-	CriticalSection cs;
+	mutable CriticalSection cs;
 
 	/** All ConnectionQueueItems */
-	ConnectionQueueItem::List downloads;
-	ConnectionQueueItem::List uploads;
+	ConnectionQueueItem::List cqis[ConnectionQueueItem::TYPE_LAST];
+	ConnectionQueueItem::List& downloads; // shortcut
 
 	/** All active connections */
 	UserConnectionList userConnections;
@@ -173,15 +178,16 @@ private:
 	UserConnection* getConnection(bool aNmdc, bool secure) noexcept;
 	void putConnection(UserConnection* aConn);
 
-	void addUploadConnection(UserConnection* uc);
 	void addDownloadConnection(UserConnection* uc);
+	void addNewConnection(UserConnection* uc, Type type);
 
-	ConnectionQueueItem* getCQI(const HintedUser& aUser, bool download);
+	ConnectionQueueItem* getCQI(const HintedUser& user, Type type);
 	void putCQI(ConnectionQueueItem* cqi);
 
 	void accept(const Socket& sock, bool secure) noexcept;
 
-	bool checkKeyprint(UserConnection *aSource);
+	bool checkKeyprint(const UserConnection* aSource) const;
+	Type checkToken(const UserConnection* uc) const;
 
 	void failed(UserConnection* aSource, const string& aError, bool protocolError);
 

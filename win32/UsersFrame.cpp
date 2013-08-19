@@ -264,7 +264,7 @@ void UsersFrame::UserInfo::update(const UserPtr& u, bool visible) {
 
 		if(u->isOnline()) {
 			columns[COLUMN_SEEN] = T_("Online");
-			columns[COLUMN_HUB] = WinUtil::getHubNames(u, Util::emptyString).first;
+			columns[COLUMN_HUB] = WinUtil::getHubNames(u->getCID()).first;
 		} else {
 			columns[COLUMN_SEEN] = fu->getLastSeen() > 0 ? Text::toT(Util::formatTime("%Y-%m-%d %H:%M", fu->getLastSeen())) : T_("Offline");
 			columns[COLUMN_HUB] = Text::toT(fu->getUrl());
@@ -272,14 +272,14 @@ void UsersFrame::UserInfo::update(const UserPtr& u, bool visible) {
 	} else {
 		isFavorite = false;
 		grantSlot = false;
-		columns[COLUMN_NICK] = WinUtil::getNicks(u, Util::emptyString);
+		columns[COLUMN_NICK] = WinUtil::getNicks(u->getCID());
 
 		if(!visible) {
 			return;
 		}
 		if(u->isOnline()) {
 			columns[COLUMN_SEEN] = T_("Online");
-			columns[COLUMN_HUB] = WinUtil::getHubNames(u, Util::emptyString).first;
+			columns[COLUMN_HUB] = WinUtil::getHubNames(u->getCID()).first;
 		} else {
 			columns[COLUMN_SEEN] = T_("Offline");
 		}

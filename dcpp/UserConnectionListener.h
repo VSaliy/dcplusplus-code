@@ -40,6 +40,7 @@ public:
 	typedef X<6> Direction;
 	typedef X<7> Get;
 	typedef X<8> Updated;
+	typedef X<9> PrivateMessage;
 	typedef X<12> Send;
 	typedef X<13> GetListLength;
 	typedef X<14> MaxedOut;
@@ -59,6 +60,8 @@ public:
 	virtual void on(Key, UserConnection*, const string&) noexcept { }
 	virtual void on(Direction, UserConnection*, const string&, const string&) noexcept { }
 	virtual void on(Get, UserConnection*, const string&, int64_t) noexcept { }
+	virtual void on(Updated, UserConnection*) noexcept { }
+	virtual void on(PrivateMessage, UserConnection*, const ChatMessage&) noexcept { }
 	virtual void on(Send, UserConnection*) noexcept { }
 	virtual void on(GetListLength, UserConnection*) noexcept { }
 	virtual void on(MaxedOut, UserConnection*, string param = Util::emptyString) noexcept { }
@@ -67,10 +70,10 @@ public:
 	virtual void on(TransmitDone, UserConnection*) noexcept { }
 	virtual void on(Supports, UserConnection*, const StringList&) noexcept { }
 	virtual void on(FileNotAvailable, UserConnection*) noexcept { }
-	virtual void on(Updated, UserConnection*) noexcept { }
 
 	virtual void on(AdcCommand::SUP, UserConnection*, const AdcCommand&) noexcept { }
 	virtual void on(AdcCommand::INF, UserConnection*, const AdcCommand&) noexcept { }
+	virtual void on(AdcCommand::MSG, UserConnection*, const AdcCommand&) noexcept { }
 	virtual void on(AdcCommand::GET, UserConnection*, const AdcCommand&) noexcept { }
 	virtual void on(AdcCommand::SND, UserConnection*, const AdcCommand&) noexcept { }
 	virtual void on(AdcCommand::STA, UserConnection*, const AdcCommand&) noexcept { }

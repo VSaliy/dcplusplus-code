@@ -126,9 +126,9 @@ int TransferView::ItemInfo::getImage(int col) const {
 }
 
 int TransferView::ItemInfo::compareItems(const ItemInfo* a, const ItemInfo* b, int col) {
-	if(const_cast<ItemInfo*>(a)->transfer().download != const_cast<ItemInfo*>(b)->transfer().download) {
-		// sort downloads before uploads.
-		return const_cast<ItemInfo*>(a)->transfer().download ? -1 : 1;
+	if(const_cast<ItemInfo*>(a)->transfer().type != const_cast<ItemInfo*>(b)->transfer().type) {
+		// sort downloads first, then uploads, then PMs.
+		return const_cast<ItemInfo*>(a)->transfer().type < const_cast<ItemInfo*>(b)->transfer().type ? -1 : 1;
 	}
 
 	auto ca = dynamic_cast<const ConnectionInfo*>(a), cb = dynamic_cast<const ConnectionInfo*>(b);
@@ -168,7 +168,7 @@ TransferView::ConnectionInfo::ConnectionInfo(const HintedUser& u, TransferInfo& 
 }
 
 bool TransferView::ConnectionInfo::operator==(const ConnectionInfo& other) const {
-	return other.parent.download == parent.download && other.getUser() == getUser();
+	return other.parent.type == parent.type && other.getUser() == getUser();
 }
 
 int TransferView::ConnectionInfo::getImage(int col) const {
@@ -195,7 +195,7 @@ void TransferView::ConnectionInfo::update(const UpdateInfo& ui) {
 	}
 
 	if(ui.updateMask & UpdateInfo::MASK_TRANSFERRED) {
-		if(parent.download && ui.transferred > transferred) {
+		if(parent.type == TYPE_DOWNLOAD && ui.transferred > transferred) {
 			parent.transferred += ui.transferred - transferred;
 		}
 
@@ -267,30 +267,31 @@ void TransferView::ConnectionInfo::force() {
 }
 
 void TransferView::ConnectionInfo::disconnect() {
-	ConnectionManager::getInstance()->disconnect(user, parent.download);
+	ConnectionManager::getInstance()->disconnect(user, static_cast<ConnectionQueueItem::Type>(parent.type));
 }
 
-TransferView::TransferInfo::TransferInfo(const TTHValue& tth, bool download, const string& path, const string& tempPath) :
+TransferView::TransferInfo::TransferInfo(const TTHValue& tth, Type type, const string& path, const string& tempPath) :
 	ItemInfo(),
 	tth(tth),
-	download(download),
+	type(type),
 	path(path),
 	tempPath(tempPath)
 {
 }
 
 bool TransferView::TransferInfo::operator==(const TransferInfo& other) const {
-	return other.download == download && other.path == path;
+	return other.type == type && other.path == path;
 }
 
 int TransferView::TransferInfo::getImage(int col) const {
-	return col == COLUMN_FILE ? WinUtil::getFileIcon(path) : ItemInfo::getImage(col);
+	return type == TYPE_PM ? WinUtil::TRANSFER_ICON_PM :
+		col == COLUMN_FILE ? WinUtil::getFileIcon(path) : ItemInfo::getImage(col);
 }
 
 void TransferView::TransferInfo::update() {
 	timeleft = 0;
 	speed = 0;
-	if(!download) { transferred = 0; }
+	if(type != TYPE_DOWNLOAD) { transferred = 0; }
 
 	if(conns.empty()) {
 		// this should never happen, but let's play safe.
@@ -303,7 +304,7 @@ void TransferView::TransferInfo::update() {
 	size_t running = 0;
 	set<string> hubs;
 	for(auto& conn: conns) {
-		if(!download) {
+		if(type != TYPE_DOWNLOAD) {
 			timeleft += conn.timeleft;
 			transferred += conn.transferred;
 		}
@@ -319,7 +320,7 @@ void TransferView::TransferInfo::update() {
 		size = conns.front().size;
 	}
 
-	if(download && size > 0 && speed > 0) {
+	if(type == TYPE_DOWNLOAD && size > 0 && speed > 0) {
 		timeleft = std::max(static_cast<double>(size - transferred), 0.0) / speed;
 	}
 
@@ -337,7 +338,7 @@ void TransferView::TransferInfo::update() {
 	} else {
 		if(running > 0) {
 			tstring userStr = Text::toT(Util::toString(running) + "/" + Util::toString(users));
-			columns[COLUMN_STATUS] = download ?
+			columns[COLUMN_STATUS] = type == TYPE_DOWNLOAD ?
 				str(TF_("Downloading from %1% users") % userStr) :
 				str(TF_("Uploading to %1% users") % userStr);
 		} else {
@@ -370,7 +371,7 @@ TransferView::TransferInfo& TransferView::TransferInfo::transfer() {
 }
 
 double TransferView::TransferInfo::barPos() const {
-	if(download) {
+	if(type == TYPE_DOWNLOAD) {
 		// "transferred" is computed from previous download events so the ratio might exceed 100%...
 		return size > 0 && transferred >= 0 ?
 			std::min(static_cast<double>(transferred) / static_cast<double>(size), 1.0) : -1;
@@ -392,7 +393,7 @@ void TransferView::TransferInfo::disconnect() {
 }
 
 TransferView::HttpInfo::HttpInfo(const string& url) :
-	TransferInfo(TTHValue(), true, url, Util::emptyString),
+	TransferInfo(TTHValue(), TYPE_DOWNLOAD, url, Util::emptyString),
 	status(STATUS_WAITING)
 {
 	columns[COLUMN_PATH] = Text::toT(url);
@@ -687,11 +688,14 @@ LRESULT TransferView::handleCustomDraw(NMLVCUSTOMDRAW& data) {
 		auto col = data.iSubItem;
 		if(col == COLUMN_STATUS) {
 			auto& info = *reinterpret_cast<ItemInfo*>(data.nmcd.lItemlParam);
-			auto item = static_cast<int>(data.nmcd.dwItemSpec);
-			drawProgress(data.nmcd.hdc, transfers->getRect(item, col, LVIR_BOUNDS), item, col,
-				info.transfer().download ? downloadIcon : uploadIcon, info.getText(col),
-				info.barPos(), info.transfer().download);
+			auto type = info.transfer().type;
+			if(type == TYPE_DOWNLOAD || type == TYPE_UPLOAD) {
+				auto item = static_cast<int>(data.nmcd.dwItemSpec);
+				drawProgress(data.nmcd.hdc, transfers->getRect(item, col, LVIR_BOUNDS), item, col,
+					type == TYPE_DOWNLOAD ? downloadIcon : uploadIcon, info.getText(col),
+					info.barPos(), type == TYPE_DOWNLOAD);
 				return CDRF_SKIPDEFAULT;
+			}
 		}
 	}
 		// Fall through
@@ -734,23 +738,23 @@ void TransferView::layout() {
 
 void TransferView::addConn(const UpdateInfo& ui) {
 	TransferInfo* transfer = nullptr;
-	auto conn = findConn(ui.user, ui.download);
+	auto conn = findConn(ui.user, ui.type);
 
 	if(ui.updateMask & UpdateInfo::MASK_PATH) {
 		// adding a connection we know the transfer of.
 		dcassert(!ui.path.empty()); // transfers are indexed by path; it can't be empty.
-		transfer = findTransfer(ui.path, ui.download);
+		transfer = findTransfer(ui.path, ui.type);
 		if(conn && &conn->parent != transfer) {
 			removeConn(*conn);
 			conn = nullptr;
 		}
 		if(!transfer) {
-			transferItems.emplace_back(ui.tth, ui.download, ui.path, ui.tempPath);
+			transferItems.emplace_back(ui.tth, ui.type, ui.path, ui.tempPath);
 			transfer = &transferItems.back();
 			transfers->insert(transfer);
-			if(ui.download) {
+			if(ui.type == TYPE_DOWNLOAD) {
 				QueueManager::getInstance()->getSizeInfo(transfer->size, transfer->transferred, ui.path);
-			} else {
+			} else if(ui.type == TYPE_UPLOAD) {
 				transfer->size = File::getSize(ui.path);
 			}
 		}
@@ -761,7 +765,7 @@ void TransferView::addConn(const UpdateInfo& ui) {
 			removeConn(*conn);
 			conn = nullptr;
 		}
-		transferItems.emplace_back(TTHValue(), ui.download, ui.user.user->getCID().toBase32(), Util::emptyString);
+		transferItems.emplace_back(TTHValue(), ui.type, ui.user.user->getCID().toBase32(), Util::emptyString);
 		transfer = &transferItems.back();
 		transfers->insert(transfer);
 	}
@@ -786,7 +790,7 @@ void TransferView::addConn(const UpdateInfo& ui) {
 }
 
 void TransferView::updateConn(const UpdateInfo& ui) {
-	auto conn = findConn(ui.user, ui.download);
+	auto conn = findConn(ui.user, ui.type);
 	if(conn) {
 		conn->update(ui);
 		conn->parent.update();
@@ -794,16 +798,16 @@ void TransferView::updateConn(const UpdateInfo& ui) {
 }
 
 void TransferView::removeConn(const UpdateInfo& ui) {
-	auto conn = findConn(ui.user, ui.download);
+	auto conn = findConn(ui.user, ui.type);
 	if(conn) {
 		removeConn(*conn);
 	}
 }
 
-TransferView::ConnectionInfo* TransferView::findConn(const HintedUser& user, bool download) {
+TransferView::ConnectionInfo* TransferView::findConn(const HintedUser& user, Type type) {
 	if(!user) { return nullptr; }
 	for(auto& transfer: transferItems) {
-		if(transfer.download == download) {
+		if(transfer.type == type) {
 			for(auto& conn: transfer.conns) {
 				if(conn.getUser() == user) {
 					return &conn;
@@ -814,9 +818,9 @@ TransferView::ConnectionInfo* TransferView::findConn(const HintedUser& user, boo
 	return nullptr;
 }
 
-TransferView::TransferInfo* TransferView::findTransfer(const string& path, bool download) {
+TransferView::TransferInfo* TransferView::findTransfer(const string& path, Type type) {
 	for(auto& transfer: transferItems) {
-		if(transfer.download == download && transfer.path == path) {
+		if(transfer.type == type && transfer.path == path) {
 			return &transfer;
 		}
 	}
@@ -920,19 +924,20 @@ void TransferView::execTasks() {
 }
 
 void TransferView::on(ConnectionManagerListener::Added, ConnectionQueueItem* aCqi) noexcept {
-	auto ui = new UpdateInfo(aCqi->getUser(), aCqi->getDownload());
+	auto ui = new UpdateInfo(aCqi->getUser(), aCqi->getType());
 	ui->setStatus(STATUS_WAITING);
-	ui->setStatusString(T_("Connecting"));
+	ui->setStatusString(aCqi->getType() == TYPE_PM ? T_("Direct encrypted private message channel") :
+		T_("Connecting"));
 
 	addedConn(ui);
 }
 
 void TransferView::on(ConnectionManagerListener::Removed, ConnectionQueueItem* aCqi) noexcept {
-	removedConn(new UpdateInfo(aCqi->getUser(), aCqi->getDownload()));
+	removedConn(new UpdateInfo(aCqi->getUser(), aCqi->getType()));
 }
 
 void TransferView::on(ConnectionManagerListener::Failed, ConnectionQueueItem* aCqi, const string& aReason) noexcept {
-	auto ui = new UpdateInfo(aCqi->getUser(), aCqi->getDownload());
+	auto ui = new UpdateInfo(aCqi->getUser(), aCqi->getType());
 	ui->setStatusString(aCqi->getUser().user->isSet(User::OLD_CLIENT) ?
 		T_("Remote client does not fully support TTH - cannot download") :
 		Text::toT(aReason));
@@ -941,7 +946,7 @@ void TransferView::on(ConnectionManagerListener::Failed, ConnectionQueueItem* aC
 }
 
 void TransferView::on(ConnectionManagerListener::StatusChanged, ConnectionQueueItem* aCqi) noexcept {
-	auto ui = new UpdateInfo(aCqi->getUser(), aCqi->getDownload());
+	auto ui = new UpdateInfo(aCqi->getUser(), aCqi->getType());
 	ui->setStatusString((aCqi->getState() == ConnectionQueueItem::CONNECTING) ? T_("Connecting") : T_("Waiting to retry"));
 
 	updatedConn(ui);
@@ -967,7 +972,7 @@ void TransferView::on(DownloadManagerListener::Failed, Download* d, const string
 }
 
 void TransferView::on(DownloadManagerListener::Starting, Download* d) noexcept {
-	auto ui = new UpdateInfo(d->getHintedUser(), true);
+	auto ui = new UpdateInfo(d->getHintedUser(), TYPE_DOWNLOAD);
 
 	tstring statusString;
 	if(d->getUserConnection().isSecure()) {
@@ -999,7 +1004,7 @@ void TransferView::on(DownloadManagerListener::Tick, const DownloadList& dl) noe
 }
 
 void TransferView::on(DownloadManagerListener::Requesting, Download* d) noexcept {
-	auto ui = new UpdateInfo(d->getHintedUser(), true);
+	auto ui = new UpdateInfo(d->getHintedUser(), TYPE_DOWNLOAD);
 	starting(ui, d);
 	ui->setTempPath(d->getTempTarget());
 	ui->setStatusString(str(TF_("Requesting %1%") % getFile(d)));
@@ -1012,7 +1017,7 @@ void TransferView::on(UploadManagerListener::Complete, Upload* u) noexcept {
 }
 
 void TransferView::on(UploadManagerListener::Starting, Upload* u) noexcept {
-	auto ui = new UpdateInfo(u->getHintedUser(), false);
+	auto ui = new UpdateInfo(u->getHintedUser(), TYPE_UPLOAD);
 	starting(ui, u);
 
 	tstring statusString;
@@ -1127,14 +1132,14 @@ void TransferView::starting(UpdateInfo* ui, Transfer* t) {
 }
 
 void TransferView::onTransferTick(Transfer* t, bool download) {
-	auto ui = new UpdateInfo(t->getHintedUser(), download);
+	auto ui = new UpdateInfo(t->getHintedUser(), download ? TYPE_DOWNLOAD : TYPE_UPLOAD);
 	ui->setTransferred(t->getPos(), t->getActual(), t->getSize());
 	ui->setSpeed(t->getAverageSpeed());
 	updatedConn(ui);
 }
 
 void TransferView::onTransferComplete(Transfer* t, bool download) {
-	auto ui = new UpdateInfo(t->getHintedUser(), download);
+	auto ui = new UpdateInfo(t->getHintedUser(), download ? TYPE_DOWNLOAD : TYPE_UPLOAD);
 	ui->setFile(t->getPath());
 	ui->setStatus(STATUS_WAITING);
 	ui->setStatusString(T_("Idle"));
@@ -1144,7 +1149,7 @@ void TransferView::onTransferComplete(Transfer* t, bool download) {
 }
 
 void TransferView::onFailed(Download* d, const string& aReason) {
- 	auto ui = new UpdateInfo(d->getHintedUser(), true, true);
+ 	auto ui = new UpdateInfo(d->getHintedUser(), TYPE_DOWNLOAD, true);
 	ui->setFile(d->getPath());
 	ui->setStatus(STATUS_WAITING);
 	ui->setStatusString(Text::toT(aReason));
@@ -1153,7 +1158,7 @@ void TransferView::onFailed(Download* d, const string& aReason) {
 }
 
 TransferView::UpdateInfo* TransferView::makeHttpUI(HttpConnection* c) {
-	auto ui = new UpdateInfo(true);
+	auto ui = new UpdateInfo(TYPE_DOWNLOAD);
 	ui->setHttp();
 	ui->setFile(c->getUrl());
 	return ui;

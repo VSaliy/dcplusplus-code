@@ -543,8 +543,8 @@ void UploadManager::on(TimerManagerListener::Minute, uint64_t  aTick ) noexcept 
 
 	for(auto& i: disconnects) {
 		LogManager::getInstance()->message(str(F_("Disconnected user leaving the hub: %1%") %
-			Util::toString(ClientManager::getInstance()->getNicks(i->getCID(), Util::emptyString))));
-		ConnectionManager::getInstance()->disconnect(i, false);
+			Util::toString(ClientManager::getInstance()->getNicks(i->getCID()))));
+		ConnectionManager::getInstance()->disconnect(i, ConnectionQueueItem::TYPE_UPLOAD);
 	}
 
 	int freeSlots = getFreeSlots();

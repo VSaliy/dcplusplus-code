@@ -20,7 +20,10 @@
 #define DCPLUSPLUS_WIN32_PRIVATE_FRAME_H
 
 #include <dcpp/ClientManagerListener.h>
+#include <dcpp/ConnectionManagerListener.h>
+#include <dcpp/CriticalSection.h>
 #include <dcpp/User.h>
+#include <dcpp/UserConnectionListener.h>
 
 #include "MDIChildFrame.h"
 #include "IRecent.h"
@@ -32,6 +35,8 @@ class PrivateFrame :
 	public MDIChildFrame<PrivateFrame>,
 	public IRecent<PrivateFrame>,
 	private ClientManagerListener,
+	private ConnectionManagerListener,
+	private UserConnectionListener,
 	public AspectChat<PrivateFrame>,
 	public AspectUserInfo<PrivateFrame>,
 	public AspectUserCommand<PrivateFrame>
@@ -49,6 +54,7 @@ class PrivateFrame :
 public:
 	enum Status {
 		STATUS_STATUS,
+		STATUS_CHANNEL,
 		STATUS_LAST
 	};
 
@@ -56,8 +62,7 @@ public:
 	const string& getId() const;
 
 	/// @return whether a new window can be opened (wrt the "Max PM windows" setting).
-	static bool gotMessage(TabViewPtr parent, const UserPtr& from, const UserPtr& to, const UserPtr& replyTo,
-		const ChatMessage& message, const string& hubHint, bool fromBot);
+	static bool gotMessage(TabViewPtr parent, const ChatMessage& message, const string& hubHint, bool fromBot);
 	static void openWindow(TabViewPtr parent, const HintedUser& replyTo, const tstring& msg = Util::emptyStringT,
 		const string& logPath = Util::emptyString, bool activate = true);
 	static void activateWindow(const UserPtr& u);
@@ -71,16 +76,13 @@ public:
 	void sendMessage(const tstring& msg, bool thirdPerson = false);
 
 private:
-	GridPtr grid;
-	GridPtr hubGrid;
-	ComboBoxPtr hubBox;
-
-	StringPairList hubs;
-	tstring hubName;
-	ParamMap ucLineParams;
-
 	UserInfoBase replyTo;
 	bool online;
+
+	mutable CriticalSection mutex;
+	UserConnection* conn;
+
+	ParamMap ucLineParams;
 
 	typedef unordered_map<UserPtr, PrivateFrame*, User::Hash> FrameMap;
 	static FrameMap frames;
@@ -96,9 +98,14 @@ private:
 	void fillLogParams(ParamMap& params) const;
 	void addedChat(const tstring& message);
 	void addStatus(const tstring& text);
-	void updateOnlineStatus();
+	void updateOnlineStatus(bool newChannel = false);
+	void updateChannel();
+	void startCC();
+	void closeCC();
+	bool ccReady() const;
 
 	bool handleChatContextMenu(dwt::ScreenCoordinate pt);
+	void handleChannelMenu();
 
 	void runUserCommand(const UserCommand& uc);
 
@@ -112,9 +119,16 @@ private:
 	UserInfoList selectedUsersImpl();
 
 	// ClientManagerListener
-	virtual void on(ClientManagerListener::UserUpdated, const OnlineUser& aUser) noexcept;
 	virtual void on(ClientManagerListener::UserConnected, const UserPtr& aUser) noexcept;
+	virtual void on(ClientManagerListener::UserUpdated, const OnlineUser& aUser) noexcept;
 	virtual void on(ClientManagerListener::UserDisconnected, const UserPtr& aUser) noexcept;
+
+	// ConnectionManagerListener
+	virtual void on(ConnectionManagerListener::Connected, ConnectionQueueItem* cqi, UserConnection* uc) noexcept;
+	virtual void on(ConnectionManagerListener::Removed, ConnectionQueueItem* cqi) noexcept;
+
+	// UserConnectionListener
+	virtual void on(UserConnectionListener::PrivateMessage, UserConnection* uc, const ChatMessage& message) noexcept;
 };
 
 #endif // !defined(PRIVATE_FRAME_H)

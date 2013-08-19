@@ -90,7 +90,8 @@ public:
 
 		FILE_ICON_GENERIC,
 
-		TRANSFER_ICON_USER
+		TRANSFER_ICON_USER,
+		TRANSFER_ICON_PM
 	};
 
 	// icon indexes to use with the "userImages" image list.
@@ -264,14 +265,12 @@ public:
 	static bool isAlt() { return (::GetKeyState(VK_MENU) & 0x8000) > 0; }
 	static bool isCtrl() { return (::GetKeyState(VK_CONTROL) & 0x8000) > 0; }
 
-	static tstring getNicks(const CID& cid, const string& hintUrl);
-	static tstring getNicks(const UserPtr& u, const string& hintUrl);
-	static tstring getNicks(const HintedUser& user) { return getNicks(user.user->getCID(), user.hint); }
-
+	static tstring getNicks(const CID& cid);
 	/** @return Pair of hubnames as a string and a bool representing the user's online status */
-	static pair<tstring, bool> getHubNames(const CID& cid, const string& hintUrl);
-	static pair<tstring, bool> getHubNames(const UserPtr& u, const string& hintUrl);
-	static pair<tstring, bool> getHubNames(const HintedUser& user) { return getHubNames(user.user->getCID(), user.hint); }
+	static pair<tstring, bool> getHubNames(const CID& cid);
+
+	static tstring getNick(const HintedUser& user);
+	static tstring getHubName(const HintedUser& user);
 
 	static void reducePaths(string& message);
 
