@@ -168,6 +168,7 @@ fullSlots(false)
 
 	for(auto& conn: conns) { conn = nullptr; }
 
+	ConnectionManager::getInstance()->addListener(this);
 	HttpManager::getInstance()->addListener(this);
 	LogManager::getInstance()->addListener(this);
 	QueueManager::getInstance()->addListener(this);
@@ -758,6 +759,19 @@ void MainWindow::TrayPM() {
 	}
 }
 
+UserConnection* MainWindow::getPMConn(const UserPtr& user, UserConnectionListener* listener) {
+	Lock l(ccpmMutex);
+	auto i = ccpms.find(user);
+	if(i != ccpms.end()) {
+		auto uc = i->second;
+		ccpms.erase(i);
+		uc->addListener(listener);
+		uc->removeListener(this);
+		return uc;
+	}
+	return nullptr;
+}
+
 void MainWindow::handleTabsTitleChanged(const tstring& title) {
 	setText(title.empty() ? _T(APPNAME) _T(" ") _T(VERSIONSTRING) : _T(APPNAME) _T(" ") _T(VERSIONSTRING) _T(" - [") + title + _T("]"));
 }
@@ -1068,9 +1082,15 @@ bool MainWindow::handleClosing() {
 			if(transfers)
 				transfers->prepareClose();
 
+			ConnectionManager::getInstance()->removeListener(this);
 			HttpManager::getInstance()->removeListener(this);
 			LogManager::getInstance()->removeListener(this);
 			QueueManager::getInstance()->removeListener(this);
+
+			{
+				Lock l(ccpmMutex);
+				ccpms.clear();
+			}
 
 			SearchManager::getInstance()->disconnect();
 			ConnectionManager::getInstance()->disconnect();
@@ -1887,6 +1907,54 @@ void MainWindow::handleTrayUpdate() {
 
 void MainWindow::handleWhatsThis() {
 	sendMessage(WM_SYSCOMMAND, SC_CONTEXTHELP);
+}
+
+void MainWindow::on(ConnectionManagerListener::Connected, ConnectionQueueItem* cqi, UserConnection* uc) noexcept {
+	if(cqi->getType() == ConnectionQueueItem::TYPE_PM) {
+
+		// C-C PMs are not supported outside of PM windows.
+		if(!SETTING(POPUP_PMS)) {
+			uc->disconnect(true);
+			return;
+		}
+
+		// until a message is received, no need to open a PM window.
+		Lock l(ccpmMutex);
+		ccpms[cqi->getUser()] = uc;
+		uc->addListener(this);
+	}
+}
+
+void MainWindow::on(ConnectionManagerListener::Removed, ConnectionQueueItem* cqi) noexcept {
+	if(cqi->getType() == ConnectionQueueItem::TYPE_PM) {
+		Lock l(ccpmMutex);
+		ccpms.erase(cqi->getUser());
+	}
+}
+
+void MainWindow::on(UserConnectionListener::PrivateMessage, UserConnection* uc, const ChatMessage& message) noexcept {
+	auto user = uc->getHintedUser();
+	callAsync([this, message, user] {
+		auto opened = PrivateFrame::isOpen(user) || PrivateFrame::gotMessage(getTabView(), message, user.hint, false);
+
+		// remove our listener as the PM window now handles the conn.
+		{
+			Lock l(ccpmMutex);
+			auto i = ccpms.find(user);
+			if(i != ccpms.end()) {
+				auto uc = i->second;
+				uc->removeListener(this);
+				if(!opened) {
+					uc->disconnect(true);
+				}
+				ccpms.erase(i);
+			}
+		}
+
+		if(opened) {
+			TrayPM();
+		}
+	});
 }
 
 void MainWindow::on(HttpManagerListener::Failed, HttpConnection* c, const string&) noexcept {

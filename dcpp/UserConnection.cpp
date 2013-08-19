@@ -19,14 +19,14 @@
 #include "stdinc.h"
 #include "UserConnection.h"
 
-#include "ClientManager.h"
-
-#include "StringTokenizer.h"
 #include "AdcCommand.h"
-#include "Transfer.h"
+#include "ChatMessage.h"
+#include "ClientManager.h"
 #include "format.h"
-#include "SettingsManager.h"
 #include "PluginManager.h"
+#include "SettingsManager.h"
+#include "StringTokenizer.h"
+#include "Transfer.h"
 
 namespace dcpp {
 
@@ -179,6 +179,39 @@ void UserConnection::supports(const StringList& feat) {
 	send("$Supports " + x + '|');
 }
 
+void UserConnection::get(const string& aType, const string& aName, const int64_t aStart, const int64_t aBytes) {
+	send(AdcCommand(AdcCommand::CMD_GET).addParam(aType).addParam(aName).addParam(Util::toString(aStart)).addParam(Util::toString(aBytes)));
+}
+
+void UserConnection::snd(const string& aType, const string& aName, const int64_t aStart, const int64_t aBytes) {
+	send(AdcCommand(AdcCommand::CMD_SND).addParam(aType).addParam(aName).addParam(Util::toString(aStart)).addParam(Util::toString(aBytes)));
+}
+
+void UserConnection::pm(const string& message, bool thirdPerson) {
+	{
+		auto lock = ClientManager::getInstance()->lock();
+		auto ou = ClientManager::getInstance()->findOnlineUser(getHintedUser());
+
+		if(PluginManager::getInstance()->runHook(HOOK_CHAT_PM_OUT, ou, message))
+			return;
+	}
+
+	AdcCommand c(AdcCommand::CMD_MSG);
+	c.addParam(message);
+	if(thirdPerson)
+		c.addParam("ME", "1");
+	send(c);
+
+	// simulate an echo message.
+	handlePM(c, true);
+}
+
+void UserConnection::handle(AdcCommand::MSG t, const AdcCommand& c) {
+	handlePM(c, false);
+
+	fire(t, this, c);
+}
+
 void UserConnection::handle(AdcCommand::STA t, const AdcCommand& c) {
 	if(c.getParameters().size() >= 2) {
 		const string& code = c.getParam(0);
@@ -189,6 +222,30 @@ void UserConnection::handle(AdcCommand::STA t, const AdcCommand& c) {
 	}
 
 	fire(t, this, c);
+}
+
+void UserConnection::handlePM(const AdcCommand& c, bool echo) noexcept {
+	auto message = c.getParam(0);
+
+	auto cm = ClientManager::getInstance();
+	auto lock = cm->lock();
+	auto peer = cm->findOnlineUser(user->getCID(), hubUrl);
+	auto me = cm->findOnlineUser(cm->getMe()->getCID(), hubUrl);
+	// null pointers allowed here as the conn may be going on without hubs.
+
+	if(echo) {
+		std::swap(peer, me);
+	}
+
+	if(peer && peer->getIdentity().noChat())
+		return;
+
+	if(PluginManager::getInstance()->runHook(HOOK_CHAT_PM_IN, peer, message))
+		return;
+
+	string tmp;
+	fire(UserConnectionListener::PrivateMessage(), this, ChatMessage(message, peer, me, peer,
+		c.hasFlag("ME", 1), c.getParam("TS", 1, tmp) ? Util::toInt64(tmp) : 0));
 }
 
 void UserConnection::on(Connected) noexcept {

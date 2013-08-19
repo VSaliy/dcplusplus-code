@@ -20,11 +20,15 @@
 #define DCPLUSPLUS_WIN32_MAIN_WINDOW_H
 
 #include <dcpp/forward.h>
+
 #include <dcpp/atomic.h>
+#include <dcpp/ConnectionManagerListener.h>
+#include <dcpp/CriticalSection.h>
 #include <dcpp/HttpManagerListener.h>
 #include <dcpp/LogManagerListener.h>
 #include <dcpp/QueueManagerListener.h>
 #include <dcpp/User.h>
+#include <dcpp/UserConnectionListener.h>
 #include <dcpp/WindowInfo.h>
 
 #include <dwt/widgets/Window.h>
@@ -38,6 +42,8 @@ using std::unique_ptr;
 class MainWindow :
 	public dwt::Window,
 	public AspectStatus<MainWindow>,
+	private ConnectionManagerListener,
+	private UserConnectionListener,
 	private HttpManagerListener,
 	private LogManagerListener,
 	private QueueManagerListener
@@ -76,6 +82,8 @@ public:
 	void notify(const tstring& title, const tstring& message, function<void ()> callback = nullptr, const dwt::IconPtr& balloonIcon = nullptr);
 	void setStaticWindowState(const string& id, bool open);
 	void TrayPM();
+
+	UserConnection* getPMConn(const UserPtr& user, UserConnectionListener* listener);
 
 	bool closing() const { return stopperThread != 0; }
 
@@ -140,6 +148,8 @@ private:
 	ViewIndexes viewIndexes; /// indexes of menu commands of the "View" menu that open static windows
 
 	bool tray_pm;
+	unordered_map<UserPtr, UserConnection*, User::Hash> ccpms;
+	CriticalSection ccpmMutex;
 
 	/* sorted list of plugin commands. static because they may be added before the window has
 	actually been created.
@@ -241,6 +251,13 @@ private:
 	void handleRestore();
 
 	static DWORD WINAPI stopper(void* p);
+
+	// ConnectionManagerListener
+	virtual void on(ConnectionManagerListener::Connected, ConnectionQueueItem* cqi, UserConnection* uc) noexcept;
+	virtual void on(ConnectionManagerListener::Removed, ConnectionQueueItem* cqi) noexcept;
+
+	// UserConnectionListener
+	virtual void on(UserConnectionListener::PrivateMessage, UserConnection* uc, const ChatMessage& message) noexcept;
 
 	// HttpManagerListener
 	void on(HttpManagerListener::Failed, HttpConnection*, const string&) noexcept;

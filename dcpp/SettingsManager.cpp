@@ -86,14 +86,15 @@ const string SettingsManager::settingTags[] =
 	"SENTRY",
 	// Bools
 	"AddFinishedInstantly", "AdlsBreakOnFirst",
-	"AllowUntrustedClients", "AllowUntrustedHubs", "AlwaysTray", "AutoAway",
+	"AllowUntrustedClients", "AllowUntrustedHubs", "AlwaysCCPM", "AlwaysTray", "AutoAway",
 	"AutoDetectIncomingConnection", "AutoFollow", "AutoKick", "AutoKickNoFavs", "AutoSearch",
 	"AutoSearchAutoMatch", "AutoDropAll", "AutoDropDisconnect", "AutoDropFilelists",
 	"AwayCompLock", "AwayTimeStamp", "BoldFinishedDownloads", "BoldFinishedUploads", "BoldFL",
 	"BoldHub", "BoldPm", "BoldQueue", "BoldSearch", "BoldSystemLog", "ClearSearch",
 	"CompressTransfers", "ConfirmADLSRemoval", "ConfirmExit", "ConfirmHubClosing",
 	"ConfirmHubRemoval", "ConfirmItemRemoval", "ConfirmUserRemoval", "Coral", "DcextRegister",
-	"DontDlAlreadyQueued", "DontDLAlreadyShared", "FavShowJoins", "FilterMessages",
+	"DontDlAlreadyQueued", "DontDLAlreadyShared", "EnableCCPM", "FavShowJoins",
+	"FilterMessages",
 	"FinishedDLOnlyFull", "FollowLinks", "GeoCity", "GeoRegion", "GetUserCountry", "GetUserInfo",
 	"HubUserCommands", "IgnoreBotPms", "IgnoreHubPms", "OpenNewWindow", "KeepFinishedFiles",
 	"KeepLists", "ListDuplicates", "LogDownloads", "LogFilelistTransfers", "LogFinishedDownloads",
@@ -349,6 +350,8 @@ SettingsManager::SettingsManager()
 	setDefault(USERS_FILTER_WAITING, false);
 	setDefault(MAX_PM_WINDOWS, 50);
 	setDefault(REQUIRE_TLS, false);
+	setDefault(ENABLE_CCPM, true);
+	setDefault(ALWAYS_CCPM, false);
 	setDefault(LAST_SHARED_FOLDER, Util::emptyString);
 
 	setSearchTypeDefaults();

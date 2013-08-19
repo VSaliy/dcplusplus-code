@@ -37,6 +37,8 @@ PropPage::ListItem CertificatesPage::listItems[] = {
 	{ SettingsManager::REQUIRE_TLS, N_("Require TLS ADC client-client connections"), IDH_SETTINGS_CERTIFICATES_ALLOW_UNTRUSTED_HUBS },
 	{ SettingsManager::ALLOW_UNTRUSTED_HUBS, N_("Allow TLS connections to hubs without trusted certificate"), IDH_SETTINGS_CERTIFICATES_ALLOW_UNTRUSTED_HUBS },
 	{ SettingsManager::ALLOW_UNTRUSTED_CLIENTS, N_("Allow TLS connections to clients without trusted certificate"), IDH_SETTINGS_CERTIFICATES_ALLOW_UNTRUSTED_CLIENTS },
+	{ SettingsManager::ENABLE_CCPM, N_("Support direct encrypted private message channels"), IDH_SETTINGS_CERTIFICATES_ENABLE_CCPM },
+	{ SettingsManager::ALWAYS_CCPM, N_("Always attempt to establish direct encrypted private message channels"), IDH_SETTINGS_CERTIFICATES_ALWAYS_CCPM },
 	{ 0, 0 }
 };
 

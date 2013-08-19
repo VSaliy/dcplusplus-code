@@ -202,6 +202,7 @@ void WinUtil::init() {
 
 	// add icons used by the transfer list (TRANSFER_ICON_*).
 	fileImages->add(*createIcon(IDI_USER, 16));
+	fileImages->add(*createIcon(IDI_PRIVATE, 16));
 
 	{
 		const dwt::Point size(16, 16);
@@ -727,15 +728,12 @@ void WinUtil::openFolder(const tstring& file) {
 			Text::fromT(file)) + "\"").c_str(), NULL, SW_SHOWNORMAL);
 }
 
-tstring WinUtil::getNicks(const CID& cid, const string& hintUrl) {
-	return Text::toT(Util::toString(ClientManager::getInstance()->getNicks(cid, hintUrl)));
+tstring WinUtil::getNicks(const CID& cid) {
+	return Text::toT(Util::toString(ClientManager::getInstance()->getNicks(cid)));
 }
 
-tstring WinUtil::getNicks(const UserPtr& u, const string& hintUrl) {
-	return getNicks(u->getCID(), hintUrl);
-}
-
-static pair<tstring, bool> formatHubNames(const StringList& hubs) {
+pair<tstring, bool> WinUtil::getHubNames(const CID& cid) {
+	auto hubs = ClientManager::getInstance()->getHubNames(cid);
 	if(hubs.empty()) {
 		return make_pair(T_("Offline"), false);
 	} else {
@@ -743,12 +741,12 @@ static pair<tstring, bool> formatHubNames(const StringList& hubs) {
 	}
 }
 
-pair<tstring, bool> WinUtil::getHubNames(const CID& cid, const string& hintUrl) {
-	return formatHubNames(ClientManager::getInstance()->getHubNames(cid, hintUrl));
+tstring WinUtil::getNick(const HintedUser& user) {
+	return Text::toT(ClientManager::getInstance()->getNick(user));
 }
 
-pair<tstring, bool> WinUtil::getHubNames(const UserPtr& u, const string& hintUrl) {
-	return getHubNames(u->getCID(), hintUrl);
+tstring WinUtil::getHubName(const HintedUser& user) {
+	return Text::toT(ClientManager::getInstance()->getHubName(user));
 }
 
 size_t WinUtil::getFileIcon(const string& fileName) {

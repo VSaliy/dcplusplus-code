@@ -62,20 +62,20 @@ public:
 	size_t getUserCount() const;
 	int64_t getAvailable() const;
 
-	StringList getHubUrls(const CID& cid, const string& hintUrl = Util::emptyString);
-	StringList getHubNames(const CID& cid, const string& hintUrl = Util::emptyString);
-	StringList getNicks(const CID& cid, const string& hintUrl = Util::emptyString);
-	string getField(const CID& cid, const string& hintUrl, const char* field) const;
-
-	StringList getNicks(const HintedUser& user) { return getNicks(user.user->getCID(), user.hint); }
-	StringList getHubNames(const HintedUser& user) { return getHubNames(user.user->getCID(), user.hint); }
-	StringList getHubUrls(const HintedUser& user) { return getHubUrls(user.user->getCID(), user.hint); }
-
-	StringPairList getHubs(const CID& cid, const string& hintUrl);
+	StringList getNicks(const CID& cid) const;
+	StringPairList getHubs(const CID& cid) const;
+	StringList getHubNames(const CID& cid) const;
+	StringList getHubUrls(const CID& cid) const;
 
 	vector<Identity> getIdentities(const UserPtr &u) const;
 
+	string getNick(const HintedUser& user) const;
+	string getHubName(const HintedUser& user) const;
+
+	string getField(const CID& cid, const string& hintUrl, const char* field) const;
 	string getConnection(const CID& cid) const;
+
+	string getOfflineNick(const CID& cid) const;
 
 	bool isConnected(const string& aUrl) const;
 

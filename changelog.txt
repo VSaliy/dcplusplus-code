@@ -3,10 +3,11 @@
 * [L#1208049] Properly ungroup transfer items (poy)
 * [L#1206855] Fix a bug with duplicate directory downloads (maksis)
 * Optimize searches with multiple extensions (emtee, poy)
-* Display hub addresses in private message windows (iceman50)
 * [L#1032153] Added CDATA parsing to XML parser (crise)
 * [L#233798] Added option to set automatic search interval (ullner)
 * [L#1033249] The text in the /help-command now lists the description of each command. (ullner)
+* Move the PM channel selector to a status bar menu (poy)
+* [ADC] Direct encrypted PM channels (poy)
 
 -- 0.828 2013-07-23 --
 * Translation fixes

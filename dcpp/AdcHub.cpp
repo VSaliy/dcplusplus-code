@@ -54,6 +54,7 @@ const string AdcHub::UDP4_FEATURE("UDP4");
 const string AdcHub::UDP6_FEATURE("UDP6");
 const string AdcHub::NAT0_FEATURE("NAT0");
 const string AdcHub::SEGA_FEATURE("SEGA");
+const string AdcHub::CCPM_FEATURE("CCPM");
 const string AdcHub::BASE_SUPPORT("ADBASE");
 const string AdcHub::BAS0_SUPPORT("ADBAS0");
 const string AdcHub::TIGR_SUPPORT("ADTIGR");
@@ -266,7 +267,7 @@ void AdcHub::handle(AdcCommand::MSG, AdcCommand& c) noexcept {
 	} else if(PluginManager::getInstance()->runHook(HOOK_CHAT_IN, this, chatMessage))
 		return;
 
-	fire(ClientListener::Message(), this, ChatMessage(c.getParam(0), from, to, replyTo, c.hasFlag("ME", 1),
+	fire(ClientListener::Message(), this, ChatMessage(chatMessage, from, to, replyTo, c.hasFlag("ME", 1),
 		c.getParam("TS", 1, temp) ? Util::toInt64(temp) : 0));
 }
 
@@ -1018,6 +1019,9 @@ void AdcHub::infoImpl() {
 
 	if(CryptoManager::getInstance()->TLSOk()) {
 		su += "," + ADCS_FEATURE;
+		if(SETTING(ENABLE_CCPM)) {
+			su += "," + CCPM_FEATURE;
+		}
 		auto &kp = CryptoManager::getInstance()->getKeyprint();
 		addParam(lastInfoMap, c, "KP", "SHA256/" + Encoder::toBase32(&kp[0], kp.size()));
 	}

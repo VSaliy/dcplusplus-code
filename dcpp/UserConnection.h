@@ -59,14 +59,22 @@ public:
 
 	enum Flags {
 		FLAG_NMDC = 0x01,
+
 		FLAG_OP = FLAG_NMDC << 1,
+
 		FLAG_UPLOAD = FLAG_OP << 1,
 		FLAG_DOWNLOAD = FLAG_UPLOAD << 1,
-		FLAG_INCOMING = FLAG_DOWNLOAD << 1,
+		FLAG_PM = FLAG_DOWNLOAD << 1,
+
+		FLAG_INCOMING = FLAG_PM << 1,
+
 		FLAG_ASSOCIATED = FLAG_INCOMING << 1,
+
 		FLAG_HASSLOT = FLAG_ASSOCIATED << 1,
 		FLAG_HASEXTRASLOT = FLAG_HASSLOT << 1,
+
 		FLAG_INVALIDKEY = FLAG_HASEXTRASLOT << 1,
+
 		FLAG_SUPPORTS_MINISLOTS = FLAG_INVALIDKEY << 1,
 		FLAG_SUPPORTS_XML_BZLIST = FLAG_SUPPORTS_MINISLOTS << 1,
 		FLAG_SUPPORTS_ADCGET = FLAG_SUPPORTS_XML_BZLIST << 1,
@@ -131,8 +139,9 @@ public:
 	// ADC Stuff
 	void sup(const StringList& features);
 	void inf(bool withToken);
-	void get(const string& aType, const string& aName, const int64_t aStart, const int64_t aBytes) { send(AdcCommand(AdcCommand::CMD_GET).addParam(aType).addParam(aName).addParam(Util::toString(aStart)).addParam(Util::toString(aBytes))); }
-	void snd(const string& aType, const string& aName, const int64_t aStart, const int64_t aBytes) { send(AdcCommand(AdcCommand::CMD_SND).addParam(aType).addParam(aName).addParam(Util::toString(aStart)).addParam(Util::toString(aBytes))); }
+	void get(const string& aType, const string& aName, const int64_t aStart, const int64_t aBytes);
+	void snd(const string& aType, const string& aName, const int64_t aStart, const int64_t aBytes);
+	void pm(const string& message, bool thirdPerson = false);
 	void send(const AdcCommand& c) { send(c.toString(0, isSet(FLAG_NMDC))); }
 
 	void setDataMode(int64_t aBytes = -1) { dcassert(socket); socket->setDataMode(aBytes); }
@@ -170,6 +179,7 @@ public:
 
 	void handle(AdcCommand::SUP t, const AdcCommand& c) { fire(t, this, c); }
 	void handle(AdcCommand::INF t, const AdcCommand& c) { fire(t, this, c); }
+	void handle(AdcCommand::MSG t, const AdcCommand& c);
 	void handle(AdcCommand::GET t, const AdcCommand& c) { fire(t, this, c); }
 	void handle(AdcCommand::SND t, const AdcCommand& c) { fire(t, this, c);	}
 	void handle(AdcCommand::STA t, const AdcCommand& c);
@@ -224,6 +234,8 @@ private:
 	void onLine(const string& aLine) noexcept;
 
 	void send(const string& aString);
+
+	void handlePM(const AdcCommand& c, bool echo) noexcept;
 
 	virtual void on(Connected) noexcept;
 	virtual void on(Line, const string&) noexcept;
