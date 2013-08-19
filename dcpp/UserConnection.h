@@ -49,6 +49,7 @@ public:
 	static const string FEATURE_ADC_BASE;
 	static const string FEATURE_ADC_BZIP;
 	static const string FEATURE_ADC_TIGR;
+	static const string FEATURE_ADC_CCPM;
 
 	static const string FILE_NOT_AVAILABLE;
 

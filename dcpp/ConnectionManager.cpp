@@ -50,6 +50,7 @@ ConnectionManager::ConnectionManager() :
 	adcFeatures.push_back("AD" + UserConnection::FEATURE_ADC_BASE);
 	adcFeatures.push_back("AD" + UserConnection::FEATURE_ADC_TIGR);
 	adcFeatures.push_back("AD" + UserConnection::FEATURE_ADC_BZIP);
+	adcFeatures.push_back("AD" + UserConnection::FEATURE_ADC_CCPM);
 }
 
 void ConnectionManager::listen() {
