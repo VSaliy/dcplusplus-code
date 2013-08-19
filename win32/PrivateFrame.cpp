@@ -210,14 +210,16 @@ void PrivateFrame::addStatus(const tstring& text) {
 }
 
 bool PrivateFrame::preClosing() {
-	ClientManager::getInstance()->removeListener(this);
-	ConnectionManager::getInstance()->removeListener(this);
-
 	{
 		Lock l(mutex);
-		if(conn) { conn->removeListener(this); }
+		if(conn) {
+			conn->removeListener(this);
+			conn->disconnect(true);
+		}
 	}
-	ConnectionManager::getInstance()->disconnect(replyTo.getUser(), ConnectionQueueItem::TYPE_PM);
+
+	ClientManager::getInstance()->removeListener(this);
+	ConnectionManager::getInstance()->removeListener(this);
 
 	frames.erase(replyTo.getUser());
 	return true;
