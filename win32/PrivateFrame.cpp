@@ -281,7 +281,7 @@ void PrivateFrame::updateOnlineStatus(bool newChannel) {
 		updateChannel();
 
 		if(online && SETTING(ALWAYS_CCPM) && !ccReady()) {
-			startCC();
+			startCC(true);
 		}
 	}
 }
@@ -292,9 +292,9 @@ void PrivateFrame::updateChannel() {
 	status->setText(STATUS_CHANNEL, channel, true);
 }
 
-void PrivateFrame::startCC() {
+void PrivateFrame::startCC(bool silent) {
 	if(ccReady()) {
-		addStatus(T_("A direct encrypted channel is already available"));
+		if(!silent) { addStatus(T_("A direct encrypted channel is already available")); }
 		return;
 	}
 
@@ -302,7 +302,7 @@ void PrivateFrame::startCC() {
 		auto lock = ClientManager::getInstance()->lock();
 		auto ou = ClientManager::getInstance()->findOnlineUser(replyTo.getUser());
 		if(!ou) {
-			addStatus(T_("User offline"));
+			if(!silent) { addStatus(T_("User offline")); }
 			return;
 		}
 
@@ -310,21 +310,21 @@ void PrivateFrame::startCC() {
 			!ou->getClient().isSecure() ? T_("The connection to the ADC hub used to initiate the channel must be encrypted") :
 			!ou->getIdentity().supports(AdcHub::CCPM_FEATURE) ? T_("The user does not support the CCPM ADC extension") : _T("");
 		if(!err.empty()) {
-			addStatus(str(TF_("Cannot start the direct encrypted channel: %1%") % err));
+			if(!silent) { addStatus(str(TF_("Cannot start the direct encrypted channel: %1%") % err)); }
 			return;
 		}
 	}
 
-	addStatus(T_("Establishing a direct encrypted channel..."));
+	if(!silent) { addStatus(T_("Establishing a direct encrypted channel...")); }
 	ClientManager::getInstance()->connect(replyTo.getUser(), ConnectionManager::pmToken);
 }
 
-void PrivateFrame::closeCC() {
+void PrivateFrame::closeCC(bool silent) {
 	if(ccReady()) {
-		addStatus(T_("Disconnecting the direct encrypted channel..."));
+		if(!silent) { addStatus(T_("Disconnecting the direct encrypted channel...")); }
 		ConnectionManager::getInstance()->disconnect(replyTo.getUser(), ConnectionQueueItem::TYPE_PM);
 	} else {
-		addStatus(T_("No direct encrypted channel available"));
+		if(!silent) { addStatus(T_("No direct encrypted channel available")); }
 	}
 }
 
@@ -481,11 +481,13 @@ void PrivateFrame::handleChannelMenu() {
 		menu->appendItem(T_("(User offline)"), nullptr, nullptr, false);
 
 	} else {
+		auto cc = ccReady();
+
 		for(auto& hub: hubs) {
 			auto url = hub.first;
-			auto current = url == replyTo.getUser().hint;
+			auto current = !cc && url == replyTo.getUser().hint;
 			auto pos = menu->appendItem(dwt::util::escapeMenu(Text::toT(hub.second)),
-				[this, url] { replyTo.getUser().hint = url; updateChannel(); }, nullptr, !current);
+				[this, url] { closeCC(true); replyTo.getUser().hint = url; updateChannel(); }, nullptr, !current);
 			if(current) {
 				menu->checkItem(pos);
 			}
@@ -494,7 +496,7 @@ void PrivateFrame::handleChannelMenu() {
 		if(SETTING(ENABLE_CCPM)) {
 			menu->appendSeparator();
 
-			if(ccReady()) {
+			if(cc) {
 				menu->appendItem(T_("Disconnect the direct encrypted channel"), [this] { closeCC(); });
 			} else {
 				menu->appendItem(T_("Start a direct encrypted channel"), [this] { startCC(); }, WinUtil::menuIcon(IDI_SECURE));

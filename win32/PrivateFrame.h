@@ -100,8 +100,8 @@ private:
 	void addStatus(const tstring& text);
 	void updateOnlineStatus(bool newChannel = false);
 	void updateChannel();
-	void startCC();
-	void closeCC();
+	void startCC(bool silent = false);
+	void closeCC(bool silent = false);
 	bool ccReady() const;
 
 	bool handleChatContextMenu(dwt::ScreenCoordinate pt);
