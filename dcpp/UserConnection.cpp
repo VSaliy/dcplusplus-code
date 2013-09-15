@@ -40,7 +40,6 @@ const string UserConnection::FEATURE_ADC_BAS0 = "BAS0";
 const string UserConnection::FEATURE_ADC_BASE = "BASE";
 const string UserConnection::FEATURE_ADC_BZIP = "BZIP";
 const string UserConnection::FEATURE_ADC_TIGR = "TIGR";
-const string UserConnection::FEATURE_ADC_CCPM = "CCPM";
 
 const string UserConnection::FILE_NOT_AVAILABLE = "File Not Available";
 
