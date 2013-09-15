@@ -1181,7 +1181,7 @@ void QueueManager::remove(const string& aTarget) noexcept {
 	}
 
 	for(auto& i: x) {
-		ConnectionManager::getInstance()->disconnect(i, ConnectionQueueItem::TYPE_DOWNLOAD);
+		ConnectionManager::getInstance()->disconnect(i, CONNECTION_TYPE_DOWNLOAD);
 	}
 }
 
@@ -1227,7 +1227,7 @@ void QueueManager::removeSource(const string& aTarget, const UserPtr& aUser, int
 	}
 endCheck:
 	if(isRunning && removeConn) {
-		ConnectionManager::getInstance()->disconnect(aUser, ConnectionQueueItem::TYPE_DOWNLOAD);
+		ConnectionManager::getInstance()->disconnect(aUser, CONNECTION_TYPE_DOWNLOAD);
 	}
 	if(removeCompletely) {
 		remove(aTarget);
@@ -1274,7 +1274,7 @@ void QueueManager::removeSource(const UserPtr& aUser, int reason) noexcept {
 	}
 
 	if(isRunning) {
-		ConnectionManager::getInstance()->disconnect(aUser, ConnectionQueueItem::TYPE_DOWNLOAD);
+		ConnectionManager::getInstance()->disconnect(aUser, CONNECTION_TYPE_DOWNLOAD);
 	}
 	if(!removeRunning.empty()) {
 		remove(removeRunning);

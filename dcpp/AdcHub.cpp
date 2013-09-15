@@ -328,10 +328,11 @@ void AdcHub::handle(AdcCommand::QUI, AdcCommand& c) noexcept {
 }
 
 void AdcHub::handle(AdcCommand::CTM, AdcCommand& c) noexcept {
+	if(c.getParameters().size() < 3)
+		return;
+
 	OnlineUser* u = findUser(c.getFrom());
 	if(!u || u->getUser() == ClientManager::getInstance()->getMe())
-		return;
-	if(c.getParameters().size() < 3)
 		return;
 
 	const string& protocol = c.getParam(0);
@@ -379,7 +380,7 @@ void AdcHub::handle(AdcCommand::RCM, AdcCommand& c) noexcept {
 	}
 
 	if(ClientManager::getInstance()->isActive()) {
-		connect(*u, token, secure);
+		connect(*u, token, CONNECTION_TYPE_LAST, secure);
 		return;
 	}
 
@@ -582,8 +583,11 @@ void AdcHub::handle(AdcCommand::GET, AdcCommand& c) noexcept {
 }
 
 void AdcHub::handle(AdcCommand::NAT, AdcCommand& c) noexcept {
+	if(c.getParameters().size() < 3)
+		return;
+
 	OnlineUser* u = findUser(c.getFrom());
-	if(!u || u->getUser() == ClientManager::getInstance()->getMe() || c.getParameters().size() < 3)
+	if(!u || u->getUser() == ClientManager::getInstance()->getMe())
 		return;
 
 	const string& protocol = c.getParam(0);
@@ -612,10 +616,14 @@ void AdcHub::handle(AdcCommand::NAT, AdcCommand& c) noexcept {
 }
 
 void AdcHub::handle(AdcCommand::RNT, AdcCommand& c) noexcept {
+	if(c.getParameters().size() < 3)
+		return;
+
 	// Sent request for NAT traversal cooperation, which
 	// was acknowledged (with requisite local port information).
+
 	OnlineUser* u = findUser(c.getFrom());
-	if(!u || u->getUser() == ClientManager::getInstance()->getMe() || c.getParameters().size() < 3)
+	if(!u || u->getUser() == ClientManager::getInstance()->getMe())
 		return;
 
 	const string& protocol = c.getParam(0);
@@ -657,11 +665,11 @@ void AdcHub::handle(AdcCommand::ZOF, AdcCommand& c) noexcept {
 	}
 }
 
-void AdcHub::connect(const OnlineUser& user, const string& token) {
-	connect(user, token, CryptoManager::getInstance()->TLSOk() && user.getUser()->isSet(User::TLS));
+void AdcHub::connect(const OnlineUser& user, const string& token, ConnectionType type) {
+	connect(user, token, type, CryptoManager::getInstance()->TLSOk() && user.getUser()->isSet(User::TLS));
 }
 
-void AdcHub::connect(const OnlineUser& user, string const& token, bool secure) {
+void AdcHub::connect(const OnlineUser& user, const string& token, ConnectionType type, bool secure) {
 	if(state != STATE_NORMAL)
 		return;
 
@@ -679,6 +687,8 @@ void AdcHub::connect(const OnlineUser& user, string const& token, bool secure) {
 		}
 		proto = &CLIENT_PROTOCOL;
 	}
+
+	ConnectionManager::getInstance()->addToken(token, user, type);
 
 	if(ClientManager::getInstance()->isActive()) {
 		const string& port = secure ? ConnectionManager::getInstance()->getSecurePort() : ConnectionManager::getInstance()->getPort();

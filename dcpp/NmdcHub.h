@@ -39,7 +39,7 @@ public:
 	using Client::send;
 	using Client::connect;
 
-	virtual void connect(const OnlineUser& aUser, const string&);
+	virtual void connect(const OnlineUser& aUser, const string&, ConnectionType);
 
 	virtual void hubMessage(const string& aMessage, bool /*thirdPerson*/ = false);
 	virtual void privateMessage(const OnlineUser& aUser, const string& aMessage, bool /*thirdPerson*/ = false);

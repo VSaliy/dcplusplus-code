@@ -318,13 +318,13 @@ void PrivateFrame::startCC(bool silent) {
 	}
 
 	if(!silent) { addStatus(T_("Establishing a direct encrypted channel...")); }
-	ClientManager::getInstance()->connect(replyTo.getUser(), ConnectionManager::pmToken);
+	ClientManager::getInstance()->connect(replyTo.getUser(), ConnectionManager::getInstance()->makeToken(), CONNECTION_TYPE_PM);
 }
 
 void PrivateFrame::closeCC(bool silent) {
 	if(ccReady()) {
 		if(!silent) { addStatus(T_("Disconnecting the direct encrypted channel...")); }
-		ConnectionManager::getInstance()->disconnect(replyTo.getUser(), ConnectionQueueItem::TYPE_PM);
+		ConnectionManager::getInstance()->disconnect(replyTo.getUser(), CONNECTION_TYPE_PM);
 	} else {
 		if(!silent) { addStatus(T_("No direct encrypted channel available")); }
 	}
@@ -533,7 +533,7 @@ void PrivateFrame::on(ClientManagerListener::UserDisconnected, const UserPtr& aU
 }
 
 void PrivateFrame::on(ConnectionManagerListener::Connected, ConnectionQueueItem* cqi, UserConnection* uc) noexcept {
-	if(cqi->getType() == ConnectionQueueItem::TYPE_PM && cqi->getUser() == replyTo.getUser()) {
+	if(cqi->getType() == CONNECTION_TYPE_PM && cqi->getUser() == replyTo.getUser()) {
 		{
 			Lock l(mutex);
 			if(conn) {
@@ -550,7 +550,7 @@ void PrivateFrame::on(ConnectionManagerListener::Connected, ConnectionQueueItem*
 }
 
 void PrivateFrame::on(ConnectionManagerListener::Removed, ConnectionQueueItem* cqi) noexcept {
-	if(cqi->getType() == ConnectionQueueItem::TYPE_PM && cqi->getUser() == replyTo.getUser()) {
+	if(cqi->getType() == CONNECTION_TYPE_PM && cqi->getUser() == replyTo.getUser()) {
 		{
 			Lock l(mutex);
 			conn = nullptr;

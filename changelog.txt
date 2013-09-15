@@ -8,6 +8,8 @@
 * [L#1033249] The text in the /help-command now lists the description of each command. (ullner)
 * Move the PM channel selector to a status bar menu (poy)
 * [ADC] Direct encrypted PM channels (poy)
+* [ADC] Validate connection tokens to avoid impersonators (poy)
+* [ADC] Send FM / FB in code 43 STAs instead of FL (poy)
 
 -- 0.828 2013-07-23 --
 * Translation fixes

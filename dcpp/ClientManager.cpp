@@ -415,12 +415,12 @@ OnlineUser* ClientManager::findOnlineUserHint(const CID& cid, const string& hint
 	return findOnlineUserHint(cid, hintUrl, p);
 }
 
-void ClientManager::connect(const HintedUser& user, const string& token) {
+void ClientManager::connect(const HintedUser& user, const string& token, ConnectionType type) {
 	Lock l(cs);
 	OnlineUser* u = findOnlineUser(user);
 
 	if(u) {
-		u->getClient().connect(*u, token);
+		u->getClient().connect(*u, token, type);
 	}
 }
 
