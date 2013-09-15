@@ -697,6 +697,8 @@ void ConnectionManager::on(AdcCommand::INF, UserConnection* aSource, const AdcCo
 		return;
 	}
 
+	auto type = CONNECTION_TYPE_LAST;
+
 	if(aSource->isSet(UserConnection::FLAG_INCOMING)) {
 		string token;
 		if(!cmd.getParam("TO", 0, token)) {
@@ -706,26 +708,30 @@ void ConnectionManager::on(AdcCommand::INF, UserConnection* aSource, const AdcCo
 		}
 		aSource->setToken(token);
 
-		if(!checkToken(aSource).first) {
+		auto tokCheck = checkToken(aSource);
+		if(!tokCheck.first) {
 			aSource->send(AdcCommand(AdcCommand::SEV_FATAL, AdcCommand::ERROR_INF_FIELD, "INF TO: invalid token").addParam("FB", "TO"));
 			putConnection(aSource);
 			return;
 		}
-
-		aSource->inf(false);
+		type = tokCheck.second;
 	}
 
-	if(checkDownload(aSource)) {
+	if(type == CONNECTION_TYPE_DOWNLOAD || checkDownload(aSource)) {
 		if(!aSource->isSet(UserConnection::FLAG_DOWNLOAD)) { aSource->setFlag(UserConnection::FLAG_DOWNLOAD); }
 		addDownloadConnection(aSource);
 
-	} else if(aSource->isSet(UserConnection::FLAG_PM) || cmd.hasFlag("PM", 0)) {
+	} else if(type == CONNECTION_TYPE_PM || aSource->isSet(UserConnection::FLAG_PM) || cmd.hasFlag("PM", 0)) {
 		if(!aSource->isSet(UserConnection::FLAG_PM)) { aSource->setFlag(UserConnection::FLAG_PM); }
 		addNewConnection(aSource, CONNECTION_TYPE_PM);
 
 	} else {
 		if(!aSource->isSet(UserConnection::FLAG_UPLOAD)) { aSource->setFlag(UserConnection::FLAG_UPLOAD); }
 		addNewConnection(aSource, CONNECTION_TYPE_UPLOAD);
+	}
+
+	if(aSource->isSet(UserConnection::FLAG_INCOMING)) {
+		aSource->inf(false);
 	}
 }
 
