@@ -235,7 +235,6 @@ private:
 	void handleDoubleClickUsers();
 	void handleCopyHub();
 	void handleAddAsFavorite();
-	void handleReconnect();
 
 	void showFilterOpts();
 	void hideFilterOpts(dwt::Widget* w);
@@ -246,6 +245,8 @@ private:
 	string stripNick(const string& nick) const;
 	tstring scanNickPrefix(const tstring& prefix);
 
+	void reconnect();
+	void disconnect(bool allowReco);
 	void redirect(string&& target);
 
 	// MDIChildFrame
