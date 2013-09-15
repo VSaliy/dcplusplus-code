@@ -930,7 +930,7 @@ void MainWindow::handleLimiterMenu(bool upload) {
 }
 
 void MainWindow::handleReconnect() {
-	forwardHub(&HubFrame::handleReconnect);
+	forwardHub(&HubFrame::reconnect);
 }
 
 void MainWindow::forwardHub(void (HubFrame::*f)()) {

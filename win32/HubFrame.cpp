@@ -136,7 +136,7 @@ void HubFrame::closeFavGroup(const string& group, bool reversed) {
 void HubFrame::reconnectDisconnected() {
 	for(auto i: frames) {
 		if(!i->client->isConnected())
-			i->handleReconnect();
+			i->reconnect();
 	}
 }
 
@@ -261,7 +261,7 @@ inTabComplete(false)
 	status->setHelpId(STATUS_AVERAGE_SHARED, IDH_HUB_AVERAGE_SHARED);
 
 	addAccel(FALT, 'G', [this] { handleGetList(); });
-	addAccel(FCONTROL, 'R', [this] { handleReconnect(); });
+	addAccel(FCONTROL, 'R', [this] { reconnect(); });
 	addAccel(FALT, 'P', [this] { handlePrivateMessage(getParent()); });
 	addAccel(FALT, 'U', [this] { users->setFocus(); });
 	addAccel(FALT, 'I', [this] { filter.text->setFocus(); });
@@ -301,7 +301,7 @@ bool HubFrame::preClosing() {
 
 	FavoriteManager::getInstance()->removeListener(this);
 	client->removeListener(this);
-	client->disconnect(true);
+	disconnect(false);
 
 	frames.erase(std::remove(frames.begin(), frames.end(), this), frames.end());
 	return true;
@@ -702,7 +702,7 @@ void HubFrame::onGetPassword() {
 				client->setPassword(Text::fromT(linePwd.getValue()));
 				client->password(Text::fromT(linePwd.getValue()));
 			} else {
-				client->disconnect(true);
+				disconnect(true);
 			}
 		} else {
 			message->setText(_T("/password "));
@@ -1290,9 +1290,9 @@ void HubFrame::tabMenuImpl(dwt::Menu* menu) {
 		menu->appendItem(T_("Add To &Favorites"), [this] { addAsFavorite(); }, WinUtil::menuIcon(IDI_FAVORITE_HUBS));
 	}
 
-	menu->appendItem(T_("&Reconnect\tCtrl+R"), [this] { handleReconnect(); }, WinUtil::menuIcon(IDI_RECONNECT));
+	menu->appendItem(T_("&Reconnect\tCtrl+R"), [this] { reconnect(); }, WinUtil::menuIcon(IDI_RECONNECT));
 	menu->appendItem(T_("Copy &address to clipboard"), [this] { handleCopyHub(); });
-	menu->appendItem(T_("&Disconnect"), [this] { client->disconnect(true); }, WinUtil::menuIcon(IDI_HUB_OFF));
+	menu->appendItem(T_("&Disconnect"), [this] { disconnect(false); }, WinUtil::menuIcon(IDI_HUB_OFF));
 
 	prepareMenu(menu, UserCommand::CONTEXT_HUB, url);
 
@@ -1470,8 +1470,13 @@ bool HubFrame::tab() {
 	return false;
 }
 
-void HubFrame::handleReconnect() {
+void HubFrame::reconnect() {
 	client->reconnect();
+}
+
+void HubFrame::disconnect(bool allowReco) {
+	client->setAutoReconnect(allowReco);
+	client->disconnect(true);
 }
 
 void HubFrame::redirect(string&& target) {
