@@ -162,6 +162,9 @@ void UserConnection::inf(bool withToken) {
 	if(withToken) {
 		c.addParam("TO", getToken());
 	}
+	if(isSet(FLAG_PM)) {
+		c.addParam("PM", "1");
+	}
 	send(c);
 }
 

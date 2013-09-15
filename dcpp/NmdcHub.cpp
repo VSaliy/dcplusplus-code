@@ -51,7 +51,7 @@ NmdcHub::~NmdcHub() {
 
 #define checkstate() if(state != STATE_NORMAL) return
 
-void NmdcHub::connect(const OnlineUser& aUser, const string&) {
+void NmdcHub::connect(const OnlineUser& aUser, const string&, ConnectionType) {
 	checkstate();
 	dcdebug("NmdcHub::connect %s\n", aUser.getIdentity().getNick().c_str());
 	if(ClientManager::getInstance()->isActive()) {

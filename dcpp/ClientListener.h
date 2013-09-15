@@ -19,6 +19,7 @@
 #ifndef CLIENTLISTENER_H_
 #define CLIENTLISTENER_H_
 
+#include "noexcept.h"
 #include "typedefs.h"
 
 namespace dcpp {

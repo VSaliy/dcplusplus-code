@@ -82,9 +82,6 @@ private:
 		STATUS_WAITING		///< Idle
 	};
 
-	// copied from dcpp::ConnectionQueueItem::Type
-	enum Type { TYPE_DOWNLOAD, TYPE_UPLOAD, TYPE_PM, TYPE_LAST };
-
 	struct TransferInfo;
 	struct UpdateInfo;
 
@@ -134,7 +131,7 @@ private:
 	};
 
 	struct TransferInfo : public ItemInfo {
-		TransferInfo(const TTHValue& tth, Type type, const string& path, const string& tempPath);
+		TransferInfo(const TTHValue& tth, ConnectionType type, const string& path, const string& tempPath);
 
 		bool operator==(const TransferInfo& other) const;
 
@@ -151,7 +148,7 @@ private:
 		virtual void disconnect();
 
 		TTHValue tth;
-		Type type;
+		ConnectionType type;
 		string path;
 		string tempPath;
 
@@ -181,14 +178,14 @@ private:
 			MASK_HTTP = 1 << 8
 		};
 
-		UpdateInfo(const HintedUser& user, int type, bool transferFailed = false) :
-			updateMask(0), user(user), type(static_cast<Type>(type)), transferFailed(transferFailed) { }
-		UpdateInfo(int type) : updateMask(0), type(static_cast<Type>(type)), transferFailed(false) { }
+		UpdateInfo(const HintedUser& user, ConnectionType type, bool transferFailed = false) :
+			updateMask(0), user(user), type(type), transferFailed(transferFailed) { }
+		UpdateInfo(ConnectionType type) : updateMask(0), type(type), transferFailed(false) { }
 
 		uint32_t updateMask;
 
 		HintedUser user;
-		Type type;
+		ConnectionType type;
 		bool transferFailed;
 
 		TTHValue tth;
@@ -258,8 +255,8 @@ private:
 	void updateConn(const UpdateInfo& ui);
 	void removeConn(const UpdateInfo& ui);
 
-	ConnectionInfo* findConn(const HintedUser& user, Type type);
-	TransferInfo* findTransfer(const string& path, Type type);
+	ConnectionInfo* findConn(const HintedUser& user, ConnectionType type);
+	TransferInfo* findTransfer(const string& path, ConnectionType type);
 	void removeConn(ConnectionInfo& conn);
 	void removeTransfer(TransferInfo& transfer);
 

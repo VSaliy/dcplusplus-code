@@ -22,15 +22,15 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include "TimerManager.h"
-
-#include "Singleton.h"
-#include "OnlineUser.h"
-#include "Socket.h"
 #include "CID.h"
 #include "ClientListener.h"
 #include "ClientManagerListener.h"
+#include "ConnectionType.h"
 #include "HintedUser.h"
+#include "OnlineUser.h"
+#include "Singleton.h"
+#include "Socket.h"
+#include "TimerManager.h"
 
 namespace dcpp {
 
@@ -123,7 +123,7 @@ public:
 
 	void sendUDP(AdcCommand& cmd, const OnlineUser& user);
 
-	void connect(const HintedUser& user, const string& token);
+	void connect(const HintedUser& user, const string& token, ConnectionType type = CONNECTION_TYPE_LAST);
 	void privateMessage(const HintedUser& user, const string& msg, bool thirdPerson);
 	void userCommand(const HintedUser& user, const UserCommand& uc, ParamMap& params, bool compatibility);
 	bool isActive() const;

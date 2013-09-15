@@ -1910,7 +1910,7 @@ void MainWindow::handleWhatsThis() {
 }
 
 void MainWindow::on(ConnectionManagerListener::Connected, ConnectionQueueItem* cqi, UserConnection* uc) noexcept {
-	if(cqi->getType() == ConnectionQueueItem::TYPE_PM) {
+	if(cqi->getType() == CONNECTION_TYPE_PM) {
 
 		// C-C PMs are not supported outside of PM windows.
 		if(!SETTING(POPUP_PMS)) {
@@ -1926,7 +1926,7 @@ void MainWindow::on(ConnectionManagerListener::Connected, ConnectionQueueItem* c
 }
 
 void MainWindow::on(ConnectionManagerListener::Removed, ConnectionQueueItem* cqi) noexcept {
-	if(cqi->getType() == ConnectionQueueItem::TYPE_PM) {
+	if(cqi->getType() == CONNECTION_TYPE_PM) {
 		Lock l(ccpmMutex);
 		ccpms.erase(cqi->getUser());
 	}
