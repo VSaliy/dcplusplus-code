@@ -715,6 +715,13 @@ void ConnectionManager::on(AdcCommand::INF, UserConnection* aSource, const AdcCo
 			return;
 		}
 		type = tokCheck.second;
+
+		// set the PM flag now in order to send a INF with PM1
+		if((type == CONNECTION_TYPE_PM || cmd.hasFlag("PM", 0)) && !aSource->isSet(UserConnection::FLAG_PM)) {
+			aSource->setFlag(UserConnection::FLAG_PM);
+		}
+
+		aSource->inf(false);
 	}
 
 	if(type == CONNECTION_TYPE_DOWNLOAD || checkDownload(aSource)) {
@@ -728,10 +735,6 @@ void ConnectionManager::on(AdcCommand::INF, UserConnection* aSource, const AdcCo
 	} else {
 		if(!aSource->isSet(UserConnection::FLAG_UPLOAD)) { aSource->setFlag(UserConnection::FLAG_UPLOAD); }
 		addNewConnection(aSource, CONNECTION_TYPE_UPLOAD);
-	}
-
-	if(aSource->isSet(UserConnection::FLAG_INCOMING)) {
-		aSource->inf(false);
 	}
 }
 
