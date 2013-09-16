@@ -64,6 +64,7 @@ legacyNOTIFYICONDATA Notification::makeNID() const {
 Notification::Notification(Widget* parent) :
 parent(parent),
 visible(false),
+ignoreNextClick(false),
 onlyBalloons(false),
 lastTick(0)
 {
@@ -169,8 +170,19 @@ bool Notification::trayHandler(const MSG& msg) {
 
 	case WM_LBUTTONUP:
 		{
-			if(iconClicked) {
+			if(ignoreNextClick) {
+				ignoreNextClick = false;
+			} else if(iconClicked) {
 				iconClicked();
+			}
+			break;
+		}
+
+	case WM_LBUTTONDBLCLK:
+		{
+			if(iconDbClicked) {
+				iconDbClicked();
+				ignoreNextClick = true;
 			}
 			break;
 		}

@@ -35,6 +35,7 @@
 #include <dwt/resources/Icon.h>
 
 #include <deque>
+#include <functional>
 
 namespace dwt {
 
@@ -72,24 +73,29 @@ public:
 	@param balloonIcon icon shown next to the title, only available on >= Vista. */
 	void addMessage(const tstring& title, const tstring& message, const Callback& callback, const IconPtr& balloonIcon = 0);
 
-	void onContextMenu(const Callback& callback_) { contextMenu = callback_; }
+	void onContextMenu(Callback callback) { contextMenu = callback; }
 
 	/// The icon was left-clicked / selected
-	void onIconClicked(const Callback& callback_) { iconClicked = callback_; }
+	void onIconClicked(Callback callback) { iconClicked = callback; }
+
+	/// The icon was double-clicked - this will swallow the next left-click message
+	void onIconDbClicked(Callback callback) { iconDbClicked = callback; }
 
 	/// This is sent when the tooltip text should be updated
-	void onUpdateTip(const Callback& callback_) { updateTip = callback_; }
+	void onUpdateTip(Callback callback) { updateTip = callback; }
 
 private:
 	Widget* parent;
 	IconPtr icon;
 
 	bool visible;
+	bool ignoreNextClick; // true after a double-click
 
 	tstring tip;
 
 	Callback contextMenu;
 	Callback iconClicked;
+	Callback iconDbClicked;
 	Callback updateTip;
 
 	std::deque<std::pair<Callback, IconPtr>> balloons; // keep a ref of the icon until the balloon has been shown.

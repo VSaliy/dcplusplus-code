@@ -625,6 +625,7 @@ void MainWindow::initTray() {
 	notifier = addChild(dwt::Notification::Seed(mainSmallIcon));
 	notifier->onContextMenu([this] { handleTrayContextMenu(); });
 	notifier->onIconClicked([this] { handleTrayClicked(); });
+	notifier->onIconDbClicked([this] { handleRestore(); });
 	notifier->onUpdateTip([this] { handleTrayUpdate(); });
 	if(SETTING(ALWAYS_TRAY)) {
 		notifier->setVisible(true);

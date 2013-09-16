@@ -11,6 +11,7 @@
 * [ADC] Validate connection tokens to avoid impersonators (poy)
 * [ADC] Send FM / FB in code 43 STAs instead of FL (poy)
 * Don't reconnect after a manual hub disconnect (poy)
+* [L#1225930] Always show the window when double-clicking the notif icon (poy)
 
 -- 0.828 2013-07-23 --
 * Translation fixes
