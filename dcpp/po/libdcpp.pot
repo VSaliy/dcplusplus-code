@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libdcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-09-16 20:44+0200\n"
+"POT-Creation-Date: 2013-09-22 16:00+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -159,7 +159,7 @@ msgstr ""
 msgid "Active mode could not be achieved; a manual configuration is recommended for better connectivity"
 msgstr ""
 
-#: dcpp\ConnectionManager.cpp:206
+#: dcpp\ConnectionManager.cpp:205
 msgid "All download slots taken"
 msgstr ""
 
@@ -193,11 +193,11 @@ msgid "Connection closed"
 msgstr ""
 
 #: dcpp\BufferedSocket.cpp:172 dcpp\BufferedSocket.cpp:190
-#: dcpp\ConnectionManager.cpp:213 dcpp\Socket.cpp:372
+#: dcpp\ConnectionManager.cpp:212 dcpp\Socket.cpp:372
 msgid "Connection timeout"
 msgstr ""
 
-#: dcpp\ConnectionManager.cpp:294
+#: dcpp\ConnectionManager.cpp:304
 #, boost-format
 msgid "Connectivity error: %1%"
 msgstr ""
@@ -219,7 +219,7 @@ msgid ""
 "\tSearch port: %9%"
 msgstr ""
 
-#: dcpp\ConnectionManager.cpp:286
+#: dcpp\ConnectionManager.cpp:296
 msgid "Connectivity restored"
 msgstr ""
 

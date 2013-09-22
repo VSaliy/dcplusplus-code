@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-07-19 18:26+0200\n"
+"POT-Creation-Date: 2013-09-22 16:00+0200\n"
 "PO-Revision-Date: 2010-07-03 18:19+0000\n"
 "Last-Translator: Mathias Bøhn Grytemark <Unknown>\n"
 "Language-Team: Norwegian Bokmal <nb@li.org>\n"
@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-07-23 12:37+0000\n"
-"X-Generator: Launchpad (build 16700)\n"
+"X-Launchpad-Export-Date: 2013-09-22 13:49+0000\n"
+"X-Generator: Launchpad (build 16765)\n"
 
 #: dcpp\DownloadManager.cpp:360
 #, boost-format
@@ -69,7 +69,7 @@ msgstr ""
 msgid "%1% (%2%)"
 msgstr ""
 
-#: dcpp\AdcHub.cpp:158
+#: dcpp\AdcHub.cpp:159
 #, boost-format
 msgid "%1% (%2%) has same CID {%3%} as %4% (%5%), ignoring"
 msgstr "%1% (%2%) har samme CID {%3%} som %4% (%5%), ignorerer"
@@ -103,12 +103,12 @@ msgid ""
 msgstr ""
 "%1% ikke delt; kalkulert CRC32 stemmer ikke med den funnet i SFV-filen."
 
-#: dcpp\AdcHub.cpp:297
+#: dcpp\AdcHub.cpp:298
 #, boost-format
 msgid "%1% was kicked by %2%: %3%"
 msgstr "%1% ble kastet ut av %2%: %3%"
 
-#: dcpp\AdcHub.cpp:300
+#: dcpp\AdcHub.cpp:301
 #, boost-format
 msgid "%1% was kicked: %2%"
 msgstr "%1% ble sparket ut: %2%"
@@ -137,16 +137,16 @@ msgstr "%s B"
 msgid "<Enter string>"
 msgstr "<Skriv søkestreng>"
 
-#: dcpp\QueueManager.cpp:595
+#: dcpp\QueueManager.cpp:599
 #, fuzzy
 msgid "A file with a different TTH root already exists in the queue"
 msgstr "En fil med en annen rot eksisterer allerede i køen"
 
-#: dcpp\QueueManager.cpp:592
+#: dcpp\QueueManager.cpp:596
 msgid "A file with a different size already exists in the queue"
 msgstr "En fil med en annen størrelse eksisterer allerede i køen"
 
-#: dcpp\QueueManager.cpp:534
+#: dcpp\QueueManager.cpp:538
 msgid "A file with the same hash already exists in your share"
 msgstr "En fil med samme hash eksisterer allerede i din share"
 
@@ -166,7 +166,7 @@ msgid ""
 "better connectivity"
 msgstr ""
 
-#: dcpp\ConnectionManager.cpp:175
+#: dcpp\ConnectionManager.cpp:205
 msgid "All download slots taken"
 msgstr "Alle nedlastningsposisjoner er opptatt"
 
@@ -182,11 +182,11 @@ msgstr ""
 msgid "Audio"
 msgstr "Audio"
 
-#: dcpp\QueueManager.cpp:1649
+#: dcpp\QueueManager.cpp:1651
 msgid "CRC32 inconsistency (SFV-Check)"
 msgstr "Inkonsistent CRC32 (SFV-Sjekk)"
 
-#: dcpp\QueueManager.cpp:1640
+#: dcpp\QueueManager.cpp:1642
 #, fuzzy, boost-format
 msgid "CRC32 inconsistency (SFV-Check): %1%"
 msgstr "Inkonsistent CRC32 (SFV-Sjekk)"
@@ -200,11 +200,11 @@ msgid "Connection closed"
 msgstr "Tilkobling lukket"
 
 #: dcpp\BufferedSocket.cpp:172 dcpp\BufferedSocket.cpp:190
-#: dcpp\ConnectionManager.cpp:182 dcpp\Socket.cpp:372
+#: dcpp\ConnectionManager.cpp:212 dcpp\Socket.cpp:372
 msgid "Connection timeout"
 msgstr "Tidsavbrudd på forbindelsen"
 
-#: dcpp\ConnectionManager.cpp:259
+#: dcpp\ConnectionManager.cpp:304
 #, boost-format
 msgid "Connectivity error: %1%"
 msgstr "Tilkoblingsfeil: %1%"
@@ -226,7 +226,7 @@ msgid ""
 "\tSearch port: %9%"
 msgstr ""
 
-#: dcpp\ConnectionManager.cpp:251
+#: dcpp\ConnectionManager.cpp:296
 msgid "Connectivity restored"
 msgstr "Tilkobling gjenopprettet"
 
@@ -261,11 +261,11 @@ msgstr ""
 msgid "Directory"
 msgstr "Katalog"
 
-#: dcpp\ShareManager.cpp:404
+#: dcpp\ShareManager.cpp:400
 msgid "Directory already shared"
 msgstr "Mappen er allerede delt"
 
-#: dcpp\ShareManager.cpp:391
+#: dcpp\ShareManager.cpp:387
 msgid "Directory is hidden"
 msgstr "Katalogen er skjult"
 
@@ -294,7 +294,7 @@ msgstr "Dokument"
 msgid "Download Queue"
 msgstr "Nedlastingskø"
 
-#: dcpp\ShareManager.cpp:681
+#: dcpp\ShareManager.cpp:677
 #, boost-format
 msgid ""
 "Duplicate file will not be shared: %1% (Size: %2% B) Dupe matched against: "
@@ -306,7 +306,7 @@ msgstr ""
 msgid "Duplicate item in the file list"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:676 dcpp\QueueManager.cpp:680
+#: dcpp\QueueManager.cpp:678 dcpp\QueueManager.cpp:682
 #, boost-format
 msgid "Duplicate source: %1%"
 msgstr "Duplicat kilde: %1%"
@@ -326,15 +326,15 @@ msgstr ""
 msgid "Error creating hash data file: %1%"
 msgstr "Feil ved oppretting av filnøkkel data fil: %1%"
 
-#: dcpp\BZUtils.cpp:33 dcpp\BZUtils.cpp:54 dcpp\BZUtils.cpp:62
+#: dcpp\BZUtils.cpp:35 dcpp\BZUtils.cpp:56 dcpp\BZUtils.cpp:64
 #: dcpp\ZUtils.cpp:37 dcpp\ZUtils.cpp:60 dcpp\ZUtils.cpp:82 dcpp\ZUtils.cpp:92
 msgid "Error during compression"
 msgstr "Feil under komprimering"
 
-#: dcpp\BZUtils.cpp:74 dcpp\BZUtils.cpp:96 dcpp\BZUtils.cpp:99
+#: dcpp\BZUtils.cpp:76 dcpp\BZUtils.cpp:98 dcpp\BZUtils.cpp:101
 #: dcpp\CryptoManager.cpp:348 dcpp\CryptoManager.cpp:367
 #: dcpp\CryptoManager.cpp:381 dcpp\ZUtils.cpp:106 dcpp\ZUtils.cpp:131
-#: dcpp\ZUtils.cpp:141
+#: dcpp\ZUtils.cpp:145
 msgid "Error during decompression"
 msgstr "Feil under dekomprimering"
 
@@ -400,7 +400,7 @@ msgstr ""
 msgid "Failed to map the %1% port (%2% %3%) with the %4% interface"
 msgstr "Klarte ikke å fjerne portforbindelse"
 
-#: dcpp\AdcHub.cpp:220
+#: dcpp\AdcHub.cpp:221
 msgid "Failed to negotiate base protocol"
 msgstr "Klarte ikke å forhandle grunnprotokoll"
 
@@ -418,27 +418,27 @@ msgstr ""
 "Klarte ikke å sette opp SOCKS-server for UDP-rele (sjekk SOCKS-adresse og "
 "port)"
 
-#: dcpp\QueueManager.cpp:663
+#: dcpp\QueueManager.cpp:665
 #, fuzzy
 msgid "File already exists at the target location"
 msgstr ""
 "En fil med tilsvarende eller større størrelse eksisterer allerede i målmappen"
 
-#: dcpp\ShareManager.cpp:846
+#: dcpp\ShareManager.cpp:840
 #, fuzzy, boost-format
 msgid "File list %1% generated"
 msgstr "Oppdatering av filliste startet"
 
-#: dcpp\ShareManager.cpp:715
+#: dcpp\ShareManager.cpp:709
 #, boost-format
 msgid "File list refresh failed: %1%"
 msgstr "Oppdatering av filliste feilet: %1%"
 
-#: dcpp\ShareManager.cpp:775
+#: dcpp\ShareManager.cpp:769
 msgid "File list refresh finished"
 msgstr "Filliste-oppdatering ferdig"
 
-#: dcpp\ShareManager.cpp:698
+#: dcpp\ShareManager.cpp:692
 msgid ""
 "File list refresh in progress, please wait for it to finish before trying to "
 "refresh again"
@@ -446,7 +446,7 @@ msgstr ""
 "Oppdatering av filliste pågår, vennligst vent til oppdateringen er ferdig "
 "med å oppdatere på nytt"
 
-#: dcpp\ShareManager.cpp:743
+#: dcpp\ShareManager.cpp:737
 msgid "File list refresh initiated"
 msgstr "Oppdatering av filliste startet"
 
@@ -490,7 +490,7 @@ msgstr "Filnøkkel databasen ble gjenoppbygget"
 msgid "Hashing failed: %1%"
 msgstr "Beregning av filnøkkel feilet: %1%"
 
-#: dcpp\AdcHub.cpp:226
+#: dcpp\AdcHub.cpp:227
 msgid ""
 "Hub probably uses an old version of ADC, please encourage the owner to "
 "upgrade"
@@ -521,7 +521,7 @@ msgstr "Ugyldig data"
 msgid "Invalid file list extension (must be .xml or .bz2)"
 msgstr ""
 
-#: dcpp\ShareManager.cpp:582
+#: dcpp\ShareManager.cpp:578
 #, boost-format
 msgid "Invalid file name found while hashing folder %1%"
 msgstr ""
@@ -531,7 +531,7 @@ msgstr ""
 msgid "Invalid regular expression: %1%"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:633
+#: dcpp\SettingsManager.cpp:640
 msgid "Invalid search type name"
 msgstr ""
 
@@ -539,7 +539,7 @@ msgstr ""
 msgid "Invalid size"
 msgstr "Ugyldig størrelse"
 
-#: dcpp\QueueManager.cpp:647 dcpp\QueueManager.cpp:655
+#: dcpp\QueueManager.cpp:652 dcpp\QueueManager.cpp:657
 msgid ""
 "Invalid target file (missing directory, check default download directory "
 "setting)"
@@ -572,7 +572,7 @@ msgstr "Flere byte skrevet enn forespørsel"
 msgid "No certificate file chosen"
 msgstr "Ingen sertifikatfil valgt"
 
-#: dcpp\ShareManager.cpp:387
+#: dcpp\ShareManager.cpp:383
 msgid "No directory specified"
 msgstr "Ingen mappe oppgitt"
 
@@ -588,7 +588,7 @@ msgstr "Ingen privat nøkkelfil valgt"
 msgid "No slots available"
 msgstr "Ingen plasser ledige"
 
-#: dcpp\SettingsManager.cpp:691
+#: dcpp\SettingsManager.cpp:698
 msgid "No such search type"
 msgstr ""
 
@@ -596,15 +596,15 @@ msgstr ""
 msgid "Non-UTF-8 data in an ADC connection"
 msgstr ""
 
-#: dcpp\AdcHub.cpp:686
+#: dcpp\AdcHub.cpp:697
 #, boost-format
 msgid "Not listening for connections - please restart %1%"
 msgstr "Lytter ikke etter tilkoblinger - vennligst koble til på nytt %1%"
 
-#: dcpp\ClientManager.cpp:174 dcpp\FinishedManager.cpp:131
-#: dcpp\FinishedManager.cpp:137 dcpp\FinishedManager.cpp:143
-#: dcpp\SearchManager.cpp:266 dcpp\SearchManager.cpp:343 dcpp\Transfer.cpp:81
-#: dcpp\Transfer.cpp:85
+#: dcpp\ClientManager.cpp:149 dcpp\ClientManager.cpp:180
+#: dcpp\FinishedManager.cpp:131 dcpp\FinishedManager.cpp:137
+#: dcpp\FinishedManager.cpp:143 dcpp\SearchManager.cpp:266
+#: dcpp\SearchManager.cpp:343 dcpp\Transfer.cpp:81 dcpp\Transfer.cpp:85
 msgid "Offline"
 msgstr "Frakoblet"
 
@@ -634,7 +634,7 @@ msgstr ""
 msgid "Redirect user(s)"
 msgstr "Omdiriger bruker(e)"
 
-#: dcpp\ShareManager.cpp:407
+#: dcpp\ShareManager.cpp:403
 msgid "Remove all subdirectories before adding this one"
 msgstr "Fjern alle undermapper før denne blir lagt til"
 
@@ -722,7 +722,7 @@ msgstr "TTH inkonsekvens"
 msgid "Target file is missing or wrong size"
 msgstr "Målfil mangler eller er feil størrelse"
 
-#: dcpp\QueueManager.cpp:642 dcpp\QueueManager.cpp:651
+#: dcpp\QueueManager.cpp:645
 msgid "Target filename too long"
 msgstr "Målfilens navn er for langt"
 
@@ -739,16 +739,16 @@ msgstr "Socks-serveren klarte ikke å opprette en forbindelse"
 msgid "The socks server requires authentication"
 msgstr "Socks-serveren krever en pålitelighetskontroll"
 
-#: dcpp\ShareManager.cpp:395
+#: dcpp\ShareManager.cpp:391
 msgid "The temporary download directory cannot be shared"
 msgstr "Den midlertidige nedlastnings mappen kan ikke deles"
 
-#: dcpp\QueueManager.cpp:599
+#: dcpp\QueueManager.cpp:603
 #, fuzzy
 msgid "This file has already finished downloading"
 msgstr "Denne filen er allerede satt i kø"
 
-#: dcpp\QueueManager.cpp:580
+#: dcpp\QueueManager.cpp:584
 msgid "This file is already queued"
 msgstr "Denne filen er allerede satt i kø"
 
@@ -759,7 +759,7 @@ msgid ""
 "fix this"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:637 dcpp\SettingsManager.cpp:659
+#: dcpp\SettingsManager.cpp:644 dcpp\SettingsManager.cpp:666
 msgid "This search type already exists"
 msgstr ""
 
@@ -790,12 +790,12 @@ msgstr ""
 msgid "Unable to create thread"
 msgstr "Kan ikke opprette tråd"
 
-#: dcpp\QueueManager.cpp:940
+#: dcpp\QueueManager.cpp:942
 #, boost-format
 msgid "Unable to move %1% to %2% (%3%) nor to rename to %4% (%5%)"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:937
+#: dcpp\QueueManager.cpp:939
 #, boost-format
 msgid "Unable to move %1% to %2% (%3%); renamed to %4%"
 msgstr ""
@@ -806,7 +806,7 @@ msgid ""
 "Unable to open %1% port(s); connectivity settings must be configured manually"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:1116
+#: dcpp\QueueManager.cpp:1118
 #, boost-format
 msgid "Unable to open filelist: %1%"
 msgstr "Kan ikke åpne filliste: %1%"
@@ -843,7 +843,7 @@ msgstr "Brukere"
 msgid "Video"
 msgstr "Video"
 
-#: dcpp\QueueManager.cpp:528
+#: dcpp\QueueManager.cpp:532
 msgid "You're trying to download from yourself!"
 msgstr "Du prøver å laste ned fra deg selv!"
 
@@ -851,7 +851,7 @@ msgstr "Du prøver å laste ned fra deg selv!"
 msgid "disabled"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:199 dcpp\SettingsManager.cpp:200
+#: dcpp\SettingsManager.cpp:201 dcpp\SettingsManager.cpp:202
 msgid "downloaded from"
 msgstr "Nedlastet fra"
 
@@ -864,6 +864,6 @@ msgstr "Søk avslått: %1%"
 msgid "undefined"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:201
+#: dcpp\SettingsManager.cpp:203
 msgid "uploaded to"
 msgstr "Opplastet til"
