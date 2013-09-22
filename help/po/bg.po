@@ -13351,9 +13351,6 @@ msgid ""
 "When composing a multiline message, this box resizes itself automatically "
 "according to the <placeholder id=0/> settings."
 msgstr ""
-"Когато съставяте многоредово съобщение, това поле автоматично се "
-"преоразмерява според настройките във \"Височина на прозореца за радактиране "
-"на съобщения\"."
 
 #. type: Content of: <html><body><p><div>
 #: help/window_hub.html:93
