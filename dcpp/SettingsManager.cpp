@@ -301,7 +301,7 @@ SettingsManager::SettingsManager()
 	setDefault(AUTO_KICK_NO_FAVS, false);
 	setDefault(PROMPT_PASSWORD, false);
 	setDefault(DONT_DL_ALREADY_QUEUED, false);
-	setDefault(MAX_COMMAND_LENGTH, 16*1024*1024);
+	setDefault(MAX_COMMAND_LENGTH, 16*1024);
 	setDefault(ALLOW_UNTRUSTED_HUBS, true);
 	setDefault(ALLOW_UNTRUSTED_CLIENTS, true);
 	setDefault(SORT_FAVUSERS_FIRST, false);
