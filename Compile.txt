@@ -6,9 +6,9 @@
 		Some tools can be found on <http://sourceforge.net/projects/dcplusplus/files/Dev/>,
 		although I recommend getting them directly from their hosts.
 
-		* A modern C++ compiler. I am currently using these 2 packages by the MinGW-builds project:
-		- 64-bit: <http://sourceforge.net/projects/mingwbuilds/files/host-windows/releases/4.8.1/64-bit/threads-win32/seh/>
-		- 32-bit: <http://sourceforge.net/projects/mingwbuilds/files/host-windows/releases/4.8.1/32-bit/threads-win32/dwarf/>
+		* A modern C++ compiler. I am currently using these 2 packages by the MinGW-w64 project:
+		- 64-bit: <http://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/4.8.1/threads-win32/seh/>
+		- 32-bit: <http://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/4.8.1/threads-win32/dwarf/>
 
 		Make sure that the compiler's "bin" directory is in your PATH environment variable.
 
@@ -110,7 +110,6 @@
 4. Alternative compilers
 
 	a. Various versions of MinGW (GCC 4.8 or later):
-	<http://sourceforge.net/projects/mingwbuilds/files/>
 	<http://sourceforge.net/projects/mingw-w64/files/>
 	<http://sourceforge.net/projects/mingw/files/>
 
@@ -119,9 +118,9 @@
 		Prefer DWARF versions (usually marked with a "-dw") of 32-bit compilers; SJLJ ones should
 		be avoided for performance reasons.
 
-		I am currently using these 2 packages by the MinGW-builds project:
-		- 32-bit: <http://sourceforge.net/projects/mingwbuilds/files/host-windows/releases/4.8.1/32-bit/threads-win32/dwarf/>
-		- 64-bit: <http://sourceforge.net/projects/mingwbuilds/files/host-windows/releases/4.8.1/64-bit/threads-win32/seh/>
+		I am currently using these 2 packages by the MinGW-w64 project:
+		- 64-bit: <http://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/4.8.1/threads-win32/seh/>
+		- 32-bit: <http://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/4.8.1/threads-win32/dwarf/>
 
 		To install compilers from regular MinGW (not MinGW-w64), the easiest way is to use
 		mingw-get. Extract it to C:\MinGW and run:
@@ -199,8 +198,7 @@
 
 		f. Developing plugins
 
-			See <https://launchpad.net/dcpp-plugin-sdk-c> and
-			<https://launchpad.net/dcpp-plugin-sdk-cpp> for C and C++ plugin SDKs.
+			The DC plugin SDK is at <https://launchpad.net/dc-plugin-sdk>.
 
 			See dcpp/Plugin* files for implementation details.
 

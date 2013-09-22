@@ -36,7 +36,6 @@ ConnectionManager::ConnectionManager() :
 	floodCounter(0),
 	shuttingDown(false)
 {
-	ClientManager::getInstance()->addListener(this);
 	TimerManager::getInstance()->addListener(this);
 
 	features.push_back(UserConnection::FEATURE_MINISLOTS);
@@ -234,6 +233,17 @@ void ConnectionManager::on(TimerManagerListener::Second, uint64_t aTick) noexcep
 void ConnectionManager::on(TimerManagerListener::Minute, uint64_t aTick) noexcept {
 	Lock l(cs);
 
+	// remove tokens associated with offline users.
+	for(auto i = tokens.begin(); i != tokens.end();) {
+		auto user = ClientManager::getInstance()->findUser(i->second.first);
+		if(user && user->isOnline()) {
+			++i;
+		} else {
+			i = tokens.erase(i);
+		}
+	}
+
+	// disconnect connections that have timed out.
 	for(auto& j: userConnections) {
 		if((j->getLastActivity() + 180*1000) < aTick) {
 			j->disconnect(true);
@@ -860,7 +870,6 @@ void ConnectionManager::disconnect(const UserPtr& user, ConnectionType type) {
 }
 
 void ConnectionManager::shutdown() {
-	ClientManager::getInstance()->removeListener(this);
 	TimerManager::getInstance()->removeListener(this);
 
 	shuttingDown = true;
@@ -880,19 +889,6 @@ void ConnectionManager::shutdown() {
 			}
 		}
 		Thread::sleep(50);
-	}
-}
-
-// ClientManagerListener
-void ConnectionManager::on(ClientManagerListener::UserDisconnected, const UserPtr& user) noexcept {
-	// remove tokens associated with the user.
-	Lock l(cs);
-	for(auto i = tokens.begin(); i != tokens.end();) {
-		if(i->second.first == user->getCID()) {
-			i = tokens.erase(i);
-		} else {
-			++i;
-		}
 	}
 }
 

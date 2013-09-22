@@ -24,7 +24,6 @@
 #include <vector>
 
 #include "BufferedSocket.h"
-#include "ClientManagerListener.h"
 #include "ConnectionManagerListener.h"
 #include "ConnectionType.h"
 #include "CriticalSection.h"
@@ -98,7 +97,6 @@ private:
 class ConnectionManager :
 	public Singleton<ConnectionManager>,
 	public Speaker<ConnectionManagerListener>,
-	private ClientManagerListener,
 	private TimerManagerListener,
 	private UserConnectionListener
 {
@@ -193,9 +191,6 @@ private:
 	bool checkDownload(const UserConnection* uc) const;
 
 	void failed(UserConnection* aSource, const string& aError, bool protocolError);
-
-	// ClientManagerListener
-	virtual void on(ClientManagerListener::UserDisconnected, const UserPtr& user) noexcept;
 
 	// UserConnectionListener
 	virtual void on(Connected, UserConnection*) noexcept;

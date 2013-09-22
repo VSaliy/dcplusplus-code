@@ -302,7 +302,7 @@ UserPtr ClientManager::getUser(const CID& cid) noexcept {
 UserPtr ClientManager::findUser(const CID& cid) const noexcept {
 	Lock l(cs);
 	auto ui = users.find(cid);
-	return ui == users.end() ? 0 : ui->second;
+	return ui == users.end() ? nullptr : ui->second;
 }
 
 bool ClientManager::isOp(const UserPtr& user, const string& aHubUrl) const {
