@@ -7,21 +7,21 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-07-19 18:26+0200\n"
-"PO-Revision-Date: 2009-03-24 12:27+0000\n"
-"Last-Translator: helix84 <Unknown>\n"
+"POT-Creation-Date: 2013-09-22 16:00+0200\n"
+"PO-Revision-Date: 2013-09-15 14:06+0000\n"
+"Last-Translator: Gabriel P <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-07-23 12:37+0000\n"
-"X-Generator: Launchpad (build 16700)\n"
+"X-Launchpad-Export-Date: 2013-09-22 13:49+0000\n"
+"X-Generator: Launchpad (build 16765)\n"
 
 #: dcpp\DownloadManager.cpp:360
 #, boost-format
 msgid " - Queued: %1%"
-msgstr ""
+msgstr " - Vo fronte: %1%"
 
 #: dcpp\Util.cpp:583
 #, c-format, boost-format
@@ -56,20 +56,20 @@ msgstr "%.02f TiB"
 #: dcpp\UserMatchManager.cpp:132
 #, boost-format
 msgid "%1% %2% (added by %3%)"
-msgstr ""
+msgstr "%1% %2% (pridal %3%)"
 
 #: dcpp\MappingManager.cpp:116 dcpp\MappingManager.cpp:153
 #, boost-format
 msgid "%1% %2% port (%3% %4%)"
-msgstr ""
+msgstr "%1% %2% port (%3% %4%)"
 
 #: dcpp\HttpConnection.cpp:143 dcpp\HttpConnection.cpp:218
 #: dcpp\HttpConnection.cpp:274
 #, boost-format
 msgid "%1% (%2%)"
-msgstr ""
+msgstr "%1% (%2%)"
 
-#: dcpp\AdcHub.cpp:158
+#: dcpp\AdcHub.cpp:159
 #, boost-format
 msgid "%1% (%2%) has same CID {%3%} as %4% (%5%), ignoring"
 msgstr "%1% (%2%) má rovnaký CID {%3%} ako %4% (%5%), ignoruje sa"
@@ -83,18 +83,18 @@ msgstr "%1% (neznáma prezývka)"
 #: dcpp\PluginManager.cpp:578
 #, boost-format
 msgid "%1% is already installed"
-msgstr ""
+msgstr "%1% je už nainštalovaný"
 
 #: dcpp\PluginManager.cpp:141 dcpp\PluginManager.cpp:540
-#, fuzzy, boost-format
+#, boost-format
 msgid "%1% is not a valid plugin"
-msgstr "%1%: Súbor nie je dostupný"
+msgstr "%1% nie je platný zásuvný modul"
 
 #: dcpp\PluginManager.cpp:107 dcpp\PluginManager.cpp:144
 #: dcpp\PluginManager.cpp:545
 #, boost-format
 msgid "%1% is not compatible with %2%"
-msgstr ""
+msgstr "%1% nie je kompatibilný s %2%"
 
 #: dcpp\HashManager.cpp:698
 #, boost-format
@@ -103,12 +103,12 @@ msgid ""
 msgstr ""
 "%1% nie je zdieľaný; vypočítaný CRC32 sa nezhoduje so súčtom v SFV súbore."
 
-#: dcpp\AdcHub.cpp:297
+#: dcpp\AdcHub.cpp:298
 #, boost-format
 msgid "%1% was kicked by %2%: %3%"
 msgstr "%2% vykopol %1%: %3%"
 
-#: dcpp\AdcHub.cpp:300
+#: dcpp\AdcHub.cpp:301
 #, boost-format
 msgid "%1% was kicked: %2%"
 msgstr "%1% bol vykopnutý: %2%"
@@ -137,74 +137,77 @@ msgstr "%s B"
 msgid "<Enter string>"
 msgstr "<Zadajte reťazec>"
 
-#: dcpp\QueueManager.cpp:595
-#, fuzzy
+#: dcpp\QueueManager.cpp:599
 msgid "A file with a different TTH root already exists in the queue"
-msgstr "Súbor s iným koreňom TTH sa už nachádza vo fronte"
+msgstr "Súbor s rozdielným TTH koreňom už vo fronte existuje"
 
-#: dcpp\QueueManager.cpp:592
+#: dcpp\QueueManager.cpp:596
 msgid "A file with a different size already exists in the queue"
 msgstr "Súbor s inou veľkosťou sa už nachádza vo fronte"
 
-#: dcpp\QueueManager.cpp:534
+#: dcpp\QueueManager.cpp:538
 msgid "A file with the same hash already exists in your share"
 msgstr "Súbor s rovnakým hašom sa už nachádza vo fronte"
 
 #: dcpp\ConnectivityManager.cpp:189
 msgid "Active mode"
-msgstr ""
+msgstr "Aktívny režim"
 
 #: dcpp\ConnectivityManager.cpp:194
 #, boost-format
 msgid ""
 "Active mode behind a router that %1% can configure; port mapping status: %2%"
 msgstr ""
+"Aktívny režim za smerovačom  ktorý môže %1% nastaviť; mapovanie stavu portu: "
+"%2%"
 
 #: dcpp\ConnectivityManager.cpp:236
 msgid ""
 "Active mode could not be achieved; a manual configuration is recommended for "
 "better connectivity"
 msgstr ""
+"Aktívny režim nemohol byť dosiahnutý; manuálne nastavenie je odporúčané pre "
+"lepšiu konektivitu"
 
-#: dcpp\ConnectionManager.cpp:175
+#: dcpp\ConnectionManager.cpp:205
 msgid "All download slots taken"
 msgstr "Všetky sťahovacie sloty sú obsadené"
 
 #: dcpp\MappingManager.cpp:58
 msgid "Another port mapping attempt is in progress..."
-msgstr ""
+msgstr "Iný pokus pre mapovanie je momentálne v priebehu..."
 
 #: dcpp\SearchManager.cpp:36
 msgid "Any"
-msgstr ""
+msgstr "Akékoľvek"
 
 #: dcpp\SearchManager.cpp:37
 msgid "Audio"
-msgstr ""
+msgstr "Audio"
 
-#: dcpp\QueueManager.cpp:1649
+#: dcpp\QueueManager.cpp:1651
 msgid "CRC32 inconsistency (SFV-Check)"
 msgstr "nekonzistentný CRC32 (kontrola v SFV)"
 
-#: dcpp\QueueManager.cpp:1640
-#, fuzzy, boost-format
+#: dcpp\QueueManager.cpp:1642
+#, boost-format
 msgid "CRC32 inconsistency (SFV-Check): %1%"
-msgstr "nekonzistentný CRC32 (kontrola v SFV)"
+msgstr "CRC32 nekonzistencia (SFV-Check): %1%"
 
 #: dcpp\SearchManager.cpp:38
 msgid "Compressed"
-msgstr ""
+msgstr "Komprimované"
 
 #: dcpp\BufferedSocket.cpp:205 dcpp\SSLSocket.cpp:158 dcpp\SSLSocket.cpp:165
 msgid "Connection closed"
 msgstr "Spojenie ukončené"
 
 #: dcpp\BufferedSocket.cpp:172 dcpp\BufferedSocket.cpp:190
-#: dcpp\ConnectionManager.cpp:182 dcpp\Socket.cpp:372
+#: dcpp\ConnectionManager.cpp:212 dcpp\Socket.cpp:372
 msgid "Connection timeout"
 msgstr "Vypršal maximálny čas nečinnosti spojenia"
 
-#: dcpp\ConnectionManager.cpp:259
+#: dcpp\ConnectionManager.cpp:304
 #, boost-format
 msgid "Connectivity error: %1%"
 msgstr "Chyba konektivity: %1%"
@@ -225,24 +228,34 @@ msgid ""
 "\tEncrypted transfer port: %8%\n"
 "\tSearch port: %9%"
 msgstr ""
+"Informácie o konektivite:\n"
+"\n"
+"Automatické nastavenie konektivity je: %1%\n"
+"\n"
+"\t%2%\n"
+"\tExterná IP (v4): %3%\n"
+"\tExterná IP (v6): %4%\n"
+"\tPoužité rozhranie (v4): %5%\n"
+"\tPoužité rozhranie (v6): %6%\n"
+"\tPort pre prenost: %7%\n"
+"\tPort pre šifrovaný prenos: %8%\n"
+"\tPort pre vyhľadávanie: %9%"
 
-#: dcpp\ConnectionManager.cpp:251
+#: dcpp\ConnectionManager.cpp:296
 msgid "Connectivity restored"
 msgstr "Konektivita bola obnovená"
 
 #: dcpp\ConnectivityManager.cpp:179
 msgid "Connectivity settings are being configured; try again later"
-msgstr ""
+msgstr "Nastavuje sa konektivita; skúste neskôr"
 
 #: dcpp\ConnectivityManager.cpp:249
-#, fuzzy
 msgid "Connectivity: "
-msgstr "Chyba konektivity: %1%"
+msgstr "Konektivita: "
 
 #: dcpp\Socket.cpp:336
-#, fuzzy
 msgid "Could not open port for listening"
-msgstr "Nebolo možné otvoriť cieľový súbor: %1%"
+msgstr "Port pre počúvanie nemohol byť otvorený"
 
 #: dcpp\DownloadManager.cpp:236
 #, boost-format
@@ -251,25 +264,23 @@ msgstr "Nebolo možné otvoriť cieľový súbor: %1%"
 
 #: dcpp\DCPlusPlus.cpp:131
 msgid "Country information"
-msgstr ""
+msgstr "Informácie o krajine"
 
 #: dcpp\ConnectivityManager.cpp:109
 msgid "Determining the best connectivity settings..."
-msgstr ""
+msgstr "Odhadujem najlepšie nastavenie konektivity..."
 
 #: dcpp\SearchManager.cpp:43
-#, fuzzy
 msgid "Directory"
-msgstr "Adresár je už zdieľaný"
+msgstr "Priečinok"
 
-#: dcpp\ShareManager.cpp:404
+#: dcpp\ShareManager.cpp:400
 msgid "Directory already shared"
 msgstr "Adresár je už zdieľaný"
 
-#: dcpp\ShareManager.cpp:391
-#, fuzzy
+#: dcpp\ShareManager.cpp:387
 msgid "Directory is hidden"
-msgstr "Adresár je už zdieľaný"
+msgstr "Priečinok je skrytý"
 
 #: dcpp\DirectoryListing.cpp:203
 msgid "Directory missing name attribute"
@@ -290,13 +301,13 @@ msgstr "Používateľ, ktorý opustil hub, bol odpojený: %1%"
 
 #: dcpp\SearchManager.cpp:39
 msgid "Document"
-msgstr ""
+msgstr "Dokument"
 
 #: dcpp\DCPlusPlus.cpp:127
 msgid "Download Queue"
 msgstr "Front sťahovaní"
 
-#: dcpp\ShareManager.cpp:681
+#: dcpp\ShareManager.cpp:677
 #, boost-format
 msgid ""
 "Duplicate file will not be shared: %1% (Size: %2% B) Dupe matched against: "
@@ -306,36 +317,36 @@ msgstr ""
 
 #: dcpp\DirectoryListing.cpp:196 dcpp\DirectoryListing.cpp:221
 msgid "Duplicate item in the file list"
-msgstr ""
+msgstr "Duplikovať položky zo zoznamu súborov"
 
-#: dcpp\QueueManager.cpp:676 dcpp\QueueManager.cpp:680
+#: dcpp\QueueManager.cpp:678 dcpp\QueueManager.cpp:682
 #, boost-format
 msgid "Duplicate source: %1%"
 msgstr "Duplicitný zdroj: %1%"
 
 #: dcpp\MappingManager.cpp:122 dcpp\MappingManager.cpp:165
 msgid "Encrypted transfer"
-msgstr ""
+msgstr "Šifrovaný prenos"
 
 #: dcpp\HttpConnection.cpp:245
 #, boost-format
 msgid "Endless redirection loop (%1%)"
-msgstr ""
+msgstr "Nekonečná slučka presmerovaní (%1%)"
 
 #: dcpp\HashManager.cpp:546
 #, boost-format
 msgid "Error creating hash data file: %1%"
 msgstr "Chyba pri vytváraní dátového súboru hašov: %1%"
 
-#: dcpp\BZUtils.cpp:33 dcpp\BZUtils.cpp:54 dcpp\BZUtils.cpp:62
+#: dcpp\BZUtils.cpp:35 dcpp\BZUtils.cpp:56 dcpp\BZUtils.cpp:64
 #: dcpp\ZUtils.cpp:37 dcpp\ZUtils.cpp:60 dcpp\ZUtils.cpp:82 dcpp\ZUtils.cpp:92
 msgid "Error during compression"
 msgstr "Chyba počas kompresie"
 
-#: dcpp\BZUtils.cpp:74 dcpp\BZUtils.cpp:96 dcpp\BZUtils.cpp:99
+#: dcpp\BZUtils.cpp:76 dcpp\BZUtils.cpp:98 dcpp\BZUtils.cpp:101
 #: dcpp\CryptoManager.cpp:348 dcpp\CryptoManager.cpp:367
 #: dcpp\CryptoManager.cpp:381 dcpp\ZUtils.cpp:106 dcpp\ZUtils.cpp:131
-#: dcpp\ZUtils.cpp:141
+#: dcpp\ZUtils.cpp:145
 msgid "Error during decompression"
 msgstr "Chyba počas dekompresie"
 
@@ -349,14 +360,14 @@ msgid "Error hashing %1%: %2%"
 msgstr "Chyba pri vytváraní hašu %1%: %2%"
 
 #: dcpp\PluginManager.cpp:600
-#, fuzzy, boost-format
+#, boost-format
 msgid "Error loading %1%"
-msgstr "Chyba pri vytváraní hašu %1%: %2%"
+msgstr "Chyba načítavania %1%"
 
 #: dcpp\PluginManager.cpp:532
-#, fuzzy, boost-format
+#, boost-format
 msgid "Error loading %1%: %2%"
-msgstr "Chyba pri vytváraní hašu %1%: %2%"
+msgstr "Chyba načítavania %1%: %2%"
 
 #: dcpp\HashManager.cpp:109 dcpp\HashManager.cpp:316
 #, boost-format
@@ -365,21 +376,20 @@ msgstr "Chyba pri ukladaní hašov: %1%"
 
 #: dcpp\SearchManager.cpp:40
 msgid "Executable"
-msgstr ""
+msgstr "Spúšťací súbor"
 
 #: dcpp\MappingManager.cpp:91 dcpp\MappingManager.cpp:191
-#, fuzzy
 msgid "Failed to create port mappings"
-msgstr "Nepodarilo sa vytvoriť vlákno"
+msgstr "Zlyhalo namapovanie portov"
 
 #: dcpp\MappingManager.cpp:180
 msgid "Failed to get external IP"
-msgstr ""
+msgstr "Zlyhalo zisťovanie externej IP"
 
 #: dcpp\MappingManager.cpp:148
-#, fuzzy, boost-format
+#, boost-format
 msgid "Failed to initialize the %1% interface"
-msgstr "Obnovenie zoznamu súborov sa začalo"
+msgstr "Zlyhala inicializácia %1% rozhrania"
 
 #: dcpp\CryptoManager.cpp:225 dcpp\CryptoManager.cpp:229
 #: dcpp\CryptoManager.cpp:234 dcpp\CryptoManager.cpp:238
@@ -394,22 +404,23 @@ msgstr "Nepodarilo sa načítať privátny kľúč"
 #: dcpp\CryptoManager.cpp:271
 #, boost-format
 msgid "Failed to load trusted certificate from %1%"
-msgstr ""
+msgstr "Zlyhalo načítanie dôveryhodného certifikátu od %1%"
 
 #: dcpp\MappingManager.cpp:156
-#, fuzzy, boost-format
+#, boost-format
 msgid "Failed to map the %1% port (%2% %3%) with the %4% interface"
-msgstr "Nepodarilo sa vytvoriť vlákno"
+msgstr "Zlyhalo mapovanie %1% port (%2% %3%) s %4% rozhraním"
 
-#: dcpp\AdcHub.cpp:220
+#: dcpp\AdcHub.cpp:221
 msgid "Failed to negotiate base protocol"
 msgstr "Nepodarilo sa vyjednať základný protokol"
 
 #: dcpp\MappingManager.cpp:204
-#, fuzzy, boost-format
+#, boost-format
 msgid ""
 "Failed to remove port mappings from the %1% device with the %2% interface"
-msgstr "Nepodarilo sa vytvoriť vlákno"
+msgstr ""
+"Zlyhalo odstránenie mapovania portov zo %1% zariadenia s %2% zariadením"
 
 #: dcpp\Socket.cpp:604
 msgid ""
@@ -419,28 +430,25 @@ msgstr ""
 "Nepodarilo sa nastaviť SOCKS server, aby robil UDP relé (skontrolujte adresu "
 "a port SOCKS)"
 
-#: dcpp\QueueManager.cpp:663
-#, fuzzy
+#: dcpp\QueueManager.cpp:665
 msgid "File already exists at the target location"
-msgstr ""
-"Súbor s rovnakou alebo väčšou veľkosťou sa už na danom cieľovom mieste "
-"nachádza"
+msgstr "Súbor už existuje v cieľovom umiestnení"
 
-#: dcpp\ShareManager.cpp:846
-#, fuzzy, boost-format
+#: dcpp\ShareManager.cpp:840
+#, boost-format
 msgid "File list %1% generated"
-msgstr "Obnovenie zoznamu súborov sa začalo"
+msgstr "Zoznam súborov %1% vygenerovaný"
 
-#: dcpp\ShareManager.cpp:715
+#: dcpp\ShareManager.cpp:709
 #, boost-format
 msgid "File list refresh failed: %1%"
 msgstr "Nepodarilo sa obnoviť zoznam súborov: %1%"
 
-#: dcpp\ShareManager.cpp:775
+#: dcpp\ShareManager.cpp:769
 msgid "File list refresh finished"
 msgstr "Obnovenie zoznamu súborov bolo dokončené"
 
-#: dcpp\ShareManager.cpp:698
+#: dcpp\ShareManager.cpp:692
 msgid ""
 "File list refresh in progress, please wait for it to finish before trying to "
 "refresh again"
@@ -448,7 +456,7 @@ msgstr ""
 "Prebieha obnovenie zoznamu súborov, počkajte prosím, kým skončí, než ho "
 "skúsite znova obnoviť"
 
-#: dcpp\ShareManager.cpp:743
+#: dcpp\ShareManager.cpp:737
 msgid "File list refresh initiated"
 msgstr "Obnovenie zoznamu súborov sa začalo"
 
@@ -458,14 +466,14 @@ msgid "Finished hashing: %1%"
 msgstr "Skončilo hašovanie: %1%"
 
 #: dcpp\HashManager.cpp:75
-#, fuzzy, boost-format
+#, boost-format
 msgid "Finished hashing: %1% (%2% at %3%/s)"
-msgstr "Skončilo hašovanie: %1% (%2%/s)"
+msgstr "Dokončené hashovanie: %1% (%2% rýchlosťou %3%/s)"
 
 #: dcpp\HashManager.cpp:78
-#, fuzzy, boost-format
+#, boost-format
 msgid "Finished hashing: %1% (%2%)"
-msgstr "Skončilo hašovanie: %1% (%2%/s)"
+msgstr "Dokončené hashovanie: %1% (%2%)"
 
 #: dcpp\DownloadManager.cpp:296
 msgid "Full tree does not match TTH root"
@@ -477,7 +485,7 @@ msgstr "Vytvorený nový TLS certifikát"
 
 #: dcpp\MappingManager.cpp:215
 msgid "Generic"
-msgstr ""
+msgstr "Štandardné"
 
 #: dcpp\DCPlusPlus.cpp:121
 msgid "Hash database"
@@ -492,7 +500,7 @@ msgstr "Databáza hašov znovu zostavená"
 msgid "Hashing failed: %1%"
 msgstr "Nepodarilo sa hašovanie: %1%"
 
-#: dcpp\AdcHub.cpp:226
+#: dcpp\AdcHub.cpp:227
 msgid ""
 "Hub probably uses an old version of ADC, please encourage the owner to "
 "upgrade"
@@ -502,47 +510,45 @@ msgstr ""
 
 #: dcpp\UserMatchManager.cpp:132
 msgid "Ignore"
-msgstr ""
+msgstr "Ignorovať"
 
 #: dcpp\FavoriteManager.cpp:680
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid URL: %1%"
-msgstr "Hľadanie vypnuté: %1%"
+msgstr "Neplatná URL adresa: %1%"
 
 #: dcpp\Archive.cpp:42 dcpp\Archive.cpp:94
-#, fuzzy
 msgid "Invalid archive"
-msgstr "Neplatná veľkosť"
+msgstr "Neplatný archív"
 
 #: dcpp\UserConnection.cpp:52 dcpp\UserConnection.cpp:70
 #: dcpp\UserConnection.cpp:138
-#, fuzzy
 msgid "Invalid data"
-msgstr "Neplatná veľkosť"
+msgstr "Neplatné dáta"
 
 #: dcpp\DirectoryListing.cpp:97
 msgid "Invalid file list extension (must be .xml or .bz2)"
-msgstr ""
+msgstr "Neplatná prípona zoznamu súborov (musí byť .xml or .bz2)"
 
-#: dcpp\ShareManager.cpp:582
+#: dcpp\ShareManager.cpp:578
 #, boost-format
 msgid "Invalid file name found while hashing folder %1%"
-msgstr ""
+msgstr "Invalid file name found while hashing folder %1%"
 
 #: dcpp\StringMatch.cpp:69
 #, boost-format
 msgid "Invalid regular expression: %1%"
-msgstr ""
+msgstr "Neplatný regulérny výraz: %1%"
 
-#: dcpp\SettingsManager.cpp:633
+#: dcpp\SettingsManager.cpp:640
 msgid "Invalid search type name"
-msgstr ""
+msgstr "Neplatný názov typu hľadania"
 
 #: dcpp\DownloadManager.cpp:224
 msgid "Invalid size"
 msgstr "Neplatná veľkosť"
 
-#: dcpp\QueueManager.cpp:647 dcpp\QueueManager.cpp:655
+#: dcpp\QueueManager.cpp:652 dcpp\QueueManager.cpp:657
 msgid ""
 "Invalid target file (missing directory, check default download directory "
 "setting)"
@@ -556,7 +562,7 @@ msgstr "Vykopnúť používateľa"
 
 #: dcpp\ConnectivityManager.cpp:131
 msgid "Local network with possible NAT detected, trying to map the ports..."
-msgstr ""
+msgstr "Detekovaná lokálna sieť s možným NAT, pokus o namapovanie portov..."
 
 #: dcpp\BufferedSocket.cpp:298
 msgid "Maximum command length exceeded"
@@ -565,7 +571,7 @@ msgstr "Bola prekročená maximálna dĺžka príkazu"
 #: dcpp\PluginManager.cpp:551
 #, boost-format
 msgid "Missing dependencies for %1%"
-msgstr ""
+msgstr "Chýbajúce závislosti pre %1%"
 
 #: dcpp\Streams.h:160
 msgid "More bytes written than requested"
@@ -575,13 +581,13 @@ msgstr "Bolo zapísaných viac bajtov ako bolo vyžiadaných"
 msgid "No certificate file chosen"
 msgstr "Nebol zvolený súbor s certifikátom"
 
-#: dcpp\ShareManager.cpp:387
+#: dcpp\ShareManager.cpp:383
 msgid "No directory specified"
 msgstr "Nebol zadaný adresár"
 
 #: dcpp\MappingManager.cpp:53
 msgid "No port mapping interface available"
-msgstr ""
+msgstr "Žiadne rozhranie pre mapovanie portov nie je k dispozícií"
 
 #: dcpp\CryptoManager.cpp:131
 msgid "No private key file chosen"
@@ -591,53 +597,54 @@ msgstr "Nebol vybraný súbor s privátnym kľúčom"
 msgid "No slots available"
 msgstr "Nie sú dostupné sloty"
 
-#: dcpp\SettingsManager.cpp:691
+#: dcpp\SettingsManager.cpp:698
 msgid "No such search type"
-msgstr ""
+msgstr "Žiadny takýto typ hľadania"
 
 #: dcpp\UserConnection.cpp:64
 msgid "Non-UTF-8 data in an ADC connection"
-msgstr ""
+msgstr "Non-UTF-8 dáta v ADC spojení"
 
-#: dcpp\AdcHub.cpp:686
+#: dcpp\AdcHub.cpp:697
 #, boost-format
 msgid "Not listening for connections - please restart %1%"
 msgstr "Nepočúvajú sa nové spojenia - prosím reštartujte %1%"
 
-#: dcpp\ClientManager.cpp:174 dcpp\FinishedManager.cpp:131
-#: dcpp\FinishedManager.cpp:137 dcpp\FinishedManager.cpp:143
-#: dcpp\SearchManager.cpp:266 dcpp\SearchManager.cpp:343 dcpp\Transfer.cpp:81
-#: dcpp\Transfer.cpp:85
+#: dcpp\ClientManager.cpp:149 dcpp\ClientManager.cpp:180
+#: dcpp\FinishedManager.cpp:131 dcpp\FinishedManager.cpp:137
+#: dcpp\FinishedManager.cpp:143 dcpp\SearchManager.cpp:266
+#: dcpp\SearchManager.cpp:343 dcpp\Transfer.cpp:81 dcpp\Transfer.cpp:85
 msgid "Offline"
 msgstr "Odpojený"
 
 #: dcpp\UploadManager.cpp:88
 msgid "Partial file list"
-msgstr ""
+msgstr "Čiastočný zoznam súborov"
 
 #: dcpp\ConnectivityManager.cpp:200
 msgid "Passive mode"
-msgstr ""
+msgstr "Pasívny režim"
 
 #: dcpp\SearchManager.cpp:41
 msgid "Picture"
-msgstr ""
+msgstr "Obrázok"
 
 #: dcpp\MappingManager.cpp:209
 #, boost-format
 msgid "Port mapping: %1%"
-msgstr ""
+msgstr "Mapovanie portov: %1%"
 
 #: dcpp\ConnectivityManager.cpp:124
 msgid ""
 "Public IP address detected, selecting active mode with direct connection"
 msgstr ""
+"Detekovaná verejná IP adresa, vyberanie aktívneho režimu s priamym spojením"
 
 #: dcpp\FavoriteManager.cpp:427
 msgid "Redirect user(s)"
 msgstr "Presmerovať používateľov"
 
-#: dcpp\ShareManager.cpp:407
+#: dcpp\ShareManager.cpp:403
 msgid "Remove all subdirectories before adding this one"
 msgstr "Odstrániť všetky podadresáre pred pridaním tohto"
 
@@ -647,11 +654,11 @@ msgstr "Odpoveď nezodpovedá požiadavke"
 
 #: dcpp\MappingManager.cpp:123 dcpp\MappingManager.cpp:166
 msgid "Search"
-msgstr ""
+msgstr "Vyhľadávanie"
 
 #: dcpp\ConnectivityManager.cpp:280
 msgid "Search (UDP)"
-msgstr ""
+msgstr "Vyhľadávanie (UDP)"
 
 #: dcpp\SearchManager.cpp:160
 #, boost-format
@@ -663,14 +670,13 @@ msgid "Search enabled again"
 msgstr "Hľadanie znova zapnuté"
 
 #: dcpp\DCPlusPlus.cpp:118
-#, fuzzy
 msgid "Security certificates"
-msgstr "Chyba pri tvorbe certifikátu"
+msgstr "Bezpečnostné certifikáty"
 
 #: dcpp\ChatMessage.cpp:65
 #, boost-format
 msgid "Sent %1%"
-msgstr ""
+msgstr "Odoslané %1%"
 
 #: dcpp\DCPlusPlus.cpp:124
 msgid "Shared Files"
@@ -687,18 +693,21 @@ msgid ""
 "Successfully created port mappings (Transfers: %1%, Encrypted transfers: "
 "%2%, Search: %3%) on the %4% device with the %5% interface"
 msgstr ""
+"Úspešne vytvorené namapovanie portov (Prenesené:  %1%, Šifrované prenosy: "
+"%2%, Hľadanie: %3%) na zariadení %4% s rozhraním  %5%"
 
 #: dcpp\MappingManager.cpp:88
 #, boost-format
 msgid ""
 "Successfully created port mappings on the %1% device with the %2% interface"
-msgstr ""
+msgstr "Úspešne vytvorené namapovanie portov na zariadení %1% s rozhraním %2%"
 
 #: dcpp\MappingManager.cpp:203
-#, fuzzy, boost-format
+#, boost-format
 msgid ""
 "Successfully removed port mappings from the %1% device with the %2% interface"
-msgstr "Nepodarilo sa vytvoriť vlákno"
+msgstr ""
+"Úspešne odstránenie namapovania portov zo zariadenia %1% s rozhraním %2%"
 
 #: dcpp\CryptoManager.cpp:220
 #, boost-format
@@ -711,11 +720,11 @@ msgstr "TLS vypnuté, nebol nastavený súbor s certifikátom"
 
 #: dcpp\SSLSocket.cpp:176
 msgid "TLS error"
-msgstr ""
+msgstr "TLS chyba"
 
 #: dcpp\SearchManager.cpp:44
 msgid "TTH"
-msgstr ""
+msgstr "TTH"
 
 #: dcpp\MerkleCheckOutputStream.h:53 dcpp\MerkleCheckOutputStream.h:113
 msgid "TTH inconsistency"
@@ -725,7 +734,7 @@ msgstr "nekonzistencia TTH"
 msgid "Target file is missing or wrong size"
 msgstr "Cieľový súbor chýba alebo má chybnú veľkosť"
 
-#: dcpp\QueueManager.cpp:642 dcpp\QueueManager.cpp:651
+#: dcpp\QueueManager.cpp:645
 msgid "Target filename too long"
 msgstr "Cieľový názov súboru je príliš dlhý"
 
@@ -742,16 +751,15 @@ msgstr "SOCKS serveru sa nepodarilo nadviazať spojenie"
 msgid "The socks server requires authentication"
 msgstr "SOCKS server vyžaduje overenie"
 
-#: dcpp\ShareManager.cpp:395
+#: dcpp\ShareManager.cpp:391
 msgid "The temporary download directory cannot be shared"
 msgstr "Dočasný adresár sťahovaní nemožno zdieľať"
 
-#: dcpp\QueueManager.cpp:599
-#, fuzzy
+#: dcpp\QueueManager.cpp:603
 msgid "This file has already finished downloading"
-msgstr "Tento súbor sa už nachádza vo fronte"
+msgstr "Sťahovanie tohto súboru už bolo dokončené"
 
-#: dcpp\QueueManager.cpp:580
+#: dcpp\QueueManager.cpp:584
 msgid "This file is already queued"
 msgstr "Tento súbor sa už nachádza vo fronte"
 
@@ -761,54 +769,57 @@ msgid ""
 "This hub is trying to use your client to spam %1%, please urge hub owner to "
 "fix this"
 msgstr ""
+"Tento hub sa pokúša použiť vás klient na spamovanie %1%, prosím naliehajte "
+"na majiteľa hub-u aby s tým niečo spravil"
 
-#: dcpp\SettingsManager.cpp:637 dcpp\SettingsManager.cpp:659
+#: dcpp\SettingsManager.cpp:644 dcpp\SettingsManager.cpp:666
 msgid "This search type already exists"
-msgstr ""
+msgstr "Tento typ hľadania už existuje"
 
 #: dcpp\HttpConnection.cpp:289
 #, boost-format
 msgid "Too much data in response body (%1%)"
-msgstr ""
+msgstr "Príliš veľa dát v tele odpovedi (%1%)"
 
 #: dcpp\MappingManager.cpp:121 dcpp\MappingManager.cpp:164
 msgid "Transfer"
-msgstr ""
+msgstr "Prenos"
 
 #: dcpp\ConnectivityManager.cpp:274
 msgid "Transfer (TCP)"
-msgstr ""
+msgstr "Prenos (TCP)"
 
 #: dcpp\HttpConnection.cpp:206
 #, boost-format
 msgid "Transfer-encoding error (%1%)"
-msgstr ""
+msgstr "Chyba v kódovaní prenosu (%1%)"
 
 #: dcpp\UserMatchManager.cpp:132
 msgid "Un-ignore"
-msgstr ""
+msgstr "Neignorovať"
 
 #: dcpp\Thread.cpp:30 dcpp\Thread.cpp:38
 msgid "Unable to create thread"
 msgstr "Nepodarilo sa vytvoriť vlákno"
 
-#: dcpp\QueueManager.cpp:940
+#: dcpp\QueueManager.cpp:942
 #, boost-format
 msgid "Unable to move %1% to %2% (%3%) nor to rename to %4% (%5%)"
-msgstr ""
+msgstr "Zlyhalo premiestnenie %1% do %2% (%3%) aj premiestnenie do %4% (%5%)"
 
-#: dcpp\QueueManager.cpp:937
+#: dcpp\QueueManager.cpp:939
 #, boost-format
 msgid "Unable to move %1% to %2% (%3%); renamed to %4%"
-msgstr ""
+msgstr "Zlyhalo premiestnenie %1% do %2% (%3%); premenované na %4%"
 
 #: dcpp\ConnectivityManager.cpp:114
 #, boost-format
 msgid ""
 "Unable to open %1% port(s); connectivity settings must be configured manually"
 msgstr ""
+"Zlyhalo otvorenie portu/portov %1%; konektivita sa musí nastaviť manuálne"
 
-#: dcpp\QueueManager.cpp:1116
+#: dcpp\QueueManager.cpp:1118
 #, boost-format
 msgid "Unable to open filelist: %1%"
 msgstr "Nepodarilo sa otvoriť zoznam súborov: %1%"
@@ -828,44 +839,44 @@ msgid "Unknown error: 0x%1$x"
 msgstr "Neznáma chyba: 0x%1$x"
 
 #: dcpp\Socket.cpp:219
-#, fuzzy, c-format, boost-format
+#, c-format, boost-format
 msgid "Unknown protocol %d"
-msgstr "Neznáma chyba: 0x%1$x"
+msgstr "Neznámy protokol %d"
 
 #: dcpp\PluginManager.cpp:565
 #, boost-format
 msgid "Updating the %1% plugin from version %2% to version %3%"
-msgstr ""
+msgstr "Aktualizácia zásuvného modulu %1%  z verzie %2% na verziu %3%"
 
 #: dcpp\DCPlusPlus.cpp:112
 msgid "Users"
-msgstr ""
+msgstr "Používatelia"
 
 #: dcpp\SearchManager.cpp:42
 msgid "Video"
-msgstr ""
+msgstr "Video"
 
-#: dcpp\QueueManager.cpp:528
+#: dcpp\QueueManager.cpp:532
 msgid "You're trying to download from yourself!"
 msgstr "Pokúšate sa sťahovať sám od seba!"
 
 #: dcpp\ConnectivityManager.cpp:182
 msgid "disabled"
-msgstr ""
+msgstr "Vypnuté"
 
-#: dcpp\SettingsManager.cpp:199 dcpp\SettingsManager.cpp:200
+#: dcpp\SettingsManager.cpp:201 dcpp\SettingsManager.cpp:202
 msgid "downloaded from"
 msgstr "stiahnuté od"
 
 #: dcpp\ConnectivityManager.cpp:182
-#, fuzzy, boost-format
+#, boost-format
 msgid "enabled - %1%"
-msgstr "Hľadanie vypnuté: %1%"
+msgstr "zapnuté - %1%"
 
 #: dcpp\ConnectivityManager.cpp:205
 msgid "undefined"
-msgstr ""
+msgstr "nedefinované"
 
-#: dcpp\SettingsManager.cpp:201
+#: dcpp\SettingsManager.cpp:203
 msgid "uploaded to"
 msgstr "nahrané komu"

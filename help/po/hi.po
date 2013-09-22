@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-07-19 18:26+0300\n"
+"POT-Creation-Date: 2013-09-22 16:00+0300\n"
 "PO-Revision-Date: 2011-02-07 11:34+0000\n"
 "Last-Translator: sujay <Unknown>\n"
 "Language-Team: Hindi <hi@li.org>\n"
@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-07-23 12:37+0000\n"
-"X-Generator: Launchpad (build 16700)\n"
+"X-Launchpad-Export-Date: 2013-09-22 13:50+0000\n"
+"X-Generator: Launchpad (build 16765)\n"
 
 #. type: Content of: <html><body><ul><li><div><placeholder><a>
 #: help/chat_commands.html:9 help/index.html:143
@@ -115,8 +115,8 @@ msgstr ""
 #: help/keyboard_commands.html:70 help/keyboard_commands.html:72
 #: help/keyboard_commands.html:76 help/keyboard_commands.html:79
 #: help/keyboard_commands.html:80 help/keyboard_commands.html:84
-#: help/settings_appearance.html:102 help/settings_expert.html:49
-#: help/settings_expert.html:51 help/settings_history.html:25
+#: help/settings_appearance.html:102 help/settings_expert.html:51
+#: help/settings_expert.html:53 help/settings_history.html:25
 #: help/settings_history.html:43 help/settings_notifications.html:37
 #: help/window_main.html:151 help/window_main.html:153 help/window_pm.html:10
 #: help/window_pm.html:11
@@ -255,7 +255,9 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:118
-msgid "Displays available commands. (The ones listed on this page.)"
+msgid ""
+"Displays available commands. (The ones listed on this page.) Optionally, you "
+"can specify &quot;brief&quot; to have a brief listing."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
@@ -528,8 +530,8 @@ msgstr ""
 #: help/keyboard_commands.html:84 help/keyboard_commands.html:89
 #: help/settings_appearance.html:102 help/settings_connectivity.html:17
 #: help/settings_connectivity.html:54 help/settings_connectivity.html:64
-#: help/settings_downloads.html:103 help/settings_expert.html:49
-#: help/settings_expert.html:51 help/settings_expert.html:53
+#: help/settings_downloads.html:103 help/settings_expert.html:51
+#: help/settings_expert.html:53 help/settings_expert.html:55
 #: help/settings_history.html:17 help/settings_history.html:25
 #: help/settings_history.html:36 help/settings_history.html:43
 #: help/settings_history.html:50 help/settings_history.html:58
@@ -557,7 +559,8 @@ msgstr ""
 #: help/window_main.html:264 help/window_main.html:267
 #: help/window_main.html:297 help/window_main.html:302
 #: help/window_main.html:365 help/window_main.html:369
-#: help/window_main.html:373 help/window_main.html:377 help/window_pm.html:34
+#: help/window_main.html:373 help/window_main.html:377 help/window_pm.html:27
+#: help/window_pm.html:69
 msgid "<placeholder id=0/>"
 msgstr ""
 
@@ -1171,7 +1174,7 @@ msgstr ""
 #: help/keyboard_commands.html:76 help/keyboard_commands.html:78
 #: help/keyboard_commands.html:80 help/keyboard_commands.html:82
 #: help/keyboard_commands.html:84 help/settings_appearance.html:102
-#: help/settings_expert.html:53 help/settings_history.html:17
+#: help/settings_expert.html:55 help/settings_history.html:17
 #: help/settings_history.html:36 help/settings_notifications.html:26
 #: help/settings_tabs.html:42 help/window_finished_downloads.html:36
 #: help/window_finished_uploads.html:36 help/window_hub.html:10
@@ -3058,39 +3061,33 @@ msgid "What secret stuff is there?"
 msgstr ""
 
 #. type: Content of: <html><body><ul><li>
-#: help/faq_secret.html:13
+#: help/faq_secret.html:12
 msgid ""
 "You can doubleclick on a user name in chat to select him in the user list"
 msgstr ""
 
 #. type: Content of: <html><body><ul><li>
-#: help/faq_secret.html:14
-msgid ""
-"You can doubleclick on text starting with www. http:// https:// ftp:// "
-"magnet: adc:// adcs:// dchub:// mailto: and irc://"
-msgstr ""
-
-#. type: Content of: <html><body><ul><li>
-#: help/faq_secret.html:15
+#: help/faq_secret.html:13
 msgid ""
 "If DC++ receives \"banned\" during the login phase, it'll stop automatically "
 "reconnecting"
 msgstr ""
 
 #. type: Content of: <html><body><ul><li>
-#: help/faq_secret.html:16
+#: help/faq_secret.html:14
 msgid ""
 "Your file list will be created on disk the first time someone requests it"
 msgstr ""
 
 #. type: Content of: <html><body><ul><li>
-#: help/faq_secret.html:17
+#: help/faq_secret.html:15
 msgid ""
-"Pressing shift on startup will prevent DC++ from auto-connecting to hubs."
+"Pressing the Shift key on startup will prevent DC++ from reopening previous "
+"hub windows."
 msgstr ""
 
 #. type: Content of: <html><body><ul><li>
-#: help/faq_secret.html:18
+#: help/faq_secret.html:16
 msgid ""
 "You can tab complete nicks in mainchat, including ignoring prefixes. In case "
 "of ambiguity pressing the Tab key again will show all the possible nicks "
@@ -3098,40 +3095,47 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li>
-#: help/faq_secret.html:19
+#: help/faq_secret.html:17
 msgid "You can drag and drop all tabs to the position of your choice."
 msgstr ""
 
 #. type: Content of: <html><body><ul><li>
-#: help/faq_secret.html:20
+#: help/faq_secret.html:18
+msgid ""
+"You can drag and drop text to and from any input boxes of the DC++ user "
+"interface and between any other capable Windows application."
+msgstr ""
+
+#. type: Content of: <html><body><ul><li>
+#: help/faq_secret.html:19
 msgid ""
 "You can see who wants to download from you and what they want to download by "
 "opening the <a po4a-id=0>Users frame</a> and filtering out Pending Uploads."
 msgstr ""
 
 #. type: Content of: <html><body><ul><li>
-#: help/faq_secret.html:21
+#: help/faq_secret.html:20
 msgid ""
 "You can drag folders from Windows Explorer and drop them in the <a po4a-"
 "id=0>Sharing</a> page in Settings."
 msgstr ""
 
 #. type: Content of: <html><body><ul><li>
-#: help/faq_secret.html:22
+#: help/faq_secret.html:21
 msgid ""
 "You can spot if a file is identical to another one by looking in the TTH "
 "column, if the TTH is the same, it is the exact same file."
 msgstr ""
 
 #. type: Content of: <html><body><ul><li>
-#: help/faq_secret.html:24
+#: help/faq_secret.html:22
 msgid ""
 "You can use Ctrl+Enter to create a new line in chat, away-message and user "
 "command!"
 msgstr ""
 
 #. type: Content of: <html><body><ul><li>
-#: help/faq_secret.html:25
+#: help/faq_secret.html:23
 msgid ""
 "You can double click on the status bar of every window to open the "
 "corresponding log file (if available)."
@@ -3544,7 +3548,8 @@ msgstr ""
 #. type: Content of: <html><body><h1>
 #: help/faq_slowdownload.html:31 help/faq_slowdownload.html:71
 #: help/index.html:44 help/settings_styles.html:24
-#: help/window_download_queue.html:36 help/window_transfers.html:9
+#: help/window_download_queue.html:36 help/window_pm.html:69
+#: help/window_transfers.html:9
 msgid "Transfers"
 msgstr ""
 
@@ -5340,6 +5345,16 @@ msgstr ""
 msgid "Donate (paypal)"
 msgstr ""
 
+#. type: Content of: <html><body><dl><dd><dl><dd><dl><dt>
+#: help/links.html:45 help/window_main.html:192
+msgid "Blog"
+msgstr ""
+
+#. type: Content of: <html><body><table><tbody><tr><td>
+#: help/links.html:49
+msgid "DC Plugin repository"
+msgstr ""
+
 #. type: Content of: <html><body><h1>
 #: help/netiquette.html:9
 msgid "Etiquette for the Direct Connect Network"
@@ -6119,7 +6134,7 @@ msgstr ""
 
 #. type: Content of: <html><body><p><div><placeholder><a>
 #: help/settings_appearance.html:100 help/window_hub.html:91
-#: help/window_pm.html:34
+#: help/window_pm.html:27
 msgid "Height of the message editing box"
 msgstr ""
 
@@ -6304,13 +6319,38 @@ msgid ""
 "in your Trusted certificate folder."
 msgstr ""
 
-#. type: Content of: <html><body><p>
+#. type: Content of: <html><body><dl><dt>
+#: help/settings_certs.html:24
+msgid "Support direct encrypted private message channels"
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
 #: help/settings_certs.html:26
+msgid ""
+"Enable support for peer-to-peer private messages that hubs can't spy upon.  "
+"<a po4a-id=0>Check the PM window help for more information.</a>"
+msgstr ""
+
+#. type: Content of: <html><body><dl><dt>
+#: help/settings_certs.html:29
+msgid "Always attempt to establish direct encrypted private message channels"
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_certs.html:31
+msgid ""
+"Try to initiate a peer-to-peer connection whenever the user in private "
+"message windows shows up.  <a po4a-id=0>Check the PM window help for more "
+"information.</a>"
+msgstr ""
+
+#. type: Content of: <html><body><p>
+#: help/settings_certs.html:36
 msgid "To see effects, please restart DC++."
 msgstr ""
 
 #. type: Content of: <html><body><p>
-#: help/settings_certs.html:29
+#: help/settings_certs.html:39
 msgid ""
 "SSL support is an experimental feature and doesn't imply that DC++ is secure "
 "in any way."
@@ -6923,19 +6963,31 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_expert.html:21
 msgid ""
-"This will limit the amount of sources a file can have before it will no "
-"longer be auto searched for. For example, if this option is set to 2, if a "
-"file has more than or exactly 2 sources, the file will be excluded from the "
-"auto-search list."
+"This will limit the amount of online sources a file can have before it will "
+"no longer be auto searched for. For example, if this option is set to 2, if "
+"a file has more than or exactly 2 sources online, the file will be excluded "
+"from the auto-search list. (default: 5 sources)"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_expert.html:22
-msgid "Mini slot size"
+msgid "Auto-search interval"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_expert.html:23
+msgid ""
+"This will set the time interval between auto searches. Specified in seconds "
+"and defaults to 120 seconds (cannot be lower than this)."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dt>
+#: help/settings_expert.html:24
+msgid "Mini slot size"
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_expert.html:25
 msgid ""
 "This value defines a file size border for mini slots; a <a po4a-id=0>mini "
 "slot</a> will be given to peers on requesting files below this size. The "
@@ -6943,12 +6995,12 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/settings_expert.html:24
+#: help/settings_expert.html:26
 msgid "Max filelist size"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_expert.html:25
+#: help/settings_expert.html:27
 msgid ""
 "This setting controls the size of the maximum file list that DC++ will open, "
 "in mebibytes. This setting helps protect against malformed file lists that "
@@ -6958,24 +7010,24 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/settings_expert.html:31
+#: help/settings_expert.html:33
 msgid "PID"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_expert.html:32
+#: help/settings_expert.html:34
 msgid ""
 "This is your unique private ID (PID). This will later with an algorithm be "
 "used to identify you on ADC hubs. <b>Do not share this with other users.</b>"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/settings_expert.html:33
+#: help/settings_expert.html:35
 msgid "Auto refresh time"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_expert.html:34
+#: help/settings_expert.html:36
 msgid ""
 "This controls the interval at which your shared directories are rescanned "
 "for new and changed content. This is measured in minutes. (default: 60 "
@@ -6983,12 +7035,12 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/settings_expert.html:37
+#: help/settings_expert.html:39
 msgid "Settings save interval"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_expert.html:38
+#: help/settings_expert.html:40
 msgid ""
 "This controls the interval at which your settings are automatically saved; "
 "good to prevent losses in case of crashes. This is measured in minutes. "
@@ -6996,43 +7048,43 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/settings_expert.html:41
+#: help/settings_expert.html:43
 msgid "Socket read buffer"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_expert.html:42
+#: help/settings_expert.html:44
 msgid ""
 "The size of the buffer DC++ use to read sockets. Measured in bytes. "
 "(default: 8192 bytes)"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/settings_expert.html:44
+#: help/settings_expert.html:46
 msgid "Socket write buffer"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_expert.html:45
+#: help/settings_expert.html:47
 msgid ""
 "The size of the buffer DC++ use to write to sockets.  Measured in bytes. "
 "(default: 8192 bytes)"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/settings_expert.html:47
+#: help/settings_expert.html:49
 msgid "Max PM windows"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_expert.html:49
+#: help/settings_expert.html:51
 msgid ""
 "The maximum amount of <placeholder id=0/> windows that are allowed to be "
 "opened at the same time. (default: 50)"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_expert.html:51
+#: help/settings_expert.html:53
 msgid ""
 "When a <placeholder id=0/> window can't be opened because this setting would "
 "not be satisfied, the chat message that spawned it will be shown in its "
@@ -9908,7 +9960,7 @@ msgstr ""
 #. type: Content of: <html><body><h2>
 #: help/window_download_queue.html:128 help/window_finished_downloads.html:58
 #: help/window_finished_uploads.html:58 help/window_hub.html:96
-#: help/window_main.html:130 help/window_pm.html:38
+#: help/window_main.html:130 help/window_pm.html:31
 #: help/window_public_hubs.html:74 help/window_search.html:127
 msgid "Status bar"
 msgstr ""
@@ -10634,7 +10686,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><p>
-#: help/window_hub.html:32 help/window_pm.html:25
+#: help/window_hub.html:32 help/window_pm.html:18
 msgid ""
 "Double-click on links (that start with http://, ftp://, www, etc) shown in "
 "the chat window to open them with the registered browser/viewer software."
@@ -10829,7 +10881,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><p><div>
-#: help/window_hub.html:91 help/window_pm.html:34
+#: help/window_hub.html:91 help/window_pm.html:27
 msgid ""
 "When composing a multiline message, this box resizes itself automatically "
 "according to the <placeholder id=0/> settings."
@@ -11456,11 +11508,6 @@ msgid ""
 "money... You can do it here, through the author's Paypal account."
 msgstr ""
 
-#. type: Content of: <html><body><dl><dd><dl><dd><dl><dt>
-#: help/window_main.html:192
-msgid "Blog"
-msgstr ""
-
 #. type: Content of: <html><body><dl><dd><dl><dd><dl><dd>
 #: help/window_main.html:193
 msgid "Opens the DC++ blog in your web browser."
@@ -11932,25 +11979,11 @@ msgstr ""
 
 #. type: Content of: <html><body><h2>
 #: help/window_pm.html:14
-msgid "[Optional] Hub selection box (top)"
-msgstr ""
-
-#. type: Content of: <html><body><p>
-#: help/window_pm.html:16
-msgid ""
-"When a user is online in multiple hubs, this box can be used to select the "
-"hub through which chat messages will be sent in order to reach the user. "
-"This can be particularly useful when transmitting sensitive information, as "
-"hubs are able to read any private message being sent."
-msgstr ""
-
-#. type: Content of: <html><body><h2>
-#: help/window_pm.html:21
 msgid "Private chat window (top)"
 msgstr ""
 
 #. type: Content of: <html><body><p>
-#: help/window_pm.html:23
+#: help/window_pm.html:16
 msgid ""
 "The private chat window displays messages sent during your private "
 "conversation with a specific user (to know which one, take a look at the "
@@ -11961,12 +11994,12 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><h2>
-#: help/window_pm.html:28
+#: help/window_pm.html:21
 msgid "Field to write a message (bottom)"
 msgstr ""
 
 #. type: Content of: <html><body><p><div>
-#: help/window_pm.html:31
+#: help/window_pm.html:24
 msgid ""
 "Write a message here to chat with the user you are currently in private "
 "conversation with (to know which one, take a look at the title bar of the "
@@ -11975,17 +12008,121 @@ msgid ""
 "available)."
 msgstr ""
 
+#. type: Content of: <html><body><h3>
+#: help/window_pm.html:33
+msgid "Message part (left)"
+msgstr ""
+
 #. type: Content of: <html><body><p>
-#: help/window_pm.html:40
+#: help/window_pm.html:35
 msgid "Shows the most recent status message."
+msgstr ""
+
+#. type: Content of: <html><body><p>
+#: help/window_pm.html:36
+msgid ""
+"To see more from the recent status messages you can move the mouse pointer "
+"above the status bar - the last few messages will be shown as a tooltip "
+"shortly."
+msgstr ""
+
+#. type: Content of: <html><body><h3>
+#: help/window_pm.html:39
+msgid "Communication channel"
+msgstr ""
+
+#. type: Content of: <html><body><p><placeholder>
+#: help/window_pm.html:42
+msgid "Direct encrypted channel"
 msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/window_pm.html:41
 msgid ""
-"To see more from the recent status messages you can move the mouse pointer "
-"above the status bar - the last few messages will be shown as a tooltip "
-"shortly."
+"Private messages are usually sent through a hub, the name of which is "
+"indicated here. This part can also show \"<placeholder id=0/>\" when private "
+"messages flow directly between you and the user (no hub involved in that "
+"case)."
+msgstr ""
+
+#. type: Content of: <html><body><p>
+#: help/window_pm.html:44
+msgid "Click this part to select the desired communication channel."
+msgstr ""
+
+#. type: Content of: <html><body><h2>
+#: help/window_pm.html:47
+msgid "Information on direct encrypted private message channels"
+msgstr ""
+
+#. type: Content of: <html><body><p>
+#: help/window_pm.html:49
+msgid ""
+"Hubs can spy upon any private message they may be involved in routing from "
+"one user to another. In order to avoid such spying, one can initiate a peer-"
+"to-peer connection with the desired user and use it to send private messages."
+msgstr ""
+
+#. type: Content of: <html><body><p>
+#: help/window_pm.html:52
+msgid ""
+"The hub used to establish the initial peer-to-peer connection must be an ADC "
+"hub and the connection between the user and the hub must be encrypted (\"adcs"
+"\" scheme instead of \"adc\"). Additionally, both users must support the "
+"\"CCPM\" ADC extension."
+msgstr ""
+
+#. type: Content of: <html><body><p>
+#: help/window_pm.html:55
+msgid "Ways to attempt a direct encrypted channel:"
+msgstr ""
+
+#. type: Content of: <html><body><p><ul><li><placeholder>
+#: help/window_pm.html:58
+msgid "Start a direct encrypted channel"
+msgstr ""
+
+#. type: Content of: <html><body><p><ul><li>
+#: help/window_pm.html:57 help/window_pm.html:64
+msgid ""
+"Click the \"Communication channel\" part of the status bar and select the "
+"\"<placeholder id=0/>\" menu command."
+msgstr ""
+
+#. type: Content of: <html><body><p><ul><li>
+#: help/window_pm.html:59
+msgid "Send the \"/direct\" chat command."
+msgstr ""
+
+#. type: Content of: <html><body><p><ul><li>
+#: help/window_pm.html:60
+msgid "Send the \"/encrypted\" chat command."
+msgstr ""
+
+#. type: Content of: <html><body><p>
+#: help/window_pm.html:62
+msgid "Ways to disconnect the direct encrypted channel:"
+msgstr ""
+
+#. type: Content of: <html><body><p><ul><li><placeholder>
+#: help/window_pm.html:65
+msgid "Disconnect the direct encrypted channel"
+msgstr ""
+
+#. type: Content of: <html><body><p><ul><li>
+#: help/window_pm.html:66
+msgid ""
+"Click the \"Communication channel\" part of the status bar and select a hub."
+msgstr ""
+
+#. type: Content of: <html><body><p><ul><li>
+#: help/window_pm.html:67
+msgid "Close the private message window."
+msgstr ""
+
+#. type: Content of: <html><body><p><ul><li>
+#: help/window_pm.html:68
+msgid "Disconnect the transfer from the <placeholder id=0/> list."
 msgstr ""
 
 #. type: Content of: <html><body><h1>
