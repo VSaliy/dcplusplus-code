@@ -13,6 +13,7 @@
 * Don't reconnect after a manual hub disconnect (poy)
 * [L#1225930] Always show the window when double-clicking the notif icon (poy)
 * [L#1220488] Upgrade the compiler
+* Reduce the max protocol command size from 16 MiB to 16 KiB
 
 -- 0.828 2013-07-23 --
 * Translation fixes
