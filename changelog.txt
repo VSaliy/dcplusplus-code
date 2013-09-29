@@ -1,3 +1,5 @@
+* [ADC] Don't disconnect CCPM conns after 3 minutes of inactivity (poy)
+
 -- 0.830 2013-09-22 --
 * [L#1010996] Correct search responses (maksis, poy)
 * [L#1206658] Fix transfer painting issues (poy)

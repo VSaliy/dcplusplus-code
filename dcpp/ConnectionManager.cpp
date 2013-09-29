@@ -244,9 +244,9 @@ void ConnectionManager::on(TimerManagerListener::Minute, uint64_t aTick) noexcep
 	}
 
 	// disconnect connections that have timed out.
-	for(auto& j: userConnections) {
-		if((j->getLastActivity() + 180*1000) < aTick) {
-			j->disconnect(true);
+	for(auto& conn: userConnections) {
+		if(!conn->isSet(UserConnection::FLAG_PM) && (conn->getLastActivity() + 180*1000) < aTick) {
+			conn->disconnect(true);
 		}
 	}
 }
