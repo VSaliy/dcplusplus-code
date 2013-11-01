@@ -41,6 +41,7 @@
 #include "FastAlloc.h"
 #include "MerkleTree.h"
 #include "Pointer.h"
+#include "StringMatch.h"
 
 #include "atomic.h"
 
@@ -123,6 +124,8 @@ public:
 		Lock l(cs);
 		return tthIndex.find(tth) != tthIndex.end();
 	}
+
+	void updateFilterCache();
 
 	GETSET(uint32_t, hits, Hits);
 	GETSET(string, bzXmlFile, BZXmlFile);
@@ -271,10 +274,21 @@ private:
 
 	BloomFilter<5> bloom;
 
+	std::list<StringMatch> cachedFilterSkiplistRegEx;
+	std::list<StringMatch> cachedFilterSkiplistFileExtensions;
+	std::list<StringMatch> cachedFilterSkiplistPaths;
+
 	const Directory::File& findFile(const string& virtualFile) const;
 
 	Directory::Ptr buildTree(const string& realPath, optional<const string&> dirName = nullptr, const Directory::Ptr& parent = nullptr);
 	bool checkHidden(const string& realPath) const;
+	bool checkInvalidFileName(const string& realPath) const;
+	bool checkInvalidPaths(const string& realPath) const;
+	bool checkInvalidFileSize(uint64_t size) const;
+	bool checkRegEx(const StringMatch& matcher, const string& match) const;
+
+	void updateFilterCache(const std::string& strSetting, std::list<StringMatch>& lst);
+	void updateFilterCache(const std::string& strSetting, const std::string& strExtraPattern, bool escapeDot, std::list<StringMatch>& lst);
 
 	void rebuildIndices();
 

@@ -589,6 +589,9 @@ ShareManager::Directory::Ptr ShareManager::buildTree(const string& realPath, opt
 		if(i->isDirectory()) {
 			auto newRealPath = realPath + name + PATH_SEPARATOR;
 
+			if(!checkInvalidPaths(newRealPath))
+				continue;
+
 			// don't share unfinished downloads
 			if(newRealPath == SETTING(TEMP_DOWNLOAD_DIRECTORY)) { continue; }
 
@@ -613,6 +616,12 @@ ShareManager::Directory::Ptr ShareManager::buildTree(const string& realPath, opt
 
 			auto size = i->getSize();
 			auto fileName = realPath + name;
+			
+			if(!checkInvalidFileName(name))
+				continue;
+
+			if(!checkInvalidFileSize(size))
+				continue;
 
 			// don't share the private key file
 			if(fileName == SETTING(TLS_PRIVATE_KEY_FILE)) { continue; }
@@ -635,6 +644,113 @@ bool ShareManager::checkHidden(const string& realPath) const {
 	}
 
 	return true;
+}
+
+bool ShareManager::checkInvalidFileName(const string& name) const
+{
+	for(auto& f: cachedFilterSkiplistRegEx)
+	{
+		if(checkRegEx(f, name))
+		{
+			return false;
+		}
+	}
+
+	for(auto& f: cachedFilterSkiplistFileExtensions)
+	{
+		if(checkRegEx(f, name))
+		{
+			dcdebug("Filtering away the file '%s' with the pattern matching '%s'\n", name.c_str(), f.pattern.c_str());
+
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool ShareManager::checkInvalidPaths(const string& name) const
+{
+	for(auto& f: cachedFilterSkiplistPaths)
+	{
+		if(checkRegEx(f, name))
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool ShareManager::checkInvalidFileSize(uint64_t size) const
+{
+	uint64_t minimumSize = SETTING(SHARING_SKIPLIST_MINSIZE);
+	if(minimumSize != 0)
+	{
+		if( size < minimumSize )
+		{
+			return false;
+		}
+	}
+
+	uint64_t maximumSize = SETTING(SHARING_SKIPLIST_MAXSIZE);
+	if(maximumSize != 0)
+	{
+		if( size > maximumSize )
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool ShareManager::checkRegEx(const StringMatch& matcher, const string& match) const
+{
+	if(match.empty())
+	{
+		return false;
+	}
+	
+	return matcher.match(match);
+}
+
+void ShareManager::updateFilterCache()
+{
+	updateFilterCache(SETTING(SHARING_SKIPLIST_REGEX), cachedFilterSkiplistRegEx);
+	updateFilterCache(SETTING(SHARING_SKIPLIST_EXTENSIONS), "$", true, cachedFilterSkiplistFileExtensions);
+	updateFilterCache(SETTING(SHARING_SKIPLIST_PATHS), cachedFilterSkiplistPaths);
+}
+
+void ShareManager::updateFilterCache(const std::string& strSetting, std::list<StringMatch>& lst)
+{
+	updateFilterCache(strSetting, "", false, lst);
+}
+
+void ShareManager::updateFilterCache(const std::string& strSetting, const std::string& strExtraPattern, bool escapeDot, std::list<StringMatch>& lst)
+{
+	lst.clear();
+
+	auto tokens = StringTokenizer<string>(strSetting, ';').getTokens();
+	for(auto& pattern: tokens)
+	{
+		if(pattern.empty())
+		{
+			continue;
+		}
+
+		if(escapeDot)
+		{
+			Util::replace(".", "\\.", pattern);
+		}
+
+		StringMatch matcher;
+		matcher.pattern = pattern + strExtraPattern;
+		matcher.setMethod(StringMatch::REGEX);
+		matcher.prepare();
+
+		lst.push_back(matcher);
+	}
 }
 
 void ShareManager::updateIndices(Directory& dir) {
@@ -741,6 +857,9 @@ void ShareManager::runRefresh(function<void (float)> progressF) {
 		vector<pair<Directory::Ptr, string>> newDirs;
 
 		float progressCounter = 0, dirCount = dirs.size();
+
+		// Make sure that the cache is updated.
+		updateFilterCache();
 
 		for(auto& i: dirs) {
 			if(checkHidden(i.second)) {

@@ -82,6 +82,20 @@ void PropPage::read(const ItemList& items) {
 				static_cast<TextBoxPtr>(i.widget)->setText(Text::toT(Util::toString(settings->get(setting))));
 				break;
 			}
+		case T_INT64:
+			{
+				auto setting = static_cast<SettingsManager::Int64Setting>(i.setting);
+				if(!settings->isDefault(setting)) {
+					static_cast<TextBoxPtr>(i.widget)->setText(Text::toT(Util::toString(settings->get(setting))));
+				}
+				break;
+			}
+		case T_INT64_WITH_SPIN:
+			{
+				auto setting = static_cast<SettingsManager::Int64Setting>(i.setting);
+				static_cast<TextBoxPtr>(i.widget)->setText(Text::toT(Util::toString(settings->get(setting))));
+				break;
+			}
 		case T_BOOL:
 			{
 				auto setting = static_cast<SettingsManager::BoolSetting>(i.setting);
@@ -125,6 +139,13 @@ void PropPage::write(const ItemList& items) {
 		case T_INT_WITH_SPIN:
 			{
 				auto setting = static_cast<SettingsManager::IntSetting>(i.setting);
+				settings->set(setting, Text::fromT(static_cast<TextBoxPtr>(i.widget)->getText()));
+				break;
+			}
+		case T_INT64:
+		case T_INT64_WITH_SPIN:
+			{
+				auto setting = static_cast<SettingsManager::Int64Setting>(i.setting);
 				settings->set(setting, Text::fromT(static_cast<TextBoxPtr>(i.widget)->getText()));
 				break;
 			}

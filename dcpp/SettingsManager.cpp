@@ -60,6 +60,7 @@ const string SettingsManager::settingTags[] =
 	"TLSPrivateKeyFile", "TLSCertificateFile", "TLSTrustedCertificatesPath",
 	"Language", "Toolbar", "LastSearchType", "Mapper",
 	"SoundMainChat", "SoundPM", "SoundPMWindow", "SoundFinishedDL", "SoundFinishedFL", "LastSharedFolder",
+	"SharingSkiplistExtensions", "SharingSkiplistRegEx", "SharingSkiplistPaths",
 	"SENTRY",
 	// Ints
 	"IncomingConnections", "OutgoingConnections", "InPort", "UDPPort", "TLSPort",
@@ -110,7 +111,7 @@ const string SettingsManager::settingTags[] =
 	"UsersFilterFavorite", "UsersFilterOnline", "UsersFilterQueue", "UsersFilterWaiting",
 	"SENTRY",
 	// Int64
-	"TotalUpload", "TotalDownload",
+	"TotalUpload", "TotalDownload", "SharingSkiplistMinSize", "SharingSkiplistMaxSize",
 	"SENTRY",
 	// Floats
 	"FileListPanedPos", "HubPanedPos", "QueuePanedPos", "SearchPanedPos",
@@ -353,6 +354,11 @@ SettingsManager::SettingsManager()
 	setDefault(ENABLE_CCPM, true);
 	setDefault(ALWAYS_CCPM, false);
 	setDefault(LAST_SHARED_FOLDER, Util::emptyString);
+	setDefault(SHARING_SKIPLIST_EXTENSIONS, Util::emptyString);
+	setDefault(SHARING_SKIPLIST_REGEX, Util::emptyString);
+	setDefault(SHARING_SKIPLIST_PATHS, Util::emptyString);
+	setDefault(SHARING_SKIPLIST_MINSIZE, 0);
+	setDefault(SHARING_SKIPLIST_MAXSIZE, 0);
 
 	setSearchTypeDefaults();
 

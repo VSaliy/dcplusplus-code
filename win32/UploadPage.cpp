@@ -93,12 +93,6 @@ remove(0)
 
 		cur->addChild(Label::Seed(T_("Note; Files appear in the share only after they've been hashed!")));
 
-		// dummy grid so that the check-box doesn't fill the whole row.
-		CheckBoxPtr shareHidden = cur->addChild(Grid::Seed(1, 1))->addChild(CheckBox::Seed(T_("Share hidden files")));
-		items.emplace_back(shareHidden, SettingsManager::SHARE_HIDDEN, PropPage::T_BOOL);
-
-		shareHidden->onClicked([=] { handleShareHiddenClicked(shareHidden, SettingsManager::SHARE_HIDDEN); });
-		shareHidden->setHelpId(IDH_SETTINGS_UPLOAD_SHAREHIDDEN);
 	}
 
 	{
