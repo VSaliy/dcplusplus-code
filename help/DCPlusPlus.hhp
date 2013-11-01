@@ -62,6 +62,7 @@ IDH_DOWNLOADPAGE=settings_downloads.html
 IDH_FAVORITE_DIRSPAGE=settings_favoritedirs.html
 IDH_QUEUEPAGE=settings_queue.html
 IDH_UPLOADPAGE=settings_sharing.html
+IDH_UPLOADFILTERINGPAGE=settings_sharing_filtering.html
 IDH_APPEARANCEPAGE=settings_appearance.html
 IDH_STYLESPAGE=settings_styles.html
 IDH_TABSPAGE=settings_tabs.html

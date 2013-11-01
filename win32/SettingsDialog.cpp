@@ -43,6 +43,7 @@
 #include "QueuePage.h"
 
 #include "UploadPage.h"
+#include "UploadFilteringPage.h"
 
 #include "AppearancePage.h"
 #include "StylesPage.h"
@@ -168,7 +169,10 @@ bool SettingsDialog::initDialog() {
 			addPage(T_("Queue"), new QueuePage(container), IDI_QUEUE, item);
 		}
 
-		addPage(T_("Sharing"), new UploadPage(container), IDI_UPLOAD, TVI_ROOT);
+		{
+			HTREEITEM item = addPage(T_("Sharing"), new UploadPage(container), IDI_UPLOAD, TVI_ROOT);
+			addPage(T_("Filtering"), new UploadFilteringPage(container), IDI_UPLOAD_FILTERING, item);
+		}
 
 		{
 			HTREEITEM item = addPage(T_("Appearance"), new AppearancePage(container), IDI_DCPP, TVI_ROOT);

@@ -82,6 +82,7 @@
 #define IDI_DLIMIT 176
 #define IDI_OPEN_OWN_FILE_LIST 177
 #define IDI_PLUGINS 178
+#define IDI_UPLOAD_FILTERING 179
 
 // Stuff that uses multiple id's
 
