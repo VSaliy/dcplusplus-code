@@ -1127,7 +1127,7 @@ ShareManager::SearchQuery::SearchQuery(const StringList& adcParams) :
 ShareManager::SearchQuery::SearchQuery(const string& nmdcString, int searchType, int64_t size, int fileType) :
 	SearchQuery()
 {
-	if(searchType == SearchManager::TYPE_TTH && nmdcString.compare(0, 4, "TTH:") == 0) {
+	if(fileType == SearchManager::TYPE_TTH && nmdcString.compare(0, 4, "TTH:") == 0) {
 		root = TTHValue(nmdcString.substr(4));
 
 	} else {
