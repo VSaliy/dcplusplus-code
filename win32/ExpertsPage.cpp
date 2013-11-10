@@ -33,7 +33,7 @@ using dwt::GridInfo;
 using dwt::Label;
 
 ExpertsPage::ExpertsPage(dwt::Widget* parent) :
-PropPage(parent, 6, 2)
+PropPage(parent, 7, 2)
 {
 	setHelpId(IDH_EXPERTSPAGE);
 
@@ -52,6 +52,7 @@ PropPage(parent, 6, 2)
 	addItem(T_("Socket read buffer"), SettingsManager::SOCKET_IN_BUFFER, true, IDH_SETTINGS_EXPERT_SOCKET_IN_BUFFER, T_("B"));
 	addItem(T_("Socket write buffer"), SettingsManager::SOCKET_OUT_BUFFER, true, IDH_SETTINGS_EXPERT_SOCKET_OUT_BUFFER, T_("B"));
 	addItem(T_("Max PM windows"), SettingsManager::MAX_PM_WINDOWS, true, IDH_SETTINGS_EXPERT_MAX_PM_WINDOWS);
+	addItem(T_("Max protocol command length"), SettingsManager::MAX_COMMAND_LENGTH, true, IDH_SETTINGS_EXPERT_MAX_COMMAND_LENGTH, T_("B"));
 
 	PropPage::read(items);
 }

@@ -1,6 +1,7 @@
 * [L#1249810] Fix NMDC TTH search responses (emtee)
 * [ADC] Don't disconnect CCPM conns after 3 minutes of inactivity (poy)
 * [L#1115765] Added ability to filter out files and directories from the share (ullner)
+* [L#1246868] Increased maximum command length to 512 KiB and added an option in the UI (ullner)
 
 -- 0.830 2013-09-22 --
 * [L#1010996] Correct search responses (maksis, poy)

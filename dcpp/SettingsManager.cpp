@@ -302,7 +302,7 @@ SettingsManager::SettingsManager()
 	setDefault(AUTO_KICK_NO_FAVS, false);
 	setDefault(PROMPT_PASSWORD, false);
 	setDefault(DONT_DL_ALREADY_QUEUED, false);
-	setDefault(MAX_COMMAND_LENGTH, 16*1024);
+	setDefault(MAX_COMMAND_LENGTH, 512*1024);
 	setDefault(ALLOW_UNTRUSTED_HUBS, true);
 	setDefault(ALLOW_UNTRUSTED_CLIENTS, true);
 	setDefault(SORT_FAVUSERS_FIRST, false);
@@ -519,6 +519,10 @@ void SettingsManager::load(string const& aFileName)
 
 			// reset the toolbar (new buttons).
 			unset(TOOLBAR);
+		}
+
+		if(v <= 0.830) {
+			unset(MAX_COMMAND_LENGTH);
 		}
 
 		if(SETTING(SET_MINISLOT_SIZE) < 512)
