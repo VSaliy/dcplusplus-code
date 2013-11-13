@@ -280,6 +280,7 @@ public:
 	static void copyMagnet(const TTHValue& aHash, const tstring& aFile, int64_t size);
 	static void searchAny(const tstring& aSearch);
 	static void searchHash(const TTHValue& aHash);
+	static void searchHub(const tstring& aUrl);
 	static string makeMagnet(const TTHValue& aHash, const string& aFile, int64_t size);
 
 	static void addLastDir(const tstring& dir);

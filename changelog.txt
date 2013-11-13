@@ -1,5 +1,6 @@
 * [L#1115765] Added ability to filter out files and directories from the share (ullner)
 * [L#1225420] Open own list when using get/browse file list on self (ullner)
+* [L#1250614] Added menu option on hub tab for only searching in that hub (ullner)
 
 -- 0.831 2013-11-11 --
 * [L#1249810] Fix NMDC TTH search responses (emtee)

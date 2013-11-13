@@ -832,6 +832,10 @@ void WinUtil::searchHash(const TTHValue& aHash) {
 	SearchFrame::openWindow(mainWindow->getTabView(), Text::toT(aHash.toBase32()), SearchManager::TYPE_TTH);
 }
 
+void WinUtil::searchHub(const tstring& aUrl) {
+	SearchFrame::openWindow(mainWindow->getTabView(), Util::emptyStringT, SearchManager::TYPE_ANY, aUrl);
+}
+
 void WinUtil::addLastDir(const tstring& dir) {
 	auto i = find(lastDirs.begin(), lastDirs.end(), dir);
 	if(i != lastDirs.end()) {
