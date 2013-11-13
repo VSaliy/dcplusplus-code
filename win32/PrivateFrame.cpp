@@ -372,7 +372,7 @@ void PrivateFrame::enterImpl(const tstring& s) {
 			handleAddFavorite();
 			addStatus(T_("Favorite user added"));
 		} else if(Util::stricmp(cmd.c_str(), _T("getlist")) == 0) {
-			handleGetList();
+			handleGetList(getParent());
 		} else if(Util::stricmp(cmd.c_str(), _T("ignore")) == 0) {
 			handleIgnoreChat(true);
 		} else if(Util::stricmp(cmd.c_str(), _T("unignore")) == 0) {

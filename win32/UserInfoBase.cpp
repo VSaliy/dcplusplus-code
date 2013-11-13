@@ -32,6 +32,7 @@
 
 #include "PrivateFrame.h"
 #include "HubFrame.h"
+#include "DirectoryListingFrame.h"
 
 void UserInfoBase::matchQueue() {
 	try {
@@ -40,18 +41,29 @@ void UserInfoBase::matchQueue() {
 		LogManager::getInstance()->message(e.getError());
 	}
 }
-void UserInfoBase::getList() {
+void UserInfoBase::getList(TabViewPtr parent) {
 	try {
 		QueueManager::getInstance()->addList(user, QueueItem::FLAG_CLIENT_VIEW);
+	} catch(const QueueSelfException& e) {
+		getOwnList(parent);
 	} catch(const Exception& e) {
 		LogManager::getInstance()->message(e.getError());
 	}
 }
-void UserInfoBase::browseList() {
+void UserInfoBase::browseList(TabViewPtr parent) {
 	if(!user.user->getCID())
 		return;
 	try {
 		QueueManager::getInstance()->addList(user, QueueItem::FLAG_CLIENT_VIEW | QueueItem::FLAG_PARTIAL_LIST);
+	} catch(const QueueSelfException& e) {
+		getOwnList(parent);
+	} catch(const Exception& e) {
+		LogManager::getInstance()->message(e.getError());
+	}
+}
+void UserInfoBase::getOwnList(TabViewPtr parent) {
+	try {
+		DirectoryListingFrame::openOwnList(parent);
 	} catch(const Exception& e) {
 		LogManager::getInstance()->message(e.getError());
 	}

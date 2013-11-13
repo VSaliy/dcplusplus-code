@@ -260,7 +260,7 @@ inTabComplete(false)
 	status->setHelpId(STATUS_SHARED, IDH_HUB_SHARED);
 	status->setHelpId(STATUS_AVERAGE_SHARED, IDH_HUB_AVERAGE_SHARED);
 
-	addAccel(FALT, 'G', [this] { handleGetList(); });
+	addAccel(FALT, 'G', [this] { handleGetList(getParent()); });
 	addAccel(FCONTROL, 'R', [this] { reconnect(); });
 	addAccel(FALT, 'P', [this] { handlePrivateMessage(getParent()); });
 	addAccel(FALT, 'U', [this] { users->setFocus(); });
@@ -487,7 +487,7 @@ void HubFrame::enterImpl(const tstring& s) {
 			if(!param.empty()) {
 				auto ui = findUser(param);
 				if(ui) {
-					ui->getList();
+					ui->getList(getParent());
 				}
 			}
 		} else if(Util::stricmp(cmd.c_str(), _T("ignore")) == 0) {
@@ -840,7 +840,7 @@ void HubFrame::removeUser(const UserPtr& aUser) {
 
 bool HubFrame::handleUsersKeyDown(int c) {
 	if(c == VK_RETURN && users->hasSelected()) {
-		handleGetList();
+		handleGetList(getParent());
 		return true;
 	}
 	return false;
@@ -1323,7 +1323,7 @@ void HubFrame::handleCopyHub() {
 
 void HubFrame::handleDoubleClickUsers() {
 	if(users->hasSelected()) {
-		users->getSelectedData()->getList();
+		users->getSelectedData()->getList(getParent());
 	}
 }
 
