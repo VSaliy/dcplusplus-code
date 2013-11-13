@@ -140,7 +140,7 @@ selected(-1)
 		WinUtil::setTableSort(users, COLUMN_LAST, SettingsManager::USERSFRAME_SORT, COLUMN_NICK);
 
 		// TODO check default (browse vs get)
-		users->onDblClicked([this] { handleGetList(); });
+		users->onDblClicked([this] { handleGetList(getParent()); });
 		users->onKeyDown([this](int c) { return handleKeyDown(c); });
 		users->onContextMenu([this](dwt::ScreenCoordinate pt) { return handleContextMenu(pt); });
 		users->setSmallImageList(userIcons);

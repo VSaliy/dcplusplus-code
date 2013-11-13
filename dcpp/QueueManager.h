@@ -48,6 +48,7 @@ using std::unordered_multimap;
 using std::unordered_map;
 
 STANDARD_EXCEPTION(QueueException);
+EXTEND_EXCEPTION(QueueSelfException, QueueException);
 
 class UserConnection;
 

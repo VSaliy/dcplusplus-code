@@ -529,7 +529,7 @@ void QueueManager::add(const string& aTarget, int64_t aSize, const TTHValue& roo
 
 	// Check that we're not downloading from ourselves...
 	if(aUser == ClientManager::getInstance()->getMe()) {
-		throw QueueException(_("You're trying to download from yourself!"));
+		throw QueueSelfException(_("You're trying to download from yourself!"));
 	}
 
 	// Check if we're not downloading something already in our share
