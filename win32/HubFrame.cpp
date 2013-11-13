@@ -1292,6 +1292,7 @@ void HubFrame::tabMenuImpl(dwt::Menu* menu) {
 
 	menu->appendItem(T_("&Reconnect\tCtrl+R"), [this] { reconnect(); }, WinUtil::menuIcon(IDI_RECONNECT));
 	menu->appendItem(T_("Copy &address to clipboard"), [this] { handleCopyHub(); });
+	menu->appendItem(T_("&Search hub"), [this] { handleSearchHub(); }, WinUtil::menuIcon(IDI_SEARCH));
 	menu->appendItem(T_("&Disconnect"), [this] { disconnect(false); }, WinUtil::menuIcon(IDI_HUB_OFF));
 
 	prepareMenu(menu, UserCommand::CONTEXT_HUB, url);
@@ -1319,6 +1320,10 @@ void HubFrame::handleShowUsersClicked() {
 
 void HubFrame::handleCopyHub() {
 	WinUtil::setClipboard(Text::toT(url));
+}
+
+void HubFrame::handleSearchHub() {
+	WinUtil::searchHub(Text::toT(url));
 }
 
 void HubFrame::handleDoubleClickUsers() {

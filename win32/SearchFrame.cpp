@@ -91,8 +91,8 @@ int SearchFrame::SearchInfo::compareItems(const SearchInfo* a, const SearchInfo*
 	}
 }
 
-void SearchFrame::openWindow(TabViewPtr parent, const tstring& str, SearchManager::TypeModes type) {
-	frames.insert(new SearchFrame(parent, str, type));
+void SearchFrame::openWindow(TabViewPtr parent, const tstring& str, SearchManager::TypeModes type, const tstring& url) {
+	frames.insert(new SearchFrame(parent, str, type, url));
 }
 
 void SearchFrame::closeAll() {
@@ -100,7 +100,7 @@ void SearchFrame::closeAll() {
 		i->close(true);
 }
 
-SearchFrame::SearchFrame(TabViewPtr parent, const tstring& initialString, SearchManager::TypeModes initialType_) :
+SearchFrame::SearchFrame(TabViewPtr parent, const tstring& initialString, SearchManager::TypeModes initialType_, const tstring& hubUrl) :
 BaseType(parent, T_("Search"), IDH_SEARCH, IDI_SEARCH, false),
 paned(0),
 options(0),
@@ -294,7 +294,15 @@ droppedResults(0)
 			if(!client->isConnected())
 				continue;
 
-			onHubAdded(new HubInfo(client));
+			auto hubInfo = new HubInfo(client);
+
+			bool checkedHub = true;
+			if(!hubUrl.empty())
+			{
+				checkedHub = hubInfo->url == hubUrl;
+			}
+
+			onHubAdded(hubInfo, checkedHub);
 		}
 	}
 
@@ -894,9 +902,9 @@ void SearchFrame::on(SearchManagerListener::SR, const SearchResultPtr& sr) noexc
 	callAsync([this, sr] { addResult(sr); });
 }
 
-void SearchFrame::onHubAdded(HubInfo* info) {
+void SearchFrame::onHubAdded(HubInfo* info, bool defaultHubState) {
 	int nItem = hubs->insert(info);
-	hubs->setChecked(nItem, (hubs->isChecked(0) ? info->op : true));
+	hubs->setChecked(nItem, (hubs->isChecked(0) ? info->op : defaultHubState));
 	hubs->setColumnWidth(0, LVSCW_AUTOSIZE);
 }
 

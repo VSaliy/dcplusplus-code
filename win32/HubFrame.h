@@ -234,6 +234,7 @@ private:
 	void handleShowUsersClicked();
 	void handleDoubleClickUsers();
 	void handleCopyHub();
+	void handleSearchHub();
 	void handleAddAsFavorite();
 
 	void showFilterOpts();
