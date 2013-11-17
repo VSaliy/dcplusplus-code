@@ -95,12 +95,20 @@ public:
 	string getHubName() const { return getHubIdentity().getNick().empty() ? getHubUrl() : getHubIdentity().getNick(); }
 	string getHubDescription() const { return getHubIdentity().getDescription(); }
 
-	Identity& getHubIdentity() { return hubIdentity; }
-
 	const string& getHubUrl() const { return hubUrl; }
 
-	GETSET(Identity, myIdentity, MyIdentity);
 	GETSET(Identity, hubIdentity, HubIdentity);
+	Identity& getHubIdentity() { return hubIdentity; }
+
+	// break this GETSET up to add a setSelf call.
+private:
+	Identity myIdentity;
+public:
+	const Identity& getMyIdentity() const { return myIdentity; }
+	template<typename GetSetT> void setMyIdentity(GetSetT&& myIdentity) {
+		myIdentity.setSelf();
+		this->myIdentity = std::forward<GetSetT>(myIdentity);
+	}
 
 	GETSET(uint32_t, uniqueId, UniqueId);
 	GETSET(string, defpassword, Password);

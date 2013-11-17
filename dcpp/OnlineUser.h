@@ -37,14 +37,6 @@ namespace dcpp {
 /** One of possibly many identities of a user, mainly for UI purposes */
 class Identity : public Flags {
 public:
-	enum IdentityFlagBits {
-		GOT_INF_BIT,
-		NMDC_PASSIVE_BIT
-	};
-	enum IdentityFlags {
-		GOT_INF = 1 << GOT_INF_BIT,
-		NMDC_PASSIVE = 1 << NMDC_PASSIVE_BIT
-	};
 	enum ClientType {
 		CT_BOT = 1,
 		CT_REGGED = 2,
@@ -55,15 +47,14 @@ public:
 		CT_HIDDEN = 64
 	};
 
-	Identity() : sid(0), ignoreChat(false) { }
-	Identity(const UserPtr& ptr, uint32_t aSID) : user(ptr), sid(aSID), ignoreChat(false) { }
+	Identity() : sid(0) { }
+	Identity(const UserPtr& ptr, uint32_t aSID) : user(ptr), sid(aSID) { }
 	Identity(const Identity& rhs) : Flags(), sid(0) { *this = rhs; } // Use operator= since we have to lock before reading...
 	Identity& operator=(const Identity& rhs) {
 		FastLock l(cs);
 		*static_cast<Flags*>(this) = rhs;
 		user = rhs.user;
 		sid = rhs.sid;
-		ignoreChat = rhs.ignoreChat;
 		style = rhs.style;
 		info = rhs.info;
 		return *this;
@@ -120,6 +111,9 @@ public:
 	UserPtr& getUser() { return user; }
 	uint32_t getSID() const { return sid; }
 
+	bool isSelf() const;
+	void setSelf();
+
 	bool noChat() const;
 	void setNoChat(bool ignoreChat);
 
@@ -127,6 +121,14 @@ public:
 	void setStyle(Style&& style);
 
 private:
+	enum {
+		// This identity corresponds to this client's user.
+		SELF_ID = 1 << 0,
+
+		// Chat messages from this identity shall be ignored.
+		IGNORE_CHAT = 1 << 1
+	};
+
 	UserPtr user;
 	uint32_t sid;
 
@@ -134,7 +136,6 @@ private:
 	typedef InfMap::iterator InfIter;
 	InfMap info;
 
-	bool ignoreChat;
 	Style style;
 
 	static FastCriticalSection cs;
