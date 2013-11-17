@@ -203,14 +203,31 @@ std::map<string, string> Identity::getInfo() const {
 	return ret;
 }
 
+bool Identity::isSelf() const {
+	FastLock l(cs);
+	return Flags::isSet(SELF_ID);
+}
+
+void Identity::setSelf() {
+	FastLock l(cs);
+	if(!Flags::isSet(SELF_ID))
+		Flags::setFlag(SELF_ID);
+}
+
 bool Identity::noChat() const {
 	FastLock l(cs);
-	return ignoreChat;
+	return Flags::isSet(IGNORE_CHAT);
 }
 
 void Identity::setNoChat(bool ignoreChat) {
 	FastLock l(cs);
-	this->ignoreChat = ignoreChat;
+	if(ignoreChat) {
+		if(!Flags::isSet(IGNORE_CHAT))
+			Flags::setFlag(IGNORE_CHAT);
+	} else {
+		if(Flags::isSet(IGNORE_CHAT))
+			Flags::unsetFlag(IGNORE_CHAT);
+	}
 }
 
 Style Identity::getStyle() const {
