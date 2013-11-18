@@ -1488,6 +1488,14 @@ void QueueLoader::startTag(const string& name, StringPairList& attribs, bool sim
 			if (downloaded > size || downloaded < 0)
 				downloaded = 0;
 
+			if(SETTING(DONT_DL_ALREADY_SHARED)){
+				if (ShareManager::getInstance()->isTTHShared(TTHValue(tthRoot))){
+					LogManager::getInstance()->message(str(F_("The queued file %1% already exists in your share, removing from the queue") 
+						% Util::addBrackets(target)));
+					return;
+				}
+			}
+
 			if(added == 0)
 				added = GET_TIME();
 
