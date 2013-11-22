@@ -285,6 +285,12 @@ private:
 	virtual void on(SearchFlood, Client*, const string&) noexcept;
 	virtual void on(ClientLine, Client*, const string& line, int type) noexcept;
 	void onStatusMessage(const string& line, int flags);
+
+	// Icon management
+	void setTabIcon();
+
+	int tabIcon;
+
 };
 
 #endif // !defined(HUB_FRAME_H)

@@ -1642,3 +1642,17 @@ dwt::IconPtr WinUtil::createIcon(unsigned id, long size) {
 dwt::IconPtr WinUtil::toolbarIcon(unsigned id) {
 	return createIcon(id, SETTING(TOOLBAR_SIZE));
 }
+
+dwt::IconPtr WinUtil::mergeIcons(const std::vector<int>& iconIds)
+{
+	const dwt::Point size(16, 16);
+	dwt::ImageList icons(size);
+
+	for(auto& item : iconIds)
+	{
+		auto icon = createIcon(item, 16);
+		icons.add(*icon);
+	}
+	
+	return dwt::util::merge(icons);
+}

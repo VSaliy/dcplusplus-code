@@ -95,6 +95,7 @@ IDI_ULIMIT				ICON					"res/ULimit.ico"
 IDI_DLIMIT				ICON					"res/DLimit.ico"
 IDI_OPEN_OWN_FILE_LIST  ICON                    "res/OpenOwnFileList.ico"
 IDI_PLUGINS			ICON					"res/Plugins.ico"
+IDI_USER_REG            ICON                    "res/UserReg.ico"
 /////////////////////////////////////////////////////////////////////////////
 //
 // Version

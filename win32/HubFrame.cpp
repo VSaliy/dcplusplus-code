@@ -183,7 +183,8 @@ confirmClose(true),
 updateUsers(false),
 currentUser(0),
 hubMenu(false),
-inTabComplete(false)
+inTabComplete(false),
+tabIcon(IDI_HUB)
 {
 	paned = addChild(SplitterContainer::Seed(SETTING(HUB_PANED_POS)));
 
@@ -958,6 +959,12 @@ void HubFrame::on(Connected, Client*) noexcept {
 }
 
 void HubFrame::on(ClientListener::UserUpdated, Client*, const OnlineUser& user) noexcept {
+
+	if(user.getIdentity().isSelf())
+	{
+		callAsync([this] { setTabIcon(); });
+	}
+
 	auto task = new UserTask(user);
 	callAsync([this, task] {
 		tasks.emplace_back([=](const UserTask& u) {
@@ -975,6 +982,11 @@ void HubFrame::on(ClientListener::UserUpdated, Client*, const OnlineUser& user) 
 
 void HubFrame::on(UsersUpdated, Client*, const OnlineUserList& aList) noexcept {
 	for(auto& i: aList) {
+		if(i->getIdentity().isSelf())
+		{
+			callAsync([this] { setTabIcon(); });
+		}
+
 		auto task = new UserTask(*i);
 		callAsync([this, task] { tasks.emplace_back([=](const UserTask& u) { updateUser(u); }, unique_ptr<UserTask>(task)); });
 	}
@@ -1525,4 +1537,47 @@ void HubFrame::hideFilterOpts(dwt::Widget* w) {
 
 HubFrame::UserInfoList HubFrame::selectedUsersImpl() const {
 	return showUsers->getChecked() ? usersFromTable(users) : (currentUser ? UserInfoList(1, currentUser) : UserInfoList());
+}
+
+void HubFrame::setTabIcon()
+{
+	bool setTabIcon = false;
+
+	auto myIdentity = client->getMyIdentity();
+	if(myIdentity.isOp())
+	{
+		if(tabIcon != IDI_USER_OP)
+		{
+			tabIcon = IDI_USER_OP;
+
+			setTabIcon = true;
+		}
+	}
+	else if(myIdentity.isRegistered())
+	{
+		if(tabIcon != IDI_USER_REG)
+		{
+			tabIcon = IDI_USER_REG;
+
+			setTabIcon = true;
+		}
+	}
+	else
+	{
+		if(tabIcon != IDI_HUB)
+		{
+			tabIcon = IDI_HUB;
+
+			setTabIcon = true;
+		}
+	}
+
+	if(setTabIcon)
+	{
+		std::vector<int> icons;
+		icons.push_back(IDI_HUB);
+		icons.push_back(tabIcon);
+
+		setIcon(WinUtil::mergeIcons(icons));
+	}
 }
