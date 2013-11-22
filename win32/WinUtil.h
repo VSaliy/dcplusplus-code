@@ -317,6 +317,8 @@ public:
 	static inline dwt::IconPtr tabIcon(unsigned id) { return createIcon(id, 16); }
 	static dwt::IconPtr toolbarIcon(unsigned id);
 
+	static dwt::IconPtr mergeIcons(const std::vector<int>& iconIds);
+
 private:
 	static void initUserMatching();
 	static void initHelpPath();
