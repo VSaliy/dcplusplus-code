@@ -43,6 +43,8 @@ using dwt::GridInfo;
 const string FavHubsFrame::id = "FavHubs";
 const string& FavHubsFrame::getId() const { return id; }
 
+dwt::ImageListPtr FavHubsFrame::hubIcons;
+
 static const ColumnInfo hubsColumns[] = {
 	{ N_("Status"), 25, false },
 	{ N_("Name"), 200, false },
@@ -80,6 +82,14 @@ hubs(0)
 		addWidget(hubs);
 
 		WinUtil::makeColumns(hubs, hubsColumns, COLUMN_LAST, SETTING(FAVHUBSFRAME_ORDER), SETTING(FAVHUBSFRAME_WIDTHS));
+
+		if(!hubIcons) {
+			const dwt::Point size(16, 16);
+			hubIcons = dwt::ImageListPtr(new dwt::ImageList(size));
+			hubIcons->add(dwt::Icon(IDI_HUB, size));
+			hubIcons->add(dwt::Icon(IDI_HUB_OFF, size));
+		}
+		hubs->setSmallImageList(hubIcons);
 
 		hubs->onDblClicked([this] { handleDoubleClick(); });
 		hubs->onKeyDown([this](int c) { return handleKeyDown(c); });
@@ -410,9 +420,11 @@ void FavHubsFrame::fillList() {
 			index = -1;
 
 		auto statusText = Util::emptyStringT;
+		auto statusIcon = HUB_OFF_ICON;
 		if(ClientManager::getInstance()->isHubConnected(entry->getServer()))
 		{
 			statusText = T_("Connected");
+			statusIcon = HUB_ON_ICON;
 		}
 
 		TStringList l;
@@ -425,7 +437,9 @@ void FavHubsFrame::fillList() {
 		l.push_back(Text::toT(entry->get(HubSettings::Description)));
 		l.push_back(Text::toT(group));
 
-		hubs->insert(l, reinterpret_cast<LPARAM>(entry), index);
+		auto row = hubs->insert(l, reinterpret_cast<LPARAM>(entry), index);
+
+		hubs->setIcon(row, COLUMN_STATUS, statusIcon);
 	}
 }
 
