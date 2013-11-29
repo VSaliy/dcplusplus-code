@@ -82,6 +82,8 @@ private:
 	mutable CriticalSection mutex;
 	UserConnection* conn;
 
+	time_t lastMessageTime;
+
 	ParamMap ucLineParams;
 
 	typedef unordered_map<UserPtr, PrivateFrame*, User::Hash> FrameMap;

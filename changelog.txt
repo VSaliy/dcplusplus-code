@@ -5,6 +5,7 @@
 * [L#309815] Hub icon will change depending on user status (user/registered/operator) (ullner)
 * [L#721513] Transferview: Added "Remove file from queue" menu option and "Force attempt" is now only available for downloads (ullner)
 * [L#210217] Add connectivity status for hubs to the favorite hubs window (ullner)
+* [L#593613] Added /lastmessage in PMs to show the time of the last message (ullner)
 
 -- 0.831 2013-11-11 --
 * [L#1249810] Fix NMDC TTH search responses (emtee)
