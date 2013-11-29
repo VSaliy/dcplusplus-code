@@ -22,6 +22,8 @@
 #include <set>
 
 #include <dcpp/FavoriteManager.h>
+#include <dcpp/ClientManager.h>
+#include <dcpp/Util.h>
 #include <dcpp/version.h>
 
 #include <dwt/widgets/Grid.h>
@@ -42,6 +44,7 @@ const string FavHubsFrame::id = "FavHubs";
 const string& FavHubsFrame::getId() const { return id; }
 
 static const ColumnInfo hubsColumns[] = {
+	{ N_("Status"), 25, false },
 	{ N_("Name"), 200, false },
 	{ N_("Description"), 290, false },
 	{ N_("Nick"), 125, false },
@@ -56,7 +59,7 @@ BaseType(parent, T_("Favorite Hubs"), IDH_FAVORITE_HUBS, IDI_FAVORITE_HUBS),
 grid(0),
 hubs(0)
 {
-	grid = addChild(Grid::Seed(2, 8));
+	grid = addChild(Grid::Seed(2, 9));
 	grid->column(0).mode = GridInfo::FILL;
 	grid->column(1).mode = GridInfo::FILL;
 	grid->column(2).mode = GridInfo::FILL;
@@ -65,6 +68,7 @@ hubs(0)
 	grid->column(5).mode = GridInfo::FILL;
 	grid->column(6).mode = GridInfo::FILL;
 	grid->column(7).mode = GridInfo::FILL;
+	grid->column(8).mode = GridInfo::FILL;
 	grid->row(0).mode = GridInfo::FILL;
 	grid->row(0).align = GridInfo::STRETCH;
 
@@ -72,7 +76,7 @@ hubs(0)
 		Table::Seed cs = WinUtil::Seeds::table;
 		cs.style |= LVS_NOSORTHEADER;
 		hubs = grid->addChild(cs);
-		grid->setWidget(hubs, 0, 0, 1, 8);
+		grid->setWidget(hubs, 0, 0, 1, 9);
 		addWidget(hubs);
 
 		WinUtil::makeColumns(hubs, hubsColumns, COLUMN_LAST, SETTING(FAVHUBSFRAME_ORDER), SETTING(FAVHUBSFRAME_WIDTHS));
@@ -152,6 +156,7 @@ hubs(0)
 	fillList();
 
 	FavoriteManager::getInstance()->addListener(this);
+	ClientManager::getInstance()->addListener(this);
 }
 
 FavHubsFrame::~FavHubsFrame() {
@@ -168,6 +173,7 @@ void FavHubsFrame::layout() {
 
 bool FavHubsFrame::preClosing() {
 	FavoriteManager::getInstance()->removeListener(this);
+	ClientManager::getInstance()->removeListener(this);
 	return true;
 }
 
@@ -403,7 +409,14 @@ void FavHubsFrame::fillList() {
 		} else
 			index = -1;
 
+		auto statusText = Util::emptyStringT;
+		if(ClientManager::getInstance()->isHubConnected(entry->getServer()))
+		{
+			statusText = T_("Connected");
+		}
+
 		TStringList l;
+		l.push_back(statusText);
 		l.push_back(Text::toT(entry->getName()));
 		l.push_back(Text::toT(entry->getHubDescription()));
 		l.push_back(Text::toT(entry->get(HubSettings::Nick)));
@@ -443,4 +456,14 @@ void FavHubsFrame::on(FavoriteAdded, const FavoriteHubEntryPtr e) noexcept {
 
 void FavHubsFrame::on(FavoriteRemoved, const FavoriteHubEntryPtr e) noexcept {
 	hubs->erase(hubs->findData(reinterpret_cast<LPARAM>(e)));
+}
+
+void FavHubsFrame::on(ClientManagerListener::ClientConnected, Client*) noexcept
+{
+	callAsync([=] { refresh(); });
+}
+
+void FavHubsFrame::on(ClientManagerListener::ClientDisconnected, Client*) noexcept
+{
+	callAsync([=] { refresh(); });
 }

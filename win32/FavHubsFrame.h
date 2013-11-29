@@ -20,12 +20,14 @@
 #define DCPLUSPLUS_WIN32_FAV_HUBS_FRAME_H
 
 #include <dcpp/FavoriteManagerListener.h>
+#include <dcpp/ClientManagerListener.h>
 
 #include "StaticFrame.h"
 
 class FavHubsFrame :
 	public StaticFrame<FavHubsFrame>,
-	private FavoriteManagerListener
+	private FavoriteManagerListener,
+	private ClientManagerListener
 {
 	typedef StaticFrame<FavHubsFrame> BaseType;
 public:
@@ -52,7 +54,8 @@ protected:
 private:
 	enum {
 		COLUMN_FIRST,
-		COLUMN_NAME = COLUMN_FIRST,
+		COLUMN_STATUS = COLUMN_FIRST,
+		COLUMN_NAME,
 		COLUMN_DESCRIPTION,
 		COLUMN_NICK,
 		COLUMN_PASSWORD,
@@ -97,8 +100,13 @@ private:
 	void select(const FavoriteHubEntryList& entries);
 	void openSelected();
 
+	// FavoriteManagerListener
 	virtual void on(FavoriteAdded, const FavoriteHubEntryPtr e) noexcept;
 	virtual void on(FavoriteRemoved, const FavoriteHubEntryPtr e) noexcept;
+
+	// ClientManagerListener
+	virtual void on(ClientManagerListener::ClientConnected, Client*) noexcept;
+	virtual void on(ClientManagerListener::ClientDisconnected, Client*) noexcept;
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_FAV_HUBS_FRAME_H)
