@@ -78,8 +78,15 @@ private:
 		int scroll;
 	};
 
+	enum {
+		HUB_ON_ICON,
+		HUB_OFF_ICON
+	};
+
 	GridPtr grid;
 	TablePtr hubs;
+
+	static dwt::ImageListPtr hubIcons;
 
 	void handleAdd();
 	void handleProperties();
