@@ -99,6 +99,7 @@ private:
 
 		virtual void force() = 0;
 		virtual void disconnect() = 0;
+		virtual void removeFileFromQueue() = 0;
 
 		int64_t timeleft;
 		int64_t speed;
@@ -124,6 +125,7 @@ private:
 
 		virtual void force();
 		virtual void disconnect();
+		virtual void removeFileFromQueue();
 
 		bool transferFailed;
 		Status status;
@@ -146,6 +148,7 @@ private:
 
 		virtual void force();
 		virtual void disconnect();
+		virtual void removeFileFromQueue();
 
 		TTHValue tth;
 		ConnectionType type;
@@ -242,6 +245,7 @@ private:
 	bool handleContextMenu(dwt::ScreenCoordinate pt);
 	void handleForce();
 	void handleDisconnect();
+	void handleRemoveFileFromQueue();
 	bool handleKeyDown(int c);
 	void handleDblClicked();
 	LRESULT handleCustomDraw(NMLVCUSTOMDRAW& data);
