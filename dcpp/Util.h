@@ -222,6 +222,8 @@ public:
 	static string getShortTimeString(time_t t = time(NULL) );
 
 	static string getTimeString();
+	static string getTimeString(time_t t);
+	static string getTimeString(time_t t, const string& formatting);
 	static string toAdcFile(const string& file);
 	static string toNmdcFile(const string& file);
 

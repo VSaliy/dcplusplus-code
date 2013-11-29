@@ -68,6 +68,7 @@ bool PrivateFrame::gotMessage(TabViewPtr parent, const ChatMessage& message, con
 			p->activate();
 
 		p->addChat(message);
+		p->lastMessageTime = message.timestamp;
 
 		if(Util::getAway() && !(SETTING(NO_AWAYMSG_TO_BOTS) && fromBot)) {
 			auto awayMessage = Util::getAwayMessage();
@@ -81,6 +82,7 @@ bool PrivateFrame::gotMessage(TabViewPtr parent, const ChatMessage& message, con
 	} else {
 		// send the message to the existing window
 		i->second->addChat(message);
+		i->second->lastMessageTime = message.timestamp;
 	}
 
 	WinUtil::notify(WinUtil::NOTIFICATION_PM, Text::toT(message.message), [user] { activateWindow(user); });
@@ -135,7 +137,8 @@ PrivateFrame::PrivateFrame(TabViewPtr parent, const HintedUser& replyTo_, const 
 BaseType(parent, _T(""), IDH_PM, IDI_PRIVATE_OFF, false),
 replyTo(replyTo_),
 online(false),
-conn(nullptr)
+conn(nullptr),
+lastMessageTime(time(NULL))
 {
 	createChat(this);
 	chat->setHelpId(IDH_PM_CHAT);
@@ -379,6 +382,8 @@ void PrivateFrame::enterImpl(const tstring& s) {
 			handleIgnoreChat(false);
 		} else if(Util::stricmp(cmd.c_str(), _T("log")) == 0) {
 			openLog();
+		} else if(Util::stricmp(cmd.c_str(), _T("lastmessage")) == 0) {
+			addStatus(Text::toT(str(F_("Last message occured %1%") % Util::getTimeString(lastMessageTime, "%c"))));
 		} else if(Util::stricmp(cmd.c_str(), _T("help")) == 0) {
 			bool bShowBriefCommands = !param.empty() && (Util::stricmp(param.c_str(), _T("brief")) == 0);
 
@@ -386,7 +391,7 @@ void PrivateFrame::enterImpl(const tstring& s) {
 			{
 				addChat(T_("*** Keyboard commands:") + _T("\r\n") + 
 						WinUtil::commands + 
-						_T(", /direct, /encrypted, /getlist, /grant, /close, /favorite, /ignore, /unignore, /log <system, downloads, uploads>")
+						_T(", /direct, /encrypted, /getlist, /grant, /close, /favorite, /ignore, /unignore, /log <system, downloads, uploads>, /lastmessage")
 						);
 			}
 			else
@@ -407,6 +412,8 @@ void PrivateFrame::enterImpl(const tstring& s) {
 						+ _T("\r\n\t") + T_("Adds a user matching definition (or modifies an existing one, if possible) to ignore chat messages from the current user.")
 						+ _T("\r\n") _T("/unignore")
 						+ _T("\r\n\t") + T_("Adds a user matching definition (or modifies an existing one, if possible) to stop ignoring chat messages from the current user.")
+						+ _T("\r\n") _T("/lastmessage")
+						+ _T("\r\n\t") + T_("Lists the date and time when the last message was sent or received.")
 						);
 			}
 
@@ -566,6 +573,7 @@ void PrivateFrame::on(UserConnectionListener::PrivateMessage, UserConnection* uc
 	auto user = uc->getHintedUser();
 	callAsync([this, message, user] {
 		addChat(message);
+		lastMessageTime = message.timestamp;
 		WinUtil::notify(WinUtil::NOTIFICATION_PM, Text::toT(message.message), [user] { activateWindow(user); });
 		WinUtil::mainWindow->TrayPM();
 	});

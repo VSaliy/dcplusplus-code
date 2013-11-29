@@ -385,17 +385,6 @@ string Util::addBrackets(const string& s) {
 	return '<' + s + '>';
 }
 
-string Util::getShortTimeString(time_t t) {
-	char buf[255];
-	tm* _tm = localtime(&t);
-	if(_tm == NULL) {
-		strcpy(buf, "xx:xx");
-	} else {
-		strftime(buf, 254, SETTING(TIME_STAMPS_FORMAT).c_str(), _tm);
-	}
-	return Text::toUtf8(buf);
-}
-
 void Util::sanitizeUrl(string& url) {
 	boost::algorithm::trim_if(url, boost::is_space() || boost::is_any_of("<>\""));
 }
@@ -1040,15 +1029,35 @@ uint32_t Util::rand() {
 	return y;
 }
 
+string Util::getShortTimeString(time_t t) {
+	char buf[255];
+	tm* _tm = localtime(&t);
+	if(_tm == NULL) {
+		strcpy(buf, "xx:xx");
+	} else {
+		strftime(buf, 254, SETTING(TIME_STAMPS_FORMAT).c_str(), _tm);
+	}
+	return Text::toUtf8(buf);
+}
+
 string Util::getTimeString() {
-	char buf[64];
 	time_t _tt;
 	time(&_tt);
+
+	return getTimeString(_tt);
+}
+
+string Util::getTimeString(time_t _tt) {
+	return getTimeString(_tt, "%X");
+}
+
+string Util::getTimeString(time_t _tt, const string& formatting) {
+	char buf[254];
 	tm* _tm = localtime(&_tt);
 	if(_tm == NULL) {
 		strcpy(buf, "xx:xx:xx");
 	} else {
-		strftime(buf, 64, "%X", _tm);
+		strftime(buf, 254, formatting.c_str(), _tm);
 	}
 	return buf;
 }
