@@ -78,6 +78,7 @@ public:
 	string getOfflineNick(const CID& cid) const;
 
 	bool isConnected(const string& aUrl) const;
+	bool isHubConnected(const string& aUrl) const;
 
 	void search(int aSizeMode, int64_t aSize, int aFileType, const string& aString, const string& aToken);
 	void search(StringList& who, int aSizeMode, int64_t aSize, int aFileType, const string& aString, const string& aToken, const StringList& aExtList);
