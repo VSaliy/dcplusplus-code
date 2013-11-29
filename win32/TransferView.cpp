@@ -270,6 +270,10 @@ void TransferView::ConnectionInfo::disconnect() {
 	ConnectionManager::getInstance()->disconnect(user, parent.type);
 }
 
+void TransferView::ConnectionInfo::removeFileFromQueue() {
+	QueueManager::getInstance()->remove(transfer().path);
+}
+
 TransferView::TransferInfo::TransferInfo(const TTHValue& tth, ConnectionType type, const string& path, const string& tempPath) :
 	ItemInfo(),
 	tth(tth),
@@ -389,6 +393,12 @@ void TransferView::TransferInfo::force() {
 void TransferView::TransferInfo::disconnect() {
 	for(auto& conn: conns) {
 		conn.disconnect();
+	}
+}
+
+void TransferView::TransferInfo::removeFileFromQueue() {
+	for(auto& conn: conns) {
+		conn.removeFileFromQueue();
 	}
 }
 
@@ -518,11 +528,16 @@ bool TransferView::handleContextMenu(dwt::ScreenCoordinate pt) {
 		}
 		menu->appendShellMenu(paths);
 
+		bool isDownload = transfer->type == CONNECTION_TYPE_DOWNLOAD;
 		if(!onlyHttp) {
 			menu->appendSeparator();
-			menu->appendItem(T_("&Force attempt"), [this] { handleForce(); });
+			menu->appendItem(T_("&Force attempt"), [this] { handleForce(); }, dwt::IconPtr(), isDownload);
+			menu->appendSeparator();
+
+			menu->appendItem(T_("&Remove file from queue"), [this] { handleRemoveFileFromQueue(); }, dwt::IconPtr(), isDownload);
 			menu->appendSeparator();
 		}
+		
 		menu->appendItem(T_("&Disconnect"), [this] { handleDisconnect(); });
 
 		WinUtil::addCopyMenu(menu.get(), transfers);
@@ -545,6 +560,11 @@ void TransferView::handleForce() {
 
 void TransferView::handleDisconnect() {
 	transfers->forEachSelected(&ItemInfo::disconnect);
+}
+
+void TransferView::handleRemoveFileFromQueue()
+{
+	transfers->forEachSelected(&ItemInfo::removeFileFromQueue);
 }
 
 bool TransferView::handleKeyDown(int c) {
