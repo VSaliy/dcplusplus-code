@@ -678,7 +678,7 @@ void HubFrame::execTasks() {
 
 void HubFrame::onConnected() {
 	addStatus(T_("Connected"));
-	setTabIcon();
+	setIcon(IDI_HUB);
 	updateSecureStatus();
 }
 
@@ -955,7 +955,10 @@ void HubFrame::on(Connecting, Client*) noexcept {
 }
 
 void HubFrame::on(Connected, Client*) noexcept {
-	callAsync([this] { onConnected(); });
+	callAsync([this] { 
+		onConnected();
+		setTabIcon();
+	});
 }
 
 void HubFrame::on(ClientListener::UserUpdated, Client*, const OnlineUser& user) noexcept {
