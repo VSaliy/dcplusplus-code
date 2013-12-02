@@ -678,7 +678,7 @@ void HubFrame::execTasks() {
 
 void HubFrame::onConnected() {
 	addStatus(T_("Connected"));
-	setIcon(IDI_HUB);
+	setTabIcon();
 	updateSecureStatus();
 }
 
