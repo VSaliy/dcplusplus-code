@@ -24,7 +24,6 @@
 #include <boost/noncopyable.hpp>
 
 #include "forward.h"
-#include "noexcept.h"
 
 #include "HintedUser.h"
 #include "FastAlloc.h"

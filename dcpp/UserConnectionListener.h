@@ -21,7 +21,6 @@
 
 #include "forward.h"
 #include "AdcCommand.h"
-#include "noexcept.h"
 #include "Util.h"
 
 namespace dcpp {

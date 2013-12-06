@@ -21,8 +21,6 @@
 
 #include <string>
 
-#include "noexcept.h"
-
 namespace dcpp {
 
 using std::string;

@@ -29,8 +29,6 @@
 #include <sys/time.h>
 #endif
 
-#include "noexcept.h"
-
 namespace dcpp {
 
 class Semaphore : boost::noncopyable

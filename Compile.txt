@@ -139,15 +139,17 @@
 		Make sure that Cygwin\bin is in your PATH environment variable.
 		Note that building with MinGW compilers provided by Cygwin is not often tested.
 
-	b. Microsoft Visual Studio 2012:
+	b. Microsoft Visual Studio 2013:
 	<http://msdn.microsoft.com/en-us/visualc/default.aspx>
 
-		Make sure VS is up-to-date; in particular, you will need the Nov 2012 CTP from
-		<http://www.microsoft.com/en-us/download/details.aspx?id=35515>. Use the patch in
-		msvc/nov2012ctp.patch to patch your VC/vcvarsall.bat file to make use of it (if you
+		Make sure VS is up-to-date; in particular, you will need the Nov 2013 CTP from
+		<http://www.microsoft.com/en-us/download/details.aspx?id=41151>. Use the patch in
+		msvc/nov2013ctp.patch to patch your VC/vcvarsall.bat file to make use of it (if you
 		generate project files and compile from the VS GUI, that won't be necessary).
 
 		To generate project files for MSVC, run "scons" with "msvcproj=1" and "tools=default".
+		[Temporary until SCons fully supports VS 2013: the above command has to be run from a VS
+		command prompt.]
 		The resulting solution file (DCPlusPlus.sln) will be in msvc/[mode-arch]/.
 
 

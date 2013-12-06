@@ -23,7 +23,6 @@
 
 #include <memory>
 
-#include "noexcept.h"
 #include "atomic.h"
 
 namespace dcpp {

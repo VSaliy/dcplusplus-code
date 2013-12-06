@@ -361,11 +361,7 @@ int TableTree::handleSort(LPARAM& lhs, LPARAM& rhs) {
 	return 0;
 }
 
-#ifndef _MSC_VER /// @todo workaround for VS' sucky decltype
 void TableTree::eraseChild(decltype(children)::iterator& child, bool deleting) {
-#else
-void TableTree::eraseChild(std::unordered_map<LPARAM, LPARAM>::iterator& child, bool deleting) {
-#endif
 	auto& item = items[child->second];
 	auto& cont = item.children;
 	if(!deleting && item.expanded) {

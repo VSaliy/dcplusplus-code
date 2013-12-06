@@ -22,7 +22,6 @@
 #include <boost/noncopyable.hpp>
 
 #include "forward.h"
-#include "noexcept.h"
 #include "Exception.h"
 #include "Util.h"
 
