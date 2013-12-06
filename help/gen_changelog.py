@@ -1,3 +1,5 @@
+#@PydevCodeAnalysisIgnore
+
 def gen_changelog(target, source, env):
         import re, cgi
 

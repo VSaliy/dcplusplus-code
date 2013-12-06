@@ -1,4 +1,5 @@
 #  -*- coding: utf-8 -*-
+#@PydevCodeAnalysisIgnore
 
 import sys, re, codecs
 
