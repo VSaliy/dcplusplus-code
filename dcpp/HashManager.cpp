@@ -233,12 +233,7 @@ void HashManager::HashStore::rebuild() {
 		}
 
 		for (auto& i: fileIndex) {
-#ifndef _MSC_VER
 			decltype(fileIndex)::mapped_type newFileList;
-#else
-			/// @todo remove this workaround when VS has a proper decltype...
-			decltype(fileIndex.begin()->second) newFileList;
-#endif
 
 			for (auto& j: i.second) {
 				if (newTreeIndex.find(j.getRoot()) != newTreeIndex.end()) {

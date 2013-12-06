@@ -461,7 +461,8 @@ QueueManager::~QueueManager() {
 		auto filelists = File::findFiles(path, "*.xml*");
 		std::sort(filelists.begin(), filelists.end());
 		std::for_each(filelists.begin(), std::set_difference(filelists.begin(), filelists.end(),
-			protectedFileLists.begin(), protectedFileLists.end(), filelists.begin()), &File::deleteFile);
+			protectedFileLists.begin(), protectedFileLists.end(), filelists.begin()),
+			[](const string& file) { File::deleteFile(file); });
 	}
 }
 

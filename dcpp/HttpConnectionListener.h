@@ -22,7 +22,6 @@
 #include <string>
 
 #include "forward.h"
-#include "noexcept.h"
 
 namespace dcpp {
 

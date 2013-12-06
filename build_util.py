@@ -412,10 +412,10 @@ def msvcproj_workarounds(target, source, env):
 	# remove SConstruct from included files since it points nowhere anyway.
 	contents = re.sub('<ItemGroup>\s*<None Include="SConstruct" />\s*</ItemGroup>', '', contents)
 
-	# update the platform toolset to the VS 2012 one.
+	# update the platform toolset to the VS 2013 one.
 	# TODO remove when SCons adds this.
 	contents = contents.replace('<UseOfMfc>false</UseOfMfc>',
-	'<UseOfMfc>false</UseOfMfc>\r\n\t\t<PlatformToolset>v120_CTP_Nov2012</PlatformToolset>')
+	'<UseOfMfc>false</UseOfMfc>\r\n\t\t<PlatformToolset>v130_CTP_Nov2013</PlatformToolset>')
 
 	f = open(str(target[0]), 'wb')
 	f.write(contents)

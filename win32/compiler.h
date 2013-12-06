@@ -27,8 +27,8 @@
 #endif
 
 #elif defined(_MSC_VER)
-#if _MSC_VER < 1700 || _MSC_FULL_VER < 170051025
-#error Visual Studio 2012 with the Nov 2012 CTP is required
+#if _MSC_VER < 1800 || _MSC_FULL_VER < 180021114
+#error Visual Studio 2013 with the Nov 2013 CTP is required
 #endif
 
 #else
