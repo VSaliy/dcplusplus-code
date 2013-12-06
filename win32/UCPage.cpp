@@ -191,9 +191,9 @@ void UCPage::handleRemoveClicked() {
 }
 
 void UCPage::addEntry(const UserCommand& uc, int index) {
-	TStringList row;
-	row.push_back((uc.getType() == UserCommand::TYPE_SEPARATOR) ? T_("Separator") : Text::toT(uc.getName()));
-	row.push_back(Text::toT(uc.getCommand()));
-	row.push_back(Text::toT(uc.getHub()));
-	commands->insert(row, (LPARAM)uc.getId(), index);
+	commands->insert({
+		(uc.getType() == UserCommand::TYPE_SEPARATOR) ? T_("Separator") : Text::toT(uc.getName()),
+		Text::toT(uc.getCommand()),
+		Text::toT(uc.getHub())
+	}, static_cast<LPARAM>(uc.getId()), index);
 }

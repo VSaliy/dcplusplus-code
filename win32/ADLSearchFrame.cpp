@@ -326,14 +326,14 @@ bool ADLSearchFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 }
 
 void ADLSearchFrame::addEntry(ADLSearch& search, int index, bool scroll) {
-	TStringList l;
-	l.push_back(Text::toT(search.searchString));
-	l.push_back(search.isRegEx() ? T_("Yes") : T_("No"));
-	l.push_back(Text::toT(search.SourceTypeToString(search.sourceType)));
-	l.push_back(Text::toT(search.destDir));
-	l.push_back((search.minFileSize >= 0) ? Text::toT(Util::toString(search.minFileSize)) + _T(" ") + Text::toT(search.SizeTypeToString(search.typeFileSize)) : Util::emptyStringT);
-	l.push_back((search.maxFileSize >= 0) ? Text::toT(Util::toString(search.maxFileSize)) + _T(" ") + Text::toT(search.SizeTypeToString(search.typeFileSize)) : Util::emptyStringT);
-	int itemCount = items->insert(l, 0, index);
+	int itemCount = items->insert({
+		Text::toT(search.searchString),
+		search.isRegEx() ? T_("Yes") : T_("No"),
+		Text::toT(search.SourceTypeToString(search.sourceType)),
+		Text::toT(search.destDir),
+		(search.minFileSize >= 0) ? Text::toT(Util::toString(search.minFileSize)) + _T(" ") + Text::toT(search.SizeTypeToString(search.typeFileSize)) : Util::emptyStringT,
+		(search.maxFileSize >= 0) ? Text::toT(Util::toString(search.maxFileSize)) + _T(" ") + Text::toT(search.SizeTypeToString(search.typeFileSize)) : Util::emptyStringT
+	}, 0, index);
 	if(index == -1)
 		index = itemCount;
 	items->setChecked(index, search.isActive);
