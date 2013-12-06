@@ -1,16 +1,22 @@
 Import('dev source_path')
 
-env, target, sources = dev.prepare_build(source_path, 'miniupnpc', source_glob = '*.c', in_bin = False)
+env, target, sources = dev.prepare_build(
+    source_path,
+    'miniupnpc',
+    source_glob='*.c',
+    in_bin=False
+)
 
 if dev.is_win32():
-	env.Append(CPPDEFINES = ['STATICLIB', 'WIN32'])
+    env.Append(CPPDEFINES=['STATICLIB', 'WIN32'])
 
-	sources = [source for source in sources if 'minissdpc' not in source]
+    sources = [source for source in sources if 'minissdpc' not in source]
+
 
 def msvcproj_files(env):
-	inc, src = dev.c_lib(env)
-	src = [source for source in src if 'minissdpc' not in str(source)]
-	return inc, src
+    inc, src = dev.c_lib(env)
+    src = [source for source in src if 'minissdpc' not in str(source)]
+    return inc, src
 
 ret = dev.build_lib(env, target, sources, msvcproj_files)
 Return('ret')
