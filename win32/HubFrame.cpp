@@ -1577,10 +1577,6 @@ void HubFrame::setTabIcon()
 
 	if(setTabIcon)
 	{
-		std::vector<int> icons;
-		icons.push_back(IDI_HUB);
-		icons.push_back(tabIcon);
-
-		setIcon(WinUtil::mergeIcons(icons));
+		setIcon(WinUtil::mergeIcons({ IDI_HUB, tabIcon }));
 	}
 }

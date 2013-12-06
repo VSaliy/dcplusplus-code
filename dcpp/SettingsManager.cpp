@@ -119,24 +119,24 @@ const string SettingsManager::settingTags[] =
 	"SENTRY"
 };
 
-SettingsManager::SettingsManager()
-{
-
-	connectionSpeeds.push_back("0.005");
-	connectionSpeeds.push_back("0.01");
-	connectionSpeeds.push_back("0.02");
-	connectionSpeeds.push_back("0.05");
-	connectionSpeeds.push_back("0.1");
-	connectionSpeeds.push_back("0.2");
-	connectionSpeeds.push_back("0.5");
-	connectionSpeeds.push_back("1");
-	connectionSpeeds.push_back("2");
-	connectionSpeeds.push_back("5");
-	connectionSpeeds.push_back("10");
-	connectionSpeeds.push_back("20");
-	connectionSpeeds.push_back("50");
-	connectionSpeeds.push_back("100");
-	connectionSpeeds.push_back("1000");
+SettingsManager::SettingsManager() {
+	connectionSpeeds = {
+		"0.005",
+		"0.01",
+		"0.02",
+		"0.05",
+		"0.1",
+		"0.2",
+		"0.5",
+		"1",
+		"2",
+		"5",
+		"10",
+		"20",
+		"50",
+		"100",
+		"1000"
+	};
 
 	for(int i=0; i<SETTINGS_LAST; i++)
 		isSet[i] = false;

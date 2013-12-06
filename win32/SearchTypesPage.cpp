@@ -255,11 +255,11 @@ void SearchTypesPage::handleRemoveClicked() {
 }
 
 void SearchTypesPage::addRow(const tstring& name, bool predefined, const TStringList& extensions) {
-	TStringList row;
-	row.push_back(name);
-	row.push_back(predefined ? T_("Predefined") : Util::emptyStringT);
-	row.push_back(Util::toString(_T(";"), extensions));
-	types->insert(row);
+	types->insert({
+		name,
+		predefined ? T_("Predefined") : Util::emptyStringT,
+		Util::toString(_T(";"), extensions)
+	});
 }
 
 void SearchTypesPage::findRealName(string& name) const {

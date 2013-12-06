@@ -165,10 +165,7 @@ void FavoriteDirsPage::handleRemoveClicked() {
 }
 
 void FavoriteDirsPage::addRow(const tstring& name, const tstring& path) {
-	TStringList row;
-	row.push_back(name);
-	row.push_back(path);
-	directories->insert(row);
+	directories->insert({ name, path });
 }
 
 void FavoriteDirsPage::addDirectory(const tstring& aPath) {

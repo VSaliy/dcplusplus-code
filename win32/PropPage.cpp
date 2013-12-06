@@ -114,9 +114,8 @@ void PropPage::read(const ListItem* listItems, TablePtr list) {
 
 	SettingsManager* settings = SettingsManager::getInstance();
 	for(size_t i = 0; listItems[i].setting != 0; ++i) {
-		TStringList row;
-		row.push_back(T_(listItems[i].desc));
-		list->setChecked(list->insert(row), settings->get(static_cast<SettingsManager::BoolSetting>(listItems[i].setting), true));
+		list->setChecked(list->insert({ T_(listItems[i].desc) }),
+			settings->get(static_cast<SettingsManager::BoolSetting>(listItems[i].setting), true));
 	}
 
 	list->setColumnWidth(0, LVSCW_AUTOSIZE);

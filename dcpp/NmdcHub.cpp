@@ -548,15 +548,14 @@ void NmdcHub::onLine(const string& aLine) noexcept {
 			}
 
 			if(CryptoManager::getInstance()->isExtended(lock)) {
-				StringList feat;
-				feat.push_back("UserCommand");
-				feat.push_back("NoGetINFO");
-				feat.push_back("NoHello");
-				feat.push_back("UserIP2");
-				feat.push_back("TTHSearch");
-				feat.push_back("ZPipe0");
-
-				supports(feat);
+				supports({
+					"UserCommand",
+					"NoGetINFO",
+					"NoHello",
+					"UserIP2",
+					"TTHSearch",
+					"ZPipe0"
+				});
 			}
 
 			key(CryptoManager::getInstance()->makeKey(lock));
@@ -1013,13 +1012,13 @@ void NmdcHub::on(Minute, uint64_t aTick) noexcept {
 	refreshLocalIp();
 
 	if(aTick > (lastProtectedIPsUpdate + 24*3600*1000)) {
-		protectedIPs.clear();
-
-		protectedIPs.push_back("dcpp.net");
-		protectedIPs.push_back("dchublist.com");
-		protectedIPs.push_back("hublist.eu");
-		protectedIPs.push_back("hublista.hu");
-		protectedIPs.push_back("dcbase.org");
+		protectedIPs = {
+			"dcpp.net",
+			"dchublist.com",
+			"hublist.eu",
+			"hublista.hu",
+			"dcbase.org"
+		};
 		for(auto i = protectedIPs.begin(); i != protectedIPs.end();) {
 			*i = Socket::resolve(*i, AF_INET);
 			if(Util::isPrivateIp(*i))

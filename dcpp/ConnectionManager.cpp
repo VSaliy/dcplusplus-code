@@ -38,16 +38,20 @@ ConnectionManager::ConnectionManager() :
 {
 	TimerManager::getInstance()->addListener(this);
 
-	features.push_back(UserConnection::FEATURE_MINISLOTS);
-	features.push_back(UserConnection::FEATURE_XML_BZLIST);
-	features.push_back(UserConnection::FEATURE_ADCGET);
-	features.push_back(UserConnection::FEATURE_TTHL);
-	features.push_back(UserConnection::FEATURE_TTHF);
+	features = {
+		UserConnection::FEATURE_MINISLOTS,
+		UserConnection::FEATURE_XML_BZLIST,
+		UserConnection::FEATURE_ADCGET,
+		UserConnection::FEATURE_TTHL,
+		UserConnection::FEATURE_TTHF
+	};
 
-	adcFeatures.push_back("AD" + UserConnection::FEATURE_ADC_BAS0);
-	adcFeatures.push_back("AD" + UserConnection::FEATURE_ADC_BASE);
-	adcFeatures.push_back("AD" + UserConnection::FEATURE_ADC_TIGR);
-	adcFeatures.push_back("AD" + UserConnection::FEATURE_ADC_BZIP);
+	adcFeatures = {
+		"AD" + UserConnection::FEATURE_ADC_BAS0,
+		"AD" + UserConnection::FEATURE_ADC_BASE,
+		"AD" + UserConnection::FEATURE_ADC_TIGR,
+		"AD" + UserConnection::FEATURE_ADC_BZIP
+	};
 }
 
 string ConnectionManager::makeToken() const {
