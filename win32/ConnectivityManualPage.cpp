@@ -43,7 +43,9 @@ autoDetect(0),
 active(0),
 upnp(0),
 passive(0),
-mapper(0)
+mapper(0),
+transferBox(0),
+tlstransferBox(0)
 {
 	setHelpId(IDH_CONNECTIVITYMANUALPAGE);
 
@@ -100,11 +102,18 @@ mapper(0)
 			boxGrid->column(0).size = 40;
 			boxGrid->column(0).mode = GridInfo::STATIC;
 
-			items.emplace_back(boxGrid->addChild(WinUtil::Seeds::Dialog::intTextBox), setting, PropPage::T_INT);
+			auto inputBox = boxGrid->addChild(WinUtil::Seeds::Dialog::intTextBox);
+			items.emplace_back(inputBox, setting, PropPage::T_INT);
+
+			return inputBox;
 		};
 
-		addPortBox(T_("Transfer"), SettingsManager::TCP_PORT, IDH_SETTINGS_CONNECTIVITY_PORT_TCP);
-		addPortBox(T_("Encrypted transfer"), SettingsManager::TLS_PORT, IDH_SETTINGS_CONNECTIVITY_PORT_TLS);
+		transferBox = addPortBox(T_("Transfer"), SettingsManager::TCP_PORT, IDH_SETTINGS_CONNECTIVITY_PORT_TCP);
+		transferBox->onUpdated([this] { onTransferPortUpdated(); });
+
+		tlstransferBox = addPortBox(T_("Encrypted transfer"), SettingsManager::TLS_PORT, IDH_SETTINGS_CONNECTIVITY_PORT_TLS);
+		tlstransferBox->onUpdated([this] { onTLSTransferPortUpdated(); });
+
 		addPortBox(T_("Search"), SettingsManager::UDP_PORT, IDH_SETTINGS_CONNECTIVITY_PORT_UDP);
 	}
 
@@ -135,6 +144,11 @@ ConnectivityManualPage::~ConnectivityManualPage() {
 }
 
 void ConnectivityManualPage::write() {
+	if(transferBox->getText() == tlstransferBox->getText())
+	{
+		tlstransferBox->setText(Util::emptyStringT);
+	}
+
 	PropPage::write(items);
 
 	// Set the connection mode
@@ -202,4 +216,22 @@ void ConnectivityManualPage::on(SettingChanged) noexcept {
 
 		read();
 	});
+}
+
+void ConnectivityManualPage::onTransferPortUpdated()
+{
+	validatePort(transferBox, tlstransferBox, T_("Transfer"), T_("encrypted transfer"));
+}
+
+void ConnectivityManualPage::onTLSTransferPortUpdated()
+{
+	validatePort(tlstransferBox, transferBox, T_("Encrypted transfer"), T_("transfer"));
+}
+
+void ConnectivityManualPage::validatePort(TextBoxPtr sourcebox, TextBoxPtr otherbox, const tstring& source, const tstring& other)
+{
+	if(sourcebox->getText() == otherbox->getText())
+	{
+		sourcebox->showPopup(T_("Invalid value"), str(TF_("%1% port cannot be the same as the %2% port") % source % other), TTI_ERROR);
+	}
 }

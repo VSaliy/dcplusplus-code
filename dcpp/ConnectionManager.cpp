@@ -76,6 +76,11 @@ void ConnectionManager::listen() {
 		dcdebug("Skipping secure port: %d\n", CONNSETTING(TLS_PORT));
 		return;
 	}
+	if(CONNSETTING(TCP_PORT) == CONNSETTING(TLS_PORT))
+	{
+		LogManager::getInstance()->message(_("The encrypted transfer port cannot be the same as the transfer port, encrypted transfers will be disabled"));
+		return;
+	}
 	secureServer.reset(new Server(true, Util::toString(CONNSETTING(TLS_PORT)), CONNSETTING(BIND_ADDRESS)));
 }
 
