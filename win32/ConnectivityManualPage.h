@@ -43,10 +43,18 @@ private:
 
 	ComboBoxPtr mapper;
 
+	TextBoxPtr transferBox;
+	TextBoxPtr tlstransferBox;
+
 	void handleAutoClicked();
 
 	void read();
 	void updateAuto();
+
+	void onTransferPortUpdated();
+	void onTLSTransferPortUpdated();
+
+	void validatePort(TextBoxPtr sourceBox, TextBoxPtr otherBox, const tstring& source, const tstring& other);
 
 	// ConnectivityManagerListener
 	void on(SettingChanged) noexcept;
