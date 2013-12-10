@@ -409,12 +409,20 @@ void QueueFrame::QueueItemInfo::update() {
 			display->columns[COLUMN_ADDED] = Text::toT(Util::formatTime("%Y-%m-%d %H:%M", getAdded()));
 		}
 		if(colMask & MASK_TTH) {
-			display->columns[COLUMN_TTH] = Text::toT(getTTH().toBase32());
+			if (getTTH()) {
+				display->columns[COLUMN_TTH] = Text::toT(getTTH().toBase32());
+			} else {
+				display->columns[COLUMN_TTH] = Util::emptyStringT;
+			}
 		}
 		if(colMask & MASK_TYPE) {
-			display->columns[COLUMN_TYPE] = Text::toT(Util::getFileExt(getTarget()));
-			if(!display->columns[COLUMN_TYPE].empty() && display->columns[COLUMN_TYPE][0] == '.')
-				display->columns[COLUMN_TYPE].erase(0, 1);
+			if (isSet(QueueItem::FLAG_USER_LIST) || isSet(QueueItem::FLAG_PARTIAL_LIST)) {
+				display->columns[COLUMN_TYPE] = T_("File List");
+			} else {
+				display->columns[COLUMN_TYPE] = Text::toT(Util::getFileExt(getTarget()));
+				if(!display->columns[COLUMN_TYPE].empty() && display->columns[COLUMN_TYPE][0] == '.')
+					display->columns[COLUMN_TYPE].erase(0, 1);
+			}
 		}
 	}
 }
