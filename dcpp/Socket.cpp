@@ -361,7 +361,6 @@ void Socket::connect(const string& aAddr, const string& aPort, const string& loc
 
 				check([&] { return ::connect(sock, ai->ai_addr, ai->ai_addrlen); }, true);
 				setIp(resolveName(ai->ai_addr, ai->ai_addrlen));
-				return;
 
 			} catch(const SocketException& e) {
 				ai->ai_family == AF_INET ? sock4.reset() : sock6.reset();
@@ -370,7 +369,10 @@ void Socket::connect(const string& aAddr, const string& aPort, const string& loc
 		}
 	}
 
-	throw SocketException(lastError);
+	// An IP should be set if at least one connection attempt succeeded
+	if(!ip.empty()) {
+		throw SocketException(lastError);
+	}
 }
 
 namespace {
