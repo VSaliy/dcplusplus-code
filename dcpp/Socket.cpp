@@ -345,6 +345,7 @@ void Socket::connect(const string& aAddr, const string& aPort, const string& loc
 	auto addr = resolveAddr(aAddr, aPort);
 
 	string lastError;
+
 	for(auto ai = addr.get(); ai; ai = ai->ai_next) {
 		if((ai->ai_family == AF_INET && !sock4.valid()) ||
 			(ai->ai_family == AF_INET6 && !sock6.valid() && !v4only))
@@ -360,6 +361,8 @@ void Socket::connect(const string& aAddr, const string& aPort, const string& loc
 
 				check([&] { return ::connect(sock, ai->ai_addr, ai->ai_addrlen); }, true);
 				setIp(resolveName(ai->ai_addr, ai->ai_addrlen));
+				return;
+
 			} catch(const SocketException& e) {
 				ai->ai_family == AF_INET ? sock4.reset() : sock6.reset();
 				lastError = e.getError();
@@ -367,8 +370,7 @@ void Socket::connect(const string& aAddr, const string& aPort, const string& loc
 		}
 	}
 
-	if(!lastError.empty())
-		throw SocketException(lastError);
+	throw SocketException(lastError);
 }
 
 namespace {
