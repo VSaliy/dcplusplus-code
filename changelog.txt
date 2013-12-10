@@ -8,6 +8,7 @@
 * [L#593613] Added /lastmessage in PMs to show the time of the last message (ullner)
 * [L#363092] Disallow transfer port and encrypted transfer port to be the same (ullner)
 * [L#1245179] Avoid connection failures (maksis)
+* [L#1228927] Fix columns for file lists in the Download Queue (emtee)
 
 -- 0.831 2013-11-11 --
 * [L#1249810] Fix NMDC TTH search responses (emtee)
