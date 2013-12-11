@@ -15,13 +15,13 @@
 		Have a look at section 2 for additional steps to configure the compiler.
 		Have a look at section 4 for alternative compilers.
 
-		* Python - 2.5.x
+		* Python - 2.7.x
 		<http://www.python.org>
 
 		Note: Python 3.x is incompatible with SCons as of writing this.
 		Make sure that Python is in your PATH environment variable.
 
-		* SCons - 0.98.5 but using the most recent version is recommended
+		* SCons - 2.3.0 but using the most recent stable version is recommended
 		<http://www.scons.org/download.php>
 
 		Note: SCons relies on Python so you need to have Python installed first.
