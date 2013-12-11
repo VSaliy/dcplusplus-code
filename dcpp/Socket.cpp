@@ -370,7 +370,7 @@ void Socket::connect(const string& aAddr, const string& aPort, const string& loc
 	}
 
 	// An IP should be set if at least one connection attempt succeeded
-	if(!ip.empty()) {
+	if(ip.empty()) {
 		throw SocketException(lastError);
 	}
 }
