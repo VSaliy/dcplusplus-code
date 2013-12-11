@@ -209,6 +209,7 @@ class Dev:
             env.Glob('*.' + inc_ext),
             env.Glob('*.' + src_ext)
         )
+    # TODO using __func__ sucks; if anyone has a better idea, chip in...
     c_lib = simple_lib.__func__('h', 'c')
     cpp_lib = simple_lib.__func__('h', 'cpp')
 
