@@ -9,8 +9,9 @@ dev.add_boost(env)
 if dev.is_win32():
     env.Append(LIBS=[
         'comctl32', 'comdlg32', 'gdi32', 'ole32', 'oleaut32', 'shlwapi',
-        'uuid', 'uxtheme', 'winmm'
+        'uuid', 'uxtheme', 'winmm', 'wtsapi32'
     ])
+
 
 env.Append(CPPPATH=['#/dwt/include'])
 
