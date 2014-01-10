@@ -342,7 +342,7 @@ conf = Configure(
 )
 
 if dev.is_win32():
-    if conf.CheckCXXHeader(['windows.h', 'htmlhelp.h'], '<>'):
+    if env['help'] and conf.CheckCXXHeader(['windows.h', 'htmlhelp.h'], '<>'):
         conf.env.Append(CPPDEFINES='HAVE_HTMLHELP_H')
 
 if 'mingw' in env['TOOLS']:
@@ -356,7 +356,7 @@ if 'mingw' in env['TOOLS']:
     ):
         conf.env.Append(CPPDEFINES='HAVE_OLD_MINGW')
 
-if 'gcc' in conf.env['TOOLS'] and conf.env['mode'] == 'debug':
+if 'gcc' in env['TOOLS'] and env['mode'] == 'debug':
     if conf.CheckFlag('-Og'):
         conf.env.Append(CCFLAGS=['-Og'])
         conf.env.Append(LINKFLAGS=['-Og'])
