@@ -342,7 +342,7 @@ conf = Configure(
 )
 
 if dev.is_win32():
-    if conf.CheckCXXHeader(['windows.h', 'htmlhelp.h'], '<>'):
+    if conf.env['help'] and conf.CheckCXXHeader(['windows.h', 'htmlhelp.h'], '<>'):
         conf.env.Append(CPPDEFINES='HAVE_HTMLHELP_H')
 
 if 'mingw' in env['TOOLS']:
