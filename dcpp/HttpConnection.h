@@ -43,6 +43,7 @@ public:
 	void abort();
 
 	const string& getMimeType() const { return mimeType; }
+	const string& getStatus() const { return statusLine; }
 
 	int64_t getSize() const { return size; }
 	int64_t getDone() const { return done; }
@@ -64,6 +65,7 @@ private:
 	string requestBody;
 
 	string mimeType;
+	string statusLine;
 	int64_t size;
 	int64_t done;
 	double speed;

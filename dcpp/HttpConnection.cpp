@@ -170,8 +170,8 @@ void HttpConnection::updateSpeed() {
 
 void HttpConnection::on(BufferedSocketListener::Connected) noexcept {
 	dcassert(socket);
-	socket->write("GET " + file + " HTTP/1.1\r\n");
-	socket->write("User-Agent: " APPNAME " v" VERSIONSTRING "\r\n");
+	socket->write(method + " " + file + " HTTP/1.1\r\n");
+	socket->write("User-Agent: " + userAgent + "\r\n");
 
 	string sRemoteServer = server;
 	if(!SETTING(HTTP_PROXY).empty())
@@ -181,9 +181,16 @@ void HttpConnection::on(BufferedSocketListener::Connected) noexcept {
 	}
 
 	socket->write("Host: " + sRemoteServer + "\r\n");
-	socket->write("Connection: close\r\n");	// we'll only be doing one request
-	socket->write("Cache-Control: no-cache\r\n\r\n");
-	if (connType == TYPE_POST) socket->write(requestBody);
+	socket->write("Cache-Control: no-cache\r\n");
+	if(connType == TYPE_POST)
+	{
+		socket->write("Content-Type: application/x-www-form-urlencoded\r\n");
+		socket->write("Content-Length: " + Util::toString(requestBody.size()) + "\r\n");
+	}
+	socket->write("Connection: close\r\n\r\n");	// we'll only be doing one request
+
+	if(connType == TYPE_POST)
+		socket->write(requestBody);
 }
 
 void HttpConnection::on(BufferedSocketListener::Line, const string& aLine) noexcept {
@@ -208,6 +215,7 @@ void HttpConnection::on(BufferedSocketListener::Line, const string& aLine) noexc
 		} else socket->setDataMode(chunkSize);
 
 	} else if(connState == CONN_UNKNOWN) {
+		statusLine = boost::trim_copy(aLine);
 		if(aLine.find("200") != string::npos) {
 			connState = CONN_OK;
 		} else if(aLine.find("301") != string::npos || aLine.find("302") != string::npos) {
@@ -215,9 +223,8 @@ void HttpConnection::on(BufferedSocketListener::Line, const string& aLine) noexc
 		} else {
 			abortRequest(true);
 			connState = CONN_FAILED;
-			fire(HttpConnectionListener::Failed(), this, str(F_("%1% (%2%)") % boost::trim_copy(aLine) % url));
+			fire(HttpConnectionListener::Failed(), this, str(F_("%1% (%2%)") % statusLine % url));
 		}
-
 	} else if(connState == CONN_MOVED && Util::findSubString(aLine, "Location") != string::npos) {
 		abortRequest(true);
 
@@ -271,7 +278,8 @@ void HttpConnection::on(BufferedSocketListener::Line, const string& aLine) noexc
 void HttpConnection::on(BufferedSocketListener::Failed, const string& aLine) noexcept {
 	abortRequest(false);
 	connState = CONN_FAILED;
-	fire(HttpConnectionListener::Failed(), this, str(F_("%1% (%2%)") % boost::trim_copy(aLine) % url));
+	statusLine = boost::trim_copy(aLine);
+	fire(HttpConnectionListener::Failed(), this, str(F_("%1% (%2%)") % statusLine % url));
 }
 
 void HttpConnection::on(BufferedSocketListener::ModeChange) noexcept {
