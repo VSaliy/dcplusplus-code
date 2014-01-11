@@ -342,7 +342,8 @@ conf = Configure(
 )
 
 if dev.is_win32():
-    if conf.CheckCXXHeader(['windows.h', 'htmlhelp.h'], '<>'):
+    # some mingw distros have one but not the other, breaking linking (note: CheckLib functions do not support explicit include_quotes)
+    if conf.CheckCXXHeader(['windows.h', 'htmlhelp.h'], '<>') and conf.CheckLib('htmlhelp', 'main', None, 'C++'):
         conf.env.Append(CPPDEFINES='HAVE_HTMLHELP_H')
 
 if 'mingw' in env['TOOLS']:
@@ -356,7 +357,7 @@ if 'mingw' in env['TOOLS']:
     ):
         conf.env.Append(CPPDEFINES='HAVE_OLD_MINGW')
 
-if 'gcc' in conf.env['TOOLS'] and conf.env['mode'] == 'debug':
+if 'gcc' in env['TOOLS'] and env['mode'] == 'debug':
     if conf.CheckFlag('-Og'):
         conf.env.Append(CCFLAGS=['-Og'])
         conf.env.Append(LINKFLAGS=['-Og'])
