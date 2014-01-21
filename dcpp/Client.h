@@ -64,7 +64,7 @@ public:
 	virtual void emulateCommand(const string& cmd) = 0;
 	virtual void send(const AdcCommand& command) = 0;
 
-	bool isConnected() const { return state != STATE_CONNECTING && state != STATE_DISCONNECTED; }
+	bool isConnected() const;
 	bool isSecure() const;
 	bool isTrusted() const;
 	std::string getCipherName() const;
@@ -132,14 +132,15 @@ protected:
 
 	static atomic<long> counts[COUNT_UNCOUNTED];
 
-	enum States {
+	enum State {
 		STATE_CONNECTING,	///< Waiting for socket to connect
 		STATE_PROTOCOL,		///< Protocol setup
 		STATE_IDENTIFY,		///< Nick setup
 		STATE_VERIFY,		///< Checking password
 		STATE_NORMAL,		///< Running
 		STATE_DISCONNECTED,	///< Nothing in particular
-	} state;
+	};
+	atomic<State> state;
 
 	BufferedSocket *sock;
 
