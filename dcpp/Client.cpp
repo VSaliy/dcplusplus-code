@@ -192,6 +192,11 @@ void Client::disconnect(bool graceLess) {
 		sock->disconnect(graceLess);
 }
 
+bool Client::isConnected() const {
+	State s = state;
+	return s != STATE_CONNECTING && s != STATE_DISCONNECTED;
+}
+
 bool Client::isSecure() const {
 	return isConnected() && sock->isSecure();
 }
