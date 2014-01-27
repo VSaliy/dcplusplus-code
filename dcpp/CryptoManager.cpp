@@ -74,8 +74,8 @@ CryptoManager::CryptoManager()
 
 		EC_KEY* tmp_ecdh;
 		if ((tmp_ecdh = EC_KEY_new_by_curve_name(NID_X9_62_prime256v1)) != NULL) {
-			SSL_CTX_set_tmp_ecdh(serverContext, tmp_ecdh);
 			SSL_CTX_set_options(serverContext, SSL_OP_SINGLE_ECDH_USE);
+			SSL_CTX_set_tmp_ecdh(serverContext, tmp_ecdh);
 
 			EC_KEY_free(tmp_ecdh);
 		}
