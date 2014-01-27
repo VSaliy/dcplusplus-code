@@ -186,7 +186,7 @@ private:
 
 	void accept(const Socket& sock, bool secure) noexcept;
 
-	bool checkKeyprint(const UserConnection* aSource) const;
+	bool checkKeyprint(UserConnection* aSource);
 	pair<bool, ConnectionType> checkToken(const UserConnection* uc) const;
 	bool checkDownload(const UserConnection* uc) const;
 
