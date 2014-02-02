@@ -571,6 +571,8 @@ tstring
 		+ _T("\r\n\t") + T_("Sets Away status. New private message windows will be responded to, once, with the message you specified, or the default away message configured in the Personal information settings page.")
 		+ _T("\r\n") _T("/back")
 		+ _T("\r\n\t") + T_("Un-sets Away status.")
+		+ _T("\r\n") _T("/d <search string>")
+		+ _T("\r\n\t") + T_("Launches your default web browser to the DuckDuckGo search engine with the specified search.")
 		+ _T("\r\n") _T("/g <search string>")
 		+ _T("\r\n\t") + T_("Launches your default web browser to the Google search engine with the specified search.")
 		+ _T("\r\n") _T("/imdb <imdb query>")
@@ -589,7 +591,7 @@ tstring
 
 tstring
 	WinUtil::commands =
-		_T("/refresh, /me <msg>, /clear [lines to keep], /slots #, /dslots #, /search <string>, /f <string>, /dc++, /away <msg>, /back, /g <searchstring>, /imdb <imdbquery>, /u <url>, /rebuild, /download, /upload");
+		_T("/refresh, /me <msg>, /clear [lines to keep], /slots #, /dslots #, /search <string>, /f <string>, /dc++, /away <msg>, /back, /d <searchstring>, /g <searchstring>, /imdb <imdbquery>, /u <url>, /rebuild, /download, /upload");
 
 bool WinUtil::checkCommand(tstring& cmd, tstring& param, tstring& message, tstring& status, bool& thirdPerson) {
 	string::size_type i = cmd.find(' ');
@@ -658,6 +660,12 @@ bool WinUtil::checkCommand(tstring& cmd, tstring& param, tstring& message, tstri
 	} else if(Util::stricmp(cmd.c_str(), _T("back")) == 0) {
 		Util::setAway(false);
 		status = T_("Away mode off");
+	} else if(Util::stricmp(cmd.c_str(), _T("d")) == 0) {
+		if(param.empty()) {
+			status = T_("Specify a search string");
+		} else {
+			WinUtil::openLink(_T("http://www.duckduckgo.com/?q=") + Text::toT(Util::encodeURI(Text::fromT(param))));
+		}
 	} else if(Util::stricmp(cmd.c_str(), _T("g")) == 0) {
 		if(param.empty()) {
 			status = T_("Specify a search string");
