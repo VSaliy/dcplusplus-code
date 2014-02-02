@@ -46,6 +46,7 @@
 
 #include <dwt/Application.h>
 #include <dwt/DWTException.h>
+#include <dwt/util/win32/Version.h>
 #include <dwt/widgets/Grid.h>
 #include <dwt/widgets/MessageBox.h>
 #include <dwt/widgets/Notification.h>
@@ -263,6 +264,20 @@ fullSlots(false)
 
 	if(SETTING(SETTINGS_SAVE_INTERVAL) > 0)
 		setSaveTimer();
+
+	if(!dwt::util::win32::ensureVersion(dwt::util::win32::VISTA)) {
+		callAsync([this] {
+			dwt::MessageBox(this).show(
+				T_(
+					"Both Microsoft and DC++ are dropping support for your operating system "
+					"(Windows XP). Please upgrade it as soon as possible."
+				),
+				T_("Windows XP is too old"),
+				dwt::MessageBox::BOX_OK,
+				dwt::MessageBox::BOX_ICONEXCLAMATION
+			);
+		});
+	}
 }
 
 void MainWindow::initWindow() {
@@ -1460,7 +1475,7 @@ void MainWindow::completeVersionUpdate(bool success, const string& result) {
 
 #ifndef _DEBUG
 		xml.resetCurrentChild();
-		if(xml.findChild("Version")) {
+		if(xml.findChild(dwt::util::win32::ensureVersion(dwt::util::win32::VISTA) ? "Version" : "XPVersion")) {
 			if(Util::toDouble(xml.getChildData()) > VERSIONFLOAT) {
 				xml.resetCurrentChild();
 				if(xml.findChild("Title")) {

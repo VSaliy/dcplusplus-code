@@ -12,6 +12,8 @@
 * HTTP fixes (crise)
 * Safer hub state tracking (poy)
 * Add "/d <search>" for DuckDuckGo searches (poy)
+* Add a dialog box to nag XP suckers into upgrading (poy)
+* Support for a new XP-only branch in version checking (poy)
 
 -- 0.831 2013-11-11 --
 * [L#1249810] Fix NMDC TTH search responses (emtee)
