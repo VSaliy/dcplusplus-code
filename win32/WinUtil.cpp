@@ -664,13 +664,13 @@ bool WinUtil::checkCommand(tstring& cmd, tstring& param, tstring& message, tstri
 		if(param.empty()) {
 			status = T_("Specify a search string");
 		} else {
-			WinUtil::openLink(_T("http://www.duckduckgo.com/?q=") + Text::toT(Util::encodeURI(Text::fromT(param))));
+			WinUtil::openLink(_T("https://www.duckduckgo.com/?q=") + Text::toT(Util::encodeURI(Text::fromT(param))));
 		}
 	} else if(Util::stricmp(cmd.c_str(), _T("g")) == 0) {
 		if(param.empty()) {
 			status = T_("Specify a search string");
 		} else {
-			WinUtil::openLink(_T("http://www.google.com/search?q=") + Text::toT(Util::encodeURI(Text::fromT(param))));
+			WinUtil::openLink(_T("https://www.google.com/search?q=") + Text::toT(Util::encodeURI(Text::fromT(param))));
 		}
 	} else if(Util::stricmp(cmd.c_str(), _T("imdb")) == 0) {
 		if(param.empty()) {
