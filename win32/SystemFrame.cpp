@@ -50,7 +50,7 @@ SystemFrame::SystemFrame(TabViewPtr parent) :
 	initStatus();
 
 	status->onDblClicked(STATUS_STATUS, [] {
-		WinUtil::openFile(Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(LogManager::SYSTEM))));
+		WinUtil::openFile(Text::toT(Util::validatePath(LogManager::getInstance()->getPath(LogManager::SYSTEM))));
 	});
 
 	layout();

@@ -519,7 +519,7 @@ void QueueManager::addList(const HintedUser& aUser, int aFlags, const string& aI
 
 string QueueManager::getListPath(const HintedUser& user) {
 	StringList nicks = ClientManager::getInstance()->getNicks(user);
-	string nick = nicks.empty() ? Util::emptyString : Util::cleanPathChars(nicks[0]) + ".";
+	string nick = nicks.empty() ? Util::emptyString : Util::validateFileName(nicks[0]) + ".";
 	return checkTarget(Util::getListPath() + nick + user.user->getCID().toBase32(), /*checkExistence*/ false);
 }
 
@@ -659,7 +659,7 @@ string QueueManager::checkTarget(const string& aTarget, bool checkExistence) {
 	}
 #endif
 
-	string target = Util::validateFileName(aTarget);
+	string target = Util::validatePath(aTarget);
 
 	// Check that the file doesn't already exist...
 	if(checkExistence && File::getSize(target) != -1) {
@@ -813,7 +813,7 @@ void QueueManager::getSizeInfo(int64_t& size, int64_t& pos, const string& target
 
 
 void QueueManager::move(const string& aSource, const string& aTarget) noexcept {
-	string target = Util::validateFileName(aTarget);
+	string target = Util::validatePath(aTarget);
 	if(aSource == target)
 		return;
 
