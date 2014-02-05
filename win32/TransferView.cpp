@@ -494,6 +494,7 @@ bool TransferView::handleContextMenu(dwt::ScreenCoordinate pt) {
 
 		set<TransferInfo*> files;
 		auto onlyHttp = true;
+		auto onlyDownloads = true;
 		for(auto i: sel) {
 			auto& transfer = transfers->getData(i)->transfer();
 			if(!dynamic_cast<HttpInfo*>(&transfer)) {
@@ -501,6 +502,9 @@ bool TransferView::handleContextMenu(dwt::ScreenCoordinate pt) {
 				if(!transfer.getText(COLUMN_FILE).empty()) {
 					files.insert(&transfer);
 				}
+			}
+			if (transfer.type != CONNECTION_TYPE_DOWNLOAD) {
+				onlyDownloads = false;
 			}
 		}
 
@@ -528,13 +532,12 @@ bool TransferView::handleContextMenu(dwt::ScreenCoordinate pt) {
 		}
 		menu->appendShellMenu(paths);
 
-		bool isDownload = transfer->type == CONNECTION_TYPE_DOWNLOAD;
 		if(!onlyHttp) {
 			menu->appendSeparator();
-			menu->appendItem(T_("&Force attempt"), [this] { handleForce(); }, dwt::IconPtr(), isDownload);
+			menu->appendItem(T_("&Force attempt"), [this] { handleForce(); }, dwt::IconPtr(), onlyDownloads);
 			menu->appendSeparator();
 
-			menu->appendItem(T_("&Remove file from queue"), [this] { handleRemoveFileFromQueue(); }, dwt::IconPtr(), isDownload);
+			menu->appendItem(T_("&Remove file from queue"), [this] { handleRemoveFileFromQueue(); }, dwt::IconPtr(), onlyDownloads);
 			menu->appendSeparator();
 		}
 		
