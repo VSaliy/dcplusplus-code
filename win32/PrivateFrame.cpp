@@ -231,7 +231,7 @@ bool PrivateFrame::preClosing() {
 string PrivateFrame::getLogPath() const {
 	ParamMap params;
 	fillLogParams(params);
-	return Util::validateFileName(LogManager::getInstance()->getPath(LogManager::PM, params));
+	return Util::validatePath(LogManager::getInstance()->getPath(LogManager::PM, params));
 }
 
 void PrivateFrame::openLog() {

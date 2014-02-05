@@ -576,7 +576,7 @@ void MainWindow::initStatusBar() {
 	}
 
 	status->onDblClicked(STATUS_STATUS, [] {
-		WinUtil::openFile(Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(LogManager::SYSTEM))));
+		WinUtil::openFile(Text::toT(Util::validatePath(LogManager::getInstance()->getPath(LogManager::SYSTEM))));
 	});
 
 	status->onDblClicked(STATUS_AWAY, &Util::switchAway);

@@ -1028,7 +1028,7 @@ void DirectoryListingFrame::download(ItemInfo* ii, const string& dir, bool view)
 	try {
 		if(ii->type == ItemInfo::FILE) {
 			if(view) {
-				File::deleteFile(dir + Util::validateFileName(ii->file->getName()));
+				File::deleteFile(dir + Util::validatePath(ii->file->getName()));
 			}
 			dl->download(ii->file, dir + Text::fromT(ii->getText(COLUMN_FILENAME)), view, WinUtil::isShift() || view);
 		} else if(!view) {

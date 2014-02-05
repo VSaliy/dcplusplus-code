@@ -317,7 +317,7 @@ bool FavoriteManager::onHttpFinished(const string& buf) noexcept {
 
 	if(useHttp) {
 		try {
-			File f(Util::getHubListsPath() + Util::validateFileName(publicListServer), File::WRITE, File::CREATE | File::TRUNCATE);
+			File f(Util::getHubListsPath() + Util::validatePath(publicListServer), File::WRITE, File::CREATE | File::TRUNCATE);
 			f.write(buf);
 			f.close();
 		} catch(const FileException&) { }
@@ -681,7 +681,7 @@ void FavoriteManager::refresh(bool forceDownload /* = false */) {
 	}
 
 	if(!forceDownload) {
-		string path = Util::getHubListsPath() + Util::validateFileName(publicListServer);
+		string path = Util::getHubListsPath() + Util::validatePath(publicListServer);
 		if(File::getSize(path) > 0) {
 			useHttp = false;
 			string buf, fileDate;
