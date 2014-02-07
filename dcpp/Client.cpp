@@ -163,20 +163,6 @@ void Client::on(Connected) noexcept {
 	updateActivity();
 	ip = sock->getIp();
 
-	if(sock->isSecure() && keyprint.compare(0, 7, "SHA256/") == 0) {
-		auto kp = sock->getKeyprint();
-		if(!kp.empty()) {
-			vector<uint8_t> kp2v(kp.size());
-			Encoder::fromBase32(keyprint.c_str() + 7, &kp2v[0], kp2v.size());
-			if(!std::equal(kp.begin(), kp.end(), kp2v.begin())) {
-				state = STATE_DISCONNECTED;
-				sock->removeListener(this);
-				fire(ClientListener::Failed(), this, "Keyprint mismatch");
-				return;
-			}
-		}
-	}
-
 	fire(ClientListener::Connected(), this);
 	state = STATE_PROTOCOL;
 }
@@ -205,11 +191,11 @@ bool Client::isTrusted() const {
 	return isConnected() && sock->isTrusted();
 }
 
-std::string Client::getCipherName() const {
+string Client::getCipherName() const {
 	return isConnected() ? sock->getCipherName() : Util::emptyString;
 }
 
-vector<uint8_t> Client::getKeyprint() const {
+ByteVector Client::getKeyprint() const {
 	return isConnected() ? sock->getKeyprint() : vector<uint8_t>();
 }
 

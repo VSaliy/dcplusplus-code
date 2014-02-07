@@ -148,7 +148,7 @@ public:
 	void setLineMode(size_t rollback) { dcassert(socket); socket->setLineMode(rollback); }
 
 	void sendRaw(const string& raw) { send(raw); }
-	void connect(const string& aServer, const string& aPort, const string& localPort, const BufferedSocket::NatRoles natRole);
+	void connect(const string& aServer, const string& aPort, const string& localPort, const BufferedSocket::NatRoles natRole, UserPtr user = nullptr);
 	void accept(const Socket& aServer);
 
 	template<typename F>
@@ -168,8 +168,9 @@ public:
 
 	bool isSecure() const { return socket && socket->isSecure(); }
 	bool isTrusted() const { return socket && socket->isTrusted(); }
-	std::string getCipherName() const { return socket ? socket->getCipherName() : Util::emptyString; }
-	vector<uint8_t> getKeyprint() const { return socket ? socket->getKeyprint() : vector<uint8_t>(); }
+	string getCipherName() const { return socket ? socket->getCipherName() : Util::emptyString; }
+	ByteVector getKeyprint() const { return socket ? socket->getKeyprint() : ByteVector(); }
+	bool verifyKeyprint(const string& expKeyp, bool allowUntrusted) noexcept { return socket ? socket->verifyKeyprint(expKeyp, allowUntrusted) : true; }
 
 	string getRemoteIp() const { return socket->getIp(); }
 	Download* getDownload() { dcassert(isSet(FLAG_DOWNLOAD)); return download; }
