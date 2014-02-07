@@ -24,9 +24,8 @@
 #include "File.h"
 
 namespace dcpp {
-namespace ssl {
 
-using std::vector;
+namespace ssl {
 
 bool SSL_CTX_use_certificate_file(::SSL_CTX* ctx, const char* file, int type) {
 	auto x509 = getX509(file);
@@ -64,16 +63,17 @@ X509 getX509(const char* file) {
 	return X509(ret);
 }
 
-vector<uint8_t> X509_digest(::X509* x509, const ::EVP_MD* md) {
+ByteVector X509_digest(::X509* x509, const ::EVP_MD* md) {
 	unsigned int n;
 	unsigned char buf[EVP_MAX_MD_SIZE];
 
 	if (!X509_digest(x509, md, buf, &n)) {
-		return vector<uint8_t>(); // Throw instead?
+		return ByteVector(); // Throw instead?
 	}
 
-	return vector<uint8_t>(buf, buf+n);
+	return ByteVector(buf, buf+n);
 }
 
 }
+
 }

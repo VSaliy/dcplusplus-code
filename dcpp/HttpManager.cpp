@@ -20,11 +20,15 @@
 #include "HttpManager.h"
 
 #include "format.h"
+#include "File.h"
 #include "HttpConnection.h"
+#include "LogManager.h"
 #include "SettingsManager.h"
 #include "Streams.h"
 
 namespace dcpp {
+
+using std::move;
 
 HttpManager::HttpManager() {
 	TimerManager::getInstance()->addListener(this);
@@ -33,15 +37,21 @@ HttpManager::HttpManager() {
 HttpManager::~HttpManager() {
 }
 
-HttpConnection* HttpManager::download(string url, OutputStream* stream) {
-	auto conn = makeConn(move(url), SETTING(CORAL), stream);
+HttpConnection* HttpManager::download(string url, OutputStream* stream,  HttpManager::CallBack callback, const string& userAgent) {
+	auto conn = makeConn(move(url), SETTING(CORAL), stream, callback, userAgent);
 	conn->download();
 	return conn;
 }
 
-HttpConnection* HttpManager::download(string url, const StringMap& postData, OutputStream* stream) {
-	auto conn = makeConn(move(url), false, stream);
+HttpConnection* HttpManager::download(string url, const StringMap& postData, OutputStream* stream, HttpManager::CallBack callback, const string& userAgent) {
+	auto conn = makeConn(move(url), false, stream, callback, userAgent);
 	conn->download(postData);
+	return conn;
+}
+
+HttpConnection* HttpManager::download(string url, const string& file, HttpManager::CallBack callback, const string& userAgent) {
+	auto conn = makeConn(move(url), SETTING(CORAL), createFile(file), callback, userAgent, HttpManager::CONN_MANAGED | HttpManager::CONN_FILE);
+	conn->download();
 	return conn;
 }
 
@@ -74,17 +84,34 @@ void HttpManager::shutdown() {
 	Lock l(cs);
 	for(auto& conn: conns) {
 		delete conn.c;
-		if(conn.manageStream) {
+		if (conn.isSet(HttpManager::CONN_MANAGED)) {
 			delete conn.stream;
 		}
 	}
 }
 
-HttpConnection* HttpManager::makeConn(string&& url, bool coralized, OutputStream* stream) {
-	auto c = new HttpConnection();
+File* HttpManager::createFile(const string& file) {
+	File* f = nullptr;
+	try {
+		File::ensureDirectory(file);
+		f = new File(file, File::RW, File::OPEN | File::CREATE | File::TRUNCATE);
+	} catch(const FileException& e) {
+		if(f) delete f;
+		LogManager::getInstance()->message(str(F_("HTTP file download failed to create file %1%, error: %2%") % file % e.getError()));
+		return nullptr;
+	}
+	return f;
+}
+
+HttpConnection* HttpManager::makeConn(string&& url, bool coralized, OutputStream* stream, HttpManager::CallBack callback, const string& userAgent, Flags::MaskType connFlags) {
+	auto c = new HttpConnection(userAgent);
 	{
 		Lock l(cs);
-		Conn conn { c, stream ? stream : new StringOutputStream(), !stream, 0 };
+		Conn conn { c, stream ? stream : new StringOutputStream(), callback };
+		if(connFlags != 0)
+			conn.setFlag(connFlags);
+		if(!stream)
+			conn.setFlag(HttpManager::CONN_MANAGED | HttpManager::CONN_STRING);
 		conns.push_back(move(conn));
 	}
 	c->addListener(this);
@@ -104,19 +131,23 @@ HttpManager::Conn* HttpManager::findConn(HttpConnection* c) {
 }
 
 void HttpManager::resetStream(HttpConnection* c) {
-	OutputStream* stream = nullptr;
+	bool managed = false;
 	{
 		Lock l(cs);
 		auto conn = findConn(c);
-		if(conn->manageStream) {
-			stream = conn->stream;
+		if(conn->stream && conn->isSet(HttpManager::CONN_MANAGED)) {
+			managed = true;
+			if(conn->isSet(HttpManager::CONN_STRING)) {
+				static_cast<StringOutputStream*>(conn->stream)->stringRef().clear();
+			} else if(conn->isSet(HttpManager::CONN_FILE)) {
+				auto file = static_cast<File*>(conn->stream);
+				file->setPos(0); file->setEOF();
+			}
 		}
 	}
-	if(stream) {
-		static_cast<StringOutputStream*>(stream)->stringRef().clear();
-	} else {
+
+	if(!managed)
 		fire(HttpManagerListener::ResetStream(), c);
-	}
 }
 
 void HttpManager::removeLater(HttpConnection* c) {
@@ -146,18 +177,38 @@ void HttpManager::on(HttpConnectionListener::Failed, HttpConnection* c, const st
 		return;
 	}
 
+	OutputStream* stream;
+	HttpManager::CallBack callback;
+	Flags::MaskType connFlags;
+	{
+		Lock l(cs);
+		auto conn = findConn(c);
+		stream = conn->stream;
+		callback = conn->callback;
+		connFlags = conn->getFlags();
+	}
+	stream->flush();
 	fire(HttpManagerListener::Failed(), c, str);
+	if(callback)
+		callback(c, stream, connFlags | HttpManager::CONN_FAILED);
 	removeLater(c);
 }
 
 void HttpManager::on(HttpConnectionListener::Complete, HttpConnection* c) noexcept {
 	OutputStream* stream;
+	HttpManager::CallBack callback;
+	Flags::MaskType connFlags;
 	{
 		Lock l(cs);
-		stream = findConn(c)->stream;
+		auto conn = findConn(c);
+		stream = conn->stream;
+		callback = conn->callback;
+		connFlags = conn->getFlags();
 	}
 	stream->flush();
 	fire(HttpManagerListener::Complete(), c, stream);
+	if(callback)
+		callback(c, stream, connFlags | HttpManager::CONN_COMPLETE);
 	removeLater(c);
 }
 
@@ -176,7 +227,7 @@ void HttpManager::on(TimerManagerListener::Minute, uint64_t tick) noexcept {
 		Lock l(cs);
 		conns.erase(std::remove_if(conns.begin(), conns.end(), [tick, &removed](const Conn& conn) -> bool {
 			if(conn.remove && tick > conn.remove) {
-				removed.emplace_back(conn.c, conn.manageStream ? conn.stream : nullptr);
+				removed.emplace_back(conn.c, conn.isSet(HttpManager::CONN_MANAGED) ? conn.stream : nullptr);
 				return true;
 			}
 			return false;

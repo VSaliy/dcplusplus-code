@@ -76,7 +76,7 @@ void ConnectionManager::listen() {
 		dcdebug("Skipping secure port: %d\n", CONNSETTING(TLS_PORT));
 		return;
 	}
-	if(CONNSETTING(TCP_PORT) == CONNSETTING(TLS_PORT))
+	if(CONNSETTING(TCP_PORT) != 0 && (CONNSETTING(TCP_PORT) == CONNSETTING(TLS_PORT)))
 	{
 		LogManager::getInstance()->message(_("The encrypted transfer port cannot be the same as the transfer port, encrypted transfers will be disabled"));
 		return;
@@ -403,7 +403,7 @@ void ConnectionManager::adcConnect(const OnlineUser& aUser, const string& aPort,
 	}
 
 	try {
-		uc->connect(aUser.getIdentity().getIp(), aPort, localPort, natRole);
+		uc->connect(aUser.getIdentity().getIp(), aPort, localPort, natRole, aUser.getUser());
 	} catch(const Exception&) {
 		putConnection(uc);
 		delete uc;
@@ -470,12 +470,6 @@ void ConnectionManager::on(UserConnectionListener::Connected, UserConnection* aS
 	if(SETTING(REQUIRE_TLS) && !aSource->isSet(UserConnection::FLAG_NMDC) && !aSource->isSecure()) {
 		putConnection(aSource);
 		QueueManager::getInstance()->removeSource(aSource->getUser(), QueueItem::Source::FLAG_UNENCRYPTED);
-		return;
-	}
-
-	if(aSource->isSecure() && !aSource->isTrusted() && !SETTING(ALLOW_UNTRUSTED_CLIENTS)) {
-		putConnection(aSource);
-		QueueManager::getInstance()->removeSource(aSource->getUser(), QueueItem::Source::FLAG_UNTRUSTED);
 		return;
 	}
 
@@ -711,7 +705,9 @@ void ConnectionManager::on(AdcCommand::INF, UserConnection* aSource, const AdcCo
 		return;
 	}
 
+	// without a valid KeyPrint this degrades into normal turst check
 	if(!checkKeyprint(aSource)) {
+		QueueManager::getInstance()->removeSource(aSource->getUser(), QueueItem::Source::FLAG_UNTRUSTED);
 		putConnection(aSource);
 		return;
 	}
@@ -766,35 +762,14 @@ void ConnectionManager::force(const UserPtr& aUser) {
 	}
 }
 
-bool ConnectionManager::checkKeyprint(const UserConnection* aSource) const {
+bool ConnectionManager::checkKeyprint(UserConnection* aSource) {
 	dcassert(aSource->getUser());
 
-	auto kp = aSource->getKeyprint();
-	if(kp.empty()) {
+	if(!aSource->isSecure() || aSource->isTrusted())
 		return true;
-	}
 
-	auto kp2 = ClientManager::getInstance()->getField(aSource->getUser()->getCID(), aSource->getHubUrl(), "KP");
-	if(kp2.empty()) {
-		// TODO false probably
-		return true;
-	}
-
-	if(kp2.compare(0, 7, "SHA256/") != 0) {
-		// Unsupported hash
-		return true;
-	}
-
-	dcdebug("Keyprint: %s vs %s\n", Encoder::toBase32(&kp[0], kp.size()).c_str(), kp2.c_str() + 7);
-
-	vector<uint8_t> kp2v(kp.size());
-	Encoder::fromBase32(&kp2[7], &kp2v[0], kp2v.size());
-	if(!std::equal(kp.begin(), kp.end(), kp2v.begin())) {
-		dcdebug("Not equal...\n");
-		return false;
-	}
-
-	return true;
+	string kp = ClientManager::getInstance()->getField(aSource->getUser()->getCID(), aSource->getHubUrl(), "KP");
+	return aSource->verifyKeyprint(kp, SETTING(ALLOW_UNTRUSTED_CLIENTS));
 }
 
 pair<bool, ConnectionType> ConnectionManager::checkToken(const UserConnection* uc) const {
