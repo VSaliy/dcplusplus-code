@@ -73,9 +73,9 @@ public:
 			Thread::sleep(100);
 	}
 
-	uint16_t accept(const Socket& srv, bool secure, bool allowUntrusted);
-	void connect(const string& aAddress, const string& aPort, bool secure, bool allowUntrusted, bool proxy);
-	void connect(const string& aAddress, const string& aPort, const string& localPort, NatRoles natRole, bool secure, bool allowUntrusted, bool proxy);
+	uint16_t accept(const Socket& srv, bool secure, bool allowUntrusted, const string& expKP = Util::emptyString);
+	void connect(const string& aAddress, const string& aPort, bool secure, bool allowUntrusted, bool proxy, const string& expKP = Util::emptyString);
+	void connect(const string& aAddress, const string& aPort, const string& localPort, NatRoles natRole, bool secure, bool allowUntrusted, bool proxy, const string& expKP = Util::emptyString);
 
 	/** Sets data mode for aBytes bytes. Must be called within onLine. */
 	void setDataMode(int64_t aBytes = -1) { mode = MODE_DATA; dataBytes = aBytes; }
@@ -91,8 +91,9 @@ public:
 
 	bool isSecure() const { return sock->isSecure(); }
 	bool isTrusted() const { return sock->isTrusted(); }
-	std::string getCipherName() const { return sock->getCipherName(); }
-	vector<uint8_t> getKeyprint() const { return sock->getKeyprint(); }
+	string getCipherName() const { return sock->getCipherName(); }
+	ByteVector getKeyprint() const { return sock->getKeyprint(); }
+	bool verifyKeyprint(const string& expKeyp, bool allowUntrusted) noexcept { return sock->verifyKeyprint(expKeyp, allowUntrusted); };
 
 	void write(const string& aData) { write(aData.data(), aData.length()); }
 	void write(const char* aBuf, size_t aLen) noexcept;
@@ -128,6 +129,7 @@ private:
 	struct TaskData {
 		virtual ~TaskData() { }
 	};
+
 	struct ConnectInfo : public TaskData {
 		ConnectInfo(string addr_, string port_, string localPort_, NatRoles natRole_, bool proxy_) : addr(addr_), port(port_), localPort(localPort_), natRole(natRole_), proxy(proxy_) { }
 		string addr;
@@ -136,10 +138,12 @@ private:
 		NatRoles natRole;
 		bool proxy;
 	};
+
 	struct SendFileInfo : public TaskData {
 		SendFileInfo(InputStream* stream_) : stream(stream_) { }
 		InputStream* stream;
 	};
+
 	struct CallData : public TaskData {
 		CallData(function<void ()> f) : f(f) { }
 		function<void ()> f;

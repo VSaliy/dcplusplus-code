@@ -20,6 +20,7 @@
 #define DCPLUSPLUS_DCPP_SSL_H
 
 #include "w.h"
+#include "typedefs.h"
 
 #include <openssl/ssl.h>
 
@@ -76,7 +77,7 @@ bool SSL_CTX_use_certificate_file(::SSL_CTX* ctx, const char* file, int type);
 bool SSL_CTX_use_PrivateKey_file(::SSL_CTX* ctx, const char* file, int type);
 
 X509 getX509(const char* file);
-std::vector<uint8_t> X509_digest(::X509* x509, const ::EVP_MD* md);
+ByteVector X509_digest(::X509* x509, const ::EVP_MD* md);
 
 }
 

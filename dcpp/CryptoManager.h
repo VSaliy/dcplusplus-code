@@ -19,19 +19,44 @@
 #ifndef DCPLUSPLUS_DCPP_CRYPTO_MANAGER_H
 #define DCPLUSPLUS_DCPP_CRYPTO_MANAGER_H
 
+#include "typedefs.h"
+
 #include "SettingsManager.h"
 
 #include "Exception.h"
 #include "Singleton.h"
-#include "SSLSocket.h"
+
+#include "SSL.h"
 
 namespace dcpp {
+
+using std::pair;
+using std::string;
 
 STANDARD_EXCEPTION(CryptoException);
 
 class CryptoManager : public Singleton<CryptoManager>
 {
 public:
+	typedef pair<bool, string> SSLVerifyData;
+
+	enum TLSTmpKeys {
+		KEY_FIRST = 0,
+		KEY_DH_512 = KEY_FIRST,
+		KEY_DH_1024,
+		KEY_DH_2048,
+		KEY_DH_4096,
+		KEY_RSA_512,
+		KEY_RSA_1024,
+		KEY_RSA_2048,
+		KEY_LAST
+	};
+
+	enum SSLContext {
+		SSL_CLIENT,
+		SSL_SERVER
+	};
+
 	string makeKey(const string& aLock);
 	const string& getLock() { return lock; }
 	const string& getPk() { return pk; }
@@ -39,15 +64,22 @@ public:
 
 	void decodeBZ2(const uint8_t* is, size_t sz, string& os);
 
-	SSLSocket* getClientSocket(bool allowUntrusted);
-	SSLSocket* getServerSocket(bool allowUntrusted);
+	SSL_CTX* getSSLContext(SSLContext wanted);
 
 	void loadCertificates() noexcept;
 	void generateCertificate();
 	bool checkCertificate() noexcept;
-	const vector<uint8_t>& getKeyprint() const noexcept;
+	const ByteVector& getKeyprint() const noexcept;
 
 	bool TLSOk() const noexcept;
+
+	static void locking_function(int mode, int n, const char* /*file*/, int /*line*/);
+	static DH* tmp_dh_cb(SSL* /*ssl*/, int /*is_export*/, int keylength);
+	static RSA* tmp_rsa_cb(SSL* /*ssl*/, int /*is_export*/, int keylength);
+	static int verify_callback(int preverify_ok, X509_STORE_CTX *ctx);
+
+	static int idxVerifyData;
+
 private:
 
 	friend class Singleton<CryptoManager>;
@@ -56,15 +88,22 @@ private:
 	virtual ~CryptoManager();
 
 	ssl::SSL_CTX clientContext;
-	ssl::SSL_CTX clientVerContext;
 	ssl::SSL_CTX serverContext;
-	ssl::SSL_CTX serverVerContext;
 
-	ssl::DH dh;
+	void sslRandCheck();
+
+	int getKeyLength(TLSTmpKeys key);
+	DH* getTmpDH(int keyLen);
+	RSA* getTmpRSA(int keyLen);
 
 	bool certsLoaded;
 
-	vector<uint8_t> keyprint;
+	static void* tmpKeysMap[KEY_LAST];
+	static CriticalSection* cs;
+	static char idxVerifyDataName[];
+	static SSLVerifyData trustedKeyprint;
+
+	ByteVector keyprint;
 	const string lock;
 	const string pk;
 
@@ -72,6 +111,8 @@ private:
 	bool isExtra(uint8_t b) {
 		return (b == 0 || b==5 || b==124 || b==96 || b==126 || b==36);
 	}
+
+	static string getNameEntryByNID(X509_NAME* name, int nid) noexcept;
 
 	void loadKeyprint(const string& file) noexcept;
 };
