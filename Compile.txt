@@ -179,16 +179,9 @@
 			to, ugly code, abusable features, features that I don't like that bloat the application
 			and incompatibility with other modifications I've already done.
 
-			To increase the chances of your patch being accepted, do it like this:
-			1) Check out the latest code from BZR (see <https://code.launchpad.net/dcplusplus> for instructions)
-			2) Make your modification. If you make other modifications apart from the one you want to submit, do them
-			   on a separate copy of the DC++ source code and then copy them to this folder.
-			3) In the source root folder (the one with this file in it) do "bzr diff > my-patch.diff". In alternative,
-			   commit to your local branch and send a merge instruction using bzr send. See a bzr howto for detailed instructions.
-			4) Open a bug at https://bugs.launchpad.net/dcplusplus and attach your patch. If this doesn't suit you, 
-			   send the patch along with a description to the dcplusplus-devel mailing list (more information here: 
-			   <http://sourceforge.net/mail/?group_id=40287>). Please make sure to include a copyright handover notice (see below).
+			The Mercurial code repository is at <https://sourceforge.net/p/dcplusplus/code/>.
 
+			We accept both plain patches and pull requests.
 
 		e. Licensing issues with submitted patches	
 
