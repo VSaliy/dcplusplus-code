@@ -1,9 +1,9 @@
 # Build the DC++ installer
 # Dependencies:
+# - hg (this tree must be under hg version control)
 # - Perl, in order to use po4a <http://po4a.alioth.debian.org/>
 # - Unicode NSIS <http://code.google.com/p/unsis/>
 # - zip (MSYS / Cygwin provide one)
-# - bzr (this tree must be under bzr version control)
 
 Import('dev')
 env = dev.env.Clone()
@@ -25,10 +25,10 @@ if env['distro']:
             'makensis.exe not found in PATH - Unicode NSIS is required to '
             'build the distro'
         )
-    if env.WhereIs('bzr') is None:
+    if env.WhereIs('hg') is None:
         raise Exception(
-            '"bzr" is required to build the distro; this tree must be under '
-            'bzr version control'
+            '"hg" is required to build the distro; this tree must be under hg '
+            'version control'
         )
     if env.WhereIs('zip') is None:
         raise Exception(
@@ -212,8 +212,8 @@ def gen_installer(target, source, env):
     ))
     zip_cmd(target[2].abspath)
 
-    # use "bzr export" to zip the source
-    env.Execute('bzr export "' + nixify(str(target[3])) + '"')
+    # use "hg archive" to zip the source
+    env.Execute('hg archive "' + nixify(str(target[3])) + '"')
 
     return ret
 
