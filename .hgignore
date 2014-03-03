@@ -2,13 +2,14 @@
 \.lib$
 \.opensdf$
 \.pdb$
+\.pyc$
 \.sdf$
 \.suo$
 \.vcxproj\.user$
 ^\.
 ^build$
 ^custom\.py$
-^dcpp/version-revno\.inc$
+^dcpp/version-rev-id\.inc$
 ^doc$
 ^help/changelog.html$
 ^help/compile\.html$

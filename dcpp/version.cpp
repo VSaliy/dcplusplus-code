@@ -19,7 +19,7 @@
 #include "stdinc.h"
 #include "version.h"
 
-#include "version-revno.inc" // should #define DCPP_REVISION
+#include "version-rev-id.inc" // should #define DCPP_REVISION
 
 #define xstrver(s) strver(s)
 #define strver(s) #s
