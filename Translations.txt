@@ -12,6 +12,11 @@ Translation templates are .pot files. Update them with:
 
 Then commit them with:
 
+	hg ci
+	hg push
+
+Copy the files to the Bazaar repository at Launchpad and commit them with:
+
 	bzr ci
 	bzr push
 
@@ -34,9 +39,9 @@ update-languages.sh, call that scons command manually then run the script.]
 
 Check updated and new translations with:
 
-	bzr status
+	hg status
 
-Ensure new translations are correct (recently updated). Use "bzr add" to add them if they are;
+Ensure new translations are correct (recently updated). Use "hg add" to add them if they are;
 otherwise, delete them.
 
 Make sure updated languages build fine; eg for the "fr" language:
@@ -45,5 +50,5 @@ Make sure updated languages build fine; eg for the "fr" language:
 
 Commit new translations:
 
-	bzr ci
-	bzr push
+	hg ci
+	hg push
