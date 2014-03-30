@@ -15,6 +15,8 @@
 * Add a dialog box to nag XP suckers into upgrading (poy)
 * Support for a new XP-only branch in version checking (poy)
 * [L#395400] Hub list caching fixed on Linux (maksis, ullner)
+* [L#1030613] Safeguards against user command flooding (ullner)
+* [L#1030613] Separate internal from external user commands (ullner)
 
 -- 0.831 2013-11-11 --
 * [L#1249810] Fix NMDC TTH search responses (emtee)

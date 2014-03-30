@@ -67,8 +67,49 @@ void FavoriteManager::shutdown() {
 }
 
 UserCommand FavoriteManager::addUserCommand(int type, int ctx, int flags, const string& name, const string& command, const string& to, const string& hub) {
-	// No dupes, add it...
 	Lock l(cs);
+
+	// The following management is to protect users against malicious hubs or clients.
+	// Hubs (or clients) can send an arbitrary amount of user commands, which means that there is a possibility that
+	// the client will need to manage thousands and thousands of user commands.
+	// This can naturally cause problems with memory etc, so the client may even crash at some point.
+	// The following management tries to remedy this problem by doing two things;
+	// a) Replaces previous user commands (if they have the same name etc)
+	// b) Restricts the amount of user commands that pertain to a particlar hub
+	// Note that this management only cares about externally created user commands, 
+	// which means that the user themselves can create however large user commands.
+	if(flags == UserCommand::FLAG_NOSAVE)
+	{
+		const int maximumUCs = 5000; // Completely arbitrary
+		int externalCommands = 0; // Used to count the number of external commands
+
+		for(auto& uc: userCommands) {
+			if((uc.isSet(UserCommand::FLAG_NOSAVE)) &&	// Only care about external commands...
+				(uc.getHub() == hub))	// ... and those pertaining to this particular hub.
+			{
+				++externalCommands;
+
+				// If the UC is generally identical otherwise, change the command
+				if((uc.getName() == name) &&
+					(uc.getCtx() == ctx) &&
+					(uc.getType() == type) &&
+					(uc.isSet(flags)) &&
+					(uc.getTo() == to))
+				{
+					uc.setCommand(command);
+					return uc;
+				}
+			}
+				
+		}
+
+		// Validate if there's too many user commands
+		if(maximumUCs <= externalCommands)
+		{
+			return userCommands.back();
+		}
+	}
+
 	userCommands.emplace_back(lastId++, type, ctx, flags, name, command, to, hub);
 	UserCommand& uc = userCommands.back();
 	if(!uc.isSet(UserCommand::FLAG_NOSAVE))
@@ -731,6 +772,7 @@ UserCommand::List FavoriteManager::getUserCommands(int ctx, const StringList& hu
 
 	Lock l(cs);
 	UserCommand::List lst;
+	UserCommand::List lstExternal;
 	for(auto& uc: userCommands) {
 		if(!(uc.getCtx() & ctx)) {
 			continue;
@@ -740,25 +782,48 @@ UserCommand::List FavoriteManager::getUserCommands(int ctx, const StringList& hu
 			const string& hub = hubs[j];
 			bool hubAdc = hub.compare(0, 6, "adc://") == 0 || hub.compare(0, 7, "adcs://") == 0;
 			bool commandAdc = uc.getHub().compare(0, 6, "adc://") == 0 || uc.getHub().compare(0, 7, "adcs://") == 0;
+			bool addUc = false;
 			if(hubAdc && commandAdc) {
 				if((uc.getHub() == "adc://" || uc.getHub() == "adcs://") ||
 					((uc.getHub() == "adc://op" || uc.getHub() == "adcs://op") && isOp[j]) ||
 					(uc.getHub() == hub) )
 				{
-					lst.push_back(uc);
-					break;
+					addUc = true;
 				}
 			} else if((!hubAdc && !commandAdc) || uc.isChat()) {
 				if((uc.getHub().length() == 0) ||
 					(uc.getHub() == "op" && isOp[j]) ||
 					(uc.getHub() == hub) )
 				{
-					lst.push_back(uc);
-					break;
+					addUc = true;
 				}
+			}
+
+			if(addUc)
+			{
+				if(uc.isSet(UserCommand::FLAG_NOSAVE))
+				{
+					lstExternal.push_back(uc);
+				}
+				else
+				{
+					lst.push_back(uc);
+				}
+				break;
 			}
 		}
 	}
+
+	// If there are both normal and external user commands, add a separator.
+	bool existNormalUCs = !lst.empty();
+	bool existExternalUCs = !lstExternal.empty();
+	if(existNormalUCs && existExternalUCs)
+	{
+		UserCommand ucSeparator(lastId++, UserCommand::TYPE_SEPARATOR, ctx, UserCommand::FLAG_NOSAVE, Util::emptyString, Util::emptyString, Util::emptyString, Util::emptyString);
+		lst.push_back(move(ucSeparator));
+	}
+
+	lst.insert(lst.end(), lstExternal.begin(), lstExternal.end());
 	return lst;
 }
 
