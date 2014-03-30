@@ -397,7 +397,7 @@ void PrivateFrame::enterImpl(const tstring& s) {
 			else
 			{
 				addChat(T_("*** Keyboard commands:") + _T("\r\n") +
-						WinUtil::descriptive_commands +
+						WinUtil::getDescriptiveCommands() +
 						+ _T("\r\n") _T("/direct")
 						+ _T("\r\n") _T("/encrypted")
 						+ _T("\r\n\t") + T_("Starts a direct encrypted communication channel to avoid spying on your private messages.")

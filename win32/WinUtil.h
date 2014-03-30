@@ -141,7 +141,6 @@ private:
 	static unordered_map<string, dwt::FontPtr> userMatchFonts; // use getUserMatchFont to access
 public:
 	static tstring commands;
-	static tstring descriptive_commands;
 	static dwt::ImageListPtr fileImages;
 	static dwt::ImageListPtr userImages;
 	static unordered_map<string, size_t> fileIndexes;
@@ -198,6 +197,7 @@ public:
 	static bool checkNick();
 	static void handleDblClicks(dwt::TextBoxBase* box);
 
+	static tstring getDescriptiveCommands();
 	/**
 	 * Check if this is a common /-command.
 	 * @param cmd The whole text string, will be updated to contain only the command.

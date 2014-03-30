@@ -528,7 +528,7 @@ void HubFrame::enterImpl(const tstring& s) {
 			else
 			{
 				addChat(T_("*** Keyboard commands:") + _T("\r\n") + 
-						WinUtil::descriptive_commands
+						WinUtil::getDescriptiveCommands()
 						+ _T("\r\n") _T("/join <hub-ip>")
 						+ _T("\r\n\t") + T_("Joins <hub-ip>. See also Open new window when using /join.")
 						+ _T("\r\n") _T("/showjoins")
