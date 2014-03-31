@@ -1,3 +1,4 @@
+-- 0.840 2014-03-31 --
 * [L#1115765] Added ability to filter out files and directories from the share (ullner)
 * [L#1225420] Open own list when using get/browse file list on self (ullner)
 * [L#1250614] Added menu option on hub tab for only searching in that hub (ullner)
