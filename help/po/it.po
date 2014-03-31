@@ -7,19 +7,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-09-22 16:00+0300\n"
-"PO-Revision-Date: 2013-06-26 15:16+0000\n"
+"POT-Creation-Date: 2014-03-23 23:05+0100\n"
+"PO-Revision-Date: 2013-12-19 18:16+0000\n"
 "Last-Translator: Guybrush88 <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-09-22 13:50+0000\n"
-"X-Generator: Launchpad (build 16765)\n"
+"X-Launchpad-Export-Date: 2014-03-30 18:17+0000\n"
+"X-Generator: Launchpad (build 16967)\n"
 
 #. type: Content of: <html><body><ul><li><div><placeholder><a>
-#: help/chat_commands.html:9 help/index.html:143
+#: help/chat_commands.html:9 help/index.html:144
 msgid "Chat Commands"
 msgstr "Comandi della chat"
 
@@ -148,12 +148,19 @@ msgid "Private Message"
 msgstr "Messaggio privato"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:52
+#: help/chat_commands.html:53
+msgid ""
+"Starts a direct encrypted communication channel to avoid spying on your "
+"private messages."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
+#: help/chat_commands.html:55
 msgid "Adds the current user's list to the Download Queue."
 msgstr "Aggiunge l' elenco degli utenti corrente alla coda dei download."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:54
+#: help/chat_commands.html:57
 msgid ""
 "Grants the remote user a slot. Once they connect, or if they don't connect "
 "in 10 minutes, the granted slot is removed."
@@ -162,14 +169,14 @@ msgstr ""
 "entro 10 minuti, lo slot assegnato sarà rimosso"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:58
+#: help/chat_commands.html:61
 msgid "Adds the current user to the list of <a po4a-id=0>Favorite Users</a>."
 msgstr ""
 "Aggiunge l'utente corrente all'elenco degli <a po4a-id=0>utenti preferiti</"
 "a>."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:61
+#: help/chat_commands.html:64
 msgid ""
 "Adds a user matching definition (or modifies an existing one, if possible) "
 "to ignore chat messages from the current user."
@@ -179,7 +186,7 @@ msgstr ""
 "corrente."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:64
+#: help/chat_commands.html:67
 msgid ""
 "Adds a user matching definition (or modifies an existing one, if possible) "
 "to stop ignoring chat messages from the current user."
@@ -188,13 +195,19 @@ msgstr ""
 "esistente, se possibile) per smettere di ignorare i messaggi di chat "
 "dall'utente corrente."
 
+#. type: Content of: <html><body><dl><dd>
+#: help/chat_commands.html:70
+#, fuzzy
+msgid "Lists the date and time when the last message was sent or received."
+msgstr "La data e l'ora in cui il file è stato aggiunto alla coda."
+
 #. type: Content of: <html><body><h2>
-#: help/chat_commands.html:67
+#: help/chat_commands.html:72
 msgid "Both"
 msgstr "Entrambi"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:70
+#: help/chat_commands.html:75
 msgid ""
 "Manually refreshes DC++'s share list by going through the shared directories "
 "and adding new folders and files. DC++ automatically refreshes once an hour "
@@ -206,7 +219,7 @@ msgstr ""
 "automaticamente ogni ora in secondo le impostazioni predefinite la lista."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:75
+#: help/chat_commands.html:80
 msgid ""
 "Sets the current number of upload slots to the number you specify. If this "
 "is less than the current number of slots, no uploads are cancelled."
@@ -216,7 +229,7 @@ msgstr ""
 "annullato."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:79
+#: help/chat_commands.html:84
 msgid ""
 "Sets the current number of download slots to the number you specify. If this "
 "is less than the current number of slots, no downloads are cancelled."
@@ -226,7 +239,7 @@ msgstr ""
 "download sarà annullato."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:83
+#: help/chat_commands.html:88
 msgid ""
 "Opens a new search window with the specified search string.  It does <u>not</"
 "u> automatically send the search."
@@ -235,12 +248,12 @@ msgstr ""
 "Essa <u>non</u> invia automaticamente la ricerca."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:87
+#: help/chat_commands.html:92
 msgid "Closes the current window."
 msgstr "Chiude la finestra corrente."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:89
+#: help/chat_commands.html:94
 msgid ""
 "Clears the current window of all text. Optionally, you can specify how many "
 "of the latest (most recent) lines should be kept."
@@ -249,7 +262,7 @@ msgstr ""
 "specificare quante delle ultime (più recenti) righe dover conservare."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:92
+#: help/chat_commands.html:97
 msgid ""
 "Sends a random DC++ advertising message to the chat, including a link to the "
 "DC++ homepage and the version number."
@@ -258,7 +271,7 @@ msgstr ""
 "pagina principale di DC++ e il numero di versione."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:95
+#: help/chat_commands.html:100
 msgid ""
 "Sets Away status. New private message windows will be responded to, once, "
 "with the message you specified, or the default away message configured in "
@@ -266,12 +279,22 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:100
+#: help/chat_commands.html:105
 msgid "Un-sets Away status."
 msgstr "Disattiva lo stato di assenza."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:102
+#: help/chat_commands.html:107
+#, fuzzy
+msgid ""
+"Launches your default web browser to the DuckDuckGo search engine with the "
+"specified search."
+msgstr ""
+"Apre il tuo browser predefinito alla pagina di ricerca di Google con la "
+"ricerca specificata."
+
+#. type: Content of: <html><body><dl><dd>
+#: help/chat_commands.html:110
 msgid ""
 "Launches your default web browser to the Google search engine with the "
 "specified search."
@@ -280,7 +303,7 @@ msgstr ""
 "ricerca specificata."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:105
+#: help/chat_commands.html:113
 msgid ""
 "Launches your default web browser to the Internet Movie Database (imdb) with "
 "the specified query."
@@ -289,7 +312,7 @@ msgstr ""
 "con la ricerca specificata."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:108
+#: help/chat_commands.html:116
 msgid ""
 "Rebuilds the HashIndex.xml and HashData.dat files, removing entries to files "
 "that are no longer shared, or old hashes for files that have since changed. "
@@ -301,16 +324,20 @@ msgstr ""
 "vecchia indicizzazione rispetto all'ultimo cambiamento."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:113
+#: help/chat_commands.html:121
 msgid ""
 "If no parameter is specified, it launches the log for the hub or private "
 "chat with the associated application in Windows. If one of the parameters is "
 "specified it opens that log file. The status log is available only in the "
 "hub frame."
 msgstr ""
+"Se non viene specificato alcun parametro, avvia il registro dell'hub o della "
+"chat privata con l'applicazione associata di Windows. Se viene specificato "
+"uno dei prametri, apre quel file di registro. Il registro di stato è "
+"disponibile soltanto nella schermata dell'hub."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:118
+#: help/chat_commands.html:126
 #, fuzzy
 msgid ""
 "Displays available commands. (The ones listed on this page.) Optionally, you "
@@ -318,12 +345,12 @@ msgid ""
 msgstr "Visuazza i comandi disponibili. (Quelli elencati in questa pagina)"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:120
+#: help/chat_commands.html:128
 msgid "Launches your default web browser with the given URL."
-msgstr "Lancia il tuo browser predefinito con il dato URL."
+msgstr "Lancia il tuo browser predefinito con l'URL dato."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:122
+#: help/chat_commands.html:130
 msgid ""
 "Highlights the last occourrence of the specified search string in the chat "
 "window."
@@ -424,6 +451,10 @@ msgid ""
 "the appropriate viewer / player software installed and correctly registered "
 "to be able to open the file."
 msgstr ""
+"Apre il file con il suo software di visualizzazione esterno corrispondente. "
+"Dovresti avere installato e registrato correttamente il software di "
+"visualizzazione/riproduzione appropriato per essere in grado di aprire il "
+"file."
 
 #. type: Content of: <html><body><dl><dt>
 #: H:/Dev/DC++/repo/help/commands_file_management.inc:6
@@ -473,7 +504,7 @@ msgstr ""
 #: help/dialog_fav_hub_groups.html:16 help/dialog_public_hub_lists.html:28
 #: help/dialog_string_list.html:29 help/settings_favoritedirs.html:22
 #: help/settings_plugins.html:51 help/settings_search_types.html:28
-#: help/settings_sharing.html:40 help/settings_user_commands.html:22
+#: help/settings_sharing.html:34 help/settings_user_commands.html:22
 #: help/settings_user_matching.html:43 help/window_adlsearch.html:54
 #: help/window_download_queue.html:21 help/window_favorite_hubs.html:47
 msgid "Remove"
@@ -582,19 +613,19 @@ msgstr "Invia un messaggio privato"
 #: help/index.html:61 help/index.html:62 help/index.html:63 help/index.html:64
 #: help/index.html:65 help/index.html:66 help/index.html:72 help/index.html:73
 #: help/index.html:75 help/index.html:76 help/index.html:77 help/index.html:80
-#: help/index.html:82 help/index.html:83 help/index.html:86 help/index.html:88
-#: help/index.html:90 help/index.html:91 help/index.html:92 help/index.html:95
-#: help/index.html:97 help/index.html:99 help/index.html:103
-#: help/index.html:105 help/index.html:106 help/index.html:107
-#: help/index.html:108 help/index.html:109 help/index.html:112
-#: help/index.html:118 help/index.html:119 help/index.html:120
+#: help/index.html:82 help/index.html:83 help/index.html:86 help/index.html:87
+#: help/index.html:89 help/index.html:91 help/index.html:92 help/index.html:93
+#: help/index.html:96 help/index.html:98 help/index.html:100
+#: help/index.html:104 help/index.html:106 help/index.html:107
+#: help/index.html:108 help/index.html:109 help/index.html:110
+#: help/index.html:113 help/index.html:119 help/index.html:120
 #: help/index.html:121 help/index.html:122 help/index.html:123
 #: help/index.html:124 help/index.html:125 help/index.html:126
 #: help/index.html:127 help/index.html:128 help/index.html:129
-#: help/index.html:130 help/index.html:131 help/index.html:137
-#: help/index.html:138 help/index.html:139 help/index.html:143
-#: help/index.html:149 help/index.html:154 help/index.html:161
-#: help/index.html:165 help/keyboard_commands.html:35
+#: help/index.html:130 help/index.html:131 help/index.html:132
+#: help/index.html:138 help/index.html:139 help/index.html:140
+#: help/index.html:144 help/index.html:150 help/index.html:155
+#: help/index.html:162 help/index.html:166 help/keyboard_commands.html:35
 #: help/keyboard_commands.html:41 help/keyboard_commands.html:46
 #: help/keyboard_commands.html:48 help/keyboard_commands.html:52
 #: help/keyboard_commands.html:55 help/keyboard_commands.html:58
@@ -618,7 +649,7 @@ msgstr "Invia un messaggio privato"
 #: help/window_favorite_hubs.html:33 help/window_favorite_hubs.html:53
 #: help/window_favorite_hubs.html:54 help/window_hub.html:91
 #: help/window_main.html:28 help/window_main.html:29 help/window_main.html:47
-#: help/window_main.html:58 H:/Dev/DC++/repo/help/menu_plugins.inc:7
+#: help/window_main.html:58 H:/Dev/DC++/repo/help/menu_plugins.inc:6
 #: help/window_main.html:71 help/window_main.html:75 help/window_main.html:79
 #: help/window_main.html:83 help/window_main.html:87 help/window_main.html:91
 #: help/window_main.html:95 help/window_main.html:99 help/window_main.html:103
@@ -817,7 +848,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/dev_applypatch.html:9 help/index.html:138
+#: help/dev_applypatch.html:9 help/index.html:139
 msgid "Applying patches"
 msgstr "Applicazione degli aggiornamenti"
 
@@ -880,7 +911,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/dev_createpatch.html:9 help/index.html:139
+#: help/dev_createpatch.html:9 help/index.html:140
 msgid "Creating patches"
 msgstr "Creazione degli aggiornamenti"
 
@@ -1880,6 +1911,7 @@ msgstr ""
 #: help/dialog_user_command.html:70
 msgid "%[type]: \"File\" or \"Directory\" (directory context only)"
 msgstr ""
+"%[type]: \"File\" o \"Directory\" (soltanto il contenuto della directory)"
 
 #. type: Content of: <html><body><ul><li>
 #: help/dialog_user_command.html:72
@@ -2040,7 +2072,7 @@ msgstr "Definizione delle corrispondenze degli utenti"
 
 #. type: Content of: <html><body><p><placeholder><a>
 #: help/dialog_user_matching.html:13 help/dialog_user_matching.html:20
-#: help/index.html:109 help/settings_styles.html:80
+#: help/index.html:110 help/settings_styles.html:80
 msgid "User matching"
 msgstr "Corrispondenze degli utenti"
 
@@ -2053,7 +2085,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd><placeholder><a>
-#: help/dialog_user_matching.html:21 help/index.html:90
+#: help/dialog_user_matching.html:21 help/index.html:91
 #: help/settings_styles.html:9 help/settings_user_matching.html:50
 msgid "Styles"
 msgstr "Stili"
@@ -2139,7 +2171,7 @@ msgstr "Tendina per la selezione del campo (a sinistra)"
 #. type: Content of: <html><body><p>
 #: help/dialog_user_matching.html:53
 msgid "The user property to be matched against for the current rule."
-msgstr ""
+msgstr "La proprietà dell'utente da far corrispondere alla regola corrente."
 
 #. type: Content of: <html><body><h3>
 #: help/dialog_user_matching.html:56
@@ -2197,7 +2229,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_connection.html:10 help/index.html:119
+#: help/faq_connection.html:10 help/index.html:120
 msgid "How to set up connection manually?"
 msgstr "Come si imposta manualmente la connessione?"
 
@@ -2563,7 +2595,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_different_icons.html:9 help/index.html:126
+#: help/faq_different_icons.html:9 help/index.html:127
 msgid "What do the different user icons mean?"
 msgstr "Cosa vogliono dire le diverse icone degli utenti?"
 
@@ -2784,7 +2816,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_mapping.html:9 help/index.html:122
+#: help/faq_mapping.html:9 help/index.html:123
 msgid "What is NAT-PMP / UPnP?"
 msgstr "Cos'è NAT-PMP / UPnP?"
 
@@ -2814,7 +2846,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_nosearch.html:9 help/index.html:124
+#: help/faq_nosearch.html:9 help/index.html:125
 msgid "Why don't I get any search results?"
 msgstr "Perché non ottengo alcun risultato di ricerca?"
 
@@ -3019,7 +3051,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><h1>
-#: help/faq_plusplus_tag.html:54 help/index.html:97
+#: help/faq_plusplus_tag.html:54 help/index.html:98
 #: help/settings_history.html:9
 msgid "History"
 msgstr "Cronologia"
@@ -3047,7 +3079,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_portforward.html:9 help/index.html:120
+#: help/faq_portforward.html:9 help/index.html:121
 msgid "How to set up manual port forwarding?"
 msgstr "Come si imposta l'inoltro manuale delle porte?"
 
@@ -3266,7 +3298,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_secret.html:10 help/index.html:129
+#: help/faq_secret.html:10 help/index.html:130
 msgid "What secret stuff is there?"
 msgstr "Che roba segreta c'è?"
 
@@ -3354,6 +3386,8 @@ msgid ""
 "You can use Ctrl+Enter to create a new line in chat, away-message and user "
 "command!"
 msgstr ""
+"Puoi utiilizzare Ctrl+Invio per creare una nuova riga nella chat, nel "
+"messaggio di assenza e nei comandi utente!"
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_secret.html:23
@@ -3365,7 +3399,7 @@ msgstr ""
 "file di registro corrispondente (se disponibile)."
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_settings_files.html:9 help/index.html:131
+#: help/faq_settings_files.html:9 help/index.html:132
 msgid "DC++ settings files guide"
 msgstr "Guida ai file delle impostazioni di DC++"
 
@@ -3455,6 +3489,8 @@ msgstr ""
 msgid ""
 "This file contains the list of installed plugins and their specific settings."
 msgstr ""
+"Questo file contiene l'elenco dei plugin installati e le loro impostazioni "
+"specifiche."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/faq_settings_files.html:33
@@ -3765,6 +3801,8 @@ msgstr "Download lenti da certi utenti"
 #: help/faq_slowdownload.html:17
 msgid "Reasons connections with some users may be too slow:"
 msgstr ""
+"Ragioni per cui le connessioni con alcuni utenti potrebbero essere troppo "
+"lente:"
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_slowdownload.html:20
@@ -3858,7 +3896,7 @@ msgstr ""
 #. type: Content of: <html><body><p>
 #: help/faq_slowdownload.html:66
 msgid "Solution: try to find more sources for your downloads:"
-msgstr ""
+msgstr "Soluzione: prova a trovare più fonti per i tuoi download."
 
 #. type: Content of: <html><body><dl><dd><placeholder><a>
 #: help/faq_slowdownload.html:70 help/index.html:35
@@ -4159,6 +4197,8 @@ msgstr "Software anti-spyware"
 #: help/faq_unblock.html:53
 msgid "Security suites with features combined of the above"
 msgstr ""
+"Suite di sicurezza con funzioni che si combinano con quelle elencate qua "
+"sopra"
 
 #. type: Content of: <html><body><h2>
 #: help/faq_unblock.html:56
@@ -4305,7 +4345,7 @@ msgstr ""
 "popolari <a po4a-id=0>qui</a>."
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_units.html:9 help/index.html:127
+#: help/faq_units.html:9 help/index.html:128
 msgid "What do the units mean?"
 msgstr "Che significato hanno le unità?"
 
@@ -4555,7 +4595,7 @@ msgstr ""
 "qua sopra."
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_whyactive.html:9 help/index.html:118
+#: help/faq_whyactive.html:9 help/index.html:119
 msgid "Why do I need active mode?"
 msgstr "Perché ho bisogno della modalità attiva?"
 
@@ -4898,7 +4938,7 @@ msgstr ""
 "tutti."
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:26 help/index.html:92 help/settings_windows.html:9
+#: help/index.html:26 help/index.html:93 help/settings_windows.html:9
 msgid "Windows"
 msgstr "Finestre"
 
@@ -5052,99 +5092,105 @@ msgid "Sharing"
 msgstr "Condivisione"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:88 help/settings_appearance.html:9
+#: help/index.html:87 help/settings_sharing_filtering.html:9
+#, fuzzy
+msgid "Filtering"
+msgstr "Filtro"
+
+#. type: Content of: <html><body><h1>
+#: help/index.html:89 help/settings_appearance.html:9
 msgid "Appearance"
 msgstr "Aspetto"
 
 #. type: Content of: <html><body><h2>
-#: help/index.html:91 help/window_main.html:317
+#: help/index.html:92 help/window_main.html:317
 msgid "Tabs"
 msgstr "Schede"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:95 help/settings_notifications.html:9
+#: help/index.html:96 help/settings_notifications.html:9
 msgid "Notifications"
 msgstr "Notifiche"
 
 #. type: Content of: <html><body><h3>
-#: help/index.html:99 help/settings_logs.html:9 help/settings_styles.html:40
+#: help/index.html:100 help/settings_logs.html:9 help/settings_styles.html:40
 msgid "Logs"
 msgstr "Registri"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:103 help/settings_advanced.html:9
+#: help/index.html:104 help/settings_advanced.html:9
 msgid "Advanced"
 msgstr "Avanzate"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:105 help/settings_expert.html:9
+#: help/index.html:106 help/settings_expert.html:9
 msgid "Experts only"
 msgstr "Solo per utenti esperti"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:106 help/settings_user_commands.html:9
+#: help/index.html:107 help/settings_user_commands.html:9
 msgid "User commands"
 msgstr "Comandi utente"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:107 help/settings_certs.html:9
+#: help/index.html:108 help/settings_certs.html:9
 msgid "Security certificates"
 msgstr "Certificati di sicurezza"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:108 help/settings_search_types.html:9
+#: help/index.html:109 help/settings_search_types.html:9
 msgid "Search types"
 msgstr "Tipi di ricerca"
 
 #. type: Content of: <html><body><dl><dd><ul><li><placeholder><a>
-#: help/index.html:112 help/window_main.html:57 help/window_main.html:58
-#: H:/Dev/DC++/repo/help/menu_plugins.inc:7 help/window_main.html:223
+#: help/index.html:113 help/window_main.html:57 help/window_main.html:58
+#: H:/Dev/DC++/repo/help/menu_plugins.inc:6 help/window_main.html:223
 #: help/window_main.html:299 help/window_main.html:302
 msgid "Plugins"
 msgstr "Plugin"
 
 #. type: Content of: <html><body><ul><li><h3>
-#: help/index.html:116
+#: help/index.html:117
 msgid "Frequently Asked Questions"
 msgstr "Domande frequenti"
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/index.html:121
+#: help/index.html:122
 msgid "How to unblock DC++ in firewalls and other security software?"
 msgstr "Come si sblocca DC++ nei firewall e in altri software di sicurezza?"
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/index.html:123
+#: help/index.html:124
 msgid "My ISP or University blocks DC++"
 msgstr "Il mio ISP o università blocca DC++"
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/index.html:125
+#: help/index.html:126
 msgid "Why am I getting slow download speeds?"
 msgstr "Perché le velocità di download sono basse?"
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/index.html:128
+#: help/index.html:129
 msgid "How do I install/uninstall/upgrade DC++?"
 msgstr "Come posso installare/disinstallare/aggiornare DC++?"
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/index.html:130
+#: help/index.html:131
 msgid "What do the DC++ tags mean?"
 msgstr "Cosa vogliono dire le etichette di DC++?"
 
 #. type: Content of: <html><body><ul><li><h3>
-#: help/index.html:135
+#: help/index.html:136
 msgid "Development"
 msgstr "Sviluppo"
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/index.html:137
+#: help/index.html:138
 msgid "Compile instructions"
 msgstr "Istruzioni per la compilazione"
 
 #. type: Content of: <html><body><ul><li><div>
-#: help/index.html:144
+#: help/index.html:145
 msgid ""
 "These are the commands that are available in chat, private messages, or "
 "both. They offer handy keyboard shortcuts to functions in the graphical "
@@ -5156,12 +5202,12 @@ msgstr ""
 "grafica."
 
 #. type: Content of: <html><body><ul><li><div><placeholder><a>
-#: help/index.html:149
+#: help/index.html:150
 msgid "List of Available Keyboard Shortcuts"
 msgstr "Elenco delle scorciatoie da tastiera disponibili"
 
 #. type: Content of: <html><body><ul><li><div>
-#: help/index.html:150
+#: help/index.html:151
 msgid ""
 "These are the keyboard shortcuts that are available in for different "
 "commands in DC++.  They offer quick access to some of the often used "
@@ -5172,12 +5218,12 @@ msgstr ""
 "spesso dell'interfaccia grafica."
 
 #. type: Content of: <html><body><ul><li><div><placeholder><a>
-#: help/index.html:154
+#: help/index.html:155
 msgid "Changelog"
 msgstr "Registro dei cambiamenti"
 
 #. type: Content of: <html><body><ul><li><div>
-#: help/index.html:155
+#: help/index.html:156
 msgid ""
 "This page contains everything that has changed in the history of DC++.  Read "
 "this to find out about features that are poorly or not documented at all. "
@@ -5189,23 +5235,23 @@ msgstr ""
 "+."
 
 #. type: Content of: <html><body><dl><dd><dl><dt>
-#: help/index.html:161 help/links.html:9 help/settings_styles.html:35
+#: help/index.html:162 help/links.html:9 help/settings_styles.html:35
 #: help/window_main.html:172
 msgid "Links"
 msgstr "Collegamenti"
 
 #. type: Content of: <html><body><ul><li><div>
-#: help/index.html:162
+#: help/index.html:163
 msgid "View the various links for DC++."
 msgstr "Visualizza i vari collegamenti per DC++."
 
 #. type: Content of: <html><body><ul><li><div><placeholder><a>
-#: help/index.html:165
+#: help/index.html:166
 msgid "Help File Credits"
 msgstr "Crediti per il file di aiuto"
 
 #. type: Content of: <html><body><ul><li><div>
-#: help/index.html:166
+#: help/index.html:167
 msgid "View the credits and license of this help file."
 msgstr "Visualizza i crediti e la licenza di questo file di aiuto."
 
@@ -5291,9 +5337,8 @@ msgstr "Chiude la finestra corrente."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/keyboard_commands.html:23
-#, fuzzy
 msgid "Ctrl + 0"
-msgstr "Ctrl + W"
+msgstr "Ctrl + 0"
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/keyboard_commands.html:25 help/window_main.html:120
@@ -5375,7 +5420,7 @@ msgstr "Aggiorna l'elenco dei file."
 #. type: Content of: <html><body><dl><dt>
 #: help/keyboard_commands.html:39
 msgid "F3"
-msgstr ""
+msgstr "F3"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/keyboard_commands.html:40
@@ -5411,9 +5456,8 @@ msgstr "Connessione veloce a un gruppo di hub preferiti."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/keyboard_commands.html:45
-#, fuzzy
 msgid "Ctrl + H"
-msgstr "Ctrl + W"
+msgstr "Ctrl + H"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/keyboard_commands.html:47
@@ -5661,12 +5705,12 @@ msgstr "Dona (paypal)"
 #. type: Content of: <html><body><dl><dd><dl><dd><dl><dt>
 #: help/links.html:45 help/window_main.html:192
 msgid "Blog"
-msgstr ""
+msgstr "Blog"
 
 #. type: Content of: <html><body><table><tbody><tr><td>
 #: help/links.html:49
 msgid "DC Plugin repository"
-msgstr ""
+msgstr "Repository dei plugin di DC"
 
 #. type: Content of: <html><body><h1>
 #: help/netiquette.html:9
@@ -5859,7 +5903,7 @@ msgstr ""
 #. type: Content of: <html><body><h1>
 #: help/non-routable.html:11
 msgid "Non-Routable IP Addresses"
-msgstr ""
+msgstr "Indirizzi IP non indirizzabili"
 
 #. type: Content of: <html><body><p>
 #: help/non-routable.html:13
@@ -5886,17 +5930,19 @@ msgstr ""
 #. type: Content of: <html><body><p>
 #: help/non-routable.html:26
 msgid "<b>10.0.0.0</b> through <b>10.255.255.255</b> (10/8 prefix)"
-msgstr ""
+msgstr "<b>10.0.0.0</b> attraverso <b>10.255.255.255</b> (prefisso 10/8)"
 
 #. type: Content of: <html><body><p>
 #: help/non-routable.html:29
 msgid "<b>172.16.0.0</b> through <b>172.31.255.255</b> (172.16/12 prefix)"
 msgstr ""
+"<b>172.16.0.0</b> attraverso <b>172.31.255.255</b> (prefisso 172.16/12)"
 
 #. type: Content of: <html><body><p>
 #: help/non-routable.html:32
 msgid "<b>192.168.0.0</b> through <b>192.168.255.255</b> (192.168/16 prefix)"
 msgstr ""
+"<b>192.168.0.0</b> attaverso <b>192.168.255.255</b> (prefisso 192.168/16)"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_advanced.html:11
@@ -5977,7 +6023,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_advanced.html:44
 msgid "Register with Windows to handle .dcext files"
-msgstr ""
+msgstr "Registra con Windows per gestire i file .dcext"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_advanced.html:46
@@ -6327,7 +6373,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_appearance.html:41
 msgid "Guess user country from IP"
-msgstr "Visualizza il paese dell'utente dall'IP"
+msgstr "Visualizza il paese dell'utente in base all'IP"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_appearance.html:43
@@ -6340,6 +6386,8 @@ msgstr ""
 #: help/settings_appearance.html:47
 msgid "City-level geolocation database (allows parameters such as %[city])"
 msgstr ""
+"Database della posizione geografica al livello delle città (permette "
+"parametri come %[city])"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_appearance.html:49
@@ -6368,7 +6416,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_appearance.html:58
 msgid "Region name geolocation database (allows %[region])"
-msgstr ""
+msgstr "Database della posizione geografica delle regioni (permette %[region])"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_appearance.html:60
@@ -6396,7 +6444,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_appearance.html:72
 msgid "(default: %H:%M)"
-msgstr ""
+msgstr "(predefinito: %H:%M)"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_appearance.html:73
@@ -6412,20 +6460,23 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_appearance.html:77
-#, fuzzy
 msgid "Available variables:"
-msgstr "Variabili Di Compatibilità"
+msgstr "Variabili disponibili:"
 
 #. type: Content of: <html><body><dl><dd><ul><li>
 #: help/settings_appearance.html:79
 msgid "<b>%[2code]</b> gets replaced by a 2-letters country code (eg DE, FR)."
 msgstr ""
+"<b>%[2code]</b> viene sostituito dal codice di due lettere del paese (per "
+"esempio: DE, FR)."
 
 #. type: Content of: <html><body><dl><dd><ul><li>
 #: help/settings_appearance.html:80
 msgid ""
 "<b>%[3code]</b> gets replaced by a 3-letters country code (eg DEU, FRA)."
 msgstr ""
+"<b>%[2code]</b> viene sostituito dal codice di tre lettere del paese (per "
+"esempio: DEU, FRA)."
 
 #. type: Content of: <html><body><dl><dd><ul><li>
 #: help/settings_appearance.html:81
@@ -6433,6 +6484,8 @@ msgid ""
 "<b>%[continent]</b> gets replaced by a continent code (AF, AS, EU, NA, OC, "
 "SA for Africa, Asia, Europe, North America, Oceania and South America)."
 msgstr ""
+"<b>%[continent]</b> viene sostituito dal codice del continente (AF, AS, EU, "
+"NA, OC, SA per Africa, Asia, Europa, Nord America, Oceania e Sud America)."
 
 #. type: Content of: <html><body><dl><dd><ul><li>
 #: help/settings_appearance.html:83
@@ -6469,17 +6522,17 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd><ul><li>
 #: help/settings_appearance.html:92
 msgid "<b>%[city]</b> gets replaced by the city's name."
-msgstr ""
+msgstr "<b>%[city]</b> viene sostituito dal nome della città."
 
 #. type: Content of: <html><body><dl><dd><ul><li>
 #: help/settings_appearance.html:93
 msgid "<b>%[lat]</b> gets replaced by the latitude."
-msgstr ""
+msgstr "<b>%[lat]</b> viene sostituito dalla latitudine."
 
 #. type: Content of: <html><body><dl><dd><ul><li>
 #: help/settings_appearance.html:94
 msgid "<b>%[long]</b> gets replaced by the longitude."
-msgstr ""
+msgstr "<b>%[long]</b> viene sostituito dalla longitudine."
 
 #. type: Content of: <html><body><dl><dd><ul><li>
 #: help/settings_appearance.html:95
@@ -6491,12 +6544,12 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd><ul><li>
 #: help/settings_appearance.html:96
 msgid "<b>%[postcode]</b> gets replaced by the city's postal code."
-msgstr ""
+msgstr "<b>%[postcode]</b> viene sostituito dal codice postale della città."
 
 #. type: Content of: <html><body><dl><dd><ul><li>
 #: help/settings_appearance.html:97
 msgid "<b>%[region]</b> gets replaced by the region's name."
-msgstr ""
+msgstr "<b>%[region]</b> viene sostituito dal nome della regione."
 
 #. type: Content of: <html><body><p><div><placeholder><a>
 #: help/settings_appearance.html:100 help/window_hub.html:91
@@ -6614,7 +6667,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/settings_bwlimit.html:53 help/settings_sharing.html:50
+#: help/settings_bwlimit.html:53 help/settings_sharing.html:44
 msgid "Upload slots"
 msgstr "Slot di upload"
 
@@ -6665,7 +6718,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_certs.html:20
 msgid "Allow TLS connections to hubs without trusted certificate"
-msgstr ""
+msgstr "Consenti le connessioni TLS agli hub anche senza un certificato fidato"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_certs.html:21
@@ -6678,6 +6731,7 @@ msgstr ""
 #: help/settings_certs.html:22
 msgid "Allow TLS connections to clients without trusted certificate"
 msgstr ""
+"Consenti le connessioni TLS ai client anche senza un certificato fidato"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_certs.html:23
@@ -6689,7 +6743,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_certs.html:24
 msgid "Support direct encrypted private message channels"
-msgstr ""
+msgstr "Supporta i canali dei messaggi privati cifrati diretti"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_certs.html:26
@@ -7004,8 +7058,8 @@ msgid ""
 "This is the port that DC++ listens on for incoming <a po4a-id=0>TLS "
 "(encrypted)</a> connections from other peers. If this port is incorrectly "
 "forwarded, you won't be able to search nor to download on encrypted ADC "
-"hubs. Note that <b>this port value should be different than the ones used "
-"for transfers (TCP) and searches (UDP).</b>"
+"hubs. Note that <b>this port value should be different than the one used for "
+"transfers (TCP).</b>"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd><dl><dt>
@@ -7042,7 +7096,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd><ul><li>
 #: help/settings_connectivity_manual.html:101
 msgid "MiniUPnP: An open-source UPnP library."
-msgstr ""
+msgstr "MiniUPnP: Una libreria UPnP open source."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_connectivity_manual.html:103
@@ -7119,13 +7173,12 @@ msgstr ""
 
 #. type: Content of: <html><body><div><dl><dd><ul><li>
 #: help/settings_downloads.html:25
-#, fuzzy
 msgid ""
 "<i>C:\\Documents And Settings\\[your username]\\Application Data\\DC++"
 "\\Downloads\\</i> for <u>Windows XP</u>;"
 msgstr ""
-"<i>C:\\Documents And Settings\\[nome utente]\\Local Settings\\Application "
-"Data\\DC++\\Incomplete</i> per <u>Windows 2000 e XP</u>;"
+"<i>C:\\Documenti e impostazioni\\[il tuo nome utente]\\Programmi\\DC++"
+"\\Download\\</i> per <u>Windows XP</u>;"
 
 #. type: Content of: <html><body><div><dl><dd><ul><li>
 #: help/settings_downloads.html:28
@@ -7299,6 +7352,7 @@ msgstr ""
 #: help/settings_downloads.html:97
 msgid "Note; because of changing download speeds, this is not 100% accurate..."
 msgstr ""
+"Nota: a causa dei cambiamenti di velocità, questo non è accurato al 100%..."
 
 #. type: Content of: <html><body><h2>
 #: help/settings_downloads.html:100
@@ -7367,9 +7421,8 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_expert.html:22
-#, fuzzy
 msgid "Auto-search interval"
-msgstr "Limite della ricerca automatica"
+msgstr "Intervallo della ricerca automatica"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_expert.html:23
@@ -7447,7 +7500,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_expert.html:43
 msgid "Socket read buffer"
-msgstr ""
+msgstr "Buffer di lettura del socket"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_expert.html:44
@@ -7492,6 +7545,19 @@ msgid ""
 "originating <placeholder id=1/> window instead."
 msgstr ""
 
+#. type: Content of: <html><body><dl><dt>
+#: help/settings_expert.html:58
+msgid "Max protocol command length"
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_expert.html:59
+msgid ""
+"The amount of protocol data DC++ will maximally manage. This setting help "
+"protect against potentially malicious clients and hubs.  Measured in bytes. "
+"(default: 524288 bytes)"
+msgstr ""
+
 #. type: Content of: <html><body><h1>
 #: help/settings_favoritedirs.html:9
 msgid "Favorite download directories"
@@ -7506,7 +7572,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/settings_favoritedirs.html:16 help/settings_sharing.html:26
+#: help/settings_favoritedirs.html:16 help/settings_sharing.html:20
 msgid "Add folder"
 msgstr "Aggiungi una cartella"
 
@@ -7522,7 +7588,7 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_favoritedirs.html:20 help/settings_search_types.html:25
-#: help/settings_sharing.html:35
+#: help/settings_sharing.html:29
 msgid "Rename"
 msgstr "Rinomina"
 
@@ -7532,7 +7598,7 @@ msgid "Rename the selected folder(s)."
 msgstr "Rinomina la(e) cartella(e) selezionata(e)."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_favoritedirs.html:23 help/settings_sharing.html:41
+#: help/settings_favoritedirs.html:23 help/settings_sharing.html:35
 msgid "Remove the selected folder(s)."
 msgstr "Rimuove la(e) cartella(e) selezionata(e)."
 
@@ -7801,6 +7867,7 @@ msgstr "Registra la chat principale"
 #: help/settings_logs.html:17
 msgid "Enables logging of the main chat of any hubs you're in."
 msgstr ""
+"Abilita il salvataggio della chat principale degli hub in cui sei entrato."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_logs.html:18
@@ -7925,7 +7992,7 @@ msgstr "N/D"
 #. type: Content of: <html><body><dl><dd><table><tbody><tr><td>
 #: help/settings_logs.html:58
 msgid "Local path of the file the chunk uploaded from"
-msgstr ""
+msgstr "Percorso locale del file da cui è stato inviato il pezzo"
 
 #. type: Content of: <html><body><dl><dd><table><tbody><tr><td>
 #: help/settings_logs.html:62 help/settings_logs.html:64
@@ -8060,7 +8127,7 @@ msgstr "Tempo effettivo di trasferimento del file nella sessione corrente"
 #. type: Content of: <html><body><dl><dd><table><tbody><tr><td>
 #: help/settings_logs.html:140
 msgid "TTH of the target file the chunk downloaded to"
-msgstr ""
+msgstr "TTH del file bersaglio di cui è stato scaricato il pezzo"
 
 #. type: Content of: <html><body><dl><dd><table><tbody><tr><td>
 #: help/settings_logs.html:141
@@ -8070,7 +8137,7 @@ msgstr "TTH del file di destinazione"
 #. type: Content of: <html><body><dl><dd><table><tbody><tr><td>
 #: help/settings_logs.html:142
 msgid "TTH of the target file the chunk uploaded from"
-msgstr ""
+msgstr "TTH del file bersaglio di cui è stato inviato il pezzo"
 
 #. type: Content of: <html><body><dl><dd><table><tbody><tr><td>
 #: help/settings_logs.html:147
@@ -8332,7 +8399,7 @@ msgstr "%[hubNI] - Nome dell'hub (sconosciuto fino alla connessione)"
 #. type: Content of: <html><body><dl><dd><div>
 #: help/settings_logs.html:218
 msgid "%[hubURL] - Address (and port if non standard) of hub"
-msgstr ""
+msgstr "%[hubURL] - Indirizzo (e porta, se non standard) dell'hub."
 
 #. type: Content of: <html><body><dl><dd><div>
 #: help/settings_logs.html:219
@@ -8429,6 +8496,8 @@ msgid ""
 "This event fires every time a download completes. Doesn't apply to file "
 "lists."
 msgstr ""
+"Questo evento mostra una notifica ogni volta che un download viene "
+"completato. Non vale per gli elenchi dei file."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_notifications.html:18
@@ -8463,6 +8532,8 @@ msgstr "Ricevuto un messaggio privato"
 #: help/settings_notifications.html:31
 msgid "This event fires every time a private chat message is received."
 msgstr ""
+"Questo evento mostra una notifica ogni volta che viene ricevuto un messaggio "
+"di chat privato."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_notifications.html:34
@@ -8614,7 +8685,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_plugins.html:23
 msgid "Some plugins may require you to restart DC++."
-msgstr ""
+msgstr "Alcuni plugin possono richiedere il riavvio di DC++."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_plugins.html:26
@@ -8631,22 +8702,22 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_plugins.html:31
 msgid "Enable"
-msgstr ""
+msgstr "Abilita"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_plugins.html:33
 msgid "Enable the selected plugin."
-msgstr ""
+msgstr "Abilita il plugin selezionato."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_plugins.html:36
 msgid "Disable"
-msgstr ""
+msgstr "Disabilita"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_plugins.html:38
 msgid "Disable the selected plugin."
-msgstr ""
+msgstr "Disabilita il plugin selezionato."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_plugins.html:43
@@ -9046,16 +9117,17 @@ msgstr "Non scaricare i file già condivisi"
 #: help/settings_queue.html:113
 msgid ""
 "This option will stop you from downloading files which already exist in one "
-"of your shared directories."
+"of your shared directories. When you enable this function, to get already "
+"shared items removed from the queue you have to restart DC++."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/settings_queue.html:115
+#: help/settings_queue.html:116
 msgid "Don't download files already in the queue"
 msgstr "Non scaricare i file già in coda"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_queue.html:116
+#: help/settings_queue.html:117
 msgid ""
 "This option will stop you from downloading files which already exist in your "
 "queue by blocking the addition of the same file to a different place in the "
@@ -9067,12 +9139,12 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/settings_queue.html:121
+#: help/settings_queue.html:122
 msgid "Keep finished files in the queue"
 msgstr "Mantieni nella coda i file scaricati"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_queue.html:122
+#: help/settings_queue.html:123
 msgid ""
 "Enable this option if you want to keep downloaded files and folders in the "
 "download queue after they have been finished. After downloaded the queue "
@@ -9187,22 +9259,8 @@ msgstr ""
 "Se vai nella scheda Condivisione e premi OK, può sembrare che il client si "
 "blocchi. Questo è dovuto all'aggiornamento dell'elenco dei file."
 
-#. type: Content of: <html><body><dl><dt>
-#: help/settings_sharing.html:20
-msgid "Share hidden files"
-msgstr "Condividi i file nascosti"
-
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_sharing.html:21
-msgid ""
-"Share files with the Hidden attribute set and files inside directory with "
-"the Hidden attribute set. With this option off, files starting with a . "
-"(full stop) will not be shared. Note: this option requires a refresh of the "
-"file list, and may cause the client to appear to freeze."
-msgstr ""
-
-#. type: Content of: <html><body><dl><dd>
-#: help/settings_sharing.html:27
 msgid ""
 "Browse for a new folder to add to your share. If another existing file "
 "shares that name, the new name will be made unique by adding another letter "
@@ -9216,7 +9274,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_sharing.html:36
+#: help/settings_sharing.html:30
 msgid ""
 "Change the virtual name on a shared folder. Note: the client will appear to "
 "freeze when you exit settings, this is due to a refresh of the file list."
@@ -9226,13 +9284,13 @@ msgstr ""
 "aggiornamento dell'elenco dei file."
 
 #. type: Content of: <html><body><dl><dt>
-#: help/settings_sharing.html:44
+#: help/settings_sharing.html:38
 msgid "Automatically open an extra slot if speed is below (0 = disable)"
 msgstr ""
 "Apri automaticamente uno slot se la velocità è minore di (0 = disattivato)"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_sharing.html:45
+#: help/settings_sharing.html:39
 msgid ""
 "If the average upload speed drops below the given number, an additional "
 "upload slot will be granted. These slots are granted once every 30 seconds "
@@ -9245,7 +9303,7 @@ msgstr ""
 "garantito non verrà chiuso."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_sharing.html:51
+#: help/settings_sharing.html:45
 msgid ""
 "Configure the number of slots that other users can occupy to download files "
 "from you. A remote user can use only one slot for each hub that they're on "
@@ -9255,13 +9313,96 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_sharing.html:59
+#: help/settings_sharing.html:53
 msgid ""
 "Note: If a user leaves the hub, DC++ will close his slots; if the user is "
 "back within 10 minutes, DC++ will grant him a slot. (This will only happen "
 "if <a po4a-id=0>Automatically disconnect users who leave the hub</a> is "
 "enabled.) This can cause your upload slots to go over the maximum set in "
 "settings."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dt>
+#: help/settings_sharing_filtering.html:11
+msgid "Share hidden files"
+msgstr "Condividi i file nascosti"
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_sharing_filtering.html:12
+msgid ""
+"Share files with the Hidden attribute set and files inside directory with "
+"the Hidden attribute set. With this option off, files starting with a . "
+"(full stop) will not be shared. Note: this option requires a refresh of the "
+"file list, and may cause the client to appear to freeze."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dt>
+#: help/settings_sharing_filtering.html:18
+#, fuzzy
+msgid "File minimum size"
+msgstr "Dimensione del file"
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_sharing_filtering.html:20
+msgid ""
+"Only include include files in thee share that has a file size above the "
+"specified value. Value is specified in bytes. The value 0 removes the filter "
+"and is the default."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dt>
+#: help/settings_sharing_filtering.html:22
+#, fuzzy
+msgid "File maximum size"
+msgstr "Dimensione del file"
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_sharing_filtering.html:24
+msgid ""
+"Only include include files in the share that has a file size below the "
+"specified value. Value is specified in bytes. The value 0 removes the filter "
+"and is the default."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dt>
+#: help/settings_sharing_filtering.html:27
+msgid "File name filtering with Regular expressions"
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_sharing_filtering.html:29
+msgid ""
+"Filters out any file with a name that matches a regular expression that is "
+"listed here. Use semicolon to separate multiple regular expressions. For "
+"example, the value ^.*\\.txt;^.*\\.png will remove any file that has the "
+"extensions txt or png."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dt>
+#: help/settings_sharing_filtering.html:32
+msgid "File extension filtering"
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_sharing_filtering.html:34
+msgid ""
+"Filters out any file with an extension that is listed here. Use semicolon to "
+"separate multiple extensions. For example, the value txt;png will remove any "
+"file that has the extensions txt or png."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dt>
+#: help/settings_sharing_filtering.html:35
+#, fuzzy
+msgid "Path filtering"
+msgstr "Filtro del testo"
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_sharing_filtering.html:37
+msgid ""
+"Filters out any path that is listed here. Use semicolon to separate multiple "
+"paths. For example, the value \"download;secret_files\" will remove any "
+"directory that has download or secret_files in the path."
 msgstr ""
 
 #. type: Content of: <html><body><p>
@@ -9639,7 +9780,7 @@ msgstr "Rimuove il comando utente selezionato correntemente."
 #. type: Content of: <html><body><h1>
 #: help/settings_user_matching.html:9
 msgid "User matching definitions"
-msgstr ""
+msgstr "Definizioni delle corrispondenze degli utenti"
 
 #. type: Content of: <html><body><p>
 #: help/settings_user_matching.html:11
@@ -10039,7 +10180,7 @@ msgstr "Aiuto"
 #. type: Content of: <html><body><dl><dd>
 #: help/window_adlsearch.html:57
 msgid "Launch this help file."
-msgstr ""
+msgstr "Lancia questo file di aiuto."
 
 #. type: Content of: <html><body><p>
 #: help/window_adlsearch.html:59
@@ -10090,7 +10231,7 @@ msgstr ""
 #. type: Content of: <html><body><h1>
 #: help/window_download_queue.html:10 help/window_download_queue.html:11
 msgid "Download queue"
-msgstr "Coda download"
+msgstr "Coda dei download"
 
 #. type: Content of: <html><body><h2>
 #: help/window_download_queue.html:13
@@ -10110,7 +10251,7 @@ msgstr "Opzioni di ricerca"
 #. type: Content of: <html><body><dl><dt>
 #: help/window_download_queue.html:17 help/window_download_queue.html:115
 msgid "Set priority"
-msgstr "Imposta priorità"
+msgstr "Imposta la priorità"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_download_queue.html:18
@@ -10119,6 +10260,9 @@ msgid ""
 "paused, it will not begin to download and it will not be <a po4a-"
 "id=0>automatically searched</a> for."
 msgstr ""
+"Questo imposterà la priorità di tutti i file nella directory. Se un file è "
+"in pausa, non inzierà ad essere scaricato e non verrà <a po4a-id=0>cercato "
+"automaticamente</a>."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_download_queue.html:19 help/window_download_queue.html:104
@@ -10136,6 +10280,9 @@ msgid ""
 "Deletes the queued directory from the queue. If <a po4a-id=0>Confirm item "
 "removal in download queue</a> is enabled, you will be prompted."
 msgstr ""
+"Elimina la directory accodata dalla coda. Se <a po4a-id=0>la conferma per la "
+"rimozione di un oggetto dalla coda dei download</a> è abilitata, verrai "
+"avvisato."
 
 #. type: Content of: <html><body><h2>
 #: help/window_download_queue.html:24
@@ -10155,7 +10302,7 @@ msgstr "Stato"
 #. type: Content of: <html><body><dl><dd>
 #: help/window_download_queue.html:30
 msgid "Display the file's current status. Possible status messages are:"
-msgstr ""
+msgstr "Mostra lo stato corrente del file. I possibili messaggi di stato sono:"
 
 #. type: Content of: <html><body><dl><dd><ul><li><p>
 #: help/window_download_queue.html:32
@@ -10181,6 +10328,8 @@ msgid ""
 "In this case one or more sources are online but not available (no free "
 "slots)."
 msgstr ""
+"In questo caso una o più fonti sono online ma non disponibili (nessuno slot "
+"libero)."
 
 #. type: Content of: <html><body><dl><dd><ul><li><p>
 #: help/window_download_queue.html:42
@@ -10317,7 +10466,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd><ul><li><p>
 #: help/window_download_queue.html:71
 msgid "<i>CRC32 inconsistency (SFV-Check)</i>"
-msgstr ""
+msgstr "<i>Inconsistenza CRC32 (SFV-Check)</i>"
 
 #. type: Content of: <html><body><dl><dd><ul><li><p>
 #: help/window_download_queue.html:72
@@ -10371,6 +10520,8 @@ msgstr ""
 #: help/window_download_queue.html:83
 msgid "<i>Remote client does not fully support TTH - cannot download</i>"
 msgstr ""
+"<i>Il client remoto non supporta completamente TTH - non è possibile "
+"effettuare il download</i>"
 
 #. type: Content of: <html><body><dl><dd><ul><li><p>
 #: help/window_download_queue.html:84
@@ -10393,7 +10544,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd><ul><li><p>
 #: help/window_download_queue.html:89
 msgid "<i>Remote ADC client does not use TLS encryption</i>"
-msgstr ""
+msgstr "<i>Il client remoto ADC non utilizza la cifratura TLS</i>"
 
 #. type: Content of: <html><body><dl><dd><ul><li><p>
 #: help/window_download_queue.html:90
@@ -10417,12 +10568,12 @@ msgstr "La data e l'ora in cui il file è stato aggiunto alla coda."
 #. type: Content of: <html><body><dl><dt>
 #: help/window_download_queue.html:96 help/window_search.html:87
 msgid "TTH root"
-msgstr ""
+msgstr "Radice TTH"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_download_queue.html:97
 msgid "The file's TTH root."
-msgstr ""
+msgstr "La radice TTH del file."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_download_queue.html:98 help/window_file_list.html:68
@@ -10447,12 +10598,12 @@ msgstr "Comandi del menù del contesto"
 #. type: Content of: <html><body><dl><dd>
 #: help/window_download_queue.html:105
 msgid "Moves and/or renames the queued file."
-msgstr ""
+msgstr "Sposta e/o rinomina il file in coda."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_download_queue.html:106
 msgid "Recheck integrity"
-msgstr ""
+msgstr "Controlla ancora l'integrità"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_download_queue.html:107
@@ -10482,7 +10633,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_download_queue.html:117
 msgid "Re-add source"
-msgstr ""
+msgstr "Riaggiungi fonte"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_download_queue.html:118
@@ -10584,7 +10735,7 @@ msgstr "Hub preferiti"
 #. type: Content of: <html><body><dl><dt>
 #: help/window_favorite_hubs.html:23
 msgid "Server"
-msgstr ""
+msgstr "Server"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_favorite_hubs.html:25
@@ -10850,17 +11001,17 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd>
 #: help/window_file_list.html:69
 msgid "Shows the file extensions of the files in the current folder."
-msgstr ""
+msgstr "Mostra le estensioni dei file nella cartella corrente."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_file_list.html:71
 msgid "The size in bytes of files in the current folder."
-msgstr ""
+msgstr "La dimensione in byte dei file nella cartella corrente."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_file_list.html:73
 msgid "The size of these files in normal form."
-msgstr ""
+msgstr "La dimensione di questi file nella forma normale."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_file_list.html:74
@@ -10870,7 +11021,7 @@ msgstr "TTH"
 #. type: Content of: <html><body><dl><dd>
 #: help/window_file_list.html:75
 msgid "The Hash of these files."
-msgstr ""
+msgstr "L'hash di questi file."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_file_list.html:83 help/window_finished_downloads.html:46
@@ -10892,7 +11043,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_file_list.html:89
 msgid "User <b>&gt;</b>"
-msgstr ""
+msgstr "Utente <b>&gt;</b>"
 
 #. type: Content of: <html><body><h2>
 #: help/window_file_list.html:96 help/window_main.html:340
@@ -10952,7 +11103,7 @@ msgstr ""
 #: help/window_finished_downloads.html:10
 #: help/window_finished_downloads.html:11
 msgid "Finished downloads"
-msgstr ""
+msgstr "Download completati"
 
 #. type: Content of: <html><body><p>
 #: help/window_finished_downloads.html:13 help/window_finished_uploads.html:13
@@ -11010,7 +11161,7 @@ msgstr "Dimensione del file"
 #. type: Content of: <html><body><dl><dd>
 #: help/window_finished_downloads.html:27
 msgid "The size of the file downloaded."
-msgstr ""
+msgstr "La dimensione del file scaricato."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_finished_downloads.html:28 help/window_finished_uploads.html:28
@@ -11040,7 +11191,7 @@ msgstr "La velocità media per il file."
 #. type: Content of: <html><body><dl><dt>
 #: help/window_finished_downloads.html:34 help/window_finished_uploads.html:34
 msgid "CRC Checked"
-msgstr ""
+msgstr "CRC Controllato"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_finished_downloads.html:35 help/window_finished_uploads.html:35
@@ -11083,7 +11234,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_finished_downloads.html:60
 msgid "Only show fully downloaded files"
-msgstr ""
+msgstr "Mostra solo i file scaricati completamente"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_finished_downloads.html:62
@@ -11230,7 +11381,7 @@ msgstr ""
 #. type: Content of: <html><body><p>
 #: help/window_hub.html:17
 msgid "This window can be focused with Alt+C."
-msgstr ""
+msgstr "Questa finestra può essere messa in evidenza con Alt+C."
 
 #. type: Content of: <html><body><h3>
 #: help/window_hub.html:20
@@ -11466,7 +11617,7 @@ msgstr ""
 #. type: Content of: <html><body><p><div>
 #: help/window_hub.html:93
 msgid "This window can be focused with Alt+M."
-msgstr ""
+msgstr "Questa finestra può esere in evidenza con Alt+M."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_hub.html:98 help/window_public_hubs.html:76
@@ -11485,7 +11636,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd>
 #: help/window_hub.html:101
 msgid "Common status messages:"
-msgstr ""
+msgstr "Messaggi di stato comuni:"
 
 #. type: Content of: <html><body><dl><dd><ul><li>
 #: help/window_hub.html:103
@@ -11741,6 +11892,8 @@ msgstr ""
 #: help/window_main.html:54
 msgid "Note that this operation is automatically run every 16 days."
 msgstr ""
+"Tieni in mente che questa operazione viene eseguita automaticamente ogni 16 "
+"giorni."
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/window_main.html:55
@@ -11764,15 +11917,15 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd><ul><li>
 #: H:/Dev/DC++/repo/help/menu_plugins.inc:6
 #, fuzzy
-msgid "\"Configure\" opens the\r <placeholder id=0/> configuration page."
+msgid "\"Configure\" opens the <placeholder id=0/> configuration page."
 msgstr "Apre la finestra di dialogo <placeholder id=0/>."
 
 #. type: Content of: <html><body><dl><dd><ul><li>
-#: H:/Dev/DC++/repo/help/menu_plugins.inc:10
+#: H:/Dev/DC++/repo/help/menu_plugins.inc:9
 msgid ""
 "Installed plugins are listed below. They can be selectively enabled or "
-"disabled. A\r \"Configure\" command is also available for each of them (the "
-"behavior of which is\r plugin-dependant). Plugins are also allowed to add "
+"disabled. A \"Configure\" command is also available for each of them (the "
+"behavior of which is plugin-dependant). Plugins are also allowed to add "
 "additional commands in that sub-menu."
 msgstr ""
 
@@ -11827,12 +11980,12 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd><dl><dd><div>
 #: help/window_main.html:88
 msgid "It lists your downloaded files in the current session."
-msgstr ""
+msgstr "Elenca i tuoi file scaricati nella sessione corrente."
 
 #. type: Content of: <html><body><dl><dd><dl><dd><div>
 #: help/window_main.html:92
 msgid "It lists the files uploaded from you in the current session."
-msgstr ""
+msgstr "Elenca i tuoi file inviati nella sessione corrente."
 
 #. type: Content of: <html><body><dl><dd><dl><dd><div>
 #: help/window_main.html:96
@@ -11872,7 +12025,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd><dl><dd><div><placeholder><a>
 #: help/window_main.html:115
 msgid "Indexing progess"
-msgstr ""
+msgstr "Progresso dell'indicizzazione"
 
 #. type: Content of: <html><body><dl><dd><dl><dd><div>
 #: help/window_main.html:115
@@ -11915,10 +12068,8 @@ msgstr "Chiudi gli hub disconessi"
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/window_main.html:139
-#, fuzzy
 msgid "Closes all disconnected <placeholder id=0/> windows."
-msgstr ""
-"Aggiunge l'utente corrente alla lista di <a po4a-id=0>Utenti Preferiti</a>."
+msgstr "Chiude tutte le <placeholder id=0/> finestre disconnesse."
 
 #. type: Content of: <html><body><dl><dd><dl><dd><div>
 #: help/window_main.html:142
@@ -11946,6 +12097,7 @@ msgstr "Chiudi tutte le finestre dei messaggi privati"
 msgid ""
 "Closes all <placeholder id=0/> windows regardless of their online status."
 msgstr ""
+"Chiude tutte le <placeholder id=0/> finestre a prescindere dal loro stato."
 
 #. type: Content of: <html><body><dl><dd><dl><dt>
 #: help/window_main.html:152
@@ -12069,7 +12221,7 @@ msgstr "Centro di aiuto"
 #. type: Content of: <html><body><dl><dd><dl><dd><dl><dd>
 #: help/window_main.html:183
 msgid "Points to the DC++ support forum."
-msgstr ""
+msgstr "Indirizza al forum di supporto di DC++."
 
 #. type: Content of: <html><body><dl><dd><dl><dd><dl><dt>
 #: help/window_main.html:184
@@ -12097,6 +12249,9 @@ msgid ""
 "Found this free program useful? Then you please consider donating some "
 "money... You can do it here, through the author's Paypal account."
 msgstr ""
+"Hai trovato questo programma gratuito utile? Allora considera la donazione "
+"di un po' di soldi, per favore... Puoi farlo qui, attraverso l'account "
+"Paypal dell'autore."
 
 #. type: Content of: <html><body><dl><dd><dl><dd><dl><dd>
 #: help/window_main.html:193
@@ -12138,9 +12293,8 @@ msgstr "</a> <a po4a-id=0>"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_main.html:220 help/window_main.html:288
-#, fuzzy
 msgid "Recent windows"
-msgstr "Chiude la finestra corrente."
+msgstr "Finestre recenti"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_main.html:224 help/window_main.html:311
@@ -12233,7 +12387,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd><p>
 #: help/window_main.html:302
 msgid "Open the <placeholder id=0/> configuration page."
-msgstr ""
+msgstr "Apri la <placeholder id=0/> pagina di configurazione."
 
 #. type: Content of: <html><body><dl><dd><p>
 #: help/window_main.html:306
@@ -12297,17 +12451,17 @@ msgstr "Le schede possono essere chiuse con:"
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/window_main.html:329
 msgid "Middle mouse click"
-msgstr ""
+msgstr "Click del tasto centrale del mouse"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/window_main.html:330
 msgid "Shift + left mouse click"
-msgstr ""
+msgstr "Shift + click sinistro del mouse"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/window_main.html:331
 msgid "Left mouse click on the"
-msgstr ""
+msgstr "Click sinistro del mouse sul"
 
 #. type: Attribute 'alt' of: <html><body><ul><li><ul><li><img>
 #: help/window_main.html:331
@@ -12355,7 +12509,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_main.html:343
 msgid "System messages"
-msgstr ""
+msgstr "Messaggi di sistema"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:344
@@ -12371,18 +12525,17 @@ msgstr ""
 #. type: Attribute 'alt' of: <html><body><dl><dt><img>
 #: help/window_main.html:346
 msgid "Online user"
-msgstr ""
+msgstr "Utente in linea"
 
 #. type: Attribute 'alt' of: <html><body><dl><dt><img>
 #: help/window_main.html:346
-#, fuzzy
 msgid "Away user"
-msgstr "Max utenti"
+msgstr "Utente assente"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_main.html:346
 msgid "Away indicator"
-msgstr ""
+msgstr "Indicatore di assenza"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:347
@@ -12402,21 +12555,23 @@ msgid ""
 "Shows the number of hubs you are currently connected to in the following "
 "format: x/y/z, where:"
 msgstr ""
+"Mostra il numero di hub in cui sei correntemente connesso nel seguente "
+"formato: x/y/z, dove:"
 
 #. type: Content of: <html><body><dl><dd><p>
 #: help/window_main.html:353
 msgid "x = number of connected hubs where you're not a registered user;"
-msgstr ""
+msgstr "x = numero di hub connessi dove non sei un utente registrato;"
 
 #. type: Content of: <html><body><dl><dd><p>
 #: help/window_main.html:354
 msgid "y = number of connected hubs where you're registered in;"
-msgstr ""
+msgstr "y = numero di hub connessi dove sei registrato;"
 
 #. type: Content of: <html><body><dl><dd><p>
 #: help/window_main.html:355
 msgid "z = number of connected hubs where you're an operator;"
-msgstr ""
+msgstr "z = numero di hub connessi dove sei un operatore;"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:357
@@ -12432,9 +12587,8 @@ msgstr "Slot"
 
 #. type: Attribute 'alt' of: <html><body><dl><dt><img>
 #: help/window_main.html:360
-#, fuzzy
 msgid "Slots full"
-msgstr "Slot"
+msgstr "Slot pieni"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:361
@@ -12445,9 +12599,8 @@ msgstr ""
 
 #. type: Attribute 'alt' of: <html><body><dl><dt><img>
 #: help/window_main.html:363
-#, fuzzy
 msgid "Downloaded bytes"
-msgstr "Scaricati"
+msgstr "Byte scaricati"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_main.html:363
@@ -12469,9 +12622,8 @@ msgstr "Doppio click per aprire la finestra <placeholder id=0/>."
 
 #. type: Attribute 'alt' of: <html><body><dl><dt><img>
 #: help/window_main.html:367
-#, fuzzy
 msgid "Uploaded bytes"
-msgstr "Upload"
+msgstr "Byte inviati"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_main.html:367
@@ -12487,9 +12639,8 @@ msgstr ""
 
 #. type: Attribute 'alt' of: <html><body><dl><dt><img>
 #: help/window_main.html:371
-#, fuzzy
 msgid "Download speed"
-msgstr "Scaricati"
+msgstr "Velocità di download"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_main.html:371
@@ -12505,9 +12656,8 @@ msgstr ""
 
 #. type: Attribute 'alt' of: <html><body><dl><dt><img>
 #: help/window_main.html:375
-#, fuzzy
 msgid "Upload speed"
-msgstr "Upload"
+msgstr "Velocità di upload"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_main.html:375
@@ -12523,9 +12673,8 @@ msgstr ""
 
 #. type: Attribute 'alt' of: <html><body><dl><dt><img>
 #: help/window_main.html:379
-#, fuzzy
 msgid "Download speed limit"
-msgstr "Scaricati"
+msgstr "Limite della velocità di download"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_main.html:379
@@ -12543,9 +12692,8 @@ msgstr ""
 
 #. type: Attribute 'alt' of: <html><body><dl><dt><img>
 #: help/window_main.html:382
-#, fuzzy
 msgid "Upload speed limit"
-msgstr "Upload"
+msgstr "Limite della velocità di upload"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_main.html:382
@@ -12622,9 +12770,8 @@ msgstr ""
 
 #. type: Content of: <html><body><h3>
 #: help/window_pm.html:33
-#, fuzzy
 msgid "Message part (left)"
-msgstr "Parte dei messaggi (a sinistra)"
+msgstr "Parte del messaggio (a sinistra)"
 
 #. type: Content of: <html><body><p>
 #: help/window_pm.html:35
@@ -12641,14 +12788,13 @@ msgstr ""
 
 #. type: Content of: <html><body><h3>
 #: help/window_pm.html:39
-#, fuzzy
 msgid "Communication channel"
-msgstr "Notizie della comunità"
+msgstr "Canale di comunicazione"
 
 #. type: Content of: <html><body><p><placeholder>
 #: help/window_pm.html:42
 msgid "Direct encrypted channel"
-msgstr ""
+msgstr "Canale cifrato diretto"
 
 #. type: Content of: <html><body><p>
 #: help/window_pm.html:41
@@ -12667,7 +12813,7 @@ msgstr ""
 #. type: Content of: <html><body><h2>
 #: help/window_pm.html:47
 msgid "Information on direct encrypted private message channels"
-msgstr ""
+msgstr "Informazioni sui canali cifrati diretti dei messaggi privati"
 
 #. type: Content of: <html><body><p>
 #: help/window_pm.html:49
@@ -12694,7 +12840,7 @@ msgstr ""
 #. type: Content of: <html><body><p><ul><li><placeholder>
 #: help/window_pm.html:58
 msgid "Start a direct encrypted channel"
-msgstr ""
+msgstr "Avvia un canale cifrato diretto"
 
 #. type: Content of: <html><body><p><ul><li>
 #: help/window_pm.html:57 help/window_pm.html:64
@@ -12706,22 +12852,22 @@ msgstr ""
 #. type: Content of: <html><body><p><ul><li>
 #: help/window_pm.html:59
 msgid "Send the \"/direct\" chat command."
-msgstr ""
+msgstr "Invia il comando della chat \"/direct\"."
 
 #. type: Content of: <html><body><p><ul><li>
 #: help/window_pm.html:60
 msgid "Send the \"/encrypted\" chat command."
-msgstr ""
+msgstr "Invia il comando della chat \"/encrypted\"."
 
 #. type: Content of: <html><body><p>
 #: help/window_pm.html:62
 msgid "Ways to disconnect the direct encrypted channel:"
-msgstr ""
+msgstr "Modi per disconnettere il canale cifrato diretto:"
 
 #. type: Content of: <html><body><p><ul><li><placeholder>
 #: help/window_pm.html:65
 msgid "Disconnect the direct encrypted channel"
-msgstr ""
+msgstr "Disconnetti il canale cifrato diretto"
 
 #. type: Content of: <html><body><p><ul><li>
 #: help/window_pm.html:66
@@ -12777,6 +12923,8 @@ msgid ""
 "Amount of bytes shared in the hub when the hub was checked by the hublist "
 "bot."
 msgstr ""
+"Quantità di byte condivisi nell'hub quando l'hub è stato controllato dal bot "
+"dell'elenco degli hub."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_public_hubs.html:27
@@ -12973,6 +13121,7 @@ msgstr ""
 #: help/window_public_hubs.html:90
 msgid "Sum of the users numbers of every hubs in the current hub list."
 msgstr ""
+"Somma del numero degli utenti di ogni hub nell'elenco degli hub corrente."
 
 #. type: Content of: <html><body><p>
 #: help/window_search.html:13
@@ -13174,7 +13323,7 @@ msgstr "Il nome del file."
 #. type: Content of: <html><body><dl><dt>
 #: help/window_search.html:66
 msgid "Hits"
-msgstr ""
+msgstr "Tentativi"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_search.html:67
@@ -13197,7 +13346,7 @@ msgstr "Il soprannome dell'utente."
 #. type: Content of: <html><body><dl><dd>
 #: help/window_search.html:72
 msgid "The file's extension (file type)."
-msgstr ""
+msgstr "L'estensione del file (tipo di file)"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_search.html:74
@@ -13207,7 +13356,7 @@ msgstr "La dimensione del file"
 #. type: Content of: <html><body><dl><dd>
 #: help/window_search.html:76
 msgid "x/y: x slots available of a total y."
-msgstr ""
+msgstr "x/y: x slot disponibili per un totale di y."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_search.html:78
@@ -13222,12 +13371,12 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd>
 #: help/window_search.html:82
 msgid "In which hub the user is in."
-msgstr ""
+msgstr "In quale hub è l'utente."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_search.html:84
 msgid "The exact size of the file."
-msgstr ""
+msgstr "La dimensione esatta del file."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_search.html:86
@@ -13237,7 +13386,7 @@ msgstr "L'?IP dell'utente."
 #. type: Content of: <html><body><dl><dd>
 #: help/window_search.html:88
 msgid "The TTH root for the file."
-msgstr ""
+msgstr "La radice TTH del file."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_search.html:90
@@ -13247,7 +13396,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_search.html:96
 msgid "Download whole directory"
-msgstr ""
+msgstr "Scarica l'intera cartella"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_search.html:97
@@ -13259,7 +13408,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_search.html:99
 msgid "Download whole directory to..."
-msgstr ""
+msgstr "Scarica l'intera cartella in..."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_search.html:100
@@ -13278,9 +13427,8 @@ msgstr ""
 
 #. type: Content of: <html><body><h2>
 #: help/window_search.html:114
-#, fuzzy
 msgid "Filter search results"
-msgstr "Messaggio Privato"
+msgstr "Filtra i risultati di ricerca"
 
 #. type: Content of: <html><body><p><div>
 #: help/window_search.html:117
@@ -13311,7 +13459,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_search.html:131
 msgid "X items or C / N items"
-msgstr ""
+msgstr "X oggetti o C / N oggetti"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_search.html:132
@@ -13539,6 +13687,8 @@ msgstr ""
 #: help/window_system_log.html:47
 msgid "Connectivity: Determining the best connectivity settings..."
 msgstr ""
+"Connettività: Determinazione delle impostazioni di connettività migliori in "
+"corso..."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_system_log.html:48
@@ -13826,6 +13976,8 @@ msgstr ""
 #: help/window_system_log.html:90
 msgid "TLS disabled, failed to generate certificate: [error message]"
 msgstr ""
+"TLS disattivato, il  file di certificato non è stato creato: [messaggio di "
+"errore]"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_system_log.html:91
@@ -13851,7 +14003,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_system_log.html:94
 msgid "CRC32 inconsistency (SFV-Check) : [path]"
-msgstr ""
+msgstr "Inconsistenza CRC32 (SFV-Check) : [percorso]"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_system_log.html:95
@@ -13921,17 +14073,22 @@ msgstr ""
 #: help/window_system_log.html:106
 msgid "Error creating hash data file: [error message]"
 msgstr ""
+"Errore durante la creazione del file di indicizzazione: [messaggio di errore]"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_system_log.html:107
 msgid "Error when creating hash data file (HashData.dat)."
 msgstr ""
+"Errore durante la creazione del file dei dati dell'indicizzazione (HashData."
+"dat)."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_system_log.html:108
 msgid ""
 "[path] not shared; calculated CRC32 does not match the one found in SFV file."
 msgstr ""
+"[percorso] non condiviso; il CRC32 calcolato non corrisponde con quello "
+"trovato nel file SFV."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_system_log.html:109
@@ -14051,7 +14208,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd>
 #: help/window_transfers.html:17
 msgid "The name of the file being transferred."
-msgstr ""
+msgstr "Il nome del file che sta venendo trasferito."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_transfers.html:22
@@ -14059,6 +14216,8 @@ msgid ""
 "Shows where the current download will be saved when finished, or the path of "
 "the upload in the file system."
 msgstr ""
+"Mostra dove verrà salvato il download corrente una volta completato, oppure "
+"il percorso dell'upload nel file system."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_transfers.html:28
@@ -14094,12 +14253,12 @@ msgstr "[U] - Connessione sicura non affidabile"
 #. type: Content of: <html><body><dl><dd>
 #: help/window_transfers.html:43
 msgid "The nick of the connected user."
-msgstr ""
+msgstr "Il soprannome dell'utente connesso."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_transfers.html:48
 msgid "The hub which the user connected through."
-msgstr ""
+msgstr "L'hub attraverso cui l'utente si è connesso."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_transfers.html:51
@@ -14112,11 +14271,13 @@ msgid ""
 "The estimated time left to complete the transfer, computed from the current "
 "speed."
 msgstr ""
+"Il tempo rimanente stimato per il completamento del trasferimento, calcolato "
+"a partire dalla velocità corrente."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_transfers.html:58
 msgid "The current up or download speed."
-msgstr ""
+msgstr "La velocità corrente di upload o download."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_transfers.html:61
@@ -14129,11 +14290,13 @@ msgid ""
 "Amount of bytes transferred so far. The compression ratio is added between "
 "parentheses (if applicable)."
 msgstr ""
+"Quantità di byte trasferiti finora. Il rapporto di compressione è aggiunto "
+"tra parentesi (se applicabile)."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_transfers.html:69
 msgid "Size of the transfer."
-msgstr ""
+msgstr "Dimensione del trasferimento."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_transfers.html:72
@@ -14143,17 +14306,17 @@ msgstr "Algoritmo cifrato"
 #. type: Content of: <html><body><dl><dd>
 #: help/window_transfers.html:74
 msgid "Details on the encryption of the transfer (if applicable)."
-msgstr ""
+msgstr "Dettagli della cifratura del trasferimento (se applicabile)."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_transfers.html:79
 msgid "IP address of the connected peer."
-msgstr ""
+msgstr "Indirizzo IP del peer connesso."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_transfers.html:84
 msgid "Country of the connected peer (if available)."
-msgstr ""
+msgstr "Paese del peer connesso (se disponibile)."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_transfers.html:93
@@ -14305,7 +14468,7 @@ msgstr ""
 #. type: Content of: <html><body><h2>
 #: help/window_users.html:51
 msgid "Filters (bottom)"
-msgstr "Filtri (in fondo)"
+msgstr "Filtri (in basso)"
 
 #. type: Content of: <html><body><p>
 #: help/window_users.html:52

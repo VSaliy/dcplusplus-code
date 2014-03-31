@@ -7,19 +7,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-09-22 16:00+0300\n"
-"PO-Revision-Date: 2013-09-20 18:15+0000\n"
+"POT-Creation-Date: 2014-03-23 23:05+0100\n"
+"PO-Revision-Date: 2014-03-24 21:18+0000\n"
 "Last-Translator: eMTee <Unknown>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-09-22 13:49+0000\n"
-"X-Generator: Launchpad (build 16765)\n"
+"X-Launchpad-Export-Date: 2014-03-30 18:17+0000\n"
+"X-Generator: Launchpad (build 16967)\n"
 
 #. type: Content of: <html><body><ul><li><div><placeholder><a>
-#: help/chat_commands.html:9 help/index.html:143
+#: help/chat_commands.html:9 help/index.html:144
 msgid "Chat Commands"
 msgstr "Chat parancsok"
 
@@ -146,12 +146,21 @@ msgid "Private Message"
 msgstr "Privát üzenet"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:52
+#: help/chat_commands.html:53
+msgid ""
+"Starts a direct encrypted communication channel to avoid spying on your "
+"private messages."
+msgstr ""
+"Közvetlen titkosított csatornát hoz létre a privát üzenetek lehallgatásának "
+"elkerülésére."
+
+#. type: Content of: <html><body><dl><dd>
+#: help/chat_commands.html:55
 msgid "Adds the current user's list to the Download Queue."
 msgstr "Az aktuális felhasználó fájl listáját a Letöltési sorhoz adja"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:54
+#: help/chat_commands.html:57
 msgid ""
 "Grants the remote user a slot. Once they connect, or if they don't connect "
 "in 10 minutes, the granted slot is removed."
@@ -161,14 +170,14 @@ msgstr ""
 "visszavonásra kerül."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:58
+#: help/chat_commands.html:61
 msgid "Adds the current user to the list of <a po4a-id=0>Favorite Users</a>."
 msgstr ""
 "Az aktuális felhasználót a <a po4a-id=0>Kedvenc Felhasználók</a> listájához "
 "adja."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:61
+#: help/chat_commands.html:64
 msgid ""
 "Adds a user matching definition (or modifies an existing one, if possible) "
 "to ignore chat messages from the current user."
@@ -177,7 +186,7 @@ msgstr ""
 "létezik) az aktuális felhasználó chat üzeneteinek mellőzésére."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:64
+#: help/chat_commands.html:67
 msgid ""
 "Adds a user matching definition (or modifies an existing one, if possible) "
 "to stop ignoring chat messages from the current user."
@@ -185,13 +194,18 @@ msgstr ""
 "Felhasználó-megfeleltetési szabályt hoz létre (vagy változtat meg ha már "
 "létezik) az aktuális felhasználó chat üzeneteinek újbóli engedélyezésére."
 
+#. type: Content of: <html><body><dl><dd>
+#: help/chat_commands.html:70
+msgid "Lists the date and time when the last message was sent or received."
+msgstr "Kiírja az utolsó küldött vagy fogadott üzenet dátumát és idejét."
+
 #. type: Content of: <html><body><h2>
-#: help/chat_commands.html:67
+#: help/chat_commands.html:72
 msgid "Both"
 msgstr "Mind a privát, mind a közös chat-ben használható parancsok"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:70
+#: help/chat_commands.html:75
 msgid ""
 "Manually refreshes DC++'s share list by going through the shared directories "
 "and adding new folders and files. DC++ automatically refreshes once an hour "
@@ -204,7 +218,7 @@ msgstr ""
 "listája változik a megosztási beállításokban."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:75
+#: help/chat_commands.html:80
 msgid ""
 "Sets the current number of upload slots to the number you specify. If this "
 "is less than the current number of slots, no uploads are cancelled."
@@ -214,7 +228,7 @@ msgstr ""
 "slotszám."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:79
+#: help/chat_commands.html:84
 msgid ""
 "Sets the current number of download slots to the number you specify. If this "
 "is less than the current number of slots, no downloads are cancelled."
@@ -224,7 +238,7 @@ msgstr ""
 "slotszám."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:83
+#: help/chat_commands.html:88
 msgid ""
 "Opens a new search window with the specified search string.  It does <u>not</"
 "u> automatically send the search."
@@ -233,12 +247,12 @@ msgstr ""
 "automatikusan <u>nem</u> indul el."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:87
+#: help/chat_commands.html:92
 msgid "Closes the current window."
 msgstr "Bezárja az aktuális ablakot"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:89
+#: help/chat_commands.html:94
 msgid ""
 "Clears the current window of all text. Optionally, you can specify how many "
 "of the latest (most recent) lines should be kept."
@@ -247,7 +261,7 @@ msgstr ""
 "a szöveg utolsó hány sorát tartsa meg."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:92
+#: help/chat_commands.html:97
 msgid ""
 "Sends a random DC++ advertising message to the chat, including a link to the "
 "DC++ homepage and the version number."
@@ -257,7 +271,7 @@ msgstr ""
 "verziószám."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:95
+#: help/chat_commands.html:100
 msgid ""
 "Sets Away status. New private message windows will be responded to, once, "
 "with the message you specified, or the default away message configured in "
@@ -269,12 +283,21 @@ msgstr ""
 "üzenetet."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:100
+#: help/chat_commands.html:105
 msgid "Un-sets Away status."
 msgstr "Kikapcsolja a Távolléti módot"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:102
+#: help/chat_commands.html:107
+msgid ""
+"Launches your default web browser to the DuckDuckGo search engine with the "
+"specified search."
+msgstr ""
+"Elindítja az alapértelmezett webböngészőben a DuckDuckGo keresőmotort a "
+"megadott keresési kulcsszavakkal."
+
+#. type: Content of: <html><body><dl><dd>
+#: help/chat_commands.html:110
 msgid ""
 "Launches your default web browser to the Google search engine with the "
 "specified search."
@@ -283,7 +306,7 @@ msgstr ""
 "keresési kulcsszavakkal."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:105
+#: help/chat_commands.html:113
 msgid ""
 "Launches your default web browser to the Internet Movie Database (imdb) with "
 "the specified query."
@@ -292,7 +315,7 @@ msgstr ""
 "megadott keresési kulcsszavakkal."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:108
+#: help/chat_commands.html:116
 msgid ""
 "Rebuilds the HashIndex.xml and HashData.dat files, removing entries to files "
 "that are no longer shared, or old hashes for files that have since changed. "
@@ -306,7 +329,7 @@ msgstr ""
 "be nem fejeződik."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:113
+#: help/chat_commands.html:121
 msgid ""
 "If no parameter is specified, it launches the log for the hub or private "
 "chat with the associated application in Windows. If one of the parameters is "
@@ -320,7 +343,7 @@ msgstr ""
 "chatba beírt paranccsal van lehetőség."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:118
+#: help/chat_commands.html:126
 msgid ""
 "Displays available commands. (The ones listed on this page.) Optionally, you "
 "can specify &quot;brief&quot; to have a brief listing."
@@ -329,12 +352,12 @@ msgstr ""
 "brief&quot paraméter megadása rövid listát eredményez."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:120
+#: help/chat_commands.html:128
 msgid "Launches your default web browser with the given URL."
 msgstr "A megadott URL-t megnyitja az alapértelmezett web böngészőben."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:122
+#: help/chat_commands.html:130
 msgid ""
 "Highlights the last occourrence of the specified search string in the chat "
 "window."
@@ -500,7 +523,7 @@ msgstr ""
 #: help/dialog_fav_hub_groups.html:16 help/dialog_public_hub_lists.html:28
 #: help/dialog_string_list.html:29 help/settings_favoritedirs.html:22
 #: help/settings_plugins.html:51 help/settings_search_types.html:28
-#: help/settings_sharing.html:40 help/settings_user_commands.html:22
+#: help/settings_sharing.html:34 help/settings_user_commands.html:22
 #: help/settings_user_matching.html:43 help/window_adlsearch.html:54
 #: help/window_download_queue.html:21 help/window_favorite_hubs.html:47
 msgid "Remove"
@@ -619,19 +642,19 @@ msgstr "Privát üzenet küldése"
 #: help/index.html:61 help/index.html:62 help/index.html:63 help/index.html:64
 #: help/index.html:65 help/index.html:66 help/index.html:72 help/index.html:73
 #: help/index.html:75 help/index.html:76 help/index.html:77 help/index.html:80
-#: help/index.html:82 help/index.html:83 help/index.html:86 help/index.html:88
-#: help/index.html:90 help/index.html:91 help/index.html:92 help/index.html:95
-#: help/index.html:97 help/index.html:99 help/index.html:103
-#: help/index.html:105 help/index.html:106 help/index.html:107
-#: help/index.html:108 help/index.html:109 help/index.html:112
-#: help/index.html:118 help/index.html:119 help/index.html:120
+#: help/index.html:82 help/index.html:83 help/index.html:86 help/index.html:87
+#: help/index.html:89 help/index.html:91 help/index.html:92 help/index.html:93
+#: help/index.html:96 help/index.html:98 help/index.html:100
+#: help/index.html:104 help/index.html:106 help/index.html:107
+#: help/index.html:108 help/index.html:109 help/index.html:110
+#: help/index.html:113 help/index.html:119 help/index.html:120
 #: help/index.html:121 help/index.html:122 help/index.html:123
 #: help/index.html:124 help/index.html:125 help/index.html:126
 #: help/index.html:127 help/index.html:128 help/index.html:129
-#: help/index.html:130 help/index.html:131 help/index.html:137
-#: help/index.html:138 help/index.html:139 help/index.html:143
-#: help/index.html:149 help/index.html:154 help/index.html:161
-#: help/index.html:165 help/keyboard_commands.html:35
+#: help/index.html:130 help/index.html:131 help/index.html:132
+#: help/index.html:138 help/index.html:139 help/index.html:140
+#: help/index.html:144 help/index.html:150 help/index.html:155
+#: help/index.html:162 help/index.html:166 help/keyboard_commands.html:35
 #: help/keyboard_commands.html:41 help/keyboard_commands.html:46
 #: help/keyboard_commands.html:48 help/keyboard_commands.html:52
 #: help/keyboard_commands.html:55 help/keyboard_commands.html:58
@@ -655,7 +678,7 @@ msgstr "Privát üzenet küldése"
 #: help/window_favorite_hubs.html:33 help/window_favorite_hubs.html:53
 #: help/window_favorite_hubs.html:54 help/window_hub.html:91
 #: help/window_main.html:28 help/window_main.html:29 help/window_main.html:47
-#: help/window_main.html:58 H:/Dev/DC++/repo/help/menu_plugins.inc:7
+#: help/window_main.html:58 H:/Dev/DC++/repo/help/menu_plugins.inc:6
 #: help/window_main.html:71 help/window_main.html:75 help/window_main.html:79
 #: help/window_main.html:83 help/window_main.html:87 help/window_main.html:91
 #: help/window_main.html:95 help/window_main.html:99 help/window_main.html:103
@@ -857,7 +880,7 @@ msgstr ""
 "alapján."
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/dev_applypatch.html:9 help/index.html:138
+#: help/dev_applypatch.html:9 help/index.html:139
 msgid "Applying patches"
 msgstr "Foltok (patch-ek) hozzáadása"
 
@@ -926,7 +949,7 @@ msgstr ""
 "(angolul) : <a po4a-id=0>GNU Diff manual</a>"
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/dev_createpatch.html:9 help/index.html:139
+#: help/dev_createpatch.html:9 help/index.html:140
 msgid "Creating patches"
 msgstr "Foltok (patch-ek) készítése"
 
@@ -2183,7 +2206,7 @@ msgstr "Felhasználó-megfeleltetési szabályok"
 
 #. type: Content of: <html><body><p><placeholder><a>
 #: help/dialog_user_matching.html:13 help/dialog_user_matching.html:20
-#: help/index.html:109 help/settings_styles.html:80
+#: help/index.html:110 help/settings_styles.html:80
 msgid "User matching"
 msgstr "Felhasználó-megfeleltetés"
 
@@ -2199,7 +2222,7 @@ msgstr ""
 "szóló oldal nyújt bővebb tájékoztatást."
 
 #. type: Content of: <html><body><dl><dd><placeholder><a>
-#: help/dialog_user_matching.html:21 help/index.html:90
+#: help/dialog_user_matching.html:21 help/index.html:91
 #: help/settings_styles.html:9 help/settings_user_matching.html:50
 msgid "Styles"
 msgstr "Stílusok"
@@ -2360,7 +2383,7 @@ msgstr ""
 "A szabálynak megfelelő felhasználók chat üzenetei nem lesznek láthatók."
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_connection.html:10 help/index.html:119
+#: help/faq_connection.html:10 help/index.html:120
 msgid "How to set up connection manually?"
 msgstr "Hogyan lehet a kapcsolódási típusokat kézzel beállítani?"
 
@@ -2884,7 +2907,7 @@ msgstr ""
 "témáról további információ <a po4a-id=0>ebben a GYIK-ben</a> található."
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_different_icons.html:9 help/index.html:126
+#: help/faq_different_icons.html:9 help/index.html:127
 msgid "What do the different user icons mean?"
 msgstr "Mit jelentenek a különböző felhasználó ikonok?"
 
@@ -3155,7 +3178,7 @@ msgstr ""
 "sorból."
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_mapping.html:9 help/index.html:122
+#: help/faq_mapping.html:9 help/index.html:123
 msgid "What is NAT-PMP / UPnP?"
 msgstr "Mi a NAT-PMP / UPnP?"
 
@@ -3198,7 +3221,7 @@ msgstr ""
 "beállítani a DC++ által igényelt portokat."
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_nosearch.html:9 help/index.html:124
+#: help/faq_nosearch.html:9 help/index.html:125
 msgid "Why don't I get any search results?"
 msgstr "Miért nem kapok semmilyen keresési eredményt?"
 
@@ -3451,7 +3474,7 @@ msgstr ""
 "engedélyezett feltöltési sebesség KiB-ban."
 
 #. type: Content of: <html><body><h1>
-#: help/faq_plusplus_tag.html:54 help/index.html:97
+#: help/faq_plusplus_tag.html:54 help/index.html:98
 #: help/settings_history.html:9
 msgid "History"
 msgstr "Előzmények"
@@ -3494,7 +3517,7 @@ msgstr ""
 "\", az \"ApexDC++\" és az \"RSX++\")."
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_portforward.html:9 help/index.html:120
+#: help/faq_portforward.html:9 help/index.html:121
 msgid "How to set up manual port forwarding?"
 msgstr "Hogyan kell beállítani a kézi port-továbbítást?"
 
@@ -3830,7 +3853,7 @@ msgstr ""
 "működjön, akiknél a titkosított fájl-átvitel engedélyezett."
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_secret.html:10 help/index.html:129
+#: help/faq_secret.html:10 help/index.html:130
 msgid "What secret stuff is there?"
 msgstr "Milyen titkos dolgok léteznek a DC++-ban?"
 
@@ -3943,7 +3966,7 @@ msgstr ""
 "naplófájlt (ha a file létezik)."
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_settings_files.html:9 help/index.html:131
+#: help/faq_settings_files.html:9 help/index.html:132
 msgid "DC++ settings files guide"
 msgstr "DC++ beállítási fájlok útmutató"
 
@@ -5223,7 +5246,7 @@ msgstr ""
 "id=0>ezen az oldalon</a> (angolul)."
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_units.html:9 help/index.html:127
+#: help/faq_units.html:9 help/index.html:128
 msgid "What do the units mean?"
 msgstr "Mit jelentenek a különböző mértékegységek?"
 
@@ -5529,7 +5552,7 @@ msgstr ""
 "lévő tanács érvényes."
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_whyactive.html:9 help/index.html:118
+#: help/faq_whyactive.html:9 help/index.html:119
 msgid "Why do I need active mode?"
 msgstr "Miért érdemes az aktív módot használni?"
 
@@ -6018,7 +6041,7 @@ msgstr ""
 "számára."
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:26 help/index.html:92 help/settings_windows.html:9
+#: help/index.html:26 help/index.html:93 help/settings_windows.html:9
 msgid "Windows"
 msgstr "Ablakok"
 
@@ -6172,101 +6195,106 @@ msgid "Sharing"
 msgstr "Megosztás"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:88 help/settings_appearance.html:9
+#: help/index.html:87 help/settings_sharing_filtering.html:9
+msgid "Filtering"
+msgstr "Szűrés"
+
+#. type: Content of: <html><body><h1>
+#: help/index.html:89 help/settings_appearance.html:9
 msgid "Appearance"
 msgstr "Megjelenés"
 
 #. type: Content of: <html><body><h2>
-#: help/index.html:91 help/window_main.html:317
+#: help/index.html:92 help/window_main.html:317
 msgid "Tabs"
 msgstr "Fülek"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:95 help/settings_notifications.html:9
+#: help/index.html:96 help/settings_notifications.html:9
 msgid "Notifications"
 msgstr "Értesítések"
 
 #. type: Content of: <html><body><h3>
-#: help/index.html:99 help/settings_logs.html:9 help/settings_styles.html:40
+#: help/index.html:100 help/settings_logs.html:9 help/settings_styles.html:40
 msgid "Logs"
 msgstr "Naplózás"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:103 help/settings_advanced.html:9
+#: help/index.html:104 help/settings_advanced.html:9
 msgid "Advanced"
 msgstr "Haladó"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:105 help/settings_expert.html:9
+#: help/index.html:106 help/settings_expert.html:9
 msgid "Experts only"
 msgstr "Csak Szakértőknek"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:106 help/settings_user_commands.html:9
+#: help/index.html:107 help/settings_user_commands.html:9
 msgid "User commands"
 msgstr "Felhasználói parancsok"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:107 help/settings_certs.html:9
+#: help/index.html:108 help/settings_certs.html:9
 msgid "Security certificates"
 msgstr "Biztonsági tanúsítványok"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:108 help/settings_search_types.html:9
+#: help/index.html:109 help/settings_search_types.html:9
 msgid "Search types"
 msgstr "Keresés típusok"
 
 #. type: Content of: <html><body><dl><dd><ul><li><placeholder><a>
-#: help/index.html:112 help/window_main.html:57 help/window_main.html:58
-#: H:/Dev/DC++/repo/help/menu_plugins.inc:7 help/window_main.html:223
+#: help/index.html:113 help/window_main.html:57 help/window_main.html:58
+#: H:/Dev/DC++/repo/help/menu_plugins.inc:6 help/window_main.html:223
 #: help/window_main.html:299 help/window_main.html:302
 msgid "Plugins"
 msgstr "Bővítmények"
 
 #. type: Content of: <html><body><ul><li><h3>
-#: help/index.html:116
+#: help/index.html:117
 msgid "Frequently Asked Questions"
 msgstr "Gyakran ismételt kérdések"
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/index.html:121
+#: help/index.html:122
 msgid "How to unblock DC++ in firewalls and other security software?"
 msgstr ""
 "Hogyan kell engedélyezni a DC++-t a tűzfalban és más biztonsági "
 "szoftverekben?"
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/index.html:123
+#: help/index.html:124
 msgid "My ISP or University blocks DC++"
 msgstr "A szolgáltatóm blokkolja vagy lassítja a DC++-t"
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/index.html:125
+#: help/index.html:126
 msgid "Why am I getting slow download speeds?"
 msgstr "Túl lassú a letöltésem. Mi lehet az oka?"
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/index.html:128
+#: help/index.html:129
 msgid "How do I install/uninstall/upgrade DC++?"
 msgstr "Hogyan telepítsem, töröljem vagy frissítsem a DC++-t?"
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/index.html:130
+#: help/index.html:131
 msgid "What do the DC++ tags mean?"
 msgstr "Mit jelent a DC++ stílusú tag?"
 
 #. type: Content of: <html><body><ul><li><h3>
-#: help/index.html:135
+#: help/index.html:136
 msgid "Development"
 msgstr "Fejlesztés"
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/index.html:137
+#: help/index.html:138
 msgid "Compile instructions"
 msgstr "A programkód fordítása"
 
 #. type: Content of: <html><body><ul><li><div>
-#: help/index.html:144
+#: help/index.html:145
 msgid ""
 "These are the commands that are available in chat, private messages, or "
 "both. They offer handy keyboard shortcuts to functions in the graphical "
@@ -6278,12 +6306,12 @@ msgstr ""
 "parancs egyáltalán nem is rendelkezik grafikus megfelelővel."
 
 #. type: Content of: <html><body><ul><li><div><placeholder><a>
-#: help/index.html:149
+#: help/index.html:150
 msgid "List of Available Keyboard Shortcuts"
 msgstr "Az elérhető gyorsbillentyűk listája"
 
 #. type: Content of: <html><body><ul><li><div>
-#: help/index.html:150
+#: help/index.html:151
 msgid ""
 "These are the keyboard shortcuts that are available in for different "
 "commands in DC++.  They offer quick access to some of the often used "
@@ -6293,12 +6321,12 @@ msgstr ""
 "grafikus felületen elérhető gyakran használt funkciók gyors elérésére."
 
 #. type: Content of: <html><body><ul><li><div><placeholder><a>
-#: help/index.html:154
+#: help/index.html:155
 msgid "Changelog"
 msgstr "Változásnapló"
 
 #. type: Content of: <html><body><ul><li><div>
-#: help/index.html:155
+#: help/index.html:156
 msgid ""
 "This page contains everything that has changed in the history of DC++.  Read "
 "this to find out about features that are poorly or not documented at all. "
@@ -6311,23 +6339,23 @@ msgstr ""
 "fejlesztéséhez."
 
 #. type: Content of: <html><body><dl><dd><dl><dt>
-#: help/index.html:161 help/links.html:9 help/settings_styles.html:35
+#: help/index.html:162 help/links.html:9 help/settings_styles.html:35
 #: help/window_main.html:172
 msgid "Links"
 msgstr "Hivatkozások"
 
 #. type: Content of: <html><body><ul><li><div>
-#: help/index.html:162
+#: help/index.html:163
 msgid "View the various links for DC++."
 msgstr "Különböző, a DC++-hoz tartozó hivatkozások listája"
 
 #. type: Content of: <html><body><ul><li><div><placeholder><a>
-#: help/index.html:165
+#: help/index.html:166
 msgid "Help File Credits"
 msgstr "Segítség fájl szerzői"
 
 #. type: Content of: <html><body><ul><li><div>
-#: help/index.html:166
+#: help/index.html:167
 msgid "View the credits and license of this help file."
 msgstr ""
 "Itt találhatóak a Segítség fájl szerzői és fordítói, valamint a programhoz "
@@ -7957,7 +7985,7 @@ msgstr ""
 "(alapértelmezett érték: 0)"
 
 #. type: Content of: <html><body><dl><dt>
-#: help/settings_bwlimit.html:53 help/settings_sharing.html:50
+#: help/settings_bwlimit.html:53 help/settings_sharing.html:44
 msgid "Upload slots"
 msgstr "Feltöltési slotok"
 
@@ -8457,14 +8485,14 @@ msgid ""
 "This is the port that DC++ listens on for incoming <a po4a-id=0>TLS "
 "(encrypted)</a> connections from other peers. If this port is incorrectly "
 "forwarded, you won't be able to search nor to download on encrypted ADC "
-"hubs. Note that <b>this port value should be different than the ones used "
-"for transfers (TCP) and searches (UDP).</b>"
+"hubs. Note that <b>this port value should be different than the one used for "
+"transfers (TCP).</b>"
 msgstr ""
-"Ezt a porton várja a DC++ a <a po4a-id=0>TLS kódólású</a> biztonságos bejövő "
-"kapcsolatokat. Ha ez a port nem megfelelően van továbbítva, akkor a keresés "
-"és a letöltés nem fog működni olyan ADC hubokon ahol kötelező a biztonságos "
-"kapcsolatok használata. Ha meg van adva, <b>ennek port értéknek különböznie "
-"kell az átvitel (TCP) és keresés (UDP) mezőben megadott portoktól</b>."
+"Ezen a porton várja a DC++ a <a po4a-id=0>TLS kódólású</a> biztonságos "
+"bejövő kapcsolatokat. Ha ez a port nem megfelelően van továbbítva, akkor a "
+"keresés és a letöltés nem fog működni olyan ADC hubokon ahol kötelező a "
+"titkosított kapcsolatok használata. Amennyiben meg van adva, ennek port "
+"értéknek különböznie kell az átvitel (TCP) mezőben megadott port értéktől."
 
 #. type: Content of: <html><body><dl><dd><dl><dt>
 #: help/settings_connectivity_manual.html:87
@@ -9087,6 +9115,23 @@ msgstr ""
 "az itt megadott határértéket, akkor a beérkező privát üzenet abban a "
 "<placeholder id=1/> ablakban jelenik meg, ahová a küldő kapcsolódva van."
 
+#. type: Content of: <html><body><dl><dt>
+#: help/settings_expert.html:58
+msgid "Max protocol command length"
+msgstr "Maximális protokol parancs hossz"
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_expert.html:59
+msgid ""
+"The amount of protocol data DC++ will maximally manage. This setting help "
+"protect against potentially malicious clients and hubs.  Measured in bytes. "
+"(default: 524288 bytes)"
+msgstr ""
+"A maximális protokol adatmennyiség amit a DC++ egyszerre hajlandó "
+"feldolgozni. Ez a beállítás a potenciálisan kártékony hubok és kliensek "
+"elleni védelmet segíti. Az értéket byte-ban kell megadni, alapértelmezetten "
+"524288 byte."
+
 #. type: Content of: <html><body><h1>
 #: help/settings_favoritedirs.html:9
 msgid "Favorite download directories"
@@ -9104,7 +9149,7 @@ msgstr ""
 "A hozzáadás történhet fogd és vidd módszerrel a Windows intézőből is."
 
 #. type: Content of: <html><body><dl><dt>
-#: help/settings_favoritedirs.html:16 help/settings_sharing.html:26
+#: help/settings_favoritedirs.html:16 help/settings_sharing.html:20
 msgid "Add folder"
 msgstr "Hozzáadás"
 
@@ -9120,7 +9165,7 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_favoritedirs.html:20 help/settings_search_types.html:25
-#: help/settings_sharing.html:35
+#: help/settings_sharing.html:29
 msgid "Rename"
 msgstr "Átnevezés"
 
@@ -9130,7 +9175,7 @@ msgid "Rename the selected folder(s)."
 msgstr "A kijelölt könyvtár(ak) átnevezése."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_favoritedirs.html:23 help/settings_sharing.html:41
+#: help/settings_favoritedirs.html:23 help/settings_sharing.html:35
 msgid "Remove the selected folder(s)."
 msgstr "A kijelölt könyvtár(ak) eltávolítása."
 
@@ -10799,19 +10844,22 @@ msgstr "Ne töltse le azokat a fájlokat, amik már meg vannak osztva"
 #: help/settings_queue.html:113
 msgid ""
 "This option will stop you from downloading files which already exist in one "
-"of your shared directories."
+"of your shared directories. When you enable this function, to get already "
+"shared items removed from the queue you have to restart DC++."
 msgstr ""
-"Megakadályozza a már megosztott fájloknak a letöltését (letöltési sorhoz "
-"való hozzáadását)."
+"Ez az opció megakadályozza a már megosztott fájlok letöltését (letöltési "
+"sorhoz való hozzáadását).  Engedélyezése után a DC++ újraindítása szükséges "
+"ahhoz, hogy a már megosztott elemek a letöltési sorból eltávolításra "
+"kerüljenek."
 
 #. type: Content of: <html><body><dl><dt>
-#: help/settings_queue.html:115
+#: help/settings_queue.html:116
 msgid "Don't download files already in the queue"
 msgstr ""
 "Ne töltse le azokat a fájlokat, amik már benne vannak a Letöltési Sorban"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_queue.html:116
+#: help/settings_queue.html:117
 msgid ""
 "This option will stop you from downloading files which already exist in your "
 "queue by blocking the addition of the same file to a different place in the "
@@ -10830,12 +10878,12 @@ msgstr ""
 "jelenik meg."
 
 #. type: Content of: <html><body><dl><dt>
-#: help/settings_queue.html:121
+#: help/settings_queue.html:122
 msgid "Keep finished files in the queue"
 msgstr "A befejezett letöltések maradjanak a Letöltési Sorban"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_queue.html:122
+#: help/settings_queue.html:123
 msgid ""
 "Enable this option if you want to keep downloaded files and folders in the "
 "download queue after they have been finished. After downloaded the queue "
@@ -10973,27 +11021,8 @@ msgstr ""
 "előforduihat, hogy a  program átmeneti ideig nem reagál, ez a fájl-lista "
 "frissítése miatt van."
 
-#. type: Content of: <html><body><dl><dt>
-#: help/settings_sharing.html:20
-msgid "Share hidden files"
-msgstr "Rejtett fájlok megosztása"
-
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_sharing.html:21
-msgid ""
-"Share files with the Hidden attribute set and files inside directory with "
-"the Hidden attribute set. With this option off, files starting with a . "
-"(full stop) will not be shared. Note: this option requires a refresh of the "
-"file list, and may cause the client to appear to freeze."
-msgstr ""
-"Engedélyezi a rejtett attribútumú fájlok ill. a rejtett könyvtárak "
-"tartalmának megosztását is. Ha ki van kapcsolva, a ponttal (.) kezdődő "
-"fájlok sem lesznek megosztva. Az opció megváltoztatása a fájl-lista "
-"frissítését eredményezi, ezért ekkor előforduihat, hogy a  program átmeneti "
-"ideig nem reagál."
-
-#. type: Content of: <html><body><dl><dd>
-#: help/settings_sharing.html:27
 msgid ""
 "Browse for a new folder to add to your share. If another existing file "
 "shares that name, the new name will be made unique by adding another letter "
@@ -11018,7 +11047,7 @@ msgstr ""
 "a hash-elés a háttérben folytatódik."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_sharing.html:36
+#: help/settings_sharing.html:30
 msgid ""
 "Change the virtual name on a shared folder. Note: the client will appear to "
 "freeze when you exit settings, this is due to a refresh of the file list."
@@ -11028,14 +11057,14 @@ msgstr ""
 "frissítése miatt van."
 
 #. type: Content of: <html><body><dl><dt>
-#: help/settings_sharing.html:44
+#: help/settings_sharing.html:38
 msgid "Automatically open an extra slot if speed is below (0 = disable)"
 msgstr ""
 "Automatikusan extra slot nyitása ha a feltöltés sebessége ez alá kerül (0 = "
 "letiltva)"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_sharing.html:45
+#: help/settings_sharing.html:39
 msgid ""
 "If the average upload speed drops below the given number, an additional "
 "upload slot will be granted. These slots are granted once every 30 seconds "
@@ -11048,7 +11077,7 @@ msgstr ""
 "növekedni kezd, a már kiadott extra slotok nem lesznek visszavéve."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_sharing.html:51
+#: help/settings_sharing.html:45
 msgid ""
 "Configure the number of slots that other users can occupy to download files "
 "from you. A remote user can use only one slot for each hub that they're on "
@@ -11064,7 +11093,7 @@ msgstr ""
 "3 kapcsolat lehetőségét biztosító - un. mini slotok állnak rendelkezésre."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_sharing.html:59
+#: help/settings_sharing.html:53
 msgid ""
 "Note: If a user leaves the hub, DC++ will close his slots; if the user is "
 "back within 10 minutes, DC++ will grant him a slot. (This will only happen "
@@ -11079,6 +11108,108 @@ msgstr ""
 "a megüresedett feltöltési slotot más is elfoglalhatja, így ezesetben "
 "előfordulhat, hogy átmeneti ideig a beállítottnál nagyobb számú feltöltési "
 "slot nyílik meg."
+
+#. type: Content of: <html><body><dl><dt>
+#: help/settings_sharing_filtering.html:11
+msgid "Share hidden files"
+msgstr "Rejtett fájlok megosztása"
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_sharing_filtering.html:12
+msgid ""
+"Share files with the Hidden attribute set and files inside directory with "
+"the Hidden attribute set. With this option off, files starting with a . "
+"(full stop) will not be shared. Note: this option requires a refresh of the "
+"file list, and may cause the client to appear to freeze."
+msgstr ""
+"Engedélyezi a rejtett attribútumú fájlok ill. a rejtett könyvtárak "
+"tartalmának megosztását is. Ha ki van kapcsolva, a ponttal (.) kezdődő "
+"fájlok sem lesznek megosztva. Az opció megváltoztatása a fájl-lista "
+"frissítését eredményezi, ezért ekkor előforduihat, hogy a  program átmeneti "
+"ideig nem reagál."
+
+#. type: Content of: <html><body><dl><dt>
+#: help/settings_sharing_filtering.html:18
+msgid "File minimum size"
+msgstr "Fájl minimum méret"
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_sharing_filtering.html:20
+msgid ""
+"Only include include files in thee share that has a file size above the "
+"specified value. Value is specified in bytes. The value 0 removes the filter "
+"and is the default."
+msgstr ""
+"Csak az itt megadott méretnél nagyobb fájlok kerülnek a megosztásba. Az "
+"értéket byte-ban kell megadni. Az alapértelmezett 0 érték kikapcsolja a "
+"szűrést."
+
+#. type: Content of: <html><body><dl><dt>
+#: help/settings_sharing_filtering.html:22
+msgid "File maximum size"
+msgstr "Fájl maximum méret"
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_sharing_filtering.html:24
+msgid ""
+"Only include include files in the share that has a file size below the "
+"specified value. Value is specified in bytes. The value 0 removes the filter "
+"and is the default."
+msgstr ""
+"Csak az itt megadott méretnél kisebb fájlok kerülnek a megosztásba. Az "
+"értéket byte-ban kell megadni. Az alapértelmezett 0 érték kikapcsolja a "
+"szűrést."
+
+#. type: Content of: <html><body><dl><dt>
+#: help/settings_sharing_filtering.html:27
+msgid "File name filtering with Regular expressions"
+msgstr "Fájlnév szűrés reguláris kifejezésekkel"
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_sharing_filtering.html:29
+msgid ""
+"Filters out any file with a name that matches a regular expression that is "
+"listed here. Use semicolon to separate multiple regular expressions. For "
+"example, the value ^.*\\.txt;^.*\\.png will remove any file that has the "
+"extensions txt or png."
+msgstr ""
+"Kiszűr minden fájlt amelyek neve megfelel az itt felsorolt reguláris "
+"kifejezéseknek. Több reguláris kifejezés megadása esetén használj "
+"pontosvesszőt az elválasztásukhoz. Például a ^.*\\.txt;^.*\\.png kifejezés "
+"kiszűr minden txt és png kierjesztésű fájlt."
+
+#. type: Content of: <html><body><dl><dt>
+#: help/settings_sharing_filtering.html:32
+msgid "File extension filtering"
+msgstr "Fájl kiterjesztés szűrés"
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_sharing_filtering.html:34
+msgid ""
+"Filters out any file with an extension that is listed here. Use semicolon to "
+"separate multiple extensions. For example, the value txt;png will remove any "
+"file that has the extensions txt or png."
+msgstr ""
+"Kiszűr minden fájlt amely az itt felsorolt kiterjesztésekkel rendelkezik. "
+"Több kiterjesztés megadásakor használj pontosvesszőt az elválasztásukhoz. "
+"Például a txt;png kifejezés kiszűr minden txt és png kierjesztésű fájlt."
+
+#. type: Content of: <html><body><dl><dt>
+#: help/settings_sharing_filtering.html:35
+msgid "Path filtering"
+msgstr "Útvonal szűrés"
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_sharing_filtering.html:37
+msgid ""
+"Filters out any path that is listed here. Use semicolon to separate multiple "
+"paths. For example, the value \"download;secret_files\" will remove any "
+"directory that has download or secret_files in the path."
+msgstr ""
+"Kiszűr minden itt felsorolt elérési útvonalat. Több útvonal megadásakor "
+"használj pontosvesszőt az elválasztásukhoz. Például a \"letoltes;"
+"titkos_fajlok\" kifejezés kiszűr minden könyvtárat amelynek útvonalában "
+"letoltes vagy titkos_fajlok található."
 
 #. type: Content of: <html><body><p>
 #: help/settings_styles.html:11
@@ -13944,23 +14075,23 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd><ul><li>
 #: H:/Dev/DC++/repo/help/menu_plugins.inc:6
-msgid "\"Configure\" opens the\r <placeholder id=0/> configuration page."
+msgid "\"Configure\" opens the <placeholder id=0/> configuration page."
 msgstr ""
 "A \"Beállítások\" menü megnyítja a <placeholder id=0/> konifigurációs "
 "ablakot."
 
 #. type: Content of: <html><body><dl><dd><ul><li>
-#: H:/Dev/DC++/repo/help/menu_plugins.inc:10
+#: H:/Dev/DC++/repo/help/menu_plugins.inc:9
 msgid ""
 "Installed plugins are listed below. They can be selectively enabled or "
-"disabled. A\r \"Configure\" command is also available for each of them (the "
-"behavior of which is\r plugin-dependant). Plugins are also allowed to add "
+"disabled. A \"Configure\" command is also available for each of them (the "
+"behavior of which is plugin-dependant). Plugins are also allowed to add "
 "additional commands in that sub-menu."
 msgstr ""
 "Ezen kívül a menü a telepített bővítményeket is listázza, ahol a bővítmények "
-"a hozzájuk tartozó almenüben egyenként ki- v. bekapcsolhatók, \r továbbá egy "
+"a hozzájuk tartozó almenüben egyenként ki- v. bekapcsolhatók, továbbá egy "
 "\"Beállítások\" nevű almenü is elérhető minden olyan bővítményhez, amely ezt "
-"támogatja.\r A bővítmények további saját parancsokat is adhatnak ehhez az "
+"támogatja. A bővítmények további saját parancsokat is adhatnak ehhez az "
 "almenühöz."
 
 #. type: Content of: <html><body><dl><dd><dl><dt>

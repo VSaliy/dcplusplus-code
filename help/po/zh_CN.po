@@ -7,19 +7,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-09-22 16:00+0300\n"
-"PO-Revision-Date: 2012-11-05 10:30+0000\n"
-"Last-Translator: comet <Unknown>\n"
+"POT-Creation-Date: 2014-03-23 23:05+0100\n"
+"PO-Revision-Date: 2013-10-23 18:51+0000\n"
+"Last-Translator: Guybrush88 <Unknown>\n"
 "Language-Team: Simplified Chinese <zh_CN@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-09-22 13:49+0000\n"
-"X-Generator: Launchpad (build 16765)\n"
+"X-Launchpad-Export-Date: 2014-03-30 18:18+0000\n"
+"X-Generator: Launchpad (build 16967)\n"
 
 #. type: Content of: <html><body><ul><li><div><placeholder><a>
-#: help/chat_commands.html:9 help/index.html:143
+#: help/chat_commands.html:9 help/index.html:144
 msgid "Chat Commands"
 msgstr "聊天命令"
 
@@ -125,43 +125,55 @@ msgid "Private Message"
 msgstr "私人信息"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:52
+#: help/chat_commands.html:53
+msgid ""
+"Starts a direct encrypted communication channel to avoid spying on your "
+"private messages."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
+#: help/chat_commands.html:55
 msgid "Adds the current user's list to the Download Queue."
 msgstr "添加当前用户列表到下载队列"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:54
+#: help/chat_commands.html:57
 msgid ""
 "Grants the remote user a slot. Once they connect, or if they don't connect "
 "in 10 minutes, the granted slot is removed."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:58
+#: help/chat_commands.html:61
 msgid "Adds the current user to the list of <a po4a-id=0>Favorite Users</a>."
 msgstr "添加当前用户到<a po4a-id=0>收藏的用户</a>列表。"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:61
+#: help/chat_commands.html:64
 msgid ""
 "Adds a user matching definition (or modifies an existing one, if possible) "
 "to ignore chat messages from the current user."
 msgstr "添加一个用户匹配的定义（或者修改已存在的一个）忽略当前用户聊天信息"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:64
+#: help/chat_commands.html:67
 msgid ""
 "Adds a user matching definition (or modifies an existing one, if possible) "
 "to stop ignoring chat messages from the current user."
 msgstr "添加一个用户匹配的定义（或者修改已存在的一个）停止忽略当前用户聊天信息"
 
+#. type: Content of: <html><body><dl><dd>
+#: help/chat_commands.html:70
+msgid "Lists the date and time when the last message was sent or received."
+msgstr ""
+
 #. type: Content of: <html><body><h2>
-#: help/chat_commands.html:67
+#: help/chat_commands.html:72
 msgid "Both"
 msgstr "两者"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:70
+#: help/chat_commands.html:75
 msgid ""
 "Manually refreshes DC++'s share list by going through the shared directories "
 "and adding new folders and files. DC++ automatically refreshes once an hour "
@@ -170,47 +182,47 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:75
+#: help/chat_commands.html:80
 msgid ""
 "Sets the current number of upload slots to the number you specify. If this "
 "is less than the current number of slots, no uploads are cancelled."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:79
+#: help/chat_commands.html:84
 msgid ""
 "Sets the current number of download slots to the number you specify. If this "
 "is less than the current number of slots, no downloads are cancelled."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:83
+#: help/chat_commands.html:88
 msgid ""
 "Opens a new search window with the specified search string.  It does <u>not</"
 "u> automatically send the search."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:87
+#: help/chat_commands.html:92
 msgid "Closes the current window."
 msgstr "关闭当前窗口。"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:89
+#: help/chat_commands.html:94
 msgid ""
 "Clears the current window of all text. Optionally, you can specify how many "
 "of the latest (most recent) lines should be kept."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:92
+#: help/chat_commands.html:97
 msgid ""
 "Sends a random DC++ advertising message to the chat, including a link to the "
 "DC++ homepage and the version number."
 msgstr "发送一条随机广告信息到聊天系统，包含DC++主页链接和版本号。"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:95
+#: help/chat_commands.html:100
 msgid ""
 "Sets Away status. New private message windows will be responded to, once, "
 "with the message you specified, or the default away message configured in "
@@ -218,26 +230,33 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:100
+#: help/chat_commands.html:105
 msgid "Un-sets Away status."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:102
+#: help/chat_commands.html:107
+msgid ""
+"Launches your default web browser to the DuckDuckGo search engine with the "
+"specified search."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
+#: help/chat_commands.html:110
 msgid ""
 "Launches your default web browser to the Google search engine with the "
 "specified search."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:105
+#: help/chat_commands.html:113
 msgid ""
 "Launches your default web browser to the Internet Movie Database (imdb) with "
 "the specified query."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:108
+#: help/chat_commands.html:116
 msgid ""
 "Rebuilds the HashIndex.xml and HashData.dat files, removing entries to files "
 "that are no longer shared, or old hashes for files that have since changed. "
@@ -246,7 +265,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:113
+#: help/chat_commands.html:121
 msgid ""
 "If no parameter is specified, it launches the log for the hub or private "
 "chat with the associated application in Windows. If one of the parameters is "
@@ -255,7 +274,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:118
+#: help/chat_commands.html:126
 #, fuzzy
 msgid ""
 "Displays available commands. (The ones listed on this page.) Optionally, you "
@@ -263,12 +282,12 @@ msgid ""
 msgstr "显示可用命令。(在本页中逐行显示。)"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:120
+#: help/chat_commands.html:128
 msgid "Launches your default web browser with the given URL."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:122
+#: help/chat_commands.html:130
 msgid ""
 "Highlights the last occourrence of the specified search string in the chat "
 "window."
@@ -290,7 +309,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: H:/Dev/DC++/repo/help/commands_file_general.inc:2
 msgid "Search for alternates"
-msgstr ""
+msgstr "搜索其它下载点"
 
 #. type: Content of: <html><body><dl><dd>
 #: H:/Dev/DC++/repo/help/commands_file_general.inc:3
@@ -302,7 +321,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: H:/Dev/DC++/repo/help/commands_file_general.inc:5
 msgid "Lookup TTH at Bitzi.com"
-msgstr ""
+msgstr "到Bitzi.com查找TTH"
 
 #. type: Content of: <html><body><dl><dd>
 #: H:/Dev/DC++/repo/help/commands_file_general.inc:6
@@ -314,7 +333,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: H:/Dev/DC++/repo/help/commands_file_general.inc:8
 msgid "Copy magnet link to clipboard"
-msgstr ""
+msgstr "复制magnet链接"
 
 #. type: Content of: <html><body><dl><dd>
 #: H:/Dev/DC++/repo/help/commands_file_general.inc:9
@@ -324,7 +343,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: H:/Dev/DC++/repo/help/commands_file_download.inc:2
 msgid "Download"
-msgstr ""
+msgstr "下载"
 
 #. type: Content of: <html><body><dl><dd>
 #: H:/Dev/DC++/repo/help/commands_file_download.inc:3
@@ -336,7 +355,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: H:/Dev/DC++/repo/help/commands_file_download.inc:6
 msgid "Download to..."
-msgstr ""
+msgstr "下载到..."
 
 #. type: Content of: <html><body><dl><dd>
 #: H:/Dev/DC++/repo/help/commands_file_download.inc:7
@@ -350,7 +369,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: H:/Dev/DC++/repo/help/commands_file_management.inc:2
 msgid "Open"
-msgstr ""
+msgstr "开启"
 
 #. type: Content of: <html><body><dl><dd>
 #: H:/Dev/DC++/repo/help/commands_file_management.inc:3
@@ -363,7 +382,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: H:/Dev/DC++/repo/help/commands_file_management.inc:6
 msgid "Open folder"
-msgstr ""
+msgstr "开启资料夹"
 
 #. type: Content of: <html><body><dl><dd>
 #: H:/Dev/DC++/repo/help/commands_file_management.inc:7
@@ -375,7 +394,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: H:/Dev/DC++/repo/help/commands_file_management.inc:9
 msgid "Shell menu"
-msgstr ""
+msgstr "外观菜单"
 
 #. type: Content of: <html><body><dl><dd>
 #: H:/Dev/DC++/repo/help/commands_file_management.inc:10
@@ -406,11 +425,11 @@ msgstr ""
 #: help/dialog_fav_hub_groups.html:16 help/dialog_public_hub_lists.html:28
 #: help/dialog_string_list.html:29 help/settings_favoritedirs.html:22
 #: help/settings_plugins.html:51 help/settings_search_types.html:28
-#: help/settings_sharing.html:40 help/settings_user_commands.html:22
+#: help/settings_sharing.html:34 help/settings_user_commands.html:22
 #: help/settings_user_matching.html:43 help/window_adlsearch.html:54
 #: help/window_download_queue.html:21 help/window_favorite_hubs.html:47
 msgid "Remove"
-msgstr ""
+msgstr "删除"
 
 #. type: Content of: <html><body><dl><dd>
 #: H:/Dev/DC++/repo/help/commands_listview.inc:3
@@ -423,7 +442,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: H:/Dev/DC++/repo/help/commands_listview.inc:6
 msgid "Remove all"
-msgstr ""
+msgstr "全部删除"
 
 #. type: Content of: <html><body><dl><dd>
 #: H:/Dev/DC++/repo/help/commands_listview.inc:7
@@ -474,7 +493,7 @@ msgstr ""
 #: H:/Dev/DC++/repo/help/commands_user_general.inc:6
 #: help/window_file_list.html:24
 msgid "Match queue"
-msgstr ""
+msgstr "队列匹配"
 
 #. type: Content of: <html><body><dl><dd>
 #: H:/Dev/DC++/repo/help/commands_user_general.inc:7
@@ -488,7 +507,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: H:/Dev/DC++/repo/help/commands_user_general.inc:10
 msgid "Send private message"
-msgstr ""
+msgstr "发悄悄话"
 
 #. type: Content of: <html><body><dl><dd><placeholder>
 #: H:/Dev/DC++/repo/help/commands_user_general.inc:11
@@ -508,19 +527,19 @@ msgstr ""
 #: help/index.html:61 help/index.html:62 help/index.html:63 help/index.html:64
 #: help/index.html:65 help/index.html:66 help/index.html:72 help/index.html:73
 #: help/index.html:75 help/index.html:76 help/index.html:77 help/index.html:80
-#: help/index.html:82 help/index.html:83 help/index.html:86 help/index.html:88
-#: help/index.html:90 help/index.html:91 help/index.html:92 help/index.html:95
-#: help/index.html:97 help/index.html:99 help/index.html:103
-#: help/index.html:105 help/index.html:106 help/index.html:107
-#: help/index.html:108 help/index.html:109 help/index.html:112
-#: help/index.html:118 help/index.html:119 help/index.html:120
+#: help/index.html:82 help/index.html:83 help/index.html:86 help/index.html:87
+#: help/index.html:89 help/index.html:91 help/index.html:92 help/index.html:93
+#: help/index.html:96 help/index.html:98 help/index.html:100
+#: help/index.html:104 help/index.html:106 help/index.html:107
+#: help/index.html:108 help/index.html:109 help/index.html:110
+#: help/index.html:113 help/index.html:119 help/index.html:120
 #: help/index.html:121 help/index.html:122 help/index.html:123
 #: help/index.html:124 help/index.html:125 help/index.html:126
 #: help/index.html:127 help/index.html:128 help/index.html:129
-#: help/index.html:130 help/index.html:131 help/index.html:137
-#: help/index.html:138 help/index.html:139 help/index.html:143
-#: help/index.html:149 help/index.html:154 help/index.html:161
-#: help/index.html:165 help/keyboard_commands.html:35
+#: help/index.html:130 help/index.html:131 help/index.html:132
+#: help/index.html:138 help/index.html:139 help/index.html:140
+#: help/index.html:144 help/index.html:150 help/index.html:155
+#: help/index.html:162 help/index.html:166 help/keyboard_commands.html:35
 #: help/keyboard_commands.html:41 help/keyboard_commands.html:46
 #: help/keyboard_commands.html:48 help/keyboard_commands.html:52
 #: help/keyboard_commands.html:55 help/keyboard_commands.html:58
@@ -544,7 +563,7 @@ msgstr ""
 #: help/window_favorite_hubs.html:33 help/window_favorite_hubs.html:53
 #: help/window_favorite_hubs.html:54 help/window_hub.html:91
 #: help/window_main.html:28 help/window_main.html:29 help/window_main.html:47
-#: help/window_main.html:58 H:/Dev/DC++/repo/help/menu_plugins.inc:7
+#: help/window_main.html:58 H:/Dev/DC++/repo/help/menu_plugins.inc:6
 #: help/window_main.html:71 help/window_main.html:75 help/window_main.html:79
 #: help/window_main.html:83 help/window_main.html:87 help/window_main.html:91
 #: help/window_main.html:95 help/window_main.html:99 help/window_main.html:103
@@ -564,7 +583,7 @@ msgstr ""
 #: help/window_main.html:373 help/window_main.html:377 help/window_pm.html:27
 #: help/window_pm.html:69
 msgid "<placeholder id=0/>"
-msgstr ""
+msgstr "<placeholder id=0/>"
 
 #. type: Content of: <html><body><dl><dd>
 #: H:/Dev/DC++/repo/help/commands_user_general.inc:11
@@ -588,7 +607,7 @@ msgstr ""
 #: H:/Dev/DC++/repo/help/commands_user_general.inc:16
 #: help/window_download_queue.html:121
 msgid "Remove user from queue"
-msgstr ""
+msgstr "从队列中删除用户"
 
 #. type: Content of: <html><body><dl><dd>
 #: H:/Dev/DC++/repo/help/commands_user_general.inc:17
@@ -600,7 +619,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: H:/Dev/DC++/repo/help/commands_user_general.inc:19
 msgid "Ignore chat"
-msgstr ""
+msgstr "忽略聊天信息"
 
 #. type: Content of: <html><body><dl><dd>
 #: H:/Dev/DC++/repo/help/commands_user_general.inc:20
@@ -612,7 +631,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: H:/Dev/DC++/repo/help/commands_user_general.inc:22
 msgid "Un-ignore chat"
-msgstr ""
+msgstr "未忽略的聊天"
 
 #. type: Content of: <html><body><dl><dd>
 #: H:/Dev/DC++/repo/help/commands_user_general.inc:23
@@ -639,7 +658,7 @@ msgstr ""
 #: H:/Dev/DC++/repo/help/commands_user_favorites.inc:2
 #: help/window_public_hubs.html:45
 msgid "Add to favorites"
-msgstr ""
+msgstr "添加到收藏夹"
 
 #. type: Content of: <html><body><dl><dd>
 #: H:/Dev/DC++/repo/help/commands_user_favorites.inc:3
@@ -665,12 +684,12 @@ msgstr ""
 #. type: Content of: <html><body><h1>
 #: help/credits.html:22
 msgid "Contributors"
-msgstr ""
+msgstr "贡献者"
 
 #. type: Content of: <html><body><h1>
 #: help/credits.html:35
 msgid "Translators"
-msgstr ""
+msgstr "翻译人员"
 
 #. type: Content of: <html><body><pre>
 #: help/credits.html:36
@@ -679,6 +698,7 @@ msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
 "  449179249 https://launchpad.net/~449179249-y\n"
+"  Guybrush88 https://launchpad.net/~guybrush\n"
 "  comet https://launchpad.net/~iamcomet\n"
 "  lostaway https://launchpad.net/~76atwy"
 
@@ -711,7 +731,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/dev_applypatch.html:9 help/index.html:138
+#: help/dev_applypatch.html:9 help/index.html:139
 msgid "Applying patches"
 msgstr ""
 
@@ -768,7 +788,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/dev_createpatch.html:9 help/index.html:139
+#: help/dev_createpatch.html:9 help/index.html:140
 msgid "Creating patches"
 msgstr ""
 
@@ -860,12 +880,12 @@ msgstr ""
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
 #: help/dialog_adls_properties.html:9 help/index.html:63
 msgid "ADLSearch Properties"
-msgstr ""
+msgstr "ADL搜索选项"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_adls_properties.html:11
 msgid "Search String"
-msgstr ""
+msgstr "查找字符串"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_adls_properties.html:12
@@ -875,7 +895,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_adls_properties.html:13
 msgid "Regular Expression"
-msgstr ""
+msgstr "正则表达式"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_adls_properties.html:14
@@ -887,7 +907,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_adls_properties.html:15 help/window_adlsearch.html:23
 msgid "Source Type"
-msgstr ""
+msgstr "货源种类"
 
 #. type: Content of: <html><body><dl><dd><p>
 #: help/dialog_adls_properties.html:16 help/window_adlsearch.html:24
@@ -899,7 +919,7 @@ msgstr ""
 #: help/window_download_queue.html:27 help/window_finished_downloads.html:20
 #: help/window_finished_uploads.html:20
 msgid "Filename"
-msgstr ""
+msgstr "文件名"
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/dialog_adls_properties.html:19 help/window_adlsearch.html:27
@@ -910,7 +930,7 @@ msgstr ""
 #: help/dialog_adls_properties.html:20 help/settings_logs.html:12
 #: help/window_adlsearch.html:28
 msgid "Directory"
-msgstr ""
+msgstr "目录"
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/dialog_adls_properties.html:21 help/window_adlsearch.html:29
@@ -922,7 +942,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd><dl><dt>
 #: help/dialog_adls_properties.html:23 help/window_adlsearch.html:31
 msgid "Full Path"
-msgstr ""
+msgstr "完整路径"
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/dialog_adls_properties.html:24 help/window_adlsearch.html:32
@@ -932,7 +952,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_adls_properties.html:27
 msgid "Min FileSize"
-msgstr ""
+msgstr "最小文件尺寸"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_adls_properties.html:28 help/window_adlsearch.html:40
@@ -944,7 +964,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_adls_properties.html:29
 msgid "Max FileSize"
-msgstr ""
+msgstr "最大文件大小"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_adls_properties.html:30 help/window_adlsearch.html:42
@@ -956,7 +976,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_adls_properties.html:31
 msgid "Size Type"
-msgstr ""
+msgstr "大小单位"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_adls_properties.html:32
@@ -966,7 +986,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_adls_properties.html:33 help/window_adlsearch.html:35
 msgid "Destination Directory"
-msgstr ""
+msgstr "归类目录名"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_adls_properties.html:34 help/window_adlsearch.html:36
@@ -979,7 +999,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_adls_properties.html:37
 msgid "Enabled"
-msgstr ""
+msgstr "启用"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_adls_properties.html:38
@@ -989,7 +1009,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_adls_properties.html:39
 msgid "Download Matches"
-msgstr ""
+msgstr "下载匹配的"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_adls_properties.html:40
@@ -1001,7 +1021,7 @@ msgstr ""
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
 #: help/dialog_customize_tb.html:9 help/index.html:65
 msgid "Toolbar customization"
-msgstr ""
+msgstr "自定义工具栏"
 
 #. type: Content of: <html><body><p>
 #: help/dialog_customize_tb.html:10
@@ -1059,7 +1079,7 @@ msgstr ""
 #: help/window_main.html:29 help/window_main.html:143
 #: help/window_main.html:148 help/window_main.html:245
 msgid "Favorite hub groups"
-msgstr ""
+msgstr "收藏的站点组"
 
 #. type: Content of: <html><body><dl><dd><div><placeholder><a>
 #: help/dialog_fav_hub_groups.html:10 help/index.html:33
@@ -1068,22 +1088,22 @@ msgstr ""
 #: help/window_main.html:241 help/window_main.html:243
 #: help/window_main.html:244
 msgid "Favorite Hubs"
-msgstr ""
+msgstr "站点收藏夹"
 
 #. type: Content of: <html><body><dl><dd><dl><dt>
 #: help/dialog_fav_hub_groups.html:10 help/window_main.html:26
 msgid "Connect to a favorite hub group"
-msgstr ""
+msgstr "连接到收藏夹的hub组"
 
 #. type: Content of: <html><body><dl><dd><dl><dt>
 #: help/dialog_fav_hub_groups.html:10 help/window_main.html:140
 msgid "Close all hubs of a favorite group"
-msgstr ""
+msgstr "关闭收藏组的全部站点"
 
 #. type: Content of: <html><body><dl><dd><dl><dt>
 #: help/dialog_fav_hub_groups.html:10 help/window_main.html:145
 msgid "Close hubs not in a favorite group"
-msgstr ""
+msgstr "关闭非收藏组的站点"
 
 #. type: Content of: <html><body><p>
 #: help/dialog_fav_hub_groups.html:10
@@ -1098,7 +1118,7 @@ msgstr ""
 #. type: Content of: <html><body><h2>
 #: help/dialog_fav_hub_groups.html:12 help/dialog_string_list.html:15
 msgid "List"
-msgstr ""
+msgstr "列表"
 
 #. type: Content of: <html><body><p>
 #: help/dialog_fav_hub_groups.html:13
@@ -1108,12 +1128,12 @@ msgstr ""
 #. type: Content of: <html><body><h3>
 #: help/dialog_fav_hub_groups.html:14
 msgid "Update"
-msgstr ""
+msgstr "更新"
 
 #. type: Content of: <html><body><h2>
 #: help/dialog_fav_hub_groups.html:15 help/dialog_fav_hub_groups.html:19
 msgid "Group properties"
-msgstr ""
+msgstr "组属性"
 
 #. type: Content of: <html><body><p>
 #: help/dialog_fav_hub_groups.html:15
@@ -1144,7 +1164,7 @@ msgstr ""
 #: help/dialog_user_command.html:37 help/dialog_user_matching.html:17
 #: help/window_favorite_hubs.html:15 help/window_public_hubs.html:15
 msgid "Name"
-msgstr ""
+msgstr "名"
 
 #. type: Content of: <html><body><p>
 #: help/dialog_fav_hub_groups.html:22
@@ -1168,7 +1188,7 @@ msgstr ""
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
 #: help/dialog_favorite_hub.html:9 help/index.html:61
 msgid "Favorite Hub Properties"
-msgstr ""
+msgstr "收藏的站点的选项"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_favorite_hub.html:10 help/index.html:29
@@ -1186,7 +1206,7 @@ msgstr ""
 #: help/window_main.html:142 help/window_main.html:147
 #: help/window_search.html:81 help/window_transfers.html:46
 msgid "Hub"
-msgstr ""
+msgstr "服务器"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_favorite_hub.html:13 help/window_favorite_hubs.html:16
@@ -1196,7 +1216,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_favorite_hub.html:14 help/window_public_hubs.html:21
 msgid "Address"
-msgstr ""
+msgstr "地址"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_favorite_hub.html:15 help/window_favorite_hubs.html:24
@@ -1209,7 +1229,7 @@ msgstr ""
 #: help/window_hub.html:49 help/window_public_hubs.html:17
 #: help/window_users.html:28 help/window_users.html:38
 msgid "Description"
-msgstr ""
+msgstr "说明"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_favorite_hub.html:17 help/window_favorite_hubs.html:18
@@ -1219,14 +1239,14 @@ msgstr ""
 #. type: Content of: <html><body><h2>
 #: help/dialog_favorite_hub.html:19
 msgid "Identification (leave blank for defaults)"
-msgstr ""
+msgstr "身份识别 (不填则与默认相同)"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_favorite_hub.html:21 help/settings_general.html:19
 #: help/window_favorite_hubs.html:19 help/window_hub.html:45
 #: help/window_users.html:22
 msgid "Nick"
-msgstr ""
+msgstr "昵称"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_favorite_hub.html:22 help/window_favorite_hubs.html:20
@@ -1239,7 +1259,7 @@ msgstr ""
 #: help/dialog_favorite_hub.html:23 help/settings_proxy.html:29
 #: help/window_favorite_hubs.html:21
 msgid "Password"
-msgstr ""
+msgstr "密码"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_favorite_hub.html:24 help/window_favorite_hubs.html:22
@@ -1258,7 +1278,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_favorite_hub.html:27 help/settings_general.html:31
 msgid "Email"
-msgstr ""
+msgstr "电子邮件"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_favorite_hub.html:28
@@ -1270,7 +1290,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_favorite_hub.html:29 help/settings_connectivity_manual.html:53
 msgid "External / WAN IP"
-msgstr ""
+msgstr "外网/公网 IP 地址"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_favorite_hub.html:30
@@ -1283,7 +1303,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_favorite_hub.html:31 help/window_favorite_hubs.html:27
 msgid "Group"
-msgstr ""
+msgstr "群组"
 
 #. type: Content of: <html><body><dl><dd><div>
 #: help/dialog_favorite_hub.html:33
@@ -1300,7 +1320,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_favorite_hub.html:36 help/window_favorite_hubs.html:51
 msgid "Manage groups"
-msgstr ""
+msgstr "管理组"
 
 #. type: Content of: <html><body><dl><dd><div>
 #: help/dialog_favorite_hub.html:38 help/window_favorite_hubs.html:53
@@ -1312,7 +1332,7 @@ msgstr ""
 #: help/dialog_indexing_progress.html:9 help/index.html:58
 #: help/window_main.html:114
 msgid "Indexing progress"
-msgstr ""
+msgstr "索引进度"
 
 #. type: Content of: <html><body><p>
 #: help/dialog_indexing_progress.html:11
@@ -1350,7 +1370,7 @@ msgstr ""
 #: help/dialog_public_hub_lists.html:9 help/index.html:64
 #: help/settings_downloads.html:103 help/window_public_hubs.html:61
 msgid "Configured Public Hub Lists"
-msgstr ""
+msgstr "设定的公众服务器列表"
 
 #. type: Content of: <html><body><h2>
 #: help/dialog_public_hub_lists.html:10
@@ -1384,7 +1404,7 @@ msgstr ""
 #: help/settings_plugins.html:19 help/settings_search_types.html:19
 #: help/settings_user_commands.html:14 help/settings_user_matching.html:19
 msgid "Add"
-msgstr ""
+msgstr "新增"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_public_hub_lists.html:21
@@ -1398,7 +1418,7 @@ msgstr ""
 #: help/settings_plugins.html:41 help/settings_user_commands.html:18
 #: help/settings_user_matching.html:33
 msgid "Move Up"
-msgstr ""
+msgstr "上移"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_public_hub_lists.html:23
@@ -1412,7 +1432,7 @@ msgstr ""
 #: help/settings_plugins.html:46 help/settings_user_commands.html:20
 #: help/settings_user_matching.html:38
 msgid "Move Down"
-msgstr ""
+msgstr "下移"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_public_hub_lists.html:25
@@ -1425,7 +1445,7 @@ msgstr ""
 #: help/dialog_public_hub_lists.html:26 help/dialog_string_list.html:27
 #: help/settings_user_matching.html:26
 msgid "Edit"
-msgstr ""
+msgstr "编辑"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_public_hub_lists.html:27
@@ -1440,7 +1460,7 @@ msgstr ""
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
 #: help/dialog_string_list.html:9 help/index.html:66
 msgid "List configuration"
-msgstr ""
+msgstr "列出配置"
 
 #. type: Content of: <html><body>
 #: help/dialog_string_list.html:10
@@ -1502,7 +1522,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_user_command.html:12
 msgid "Separator"
-msgstr ""
+msgstr "分隔符"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_user_command.html:13
@@ -1512,7 +1532,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_user_command.html:14
 msgid "Raw"
-msgstr ""
+msgstr "原生"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_user_command.html:15
@@ -1524,7 +1544,7 @@ msgstr ""
 #. type: Content of: <html><body><h2>
 #: help/dialog_user_command.html:16 help/settings_styles.html:34
 msgid "Chat"
-msgstr ""
+msgstr "聊天"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_user_command.html:17
@@ -1534,7 +1554,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_user_command.html:18
 msgid "PM"
-msgstr ""
+msgstr "私聊消息"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_user_command.html:19
@@ -1544,7 +1564,7 @@ msgstr ""
 #. type: Content of: <html><body><h2>
 #: help/dialog_user_command.html:21
 msgid "Context"
-msgstr ""
+msgstr "上下文"
 
 #. type: Content of: <html><body><p>
 #: help/dialog_user_command.html:23
@@ -1554,7 +1574,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_user_command.html:26
 msgid "Hub Menu"
-msgstr ""
+msgstr "站点菜单"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_user_command.html:27
@@ -1564,7 +1584,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_user_command.html:28
 msgid "User Menu"
-msgstr ""
+msgstr "用户菜单"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_user_command.html:29
@@ -1574,7 +1594,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_user_command.html:30
 msgid "Search Menu"
-msgstr ""
+msgstr "搜索菜单"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_user_command.html:31
@@ -1594,7 +1614,7 @@ msgstr ""
 #. type: Content of: <html><body><h2>
 #: help/dialog_user_command.html:35
 msgid "Parameters"
-msgstr ""
+msgstr "参数"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_user_command.html:38
@@ -1606,7 +1626,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_user_command.html:39
 msgid "Command"
-msgstr ""
+msgstr "命令"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_user_command.html:40
@@ -1618,7 +1638,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_user_command.html:41
 msgid "Hub address"
-msgstr ""
+msgstr "站点地址"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_user_command.html:43
@@ -1634,7 +1654,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_user_command.html:48
 msgid "To"
-msgstr ""
+msgstr "到"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_user_command.html:49
@@ -1656,7 +1676,7 @@ msgstr ""
 #. type: Content of: <html><body><h2>
 #: help/dialog_user_command.html:55
 msgid "Variables"
-msgstr ""
+msgstr "变量"
 
 #. type: Content of: <html><body><p>
 #: help/dialog_user_command.html:57
@@ -1857,13 +1877,13 @@ msgstr ""
 #: help/dialog_user_matching.html:9 help/index.html:60
 #: help/settings_user_matching.html:22 help/settings_user_matching.html:29
 msgid "User matching definition"
-msgstr ""
+msgstr "用户匹配的定义"
 
 #. type: Content of: <html><body><p><placeholder><a>
 #: help/dialog_user_matching.html:13 help/dialog_user_matching.html:20
-#: help/index.html:109 help/settings_styles.html:80
+#: help/index.html:110 help/settings_styles.html:80
 msgid "User matching"
-msgstr ""
+msgstr "用户匹配"
 
 #. type: Content of: <html><body><p>
 #: help/dialog_user_matching.html:11
@@ -1874,10 +1894,10 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd><placeholder><a>
-#: help/dialog_user_matching.html:21 help/index.html:90
+#: help/dialog_user_matching.html:21 help/index.html:91
 #: help/settings_styles.html:9 help/settings_user_matching.html:50
 msgid "Styles"
-msgstr ""
+msgstr "样式"
 
 #. type: Content of: <html><body><p>
 #: help/dialog_user_matching.html:19
@@ -1889,7 +1909,7 @@ msgstr ""
 #. type: Content of: <html><body><h2>
 #: help/dialog_user_matching.html:24
 msgid "Match favorite users"
-msgstr ""
+msgstr "匹配收藏的用户"
 
 #. type: Content of: <html><body><h1>
 #: help/dialog_user_matching.html:27 help/index.html:34
@@ -1901,7 +1921,7 @@ msgstr ""
 #: help/window_public_hubs.html:89 help/window_users.html:10
 #: help/window_users.html:11
 msgid "Users"
-msgstr ""
+msgstr "用户"
 
 #. type: Content of: <html><body><p>
 #: help/dialog_user_matching.html:26
@@ -1914,7 +1934,7 @@ msgstr ""
 #. type: Content of: <html><body><h2>
 #: help/dialog_user_matching.html:31
 msgid "Match operators"
-msgstr ""
+msgstr "匹配操作员"
 
 #. type: Content of: <html><body><p>
 #: help/dialog_user_matching.html:33
@@ -1926,7 +1946,7 @@ msgstr ""
 #. type: Content of: <html><body><h2>
 #: help/dialog_user_matching.html:37
 msgid "Match bots"
-msgstr ""
+msgstr "匹配bots"
 
 #. type: Content of: <html><body><p>
 #: help/dialog_user_matching.html:39
@@ -1938,12 +1958,12 @@ msgstr ""
 #. type: Content of: <html><body><h2>
 #: help/dialog_user_matching.html:43
 msgid "Rules"
-msgstr ""
+msgstr "规则"
 
 #. type: Content of: <html><body><h3>
 #: help/dialog_user_matching.html:45
 msgid "Add a rule"
-msgstr ""
+msgstr "添加规则"
 
 #. type: Content of: <html><body><p>
 #: help/dialog_user_matching.html:47
@@ -1997,7 +2017,7 @@ msgstr ""
 #. type: Content of: <html><body><h2>
 #: help/dialog_user_matching.html:72
 msgid "Always show chat messages"
-msgstr ""
+msgstr "总是显示聊天信息"
 
 #. type: Content of: <html><body><p>
 #: help/dialog_user_matching.html:74
@@ -2009,7 +2029,7 @@ msgstr ""
 #. type: Content of: <html><body><h2>
 #: help/dialog_user_matching.html:78
 msgid "Ignore chat messages"
-msgstr ""
+msgstr "忽略聊天信息"
 
 #. type: Content of: <html><body><p>
 #: help/dialog_user_matching.html:80
@@ -2018,7 +2038,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_connection.html:10 help/index.html:119
+#: help/faq_connection.html:10 help/index.html:120
 msgid "How to set up connection manually?"
 msgstr ""
 
@@ -2379,7 +2399,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_different_icons.html:9 help/index.html:126
+#: help/faq_different_icons.html:9 help/index.html:127
 msgid "What do the different user icons mean?"
 msgstr ""
 
@@ -2391,7 +2411,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/faq_different_icons.html:12
 msgid "Green"
-msgstr ""
+msgstr "绿色"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/faq_different_icons.html:13
@@ -2401,7 +2421,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/faq_different_icons.html:14
 msgid "Grey"
-msgstr ""
+msgstr "灰色"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/faq_different_icons.html:15
@@ -2411,7 +2431,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/faq_different_icons.html:16
 msgid "Yellow"
-msgstr ""
+msgstr "黄色"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/faq_different_icons.html:17
@@ -2587,7 +2607,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_mapping.html:9 help/index.html:122
+#: help/faq_mapping.html:9 help/index.html:123
 msgid "What is NAT-PMP / UPnP?"
 msgstr ""
 
@@ -2617,7 +2637,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_nosearch.html:9 help/index.html:124
+#: help/faq_nosearch.html:9 help/index.html:125
 msgid "Why don't I get any search results?"
 msgstr ""
 
@@ -2813,7 +2833,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><h1>
-#: help/faq_plusplus_tag.html:54 help/index.html:97
+#: help/faq_plusplus_tag.html:54 help/index.html:98
 #: help/settings_history.html:9
 msgid "History"
 msgstr ""
@@ -2841,7 +2861,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_portforward.html:9 help/index.html:120
+#: help/faq_portforward.html:9 help/index.html:121
 msgid "How to set up manual port forwarding?"
 msgstr ""
 
@@ -3062,7 +3082,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_secret.html:10 help/index.html:129
+#: help/faq_secret.html:10 help/index.html:130
 msgid "What secret stuff is there?"
 msgstr ""
 
@@ -3148,7 +3168,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_settings_files.html:9 help/index.html:131
+#: help/faq_settings_files.html:9 help/index.html:132
 msgid "DC++ settings files guide"
 msgstr ""
 
@@ -4052,7 +4072,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_units.html:9 help/index.html:127
+#: help/faq_units.html:9 help/index.html:128
 msgid "What do the units mean?"
 msgstr ""
 
@@ -4296,7 +4316,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_whyactive.html:9 help/index.html:118
+#: help/faq_whyactive.html:9 help/index.html:119
 msgid "Why do I need active mode?"
 msgstr ""
 
@@ -4623,7 +4643,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:26 help/index.html:92 help/settings_windows.html:9
+#: help/index.html:26 help/index.html:93 help/settings_windows.html:9
 msgid "Windows"
 msgstr ""
 
@@ -4777,99 +4797,104 @@ msgid "Sharing"
 msgstr ""
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:88 help/settings_appearance.html:9
+#: help/index.html:87 help/settings_sharing_filtering.html:9
+msgid "Filtering"
+msgstr ""
+
+#. type: Content of: <html><body><h1>
+#: help/index.html:89 help/settings_appearance.html:9
 msgid "Appearance"
 msgstr ""
 
 #. type: Content of: <html><body><h2>
-#: help/index.html:91 help/window_main.html:317
+#: help/index.html:92 help/window_main.html:317
 msgid "Tabs"
 msgstr ""
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:95 help/settings_notifications.html:9
+#: help/index.html:96 help/settings_notifications.html:9
 msgid "Notifications"
 msgstr ""
 
 #. type: Content of: <html><body><h3>
-#: help/index.html:99 help/settings_logs.html:9 help/settings_styles.html:40
+#: help/index.html:100 help/settings_logs.html:9 help/settings_styles.html:40
 msgid "Logs"
 msgstr ""
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:103 help/settings_advanced.html:9
+#: help/index.html:104 help/settings_advanced.html:9
 msgid "Advanced"
 msgstr ""
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:105 help/settings_expert.html:9
+#: help/index.html:106 help/settings_expert.html:9
 msgid "Experts only"
 msgstr ""
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:106 help/settings_user_commands.html:9
+#: help/index.html:107 help/settings_user_commands.html:9
 msgid "User commands"
 msgstr ""
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:107 help/settings_certs.html:9
+#: help/index.html:108 help/settings_certs.html:9
 msgid "Security certificates"
 msgstr ""
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:108 help/settings_search_types.html:9
+#: help/index.html:109 help/settings_search_types.html:9
 msgid "Search types"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd><ul><li><placeholder><a>
-#: help/index.html:112 help/window_main.html:57 help/window_main.html:58
-#: H:/Dev/DC++/repo/help/menu_plugins.inc:7 help/window_main.html:223
+#: help/index.html:113 help/window_main.html:57 help/window_main.html:58
+#: H:/Dev/DC++/repo/help/menu_plugins.inc:6 help/window_main.html:223
 #: help/window_main.html:299 help/window_main.html:302
 msgid "Plugins"
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><h3>
-#: help/index.html:116
+#: help/index.html:117
 msgid "Frequently Asked Questions"
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/index.html:121
+#: help/index.html:122
 msgid "How to unblock DC++ in firewalls and other security software?"
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/index.html:123
+#: help/index.html:124
 msgid "My ISP or University blocks DC++"
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/index.html:125
+#: help/index.html:126
 msgid "Why am I getting slow download speeds?"
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/index.html:128
+#: help/index.html:129
 msgid "How do I install/uninstall/upgrade DC++?"
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/index.html:130
+#: help/index.html:131
 msgid "What do the DC++ tags mean?"
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><h3>
-#: help/index.html:135
+#: help/index.html:136
 msgid "Development"
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/index.html:137
+#: help/index.html:138
 msgid "Compile instructions"
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><div>
-#: help/index.html:144
+#: help/index.html:145
 msgid ""
 "These are the commands that are available in chat, private messages, or "
 "both. They offer handy keyboard shortcuts to functions in the graphical "
@@ -4877,12 +4902,12 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><div><placeholder><a>
-#: help/index.html:149
+#: help/index.html:150
 msgid "List of Available Keyboard Shortcuts"
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><div>
-#: help/index.html:150
+#: help/index.html:151
 msgid ""
 "These are the keyboard shortcuts that are available in for different "
 "commands in DC++.  They offer quick access to some of the often used "
@@ -4890,12 +4915,12 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><div><placeholder><a>
-#: help/index.html:154
+#: help/index.html:155
 msgid "Changelog"
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><div>
-#: help/index.html:155
+#: help/index.html:156
 msgid ""
 "This page contains everything that has changed in the history of DC++.  Read "
 "this to find out about features that are poorly or not documented at all. "
@@ -4903,23 +4928,23 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd><dl><dt>
-#: help/index.html:161 help/links.html:9 help/settings_styles.html:35
+#: help/index.html:162 help/links.html:9 help/settings_styles.html:35
 #: help/window_main.html:172
 msgid "Links"
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><div>
-#: help/index.html:162
+#: help/index.html:163
 msgid "View the various links for DC++."
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><div><placeholder><a>
-#: help/index.html:165
+#: help/index.html:166
 msgid "Help File Credits"
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><div>
-#: help/index.html:166
+#: help/index.html:167
 msgid "View the credits and license of this help file."
 msgstr ""
 
@@ -6253,7 +6278,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/settings_bwlimit.html:53 help/settings_sharing.html:50
+#: help/settings_bwlimit.html:53 help/settings_sharing.html:44
 msgid "Upload slots"
 msgstr ""
 
@@ -6631,8 +6656,8 @@ msgid ""
 "This is the port that DC++ listens on for incoming <a po4a-id=0>TLS "
 "(encrypted)</a> connections from other peers. If this port is incorrectly "
 "forwarded, you won't be able to search nor to download on encrypted ADC "
-"hubs. Note that <b>this port value should be different than the ones used "
-"for transfers (TCP) and searches (UDP).</b>"
+"hubs. Note that <b>this port value should be different than the one used for "
+"transfers (TCP).</b>"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd><dl><dt>
@@ -7097,6 +7122,19 @@ msgid ""
 "originating <placeholder id=1/> window instead."
 msgstr ""
 
+#. type: Content of: <html><body><dl><dt>
+#: help/settings_expert.html:58
+msgid "Max protocol command length"
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_expert.html:59
+msgid ""
+"The amount of protocol data DC++ will maximally manage. This setting help "
+"protect against potentially malicious clients and hubs.  Measured in bytes. "
+"(default: 524288 bytes)"
+msgstr ""
+
 #. type: Content of: <html><body><h1>
 #: help/settings_favoritedirs.html:9
 msgid "Favorite download directories"
@@ -7111,7 +7149,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/settings_favoritedirs.html:16 help/settings_sharing.html:26
+#: help/settings_favoritedirs.html:16 help/settings_sharing.html:20
 msgid "Add folder"
 msgstr ""
 
@@ -7125,7 +7163,7 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_favoritedirs.html:20 help/settings_search_types.html:25
-#: help/settings_sharing.html:35
+#: help/settings_sharing.html:29
 msgid "Rename"
 msgstr ""
 
@@ -7135,7 +7173,7 @@ msgid "Rename the selected folder(s)."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_favoritedirs.html:23 help/settings_sharing.html:41
+#: help/settings_favoritedirs.html:23 help/settings_sharing.html:35
 msgid "Remove the selected folder(s)."
 msgstr ""
 
@@ -8563,16 +8601,17 @@ msgstr ""
 #: help/settings_queue.html:113
 msgid ""
 "This option will stop you from downloading files which already exist in one "
-"of your shared directories."
+"of your shared directories. When you enable this function, to get already "
+"shared items removed from the queue you have to restart DC++."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/settings_queue.html:115
+#: help/settings_queue.html:116
 msgid "Don't download files already in the queue"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_queue.html:116
+#: help/settings_queue.html:117
 msgid ""
 "This option will stop you from downloading files which already exist in your "
 "queue by blocking the addition of the same file to a different place in the "
@@ -8584,12 +8623,12 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/settings_queue.html:121
+#: help/settings_queue.html:122
 msgid "Keep finished files in the queue"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_queue.html:122
+#: help/settings_queue.html:123
 msgid ""
 "Enable this option if you want to keep downloaded files and folders in the "
 "download queue after they have been finished. After downloaded the queue "
@@ -8690,22 +8729,8 @@ msgid ""
 "this is due to a refresh of the file list."
 msgstr ""
 
-#. type: Content of: <html><body><dl><dt>
-#: help/settings_sharing.html:20
-msgid "Share hidden files"
-msgstr ""
-
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_sharing.html:21
-msgid ""
-"Share files with the Hidden attribute set and files inside directory with "
-"the Hidden attribute set. With this option off, files starting with a . "
-"(full stop) will not be shared. Note: this option requires a refresh of the "
-"file list, and may cause the client to appear to freeze."
-msgstr ""
-
-#. type: Content of: <html><body><dl><dd>
-#: help/settings_sharing.html:27
 msgid ""
 "Browse for a new folder to add to your share. If another existing file "
 "shares that name, the new name will be made unique by adding another letter "
@@ -8719,19 +8744,19 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_sharing.html:36
+#: help/settings_sharing.html:30
 msgid ""
 "Change the virtual name on a shared folder. Note: the client will appear to "
 "freeze when you exit settings, this is due to a refresh of the file list."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/settings_sharing.html:44
+#: help/settings_sharing.html:38
 msgid "Automatically open an extra slot if speed is below (0 = disable)"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_sharing.html:45
+#: help/settings_sharing.html:39
 msgid ""
 "If the average upload speed drops below the given number, an additional "
 "upload slot will be granted. These slots are granted once every 30 seconds "
@@ -8740,7 +8765,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_sharing.html:51
+#: help/settings_sharing.html:45
 msgid ""
 "Configure the number of slots that other users can occupy to download files "
 "from you. A remote user can use only one slot for each hub that they're on "
@@ -8750,13 +8775,93 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_sharing.html:59
+#: help/settings_sharing.html:53
 msgid ""
 "Note: If a user leaves the hub, DC++ will close his slots; if the user is "
 "back within 10 minutes, DC++ will grant him a slot. (This will only happen "
 "if <a po4a-id=0>Automatically disconnect users who leave the hub</a> is "
 "enabled.) This can cause your upload slots to go over the maximum set in "
 "settings."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dt>
+#: help/settings_sharing_filtering.html:11
+msgid "Share hidden files"
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_sharing_filtering.html:12
+msgid ""
+"Share files with the Hidden attribute set and files inside directory with "
+"the Hidden attribute set. With this option off, files starting with a . "
+"(full stop) will not be shared. Note: this option requires a refresh of the "
+"file list, and may cause the client to appear to freeze."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dt>
+#: help/settings_sharing_filtering.html:18
+msgid "File minimum size"
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_sharing_filtering.html:20
+msgid ""
+"Only include include files in thee share that has a file size above the "
+"specified value. Value is specified in bytes. The value 0 removes the filter "
+"and is the default."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dt>
+#: help/settings_sharing_filtering.html:22
+msgid "File maximum size"
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_sharing_filtering.html:24
+msgid ""
+"Only include include files in the share that has a file size below the "
+"specified value. Value is specified in bytes. The value 0 removes the filter "
+"and is the default."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dt>
+#: help/settings_sharing_filtering.html:27
+msgid "File name filtering with Regular expressions"
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_sharing_filtering.html:29
+msgid ""
+"Filters out any file with a name that matches a regular expression that is "
+"listed here. Use semicolon to separate multiple regular expressions. For "
+"example, the value ^.*\\.txt;^.*\\.png will remove any file that has the "
+"extensions txt or png."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dt>
+#: help/settings_sharing_filtering.html:32
+msgid "File extension filtering"
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_sharing_filtering.html:34
+msgid ""
+"Filters out any file with an extension that is listed here. Use semicolon to "
+"separate multiple extensions. For example, the value txt;png will remove any "
+"file that has the extensions txt or png."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dt>
+#: help/settings_sharing_filtering.html:35
+msgid "Path filtering"
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_sharing_filtering.html:37
+msgid ""
+"Filters out any path that is listed here. Use semicolon to separate multiple "
+"paths. For example, the value \"download;secret_files\" will remove any "
+"directory that has download or secret_files in the path."
 msgstr ""
 
 #. type: Content of: <html><body><p>
@@ -11187,15 +11292,15 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd><ul><li>
 #: H:/Dev/DC++/repo/help/menu_plugins.inc:6
-msgid "\"Configure\" opens the\r <placeholder id=0/> configuration page."
+msgid "\"Configure\" opens the <placeholder id=0/> configuration page."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd><ul><li>
-#: H:/Dev/DC++/repo/help/menu_plugins.inc:10
+#: H:/Dev/DC++/repo/help/menu_plugins.inc:9
 msgid ""
 "Installed plugins are listed below. They can be selectively enabled or "
-"disabled. A\r \"Configure\" command is also available for each of them (the "
-"behavior of which is\r plugin-dependant). Plugins are also allowed to add "
+"disabled. A \"Configure\" command is also available for each of them (the "
+"behavior of which is plugin-dependant). Plugins are also allowed to add "
 "additional commands in that sub-menu."
 msgstr ""
 

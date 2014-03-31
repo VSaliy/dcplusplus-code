@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-09-22 16:00+0200\n"
+"POT-Creation-Date: 2014-03-31 14:37+0200\n"
 "PO-Revision-Date: 2013-07-21 09:59+0000\n"
 "Last-Translator: Gabberworld <Unknown>\n"
 "Language-Team: Estonian <et@li.org>\n"
@@ -15,40 +15,40 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-09-22 13:49+0000\n"
-"X-Generator: Launchpad (build 16765)\n"
+"X-Launchpad-Export-Date: 2014-03-30 18:17+0000\n"
+"X-Generator: Launchpad (build 16967)\n"
 
 #: dcpp\DownloadManager.cpp:360
 #, boost-format
 msgid " - Queued: %1%"
 msgstr ""
 
-#: dcpp\Util.cpp:583
+#: dcpp\Util.cpp:571
 #, c-format, boost-format
 msgid "%'lld B"
 msgstr "%'lld B"
 
-#: dcpp\Util.cpp:545
+#: dcpp\Util.cpp:533
 #, c-format, boost-format
 msgid "%.02f GiB"
 msgstr "%.02f GiB"
 
-#: dcpp\Util.cpp:541
+#: dcpp\Util.cpp:529
 #, c-format, boost-format
 msgid "%.02f KiB"
 msgstr "%.02f KiB"
 
-#: dcpp\Util.cpp:543
+#: dcpp\Util.cpp:531
 #, c-format, boost-format
 msgid "%.02f MiB"
 msgstr "%.02f MiB"
 
-#: dcpp\Util.cpp:549
+#: dcpp\Util.cpp:537
 #, c-format, boost-format
 msgid "%.02f PiB"
 msgstr "%.02f PiB"
 
-#: dcpp\Util.cpp:547
+#: dcpp\Util.cpp:535
 #, c-format, boost-format
 msgid "%.02f TiB"
 msgstr "%.02f TiB"
@@ -63,8 +63,8 @@ msgstr ""
 msgid "%1% %2% port (%3% %4%)"
 msgstr ""
 
-#: dcpp\HttpConnection.cpp:143 dcpp\HttpConnection.cpp:218
-#: dcpp\HttpConnection.cpp:274
+#: dcpp\HttpConnection.cpp:143 dcpp\HttpConnection.cpp:226
+#: dcpp\HttpConnection.cpp:282
 #, boost-format
 msgid "%1% (%2%)"
 msgstr "%1% (%2%)"
@@ -96,7 +96,7 @@ msgstr "%1%: Fail pole kättesaadav"
 msgid "%1% is not compatible with %2%"
 msgstr ""
 
-#: dcpp\HashManager.cpp:698
+#: dcpp\HashManager.cpp:693
 #, boost-format
 msgid ""
 "%1% not shared; calculated CRC32 does not match the one found in SFV file."
@@ -122,12 +122,12 @@ msgstr "%1%/s"
 msgid "%1%: File not available"
 msgstr "%1%: Fail pole kättesaadav"
 
-#: dcpp\Util.cpp:539
+#: dcpp\Util.cpp:527
 #, c-format, boost-format
 msgid "%d B"
 msgstr "%d B"
 
-#: dcpp\Util.cpp:579
+#: dcpp\Util.cpp:567
 #, c-format, boost-format
 msgid "%s B"
 msgstr "%s B"
@@ -136,15 +136,15 @@ msgstr "%s B"
 msgid "<Enter string>"
 msgstr "<Sisesta string>"
 
-#: dcpp\QueueManager.cpp:599
+#: dcpp\QueueManager.cpp:600
 msgid "A file with a different TTH root already exists in the queue"
 msgstr "Fail erineva TTH juurkaustaga on juba järjekorras"
 
-#: dcpp\QueueManager.cpp:596
+#: dcpp\QueueManager.cpp:597
 msgid "A file with a different size already exists in the queue"
 msgstr "Erineva suurusega fail on juba järjekorras"
 
-#: dcpp\QueueManager.cpp:538
+#: dcpp\QueueManager.cpp:539
 msgid "A file with the same hash already exists in your share"
 msgstr "Sama hashiga fail on juba jagatud"
 
@@ -164,7 +164,7 @@ msgid ""
 "better connectivity"
 msgstr ""
 
-#: dcpp\ConnectionManager.cpp:205
+#: dcpp\ConnectionManager.cpp:214
 msgid "All download slots taken"
 msgstr "Kõik allalaadimis slotid on võetud"
 
@@ -180,29 +180,36 @@ msgstr "Suvaline"
 msgid "Audio"
 msgstr "Audio"
 
-#: dcpp\QueueManager.cpp:1651
+#: dcpp\QueueManager.cpp:1660
 msgid "CRC32 inconsistency (SFV-Check)"
 msgstr "CRC32 ebakõla (SFV-kontroll)"
 
-#: dcpp\QueueManager.cpp:1642
+#: dcpp\QueueManager.cpp:1651
 #, fuzzy, boost-format
 msgid "CRC32 inconsistency (SFV-Check): %1%"
 msgstr "CRC32 ebakõla (SFV-kontroll)"
+
+#: dcpp\CryptoManager.cpp:626
+#, boost-format
+msgid ""
+"Certificate verification for %1% failed with error: %2% (certificate "
+"KeyPrint: %3%)"
+msgstr ""
 
 #: dcpp\SearchManager.cpp:38
 msgid "Compressed"
 msgstr "Kompresseeritud"
 
-#: dcpp\BufferedSocket.cpp:205 dcpp\SSLSocket.cpp:158 dcpp\SSLSocket.cpp:165
+#: dcpp\BufferedSocket.cpp:203 dcpp\SSLSocket.cpp:171 dcpp\SSLSocket.cpp:178
 msgid "Connection closed"
 msgstr "Ühendus suletud"
 
-#: dcpp\BufferedSocket.cpp:172 dcpp\BufferedSocket.cpp:190
-#: dcpp\ConnectionManager.cpp:212 dcpp\Socket.cpp:372
+#: dcpp\BufferedSocket.cpp:170 dcpp\BufferedSocket.cpp:188
+#: dcpp\ConnectionManager.cpp:221 dcpp\Socket.cpp:385
 msgid "Connection timeout"
 msgstr "Ühendus aegus"
 
-#: dcpp\ConnectionManager.cpp:304
+#: dcpp\ConnectionManager.cpp:313
 #, boost-format
 msgid "Connectivity error: %1%"
 msgstr "Ühenduse viga: %1%"
@@ -224,7 +231,7 @@ msgid ""
 "\tSearch port: %9%"
 msgstr ""
 
-#: dcpp\ConnectionManager.cpp:296
+#: dcpp\ConnectionManager.cpp:305
 msgid "Connectivity restored"
 msgstr "Ühendus taastatud"
 
@@ -275,7 +282,7 @@ msgstr "Kaustal puudub nimi"
 msgid "Discard"
 msgstr "Unusta"
 
-#: dcpp\BufferedSocket.cpp:476 dcpp\HttpManager.cpp:66
+#: dcpp\BufferedSocket.cpp:474 dcpp\HttpManager.cpp:76
 msgid "Disconnected"
 msgstr "Ühendus katkestatud"
 
@@ -292,7 +299,7 @@ msgstr "Dokument"
 msgid "Download Queue"
 msgstr "Allalaadimiste järjekord"
 
-#: dcpp\ShareManager.cpp:677
+#: dcpp\ShareManager.cpp:793
 #, boost-format
 msgid ""
 "Duplicate file will not be shared: %1% (Size: %2% B) Dupe matched against: "
@@ -303,7 +310,7 @@ msgstr "Korduvaid faile ei jagata: %1% (Suurus: %2% B) Ühildub failiga: %3%"
 msgid "Duplicate item in the file list"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:678 dcpp\QueueManager.cpp:682
+#: dcpp\QueueManager.cpp:679 dcpp\QueueManager.cpp:683
 #, boost-format
 msgid "Duplicate source: %1%"
 msgstr "Topelt allikad: %1%"
@@ -313,12 +320,12 @@ msgstr "Topelt allikad: %1%"
 msgid "Encrypted transfer"
 msgstr " Krüpteeritud edastuse port (%1% TCP)"
 
-#: dcpp\HttpConnection.cpp:245
+#: dcpp\HttpConnection.cpp:252
 #, boost-format
 msgid "Endless redirection loop (%1%)"
 msgstr ""
 
-#: dcpp\HashManager.cpp:546
+#: dcpp\HashManager.cpp:541
 #, boost-format
 msgid "Error creating hash data file: %1%"
 msgstr "Viga hashi andmefaili loomisel: %1%"
@@ -329,17 +336,17 @@ msgid "Error during compression"
 msgstr "Kokkupakkimise viga"
 
 #: dcpp\BZUtils.cpp:76 dcpp\BZUtils.cpp:98 dcpp\BZUtils.cpp:101
-#: dcpp\CryptoManager.cpp:348 dcpp\CryptoManager.cpp:367
-#: dcpp\CryptoManager.cpp:381 dcpp\ZUtils.cpp:106 dcpp\ZUtils.cpp:131
+#: dcpp\CryptoManager.cpp:664 dcpp\CryptoManager.cpp:683
+#: dcpp\CryptoManager.cpp:697 dcpp\ZUtils.cpp:106 dcpp\ZUtils.cpp:131
 #: dcpp\ZUtils.cpp:145
 msgid "Error during decompression"
 msgstr "Lahtipakkimise viga"
 
-#: dcpp\CryptoManager.cpp:146
+#: dcpp\CryptoManager.cpp:136
 msgid "Error generating certificate"
 msgstr "Sertifikaadi loomise viga"
 
-#: dcpp\HashManager.cpp:703
+#: dcpp\HashManager.cpp:698
 #, boost-format
 msgid "Error hashing %1%: %2%"
 msgstr "Viga hashimisel %1%: %2%"
@@ -354,7 +361,7 @@ msgstr "Viga hashimisel %1%: %2%"
 msgid "Error loading %1%: %2%"
 msgstr "Viga hashimisel %1%: %2%"
 
-#: dcpp\HashManager.cpp:109 dcpp\HashManager.cpp:316
+#: dcpp\HashManager.cpp:109 dcpp\HashManager.cpp:311
 #, boost-format
 msgid "Error saving hash data: %1%"
 msgstr "Viga hashi andmete salvestamisel: %1%"
@@ -376,17 +383,15 @@ msgstr "Välise IP saamine nurjus"
 msgid "Failed to initialize the %1% interface"
 msgstr "Faililisti värskendamine käivitatud"
 
-#: dcpp\CryptoManager.cpp:225 dcpp\CryptoManager.cpp:229
-#: dcpp\CryptoManager.cpp:234 dcpp\CryptoManager.cpp:238
+#: dcpp\CryptoManager.cpp:409
 msgid "Failed to load certificate file"
 msgstr "Sertifikaadi laadimine ebaõnnestus"
 
-#: dcpp\CryptoManager.cpp:243 dcpp\CryptoManager.cpp:247
-#: dcpp\CryptoManager.cpp:252 dcpp\CryptoManager.cpp:256
+#: dcpp\CryptoManager.cpp:417
 msgid "Failed to load private key"
 msgstr "Privaatvõtme laadimine ebaõnnestus"
 
-#: dcpp\CryptoManager.cpp:271
+#: dcpp\CryptoManager.cpp:430
 #, boost-format
 msgid "Failed to load trusted certificate from %1%"
 msgstr ""
@@ -406,7 +411,7 @@ msgid ""
 "Failed to remove port mappings from the %1% device with the %2% interface"
 msgstr "Ei saa luua lõime"
 
-#: dcpp\Socket.cpp:604
+#: dcpp\Socket.cpp:617
 msgid ""
 "Failed to set up the socks server for UDP relay (check socks address and "
 "port)"
@@ -414,31 +419,31 @@ msgstr ""
 "Socks serveri seadmine UDP vahetuseks ebaõnnestus (kontrolli aadressi ja "
 "porti)"
 
-#: dcpp\QueueManager.cpp:665
+#: dcpp\QueueManager.cpp:666
 msgid "File already exists at the target location"
 msgstr "Fail on juba sihtkohal olemas"
 
-#: dcpp\ShareManager.cpp:840
+#: dcpp\ShareManager.cpp:959
 #, boost-format
 msgid "File list %1% generated"
 msgstr "Failinimekiri %1% loodud"
 
-#: dcpp\ShareManager.cpp:709
+#: dcpp\ShareManager.cpp:825
 #, boost-format
 msgid "File list refresh failed: %1%"
 msgstr "Faililisti värskendamine ebaõnnestus: %1%"
 
-#: dcpp\ShareManager.cpp:769
+#: dcpp\ShareManager.cpp:888
 msgid "File list refresh finished"
 msgstr "Faililisti värskendamine lõpetatud"
 
-#: dcpp\ShareManager.cpp:692
+#: dcpp\ShareManager.cpp:808
 msgid ""
 "File list refresh in progress, please wait for it to finish before trying to "
 "refresh again"
 msgstr "Faililisti värskendamine, palun oota enne uuesti värskendamist"
 
-#: dcpp\ShareManager.cpp:737
+#: dcpp\ShareManager.cpp:853
 msgid "File list refresh initiated"
 msgstr "Faililisti värskendamine käivitatud"
 
@@ -461,7 +466,7 @@ msgstr "Hashimine lõpetatud: %1% (%2%/s)"
 msgid "Full tree does not match TTH root"
 msgstr "Kogu puu ei ühildu TTH juurega"
 
-#: dcpp\CryptoManager.cpp:218
+#: dcpp\CryptoManager.cpp:398
 msgid "Generated new TLS certificate"
 msgstr "Loodud uus TLS sertifikaat"
 
@@ -469,15 +474,20 @@ msgstr "Loodud uus TLS sertifikaat"
 msgid "Generic"
 msgstr ""
 
+#: dcpp\HttpManager.cpp:100
+#, boost-format
+msgid "HTTP file download failed to create file %1%, error: %2%"
+msgstr ""
+
 #: dcpp\DCPlusPlus.cpp:121
 msgid "Hash database"
 msgstr "Hashi andmebaas"
 
-#: dcpp\HashManager.cpp:625
+#: dcpp\HashManager.cpp:620
 msgid "Hash database rebuilt"
 msgstr "Hashi andmebaas taasloodud"
 
-#: dcpp\HashManager.cpp:68 dcpp\HashManager.cpp:261
+#: dcpp\HashManager.cpp:68 dcpp\HashManager.cpp:256
 #, boost-format
 msgid "Hashing failed: %1%"
 msgstr "Hashimine ebaõnnestus: %1%"
@@ -492,7 +502,7 @@ msgstr "Hub kasutab ilmselt vanemat ADC versiooni, palu hubi omanikul uuendada"
 msgid "Ignore"
 msgstr ""
 
-#: dcpp\FavoriteManager.cpp:680
+#: dcpp\FavoriteManager.cpp:720
 #, fuzzy, boost-format
 msgid "Invalid URL: %1%"
 msgstr "Otsing keelatud: %1%"
@@ -521,7 +531,7 @@ msgstr ""
 msgid "Invalid regular expression: %1%"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:640
+#: dcpp\SettingsManager.cpp:650
 msgid "Invalid search type name"
 msgstr ""
 
@@ -529,13 +539,13 @@ msgstr ""
 msgid "Invalid size"
 msgstr "Vigane suurus"
 
-#: dcpp\QueueManager.cpp:652 dcpp\QueueManager.cpp:657
+#: dcpp\QueueManager.cpp:653 dcpp\QueueManager.cpp:658
 msgid ""
 "Invalid target file (missing directory, check default download directory "
 "setting)"
 msgstr "Vigane sihtfail (kaust puudub, kontrolli vaikimisi allalaadimiskausta)"
 
-#: dcpp\FavoriteManager.cpp:423
+#: dcpp\FavoriteManager.cpp:463
 msgid "Kick user(s)"
 msgstr "Löö Kasutajat"
 
@@ -543,7 +553,7 @@ msgstr "Löö Kasutajat"
 msgid "Local network with possible NAT detected, trying to map the ports..."
 msgstr ""
 
-#: dcpp\BufferedSocket.cpp:298
+#: dcpp\BufferedSocket.cpp:296
 msgid "Maximum command length exceeded"
 msgstr "Maksimaalne käsu pikkus ületatud"
 
@@ -556,7 +566,7 @@ msgstr ""
 msgid "More bytes written than requested"
 msgstr "Rohkem baite kirjutatud kui küsitud"
 
-#: dcpp\CryptoManager.cpp:134
+#: dcpp\CryptoManager.cpp:125
 msgid "No certificate file chosen"
 msgstr "Sertifikaadi fail valimata"
 
@@ -568,7 +578,7 @@ msgstr "Kaust valimata"
 msgid "No port mapping interface available"
 msgstr ""
 
-#: dcpp\CryptoManager.cpp:131
+#: dcpp\CryptoManager.cpp:122
 msgid "No private key file chosen"
 msgstr "Privaatvõtme fail valimata"
 
@@ -576,7 +586,7 @@ msgstr "Privaatvõtme fail valimata"
 msgid "No slots available"
 msgstr "Kõik slotid on hõivatud"
 
-#: dcpp\SettingsManager.cpp:698
+#: dcpp\SettingsManager.cpp:708
 msgid "No such search type"
 msgstr ""
 
@@ -618,7 +628,7 @@ msgid ""
 "Public IP address detected, selecting active mode with direct connection"
 msgstr ""
 
-#: dcpp\FavoriteManager.cpp:427
+#: dcpp\FavoriteManager.cpp:467
 msgid "Redirect user(s)"
 msgstr "Suuna kasutaja(d) ümber"
 
@@ -662,7 +672,7 @@ msgstr ""
 msgid "Shared Files"
 msgstr "Jagatud failid"
 
-#: dcpp\Socket.cpp:480 dcpp\Socket.cpp:484
+#: dcpp\Socket.cpp:493 dcpp\Socket.cpp:497
 msgid "Socks server authentication failed (bad login / password?)"
 msgstr "Socks serveri autentimine ebaõnnestus (vale nimi/parool?)"
 
@@ -685,16 +695,16 @@ msgid ""
 "Successfully removed port mappings from the %1% device with the %2% interface"
 msgstr "Ei saa luua lõime"
 
-#: dcpp\CryptoManager.cpp:220
+#: dcpp\CryptoManager.cpp:400
 #, boost-format
 msgid "TLS disabled, failed to generate certificate: %1%"
 msgstr "TLS keelatus, sertifikaadi loomine ebaõnnestus: %1%"
 
-#: dcpp\CryptoManager.cpp:210
+#: dcpp\CryptoManager.cpp:390
 msgid "TLS disabled, no certificate file set"
 msgstr "TLS keelatud, sertifikaadi fail seadmata"
 
-#: dcpp\SSLSocket.cpp:176
+#: dcpp\SSLSocket.cpp:189
 msgid "TLS error"
 msgstr ""
 
@@ -710,20 +720,32 @@ msgstr "TTH ebakõla"
 msgid "Target file is missing or wrong size"
 msgstr "Sihtfail puudub või vale suurusega"
 
-#: dcpp\QueueManager.cpp:645
+#: dcpp\QueueManager.cpp:646
 msgid "Target filename too long"
 msgstr "Sihtfaili nimi liiga pikk"
 
-#: dcpp\Socket.cpp:466
+#: dcpp\ConnectionManager.cpp:81
+msgid ""
+"The encrypted transfer port cannot be the same as the transfer port, "
+"encrypted transfers will be disabled"
+msgstr ""
+
+#: dcpp\QueueManager.cpp:1494
+#, boost-format
+msgid ""
+"The queued file %1% already exists in your share, removing from the queue"
+msgstr ""
+
+#: dcpp\Socket.cpp:479
 msgid "The socks server doesn't support login / password authentication"
 msgstr "Socks server ei toeta login/parool autentimist"
 
-#: dcpp\Socket.cpp:379 dcpp\Socket.cpp:387 dcpp\Socket.cpp:420
-#: dcpp\Socket.cpp:424 dcpp\Socket.cpp:448 dcpp\Socket.cpp:463
+#: dcpp\Socket.cpp:392 dcpp\Socket.cpp:400 dcpp\Socket.cpp:433
+#: dcpp\Socket.cpp:437 dcpp\Socket.cpp:461 dcpp\Socket.cpp:476
 msgid "The socks server failed establish a connection"
 msgstr "Socks serveri ühenduse loomine ebaõnnestus"
 
-#: dcpp\Socket.cpp:452
+#: dcpp\Socket.cpp:465
 msgid "The socks server requires authentication"
 msgstr "Socks server vajab autentimist"
 
@@ -731,26 +753,26 @@ msgstr "Socks server vajab autentimist"
 msgid "The temporary download directory cannot be shared"
 msgstr "Ajutist allalaadimiskausta ei saa jagada"
 
-#: dcpp\QueueManager.cpp:603
+#: dcpp\QueueManager.cpp:604
 msgid "This file has already finished downloading"
 msgstr "Fail on juba alla laaditud"
 
-#: dcpp\QueueManager.cpp:584
+#: dcpp\QueueManager.cpp:585
 msgid "This file is already queued"
 msgstr "Fail on juba järjekorras"
 
-#: dcpp\NmdcHub.cpp:947
+#: dcpp\NmdcHub.cpp:946
 #, boost-format
 msgid ""
 "This hub is trying to use your client to spam %1%, please urge hub owner to "
 "fix this"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:644 dcpp\SettingsManager.cpp:666
+#: dcpp\SettingsManager.cpp:654 dcpp\SettingsManager.cpp:676
 msgid "This search type already exists"
 msgstr ""
 
-#: dcpp\HttpConnection.cpp:289
+#: dcpp\HttpConnection.cpp:297
 #, boost-format
 msgid "Too much data in response body (%1%)"
 msgstr ""
@@ -764,7 +786,7 @@ msgstr ""
 msgid "Transfer (TCP)"
 msgstr " Ülekande port (%1% TCP)"
 
-#: dcpp\HttpConnection.cpp:206
+#: dcpp\HttpConnection.cpp:213
 #, boost-format
 msgid "Transfer-encoding error (%1%)"
 msgstr ""
@@ -777,12 +799,12 @@ msgstr ""
 msgid "Unable to create thread"
 msgstr "Ei saa luua lõime"
 
-#: dcpp\QueueManager.cpp:942
+#: dcpp\QueueManager.cpp:943
 #, boost-format
 msgid "Unable to move %1% to %2% (%3%) nor to rename to %4% (%5%)"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:939
+#: dcpp\QueueManager.cpp:940
 #, boost-format
 msgid "Unable to move %1% to %2% (%3%); renamed to %4%"
 msgstr "Ei saa liigutada %1% to %2% (%3%); ümber nimetatud %4%"
@@ -793,7 +815,7 @@ msgid ""
 "Unable to open %1% port(s); connectivity settings must be configured manually"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:1118
+#: dcpp\QueueManager.cpp:1119
 #, boost-format
 msgid "Unable to open filelist: %1%"
 msgstr "Faililisti ei saa avada: %1%"
@@ -830,7 +852,7 @@ msgstr "Kasutajad"
 msgid "Video"
 msgstr "Video"
 
-#: dcpp\QueueManager.cpp:532
+#: dcpp\QueueManager.cpp:533
 msgid "You're trying to download from yourself!"
 msgstr "Proovid alla laadida iseendalt!"
 
@@ -838,7 +860,7 @@ msgstr "Proovid alla laadida iseendalt!"
 msgid "disabled"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:201 dcpp\SettingsManager.cpp:202
+#: dcpp\SettingsManager.cpp:202 dcpp\SettingsManager.cpp:203
 msgid "downloaded from"
 msgstr "alla laetud:"
 
@@ -851,6 +873,6 @@ msgstr "Otsing keelatud: %1%"
 msgid "undefined"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:203
+#: dcpp\SettingsManager.cpp:204
 msgid "uploaded to"
 msgstr "üles laetud:"

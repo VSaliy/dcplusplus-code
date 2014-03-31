@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-09-22 16:00+0300\n"
+"POT-Creation-Date: 2014-03-23 23:05+0100\n"
 "PO-Revision-Date: 2012-12-25 23:23+0000\n"
 "Last-Translator: Guybrush88 <Unknown>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
@@ -15,11 +15,11 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-09-22 13:49+0000\n"
-"X-Generator: Launchpad (build 16765)\n"
+"X-Launchpad-Export-Date: 2014-03-30 18:18+0000\n"
+"X-Generator: Launchpad (build 16967)\n"
 
 #. type: Content of: <html><body><ul><li><div><placeholder><a>
-#: help/chat_commands.html:9 help/index.html:143
+#: help/chat_commands.html:9 help/index.html:144
 msgid "Chat Commands"
 msgstr "Chat Commands"
 
@@ -135,12 +135,19 @@ msgid "Private Message"
 msgstr "Private Message"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:52
+#: help/chat_commands.html:53
+msgid ""
+"Starts a direct encrypted communication channel to avoid spying on your "
+"private messages."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
+#: help/chat_commands.html:55
 msgid "Adds the current user's list to the Download Queue."
 msgstr "Adds the current user's list to the Download Queue."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:54
+#: help/chat_commands.html:57
 msgid ""
 "Grants the remote user a slot. Once they connect, or if they don't connect "
 "in 10 minutes, the granted slot is removed."
@@ -149,31 +156,37 @@ msgstr ""
 "in 10 minutes, the granted slot is removed."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:58
+#: help/chat_commands.html:61
 msgid "Adds the current user to the list of <a po4a-id=0>Favorite Users</a>."
 msgstr "Adds the current user to the list of <a po4a-id=0>Favourite Users</a>."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:61
+#: help/chat_commands.html:64
 msgid ""
 "Adds a user matching definition (or modifies an existing one, if possible) "
 "to ignore chat messages from the current user."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:64
+#: help/chat_commands.html:67
 msgid ""
 "Adds a user matching definition (or modifies an existing one, if possible) "
 "to stop ignoring chat messages from the current user."
 msgstr ""
 
+#. type: Content of: <html><body><dl><dd>
+#: help/chat_commands.html:70
+#, fuzzy
+msgid "Lists the date and time when the last message was sent or received."
+msgstr "The date and time when the file was added to the queue."
+
 #. type: Content of: <html><body><h2>
-#: help/chat_commands.html:67
+#: help/chat_commands.html:72
 msgid "Both"
 msgstr "Both"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:70
+#: help/chat_commands.html:75
 msgid ""
 "Manually refreshes DC++'s share list by going through the shared directories "
 "and adding new folders and files. DC++ automatically refreshes once an hour "
@@ -186,7 +199,7 @@ msgstr ""
 "changed."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:75
+#: help/chat_commands.html:80
 msgid ""
 "Sets the current number of upload slots to the number you specify. If this "
 "is less than the current number of slots, no uploads are cancelled."
@@ -195,7 +208,7 @@ msgstr ""
 "is less than the current number of slots, no downloads are cancelled."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:79
+#: help/chat_commands.html:84
 msgid ""
 "Sets the current number of download slots to the number you specify. If this "
 "is less than the current number of slots, no downloads are cancelled."
@@ -204,7 +217,7 @@ msgstr ""
 "is less than the current number of slots, no downloads are cancelled."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:83
+#: help/chat_commands.html:88
 msgid ""
 "Opens a new search window with the specified search string.  It does <u>not</"
 "u> automatically send the search."
@@ -213,12 +226,12 @@ msgstr ""
 "u> automatically send the search."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:87
+#: help/chat_commands.html:92
 msgid "Closes the current window."
 msgstr "Closes the current window."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:89
+#: help/chat_commands.html:94
 msgid ""
 "Clears the current window of all text. Optionally, you can specify how many "
 "of the latest (most recent) lines should be kept."
@@ -227,7 +240,7 @@ msgstr ""
 "of the latest (most recent) lines should be kept."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:92
+#: help/chat_commands.html:97
 msgid ""
 "Sends a random DC++ advertising message to the chat, including a link to the "
 "DC++ homepage and the version number."
@@ -236,7 +249,7 @@ msgstr ""
 "DC++ homepage and the version number."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:95
+#: help/chat_commands.html:100
 msgid ""
 "Sets Away status. New private message windows will be responded to, once, "
 "with the message you specified, or the default away message configured in "
@@ -244,44 +257,54 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:100
+#: help/chat_commands.html:105
 msgid "Un-sets Away status."
 msgstr "Un-sets Away status."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:102
+#: help/chat_commands.html:107
+#, fuzzy
 msgid ""
-"Launches your default web browser to the Google search engine with the "
+"Launches your default web browser to the DuckDuckGo search engine with the "
 "specified search."
 msgstr ""
 "Launches your default web browser to the Google search engine with the "
 "specified search."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:105
+#: help/chat_commands.html:110
 msgid ""
-"Launches your default web browser to the Internet Movie Database (imdb) with "
-"the specified query."
+"Launches your default web browser to the Google search engine with the "
+"specified search."
 msgstr ""
-"Launches your default web browser to the Internet Movie Database (imdb) with "
-"the specified query."
-
-#. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:108
-msgid ""
-"Rebuilds the HashIndex.xml and HashData.dat files, removing entries to files "
-"that are no longer shared, or old hashes for files that have since changed. "
-"This runs in the main DC++ thread, so the interface will freeze until the "
-"rebuild is finished."
-msgstr ""
-"Rebuilds the HashIndex.xml and HashData.dat files, removing entries to files "
-"that are no longer shared, or old hashes for files that have since changed. "
-"This runs in the main DC++ thread, so the interface will freeze until the "
-"rebuild is finished."
+"Launches your default web browser to the Google search engine with the "
+"specified search."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:113
 msgid ""
+"Launches your default web browser to the Internet Movie Database (imdb) with "
+"the specified query."
+msgstr ""
+"Launches your default web browser to the Internet Movie Database (imdb) with "
+"the specified query."
+
+#. type: Content of: <html><body><dl><dd>
+#: help/chat_commands.html:116
+msgid ""
+"Rebuilds the HashIndex.xml and HashData.dat files, removing entries to files "
+"that are no longer shared, or old hashes for files that have since changed. "
+"This runs in the main DC++ thread, so the interface will freeze until the "
+"rebuild is finished."
+msgstr ""
+"Rebuilds the HashIndex.xml and HashData.dat files, removing entries to files "
+"that are no longer shared, or old hashes for files that have since changed. "
+"This runs in the main DC++ thread, so the interface will freeze until the "
+"rebuild is finished."
+
+#. type: Content of: <html><body><dl><dd>
+#: help/chat_commands.html:121
+msgid ""
 "If no parameter is specified, it launches the log for the hub or private "
 "chat with the associated application in Windows. If one of the parameters is "
 "specified it opens that log file. The status log is available only in the "
@@ -293,7 +316,7 @@ msgstr ""
 "hub frame."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:118
+#: help/chat_commands.html:126
 #, fuzzy
 msgid ""
 "Displays available commands. (The ones listed on this page.) Optionally, you "
@@ -301,12 +324,12 @@ msgid ""
 msgstr "Displays available commands. (The ones listed on this page.)"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:120
+#: help/chat_commands.html:128
 msgid "Launches your default web browser with the given URL."
 msgstr "Launches your default web browser with the given URL."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/chat_commands.html:122
+#: help/chat_commands.html:130
 msgid ""
 "Highlights the last occourrence of the specified search string in the chat "
 "window."
@@ -473,7 +496,7 @@ msgstr ""
 #: help/dialog_fav_hub_groups.html:16 help/dialog_public_hub_lists.html:28
 #: help/dialog_string_list.html:29 help/settings_favoritedirs.html:22
 #: help/settings_plugins.html:51 help/settings_search_types.html:28
-#: help/settings_sharing.html:40 help/settings_user_commands.html:22
+#: help/settings_sharing.html:34 help/settings_user_commands.html:22
 #: help/settings_user_matching.html:43 help/window_adlsearch.html:54
 #: help/window_download_queue.html:21 help/window_favorite_hubs.html:47
 msgid "Remove"
@@ -585,19 +608,19 @@ msgstr "Send private message"
 #: help/index.html:61 help/index.html:62 help/index.html:63 help/index.html:64
 #: help/index.html:65 help/index.html:66 help/index.html:72 help/index.html:73
 #: help/index.html:75 help/index.html:76 help/index.html:77 help/index.html:80
-#: help/index.html:82 help/index.html:83 help/index.html:86 help/index.html:88
-#: help/index.html:90 help/index.html:91 help/index.html:92 help/index.html:95
-#: help/index.html:97 help/index.html:99 help/index.html:103
-#: help/index.html:105 help/index.html:106 help/index.html:107
-#: help/index.html:108 help/index.html:109 help/index.html:112
-#: help/index.html:118 help/index.html:119 help/index.html:120
+#: help/index.html:82 help/index.html:83 help/index.html:86 help/index.html:87
+#: help/index.html:89 help/index.html:91 help/index.html:92 help/index.html:93
+#: help/index.html:96 help/index.html:98 help/index.html:100
+#: help/index.html:104 help/index.html:106 help/index.html:107
+#: help/index.html:108 help/index.html:109 help/index.html:110
+#: help/index.html:113 help/index.html:119 help/index.html:120
 #: help/index.html:121 help/index.html:122 help/index.html:123
 #: help/index.html:124 help/index.html:125 help/index.html:126
 #: help/index.html:127 help/index.html:128 help/index.html:129
-#: help/index.html:130 help/index.html:131 help/index.html:137
-#: help/index.html:138 help/index.html:139 help/index.html:143
-#: help/index.html:149 help/index.html:154 help/index.html:161
-#: help/index.html:165 help/keyboard_commands.html:35
+#: help/index.html:130 help/index.html:131 help/index.html:132
+#: help/index.html:138 help/index.html:139 help/index.html:140
+#: help/index.html:144 help/index.html:150 help/index.html:155
+#: help/index.html:162 help/index.html:166 help/keyboard_commands.html:35
 #: help/keyboard_commands.html:41 help/keyboard_commands.html:46
 #: help/keyboard_commands.html:48 help/keyboard_commands.html:52
 #: help/keyboard_commands.html:55 help/keyboard_commands.html:58
@@ -621,7 +644,7 @@ msgstr "Send private message"
 #: help/window_favorite_hubs.html:33 help/window_favorite_hubs.html:53
 #: help/window_favorite_hubs.html:54 help/window_hub.html:91
 #: help/window_main.html:28 help/window_main.html:29 help/window_main.html:47
-#: help/window_main.html:58 H:/Dev/DC++/repo/help/menu_plugins.inc:7
+#: help/window_main.html:58 H:/Dev/DC++/repo/help/menu_plugins.inc:6
 #: help/window_main.html:71 help/window_main.html:75 help/window_main.html:79
 #: help/window_main.html:83 help/window_main.html:87 help/window_main.html:91
 #: help/window_main.html:95 help/window_main.html:99 help/window_main.html:103
@@ -809,7 +832,7 @@ msgstr ""
 "folder; \"Full Path\": Matches against whole directory + filename."
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/dev_applypatch.html:9 help/index.html:138
+#: help/dev_applypatch.html:9 help/index.html:139
 msgid "Applying patches"
 msgstr "Applying patches"
 
@@ -875,7 +898,7 @@ msgstr ""
 "Otherwise, the manual can be found at the <a po4a-id=0>GNU Diff manual</a>"
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/dev_createpatch.html:9 help/index.html:139
+#: help/dev_createpatch.html:9 help/index.html:140
 msgid "Creating patches"
 msgstr "Creating patches"
 
@@ -2062,7 +2085,7 @@ msgstr ""
 
 #. type: Content of: <html><body><p><placeholder><a>
 #: help/dialog_user_matching.html:13 help/dialog_user_matching.html:20
-#: help/index.html:109 help/settings_styles.html:80
+#: help/index.html:110 help/settings_styles.html:80
 #, fuzzy
 msgid "User matching"
 msgstr "User Command"
@@ -2076,7 +2099,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd><placeholder><a>
-#: help/dialog_user_matching.html:21 help/index.html:90
+#: help/dialog_user_matching.html:21 help/index.html:91
 #: help/settings_styles.html:9 help/settings_user_matching.html:50
 msgid "Styles"
 msgstr ""
@@ -2229,7 +2252,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_connection.html:10 help/index.html:119
+#: help/faq_connection.html:10 help/index.html:120
 #, fuzzy
 msgid "How to set up connection manually?"
 msgstr "<a po4a-id=0>How to set up active mode?</a>"
@@ -2648,7 +2671,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_different_icons.html:9 help/index.html:126
+#: help/faq_different_icons.html:9 help/index.html:127
 #, fuzzy
 msgid "What do the different user icons mean?"
 msgstr "What do the different icons mean?"
@@ -2907,7 +2930,7 @@ msgstr ""
 "be removed from your queue."
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_mapping.html:9 help/index.html:122
+#: help/faq_mapping.html:9 help/index.html:123
 msgid "What is NAT-PMP / UPnP?"
 msgstr ""
 
@@ -2940,7 +2963,7 @@ msgstr ""
 "id=0>Manual port forwarding</a> to be able to use DC++ in active mode."
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_nosearch.html:9 help/index.html:124
+#: help/faq_nosearch.html:9 help/index.html:125
 msgid "Why don't I get any search results?"
 msgstr "Why don't I get any search results?"
 
@@ -3180,7 +3203,7 @@ msgstr ""
 "in KiBs."
 
 #. type: Content of: <html><body><h1>
-#: help/faq_plusplus_tag.html:54 help/index.html:97
+#: help/faq_plusplus_tag.html:54 help/index.html:98
 #: help/settings_history.html:9
 msgid "History"
 msgstr "History"
@@ -3221,7 +3244,7 @@ msgstr ""
 "type (common are \"StrgDC++\", \"ApexDC++\" and \"PWDC++\")."
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_portforward.html:9 help/index.html:120
+#: help/faq_portforward.html:9 help/index.html:121
 #, fuzzy
 msgid "How to set up manual port forwarding?"
 msgstr "Firewall with manual port forwarding"
@@ -3516,7 +3539,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_secret.html:10 help/index.html:129
+#: help/faq_secret.html:10 help/index.html:130
 msgid "What secret stuff is there?"
 msgstr "What secret stuff is there?"
 
@@ -3623,7 +3646,7 @@ msgstr ""
 "corresponding log file (if available)."
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_settings_files.html:9 help/index.html:131
+#: help/faq_settings_files.html:9 help/index.html:132
 msgid "DC++ settings files guide"
 msgstr ""
 
@@ -4660,7 +4683,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_units.html:9 help/index.html:127
+#: help/faq_units.html:9 help/index.html:128
 msgid "What do the units mean?"
 msgstr "What do the units mean?"
 
@@ -4926,7 +4949,7 @@ msgstr ""
 "applies."
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_whyactive.html:9 help/index.html:118
+#: help/faq_whyactive.html:9 help/index.html:119
 msgid "Why do I need active mode?"
 msgstr "Why do I need active mode?"
 
@@ -5340,7 +5363,7 @@ msgstr ""
 "Direct Connect Network more enjoyable for everyone."
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:26 help/index.html:92 help/settings_windows.html:9
+#: help/index.html:26 help/index.html:93 help/settings_windows.html:9
 msgid "Windows"
 msgstr "Windows"
 
@@ -5500,108 +5523,114 @@ msgid "Sharing"
 msgstr "Sharing"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:88 help/settings_appearance.html:9
+#: help/index.html:87 help/settings_sharing_filtering.html:9
+#, fuzzy
+msgid "Filtering"
+msgstr "Filter"
+
+#. type: Content of: <html><body><h1>
+#: help/index.html:89 help/settings_appearance.html:9
 msgid "Appearance"
 msgstr "Appearance"
 
 #. type: Content of: <html><body><h2>
-#: help/index.html:91 help/window_main.html:317
+#: help/index.html:92 help/window_main.html:317
 msgid "Tabs"
 msgstr "Tabs"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:95 help/settings_notifications.html:9
+#: help/index.html:96 help/settings_notifications.html:9
 #, fuzzy
 msgid "Notifications"
 msgstr "Notification sound"
 
 #. type: Content of: <html><body><h3>
-#: help/index.html:99 help/settings_logs.html:9 help/settings_styles.html:40
+#: help/index.html:100 help/settings_logs.html:9 help/settings_styles.html:40
 msgid "Logs"
 msgstr "Logs"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:103 help/settings_advanced.html:9
+#: help/index.html:104 help/settings_advanced.html:9
 msgid "Advanced"
 msgstr "Advanced"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:105 help/settings_expert.html:9
+#: help/index.html:106 help/settings_expert.html:9
 msgid "Experts only"
 msgstr "Experts only"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:106 help/settings_user_commands.html:9
+#: help/index.html:107 help/settings_user_commands.html:9
 #, fuzzy
 msgid "User commands"
 msgstr "User Commands"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:107 help/settings_certs.html:9
+#: help/index.html:108 help/settings_certs.html:9
 #, fuzzy
 msgid "Security certificates"
 msgstr "Security Certificates"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:108 help/settings_search_types.html:9
+#: help/index.html:109 help/settings_search_types.html:9
 #, fuzzy
 msgid "Search types"
 msgstr "Search Spy"
 
 #. type: Content of: <html><body><dl><dd><ul><li><placeholder><a>
-#: help/index.html:112 help/window_main.html:57 help/window_main.html:58
-#: H:/Dev/DC++/repo/help/menu_plugins.inc:7 help/window_main.html:223
+#: help/index.html:113 help/window_main.html:57 help/window_main.html:58
+#: H:/Dev/DC++/repo/help/menu_plugins.inc:6 help/window_main.html:223
 #: help/window_main.html:299 help/window_main.html:302
 msgid "Plugins"
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><h3>
-#: help/index.html:116
+#: help/index.html:117
 msgid "Frequently Asked Questions"
 msgstr "Frequently Asked Questions"
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/index.html:121
+#: help/index.html:122
 msgid "How to unblock DC++ in firewalls and other security software?"
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/index.html:123
+#: help/index.html:124
 #, fuzzy
 msgid "My ISP or University blocks DC++"
 msgstr "<a po4a-id=0>My University blocks DC++</a>"
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/index.html:125
+#: help/index.html:126
 #, fuzzy
 msgid "Why am I getting slow download speeds?"
 msgstr "<a po4a-id=0>Why am I getting slow download speeds?</a>"
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/index.html:128
+#: help/index.html:129
 #, fuzzy
 msgid "How do I install/uninstall/upgrade DC++?"
 msgstr "<a po4a-id=0>How do I install/uninstall/upgrade DC++?</a>"
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/index.html:130
+#: help/index.html:131
 #, fuzzy
 msgid "What do the DC++ tags mean?"
 msgstr "What do the DC++-style tags mean?"
 
 #. type: Content of: <html><body><ul><li><h3>
-#: help/index.html:135
+#: help/index.html:136
 msgid "Development"
 msgstr "Development"
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/index.html:137
+#: help/index.html:138
 #, fuzzy
 msgid "Compile instructions"
 msgstr "<a po4a-id=0>Compile instructions</a>"
 
 #. type: Content of: <html><body><ul><li><div>
-#: help/index.html:144
+#: help/index.html:145
 msgid ""
 "These are the commands that are available in chat, private messages, or "
 "both. They offer handy keyboard shortcuts to functions in the graphical "
@@ -5612,13 +5641,13 @@ msgstr ""
 "interface. Some commands have no graphical counterpart."
 
 #. type: Content of: <html><body><ul><li><div><placeholder><a>
-#: help/index.html:149
+#: help/index.html:150
 #, fuzzy
 msgid "List of Available Keyboard Shortcuts"
 msgstr "Keyboard shortcuts"
 
 #. type: Content of: <html><body><ul><li><div>
-#: help/index.html:150
+#: help/index.html:151
 msgid ""
 "These are the keyboard shortcuts that are available in for different "
 "commands in DC++.  They offer quick access to some of the often used "
@@ -5626,13 +5655,13 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><div><placeholder><a>
-#: help/index.html:154
+#: help/index.html:155
 #, fuzzy
 msgid "Changelog"
 msgstr "Change Log"
 
 #. type: Content of: <html><body><ul><li><div>
-#: help/index.html:155
+#: help/index.html:156
 msgid ""
 "This page contains everything that has changed in the history of DC++.  Read "
 "this to find out about features that are poorly or not documented at all. "
@@ -5643,24 +5672,24 @@ msgstr ""
 "You'll also find all the people that have contributed code to DC++ here."
 
 #. type: Content of: <html><body><dl><dd><dl><dt>
-#: help/index.html:161 help/links.html:9 help/settings_styles.html:35
+#: help/index.html:162 help/links.html:9 help/settings_styles.html:35
 #: help/window_main.html:172
 msgid "Links"
 msgstr "Links"
 
 #. type: Content of: <html><body><ul><li><div>
-#: help/index.html:162
+#: help/index.html:163
 msgid "View the various links for DC++."
 msgstr "View the various links for DC++."
 
 #. type: Content of: <html><body><ul><li><div><placeholder><a>
-#: help/index.html:165
+#: help/index.html:166
 #, fuzzy
 msgid "Help File Credits"
 msgstr "Help File Credits and License"
 
 #. type: Content of: <html><body><ul><li><div>
-#: help/index.html:166
+#: help/index.html:167
 msgid "View the credits and license of this help file."
 msgstr "View the credits and license of this help file."
 
@@ -7190,7 +7219,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/settings_bwlimit.html:53 help/settings_sharing.html:50
+#: help/settings_bwlimit.html:53 help/settings_sharing.html:44
 msgid "Upload slots"
 msgstr "Upload slots"
 
@@ -7609,13 +7638,16 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/settings_connectivity_manual.html:82
+#, fuzzy
 msgid ""
 "This is the port that DC++ listens on for incoming <a po4a-id=0>TLS "
 "(encrypted)</a> connections from other peers. If this port is incorrectly "
 "forwarded, you won't be able to search nor to download on encrypted ADC "
-"hubs. Note that <b>this port value should be different than the ones used "
-"for transfers (TCP) and searches (UDP).</b>"
+"hubs. Note that <b>this port value should be different than the one used for "
+"transfers (TCP).</b>"
 msgstr ""
+"This is the port that DC++ listens on for incoming client connections. If "
+"this setting is blank, DC++ will use a random port between 1025 and 32000."
 
 #. type: Content of: <html><body><dl><dd><dl><dt>
 #: help/settings_connectivity_manual.html:87
@@ -8144,6 +8176,19 @@ msgid ""
 "originating <placeholder id=1/> window instead."
 msgstr ""
 
+#. type: Content of: <html><body><dl><dt>
+#: help/settings_expert.html:58
+msgid "Max protocol command length"
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_expert.html:59
+msgid ""
+"The amount of protocol data DC++ will maximally manage. This setting help "
+"protect against potentially malicious clients and hubs.  Measured in bytes. "
+"(default: 524288 bytes)"
+msgstr ""
+
 #. type: Content of: <html><body><h1>
 #: help/settings_favoritedirs.html:9
 msgid "Favorite download directories"
@@ -8161,7 +8206,7 @@ msgstr ""
 "drag and drop folders from a Windows Explorer window."
 
 #. type: Content of: <html><body><dl><dt>
-#: help/settings_favoritedirs.html:16 help/settings_sharing.html:26
+#: help/settings_favoritedirs.html:16 help/settings_sharing.html:20
 msgid "Add folder"
 msgstr "Add folder"
 
@@ -8178,7 +8223,7 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_favoritedirs.html:20 help/settings_search_types.html:25
-#: help/settings_sharing.html:35
+#: help/settings_sharing.html:29
 msgid "Rename"
 msgstr "Rename"
 
@@ -8188,7 +8233,7 @@ msgid "Rename the selected folder(s)."
 msgstr "Rename the selected folder(s)."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_favoritedirs.html:23 help/settings_sharing.html:41
+#: help/settings_favoritedirs.html:23 help/settings_sharing.html:35
 msgid "Remove the selected folder(s)."
 msgstr "Remove the selected folder(s)."
 
@@ -9748,20 +9793,22 @@ msgstr "Don't download files already in share"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_queue.html:113
+#, fuzzy
 msgid ""
 "This option will stop you from downloading files which already exist in one "
-"of your shared directories."
+"of your shared directories. When you enable this function, to get already "
+"shared items removed from the queue you have to restart DC++."
 msgstr ""
 "This option will stop you from downloading files which already exist in one "
 "of your shared directories."
 
 #. type: Content of: <html><body><dl><dt>
-#: help/settings_queue.html:115
+#: help/settings_queue.html:116
 msgid "Don't download files already in the queue"
 msgstr "Don't download files already in the queue"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_queue.html:116
+#: help/settings_queue.html:117
 msgid ""
 "This option will stop you from downloading files which already exist in your "
 "queue by blocking the addition of the same file to a different place in the "
@@ -9773,13 +9820,13 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/settings_queue.html:121
+#: help/settings_queue.html:122
 #, fuzzy
 msgid "Keep finished files in the queue"
 msgstr "Removes the user from all files in the queue."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_queue.html:122
+#: help/settings_queue.html:123
 msgid ""
 "Enable this option if you want to keep downloaded files and folders in the "
 "download queue after they have been finished. After downloaded the queue "
@@ -9884,27 +9931,9 @@ msgstr ""
 "If you enter the Sharing tab and press OK; the client may appear to freeze, "
 "this is due to a refresh of the file list."
 
-#. type: Content of: <html><body><dl><dt>
-#: help/settings_sharing.html:20
-msgid "Share hidden files"
-msgstr "Share hidden files"
-
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_sharing.html:21
 msgid ""
-"Share files with the Hidden attribute set and files inside directory with "
-"the Hidden attribute set. With this option off, files starting with a . "
-"(full stop) will not be shared. Note: this option requires a refresh of the "
-"file list, and may cause the client to appear to freeze."
-msgstr ""
-"Share files with the Hidden attribute set and files inside directory with "
-"the Hidden attribute set. With this option off, files starting with a . "
-"(full stop) will not be shared. Note: this option requires a refresh of the "
-"file list, and may cause the client to appear to freeze."
-
-#. type: Content of: <html><body><dl><dd>
-#: help/settings_sharing.html:27
-msgid ""
 "Browse for a new folder to add to your share. If another existing file "
 "shares that name, the new name will be made unique by adding another letter "
 "to its name. After selecting the directory to add, you will be able to pick "
@@ -9926,7 +9955,7 @@ msgstr ""
 "hashing continue in the background."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_sharing.html:36
+#: help/settings_sharing.html:30
 msgid ""
 "Change the virtual name on a shared folder. Note: the client will appear to "
 "freeze when you exit settings, this is due to a refresh of the file list."
@@ -9935,12 +9964,12 @@ msgstr ""
 "freeze when you exit settings, this is due to a refresh of the file list."
 
 #. type: Content of: <html><body><dl><dt>
-#: help/settings_sharing.html:44
+#: help/settings_sharing.html:38
 msgid "Automatically open an extra slot if speed is below (0 = disable)"
 msgstr "Automatically open an extra slot if speed is below (0 = disable)"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_sharing.html:45
+#: help/settings_sharing.html:39
 msgid ""
 "If the average upload speed drops below the given number, an additional "
 "upload slot will be granted. These slots are granted once every 30 seconds "
@@ -9953,7 +9982,7 @@ msgstr ""
 "will not be closed."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_sharing.html:51
+#: help/settings_sharing.html:45
 msgid ""
 "Configure the number of slots that other users can occupy to download files "
 "from you. A remote user can use only one slot for each hub that they're on "
@@ -9963,13 +9992,100 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_sharing.html:59
+#: help/settings_sharing.html:53
 msgid ""
 "Note: If a user leaves the hub, DC++ will close his slots; if the user is "
 "back within 10 minutes, DC++ will grant him a slot. (This will only happen "
 "if <a po4a-id=0>Automatically disconnect users who leave the hub</a> is "
 "enabled.) This can cause your upload slots to go over the maximum set in "
 "settings."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dt>
+#: help/settings_sharing_filtering.html:11
+msgid "Share hidden files"
+msgstr "Share hidden files"
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_sharing_filtering.html:12
+msgid ""
+"Share files with the Hidden attribute set and files inside directory with "
+"the Hidden attribute set. With this option off, files starting with a . "
+"(full stop) will not be shared. Note: this option requires a refresh of the "
+"file list, and may cause the client to appear to freeze."
+msgstr ""
+"Share files with the Hidden attribute set and files inside directory with "
+"the Hidden attribute set. With this option off, files starting with a . "
+"(full stop) will not be shared. Note: this option requires a refresh of the "
+"file list, and may cause the client to appear to freeze."
+
+#. type: Content of: <html><body><dl><dt>
+#: help/settings_sharing_filtering.html:18
+#, fuzzy
+msgid "File minimum size"
+msgstr "File size"
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_sharing_filtering.html:20
+msgid ""
+"Only include include files in thee share that has a file size above the "
+"specified value. Value is specified in bytes. The value 0 removes the filter "
+"and is the default."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dt>
+#: help/settings_sharing_filtering.html:22
+#, fuzzy
+msgid "File maximum size"
+msgstr "File size"
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_sharing_filtering.html:24
+msgid ""
+"Only include include files in the share that has a file size below the "
+"specified value. Value is specified in bytes. The value 0 removes the filter "
+"and is the default."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dt>
+#: help/settings_sharing_filtering.html:27
+msgid "File name filtering with Regular expressions"
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_sharing_filtering.html:29
+msgid ""
+"Filters out any file with a name that matches a regular expression that is "
+"listed here. Use semicolon to separate multiple regular expressions. For "
+"example, the value ^.*\\.txt;^.*\\.png will remove any file that has the "
+"extensions txt or png."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dt>
+#: help/settings_sharing_filtering.html:32
+#, fuzzy
+msgid "File extension filtering"
+msgstr "The file's extension (file type)."
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_sharing_filtering.html:34
+msgid ""
+"Filters out any file with an extension that is listed here. Use semicolon to "
+"separate multiple extensions. For example, the value txt;png will remove any "
+"file that has the extensions txt or png."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dt>
+#: help/settings_sharing_filtering.html:35
+msgid "Path filtering"
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_sharing_filtering.html:37
+msgid ""
+"Filters out any path that is listed here. Use semicolon to separate multiple "
+"paths. For example, the value \"download;secret_files\" will remove any "
+"directory that has download or secret_files in the path."
 msgstr ""
 
 #. type: Content of: <html><body><p>
@@ -12538,15 +12654,15 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd><ul><li>
 #: H:/Dev/DC++/repo/help/menu_plugins.inc:6
 #, fuzzy
-msgid "\"Configure\" opens the\r <placeholder id=0/> configuration page."
+msgid "\"Configure\" opens the <placeholder id=0/> configuration page."
 msgstr "Open the Settings dialog."
 
 #. type: Content of: <html><body><dl><dd><ul><li>
-#: H:/Dev/DC++/repo/help/menu_plugins.inc:10
+#: H:/Dev/DC++/repo/help/menu_plugins.inc:9
 msgid ""
 "Installed plugins are listed below. They can be selectively enabled or "
-"disabled. A\r \"Configure\" command is also available for each of them (the "
-"behavior of which is\r plugin-dependant). Plugins are also allowed to add "
+"disabled. A \"Configure\" command is also available for each of them (the "
+"behavior of which is plugin-dependant). Plugins are also allowed to add "
 "additional commands in that sub-menu."
 msgstr ""
 
