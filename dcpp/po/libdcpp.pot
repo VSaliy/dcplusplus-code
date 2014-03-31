@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libdcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2014-03-23 23:05+0100\n"
+"POT-Creation-Date: 2014-03-31 14:37+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -481,7 +481,7 @@ msgstr ""
 msgid "Ignore"
 msgstr ""
 
-#: dcpp\FavoriteManager.cpp:679
+#: dcpp\FavoriteManager.cpp:720
 #, boost-format
 msgid "Invalid URL: %1%"
 msgstr ""
@@ -521,7 +521,7 @@ msgstr ""
 msgid "Invalid target file (missing directory, check default download directory setting)"
 msgstr ""
 
-#: dcpp\FavoriteManager.cpp:422
+#: dcpp\FavoriteManager.cpp:463
 msgid "Kick user(s)"
 msgstr ""
 
@@ -603,7 +603,7 @@ msgstr ""
 msgid "Public IP address detected, selecting active mode with direct connection"
 msgstr ""
 
-#: dcpp\FavoriteManager.cpp:426
+#: dcpp\FavoriteManager.cpp:467
 msgid "Redirect user(s)"
 msgstr ""
 

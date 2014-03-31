@@ -7,64 +7,64 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-09-22 16:00+0300\n"
-"PO-Revision-Date: 2013-09-17 18:18+0000\n"
-"Last-Translator: endator <Unknown>\n"
+"POT-Creation-Date: 2014-03-23 23:05+0100\n"
+"PO-Revision-Date: 2014-01-29 16:52+0000\n"
+"Last-Translator: Jonas Bohden <Unknown>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-09-22 13:51+0000\n"
-"X-Generator: Launchpad (build 16765)\n"
+"X-Launchpad-Export-Date: 2014-03-30 18:18+0000\n"
+"X-Generator: Launchpad (build 16967)\n"
 
 #. type: Content of: <Strings><SECTION_DCPP>
 #: installer/Strings.xml:3
 #, no-wrap
 msgid "DC++ (required)"
-msgstr "DC++ (nödvändig)"
+msgstr "DC++ (krävs)"
 
 #. type: Content of: <Strings><BACKUP_QUESTION>
 #: installer/Strings.xml:4
 #, no-wrap
 msgid "A previous installation of DC++ has been found; backup settings and queue to '$R0'?"
-msgstr "En föregående installation av DC++ hittades, vill du göra en backup på inställningar samt nedladdningslistan till '$R0'?"
+msgstr "En tidigare installation av DC++ hittades. Säkerhetskopiera inställningarna och kön till '$R0'?"
 
 #. type: Content of: <Strings><SECTION_START_MENU>
 #: installer/Strings.xml:5
 #, no-wrap
 msgid "Start menu shortcuts"
-msgstr "Startmeny genväg"
+msgstr "Startmenygenväg"
 
 #. type: Content of: <Strings><SECTION_LOCAL>
 #: installer/Strings.xml:6
 #, no-wrap
 msgid "Store settings in the user profile directory"
-msgstr "Lagra inställningar i din user profil"
+msgstr "Lagra inställningar i användarmappen"
 
 #. type: Content of: <Strings><SECTION_ARCH>
 #: installer/Strings.xml:7
 #, no-wrap
 msgid "Install the 32-bit version"
-msgstr "Installera 32-bitars version"
+msgstr "Installera 32-bitars versionen"
 
 #. type: Content of: <Strings><LOCAL_WARNING>
 #: installer/Strings.xml:8
 #, no-wrap
 msgid "Unchecking this box will make DC++ store its settings in the program directory. This is strongly discouraged on Windows Vista and later; settings or downloads might get lost."
-msgstr "Kryssas denna ruta ur kommer DC++ att lagra alla inställningar i programmappen. Använder du Microsoft Vista eller senare bör du inte göra det då inställningar och nerladdade filer kan försvinna"
+msgstr "Om du avmarkerar denna ruta så kommer DC++ att lagra alla inställningar i programmappen. Detta rekommenderas inte i Windows Vista och nyare. Inställningar och nedladdningar kan försvinna."
 
 #. type: Content of: <Strings><WARNING_LOCALE_ERASED>
 #: installer/Strings.xml:9
 #, no-wrap
 msgid "Warning: the 'locale' directory ($INSTDIR\\locale) will be completely erased!"
-msgstr "Varning: katalogen 'locale' ($INSTDIR\\locale) kommer att tas bort helt!"
+msgstr "Varning! Mappen 'locale' ($INSTDIR\\locale) kommer att raderas helt!"
 
 #. type: Content of: <Strings><SM_DCPP_DESCR>
 #: installer/Strings.xml:10
 #, no-wrap
 msgid "DC++ (file sharing application)"
-msgstr "DC++ (fildelningsapplikation)"
+msgstr "DC++ (fildelningsprogram)"
 
 #. type: Content of: <Strings><SM_LICENSE>
 #: installer/Strings.xml:11
@@ -82,7 +82,7 @@ msgstr "Hjälp"
 #: installer/Strings.xml:13
 #, no-wrap
 msgid "Change Log"
-msgstr "Logg över programvaruändringar"
+msgstr "Ändringslogg"
 
 #. type: Content of: <Strings><EXECUTE_QUERY>
 #: installer/Strings.xml:14
@@ -100,4 +100,4 @@ msgstr "Avinstallera"
 #: installer/Strings.xml:16
 #, no-wrap
 msgid "Also remove queue, settings and the whole DC++ program directory ($INSTDIR) with all of its sub-directories?"
-msgstr "Ta också bort kö, inställningar och hela DC++:s programkatalog ($INSTDIR) med alla underkataloger?"
+msgstr "Ta även bort kö, inställningar och hela DC++:s programmapp ($INSTDIR) med alla dess undermappar?"
