@@ -1375,7 +1375,7 @@ string HubFrame::getLogPath(bool status) const {
 	params["hubNI"] = [this] { return client->getHubName(); };
 	params["hubURL"] = [this] { return client->getHubUrl(); };
 	params["myNI"] = [this] { return client->getMyNick(); };
-	return Util::validatePath(LogManager::getInstance()->getPath(status ? LogManager::STATUS : LogManager::CHAT, params));
+	return Util::validateFileName(LogManager::getInstance()->getPath(status ? LogManager::STATUS : LogManager::CHAT, params));
 }
 
 void HubFrame::openLog(bool status) {

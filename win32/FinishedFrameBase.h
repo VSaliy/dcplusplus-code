@@ -155,7 +155,7 @@ protected:
 		}
 
 		this->status->onDblClicked(STATUS_STATUS, [] {
-			WinUtil::openFile(Text::toT(Util::validatePath(LogManager::getInstance()->getPath(
+			WinUtil::openFile(Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(
 				in_UL ? LogManager::UPLOAD : LogManager::DOWNLOAD))));
 		});
 

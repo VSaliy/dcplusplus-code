@@ -208,10 +208,9 @@ public:
 	static void decodeUrl(const string& aUrl, string& protocol, string& host, string& port, string& path, string& query, string& fragment);
 	static map<string, string> decodeQuery(const string& query);
 
-	static inline string validatePath(const string& aPath) { return cleanPathChars(aPath, false); }
-	static inline string validateFileName(const string& aFileName) { return cleanPathChars(aFileName, true); }
+	static string validateFileName(string aFile);
 	static bool checkExtension(const string& tmp);
-	static string cleanPathChars(string aPath, bool isFileName);
+	static string cleanPathChars(const string& str);
 	static string addBrackets(const string& s);
 
 	static string formatBytes(const string& aString) { return formatBytes(toInt64(aString)); }
