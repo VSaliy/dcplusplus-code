@@ -51,7 +51,7 @@ LogManager::List LogManager::getLastLogs() {
 }
 
 string LogManager::getPath(Area area, ParamMap& params) const {
-	return SETTING(LOG_DIRECTORY) + Util::formatParams(getSetting(area, FILE), params, Util::validateFileName);
+	return SETTING(LOG_DIRECTORY) + Util::formatParams(getSetting(area, FILE), params, Util::cleanPathChars);
 }
 
 string LogManager::getPath(Area area) const {
@@ -70,7 +70,7 @@ void LogManager::saveSetting(int area, int sel, const string& setting) {
 void LogManager::log(const string& area, const string& msg) noexcept {
 	Lock l(cs);
 	try {
-		string aArea = Util::validatePath(area);
+		string aArea = Util::validateFileName(area);
 		File::ensureDirectory(aArea);
 		File f(aArea, File::WRITE, File::OPEN | File::CREATE);
 		f.setEndPos(0);

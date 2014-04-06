@@ -1,4 +1,5 @@
 * Reset fav hub column sizes (poy)
+* [L#395400] Revert the hub list caching patch as it was messing logs up (poy)
 
 -- 0.840 2014-03-31 --
 * [L#1115765] Added ability to filter out files and directories from the share (ullner)
