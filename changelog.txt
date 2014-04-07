@@ -22,6 +22,15 @@
 * [L#395400] Hub list caching fixed on Linux (maksis, ullner)
 * [L#1030613] Safeguards against user command flooding (ullner)
 * [L#1030613] Separate internal from external user commands (ullner)
+* [L#991342] Verify keyprints against all available certificates - works with cert chains (crise)
+* [L#991342] Use keyprints to indicate trust for hubs and clients - keyprint is equivalent to certificate pinning in this regard (crise)
+* [L#991342] Generate temporary TLS keys dynamically at startup (crise)
+* [L#991342] Use variable size temporary TLS keys (crise)
+* [L#991342] Log some certificate verification errors (crise)
+* [L#991342] No longer use SHA1 for automatically generated client certificates (crise)
+* [L#991342] Automatically generated certificates remain valid for 90 days instead of 10 (crise)
+* [L#991342] Request certificate for all TLS connections regardless of security settings (crise)
+* [L#991342] Better OpenSSL integration regarding multi-threading and clean-up (crise)
 
 -- 0.831 2013-11-11 --
 * [L#1249810] Fix NMDC TTH search responses (emtee)
