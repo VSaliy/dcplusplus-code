@@ -457,7 +457,7 @@ void DirectoryListing::Directory::filterList(DirectoryListing::Directory::TTHSet
 
 		d->filterList(l);
 
-		if(d->directories.empty() || d->files.empty()) {
+		if(d->directories.empty() && d->files.empty()) {
 			i = directories.erase(i);
 			delete d;
 		} else {
