@@ -1,3 +1,5 @@
+* [#1307978] Fix subtract list functionality (crise)
+
 -- 0.842 2014-04-10 --
 * Update OpenSSL to version 1.0.1g - notably fixes the TLS heartbeat attack
 
