@@ -1,6 +1,7 @@
 * [L#1308290] Disable TLS v1.0 and v1.1-based ADCS connections (cologic)
 
 * [#1307978] Fix subtract list functionality (crise)
+* [#1309390] [NMDC] Prevent crashes when receiving malicious search requests (pavel pimenov)
 
 -- 0.842 2014-04-10 --
 * Update OpenSSL to version 1.0.1g - notably fixes the TLS heartbeat attack
