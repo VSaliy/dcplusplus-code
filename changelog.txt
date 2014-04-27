@@ -1,3 +1,4 @@
+-- 0.843 2014-04-28 --
 * [#1307978] Fix subtract list functionality (crise)
 * [#1309390] [NMDC] Prevent crashes when receiving malicious search requests (pavel pimenov)
 
