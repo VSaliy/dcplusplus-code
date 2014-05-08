@@ -52,8 +52,8 @@ CryptoManager::CryptoManager()
 	SSL_library_init();
 	SSL_load_error_strings();
 
-	clientContext.reset(SSL_CTX_new(TLSv1_client_method()));
-	serverContext.reset(SSL_CTX_new(TLSv1_server_method()));
+	clientContext.reset(SSL_CTX_new(SSLv23_client_method()));
+	serverContext.reset(SSL_CTX_new(SSLv23_server_method()));
 
 	idxVerifyData = SSL_get_ex_new_index(0, idxVerifyDataName, NULL, NULL, NULL);
 
@@ -69,8 +69,8 @@ CryptoManager::CryptoManager()
 		for(int i = KEY_RSA_512; i != KEY_LAST; ++i)
 			tmpKeysMap[i] = getTmpRSA(getKeyLength(static_cast<TLSTmpKeys>(i)));
 
-		SSL_CTX_set_options(clientContext, SSL_OP_NO_SSLv2 | SSL_OP_NO_SSLv3 | SSL_OP_NO_TLSv1 | SSL_OP_NO_TLSv1_1);
-		SSL_CTX_set_options(serverContext, SSL_OP_SINGLE_DH_USE | SSL_OP_NO_SSLv2 | SSL_OP_NO_SSLv3 | SSL_OP_NO_TLSv1 | SSL_OP_NO_TLSv1_1);
+		SSL_CTX_set_options(clientContext, SSL_OP_NO_SSLv2 | SSL_OP_NO_SSLv3);
+		SSL_CTX_set_options(serverContext, SSL_OP_SINGLE_DH_USE | SSL_OP_NO_SSLv2 | SSL_OP_NO_SSLv3);
 
 		EC_KEY* tmp_ecdh;
 		if ((tmp_ecdh = EC_KEY_new_by_curve_name(NID_X9_62_prime256v1)) != NULL) {
