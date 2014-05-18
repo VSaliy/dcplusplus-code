@@ -10,30 +10,30 @@ rm -rf ../include ../lib
 mkdir ..\include\openssl ..\lib\x64 ..\lib\ia64
 mv opensslconf.h ../include/openssl
 
-rm -rf */
-tar -xzf *.tar.gz
+rm -rf openssl*/
+tar -xzf openssl-*.tar.gz
 cd openssl*
-patch -p1 -i../patch.patch
+bash --login -i -c "cd '%CD%' && find ../patches -name '*.patch' -exec patch -p1 -i '{}' \;"
 bash --login -i -c "cd '%CD%' && ./Configure mingw --cross-compile-prefix=i686-w64-mingw32- && make"
 if errorlevel 1 goto end
 mv crypto/opensslconf.h ../../include/openssl/opensslconf-mingw-x86.h
 mv libcrypto.a libssl.a ../../lib
 cd ..
 
-rm -rf */
-tar -xzf *.tar.gz
+rm -rf openssl*/
+tar -xzf openssl-*.tar.gz
 cd openssl*
-patch -p1 -i../patch.patch
+bash --login -i -c "cd '%CD%' && find ../patches -name '*.patch' -exec patch -p1 -i '{}' \;"
 bash --login -i -c "cd '%CD%' && ./Configure mingw64 --cross-compile-prefix=x86_64-w64-mingw32- && make"
 if errorlevel 1 goto end
 mv crypto/opensslconf.h ../../include/openssl/opensslconf-mingw-x64.h
 mv libcrypto.a libssl.a ../../lib/x64
 cd ..
 
-rm -rf */
-tar -xzf *.tar.gz
+rm -rf openssl*/
+tar -xzf openssl-*.tar.gz
 cd openssl*
-patch -p1 -i../patch.patch
+bash --login -i -c "cd '%CD%' && find ../patches -name '*.patch' -exec patch -p1 -i '{}' \;"
 call "%VCDIR%\vcvarsall.bat" x86
 echo on
 perl Configure VC-WIN32 --prefix=.
@@ -50,10 +50,10 @@ mv lib/ssleay32.lib ../../lib/ssleay32d.lib
 mv tmp32.dbg/libd.pdb ../../lib
 cd ..
 
-rm -rf */
-tar -xzf *.tar.gz
+rm -rf openssl*/
+tar -xzf openssl-*.tar.gz
 cd openssl*
-patch -p1 -i../patch.patch
+bash --login -i -c "cd '%CD%' && find ../patches -name '*.patch' -exec patch -p1 -i '{}' \;"
 call "%VCDIR%\vcvarsall.bat" amd64
 echo on
 perl Configure VC-WIN64A --prefix=.
@@ -69,6 +69,6 @@ mv lib/ssleay32.lib ../../lib/x64/ssleay32d.lib
 mv tmp32.dbg/libd.pdb ../../lib/x64
 cd ..
 
-rm -rf */
+rm -rf openssl*/
 :end
 pause
