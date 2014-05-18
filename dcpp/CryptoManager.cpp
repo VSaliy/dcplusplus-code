@@ -34,7 +34,7 @@
 
 namespace dcpp {
 
-void* CryptoManager::tmpKeysMap[KEY_LAST] = { NULL, NULL, NULL, NULL, NULL, NULL, NULL };
+void* CryptoManager::tmpKeysMap[KEY_LAST] = { NULL, NULL, NULL };
 CriticalSection* CryptoManager::cs = NULL;
 int CryptoManager::idxVerifyData = 0;
 char CryptoManager::idxVerifyDataName[] = APPNAME ".VerifyData";
@@ -62,11 +62,11 @@ CryptoManager::CryptoManager()
 		sslRandCheck();
 
 		// Init temp data for DH keys
-		for(int i = KEY_FIRST; i != KEY_RSA_512; ++i)
+		for(int i = KEY_FIRST; i != KEY_RSA_2048; ++i)
 			tmpKeysMap[i] = getTmpDH(getKeyLength(static_cast<TLSTmpKeys>(i)));
 
 		// and same for RSA keys
-		for(int i = KEY_RSA_512; i != KEY_LAST; ++i)
+		for(int i = KEY_RSA_2048; i != KEY_LAST; ++i)
 			tmpKeysMap[i] = getTmpRSA(getKeyLength(static_cast<TLSTmpKeys>(i)));
 
 		const char ciphersuites[] = "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:DHE-RSA-AES128-SHA:AES128-SHA";
@@ -101,11 +101,11 @@ CryptoManager::~CryptoManager() {
 	clientContext.reset();
 	serverContext.reset();
 
-	for(int i = KEY_FIRST; i != KEY_RSA_512; ++i) {
+	for(int i = KEY_FIRST; i != KEY_RSA_2048; ++i) {
 		if(tmpKeysMap[i]) DH_free((DH*)tmpKeysMap[i]);
 	}
 
-	for(int i = KEY_RSA_512; i != KEY_LAST; ++i) {
+	for(int i = KEY_RSA_2048; i != KEY_LAST; ++i) {
 		if(tmpKeysMap[i]) RSA_free((RSA*)tmpKeysMap[i]);
 	}
 
