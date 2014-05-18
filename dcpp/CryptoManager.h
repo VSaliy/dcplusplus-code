@@ -42,12 +42,8 @@ public:
 
 	enum TLSTmpKeys {
 		KEY_FIRST = 0,
-		KEY_DH_512 = KEY_FIRST,
-		KEY_DH_1024,
-		KEY_DH_2048,
+		KEY_DH_2048 = KEY_FIRST,
 		KEY_DH_4096,
-		KEY_RSA_512,
-		KEY_RSA_1024,
 		KEY_RSA_2048,
 		KEY_LAST
 	};
