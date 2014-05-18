@@ -228,10 +228,8 @@ int CryptoManager::getKeyLength(TLSTmpKeys key) {
 }
 
 DH* CryptoManager::getTmpDH(int keyLen) {
-#ifndef WITH_WEAK_KEYS
 	if (keyLen < 2048)
 		return NULL;
-#endif
 
 	DH* tmpDH = DH_new();
 	if(!tmpDH) return NULL;
@@ -361,10 +359,8 @@ DH* CryptoManager::getTmpDH(int keyLen) {
 }
 
 RSA* CryptoManager::getTmpRSA(int keyLen) {
-#ifndef WITH_WEAK_KEYS
 	if (keyLen < 2048)
 		return NULL;
-#endif
 
 	RSA* tmpRSA = RSA_new();
 	BIGNUM* bn = BN_new();
@@ -497,10 +493,8 @@ void CryptoManager::locking_function(int mode, int n, const char* /*file*/, int 
 }
 
 DH* CryptoManager::tmp_dh_cb(SSL* /*ssl*/, int /*is_export*/, int keylength) {
-#ifndef WITH_WEAK_KEYS
 	if (keylength < 2048)
 		return (DH*)tmpKeysMap[KEY_DH_2048];
-#endif
 
 	void* tmpDH = NULL;
 	switch(keylength) {
@@ -518,10 +512,8 @@ DH* CryptoManager::tmp_dh_cb(SSL* /*ssl*/, int /*is_export*/, int keylength) {
 }
 
 RSA* CryptoManager::tmp_rsa_cb(SSL* /*ssl*/, int /*is_export*/, int keylength) {
-#ifndef WITH_WEAK_KEYS
 	if (keylength < 2048)
 		return (RSA*)tmpKeysMap[KEY_RSA_2048];
-#endif
 
 	void* tmpRSA = NULL;
 	switch(keylength) {
