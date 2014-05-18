@@ -1,3 +1,6 @@
+* Build MinGW variants with the same settings as VS variants.
+* Fix execution of Perl scripts from a Cygwin environment.
+
 diff -ru old/Configure new/Configure
 --- old/Configure	2008-09-18 14:56:10.000000000 +0200
 +++ new/Configure	2009-03-10 23:48:48.034829900 +0100
