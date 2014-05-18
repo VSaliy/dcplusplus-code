@@ -1,4 +1,0 @@
-008_openssl.patch:
-	http://ftp.openbsd.org/pub/OpenBSD/patches/5.4/common/008_openssl.patch
-	explains how it fixes a use-after-free race condition. This patch can be
-	removed when OpenSSL releases a version which fixes this.

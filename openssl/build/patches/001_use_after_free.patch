@@ -1,3 +1,7 @@
+	<http://ftp.openbsd.org/pub/OpenBSD/patches/5.4/common/008_openssl.patch>
+	explains how it fixes a use-after-free race condition. This patch can be
+	removed when OpenSSL releases a version which fixes this.
+
 diff -ru old/ssl/s3_pkt.c new/ssl/s3_pkt.c
 --- old/ssl/s3_pkt.c	14 Feb 2013 15:11:43 -0000	1.19
 +++ new/ssl/s3_pkt.c	12 Apr 2014 17:00:53 -0000	1.19.4.1
