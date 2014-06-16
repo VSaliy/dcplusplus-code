@@ -1,7 +1,7 @@
 /*
   DC++ Widget Toolkit
 
-  Copyright (c) 2007-2013, Jacek Sieka
+  Copyright (c) 2007-2014, Jacek Sieka
 
   SmartWin++
 
@@ -106,6 +106,11 @@ inline Message Button::getClickMessage() {
 
 inline Message Button::getDblClickMessage() {
 	return Message(WM_COMMAND, MAKEWPARAM(0, BN_DBLCLK));
+}
+
+inline Button::Button(Widget* parent) :
+	BaseType(parent, ChainingDispatcher::superClass<ThisType>())
+{
 }
 
 }

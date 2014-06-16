@@ -1,7 +1,7 @@
 /*
   DC++ Widget Toolkit
 
-  Copyright (c) 2007-2013, Jacek Sieka
+  Copyright (c) 2007-2014, Jacek Sieka
 
   All rights reserved.
 
@@ -44,11 +44,6 @@ padding(3, 2)
 {
 }
 
-Button::Button(Widget* parent) :
-	BaseType(parent, ChainingDispatcher::superClass<ThisType>())
-{
-}
-
 void Button::create(const Seed& cs) {
 	BaseType::create(cs);
 	setFont(cs.font);
@@ -67,8 +62,14 @@ void Button::setImage(IconPtr icon) {
 
 Point Button::getPreferredSize() {
 	SIZE size = { 0 };
-	sendMessage(BCM_GETIDEALSIZE, 0, reinterpret_cast<LPARAM>(&size));
-	return Point(size.cx, size.cy);
+	if(sendMessage(BCM_GETIDEALSIZE, 0, reinterpret_cast<LPARAM>(&size))) {
+		return Point(size.cx, size.cy);
+	}
+
+	// BCM_GETIDEALSIZE fails on WINE: https://bugs.winehq.org/show_bug.cgi?id=24623
+	UpdateCanvas c(this);
+	auto select(c.select(*getFont()));
+	return c.getTextExtent(getText()) + Point(3, 2) + Point(::GetSystemMetrics(SM_CYFIXEDFRAME) * 2, ::GetSystemMetrics(SM_CXFIXEDFRAME) * 2);
 }
 
 }
