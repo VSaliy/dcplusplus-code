@@ -340,7 +340,7 @@ void AdcHub::handle(AdcCommand::CTM, AdcCommand& c) noexcept {
 	const string& token = c.getParam(2);
 
 	bool secure = false;
-	if(protocol == CLIENT_PROTOCOL) {
+	if(protocol == CLIENT_PROTOCOL && !SETTING(REQUIRE_TLS)) {
 		// Nothing special
 	} else if(protocol == SECURE_CLIENT_PROTOCOL_TEST && CryptoManager::getInstance()->TLSOk()) {
 		secure = true;
@@ -370,7 +370,7 @@ void AdcHub::handle(AdcCommand::RCM, AdcCommand& c) noexcept {
 	const string& token = c.getParam(1);
 
 	bool secure;
-	if(protocol == CLIENT_PROTOCOL) {
+	if(protocol == CLIENT_PROTOCOL && !SETTING(REQUIRE_TLS)) {
 		secure = false;
 	} else if(protocol == SECURE_CLIENT_PROTOCOL_TEST && CryptoManager::getInstance()->TLSOk()) {
 		secure = true;
