@@ -467,12 +467,6 @@ void ConnectionManager::on(AdcCommand::STA, UserConnection*, const AdcCommand& c
 }
 
 void ConnectionManager::on(UserConnectionListener::Connected, UserConnection* aSource) noexcept {
-	if(SETTING(REQUIRE_TLS) && !aSource->isSet(UserConnection::FLAG_NMDC) && !aSource->isSecure()) {
-		putConnection(aSource);
-		QueueManager::getInstance()->removeSource(aSource->getUser(), QueueItem::Source::FLAG_UNENCRYPTED);
-		return;
-	}
-
 	dcassert(aSource->getState() == UserConnection::STATE_CONNECT);
 	if(aSource->isSet(UserConnection::FLAG_NMDC)) {
 		aSource->myNick(aSource->getToken());
@@ -686,6 +680,14 @@ void ConnectionManager::on(AdcCommand::INF, UserConnection* aSource, const AdcCo
 	if(aSource->getState() != UserConnection::STATE_INF) {
 		aSource->send(AdcCommand(AdcCommand::SEV_FATAL, AdcCommand::ERROR_PROTOCOL_GENERIC, "Expecting INF"));
 		aSource->disconnect();
+		return;
+	}
+
+	// Leaks CSUPs, other client's CINF, and ADC connection's presence. Allows removing
+	// user from queue by waiting long enough for aSource->getUser() to function.
+	if(SETTING(REQUIRE_TLS) && !aSource->isSet(UserConnection::FLAG_NMDC) && !aSource->isSecure()) {
+		putConnection(aSource);
+		QueueManager::getInstance()->removeSource(aSource->getUser(), QueueItem::Source::FLAG_UNENCRYPTED);
 		return;
 	}
 
