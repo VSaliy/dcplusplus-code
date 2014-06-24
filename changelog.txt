@@ -4,6 +4,7 @@
 * [#1309390] [NMDC] Prevent crashes when receiving malicious search requests (pavel pimenov)
 * Update OpenSSL to version 1.0.1h - fixes ChangeCipherSuite attack
 * Fix DWT button rendering on WINE (cologic)
+* [#1206864] Fix "Require TLS ADC C-C connections"
 
 -- 0.842 2014-04-10 --
 * Update OpenSSL to version 1.0.1g - notably fixes the TLS heartbeat attack
