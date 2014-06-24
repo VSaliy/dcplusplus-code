@@ -681,7 +681,7 @@ void AdcHub::connect(const OnlineUser& user, const string& token, ConnectionType
 		}
 		proto = &SECURE_CLIENT_PROTOCOL_TEST;
 	} else {
-		if(user.getUser()->isSet(User::NO_ADC_1_0_PROTOCOL) || !SETTING(REQUIRE_TLS)) {
+		if(user.getUser()->isSet(User::NO_ADC_1_0_PROTOCOL) || SETTING(REQUIRE_TLS)) {
 			/// @todo log, consider removing from queue
 			return;
 		}
