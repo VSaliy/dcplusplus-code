@@ -48,6 +48,7 @@ AdvancedPage::ListItem AdvancedPage::listItems[] = {
 	{ SettingsManager::AUTO_KICK_NO_FAVS, N_("Don't automatically disconnect favorite users who leave the hub"), IDH_SETTINGS_ADVANCED_AUTO_KICK_NO_FAVS },
 	{ SettingsManager::OWNER_DRAWN_MENUS, N_("Use extended menus with icons and titles"), IDH_SETTINGS_ADVANCED_OWNER_DRAWN_MENUS },
 	{ SettingsManager::USE_SYSTEM_ICONS, N_("Use system icons when browsing files (slows browsing down a bit)"), IDH_SETTINGS_ADVANCED_USE_SYSTEM_ICONS },
+	{ SettingsManager::CLICKABLE_CHAT_LINKS, N_("Clickable chat links (disable on Wine)"), IDH_SETTINGS_CLICKABLE_CHAT_LINKS },
 	{ SettingsManager::CORAL, N_("Use Coral network for HTTP downloads (improves reliability)"), IDH_SETTINGS_ADVANCED_CORAL },
 	{ SettingsManager::SEGMENTED_DL, N_("Enable segmented downloads"), IDH_SETTINGS_ADVANCED_SEGMENTED_DL },
 	{ 0, 0 }
