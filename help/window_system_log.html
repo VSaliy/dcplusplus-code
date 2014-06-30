@@ -29,6 +29,8 @@
 	<dd>Shown for each successfully hashed file including the full path, filesize and hashing speed. Speed value may won't be added for small files.</dd>
 	<dt>[Nick]: matched [x] files</dt>
 	<dd>This message is shown when someone's filelist has just matched to your queue. [x] shows the number of found matches.</dd>
+	<dt>The queued file %1% already exists in your share, removing from the queue</dt>
+	<dd>You have the <a href="settings_queue.html#alreadyshared">Don't download files already in share</a> setting enabled and tried to download an already shared file. The operation was prevented accordingly.</dd>
 	<dt>Duplicate file will not be shared: [path1] (Size: [size]) Dupe matched against: [path2]</dt>
 	<dd>This means that since you have <a href="settings_advanced.html#listdupes">Keep duplicate files in your file list</a>
 	setting disabled, a file ([path1]) beeing indexed and already shared (as [path2]) won't be added to your share again.</dd>
@@ -73,6 +75,8 @@
 	<dd>DC++ has failed to remove the existing port forwarding rules from the router made by <a href="faq_mapping.html">NAT-PMP or UPnP</a>. This message can appear at shutdown or during an <a href="settings_connectivity.html#autoconn">Automatic connectivity setup</a> attempt and it means that existing port mappings created earlier couldn't be removed successfully. If this message persists the most probable reason is broken NAT-PMP / UPnP support of the (router) device.</dd>
 	<dt>Connectivity: Unable to open TCP/UDP/TLS port(s); connectivity settings must be configured manually</dt>
 	<dd>You can get this message only when <a href="settings_connectivity.html#autoconn">Automatic connectivity setup</a> is enabled and DC++ failed to open port(s) before trying to determine the available conncetion types. Possible reasons include the choosen port(s) are already occupied by another application or <a href="faq_unblock.html">DC++ is blocked by a software firewall</a>.</dd>
+	<dt>The encrypted transfer port cannot be the same as the transfer port, encrypted transfers will be disabled</dt>
+	<dd>The two kind of transfers cannot use the same port therfore the secure one had to be disabled. You have to specify different TCP port for the different transfers in the <a href="settings_connectivity_manual.html#connection">Incoming connection settings</a> or review the current <a href="settings_connectivity.html">connectivity setup</a>.</dd>
 	<dt>Not listening for connections - please restart DC++</dt>
 	<dd>An unrecoverable low level networking error keeps DC++ from listening for connections. Search and download won't work until you restart DC++.</dd>
 	<dt>Connectivity error: [error message]</dt>
@@ -91,6 +95,8 @@
 	<dd>TLS certificate files are missing or could not be opened. DC++ tried to regenrerate them but it wasn't successful, either. Make sure you have write access rights to the 'Certificates' subfolder of the directory where DC++ configuraton files are stored.</dd>
 	<dt>TLS disabled, no certificate file set</dt>
 	<dd>TLS can't be used because no certificate files set. You should set or generate them properly in the <a href="settings_certs.html">Security certificates</a> page.</dd>
+	<dt>Certificate verification for [CA name] failed with error: [error message] (certificate KeyPrint: [keyprint])</dt>
+	<dd>The security certificate verification of user or hub with keyprint [keyprint] has failed because of [error message].</dd>
 	<dt>CRC32 inconsistency (SFV-Check) : [path]</dt>
 	<dd>You have <a href="settings_advanced.html#sfvcheck">automatic SFV checking enabled</a> and a downloaded file is not passed the SFV-check. The file will be downloaded again.</dd>
 	<dt>File list refresh in progress, please wait for it to finish before trying to refresh again</dt>
@@ -117,6 +123,8 @@
 	<dd>There was a problem preparing file [path] upon an upload request by a peer.</dd>
 	<dt>Invalid regular expression: [regex]</dt>
 	<dd>There was a problem applying a regular experssion [regex] specified in one of the filter functions.</dd>
+	<dt>HTTP file download failed to create file [filename], error: [error message]</dt>
+	<dd>The built-in HTTP downloader couldn't save the file it has downloaded because of [error message].</dd>
 
 	<!-- This can be reused when the message will go to the log again...
 	<dt>Someone is trying to use your client to spam [ip address], please urge hub owner to fix this</dt>
