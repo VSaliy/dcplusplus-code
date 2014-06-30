@@ -210,7 +210,13 @@ tstring Parser::Context::getBegin() const {
 	string ret = "{";
 
 	if(!link.empty()) {
-		ret += "\\field{\\*\\fldinst HYPERLINK \"" + link + "\"}{\\fldrslt";
+		/* Wine doesn't support chat links so display them as plain text.
+		 * See <http://bugs.winehq.org/show_bug.cgi?id=34824>. */
+		if(SETTING(CLICKABLE_CHAT_LINKS)) {
+			ret += "\\field{\\*\\fldinst HYPERLINK \"" + link + "\"}{\\fldrslt";
+		} else {
+			ret += "{";
+		}
 	}
 
 	ret += "\\f" + Util::toString(font) + "\\fs" + Util::toString(fontSize) +
@@ -221,8 +227,13 @@ tstring Parser::Context::getBegin() const {
 
 	ret += " ";
 
-	// add an invisible space; otherwise link formatting may get lost...
-	if(!link.empty()) { ret += "{\\v  }"; }
+	if(!link.empty()) {
+		// add an invisible space; otherwise link formatting may get lost...
+		ret += "{\\v  }";
+
+		// Throw the link before its label when in the Wine workaround...
+		if(!SETTING(CLICKABLE_CHAT_LINKS)) { ret += "<" + link + "> "; }
+	}
 
 	return Text::toT(ret);
 }

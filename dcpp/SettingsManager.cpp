@@ -92,6 +92,7 @@ const string SettingsManager::settingTags[] =
 	"AutoSearchAutoMatch", "AutoDropAll", "AutoDropDisconnect", "AutoDropFilelists",
 	"AwayCompLock", "AwayTimeStamp", "BoldFinishedDownloads", "BoldFinishedUploads", "BoldFL",
 	"BoldHub", "BoldPm", "BoldQueue", "BoldSearch", "BoldSystemLog", "ClearSearch",
+	"ClickableChatLinks",
 	"CompressTransfers", "ConfirmADLSRemoval", "ConfirmExit", "ConfirmHubClosing",
 	"ConfirmHubRemoval", "ConfirmItemRemoval", "ConfirmUserRemoval", "Coral", "DcextRegister",
 	"DontDlAlreadyQueued", "DontDLAlreadyShared", "EnableCCPM", "FavShowJoins",
@@ -171,6 +172,7 @@ SettingsManager::SettingsManager() {
 	setDefault(AUTO_DETECT_CONNECTION, true);
 	setDefault(AUTO_FOLLOW, true);
 	setDefault(CLEAR_SEARCH, true);
+	setDefault(CLICKABLE_CHAT_LINKS, true);
 	setDefault(SHARE_HIDDEN, false);
 	setDefault(FILTER_MESSAGES, true);
 	setDefault(MINIMIZE_TRAY, true);
