@@ -67,6 +67,7 @@ Point Button::getPreferredSize() {
 	}
 
 	// BCM_GETIDEALSIZE fails on WINE: https://bugs.winehq.org/show_bug.cgi?id=24623
+	// Last verified as unfixed on 2014-07-01
 	UpdateCanvas c(this);
 	auto select(c.select(*getFont()));
 	return c.getTextExtent(getText()) + Point(3, 2) + Point(::GetSystemMetrics(SM_CYFIXEDFRAME) * 2, ::GetSystemMetrics(SM_CXFIXEDFRAME) * 2);
