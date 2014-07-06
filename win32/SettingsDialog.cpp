@@ -69,7 +69,7 @@ using dwt::GridInfo;
 
 using dwt::ToolTip;
 
-const int SettingsDialog::pluginPagePos = 22; // remember to change when adding pages...
+const int SettingsDialog::pluginPagePos = 23; // remember to change when adding pages...
 
 SettingsDialog::SettingsDialog(dwt::Widget* parent) :
 dwt::ModalDialog(parent),
