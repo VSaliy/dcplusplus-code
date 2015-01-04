@@ -3,6 +3,7 @@
 * Fix DWT button rendering on WINE (cologic)
 * [L#1206864] Fix "Require TLS ADC C-C connections" (cologic)
 * Add option to disable smart chat links - recommended on WINE (poy)
+* Improve UTF-8 RFC-3629 compliance (cologic)
 
 -- 0.843 2014-04-28 --
 * [L#1307978] Fix subtract list functionality (crise)
