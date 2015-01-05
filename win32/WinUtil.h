@@ -276,7 +276,6 @@ public:
 
 	// Hash related
 	static void addHashItems(Menu* menu, const TTHValue& tth, const tstring& filename, int64_t size);
-	static void bitziLink(const TTHValue& aHash);
 	static void copyMagnet(const TTHValue& aHash, const tstring& aFile, int64_t size);
 	static void searchAny(const tstring& aSearch);
 	static void searchHash(const TTHValue& aHash);
