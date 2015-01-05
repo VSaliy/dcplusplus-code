@@ -822,16 +822,7 @@ void WinUtil::reducePaths(string& message) {
 void WinUtil::addHashItems(Menu* menu, const TTHValue& tth, const tstring& filename, int64_t size) {
 	if(!tth) { return; }
 	menu->appendItem(T_("Search for alternates"), [=] { searchHash(tth); }, menuIcon(IDI_SEARCH));
-	menu->appendItem(T_("Lookup TTH at Bitzi.com"), [=] { bitziLink(tth); });
 	menu->appendItem(T_("Copy magnet link to clipboard"), [=] { copyMagnet(tth, filename, size); }, menuIcon(IDI_MAGNET));
-}
-
-void WinUtil::bitziLink(const TTHValue& aHash) {
-	// to use this free service by bitzi, we must not hammer or request information from bitzi
-	// except when the user requests it (a mass lookup isn't acceptable), and (if we ever fetch
-	// this data within DC++, we must identify the client/mod in the user agent, so abuse can be
-	// tracked down and the code can be fixed
-	openLink(_T("http://bitzi.com/lookup/tree:tiger:") + Text::toT(aHash.toBase32()));
 }
 
 void WinUtil::copyMagnet(const TTHValue& aHash, const tstring& aFile, int64_t size) {

@@ -4,6 +4,7 @@
 * [L#1206864] Fix "Require TLS ADC C-C connections" (cologic)
 * Add option to disable smart chat links - recommended on Wine (poy)
 * Improve UTF-8 RFC-3629 compliance (cologic)
+* Remove deprecated Bitzi TTH lookup (emtee)
 
 -- 0.843 2014-04-28 --
 * [L#1307978] Fix subtract list functionality (crise)
