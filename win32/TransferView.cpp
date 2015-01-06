@@ -289,7 +289,7 @@ bool TransferView::TransferInfo::operator==(const TransferInfo& other) const {
 
 int TransferView::TransferInfo::getImage(int col) const {
 	return type == CONNECTION_TYPE_PM ? WinUtil::TRANSFER_ICON_PM :
-		col == COLUMN_FILE ? WinUtil::getFileIcon(path) : ItemInfo::getImage(col);
+		col == COLUMN_FILE ? static_cast<int>(WinUtil::getFileIcon(path)) : ItemInfo::getImage(col);
 }
 
 void TransferView::TransferInfo::update() {

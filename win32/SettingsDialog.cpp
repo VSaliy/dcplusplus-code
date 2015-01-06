@@ -289,7 +289,7 @@ BOOL CALLBACK SettingsDialog::EnumChildProc(HWND hwnd, LPARAM lParam) {
 		provide a valid cshelp id; the tooltip will disappear when hovering others (to be as
 		discreet as possible). the tooltip is provided a random text to make it believe in its
 		usefulness (we will actually hide it and show our own rich one on top of it). */
-		dialog->tip->addTool(widget, _T("M"));
+		dialog->tip->addTool(widget, const_cast<LPTSTR>(_T("M")));
 
 		// special refresh logic for tables as they may have different help ids for each item.
 		if(table) {
