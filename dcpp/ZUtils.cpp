@@ -149,6 +149,7 @@ void GZ::decompress(const string& source, const string& target) {
 	File f(target, File::WRITE, File::CREATE | File::TRUNCATE);
 
 	const size_t BUF_SIZE = 64 * 1024;
+	const int BUF_SIZE_INT = static_cast<int>(BUF_SIZE);
 	ByteVector buf(BUF_SIZE);
 
 	while(true) {
@@ -156,7 +157,7 @@ void GZ::decompress(const string& source, const string& target) {
 		if(read > 0) {
 			f.write(&buf[0], read);
 		}
-		if(read < BUF_SIZE) {
+		if(read < BUF_SIZE_INT) {
 			break;
 		}
 	}

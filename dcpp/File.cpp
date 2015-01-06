@@ -25,7 +25,7 @@ namespace dcpp {
 
 #ifdef _WIN32
 File::File(const string& aFileName, int access, int mode) {
-	dcassert(access == WRITE || access == READ || access == (READ | WRITE));
+	dcassert(access == static_cast<int>(WRITE) || access == static_cast<int>(READ) || access == static_cast<int>((READ | WRITE)));
 
 	int m = 0;
 	if(mode & OPEN) {
