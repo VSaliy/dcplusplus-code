@@ -1,5 +1,5 @@
 * [L#1308290] Enable TLS v1.1 and TLS v1.2-based ADCS connections (cologic)
-* Update OpenSSL to version 1.0.1h - fixes ChangeCipherSuite attack
+* Update OpenSSL to version 1.0.1k
 * Fix DWT button rendering on WINE (cologic)
 * [L#1206864] Fix "Require TLS ADC C-C connections" (cologic)
 * Add option to disable smart chat links - recommended on Wine (poy)
