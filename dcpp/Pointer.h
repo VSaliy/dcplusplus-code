@@ -53,31 +53,6 @@ struct DeleteFunction {
 	void operator()(const T& p) const { delete p; }
 };
 
-template<typename T>
-inline unique_ptr<T> make_unique()
-{
-    return unique_ptr<T>(new T);
-}
-
-template<typename T, typename A0>
-inline unique_ptr<T> make_unique(A0&& a0)
-{
-    return unique_ptr<T>(new T(forward<A0>(a0)));
-}
-
-template<typename T, typename A0, typename A1>
-inline unique_ptr<T> make_unique(A0 && a0, A1 && a1)
-{
-    return unique_ptr<T>(new T(forward<A0>(a0), forward<A1>(a1)));
-}
-
-template<typename T, typename A0, typename A1, typename A2>
-inline unique_ptr<T> make_unique(A0 && a0, A1 && a1, A2 && a2)
-{
-    return unique_ptr<T>(new T(forward<A0>(a0), forward<A1>(a1), forward<A2>(a2)));
-}
-
-
 } // namespace dcpp
 
 #endif // !defined(POINTER_H)

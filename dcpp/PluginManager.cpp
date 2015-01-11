@@ -54,6 +54,7 @@
 
 namespace dcpp {
 
+using std::make_unique;
 using std::swap;
 
 PluginManager::PluginManager() : dcCore(), shutdown(false), secNum(Util::rand()) {
