@@ -14,7 +14,7 @@
 #define OS_STRING "Generic/1"
 #endif
 
-#define MINIUPNPC_VERSION_STRING "1.8"
+#define MINIUPNPC_VERSION_STRING "1.9"
 
 #endif
 
