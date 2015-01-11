@@ -22,9 +22,9 @@
 #include "forward.h"
 #include "StringSearch.h"
 
+#include <regex>
 #include <string>
 
-#include <boost/regex.hpp>
 #include <boost/variant.hpp>
 
 namespace dcpp {
@@ -52,7 +52,7 @@ struct StringMatch {
 	bool match(const string& str) const;
 
 private:
-	boost::variant<StringSearch::List, string, boost::regex> search;
+	boost::variant<StringSearch::List, string, std::regex> search;
 };
 
 } // namespace dcpp
