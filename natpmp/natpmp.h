@@ -1,6 +1,6 @@
-/* $Id: natpmp.h,v 1.15 2011/07/15 08:30:11 nanard Exp $ */
+/* $Id: natpmp.h,v 1.19 2014/04/01 09:39:29 nanard Exp $ */
 /* libnatpmp
-Copyright (c) 2007-2011, Thomas BERNARD 
+Copyright (c) 2007-2013, Thomas BERNARD
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -35,16 +35,23 @@ POSSIBILITY OF SUCH DAMAGE.
 #include <time.h>
 #if !defined(_MSC_VER)
 #include <sys/time.h>
-#endif
+#endif	/* !defined(_MSC_VER) */
+
 #ifdef WIN32
 #include <winsock2.h>
+#if !defined(_MSC_VER) || _MSC_VER >= 1600
 #include <stdint.h>
+#else	/* !defined(_MSC_VER) || _MSC_VER >= 1600 */
+typedef unsigned long uint32_t;
+typedef unsigned short uint16_t;
+#endif	/* !defined(_MSC_VER) || _MSC_VER >= 1600 */
 #define in_addr_t uint32_t
 #include "declspec.h"
-#else
-#define LIBSPEC
+#else	/* WIN32 */
 #include <netinet/in.h>
-#endif
+#endif	/* WIN32 */
+
+#include "declspec.h"
 
 typedef struct {
 	int s;	/* socket */
