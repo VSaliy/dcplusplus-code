@@ -1,6 +1,6 @@
-/* $Id: natpmp.c,v 1.14 2011/07/15 08:30:11 nanard Exp $ */
+/* $Id: natpmp.c,v 1.18 2013/11/26 08:47:36 nanard Exp $ */
 /* libnatpmp
-Copyright (c) 2007-2011, Thomas BERNARD 
+Copyright (c) 2007-2013, Thomas BERNARD
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -39,9 +39,16 @@ POSSIBILITY OF SUCH DAMAGE.
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <io.h>
+#ifdef EWOULDBLOCK
+#undef EWOULDBLOCK
+#endif
+#ifdef ECONNREFUSED
+#undef ECONNREFUSED
+#endif
 #define EWOULDBLOCK WSAEWOULDBLOCK
 #define ECONNREFUSED WSAECONNREFUSED
 #include "wingettimeofday.h"
+#define gettimeofday natpmp_gettimeofday
 #else
 #include <errno.h>
 #include <unistd.h>
@@ -52,13 +59,14 @@ POSSIBILITY OF SUCH DAMAGE.
 #endif
 #include "natpmp.h"
 #include "getgateway.h"
+#include <stdio.h>
 
 LIBSPEC int initnatpmp(natpmp_t * p, int forcegw, in_addr_t forcedgw)
 {
 #ifdef WIN32
 	u_long ioctlArg = 1;
 #else
-	int flags; 
+	int flags;
 #endif
 	struct sockaddr_in addr;
 	if(!p)
@@ -83,7 +91,7 @@ LIBSPEC int initnatpmp(natpmp_t * p, int forcegw, in_addr_t forcedgw)
 		if(getdefaultgateway(&(p->gateway)) < 0)
 			return NATPMP_ERR_CANNOTGETGATEWAY;
 	}
-	
+
 	memset(&addr, 0, sizeof(addr));
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(NATPMP_PORT);
@@ -176,9 +184,20 @@ LIBSPEC int sendnewportmappingrequest(natpmp_t * p, int protocol,
 	p->pending_request[1] = protocol;
 	p->pending_request[2] = 0;
 	p->pending_request[3] = 0;
-	*((uint16_t *)(p->pending_request + 4)) = htons(privateport);
-	*((uint16_t *)(p->pending_request + 6)) = htons(publicport);
-	*((uint32_t *)(p->pending_request + 8)) = htonl(lifetime);
+	/* break strict-aliasing rules :
+	*((uint16_t *)(p->pending_request + 4)) = htons(privateport); */
+	p->pending_request[4] = (privateport >> 8) & 0xff;
+	p->pending_request[5] = privateport & 0xff;
+	/* break stric-aliasing rules :
+	*((uint16_t *)(p->pending_request + 6)) = htons(publicport); */
+	p->pending_request[6] = (publicport >> 8) & 0xff;
+	p->pending_request[7] = publicport & 0xff;
+	/* break stric-aliasing rules :
+	*((uint32_t *)(p->pending_request + 8)) = htonl(lifetime); */
+	p->pending_request[8] = (lifetime >> 24) & 0xff;
+	p->pending_request[9] = (lifetime >> 16) & 0xff;
+	p->pending_request[10] = (lifetime >> 8) & 0xff;
+	p->pending_request[11] = lifetime & 0xff;
 	p->pending_request_len = 12;
 	return sendnatpmprequest(p);
 }
@@ -194,7 +213,11 @@ LIBSPEC int readnatpmpresponse(natpmp_t * p, natpmpresp_t * response)
 	n = recvfrom(p->s, buf, sizeof(buf), 0,
 	             (struct sockaddr *)&addr, &addrlen);
 	if(n<0)
+#ifdef WIN32
+		switch(WSAGetLastError()) {
+#else
 		switch(errno) {
+#endif
 		/*case EAGAIN:*/
 		case EWOULDBLOCK:
 			n = NATPMP_TRYAGAIN;
