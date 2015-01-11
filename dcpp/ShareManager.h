@@ -20,6 +20,7 @@
 #define DCPLUSPLUS_DCPP_SHARE_MANAGER_H
 
 #include <functional>
+#include <list>
 #include <map>
 #include <memory>
 #include <set>
