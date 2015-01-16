@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2014-03-31 14:37+0200\n"
+"POT-Creation-Date: 2015-01-04 23:10+0100\n"
 "PO-Revision-Date: 2012-05-16 01:15+0000\n"
 "Last-Translator: الأستاذ عوض الغامدي _ منتديات عميد التعريب <Unknown>\n"
 "Language-Team: awadh alghaamdi <awadh_al_ghaamdi@hotmail.com>\n"
@@ -17,8 +17,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n % 100 >= "
 "3 && n % 100 <= 10 ? 3 : n % 100 >= 11 && n % 100 <= 99 ? 4 : 5;\n"
-"X-Launchpad-Export-Date: 2014-03-30 18:17+0000\n"
-"X-Generator: Launchpad (build 16967)\n"
+"X-Launchpad-Export-Date: 2015-01-16 09:32+0000\n"
+"X-Generator: Launchpad (build 17303)\n"
 "X-Poedit-Country: SAUDI ARABIA\n"
 "X-Poedit-Language: Arabic\n"
 
@@ -508,7 +508,7 @@ msgstr "ADL بحث"
 msgid "ADLSearch Properties"
 msgstr "ADLخواص البحث"
 
-#: win32\AboutDlg.cpp:171 win32\MainWindow.cpp:409
+#: win32\AboutDlg.cpp:172 win32\MainWindow.cpp:409
 msgid "About DC++"
 msgstr "حول البرنامج"
 
@@ -943,6 +943,10 @@ msgstr ""
 msgid "Click and drag to resize"
 msgstr ""
 
+#: win32\AdvancedPage.cpp:51
+msgid "Clickable chat links (disable on Wine)"
+msgstr ""
+
 #: win32\UsersFrame.cpp:101
 #, fuzzy
 msgid "Client type"
@@ -1002,7 +1006,7 @@ msgstr ""
 msgid "Community news"
 msgstr ""
 
-#: win32\AboutDlg.cpp:116
+#: win32\AboutDlg.cpp:117
 msgid "Compiler"
 msgstr ""
 
@@ -1486,7 +1490,7 @@ msgstr "تحميل قائمة المحاور العامة"
 msgid "Downloading public hub list... (%1%)"
 msgstr "تحميل قائمة المحاور العامة"
 
-#: win32\AboutDlg.cpp:162
+#: win32\AboutDlg.cpp:163
 msgid "Downloading..."
 msgstr "...جاري التحميل"
 
@@ -1560,7 +1564,7 @@ msgstr ""
 msgid "Enable safe and compressed transfers"
 msgstr "تشغيل خاصية النقل الآمن م المضغوط"
 
-#: win32\AdvancedPage.cpp:52
+#: win32\AdvancedPage.cpp:53
 msgid "Enable segmented downloads"
 msgstr ""
 
@@ -1590,7 +1594,7 @@ msgstr ""
 msgid "Error loading the notepad file: %1%"
 msgstr ""
 
-#: win32\AboutDlg.cpp:207
+#: win32\AboutDlg.cpp:208
 #, fuzzy
 msgid "Error processing version information"
 msgstr "المعلومات الخاصة"
@@ -1959,7 +1963,7 @@ msgid ""
 "in 10 minutes, the granted slot is removed."
 msgstr ""
 
-#: win32\AboutDlg.cpp:139
+#: win32\AboutDlg.cpp:140
 msgid "Greetz and Contributors"
 msgstr ""
 
@@ -2337,7 +2341,7 @@ msgstr "ملف اللغة"
 msgid "Last message occured %1%"
 msgstr ""
 
-#: win32\AboutDlg.cpp:161
+#: win32\AboutDlg.cpp:162
 msgid "Latest stable version"
 msgstr ""
 
@@ -2363,7 +2367,7 @@ msgstr ""
 msgid "Launches your default web browser with the given URL."
 msgstr ""
 
-#: win32\AboutDlg.cpp:103
+#: win32\AboutDlg.cpp:104
 msgid ""
 "Leading project contributor: poy\n"
 "Ex-project contributor: Todd Pederzani\n"
@@ -2806,7 +2810,7 @@ msgstr ""
 msgid "No plugin has been selected"
 msgstr ""
 
-#: win32\AboutDlg.cpp:157
+#: win32\AboutDlg.cpp:158
 msgid "No transfers yet"
 msgstr ""
 
@@ -3205,7 +3209,7 @@ msgstr "توصيل سريع"
 msgid "Rating"
 msgstr "التصنيف"
 
-#: win32\AboutDlg.cpp:156
+#: win32\AboutDlg.cpp:157
 #, c-format, boost-format
 msgid "Ratio (up/down): %1$0.2f"
 msgstr ""
@@ -3819,7 +3823,7 @@ msgstr "B"
 msgid "TLS Keyprint"
 msgstr ""
 
-#: win32\AboutDlg.cpp:112 win32\DirectoryListingFrame.cpp:68
+#: win32\AboutDlg.cpp:113 win32\DirectoryListingFrame.cpp:68
 #: win32\QueueFrame.cpp:58 win32\SearchFrame.cpp:61 win32\TransferView.cpp:980
 msgid "TTH"
 msgstr ""
@@ -3970,7 +3974,7 @@ msgstr "الحجم الكامل"
 msgid "Total slots"
 msgstr "الوصلات لعملية الرفع"
 
-#: win32\AboutDlg.cpp:148
+#: win32\AboutDlg.cpp:149
 msgid "Totals"
 msgstr ""
 
@@ -4110,7 +4114,7 @@ msgstr "الوصلات لعملية الرفع"
 msgid "Upload speed"
 msgstr "الملفات المرفعة"
 
-#: win32\AboutDlg.cpp:152
+#: win32\AboutDlg.cpp:153
 #, boost-format
 msgid "Upload: %1%, Download: %2%"
 msgstr ""
@@ -4133,7 +4137,7 @@ msgstr "الملفات المرفعة"
 msgid "Use CTRL for line history"
 msgstr "لخط الهيستوري CTRL استخدم"
 
-#: win32\AdvancedPage.cpp:51
+#: win32\AdvancedPage.cpp:52
 msgid "Use Coral network for HTTP downloads (improves reliability)"
 msgstr ""
 

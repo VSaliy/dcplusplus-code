@@ -7,17 +7,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: win32\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2014-03-31 14:37+0200\n"
-"PO-Revision-Date: 2012-08-14 17:48+0000\n"
-"Last-Translator: Xcell <correodexcell@gmail.com>\n"
+"POT-Creation-Date: 2015-01-04 23:10+0100\n"
+"PO-Revision-Date: 2015-01-05 05:18+0000\n"
+"Last-Translator: Francisco Blas Izquierdo Riera (klondike) "
+"<franxisco1988@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2014-03-30 18:17+0000\n"
-"X-Generator: Launchpad (build 16967)\n"
+"X-Launchpad-Export-Date: 2015-01-16 09:32+0000\n"
+"X-Generator: Launchpad (build 17303)\n"
 
 #: win32\PublicHubsFrame.cpp:420
 msgid " from Coral"
@@ -37,9 +38,9 @@ msgstr ""
 "¿Abrir página de descargas?"
 
 #: win32\UserMatchPage.cpp:219
-#, fuzzy, boost-format
+#, boost-format
 msgid "%1% %2%: %3%"
-msgstr "D: %1%/s (%2%)"
+msgstr "%1% %2%: %3%"
 
 #: win32\TransferView.cpp:207
 #, boost-format
@@ -47,16 +48,16 @@ msgid "%1% (%2$0.2f)"
 msgstr "%1% (%2$0.2f)"
 
 #: win32\SearchFrame.cpp:524
-#, fuzzy, boost-format
+#, boost-format
 msgid "%1% (%2%)"
-msgstr "D: %1%/s (%2%)"
+msgstr "%1% (%2%)"
 
 #: win32\SearchFrame.cpp:1072
 #, boost-format
 msgid "%1% / %2% item"
 msgid_plural "%1% / %2% items"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1% / %2% elemento"
+msgstr[1] "%1% / %2% elementos"
 
 #: win32\SearchFrame.cpp:1103
 #, boost-format
@@ -406,7 +407,7 @@ msgstr "&Ventana"
 #: win32\TransferView.cpp:985
 #, boost-format
 msgid "(%1%)"
-msgstr ""
+msgstr "(%1%)"
 
 #: win32\MainWindow.cpp:840
 msgid "(No recent item found)"
@@ -480,7 +481,7 @@ msgstr "Búsqueda automática"
 msgid "ADLSearch Properties"
 msgstr "Propiedades de la Búsqueda ADL"
 
-#: win32\AboutDlg.cpp:171 win32\MainWindow.cpp:409
+#: win32\AboutDlg.cpp:172 win32\MainWindow.cpp:409
 msgid "About DC++"
 msgstr "Acerca de DC++"
 
@@ -502,9 +503,8 @@ msgid "Active mode (let DC++ configure my router with NAT-PMP / UPnP)"
 msgstr "Use UPnP para permitir a DC++ configurar mi router"
 
 #: win32\MainWindow.cpp:721
-#, fuzzy
 msgid "Add"
-msgstr "&Añadir"
+msgstr "Añadir"
 
 #: win32\HubFrame.cpp:1305 win32\PublicHubsFrame.cpp:336
 #: win32\WinUtil.cpp:1578 win32\UserInfoBase.h:161
@@ -542,24 +542,32 @@ msgid ""
 "Adds a user matching definition (or modifies an existing one, if possible) "
 "to ignore chat messages from the current user."
 msgstr ""
+"Agrega una definición de usuario coincidente (o modifica una ya existente, "
+"si es posible) para ignorar los mensajes de chat del usuario actual."
 
 #: win32\HubFrame.cpp:554
 msgid ""
 "Adds a user matching definition (or modifies an existing one, if possible) "
 "to ignore chat messages from the specified user."
 msgstr ""
+"Agrega una definición de usuario coincidente (o modifica una ya existente, "
+"si es posible) para ignorar los mensajes de chat del usuario especificado."
 
 #: win32\PrivateFrame.cpp:414
 msgid ""
 "Adds a user matching definition (or modifies an existing one, if possible) "
 "to stop ignoring chat messages from the current user."
 msgstr ""
+"Agrega una definición de usuario coincidente (o modifica una existente, si "
+"es posible) para dejar de ignorar mensajes de chat del usuario actual."
 
 #: win32\HubFrame.cpp:556
 msgid ""
 "Adds a user matching definition (or modifies an existing one, if possible) "
 "to stop ignoring chat messages from the specified user."
 msgstr ""
+"Agrega una definición de usuario coincidente (o modifica una existente, si "
+"es posible) para dejar de ignorar mensajes de chat del usuario especificado."
 
 #: win32\HubFrame.cpp:545
 msgid ""
@@ -573,11 +581,11 @@ msgstr ""
 
 #: win32\PrivateFrame.cpp:405
 msgid "Adds the current user's list to the Download Queue."
-msgstr ""
+msgstr "Agrega la lista actual de usuarios a la Cola de Descarga"
 
 #: win32\HubFrame.cpp:552
 msgid "Adds the user's list to the Download Queue."
-msgstr ""
+msgstr "Agrega la lista del usuario a la Cola de Descarga"
 
 #: win32\SettingsDialog.cpp:192
 msgid "Advanced"
@@ -657,7 +665,7 @@ msgstr "Como máximo"
 
 #: win32\PluginInfoDlg.cpp:92 win32\PluginPage.cpp:237
 msgid "Author: "
-msgstr ""
+msgstr "Autor: "
 
 #: win32\UsersFrame.cpp:54
 #, fuzzy
@@ -747,7 +755,7 @@ msgstr "Media: %1%"
 
 #: win32\UsersFrame.cpp:79
 msgid "Away"
-msgstr ""
+msgstr "Ausente"
 
 #: win32\GeneralPage.cpp:91
 msgid "Away message (empty = no away message)"
@@ -794,13 +802,12 @@ msgid "Balloon settings"
 msgstr "Opciones de Conexión"
 
 #: win32\SettingsDialog.cpp:162
-#, fuzzy
 msgid "Bandwidth limiting"
-msgstr "Limitación de ancho de banda"
+msgstr "Limites del ancho de banda"
 
 #: win32\NotificationsPage.cpp:281
 msgid "Beep"
-msgstr ""
+msgstr "Pitar"
 
 #: win32\UploadFilteringPage.cpp:81
 msgid "Below (maximum size)"
@@ -913,9 +920,15 @@ msgid ""
 "Clears the current window of all text. Optionally, you can specify how many "
 "of the latest (most recent) lines should be kept."
 msgstr ""
+"Borra todo el texto de la ventana actual. Opcionalmente, se puede "
+"especificar cuántas líneas (las más recientes) pueden conservarse."
 
 #: win32\dwtTexts.cpp:37
 msgid "Click and drag to resize"
+msgstr ""
+
+#: win32\AdvancedPage.cpp:51
+msgid "Clickable chat links (disable on Wine)"
 msgstr ""
 
 #: win32\UsersFrame.cpp:101
@@ -976,14 +989,13 @@ msgstr "Noticias de la comunidad"
 msgid "Community news"
 msgstr "Noticias de la comunidad"
 
-#: win32\AboutDlg.cpp:116
+#: win32\AboutDlg.cpp:117
 msgid "Compiler"
-msgstr ""
+msgstr "Compilador"
 
 #: win32\MainWindow.cpp:722 win32\MainWindow.cpp:740
-#, fuzzy
 msgid "Configure"
-msgstr "&Configurar"
+msgstr "Configurar"
 
 #: win32\DownloadPage.cpp:118
 msgid "Configure Public Hub Lists"
@@ -1064,18 +1076,16 @@ msgid "Connection"
 msgstr "Conexión"
 
 #: win32\SettingsDialog.cpp:160
-#, fuzzy
 msgid "Connectivity"
-msgstr "Conectar"
+msgstr "Conectividad"
 
 #: win32\CommandDlg.cpp:105
 msgid "Context"
 msgstr "Contexto"
 
 #: win32\WinUtil.cpp:1613
-#, fuzzy
 msgid "Copy"
-msgstr "&Copiar"
+msgstr "Copiar"
 
 #: win32\HubFrame.cpp:1309
 msgid "Copy &address to clipboard"
@@ -1123,7 +1133,7 @@ msgstr ""
 
 #: win32\NotificationsPage.cpp:281
 msgid "Custom"
-msgstr ""
+msgstr "Personalización"
 
 #: win32\StylesPage.cpp:125 win32\UserMatchPage.cpp:232
 #, fuzzy
@@ -1132,7 +1142,7 @@ msgstr "Ejecutar en Segundo Plano"
 
 #: win32\StylesPage.cpp:102 win32\UserMatchPage.cpp:228
 msgid "Custom font"
-msgstr ""
+msgstr "Fuente personalizada"
 
 #: win32\StylesPage.cpp:111 win32\UserMatchPage.cpp:230
 msgid "Custom text color"
@@ -1140,7 +1150,7 @@ msgstr ""
 
 #: win32\MainWindow.cpp:933
 msgid "Custom..."
-msgstr ""
+msgstr "Personalizado…"
 
 #: win32\MainWindow.cpp:1203
 #, boost-format
@@ -1162,9 +1172,9 @@ msgstr ""
 "S: %3%/s (%4%)"
 
 #: win32\MainWindow.cpp:759
-#, fuzzy, boost-format
+#, boost-format
 msgid "DC++ - %1%"
-msgstr "D: %1%"
+msgstr "DC++ - %1%"
 
 #: win32\MagnetDlg.cpp:71
 msgid ""
@@ -1200,9 +1210,8 @@ msgid "Description"
 msgstr "Descripción"
 
 #: win32\PluginInfoDlg.cpp:91 win32\PluginPage.cpp:236
-#, fuzzy
 msgid "Description: "
-msgstr "Descripción"
+msgstr "Descripción: "
 
 #: win32\ADLSearchFrame.cpp:47 win32\ADLSProperties.cpp:106
 msgid "Destination Directory"
@@ -1244,14 +1253,12 @@ msgid "Directory or directory name already exists"
 msgstr "Directorio ya existe"
 
 #: win32\MainWindow.cpp:737 win32\PluginPage.cpp:106 win32\PluginPage.cpp:258
-#, fuzzy
 msgid "Disable"
-msgstr "Permitido"
+msgstr "Desactivar"
 
 #: win32\MainWindow.cpp:924
-#, fuzzy
 msgid "Disabled"
-msgstr "Permitido"
+msgstr "Desactivado"
 
 #: win32\PrivateFrame.cpp:509
 msgid "Disconnect the direct encrypted channel"
@@ -1364,9 +1371,8 @@ msgid "Download failed: %1%"
 msgstr "Descarga fallida: %1%"
 
 #: win32\TransferView.cpp:1112 win32\WinUtil.cpp:92
-#, fuzzy
 msgid "Download finished"
-msgstr "Descargado"
+msgstr "Descarga completada"
 
 #: win32\DirectoryListingFrame.cpp:369
 msgid "Download full list"
@@ -1396,9 +1402,8 @@ msgid "Download slots set"
 msgstr "Establecer slots de descarga"
 
 #: win32\UsersFrame.cpp:85
-#, fuzzy
 msgid "Download speed"
-msgstr "Descargado"
+msgstr "Velocidad de descarga"
 
 #: win32\SearchFrame.cpp:855
 msgid "Download to..."
@@ -1422,9 +1427,8 @@ msgid "Downloaded hub list is corrupted or unsupported (%1%)"
 msgstr "La lista de hubs está corrompida o no soportada (%1%)"
 
 #: win32\TransferView.cpp:1081
-#, fuzzy
 msgid "Downloading"
-msgstr "Descargando..."
+msgstr "Descargando"
 
 #: win32\TransferView.cpp:1017
 #, boost-format
@@ -1449,7 +1453,7 @@ msgstr "Descargando la Lista Pública de Hubs..."
 msgid "Downloading public hub list... (%1%)"
 msgstr "Descargando la Lista Pública de Hubs...(%1%)"
 
-#: win32\AboutDlg.cpp:162
+#: win32\AboutDlg.cpp:163
 msgid "Downloading..."
 msgstr "Descargando..."
 
@@ -1488,7 +1492,6 @@ msgstr "Transcurrido"
 
 #: win32\FavHubGroupsDlg.cpp:144 win32\FavHubProperties.cpp:120
 #: win32\GeneralPage.cpp:65 win32\HubFrame.cpp:441
-#, fuzzy
 msgid "Email"
 msgstr "Correo electrónico"
 
@@ -1497,9 +1500,8 @@ msgid "Empty hub address specified"
 msgstr ""
 
 #: win32\MainWindow.cpp:736 win32\PluginPage.cpp:102 win32\PluginPage.cpp:257
-#, fuzzy
 msgid "Enable"
-msgstr "Permitido"
+msgstr "Activar"
 
 #: win32\AdvancedPage.cpp:40
 msgid "Enable automatic SFV checking"
@@ -1521,7 +1523,7 @@ msgstr ""
 msgid "Enable safe and compressed transfers"
 msgstr "Activar transferencias seguras y comprimidas"
 
-#: win32\AdvancedPage.cpp:52
+#: win32\AdvancedPage.cpp:53
 msgid "Enable segmented downloads"
 msgstr "Activar descargas segmentadas"
 
@@ -1534,9 +1536,8 @@ msgid "Enabled / Search String"
 msgstr "Activo / Cadena de búsqueda"
 
 #: win32\ConnectivityManualPage.cpp:114 win32\ConnectivityManualPage.cpp:228
-#, fuzzy
 msgid "Encrypted transfer"
-msgstr " Puerto de Transferencia Encriptado (%1% TCP)"
+msgstr "Transferencia cifrada"
 
 #: win32\SearchFrame.cpp:141
 #, fuzzy
@@ -1552,7 +1553,7 @@ msgstr "Error Generando certificado"
 msgid "Error loading the notepad file: %1%"
 msgstr "Error cargando el archivo de bloc de notas %1%"
 
-#: win32\AboutDlg.cpp:207
+#: win32\AboutDlg.cpp:208
 msgid "Error processing version information"
 msgstr "Error procesando la información de versión"
 
@@ -1571,11 +1572,11 @@ msgstr ""
 
 #: win32\NotificationsPage.cpp:37
 msgid "Event"
-msgstr ""
+msgstr "Evento"
 
 #: win32\UserMatchPage.cpp:217 win32\WinUtil.cpp:1195
 msgid "Exact match"
-msgstr ""
+msgstr "Coincidencia exacta"
 
 #: win32\DirectoryListingFrame.cpp:67 win32\QueueFrame.cpp:55
 #: win32\SearchFrame.cpp:59
@@ -1626,9 +1627,8 @@ msgid ""
 msgstr ""
 
 #: win32\UsersFrame.cpp:53 win32\UsersFrame.cpp:187
-#, fuzzy
 msgid "Favorite"
-msgstr "Favoritos"
+msgstr "Favorito"
 
 #: win32\FavHubProperties.cpp:177
 msgid "Favorite Hub Properties"
@@ -1674,7 +1674,7 @@ msgstr "Favoritos"
 
 #: win32\UsersFrame.cpp:95
 msgid "Features"
-msgstr ""
+msgstr "Características"
 
 #: win32\DirectoryListingFrame.cpp:64 win32\DirectoryListingFrame.cpp:1566
 #: win32\SearchFrame.cpp:50 win32\TransferView.cpp:48
@@ -1717,9 +1717,8 @@ msgid "File name filtering with regular expressions"
 msgstr ""
 
 #: win32\PluginPage.cpp:239
-#, fuzzy
 msgid "File name: "
-msgstr "Nombre del Archivo:"
+msgstr "Nombre de archivo: "
 
 #: win32\QueueFrame.cpp:384
 msgid "File not available"
@@ -1785,14 +1784,12 @@ msgid "Filter users"
 msgstr "Usuarios Favoritos"
 
 #: win32\UsersFrame.cpp:158
-#, fuzzy
 msgid "Filter:"
-msgstr "F&iltro"
+msgstr "Filtro:"
 
 #: win32\SettingsDialog.cpp:174
-#, fuzzy
 msgid "Filtering"
-msgstr "F&iltro"
+msgstr "Filtrado"
 
 #: win32\DirectoryListingFrame.cpp:372
 msgid "Find"
@@ -1808,13 +1805,12 @@ msgid "Find files"
 msgstr "Tamaño Mínimo"
 
 #: win32\DirectoryListingFrame.cpp:287
-#, fuzzy
 msgid "Find next"
-msgstr "Buscar"
+msgstr "Buscar siguiente"
 
 #: win32\DirectoryListingFrame.cpp:280
 msgid "Find previous"
-msgstr ""
+msgstr "Buscar anterior"
 
 #: win32\QueueFrame.cpp:346
 msgid "Finished"
@@ -1860,18 +1856,16 @@ msgid "Full tree does not match TTH root"
 msgstr "La estructura del árbol TTH no es correcta"
 
 #: win32\ListFilter.cpp:163
-#, fuzzy
 msgid "GB"
 msgstr "GB"
 
 #: win32\StylesPage.cpp:147
 msgid "General"
-msgstr ""
+msgstr "General"
 
 #: win32\UsersFrame.cpp:375
-#, fuzzy
 msgid "General information"
-msgstr "Información Personal"
+msgstr "Información general"
 
 #: win32\CertificatesPage.cpp:93
 msgid "Generate certificates"
@@ -1909,8 +1903,10 @@ msgid ""
 "Grants the remote user a slot. Once they connect, or if they don't connect "
 "in 10 minutes, the granted slot is removed."
 msgstr ""
+"Garantizar conexión a un usuario remoto. Una vez conectado, o si no conecta "
+"en 10 minutos, esta asignación será eliminada."
 
-#: win32\AboutDlg.cpp:139
+#: win32\AboutDlg.cpp:140
 msgid "Greetz and Contributors"
 msgstr "Saludos  y Colaboradores"
 
@@ -2276,7 +2272,7 @@ msgstr "Idioma"
 msgid "Last message occured %1%"
 msgstr "Mensaje privado de %1%: %2%"
 
-#: win32\AboutDlg.cpp:161
+#: win32\AboutDlg.cpp:162
 msgid "Latest stable version"
 msgstr "Última versión estable"
 
@@ -2302,7 +2298,7 @@ msgstr ""
 msgid "Launches your default web browser with the given URL."
 msgstr ""
 
-#: win32\AboutDlg.cpp:103
+#: win32\AboutDlg.cpp:104
 msgid ""
 "Leading project contributor: poy\n"
 "Ex-project contributor: Todd Pederzani\n"
@@ -2728,7 +2724,7 @@ msgstr ""
 msgid "No plugin has been selected"
 msgstr ""
 
-#: win32\AboutDlg.cpp:157
+#: win32\AboutDlg.cpp:158
 msgid "No transfers yet"
 msgstr "No transferencias aún"
 
@@ -3133,7 +3129,7 @@ msgstr "Conexión Rápida"
 msgid "Rating"
 msgstr "Evaluación"
 
-#: win32\AboutDlg.cpp:156
+#: win32\AboutDlg.cpp:157
 #, c-format, boost-format
 msgid "Ratio (up/down): %1$0.2f"
 msgstr "Ratio (arriba / abajo): %1$0.2f"
@@ -3740,7 +3736,7 @@ msgstr "TiB"
 msgid "TLS Keyprint"
 msgstr ""
 
-#: win32\AboutDlg.cpp:112 win32\DirectoryListingFrame.cpp:68
+#: win32\AboutDlg.cpp:113 win32\DirectoryListingFrame.cpp:68
 #: win32\QueueFrame.cpp:58 win32\SearchFrame.cpp:61 win32\TransferView.cpp:980
 msgid "TTH"
 msgstr "TTH"
@@ -3900,7 +3896,7 @@ msgstr "Tamaño total:"
 msgid "Total slots"
 msgstr "Totales"
 
-#: win32\AboutDlg.cpp:148
+#: win32\AboutDlg.cpp:149
 msgid "Totals"
 msgstr "Totales"
 
@@ -4045,7 +4041,7 @@ msgstr "Slots de subida"
 msgid "Upload speed"
 msgstr "Subidas"
 
-#: win32\AboutDlg.cpp:152
+#: win32\AboutDlg.cpp:153
 #, boost-format
 msgid "Upload: %1%, Download: %2%"
 msgstr "Upload: %1%, Download: %2%"
@@ -4068,7 +4064,7 @@ msgstr "Subidas"
 msgid "Use CTRL for line history"
 msgstr "Usar CTRL para lineas de historial"
 
-#: win32\AdvancedPage.cpp:51
+#: win32\AdvancedPage.cpp:52
 msgid "Use Coral network for HTTP downloads (improves reliability)"
 msgstr "Use red Coral para descargas HTTP"
 

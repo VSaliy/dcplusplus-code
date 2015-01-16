@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2014-03-31 14:37+0200\n"
+"POT-Creation-Date: 2015-01-04 23:10+0100\n"
 "PO-Revision-Date: 2013-10-23 18:45+0000\n"
 "Last-Translator: Guybrush88 <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -17,8 +17,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2014-03-30 18:16+0000\n"
-"X-Generator: Launchpad (build 16967)\n"
+"X-Launchpad-Export-Date: 2015-01-16 09:32+0000\n"
+"X-Generator: Launchpad (build 17303)\n"
 
 #: win32\PublicHubsFrame.cpp:420
 msgid " from Coral"
@@ -485,7 +485,7 @@ msgstr "ADL поиск"
 msgid "ADLSearch Properties"
 msgstr "Настройки ADL поиска"
 
-#: win32\AboutDlg.cpp:171 win32\MainWindow.cpp:409
+#: win32\AboutDlg.cpp:172 win32\MainWindow.cpp:409
 msgid "About DC++"
 msgstr "О DC++"
 
@@ -916,6 +916,10 @@ msgstr ""
 msgid "Click and drag to resize"
 msgstr ""
 
+#: win32\AdvancedPage.cpp:51
+msgid "Clickable chat links (disable on Wine)"
+msgstr ""
+
 #: win32\UsersFrame.cpp:101
 #, fuzzy
 msgid "Client type"
@@ -974,7 +978,7 @@ msgstr "Новости сообщества"
 msgid "Community news"
 msgstr "Новости сообщества"
 
-#: win32\AboutDlg.cpp:116
+#: win32\AboutDlg.cpp:117
 msgid "Compiler"
 msgstr "Компилятор"
 
@@ -1441,7 +1445,7 @@ msgstr "Закачка списка Интернет хабов..."
 msgid "Downloading public hub list... (%1%)"
 msgstr "Закачка списка открытых хабов... (%1%)"
 
-#: win32\AboutDlg.cpp:162
+#: win32\AboutDlg.cpp:163
 msgid "Downloading..."
 msgstr "Закачка..."
 
@@ -1511,7 +1515,7 @@ msgstr ""
 msgid "Enable safe and compressed transfers"
 msgstr "Разрешить безопасные и сжатые передачи"
 
-#: win32\AdvancedPage.cpp:52
+#: win32\AdvancedPage.cpp:53
 msgid "Enable segmented downloads"
 msgstr "Разрешить закачки с разных источников"
 
@@ -1542,7 +1546,7 @@ msgstr "Ошибка при генерации сертификата"
 msgid "Error loading the notepad file: %1%"
 msgstr "Ошибка загрузки файла блокнота: %1%"
 
-#: win32\AboutDlg.cpp:207
+#: win32\AboutDlg.cpp:208
 msgid "Error processing version information"
 msgstr "Ошибка обработки информации о версии"
 
@@ -1895,7 +1899,7 @@ msgstr ""
 "Предоставляет пользователю слот. Как только пользователь подключится, либо "
 "если он не подключится в течение 10 минут, предоставленный слот будет закрыт."
 
-#: win32\AboutDlg.cpp:139
+#: win32\AboutDlg.cpp:140
 msgid "Greetz and Contributors"
 msgstr "Благодарности"
 
@@ -2262,7 +2266,7 @@ msgstr "Язык"
 msgid "Last message occured %1%"
 msgstr "Личное сообщение от %1%: %2%"
 
-#: win32\AboutDlg.cpp:161
+#: win32\AboutDlg.cpp:162
 msgid "Latest stable version"
 msgstr "Последняя стабильная версия"
 
@@ -2292,7 +2296,7 @@ msgstr ""
 msgid "Launches your default web browser with the given URL."
 msgstr "Запускает браузер по умолчанию с указанным URL."
 
-#: win32\AboutDlg.cpp:103
+#: win32\AboutDlg.cpp:104
 msgid ""
 "Leading project contributor: poy\n"
 "Ex-project contributor: Todd Pederzani\n"
@@ -2716,7 +2720,7 @@ msgstr "Не добавл. загрузки, если скорость выше 
 msgid "No plugin has been selected"
 msgstr ""
 
-#: win32\AboutDlg.cpp:157
+#: win32\AboutDlg.cpp:158
 msgid "No transfers yet"
 msgstr "Нет передач"
 
@@ -3115,7 +3119,7 @@ msgstr "Быстрое соединение"
 msgid "Rating"
 msgstr "Рейтинг"
 
-#: win32\AboutDlg.cpp:156
+#: win32\AboutDlg.cpp:157
 #, c-format, boost-format
 msgid "Ratio (up/down): %1$0.2f"
 msgstr "Соотношение (up/down): %1$0.2f"
@@ -3730,7 +3734,7 @@ msgstr "ТБ"
 msgid "TLS Keyprint"
 msgstr ""
 
-#: win32\AboutDlg.cpp:112 win32\DirectoryListingFrame.cpp:68
+#: win32\AboutDlg.cpp:113 win32\DirectoryListingFrame.cpp:68
 #: win32\QueueFrame.cpp:58 win32\SearchFrame.cpp:61 win32\TransferView.cpp:980
 msgid "TTH"
 msgstr "TTH"
@@ -3891,7 +3895,7 @@ msgstr "Шара:"
 msgid "Total slots"
 msgstr "Всего"
 
-#: win32\AboutDlg.cpp:148
+#: win32\AboutDlg.cpp:149
 msgid "Totals"
 msgstr "Всего"
 
@@ -4031,7 +4035,7 @@ msgstr "Слоты передачи"
 msgid "Upload speed"
 msgstr "Скорость отдачи"
 
-#: win32\AboutDlg.cpp:152
+#: win32\AboutDlg.cpp:153
 #, boost-format
 msgid "Upload: %1%, Download: %2%"
 msgstr "Передано: %1%, закачано: %2%"
@@ -4054,7 +4058,7 @@ msgstr "Передачи"
 msgid "Use CTRL for line history"
 msgstr "Использовать CTRL для перевода строки"
 
-#: win32\AdvancedPage.cpp:51
+#: win32\AdvancedPage.cpp:52
 msgid "Use Coral network for HTTP downloads (improves reliability)"
 msgstr "Использовать сеть Coral для HTTP-загрузок (повышает надежность)"
 
@@ -4309,6 +4313,3 @@ msgstr "К"
 #, fuzzy
 msgid "transfer"
 msgstr "Передано:"
-
-#~ msgid "Closes the current window."
-#~ msgstr "Закрыть текущее окно."

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: win32\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2014-03-31 14:37+0200\n"
+"POT-Creation-Date: 2015-01-04 23:10+0100\n"
 "PO-Revision-Date: 2012-09-09 21:26+0000\n"
 "Last-Translator: Mank <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,8 +16,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2014-03-30 18:16+0000\n"
-"X-Generator: Launchpad (build 16967)\n"
+"X-Launchpad-Export-Date: 2015-01-16 09:32+0000\n"
+"X-Generator: Launchpad (build 17303)\n"
 
 #: win32\PublicHubsFrame.cpp:420
 msgid " from Coral"
@@ -480,7 +480,7 @@ msgstr "Automaticke hledani v seznamech souboru"
 msgid "ADLSearch Properties"
 msgstr "Vlastnosti ADL hledani"
 
-#: win32\AboutDlg.cpp:171 win32\MainWindow.cpp:409
+#: win32\AboutDlg.cpp:172 win32\MainWindow.cpp:409
 msgid "About DC++"
 msgstr "O DC++"
 
@@ -907,6 +907,10 @@ msgstr ""
 msgid "Click and drag to resize"
 msgstr ""
 
+#: win32\AdvancedPage.cpp:51
+msgid "Clickable chat links (disable on Wine)"
+msgstr ""
+
 #: win32\UsersFrame.cpp:101
 msgid "Client type"
 msgstr "Typ Clienta"
@@ -964,7 +968,7 @@ msgstr "Community news"
 msgid "Community news"
 msgstr "Community news"
 
-#: win32\AboutDlg.cpp:116
+#: win32\AboutDlg.cpp:117
 msgid "Compiler"
 msgstr ""
 
@@ -1433,7 +1437,7 @@ msgstr "Stahujem verejny seznam Hubu..."
 msgid "Downloading public hub list... (%1%)"
 msgstr "Stahuji veřejný seznam souborů... (%1%)"
 
-#: win32\AboutDlg.cpp:162
+#: win32\AboutDlg.cpp:163
 msgid "Downloading..."
 msgstr "Stahujem ..."
 
@@ -1511,7 +1515,7 @@ msgstr ""
 "moznosti komprimovane prenosy(experiment,narocny na Cpu,bezp. prenosy sou "
 "oznacene * od verz.0.681 T )"
 
-#: win32\AdvancedPage.cpp:52
+#: win32\AdvancedPage.cpp:53
 msgid "Enable segmented downloads"
 msgstr "Povolit segmentové stahování"
 
@@ -1542,7 +1546,7 @@ msgstr "Chyba generovaného certifikátu"
 msgid "Error loading the notepad file: %1%"
 msgstr ""
 
-#: win32\AboutDlg.cpp:207
+#: win32\AboutDlg.cpp:208
 msgid "Error processing version information"
 msgstr "Chyba při zpracování informace o verzi"
 
@@ -1896,7 +1900,7 @@ msgid ""
 "in 10 minutes, the granted slot is removed."
 msgstr ""
 
-#: win32\AboutDlg.cpp:139
+#: win32\AboutDlg.cpp:140
 msgid "Greetz and Contributors"
 msgstr "Poděkování a příspěvky"
 
@@ -2265,7 +2269,7 @@ msgstr "Jazyk"
 msgid "Last message occured %1%"
 msgstr "Soukromá zpráva od %1%: %2%"
 
-#: win32\AboutDlg.cpp:161
+#: win32\AboutDlg.cpp:162
 msgid "Latest stable version"
 msgstr "Poslední stabilní verze"
 
@@ -2291,7 +2295,7 @@ msgstr ""
 msgid "Launches your default web browser with the given URL."
 msgstr ""
 
-#: win32\AboutDlg.cpp:103
+#: win32\AboutDlg.cpp:104
 msgid ""
 "Leading project contributor: poy\n"
 "Ex-project contributor: Todd Pederzani\n"
@@ -2724,7 +2728,7 @@ msgstr "Nezahajovat dalsi stahovani pri rychlosti nad (kB/s, 0 = vypnute)"
 msgid "No plugin has been selected"
 msgstr ""
 
-#: win32\AboutDlg.cpp:157
+#: win32\AboutDlg.cpp:158
 msgid "No transfers yet"
 msgstr "Zatím žádné přenosy"
 
@@ -3126,7 +3130,7 @@ msgstr "Rychle pripojeni na hub"
 msgid "Rating"
 msgstr "Hodnoceni"
 
-#: win32\AboutDlg.cpp:156
+#: win32\AboutDlg.cpp:157
 #, c-format, boost-format
 msgid "Ratio (up/down): %1$0.2f"
 msgstr "Poměr (odesláno/stáhnuto): %1$0.2f"
@@ -3740,7 +3744,7 @@ msgstr "TiB"
 msgid "TLS Keyprint"
 msgstr ""
 
-#: win32\AboutDlg.cpp:112 win32\DirectoryListingFrame.cpp:68
+#: win32\AboutDlg.cpp:113 win32\DirectoryListingFrame.cpp:68
 #: win32\QueueFrame.cpp:58 win32\SearchFrame.cpp:61 win32\TransferView.cpp:980
 msgid "TTH"
 msgstr "TTH"
@@ -3892,7 +3896,7 @@ msgstr "Celkem :"
 msgid "Total slots"
 msgstr "Celkem"
 
-#: win32\AboutDlg.cpp:148
+#: win32\AboutDlg.cpp:149
 msgid "Totals"
 msgstr "Celkem"
 
@@ -4037,7 +4041,7 @@ msgstr "Upload sloty"
 msgid "Upload speed"
 msgstr "Odesilani"
 
-#: win32\AboutDlg.cpp:152
+#: win32\AboutDlg.cpp:153
 #, boost-format
 msgid "Upload: %1%, Download: %2%"
 msgstr "Odesláno: %1%, Staženo: %2%"
@@ -4062,7 +4066,7 @@ msgstr ""
 "Pouzivat klavesu CTRL pro radkovu historii (pomoci klavesy CTRL a pouzitim "
 "sipek si muzete prehlidnut historii toho co jste napsali do hlavniho chatu)"
 
-#: win32\AdvancedPage.cpp:51
+#: win32\AdvancedPage.cpp:52
 #, fuzzy
 msgid "Use Coral network for HTTP downloads (improves reliability)"
 msgstr "Použít síť Coral ke stahování seznamu hubů (zvyšuje spolehlivost)"

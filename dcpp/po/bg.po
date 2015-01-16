@@ -8,16 +8,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2014-03-31 14:37+0200\n"
-"PO-Revision-Date: 2014-03-08 16:19+0000\n"
+"POT-Creation-Date: 2015-01-04 23:09+0100\n"
+"PO-Revision-Date: 2014-10-27 11:18+0000\n"
 "Last-Translator: Hafo <hafo@abv.bg>\n"
 "Language-Team: Bulgarian <bg@li.org>\n"
 "Language: bg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-03-30 18:17+0000\n"
-"X-Generator: Launchpad (build 16967)\n"
+"X-Launchpad-Export-Date: 2015-01-16 09:33+0000\n"
+"X-Generator: Launchpad (build 17303)\n"
 "X-Poedit-Country: BULGARIA\n"
 "X-Poedit-Language: Bulgarian\n"
 
@@ -26,32 +26,32 @@ msgstr ""
 msgid " - Queued: %1%"
 msgstr " - На опашката: %1%"
 
-#: dcpp\Util.cpp:571
+#: dcpp\Util.cpp:572
 #, c-format, boost-format
 msgid "%'lld B"
 msgstr "%'lld B"
 
-#: dcpp\Util.cpp:533
+#: dcpp\Util.cpp:534
 #, c-format, boost-format
 msgid "%.02f GiB"
 msgstr "%.02f GiB"
 
-#: dcpp\Util.cpp:529
+#: dcpp\Util.cpp:530
 #, c-format, boost-format
 msgid "%.02f KiB"
 msgstr "%.02f KiB"
 
-#: dcpp\Util.cpp:531
+#: dcpp\Util.cpp:532
 #, c-format, boost-format
 msgid "%.02f MiB"
 msgstr "%.02f MiB"
 
-#: dcpp\Util.cpp:537
+#: dcpp\Util.cpp:538
 #, c-format, boost-format
 msgid "%.02f PiB"
 msgstr "%.02f PiB"
 
-#: dcpp\Util.cpp:535
+#: dcpp\Util.cpp:536
 #, c-format, boost-format
 msgid "%.02f TiB"
 msgstr "%.02f TiB"
@@ -77,7 +77,7 @@ msgstr "%1% (%2%)"
 msgid "%1% (%2%) has same CID {%3%} as %4% (%5%), ignoring"
 msgstr "%1% (%2%) има същия CID {%3%} като %4% (%5%), игнорира се"
 
-#: dcpp\NmdcHub.cpp:293
+#: dcpp\NmdcHub.cpp:295
 #, boost-format
 msgid "%1% (Nick unknown)"
 msgstr "%1% (неизвестен псевдоним)"
@@ -127,12 +127,12 @@ msgstr "%1%/s"
 msgid "%1%: File not available"
 msgstr "%1%: Файла не е достъпен"
 
-#: dcpp\Util.cpp:527
+#: dcpp\Util.cpp:528
 #, c-format, boost-format
 msgid "%d B"
 msgstr "%d B"
 
-#: dcpp\Util.cpp:567
+#: dcpp\Util.cpp:568
 #, c-format, boost-format
 msgid "%s B"
 msgstr "%s B"
@@ -198,7 +198,7 @@ msgstr "CRC32 несъвпадение (SFV-проверка)"
 msgid "CRC32 inconsistency (SFV-Check): %1%"
 msgstr "CRC32 несъответствие (SFV-Проверка): %1%"
 
-#: dcpp\CryptoManager.cpp:626
+#: dcpp\CryptoManager.cpp:577
 #, boost-format
 msgid ""
 "Certificate verification for %1% failed with error: %2% (certificate "
@@ -356,13 +356,13 @@ msgid "Error during compression"
 msgstr "Грешка при компресиране"
 
 #: dcpp\BZUtils.cpp:76 dcpp\BZUtils.cpp:98 dcpp\BZUtils.cpp:101
-#: dcpp\CryptoManager.cpp:664 dcpp\CryptoManager.cpp:683
-#: dcpp\CryptoManager.cpp:697 dcpp\ZUtils.cpp:106 dcpp\ZUtils.cpp:131
+#: dcpp\CryptoManager.cpp:615 dcpp\CryptoManager.cpp:634
+#: dcpp\CryptoManager.cpp:648 dcpp\ZUtils.cpp:106 dcpp\ZUtils.cpp:131
 #: dcpp\ZUtils.cpp:145
 msgid "Error during decompression"
 msgstr "Грешка при декомпресиране"
 
-#: dcpp\CryptoManager.cpp:136
+#: dcpp\CryptoManager.cpp:139
 msgid "Error generating certificate"
 msgstr "Грешка при генериране на сертификат"
 
@@ -403,15 +403,15 @@ msgstr "Грешка при взимане на външен IP адрес"
 msgid "Failed to initialize the %1% interface"
 msgstr "Не може да се инициализира %1% интерфейсът"
 
-#: dcpp\CryptoManager.cpp:409
+#: dcpp\CryptoManager.cpp:372
 msgid "Failed to load certificate file"
 msgstr "Неуспешно зареждане на файла със сертификат"
 
-#: dcpp\CryptoManager.cpp:417
+#: dcpp\CryptoManager.cpp:380
 msgid "Failed to load private key"
 msgstr "Неуспешно зареждане на личния ключ"
 
-#: dcpp\CryptoManager.cpp:430
+#: dcpp\CryptoManager.cpp:393
 #, boost-format
 msgid "Failed to load trusted certificate from %1%"
 msgstr "Неуспех при зареждане на доверен сертификат от %1%"
@@ -419,7 +419,7 @@ msgstr "Неуспех при зареждане на доверен серти�
 #: dcpp\MappingManager.cpp:156
 #, boost-format
 msgid "Failed to map the %1% port (%2% %3%) with the %4% interface"
-msgstr "Неуспешно пренасочване на портът за %1%  (%2% %3%) с %4% интерфейса"
+msgstr "Неуспешно пренасочване на порта за %1%  (%2% %3%) с %4% интерфейса"
 
 #: dcpp\AdcHub.cpp:221
 msgid "Failed to negotiate base protocol"
@@ -443,7 +443,7 @@ msgstr ""
 
 #: dcpp\QueueManager.cpp:666
 msgid "File already exists at the target location"
-msgstr "Файла вече съществува на това място"
+msgstr "Файлът вече съществува на това място"
 
 #: dcpp\ShareManager.cpp:959
 #, boost-format
@@ -490,7 +490,7 @@ msgstr "Завършено хеширане: %1% (%2%)"
 msgid "Full tree does not match TTH root"
 msgstr "Списъка не съответства на TTH-хеша"
 
-#: dcpp\CryptoManager.cpp:398
+#: dcpp\CryptoManager.cpp:361
 msgid "Generated new TLS certificate"
 msgstr "Генерира се нов TLS сертификат"
 
@@ -557,7 +557,7 @@ msgstr "Невалидно име на файл, намерен при хеши�
 msgid "Invalid regular expression: %1%"
 msgstr "Невалиден регулярен израз: %1%"
 
-#: dcpp\SettingsManager.cpp:650
+#: dcpp\SettingsManager.cpp:658
 msgid "Invalid search type name"
 msgstr "Невалидно име за типа търсене"
 
@@ -580,8 +580,8 @@ msgstr "Изгони потребителя(ите)"
 #: dcpp\ConnectivityManager.cpp:131
 msgid "Local network with possible NAT detected, trying to map the ports..."
 msgstr ""
-"Открита е локална мрежа с възможност за NAT и се прави опит да се пренасочат "
-"портовете..."
+"Открита е локална мрежа с възможност за преобразуване на мрежовите адреси и "
+"се прави опит да се пренасочат портовете..."
 
 #: dcpp\BufferedSocket.cpp:296
 msgid "Maximum command length exceeded"
@@ -596,7 +596,7 @@ msgstr "Липсват зависимости за %1%"
 msgid "More bytes written than requested"
 msgstr "Записани са повече байтове от заявения брой"
 
-#: dcpp\CryptoManager.cpp:125
+#: dcpp\CryptoManager.cpp:128
 msgid "No certificate file chosen"
 msgstr "Няма избран файл със сертификат"
 
@@ -608,7 +608,7 @@ msgstr "Не е определена папка"
 msgid "No port mapping interface available"
 msgstr "Няма наличен интерфейс за пренасочване на портовете"
 
-#: dcpp\CryptoManager.cpp:122
+#: dcpp\CryptoManager.cpp:125
 msgid "No private key file chosen"
 msgstr "Няма избран файл с личен ключ"
 
@@ -616,7 +616,7 @@ msgstr "Няма избран файл с личен ключ"
 msgid "No slots available"
 msgstr "Няма налични слотове"
 
-#: dcpp\SettingsManager.cpp:708
+#: dcpp\SettingsManager.cpp:716
 msgid "No such search type"
 msgstr "Няма такъв тип търсене"
 
@@ -727,12 +727,12 @@ msgstr ""
 "Успешно премахнато пренасочване на портове на устройството %1% с %2% "
 "интерфейса"
 
-#: dcpp\CryptoManager.cpp:400
+#: dcpp\CryptoManager.cpp:363
 #, boost-format
 msgid "TLS disabled, failed to generate certificate: %1%"
 msgstr "TLS е изключен, неуспех при генериране на сертификат: %1%"
 
-#: dcpp\CryptoManager.cpp:390
+#: dcpp\CryptoManager.cpp:353
 msgid "TLS disabled, no certificate file set"
 msgstr "TLS е изключен, няма дефиниран файл със сертификат"
 
@@ -761,6 +761,8 @@ msgid ""
 "The encrypted transfer port cannot be the same as the transfer port, "
 "encrypted transfers will be disabled"
 msgstr ""
+"Портът за криптиран трансфер не може да бъде същият като порта за трансфер, "
+"криптираните трансфери ще бъдат изключени"
 
 #: dcpp\QueueManager.cpp:1494
 #, boost-format
@@ -793,7 +795,7 @@ msgstr "Този файл вече е свален"
 msgid "This file is already queued"
 msgstr "Този файл вече е на опашката"
 
-#: dcpp\NmdcHub.cpp:946
+#: dcpp\NmdcHub.cpp:948
 #, boost-format
 msgid ""
 "This hub is trying to use your client to spam %1%, please urge hub owner to "
@@ -802,7 +804,7 @@ msgstr ""
 "Този хъб се опитва да използва клиента за спам %1%, помолете собственика на "
 "хъба да го поправи"
 
-#: dcpp\SettingsManager.cpp:654 dcpp\SettingsManager.cpp:676
+#: dcpp\SettingsManager.cpp:662 dcpp\SettingsManager.cpp:684
 msgid "This search type already exists"
 msgstr "Този тип на търсене вече съществува"
 
@@ -896,7 +898,7 @@ msgstr "Опитвате се да сваляте файлове от себе �
 msgid "disabled"
 msgstr "деактивирано"
 
-#: dcpp\SettingsManager.cpp:202 dcpp\SettingsManager.cpp:203
+#: dcpp\SettingsManager.cpp:204 dcpp\SettingsManager.cpp:205
 msgid "downloaded from"
 msgstr "свален от"
 
@@ -909,6 +911,6 @@ msgstr "активирано - %1%"
 msgid "undefined"
 msgstr "неопределен"
 
-#: dcpp\SettingsManager.cpp:204
+#: dcpp\SettingsManager.cpp:206
 msgid "uploaded to"
 msgstr "качен на"

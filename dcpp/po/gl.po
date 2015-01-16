@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2014-03-31 14:37+0200\n"
+"POT-Creation-Date: 2015-01-04 23:09+0100\n"
 "PO-Revision-Date: 2011-03-02 08:52+0000\n"
 "Last-Translator: Miguel Anxo Bouzada <mbouzada@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,40 +15,40 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-03-30 18:17+0000\n"
-"X-Generator: Launchpad (build 16967)\n"
+"X-Launchpad-Export-Date: 2015-01-16 09:33+0000\n"
+"X-Generator: Launchpad (build 17303)\n"
 
 #: dcpp\DownloadManager.cpp:360
 #, boost-format
 msgid " - Queued: %1%"
 msgstr ""
 
-#: dcpp\Util.cpp:571
+#: dcpp\Util.cpp:572
 #, c-format, boost-format
 msgid "%'lld B"
 msgstr "%'lld B"
 
-#: dcpp\Util.cpp:533
+#: dcpp\Util.cpp:534
 #, c-format, boost-format
 msgid "%.02f GiB"
 msgstr "%.02f GiB"
 
-#: dcpp\Util.cpp:529
+#: dcpp\Util.cpp:530
 #, c-format, boost-format
 msgid "%.02f KiB"
 msgstr "%.02f KiB"
 
-#: dcpp\Util.cpp:531
+#: dcpp\Util.cpp:532
 #, c-format, boost-format
 msgid "%.02f MiB"
 msgstr "%.02f MiB"
 
-#: dcpp\Util.cpp:537
+#: dcpp\Util.cpp:538
 #, c-format, boost-format
 msgid "%.02f PiB"
 msgstr "%.02f PiB"
 
-#: dcpp\Util.cpp:535
+#: dcpp\Util.cpp:536
 #, c-format, boost-format
 msgid "%.02f TiB"
 msgstr "%.02f TiB"
@@ -74,7 +74,7 @@ msgstr ""
 msgid "%1% (%2%) has same CID {%3%} as %4% (%5%), ignoring"
 msgstr "%1% (%2%) ten o mesmo CID {%3%} que %4% (%5%), ignorando"
 
-#: dcpp\NmdcHub.cpp:293
+#: dcpp\NmdcHub.cpp:295
 #, boost-format
 msgid "%1% (Nick unknown)"
 msgstr "%1% (alcume descoñecido)"
@@ -124,12 +124,12 @@ msgstr "%1%/s"
 msgid "%1%: File not available"
 msgstr "%1%: O ficheiro non está dispoñíbel"
 
-#: dcpp\Util.cpp:527
+#: dcpp\Util.cpp:528
 #, c-format, boost-format
 msgid "%d B"
 msgstr "%d B"
 
-#: dcpp\Util.cpp:567
+#: dcpp\Util.cpp:568
 #, c-format, boost-format
 msgid "%s B"
 msgstr "%s B"
@@ -191,7 +191,7 @@ msgstr "ERRO de inconsistencia CRC32 (SFV-Check)"
 msgid "CRC32 inconsistency (SFV-Check): %1%"
 msgstr "ERRO de CRC32 (¿ficheiro corrupto?) (SFV-Check)"
 
-#: dcpp\CryptoManager.cpp:626
+#: dcpp\CryptoManager.cpp:577
 #, boost-format
 msgid ""
 "Certificate verification for %1% failed with error: %2% (certificate "
@@ -338,13 +338,13 @@ msgid "Error during compression"
 msgstr "Produciuse un erro ao comprimir"
 
 #: dcpp\BZUtils.cpp:76 dcpp\BZUtils.cpp:98 dcpp\BZUtils.cpp:101
-#: dcpp\CryptoManager.cpp:664 dcpp\CryptoManager.cpp:683
-#: dcpp\CryptoManager.cpp:697 dcpp\ZUtils.cpp:106 dcpp\ZUtils.cpp:131
+#: dcpp\CryptoManager.cpp:615 dcpp\CryptoManager.cpp:634
+#: dcpp\CryptoManager.cpp:648 dcpp\ZUtils.cpp:106 dcpp\ZUtils.cpp:131
 #: dcpp\ZUtils.cpp:145
 msgid "Error during decompression"
 msgstr "Produciuse un erro ao descomprimir"
 
-#: dcpp\CryptoManager.cpp:136
+#: dcpp\CryptoManager.cpp:139
 msgid "Error generating certificate"
 msgstr "Produciuse un erro ao xerar o certificado"
 
@@ -385,15 +385,15 @@ msgstr "Non foi posíbel obter un IP externo"
 msgid "Failed to initialize the %1% interface"
 msgstr "Produciuse un fallo ao inicializar a interface %1%"
 
-#: dcpp\CryptoManager.cpp:409
+#: dcpp\CryptoManager.cpp:372
 msgid "Failed to load certificate file"
 msgstr "Produciuse un fallo ao cargar o ficheiro do certificado"
 
-#: dcpp\CryptoManager.cpp:417
+#: dcpp\CryptoManager.cpp:380
 msgid "Failed to load private key"
 msgstr "Produciuse un fallo ao cargar a chave privada"
 
-#: dcpp\CryptoManager.cpp:430
+#: dcpp\CryptoManager.cpp:393
 #, boost-format
 msgid "Failed to load trusted certificate from %1%"
 msgstr ""
@@ -470,7 +470,7 @@ msgstr "Hash rematado: %1% (%2%/s)"
 msgid "Full tree does not match TTH root"
 msgstr ""
 
-#: dcpp\CryptoManager.cpp:398
+#: dcpp\CryptoManager.cpp:361
 msgid "Generated new TLS certificate"
 msgstr "Novo certificado TLS xerado"
 
@@ -538,7 +538,7 @@ msgstr ""
 msgid "Invalid regular expression: %1%"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:650
+#: dcpp\SettingsManager.cpp:658
 msgid "Invalid search type name"
 msgstr ""
 
@@ -575,7 +575,7 @@ msgstr ""
 msgid "More bytes written than requested"
 msgstr ""
 
-#: dcpp\CryptoManager.cpp:125
+#: dcpp\CryptoManager.cpp:128
 #, fuzzy
 msgid "No certificate file chosen"
 msgstr "TLS desactivado, arquivo do certificado non configurado"
@@ -588,7 +588,7 @@ msgstr "Directorio non especificado"
 msgid "No port mapping interface available"
 msgstr ""
 
-#: dcpp\CryptoManager.cpp:122
+#: dcpp\CryptoManager.cpp:125
 msgid "No private key file chosen"
 msgstr ""
 
@@ -596,7 +596,7 @@ msgstr ""
 msgid "No slots available"
 msgstr "Slots NON Dispoñibles"
 
-#: dcpp\SettingsManager.cpp:708
+#: dcpp\SettingsManager.cpp:716
 msgid "No such search type"
 msgstr ""
 
@@ -705,12 +705,12 @@ msgid ""
 "Successfully removed port mappings from the %1% device with the %2% interface"
 msgstr "Non se pode iniciar tarea"
 
-#: dcpp\CryptoManager.cpp:400
+#: dcpp\CryptoManager.cpp:363
 #, boost-format
 msgid "TLS disabled, failed to generate certificate: %1%"
 msgstr "TLS desactivado, fallo o xerar certificado: %1%"
 
-#: dcpp\CryptoManager.cpp:390
+#: dcpp\CryptoManager.cpp:353
 msgid "TLS disabled, no certificate file set"
 msgstr "TLS desactivado, arquivo do certificado non configurado"
 
@@ -773,14 +773,14 @@ msgstr "Este arquivo xa esta na cola"
 msgid "This file is already queued"
 msgstr "Este arquivo xa esta na cola"
 
-#: dcpp\NmdcHub.cpp:946
+#: dcpp\NmdcHub.cpp:948
 #, boost-format
 msgid ""
 "This hub is trying to use your client to spam %1%, please urge hub owner to "
 "fix this"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:654 dcpp\SettingsManager.cpp:676
+#: dcpp\SettingsManager.cpp:662 dcpp\SettingsManager.cpp:684
 msgid "This search type already exists"
 msgstr ""
 
@@ -872,7 +872,7 @@ msgstr "Intentas descargar de ti mesmo!"
 msgid "disabled"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:202 dcpp\SettingsManager.cpp:203
+#: dcpp\SettingsManager.cpp:204 dcpp\SettingsManager.cpp:205
 msgid "downloaded from"
 msgstr "baixado de"
 
@@ -885,6 +885,6 @@ msgstr "Fallo de hash: %1%"
 msgid "undefined"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:204
+#: dcpp\SettingsManager.cpp:206
 msgid "uploaded to"
 msgstr "subido a"

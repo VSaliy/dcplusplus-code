@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2014-03-31 14:37+0200\n"
+"POT-Creation-Date: 2015-01-04 23:09+0100\n"
 "PO-Revision-Date: 2011-01-20 07:45+0000\n"
 "Last-Translator: Andy C. Candet <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,40 +15,40 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-03-30 18:17+0000\n"
-"X-Generator: Launchpad (build 16967)\n"
+"X-Launchpad-Export-Date: 2015-01-16 09:33+0000\n"
+"X-Generator: Launchpad (build 17303)\n"
 
 #: dcpp\DownloadManager.cpp:360
 #, boost-format
 msgid " - Queued: %1%"
 msgstr ""
 
-#: dcpp\Util.cpp:571
+#: dcpp\Util.cpp:572
 #, c-format, boost-format
 msgid "%'lld B"
 msgstr "%'lld B"
 
-#: dcpp\Util.cpp:533
+#: dcpp\Util.cpp:534
 #, c-format, boost-format
 msgid "%.02f GiB"
 msgstr "%.02f GiB"
 
-#: dcpp\Util.cpp:529
+#: dcpp\Util.cpp:530
 #, c-format, boost-format
 msgid "%.02f KiB"
 msgstr "%.02f KiB"
 
-#: dcpp\Util.cpp:531
+#: dcpp\Util.cpp:532
 #, c-format, boost-format
 msgid "%.02f MiB"
 msgstr "%.02f MiB"
 
-#: dcpp\Util.cpp:537
+#: dcpp\Util.cpp:538
 #, c-format, boost-format
 msgid "%.02f PiB"
 msgstr "%.02f PiB"
 
-#: dcpp\Util.cpp:535
+#: dcpp\Util.cpp:536
 #, c-format, boost-format
 msgid "%.02f TiB"
 msgstr "%.02f TiB"
@@ -74,7 +74,7 @@ msgstr ""
 msgid "%1% (%2%) has same CID {%3%} as %4% (%5%), ignoring"
 msgstr "%1% (%2%) are același CID {%3%} ca și %4% (%5%), se ignoră"
 
-#: dcpp\NmdcHub.cpp:293
+#: dcpp\NmdcHub.cpp:295
 #, boost-format
 msgid "%1% (Nick unknown)"
 msgstr "%1% (Poreclă necunoscută)"
@@ -124,12 +124,12 @@ msgstr "%1%/s"
 msgid "%1%: File not available"
 msgstr "%1%: Fișierul nu e disponibil"
 
-#: dcpp\Util.cpp:527
+#: dcpp\Util.cpp:528
 #, c-format, boost-format
 msgid "%d B"
 msgstr "%d B"
 
-#: dcpp\Util.cpp:567
+#: dcpp\Util.cpp:568
 #, c-format, boost-format
 msgid "%s B"
 msgstr "%s B"
@@ -191,7 +191,7 @@ msgstr "Inconsistență CRC32 (Verificare SFV)"
 msgid "CRC32 inconsistency (SFV-Check): %1%"
 msgstr "Inconsistență CRC32 (Verificare SFV)"
 
-#: dcpp\CryptoManager.cpp:626
+#: dcpp\CryptoManager.cpp:577
 #, boost-format
 msgid ""
 "Certificate verification for %1% failed with error: %2% (certificate "
@@ -338,13 +338,13 @@ msgid "Error during compression"
 msgstr "Eroare în cursul comprimării"
 
 #: dcpp\BZUtils.cpp:76 dcpp\BZUtils.cpp:98 dcpp\BZUtils.cpp:101
-#: dcpp\CryptoManager.cpp:664 dcpp\CryptoManager.cpp:683
-#: dcpp\CryptoManager.cpp:697 dcpp\ZUtils.cpp:106 dcpp\ZUtils.cpp:131
+#: dcpp\CryptoManager.cpp:615 dcpp\CryptoManager.cpp:634
+#: dcpp\CryptoManager.cpp:648 dcpp\ZUtils.cpp:106 dcpp\ZUtils.cpp:131
 #: dcpp\ZUtils.cpp:145
 msgid "Error during decompression"
 msgstr "Eroare în cursul decomprimării"
 
-#: dcpp\CryptoManager.cpp:136
+#: dcpp\CryptoManager.cpp:139
 msgid "Error generating certificate"
 msgstr "Eroare la generarea certificatului"
 
@@ -385,15 +385,15 @@ msgstr "Nu s-a putut obține IP-ul extern"
 msgid "Failed to initialize the %1% interface"
 msgstr "Nu am putut inițializa interfața %1%"
 
-#: dcpp\CryptoManager.cpp:409
+#: dcpp\CryptoManager.cpp:372
 msgid "Failed to load certificate file"
 msgstr "Incărcarea fișierului certificat a eșuat"
 
-#: dcpp\CryptoManager.cpp:417
+#: dcpp\CryptoManager.cpp:380
 msgid "Failed to load private key"
 msgstr "Incărcarea cheii private a eșuat"
 
-#: dcpp\CryptoManager.cpp:430
+#: dcpp\CryptoManager.cpp:393
 #, boost-format
 msgid "Failed to load trusted certificate from %1%"
 msgstr ""
@@ -470,7 +470,7 @@ msgstr "S-a generat valoarea de dispersie: %1% (%2%)"
 msgid "Full tree does not match TTH root"
 msgstr "Arborele complet nu se potrivește cu rădacina TTH"
 
-#: dcpp\CryptoManager.cpp:398
+#: dcpp\CryptoManager.cpp:361
 msgid "Generated new TLS certificate"
 msgstr "Certificat TLS nou generat"
 
@@ -537,7 +537,7 @@ msgstr "Nume de fișier invalid găsit în timp ce se dispersa dosarul %1%"
 msgid "Invalid regular expression: %1%"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:650
+#: dcpp\SettingsManager.cpp:658
 msgid "Invalid search type name"
 msgstr "Numele tipului de căutare invalid"
 
@@ -574,7 +574,7 @@ msgstr ""
 msgid "More bytes written than requested"
 msgstr "Numărul de biţi scrişi a depăşit cererea"
 
-#: dcpp\CryptoManager.cpp:125
+#: dcpp\CryptoManager.cpp:128
 msgid "No certificate file chosen"
 msgstr "Nici un fișier-certificat nu a fost ales"
 
@@ -586,7 +586,7 @@ msgstr "Nici un dosar specificat"
 msgid "No port mapping interface available"
 msgstr ""
 
-#: dcpp\CryptoManager.cpp:122
+#: dcpp\CryptoManager.cpp:125
 msgid "No private key file chosen"
 msgstr "Nici un fișier-cheie privată nu a fost ales"
 
@@ -594,7 +594,7 @@ msgstr "Nici un fișier-cheie privată nu a fost ales"
 msgid "No slots available"
 msgstr "Nici un slot disponibil"
 
-#: dcpp\SettingsManager.cpp:708
+#: dcpp\SettingsManager.cpp:716
 msgid "No such search type"
 msgstr "Nu există acest tip de căutare"
 
@@ -704,12 +704,12 @@ msgid ""
 "Successfully removed port mappings from the %1% device with the %2% interface"
 msgstr "Nu se poate crea firul de execuţie"
 
-#: dcpp\CryptoManager.cpp:400
+#: dcpp\CryptoManager.cpp:363
 #, boost-format
 msgid "TLS disabled, failed to generate certificate: %1%"
 msgstr "Sistemul TLS închis, generarea certificatului a eşuat: %1%"
 
-#: dcpp\CryptoManager.cpp:390
+#: dcpp\CryptoManager.cpp:353
 msgid "TLS disabled, no certificate file set"
 msgstr "TLS e dezactivat, nu e setat fișierul-certificat"
 
@@ -770,7 +770,7 @@ msgstr "Acest fițier s-a descărcat deja complet"
 msgid "This file is already queued"
 msgstr "Acest fișier există deja în coadă"
 
-#: dcpp\NmdcHub.cpp:946
+#: dcpp\NmdcHub.cpp:948
 #, boost-format
 msgid ""
 "This hub is trying to use your client to spam %1%, please urge hub owner to "
@@ -779,7 +779,7 @@ msgstr ""
 "Acest hub încearcă să vă folosească clientul pentru a spam-a %1%, vă rog "
 "spuneți-i deținătorului hub-ului să repare problema"
 
-#: dcpp\SettingsManager.cpp:654 dcpp\SettingsManager.cpp:676
+#: dcpp\SettingsManager.cpp:662 dcpp\SettingsManager.cpp:684
 msgid "This search type already exists"
 msgstr "Acest tip de căutare există deja"
 
@@ -871,7 +871,7 @@ msgstr "Încercați să descărcați de la dv. înșivă!"
 msgid "disabled"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:202 dcpp\SettingsManager.cpp:203
+#: dcpp\SettingsManager.cpp:204 dcpp\SettingsManager.cpp:205
 msgid "downloaded from"
 msgstr "descărcat de la"
 
@@ -884,6 +884,6 @@ msgstr "Căutare dezactivată: %1%"
 msgid "undefined"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:204
+#: dcpp\SettingsManager.cpp:206
 msgid "uploaded to"
 msgstr "trimis spre"

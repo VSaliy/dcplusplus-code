@@ -7,6 +7,7 @@
 * Remove deprecated Bitzi TTH lookup (emtee)
 * Update MiniUPnP to version 1.9
 * Update the NAT-PMP library
+* Update translations
 
 -- 0.843 2014-04-28 --
 * [L#1307978] Fix subtract list functionality (crise)

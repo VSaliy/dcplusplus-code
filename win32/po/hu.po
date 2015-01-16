@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2014-03-31 14:37+0200\n"
-"PO-Revision-Date: 2014-03-24 11:31+0000\n"
+"POT-Creation-Date: 2015-01-04 23:10+0100\n"
+"PO-Revision-Date: 2015-01-04 22:25+0000\n"
 "Last-Translator: eMTee <Unknown>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "Language: hu\n"
@@ -16,8 +16,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2014-03-30 18:16+0000\n"
-"X-Generator: Launchpad (build 16967)\n"
+"X-Launchpad-Export-Date: 2015-01-16 09:33+0000\n"
+"X-Generator: Launchpad (build 17303)\n"
 
 #: win32\PublicHubsFrame.cpp:420
 msgid " from Coral"
@@ -479,7 +479,7 @@ msgstr "ADL keresés"
 msgid "ADLSearch Properties"
 msgstr "ADL keresés tulajdonságai"
 
-#: win32\AboutDlg.cpp:171 win32\MainWindow.cpp:409
+#: win32\AboutDlg.cpp:172 win32\MainWindow.cpp:409
 msgid "About DC++"
 msgstr "A DC++-ról"
 
@@ -932,6 +932,10 @@ msgstr ""
 msgid "Click and drag to resize"
 msgstr "Kattints és húzd az átméretezéshez"
 
+#: win32\AdvancedPage.cpp:51
+msgid "Clickable chat links (disable on Wine)"
+msgstr "Kattintható linkek a chat-ban (kapcsold ki Wine alatt)"
+
 #: win32\UsersFrame.cpp:101
 msgid "Client type"
 msgstr "Kliens típus"
@@ -988,7 +992,7 @@ msgstr "Kommunikációs csatorna"
 msgid "Community news"
 msgstr "Közösségi hírek"
 
-#: win32\AboutDlg.cpp:116
+#: win32\AboutDlg.cpp:117
 msgid "Compiler"
 msgstr "Fordítóprogram"
 
@@ -1451,7 +1455,7 @@ msgstr "Publikus hublista letöltése..."
 msgid "Downloading public hub list... (%1%)"
 msgstr "Publikus hublista letöltése... (%1%)"
 
-#: win32\AboutDlg.cpp:162
+#: win32\AboutDlg.cpp:163
 msgid "Downloading..."
 msgstr "Letöltés..."
 
@@ -1521,7 +1525,7 @@ msgstr "Távollét mód engedélyezése ha a Windows zárolva van"
 msgid "Enable safe and compressed transfers"
 msgstr "Biztonságos és tömörített átvitel engedélyezése"
 
-#: win32\AdvancedPage.cpp:52
+#: win32\AdvancedPage.cpp:53
 msgid "Enable segmented downloads"
 msgstr "Többszálú letöltés engedélyezése"
 
@@ -1550,7 +1554,7 @@ msgstr "Hiba a tanúsítvány készítésekor"
 msgid "Error loading the notepad file: %1%"
 msgstr "Hiba a Jegyzettömb fájl betöltésekor: %1%"
 
-#: win32\AboutDlg.cpp:207
+#: win32\AboutDlg.cpp:208
 msgid "Error processing version information"
 msgstr "Hiba a verzió információ feldolgozása közben"
 
@@ -1896,7 +1900,7 @@ msgstr ""
 "a felhasználó 10 percig nem kapcsolódik az extra slot automatikusan "
 "visszavonásra kerül."
 
-#: win32\AboutDlg.cpp:139
+#: win32\AboutDlg.cpp:140
 msgid "Greetz and Contributors"
 msgstr "Köszönetnyilvánítás és Közreműködők"
 
@@ -2260,7 +2264,7 @@ msgstr "Nyelv"
 msgid "Last message occured %1%"
 msgstr "Az utolsó üzenet ideje: %1%"
 
-#: win32\AboutDlg.cpp:161
+#: win32\AboutDlg.cpp:162
 msgid "Latest stable version"
 msgstr "Utolsó stabil verzió"
 
@@ -2292,7 +2296,7 @@ msgstr ""
 msgid "Launches your default web browser with the given URL."
 msgstr "A megadott URL-t megnyitja az alapértelmezett web böngészőben."
 
-#: win32\AboutDlg.cpp:103
+#: win32\AboutDlg.cpp:104
 msgid ""
 "Leading project contributor: poy\n"
 "Ex-project contributor: Todd Pederzani\n"
@@ -2715,7 +2719,7 @@ msgstr "Ne legyen új letöltés, ha a sebesség ezt túllépi (KiB/s, 0 = letil
 msgid "No plugin has been selected"
 msgstr "Nincs kiválasztva bővítmény"
 
-#: win32\AboutDlg.cpp:157
+#: win32\AboutDlg.cpp:158
 msgid "No transfers yet"
 msgstr "Nem volt még átvitel"
 
@@ -3115,7 +3119,7 @@ msgstr "Gyors Csatlakozás"
 msgid "Rating"
 msgstr "Minősítés"
 
-#: win32\AboutDlg.cpp:156
+#: win32\AboutDlg.cpp:157
 #, c-format, boost-format
 msgid "Ratio (up/down): %1$0.2f"
 msgstr "Arány (fel/letöltés): %1$0.2f"
@@ -3731,7 +3735,7 @@ msgstr "TB"
 msgid "TLS Keyprint"
 msgstr "TLS Keyprint"
 
-#: win32\AboutDlg.cpp:112 win32\DirectoryListingFrame.cpp:68
+#: win32\AboutDlg.cpp:113 win32\DirectoryListingFrame.cpp:68
 #: win32\QueueFrame.cpp:58 win32\SearchFrame.cpp:61 win32\TransferView.cpp:980
 msgid "TTH"
 msgstr "TTH"
@@ -3897,7 +3901,7 @@ msgstr "Teljes méret:"
 msgid "Total slots"
 msgstr "Összes slot"
 
-#: win32\AboutDlg.cpp:148
+#: win32\AboutDlg.cpp:149
 msgid "Totals"
 msgstr "Összesítés"
 
@@ -4035,7 +4039,7 @@ msgstr "Feltöltési slotok"
 msgid "Upload speed"
 msgstr "Feltöltési sebesség"
 
-#: win32\AboutDlg.cpp:152
+#: win32\AboutDlg.cpp:153
 #, boost-format
 msgid "Upload: %1%, Download: %2%"
 msgstr "Feltöltve: %1%, Letöltve: %2%"
@@ -4058,7 +4062,7 @@ msgstr "Feltöltések"
 msgid "Use CTRL for line history"
 msgstr "CTRL billentyű használata a chatsor történethez"
 
-#: win32\AdvancedPage.cpp:51
+#: win32\AdvancedPage.cpp:52
 msgid "Use Coral network for HTTP downloads (improves reliability)"
 msgstr "A Coral hálózat használata a HTTP letöltésekhez (megbízhatóbb)"
 
@@ -4316,6 +4320,3 @@ msgstr "-"
 #: win32\ConnectivityManualPage.cpp:228
 msgid "transfer"
 msgstr "átvitel"
-
-#~ msgid "Closes the current window."
-#~ msgstr "Bezárja az aktuális ablakot"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: win32\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2014-03-31 14:37+0200\n"
+"POT-Creation-Date: 2015-01-04 23:10+0100\n"
 "PO-Revision-Date: 2012-05-16 01:15+0000\n"
 "Last-Translator: Launchpad Translations Administrators <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,8 +16,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2014-03-30 18:16+0000\n"
-"X-Generator: Launchpad (build 16967)\n"
+"X-Launchpad-Export-Date: 2015-01-16 09:32+0000\n"
+"X-Generator: Launchpad (build 17303)\n"
 
 #: win32\PublicHubsFrame.cpp:420
 msgid " from Coral"
@@ -505,7 +505,7 @@ msgstr "ADL ស្វែងរក"
 msgid "ADLSearch Properties"
 msgstr "ADL ស្វែងរកលក្ខណៈសម្បត្តិ"
 
-#: win32\AboutDlg.cpp:171 win32\MainWindow.cpp:409
+#: win32\AboutDlg.cpp:172 win32\MainWindow.cpp:409
 msgid "About DC++"
 msgstr ""
 
@@ -936,6 +936,10 @@ msgstr ""
 msgid "Click and drag to resize"
 msgstr ""
 
+#: win32\AdvancedPage.cpp:51
+msgid "Clickable chat links (disable on Wine)"
+msgstr ""
+
 #: win32\UsersFrame.cpp:101
 #, fuzzy
 msgid "Client type"
@@ -998,7 +1002,7 @@ msgstr ""
 msgid "Community news"
 msgstr ""
 
-#: win32\AboutDlg.cpp:116
+#: win32\AboutDlg.cpp:117
 msgid "Compiler"
 msgstr ""
 
@@ -1478,7 +1482,7 @@ msgstr "កំពុងទាញយកបញ្ជី hub សាធារណៈ.
 msgid "Downloading public hub list... (%1%)"
 msgstr "កំពុងទាញយកបញ្ជី hub សាធារណៈ..."
 
-#: win32\AboutDlg.cpp:162
+#: win32\AboutDlg.cpp:163
 msgid "Downloading..."
 msgstr "កំពុងទាញយក..."
 
@@ -1552,7 +1556,7 @@ msgstr ""
 msgid "Enable safe and compressed transfers"
 msgstr "អនុញ្ញាតការផ្ទេរដែលសុវត្តិភាព និង បង្ហាប់"
 
-#: win32\AdvancedPage.cpp:52
+#: win32\AdvancedPage.cpp:53
 msgid "Enable segmented downloads"
 msgstr ""
 
@@ -1583,7 +1587,7 @@ msgstr "កំហុសក្នុងការបង្កើតសោរបញ
 msgid "Error loading the notepad file: %1%"
 msgstr ""
 
-#: win32\AboutDlg.cpp:207
+#: win32\AboutDlg.cpp:208
 #, fuzzy
 msgid "Error processing version information"
 msgstr "ពត៌មានផ្ទាល់ខ្លួន"
@@ -1952,7 +1956,7 @@ msgid ""
 "in 10 minutes, the granted slot is removed."
 msgstr ""
 
-#: win32\AboutDlg.cpp:139
+#: win32\AboutDlg.cpp:140
 msgid "Greetz and Contributors"
 msgstr ""
 
@@ -2327,7 +2331,7 @@ msgstr "ឯកសារភាសា"
 msgid "Last message occured %1%"
 msgstr "សារឯកជន"
 
-#: win32\AboutDlg.cpp:161
+#: win32\AboutDlg.cpp:162
 msgid "Latest stable version"
 msgstr ""
 
@@ -2353,7 +2357,7 @@ msgstr ""
 msgid "Launches your default web browser with the given URL."
 msgstr ""
 
-#: win32\AboutDlg.cpp:103
+#: win32\AboutDlg.cpp:104
 msgid ""
 "Leading project contributor: poy\n"
 "Ex-project contributor: Todd Pederzani\n"
@@ -2788,7 +2792,7 @@ msgstr "គ្មានការទាញយកថ្មី ប្រសិន�
 msgid "No plugin has been selected"
 msgstr ""
 
-#: win32\AboutDlg.cpp:157
+#: win32\AboutDlg.cpp:158
 msgid "No transfers yet"
 msgstr ""
 
@@ -3188,7 +3192,7 @@ msgstr "តភ្ជាប់រហ័ស"
 msgid "Rating"
 msgstr "កម្រិតគុណភាព"
 
-#: win32\AboutDlg.cpp:156
+#: win32\AboutDlg.cpp:157
 #, c-format, boost-format
 msgid "Ratio (up/down): %1$0.2f"
 msgstr ""
@@ -3803,7 +3807,7 @@ msgstr "B"
 msgid "TLS Keyprint"
 msgstr ""
 
-#: win32\AboutDlg.cpp:112 win32\DirectoryListingFrame.cpp:68
+#: win32\AboutDlg.cpp:113 win32\DirectoryListingFrame.cpp:68
 #: win32\QueueFrame.cpp:58 win32\SearchFrame.cpp:61 win32\TransferView.cpp:980
 msgid "TTH"
 msgstr ""
@@ -3954,7 +3958,7 @@ msgstr "ទំហំសរុប:"
 msgid "Total slots"
 msgstr "ប្រលោះផ្ទុកឡើង"
 
-#: win32\AboutDlg.cpp:148
+#: win32\AboutDlg.cpp:149
 msgid "Totals"
 msgstr ""
 
@@ -4101,7 +4105,7 @@ msgstr "ប្រលោះផ្ទុកឡើង"
 msgid "Upload speed"
 msgstr "ផ្ទុកឡើង"
 
-#: win32\AboutDlg.cpp:152
+#: win32\AboutDlg.cpp:153
 #, boost-format
 msgid "Upload: %1%, Download: %2%"
 msgstr ""
@@ -4124,7 +4128,7 @@ msgstr "ផ្ទុកឡើង"
 msgid "Use CTRL for line history"
 msgstr "ប្រើ CTRL សម្រាប់បណ្តាញប្រវត្តិ"
 
-#: win32\AdvancedPage.cpp:51
+#: win32\AdvancedPage.cpp:52
 msgid "Use Coral network for HTTP downloads (improves reliability)"
 msgstr ""
 

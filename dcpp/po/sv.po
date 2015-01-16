@@ -7,48 +7,48 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2014-03-31 14:37+0200\n"
-"PO-Revision-Date: 2014-01-29 19:37+0000\n"
-"Last-Translator: Jonas Bohden <Unknown>\n"
+"POT-Creation-Date: 2015-01-04 23:09+0100\n"
+"PO-Revision-Date: 2014-03-31 20:02+0000\n"
+"Last-Translator: Fredrik Ullner <ullner@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-03-30 18:17+0000\n"
-"X-Generator: Launchpad (build 16967)\n"
+"X-Launchpad-Export-Date: 2015-01-16 09:33+0000\n"
+"X-Generator: Launchpad (build 17303)\n"
 
 #: dcpp\DownloadManager.cpp:360
 #, boost-format
 msgid " - Queued: %1%"
 msgstr " - Köad: %1%"
 
-#: dcpp\Util.cpp:571
+#: dcpp\Util.cpp:572
 #, c-format, boost-format
 msgid "%'lld B"
 msgstr "%'lld B"
 
-#: dcpp\Util.cpp:533
+#: dcpp\Util.cpp:534
 #, c-format, boost-format
 msgid "%.02f GiB"
 msgstr "%.02f GiB"
 
-#: dcpp\Util.cpp:529
+#: dcpp\Util.cpp:530
 #, c-format, boost-format
 msgid "%.02f KiB"
 msgstr "%.02f KiB"
 
-#: dcpp\Util.cpp:531
+#: dcpp\Util.cpp:532
 #, c-format, boost-format
 msgid "%.02f MiB"
 msgstr "%.02f MiB"
 
-#: dcpp\Util.cpp:537
+#: dcpp\Util.cpp:538
 #, c-format, boost-format
 msgid "%.02f PiB"
 msgstr "%.02f PiB"
 
-#: dcpp\Util.cpp:535
+#: dcpp\Util.cpp:536
 #, c-format, boost-format
 msgid "%.02f TiB"
 msgstr "%.02f TiB"
@@ -74,7 +74,7 @@ msgstr "%1% (%2%)"
 msgid "%1% (%2%) has same CID {%3%} as %4% (%5%), ignoring"
 msgstr "%1% (%2%) har samma CID {%3%} som %4% (%5%), ignorerar"
 
-#: dcpp\NmdcHub.cpp:293
+#: dcpp\NmdcHub.cpp:295
 #, boost-format
 msgid "%1% (Nick unknown)"
 msgstr "%1% (Okänt smeknamn)"
@@ -122,12 +122,12 @@ msgstr "%1%/s"
 msgid "%1%: File not available"
 msgstr "%1%: Filen ej tillgänglig"
 
-#: dcpp\Util.cpp:527
+#: dcpp\Util.cpp:528
 #, c-format, boost-format
 msgid "%d B"
 msgstr "%d B"
 
-#: dcpp\Util.cpp:567
+#: dcpp\Util.cpp:568
 #, c-format, boost-format
 msgid "%s B"
 msgstr "%s B"
@@ -192,12 +192,14 @@ msgstr "CRC32-inkonsekvens (SFV-kontroll)"
 msgid "CRC32 inconsistency (SFV-Check): %1%"
 msgstr "CRC32-inkonsekvens (SFV-kontroll):  %1%"
 
-#: dcpp\CryptoManager.cpp:626
+#: dcpp\CryptoManager.cpp:577
 #, boost-format
 msgid ""
 "Certificate verification for %1% failed with error: %2% (certificate "
 "KeyPrint: %3%)"
 msgstr ""
+"Fel vid certifikatverifikation för %1% med felet: %2% (certifikatets "
+"KeyPrint: %3%)"
 
 #: dcpp\SearchManager.cpp:38
 msgid "Compressed"
@@ -350,13 +352,13 @@ msgid "Error during compression"
 msgstr "Fel under komprimering"
 
 #: dcpp\BZUtils.cpp:76 dcpp\BZUtils.cpp:98 dcpp\BZUtils.cpp:101
-#: dcpp\CryptoManager.cpp:664 dcpp\CryptoManager.cpp:683
-#: dcpp\CryptoManager.cpp:697 dcpp\ZUtils.cpp:106 dcpp\ZUtils.cpp:131
+#: dcpp\CryptoManager.cpp:615 dcpp\CryptoManager.cpp:634
+#: dcpp\CryptoManager.cpp:648 dcpp\ZUtils.cpp:106 dcpp\ZUtils.cpp:131
 #: dcpp\ZUtils.cpp:145
 msgid "Error during decompression"
 msgstr "Fel under avkomprimering"
 
-#: dcpp\CryptoManager.cpp:136
+#: dcpp\CryptoManager.cpp:139
 msgid "Error generating certificate"
 msgstr "Fel vid skapande av ceritikat"
 
@@ -397,15 +399,15 @@ msgstr "Kunde inte hämta externt IP"
 msgid "Failed to initialize the %1% interface"
 msgstr "Kunde inte initialisera gränssnittet %1%"
 
-#: dcpp\CryptoManager.cpp:409
+#: dcpp\CryptoManager.cpp:372
 msgid "Failed to load certificate file"
 msgstr "Kunde inte ladda certifikatfil"
 
-#: dcpp\CryptoManager.cpp:417
+#: dcpp\CryptoManager.cpp:380
 msgid "Failed to load private key"
 msgstr "Kunde inte ladda privat nyckel"
 
-#: dcpp\CryptoManager.cpp:430
+#: dcpp\CryptoManager.cpp:393
 #, boost-format
 msgid "Failed to load trusted certificate from %1%"
 msgstr "Kunde inte ladda betrott certifikat från %1%"
@@ -483,7 +485,7 @@ msgstr "Hashning färdig: %1% (%2%)"
 msgid "Full tree does not match TTH root"
 msgstr "Fullt träd matchar inte TTH-roten"
 
-#: dcpp\CryptoManager.cpp:398
+#: dcpp\CryptoManager.cpp:361
 msgid "Generated new TLS certificate"
 msgstr "Genererade nytt TLS-certifikat"
 
@@ -494,7 +496,7 @@ msgstr "Allmän"
 #: dcpp\HttpManager.cpp:100
 #, boost-format
 msgid "HTTP file download failed to create file %1%, error: %2%"
-msgstr ""
+msgstr "Fel vid HTTP nerladdning vid skapande av fil %1%, fel: %2%"
 
 #: dcpp\DCPlusPlus.cpp:121
 msgid "Hash database"
@@ -549,7 +551,7 @@ msgstr "Ogiltigt filnamn hittades vid indexering av mappen %1%"
 msgid "Invalid regular expression: %1%"
 msgstr "Ogiltigt reguljärt uttryck: %1%"
 
-#: dcpp\SettingsManager.cpp:650
+#: dcpp\SettingsManager.cpp:658
 msgid "Invalid search type name"
 msgstr "Ogiltigt namn för söktyp"
 
@@ -586,7 +588,7 @@ msgstr "Saknar samband för %1%"
 msgid "More bytes written than requested"
 msgstr "Skrev fler byte än efterfrågat"
 
-#: dcpp\CryptoManager.cpp:125
+#: dcpp\CryptoManager.cpp:128
 msgid "No certificate file chosen"
 msgstr "Ingen certifikatfil vald"
 
@@ -598,7 +600,7 @@ msgstr "Ingen mapp specificerad"
 msgid "No port mapping interface available"
 msgstr "Inget portmappningsgränssnitt tillgängligt"
 
-#: dcpp\CryptoManager.cpp:122
+#: dcpp\CryptoManager.cpp:125
 msgid "No private key file chosen"
 msgstr "Ingen privat nyckelfil vald"
 
@@ -606,7 +608,7 @@ msgstr "Ingen privat nyckelfil vald"
 msgid "No slots available"
 msgstr "Inga platser tillgängliga"
 
-#: dcpp\SettingsManager.cpp:708
+#: dcpp\SettingsManager.cpp:716
 msgid "No such search type"
 msgstr "Ingen sådan söktyp"
 
@@ -717,12 +719,12 @@ msgid ""
 msgstr ""
 "Lyckades ta bort portmappningar från enhet %1% med användargränssnittet %2%"
 
-#: dcpp\CryptoManager.cpp:400
+#: dcpp\CryptoManager.cpp:363
 #, boost-format
 msgid "TLS disabled, failed to generate certificate: %1%"
 msgstr "TLS avaktiverat. Misslyckades att generera certifikat: %1%"
 
-#: dcpp\CryptoManager.cpp:390
+#: dcpp\CryptoManager.cpp:353
 msgid "TLS disabled, no certificate file set"
 msgstr "TLS avaktiverat. Ingen certifikatsfil angiven"
 
@@ -751,12 +753,16 @@ msgid ""
 "The encrypted transfer port cannot be the same as the transfer port, "
 "encrypted transfers will be disabled"
 msgstr ""
+"Den krypterade överföringsporten kan inte vara samma som överföringsporten, "
+"krypterade överföringar är avstängda"
 
 #: dcpp\QueueManager.cpp:1494
 #, boost-format
 msgid ""
 "The queued file %1% already exists in your share, removing from the queue"
 msgstr ""
+"Den köade filen %1% finns redan i din lista av utdelade filer, raderar från "
+"kön."
 
 #: dcpp\Socket.cpp:479
 msgid "The socks server doesn't support login / password authentication"
@@ -783,7 +789,7 @@ msgstr "Denna fil har redan laddats ned"
 msgid "This file is already queued"
 msgstr "Denna fil finns redan i kön"
 
-#: dcpp\NmdcHub.cpp:946
+#: dcpp\NmdcHub.cpp:948
 #, boost-format
 msgid ""
 "This hub is trying to use your client to spam %1%, please urge hub owner to "
@@ -792,7 +798,7 @@ msgstr ""
 "Denna hubb försöker att använda din klient för att spamma %1%. Vänligen "
 "upplys hubbägaren om att åtgärda detta"
 
-#: dcpp\SettingsManager.cpp:654 dcpp\SettingsManager.cpp:676
+#: dcpp\SettingsManager.cpp:662 dcpp\SettingsManager.cpp:684
 msgid "This search type already exists"
 msgstr "Denna söktyp finns redan"
 
@@ -884,7 +890,7 @@ msgstr "Du försöker att ladda ned från dig själv!"
 msgid "disabled"
 msgstr "avaktiverad"
 
-#: dcpp\SettingsManager.cpp:202 dcpp\SettingsManager.cpp:203
+#: dcpp\SettingsManager.cpp:204 dcpp\SettingsManager.cpp:205
 msgid "downloaded from"
 msgstr "nedladdad från"
 
@@ -897,6 +903,6 @@ msgstr "aktiverad - %1%"
 msgid "undefined"
 msgstr "odefinierad"
 
-#: dcpp\SettingsManager.cpp:204
+#: dcpp\SettingsManager.cpp:206
 msgid "uploaded to"
 msgstr "uppladdad till"

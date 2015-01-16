@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: win32\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2014-03-31 14:37+0200\n"
+"POT-Creation-Date: 2015-01-04 23:10+0100\n"
 "PO-Revision-Date: 2012-05-16 01:15+0000\n"
 "Last-Translator: Launchpad Translations Administrators <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,8 +16,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2014-03-30 18:16+0000\n"
-"X-Generator: Launchpad (build 16967)\n"
+"X-Launchpad-Export-Date: 2015-01-16 09:32+0000\n"
+"X-Generator: Launchpad (build 17303)\n"
 
 #: win32\PublicHubsFrame.cpp:420
 msgid " from Coral"
@@ -481,7 +481,7 @@ msgstr "ADL 검색"
 msgid "ADLSearch Properties"
 msgstr "ADL 검색 등록정보"
 
-#: win32\AboutDlg.cpp:171 win32\MainWindow.cpp:409
+#: win32\AboutDlg.cpp:172 win32\MainWindow.cpp:409
 msgid "About DC++"
 msgstr "DC++ 정보"
 
@@ -938,6 +938,10 @@ msgstr ""
 msgid "Click and drag to resize"
 msgstr ""
 
+#: win32\AdvancedPage.cpp:51
+msgid "Clickable chat links (disable on Wine)"
+msgstr ""
+
 #: win32\UsersFrame.cpp:101
 #, fuzzy
 msgid "Client type"
@@ -997,7 +1001,7 @@ msgstr ""
 msgid "Community news"
 msgstr ""
 
-#: win32\AboutDlg.cpp:116
+#: win32\AboutDlg.cpp:117
 msgid "Compiler"
 msgstr ""
 
@@ -1474,7 +1478,7 @@ msgstr "허브 목록 다운로드..."
 msgid "Downloading public hub list... (%1%)"
 msgstr "허브 목록 다운로드... (%1%)"
 
-#: win32\AboutDlg.cpp:162
+#: win32\AboutDlg.cpp:163
 msgid "Downloading..."
 msgstr "다운로드..."
 
@@ -1557,7 +1561,7 @@ msgstr ""
 "하지만 압축되지 않은 구조를 갖는 포맷의 파일을 전송하는데 있어 엄청난 속도의 "
 "향상을 가져올 수 있을 뿐더러 파일의 무결성까지 보장할 수 있음)"
 
-#: win32\AdvancedPage.cpp:52
+#: win32\AdvancedPage.cpp:53
 msgid "Enable segmented downloads"
 msgstr "분할-다운로드 방식을 사용함"
 
@@ -1588,7 +1592,7 @@ msgstr "인증서 생성 오류"
 msgid "Error loading the notepad file: %1%"
 msgstr "메모장 파일 열기 오류: %1%"
 
-#: win32\AboutDlg.cpp:207
+#: win32\AboutDlg.cpp:208
 msgid "Error processing version information"
 msgstr "버전 정보 처리 오류"
 
@@ -1947,7 +1951,7 @@ msgid ""
 "in 10 minutes, the granted slot is removed."
 msgstr ""
 
-#: win32\AboutDlg.cpp:139
+#: win32\AboutDlg.cpp:140
 msgid "Greetz and Contributors"
 msgstr "인사말 및 도움 주신 분들"
 
@@ -2320,7 +2324,7 @@ msgstr "언어"
 msgid "Last message occured %1%"
 msgstr "%1%: %2%에게서 온 1:1 메시지"
 
-#: win32\AboutDlg.cpp:161
+#: win32\AboutDlg.cpp:162
 msgid "Latest stable version"
 msgstr "최신 안정화 버전"
 
@@ -2346,7 +2350,7 @@ msgstr ""
 msgid "Launches your default web browser with the given URL."
 msgstr ""
 
-#: win32\AboutDlg.cpp:103
+#: win32\AboutDlg.cpp:104
 msgid ""
 "Leading project contributor: poy\n"
 "Ex-project contributor: Todd Pederzani\n"
@@ -2768,7 +2772,7 @@ msgstr "초과하면 새로운 다운로드가 제한되는 속도 (kiB/s, 0=무
 msgid "No plugin has been selected"
 msgstr ""
 
-#: win32\AboutDlg.cpp:157
+#: win32\AboutDlg.cpp:158
 msgid "No transfers yet"
 msgstr "아직 전송이 없음"
 
@@ -3171,7 +3175,7 @@ msgstr "허브에 바로 접속하기"
 msgid "Rating"
 msgstr "평점"
 
-#: win32\AboutDlg.cpp:156
+#: win32\AboutDlg.cpp:157
 #, c-format, boost-format
 msgid "Ratio (up/down): %1$0.2f"
 msgstr "비율 (업/다운): %1$0.2f"
@@ -3803,7 +3807,7 @@ msgstr "TiB"
 msgid "TLS Keyprint"
 msgstr ""
 
-#: win32\AboutDlg.cpp:112 win32\DirectoryListingFrame.cpp:68
+#: win32\AboutDlg.cpp:113 win32\DirectoryListingFrame.cpp:68
 #: win32\QueueFrame.cpp:58 win32\SearchFrame.cpp:61 win32\TransferView.cpp:980
 msgid "TTH"
 msgstr "TTH"
@@ -3963,7 +3967,7 @@ msgstr "공유량:"
 msgid "Total slots"
 msgstr "전체"
 
-#: win32\AboutDlg.cpp:148
+#: win32\AboutDlg.cpp:149
 msgid "Totals"
 msgstr "전체"
 
@@ -4105,7 +4109,7 @@ msgstr "업로드 슬롯 개수"
 msgid "Upload speed"
 msgstr "업로드"
 
-#: win32\AboutDlg.cpp:152
+#: win32\AboutDlg.cpp:153
 #, boost-format
 msgid "Upload: %1%, Download: %2%"
 msgstr "업로드: %1%, 다운로드: %2%"
@@ -4131,7 +4135,7 @@ msgstr ""
 "1:1 창의 메시지 입력란에서 CTRL 키를 누른 채 ↑/↓ 키를 눌러야 이전에 입력했던 "
 "히스토리를 불러올 수 있음) (옵션을 끄면, ↑/↓ 키만 눌러도 됨)"
 
-#: win32\AdvancedPage.cpp:51
+#: win32\AdvancedPage.cpp:52
 msgid "Use Coral network for HTTP downloads (improves reliability)"
 msgstr "HTTP 다운로드에 분산배포망(Coral network)을 사용함 (신뢰도가 향상됨)"
 
