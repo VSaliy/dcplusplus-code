@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: win32\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2014-03-31 14:37+0200\n"
+"POT-Creation-Date: 2015-01-04 23:10+0100\n"
 "PO-Revision-Date: 2012-05-16 01:15+0000\n"
 "Last-Translator: Launchpad Translations Administrators <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,8 +17,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
-"X-Launchpad-Export-Date: 2014-03-30 18:16+0000\n"
-"X-Generator: Launchpad (build 16967)\n"
+"X-Launchpad-Export-Date: 2015-01-16 09:33+0000\n"
+"X-Generator: Launchpad (build 17303)\n"
 
 #: win32\PublicHubsFrame.cpp:420
 msgid " from Coral"
@@ -492,7 +492,7 @@ msgstr "ADL Iskanje"
 msgid "ADLSearch Properties"
 msgstr "Nastavitve ADL Iskanja"
 
-#: win32\AboutDlg.cpp:171 win32\MainWindow.cpp:409
+#: win32\AboutDlg.cpp:172 win32\MainWindow.cpp:409
 msgid "About DC++"
 msgstr "O programu DC++"
 
@@ -922,6 +922,10 @@ msgstr ""
 msgid "Click and drag to resize"
 msgstr "Klikni in raztegni za razširitev"
 
+#: win32\AdvancedPage.cpp:51
+msgid "Clickable chat links (disable on Wine)"
+msgstr ""
+
 #: win32\UsersFrame.cpp:101
 msgid "Client type"
 msgstr "Vrsta odjemalca"
@@ -979,7 +983,7 @@ msgstr ""
 msgid "Community news"
 msgstr ""
 
-#: win32\AboutDlg.cpp:116
+#: win32\AboutDlg.cpp:117
 msgid "Compiler"
 msgstr ""
 
@@ -1453,7 +1457,7 @@ msgstr "Odjemanje seznama javnih vozlišč (hubov)..."
 msgid "Downloading public hub list... (%1%)"
 msgstr "Odjemanje seznama javnih vozlišč (hubov)... (%1%)"
 
-#: win32\AboutDlg.cpp:162
+#: win32\AboutDlg.cpp:163
 msgid "Downloading..."
 msgstr "Odjemanje..."
 
@@ -1525,7 +1529,7 @@ msgstr ""
 msgid "Enable safe and compressed transfers"
 msgstr "Omogoči varna in stisnjena odjemanja"
 
-#: win32\AdvancedPage.cpp:52
+#: win32\AdvancedPage.cpp:53
 msgid "Enable segmented downloads"
 msgstr "Omogoči segmentirana odjemanja"
 
@@ -1555,7 +1559,7 @@ msgstr "Napaka pri ustvarjanju certifikata"
 msgid "Error loading the notepad file: %1%"
 msgstr ""
 
-#: win32\AboutDlg.cpp:207
+#: win32\AboutDlg.cpp:208
 #, fuzzy
 msgid "Error processing version information"
 msgstr "Osebni podatki"
@@ -1911,7 +1915,7 @@ msgid ""
 "in 10 minutes, the granted slot is removed."
 msgstr ""
 
-#: win32\AboutDlg.cpp:139
+#: win32\AboutDlg.cpp:140
 msgid "Greetz and Contributors"
 msgstr "Zahvale in sodelavci"
 
@@ -2277,7 +2281,7 @@ msgstr "Jezik"
 msgid "Last message occured %1%"
 msgstr "Zasebno sporočilo od %1%: %2%"
 
-#: win32\AboutDlg.cpp:161
+#: win32\AboutDlg.cpp:162
 msgid "Latest stable version"
 msgstr "Zadnja stabilna verzija"
 
@@ -2303,7 +2307,7 @@ msgstr ""
 msgid "Launches your default web browser with the given URL."
 msgstr ""
 
-#: win32\AboutDlg.cpp:103
+#: win32\AboutDlg.cpp:104
 msgid ""
 "Leading project contributor: poy\n"
 "Ex-project contributor: Todd Pederzani\n"
@@ -2735,7 +2739,7 @@ msgstr "Meja za pavziranje novih odjemanj (KiB/s, 0 = onemogočeno)"
 msgid "No plugin has been selected"
 msgstr ""
 
-#: win32\AboutDlg.cpp:157
+#: win32\AboutDlg.cpp:158
 msgid "No transfers yet"
 msgstr "Še nobenih odjemanj"
 
@@ -3138,7 +3142,7 @@ msgstr "Hitro povezovanje"
 msgid "Rating"
 msgstr "Ocena"
 
-#: win32\AboutDlg.cpp:156
+#: win32\AboutDlg.cpp:157
 #, c-format, boost-format
 msgid "Ratio (up/down): %1$0.2f"
 msgstr "Razmerje (gor/dol): %1$0.2f"
@@ -3758,7 +3762,7 @@ msgstr "TiB"
 msgid "TLS Keyprint"
 msgstr ""
 
-#: win32\AboutDlg.cpp:112 win32\DirectoryListingFrame.cpp:68
+#: win32\AboutDlg.cpp:113 win32\DirectoryListingFrame.cpp:68
 #: win32\QueueFrame.cpp:58 win32\SearchFrame.cpp:61 win32\TransferView.cpp:980
 msgid "TTH"
 msgstr "TTH"
@@ -3910,7 +3914,7 @@ msgstr "Skupno:"
 msgid "Total slots"
 msgstr "Skupno"
 
-#: win32\AboutDlg.cpp:148
+#: win32\AboutDlg.cpp:149
 msgid "Totals"
 msgstr "Skupno"
 
@@ -4056,7 +4060,7 @@ msgstr "Reže(sloti) za oddajanja"
 msgid "Upload speed"
 msgstr "Oddajanja"
 
-#: win32\AboutDlg.cpp:152
+#: win32\AboutDlg.cpp:153
 #, boost-format
 msgid "Upload: %1%, Download: %2%"
 msgstr "Oddajanje: %1%, Odjemanje: %2%"
@@ -4079,7 +4083,7 @@ msgstr "Oddajanja"
 msgid "Use CTRL for line history"
 msgstr "Uporabi CTRL za vrstično zgodovino"
 
-#: win32\AdvancedPage.cpp:51
+#: win32\AdvancedPage.cpp:52
 #, fuzzy
 msgid "Use Coral network for HTTP downloads (improves reliability)"
 msgstr ""

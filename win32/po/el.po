@@ -7,17 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: win32\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2014-03-31 14:37+0200\n"
-"PO-Revision-Date: 2012-05-16 01:15+0000\n"
-"Last-Translator: Launchpad Translations Administrators <Unknown>\n"
+"POT-Creation-Date: 2015-01-04 23:10+0100\n"
+"PO-Revision-Date: 2014-05-18 08:00+0000\n"
+"Last-Translator: DIMITRIOS VLASTARAS <dimitriosvlastaras@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2014-03-30 18:16+0000\n"
-"X-Generator: Launchpad (build 16967)\n"
+"X-Launchpad-Export-Date: 2015-01-16 09:32+0000\n"
+"X-Generator: Launchpad (build 17303)\n"
 
 #: win32\PublicHubsFrame.cpp:420
 msgid " from Coral"
@@ -88,7 +88,7 @@ msgstr "%1% αρχεία/ώρα, %2% αρχεία απέμειναν"
 #: win32\MainWindow.cpp:1195
 #, boost-format
 msgid "%1% free slots of %2% total upload slots - Click to adjust"
-msgstr ""
+msgstr "%1% ελευθερες θεσεις απο  %2% συνολικες θεσεις - Κλικ να επιλεξεις"
 
 #: win32\FavHubsFrame.cpp:363 win32\TransferView.cpp:355
 #, fuzzy, boost-format
@@ -121,7 +121,7 @@ msgstr "%1% απέμειναν"
 #: win32\ConnectivityManualPage.cpp:235
 #, boost-format
 msgid "%1% port cannot be the same as the %2% port"
-msgstr ""
+msgstr "η θύρα %1% δε μπορεί να είναι ίδια με τη θύρα %2%"
 
 #: win32\MainWindow.cpp:879
 #, boost-format
@@ -147,14 +147,14 @@ msgstr[1] "%1% χρήστες"
 
 #: win32\HubFrame.cpp:1287 win32\TransferView.cpp:351 win32\UsersFrame.cpp:462
 #: win32\FinishedFrameBase.h:490
-#, fuzzy, boost-format
+#, boost-format
 msgid "%1% users"
-msgstr "%1% χρήστης"
+msgstr "%1% χρήστες"
 
 #: win32\MainWindow.cpp:1614
-#, fuzzy, boost-format
+#, boost-format
 msgid "%1%-level %2%"
-msgstr "D: %1%/δευτ. (%2%)"
+msgstr "%1%-επίπεδο %2%"
 
 #: win32\MainWindow.cpp:1194 win32\UserInfoBase.cpp:140
 #, fuzzy, boost-format
@@ -364,9 +364,8 @@ msgid "&Remove"
 msgstr "&Αφαίρεση"
 
 #: win32\TransferView.cpp:540
-#, fuzzy
 msgid "&Remove file from queue"
-msgstr "Αφαίρεση χρήστη από την σειρά αναμονής"
+msgstr "σβηστε το αρχειο απο την ουρα αναμονης"
 
 #: win32\MainWindow.cpp:362
 msgid "&Search\tCtrl+S"
@@ -468,6 +467,8 @@ msgstr ""
 msgid ""
 "A secure ADC hub is required; this feature is not supported on NMDC hubs"
 msgstr ""
+"Απαιτείται ένα ασφαλές ADC hub αυτη η δυνατότητα δεν υποστηρίζεται απο NMDC "
+"hubs"
 
 #: win32\UploadPage.cpp:290
 #, boost-format
@@ -486,7 +487,7 @@ msgstr "ADL Αναζήτηση"
 msgid "ADLSearch Properties"
 msgstr "Ιδιότητες ADL Αναζήτησης"
 
-#: win32\AboutDlg.cpp:171 win32\MainWindow.cpp:409
+#: win32\AboutDlg.cpp:172 win32\MainWindow.cpp:409
 msgid "About DC++"
 msgstr "Σχετικά με το DC++"
 
@@ -503,9 +504,9 @@ msgid "Active mode (I have no router / I have configured my router)"
 msgstr ""
 
 #: win32\ConnectivityManualPage.cpp:70
-#, fuzzy
 msgid "Active mode (let DC++ configure my router with NAT-PMP / UPnP)"
-msgstr "Χρήση UPnP για να ρυθμίσει το DC++ το router μου"
+msgstr ""
+"Ενεργός κατάσταση (αφήστε το DC++ να ρυθμίσει το ρούτερ με NAT-PMP / UPnP)"
 
 #: win32\MainWindow.cpp:721
 #, fuzzy
@@ -529,7 +530,7 @@ msgstr ""
 
 #: win32\GeneralPage.cpp:101
 msgid "Add timestamp to the end of away messages"
-msgstr ""
+msgstr "Πρόσθεσε χρονική σήμανση στο τέλος των εξερχομένων μηνυμάτων"
 
 #: win32\QueueFrame.cpp:57
 msgid "Added"
@@ -561,12 +562,18 @@ msgid ""
 "Adds a user matching definition (or modifies an existing one, if possible) "
 "to stop ignoring chat messages from the current user."
 msgstr ""
+"Προσθέτει έναν ορισμό που ταιριάζουν στο χρήστη (ή τροποποιεί εναν "
+"υπάρχοντα, αν είναι δυνατόν) να σταματήσει να αγνοεί μηνύματα chat από τον "
+"τρέχοντα χρήστη."
 
 #: win32\HubFrame.cpp:556
 msgid ""
 "Adds a user matching definition (or modifies an existing one, if possible) "
 "to stop ignoring chat messages from the specified user."
 msgstr ""
+"Προσθέτει έναν ορισμό που ταιριάζουν στο χρήστη (ή τροποποιεί εναν "
+"υπάρχοντα, αν είναι δυνατόν) να σταματήσει να αγνοεί μηνύματα chat από τον "
+"τρέχοντα χρήστη."
 
 #: win32\HubFrame.cpp:545
 msgid ""
@@ -630,7 +637,7 @@ msgstr "Πάντα άνοιγμα της Βοήθειας με αυτό το π�
 
 #: win32\UserMatchDlg.cpp:97 win32\UserMatchPage.cpp:223
 msgid "Always show chat messages"
-msgstr ""
+msgstr "Παντα εμφανιση μηνυμάτων chat"
 
 #: win32\FavHubGroupsDlg.cpp:317
 #, boost-format
@@ -708,9 +715,8 @@ msgid "Automatic connectivity setup"
 msgstr "Ρυθμίσεις εξερχόμενης σύνδεσης"
 
 #: win32\ConnectivityPage.cpp:98
-#, fuzzy
 msgid "Automatic connectivity setup is currently disabled"
-msgstr "Ρυθμίσεις εξερχόμενης σύνδεσης"
+msgstr "Αυτόματη ρύθμιση σύνδεσης είναι απενεργοποιημένη"
 
 #: win32\ConnectivityPage.cpp:116
 msgid ""
@@ -798,9 +804,8 @@ msgid "Balloon settings"
 msgstr "Ρυθμίσεις σύνδεσης"
 
 #: win32\SettingsDialog.cpp:162
-#, fuzzy
 msgid "Bandwidth limiting"
-msgstr "Περιορισμός Bandwidth"
+msgstr "οριο"
 
 #: win32\NotificationsPage.cpp:281
 msgid "Beep"
@@ -870,11 +875,11 @@ msgstr "Ακύρωση"
 
 #: win32\PluginApiWin.cpp:105
 msgid "Cannot enable the plugin:"
-msgstr ""
+msgstr "Δεν είναι δυνατή η ενεργοποίηση του plugin:"
 
 #: win32\PluginApiWin.cpp:83 win32\PluginInfoDlg.cpp:133
 msgid "Cannot install the plugin:"
-msgstr ""
+msgstr "Δεν μπορείτε να εγκαταστήσετε το plugin:"
 
 #: win32\PrivateFrame.cpp:318
 #, boost-format
@@ -887,7 +892,7 @@ msgstr "Αλλαγές ανά έκδοση"
 
 #: win32\TextFrame.cpp:91
 msgid "Change the text viewer font"
-msgstr ""
+msgstr "Αλλαγή της γραμματοσειράς"
 
 #: win32\CommandDlg.cpp:91 win32\StylesPage.cpp:149
 msgid "Chat"
@@ -923,6 +928,10 @@ msgstr ""
 
 #: win32\dwtTexts.cpp:37
 msgid "Click and drag to resize"
+msgstr ""
+
+#: win32\AdvancedPage.cpp:51
+msgid "Clickable chat links (disable on Wine)"
 msgstr ""
 
 #: win32\UsersFrame.cpp:101
@@ -984,7 +993,7 @@ msgstr ""
 msgid "Community news"
 msgstr ""
 
-#: win32\AboutDlg.cpp:116
+#: win32\AboutDlg.cpp:117
 msgid "Compiler"
 msgstr ""
 
@@ -1072,9 +1081,8 @@ msgid "Connection"
 msgstr "Σύνδεση"
 
 #: win32\SettingsDialog.cpp:160
-#, fuzzy
 msgid "Connectivity"
-msgstr "Σύνδεση"
+msgstr "Συνδεσιμότητα"
 
 #: win32\CommandDlg.cpp:105
 msgid "Context"
@@ -1094,9 +1102,8 @@ msgid "Copy magnet link to clipboard"
 msgstr "Αντιγραφή magnet συνδέσμου στο πρόχειρο"
 
 #: win32\UserInfoBase.h:175
-#, fuzzy
 msgid "Copy user information"
-msgstr "Προσωπικές πληροφορίες"
+msgstr "Αντιγραφή πληροφοριών του χρήστη"
 
 #: win32\HubFrame.cpp:64 win32\PublicHubsFrame.cpp:45
 #: win32\TransferView.cpp:59 win32\UserInfoBase.cpp:133
@@ -1123,7 +1130,7 @@ msgstr "&Σημειωματάριο\tCtrl+N"
 
 #: win32\PrivateFrame.cpp:164
 msgid "Current communication channel - click to change"
-msgstr ""
+msgstr "Τρέχον κανάλι επικοινωνίας - κλικ για να αλλάξετε"
 
 #: win32\HubFrame.cpp:514
 #, boost-format
@@ -1132,7 +1139,7 @@ msgstr ""
 
 #: win32\NotificationsPage.cpp:281
 msgid "Custom"
-msgstr ""
+msgstr "Προσαρμοσμένο"
 
 #: win32\StylesPage.cpp:125 win32\UserMatchPage.cpp:232
 #, fuzzy
@@ -1149,7 +1156,7 @@ msgstr ""
 
 #: win32\MainWindow.cpp:933
 msgid "Custom..."
-msgstr ""
+msgstr "Προσαρμοσμένο…"
 
 #: win32\MainWindow.cpp:1203
 #, boost-format
@@ -1198,9 +1205,8 @@ msgid "Default group"
 msgstr "Προεπιλογή"
 
 #: win32\TabsPage.cpp:102
-#, fuzzy
 msgid "Default theme"
-msgstr "Προεπιλογή"
+msgstr "Προκαθορισμένο θέμα"
 
 #: win32\FavHubGroupsDlg.cpp:140 win32\FavHubProperties.cpp:88
 #: win32\FavHubProperties.cpp:115 win32\FavHubsFrame.cpp:51
@@ -1291,6 +1297,9 @@ msgid ""
 "Displays available commands. (The ones listed on this page.) Optionally, you "
 "can specify &quot;brief&quot; to have a brief listing."
 msgstr ""
+"Παρουσιάζει τις διαθέσιμες εντολές. (αυτές που αναφέρονται σε αυτή τη "
+"σελίδα.) Προαιρετικά, μπορείτε να καθορίσετε \"&quot;brief&quot;\" να έχετε "
+"μια σύντομη λίστα."
 
 #: win32\HubFrame.cpp:542
 msgid ""
@@ -1461,7 +1470,7 @@ msgstr "Λήψη της λίστας δημοσίων κυψελών..."
 msgid "Downloading public hub list... (%1%)"
 msgstr "Λήψη της λίστας δημοσίων κυψελών... (%1%)"
 
-#: win32\AboutDlg.cpp:162
+#: win32\AboutDlg.cpp:163
 msgid "Downloading..."
 msgstr "Γίνεται λήψη..."
 
@@ -1535,7 +1544,7 @@ msgstr ""
 msgid "Enable safe and compressed transfers"
 msgstr "Ενεργοποίηση ασφαλών και συμπιεσμένων μεταφορών"
 
-#: win32\AdvancedPage.cpp:52
+#: win32\AdvancedPage.cpp:53
 msgid "Enable segmented downloads"
 msgstr "Ενεργοποίηση τμηματικών λήψεων"
 
@@ -1566,7 +1575,7 @@ msgstr "Σφάλμα κατά τη δημιουργία πιστοποιητικ
 msgid "Error loading the notepad file: %1%"
 msgstr "Σφάλμα κατά το άνοιγμα του αρχείου σημειωματαρίου: %1%"
 
-#: win32\AboutDlg.cpp:207
+#: win32\AboutDlg.cpp:208
 msgid "Error processing version information"
 msgstr "Σφάλμα επεξεργασίας των πληροφοριών έκδοσης"
 
@@ -1924,7 +1933,7 @@ msgid ""
 "in 10 minutes, the granted slot is removed."
 msgstr ""
 
-#: win32\AboutDlg.cpp:139
+#: win32\AboutDlg.cpp:140
 msgid "Greetz and Contributors"
 msgstr "Χαιρετισμοί και συντελεστές"
 
@@ -2292,7 +2301,7 @@ msgstr "Γλώσσα"
 msgid "Last message occured %1%"
 msgstr "Προσωπικό μήνυμα από %1%: %2%"
 
-#: win32\AboutDlg.cpp:161
+#: win32\AboutDlg.cpp:162
 msgid "Latest stable version"
 msgstr "Τελευταία σταθερή έκδοση"
 
@@ -2318,7 +2327,7 @@ msgstr ""
 msgid "Launches your default web browser with the given URL."
 msgstr ""
 
-#: win32\AboutDlg.cpp:103
+#: win32\AboutDlg.cpp:104
 msgid ""
 "Leading project contributor: poy\n"
 "Ex-project contributor: Todd Pederzani\n"
@@ -2742,7 +2751,7 @@ msgstr "Όριο ταχύτητας σε Κb/δευτ. για παύση λήψ�
 msgid "No plugin has been selected"
 msgstr ""
 
-#: win32\AboutDlg.cpp:157
+#: win32\AboutDlg.cpp:158
 msgid "No transfers yet"
 msgstr "Χωρίς μεταφορές προς το παρόν"
 
@@ -3143,7 +3152,7 @@ msgstr "Άμεση σύνδεση"
 msgid "Rating"
 msgstr "Βαθμολογήση"
 
-#: win32\AboutDlg.cpp:156
+#: win32\AboutDlg.cpp:157
 #, c-format, boost-format
 msgid "Ratio (up/down): %1$0.2f"
 msgstr "Αναλογία (ανέβασμα/λήψη): %1$0.2f"
@@ -3757,7 +3766,7 @@ msgstr "Tb"
 msgid "TLS Keyprint"
 msgstr ""
 
-#: win32\AboutDlg.cpp:112 win32\DirectoryListingFrame.cpp:68
+#: win32\AboutDlg.cpp:113 win32\DirectoryListingFrame.cpp:68
 #: win32\QueueFrame.cpp:58 win32\SearchFrame.cpp:61 win32\TransferView.cpp:980
 msgid "TTH"
 msgstr "ΤΤΗ"
@@ -3914,7 +3923,7 @@ msgstr "Συνολικό μέγεθος:"
 msgid "Total slots"
 msgstr "Σύνολα"
 
-#: win32\AboutDlg.cpp:148
+#: win32\AboutDlg.cpp:149
 msgid "Totals"
 msgstr "Σύνολα"
 
@@ -4057,7 +4066,7 @@ msgstr "Θέσεις ανεβάσματος"
 msgid "Upload speed"
 msgstr "Ανεβασμένα"
 
-#: win32\AboutDlg.cpp:152
+#: win32\AboutDlg.cpp:153
 #, boost-format
 msgid "Upload: %1%, Download: %2%"
 msgstr "Ανέβασμα: %1%, Λήψη: %2%"
@@ -4080,7 +4089,7 @@ msgstr "Ανεβασμένα"
 msgid "Use CTRL for line history"
 msgstr "Χρήση CTRL για το ιστορικό σύνδεσης"
 
-#: win32\AdvancedPage.cpp:51
+#: win32\AdvancedPage.cpp:52
 msgid "Use Coral network for HTTP downloads (improves reliability)"
 msgstr "Χρήση του δικτύου Coral για HTTP λήψεις (βελτιώνει την αξιοπιστία)"
 

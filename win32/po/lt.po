@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: win32\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2014-03-31 14:37+0200\n"
+"POT-Creation-Date: 2015-01-04 23:10+0100\n"
 "PO-Revision-Date: 2012-05-16 01:15+0000\n"
 "Last-Translator: Launchpad Translations Administrators <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,8 +17,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
 "%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2014-03-30 18:16+0000\n"
-"X-Generator: Launchpad (build 16967)\n"
+"X-Launchpad-Export-Date: 2015-01-16 09:32+0000\n"
+"X-Generator: Launchpad (build 17303)\n"
 
 #: win32\PublicHubsFrame.cpp:420
 msgid " from Coral"
@@ -489,7 +489,7 @@ msgstr "ADL paieška"
 msgid "ADLSearch Properties"
 msgstr "ADL paieškos savybės"
 
-#: win32\AboutDlg.cpp:171 win32\MainWindow.cpp:409
+#: win32\AboutDlg.cpp:172 win32\MainWindow.cpp:409
 msgid "About DC++"
 msgstr "Apie DC++"
 
@@ -920,6 +920,10 @@ msgstr ""
 msgid "Click and drag to resize"
 msgstr ""
 
+#: win32\AdvancedPage.cpp:51
+msgid "Clickable chat links (disable on Wine)"
+msgstr ""
+
 #: win32\UsersFrame.cpp:101
 #, fuzzy
 msgid "Client type"
@@ -980,7 +984,7 @@ msgstr ""
 msgid "Community news"
 msgstr ""
 
-#: win32\AboutDlg.cpp:116
+#: win32\AboutDlg.cpp:117
 msgid "Compiler"
 msgstr ""
 
@@ -1456,7 +1460,7 @@ msgstr "Siunčiamas hub'ų sąrašas..."
 msgid "Downloading public hub list... (%1%)"
 msgstr "Siunčiamas hub'ų sąrašas..."
 
-#: win32\AboutDlg.cpp:162
+#: win32\AboutDlg.cpp:163
 msgid "Downloading..."
 msgstr "Siunčiama..."
 
@@ -1530,7 +1534,7 @@ msgstr ""
 msgid "Enable safe and compressed transfers"
 msgstr "Leisk saugius ir suglaudintus perdavimus"
 
-#: win32\AdvancedPage.cpp:52
+#: win32\AdvancedPage.cpp:53
 msgid "Enable segmented downloads"
 msgstr ""
 
@@ -1561,7 +1565,7 @@ msgstr ""
 msgid "Error loading the notepad file: %1%"
 msgstr ""
 
-#: win32\AboutDlg.cpp:207
+#: win32\AboutDlg.cpp:208
 #, fuzzy
 msgid "Error processing version information"
 msgstr "Asmeninė informacija"
@@ -1930,7 +1934,7 @@ msgid ""
 "in 10 minutes, the granted slot is removed."
 msgstr ""
 
-#: win32\AboutDlg.cpp:139
+#: win32\AboutDlg.cpp:140
 msgid "Greetz and Contributors"
 msgstr ""
 
@@ -2306,7 +2310,7 @@ msgstr "Kalba"
 msgid "Last message occured %1%"
 msgstr ""
 
-#: win32\AboutDlg.cpp:161
+#: win32\AboutDlg.cpp:162
 msgid "Latest stable version"
 msgstr ""
 
@@ -2332,7 +2336,7 @@ msgstr ""
 msgid "Launches your default web browser with the given URL."
 msgstr ""
 
-#: win32\AboutDlg.cpp:103
+#: win32\AboutDlg.cpp:104
 msgid ""
 "Leading project contributor: poy\n"
 "Ex-project contributor: Todd Pederzani\n"
@@ -2774,7 +2778,7 @@ msgstr "Nesiųsk naujų bylų, jei srautas viršija (KiB/s, 0 = neribota)"
 msgid "No plugin has been selected"
 msgstr ""
 
-#: win32\AboutDlg.cpp:157
+#: win32\AboutDlg.cpp:158
 msgid "No transfers yet"
 msgstr ""
 
@@ -3174,7 +3178,7 @@ msgstr "Greitas sujungimas"
 msgid "Rating"
 msgstr "Reitingas"
 
-#: win32\AboutDlg.cpp:156
+#: win32\AboutDlg.cpp:157
 #, c-format, boost-format
 msgid "Ratio (up/down): %1$0.2f"
 msgstr ""
@@ -3788,7 +3792,7 @@ msgstr "B"
 msgid "TLS Keyprint"
 msgstr ""
 
-#: win32\AboutDlg.cpp:112 win32\DirectoryListingFrame.cpp:68
+#: win32\AboutDlg.cpp:113 win32\DirectoryListingFrame.cpp:68
 #: win32\QueueFrame.cpp:58 win32\SearchFrame.cpp:61 win32\TransferView.cpp:980
 msgid "TTH"
 msgstr ""
@@ -3939,7 +3943,7 @@ msgstr "Iš viso:"
 msgid "Total slots"
 msgstr "Vietos"
 
-#: win32\AboutDlg.cpp:148
+#: win32\AboutDlg.cpp:149
 msgid "Totals"
 msgstr ""
 
@@ -4081,7 +4085,7 @@ msgstr "Vietos"
 msgid "Upload speed"
 msgstr "Išsiuntimai"
 
-#: win32\AboutDlg.cpp:152
+#: win32\AboutDlg.cpp:153
 #, boost-format
 msgid "Upload: %1%, Download: %2%"
 msgstr ""
@@ -4104,7 +4108,7 @@ msgstr "Išsiuntimai"
 msgid "Use CTRL for line history"
 msgstr "Naudok CTRL ankstesnėms eilutėms"
 
-#: win32\AdvancedPage.cpp:51
+#: win32\AdvancedPage.cpp:52
 msgid "Use Coral network for HTTP downloads (improves reliability)"
 msgstr ""
 

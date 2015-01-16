@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: win32\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2014-03-31 14:37+0200\n"
-"PO-Revision-Date: 2014-03-23 23:11+0000\n"
+"POT-Creation-Date: 2015-01-04 23:10+0100\n"
+"PO-Revision-Date: 2015-01-04 22:29+0000\n"
 "Last-Translator: poy <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -16,8 +16,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Launchpad-Export-Date: 2014-03-30 18:16+0000\n"
-"X-Generator: Launchpad (build 16967)\n"
+"X-Launchpad-Export-Date: 2015-01-16 09:33+0000\n"
+"X-Generator: Launchpad (build 17303)\n"
 
 #: win32\PublicHubsFrame.cpp:420
 msgid " from Coral"
@@ -478,7 +478,7 @@ msgstr "Recherche ADL"
 msgid "ADLSearch Properties"
 msgstr "Propriétés de la Recherche ADL"
 
-#: win32\AboutDlg.cpp:171 win32\MainWindow.cpp:409
+#: win32\AboutDlg.cpp:172 win32\MainWindow.cpp:409
 msgid "About DC++"
 msgstr "À propos de DC++"
 
@@ -931,6 +931,10 @@ msgstr ""
 msgid "Click and drag to resize"
 msgstr "Cliquez et faites glisser pour redimensionner"
 
+#: win32\AdvancedPage.cpp:51
+msgid "Clickable chat links (disable on Wine)"
+msgstr "Liens de chat cliquables (à désactiver sous Wine)"
+
 #: win32\UsersFrame.cpp:101
 msgid "Client type"
 msgstr "Type de client"
@@ -987,7 +991,7 @@ msgstr "Canal de communication"
 msgid "Community news"
 msgstr "Nouvelles de la communauté"
 
-#: win32\AboutDlg.cpp:116
+#: win32\AboutDlg.cpp:117
 msgid "Compiler"
 msgstr "Compilateur"
 
@@ -1454,7 +1458,7 @@ msgstr "Téléchargement de la liste de hubs publics..."
 msgid "Downloading public hub list... (%1%)"
 msgstr "Téléchargement de la liste de hubs publics... (%1%)"
 
-#: win32\AboutDlg.cpp:162
+#: win32\AboutDlg.cpp:163
 msgid "Downloading..."
 msgstr "Téléchargement..."
 
@@ -1524,7 +1528,7 @@ msgstr "Activer le mode absence quand la session Windows est bloquée"
 msgid "Enable safe and compressed transfers"
 msgstr "Activer les transferts sûrs et compressés"
 
-#: win32\AdvancedPage.cpp:52
+#: win32\AdvancedPage.cpp:53
 msgid "Enable segmented downloads"
 msgstr "Activer les téléchargements segmentés"
 
@@ -1553,7 +1557,7 @@ msgstr "Erreur lors de la génération du certificat"
 msgid "Error loading the notepad file: %1%"
 msgstr "Erreur lors du chargement du fichier du bloc-notes : %1%"
 
-#: win32\AboutDlg.cpp:207
+#: win32\AboutDlg.cpp:208
 msgid "Error processing version information"
 msgstr "Erreur lors du traitement des informations de version"
 
@@ -1898,7 +1902,7 @@ msgstr ""
 "Accorde un slot à l'utilisateur. Une fois qu'il est connecté, ou s'il ne se "
 "connecte pas dans les 10 minutes, le slot accordé ne l'est plus."
 
-#: win32\AboutDlg.cpp:139
+#: win32\AboutDlg.cpp:140
 msgid "Greetz and Contributors"
 msgstr "Remerciements et Contributeurs"
 
@@ -2265,7 +2269,7 @@ msgstr "Langue"
 msgid "Last message occured %1%"
 msgstr "Dernier message : %1%"
 
-#: win32\AboutDlg.cpp:161
+#: win32\AboutDlg.cpp:162
 msgid "Latest stable version"
 msgstr "Dernière version stable"
 
@@ -2297,7 +2301,7 @@ msgstr ""
 msgid "Launches your default web browser with the given URL."
 msgstr "Ouvre l'URL spécifiée dans votre navigateur web par défaut."
 
-#: win32\AboutDlg.cpp:103
+#: win32\AboutDlg.cpp:104
 msgid ""
 "Leading project contributor: poy\n"
 "Ex-project contributor: Todd Pederzani\n"
@@ -2718,7 +2722,7 @@ msgstr "Pas de nouveau téléch. si la vitesse > (Kio/s, 0 = désactivé)"
 msgid "No plugin has been selected"
 msgstr "Aucun plugin n'est sélectionné"
 
-#: win32\AboutDlg.cpp:157
+#: win32\AboutDlg.cpp:158
 msgid "No transfers yet"
 msgstr "Pas encore de transferts"
 
@@ -3115,7 +3119,7 @@ msgstr "Connexion Rapide"
 msgid "Rating"
 msgstr "Évaluation"
 
-#: win32\AboutDlg.cpp:156
+#: win32\AboutDlg.cpp:157
 #, c-format, boost-format
 msgid "Ratio (up/down): %1$0.2f"
 msgstr "Ratio (envoi/téléchargement) : %1$0.2f"
@@ -3732,7 +3736,7 @@ msgstr "To"
 msgid "TLS Keyprint"
 msgstr "Clé TLS"
 
-#: win32\AboutDlg.cpp:112 win32\DirectoryListingFrame.cpp:68
+#: win32\AboutDlg.cpp:113 win32\DirectoryListingFrame.cpp:68
 #: win32\QueueFrame.cpp:58 win32\SearchFrame.cpp:61 win32\TransferView.cpp:980
 msgid "TTH"
 msgstr "TTH"
@@ -3894,7 +3898,7 @@ msgstr "Taille totale :"
 msgid "Total slots"
 msgstr "Slots au total"
 
-#: win32\AboutDlg.cpp:148
+#: win32\AboutDlg.cpp:149
 msgid "Totals"
 msgstr "Totaux"
 
@@ -4033,7 +4037,7 @@ msgstr "Slots d'envoi"
 msgid "Upload speed"
 msgstr "Vitesse d'envoi"
 
-#: win32\AboutDlg.cpp:152
+#: win32\AboutDlg.cpp:153
 #, boost-format
 msgid "Upload: %1%, Download: %2%"
 msgstr "Envoi : %1%, Téléchargement : %2%"
@@ -4056,7 +4060,7 @@ msgstr "Envois"
 msgid "Use CTRL for line history"
 msgstr "Utiliser CTRL pour l'historique des lignes"
 
-#: win32\AdvancedPage.cpp:51
+#: win32\AdvancedPage.cpp:52
 msgid "Use Coral network for HTTP downloads (improves reliability)"
 msgstr ""
 "Utiliser le réseau Coral pour les téléchargements HTTP (améliore la "
@@ -4317,6 +4321,3 @@ msgstr "à"
 #: win32\ConnectivityManualPage.cpp:228
 msgid "transfer"
 msgstr "transfert"
-
-#~ msgid "Closes the current window."
-#~ msgstr "Ferme la fenêtre actuelle."

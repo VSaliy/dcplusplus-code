@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: win32\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2014-03-31 14:37+0200\n"
-"PO-Revision-Date: 2014-02-12 09:09+0000\n"
+"POT-Creation-Date: 2015-01-04 23:10+0100\n"
+"PO-Revision-Date: 2015-01-13 13:16+0000\n"
 "Last-Translator: Guybrush88 <Unknown>\n"
 "Language-Team: Italian language <netcelli@gmail.com>\n"
 "Language: \n"
@@ -16,8 +16,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2014-03-30 18:16+0000\n"
-"X-Generator: Launchpad (build 16967)\n"
+"X-Launchpad-Export-Date: 2015-01-16 09:33+0000\n"
+"X-Generator: Launchpad (build 17303)\n"
 "X-Poedit-Country: ITALY\n"
 "X-Poedit-Language: Italian\n"
 
@@ -123,7 +123,7 @@ msgstr "Porta %1%"
 #: win32\ConnectivityManualPage.cpp:235
 #, boost-format
 msgid "%1% port cannot be the same as the %2% port"
-msgstr ""
+msgstr "La porta %1% non può essere uguale alla porta %2%"
 
 #: win32\MainWindow.cpp:879
 #, boost-format
@@ -363,18 +363,16 @@ msgid "&Remove"
 msgstr "&Rimuovi"
 
 #: win32\TransferView.cpp:540
-#, fuzzy
 msgid "&Remove file from queue"
-msgstr "Rimuovi l'utente dalla coda"
+msgstr "&Rimuovi il file dalla coda"
 
 #: win32\MainWindow.cpp:362
 msgid "&Search\tCtrl+S"
 msgstr "&Ricerca\tCtrl+S"
 
 #: win32\HubFrame.cpp:1310
-#, fuzzy
 msgid "&Search hub"
-msgstr "Menu Ricerca"
+msgstr "&Cerca un hub"
 
 #: win32\QueueFrame.cpp:920 win32\WinUtil.cpp:1575 win32\UserInfoBase.h:159
 msgid "&Send private message"
@@ -482,13 +480,13 @@ msgstr "Ricerca ADL"
 msgid "ADLSearch Properties"
 msgstr "Proprietà della ricerca ADL"
 
-#: win32\AboutDlg.cpp:171 win32\MainWindow.cpp:409
+#: win32\AboutDlg.cpp:172 win32\MainWindow.cpp:409
 msgid "About DC++"
 msgstr "Riguardo a DC++"
 
 #: win32\UploadFilteringPage.cpp:76
 msgid "Above (minimum size)"
-msgstr ""
+msgstr "Al di sopra (dimensione minima)"
 
 #: win32\AdvancedPage.cpp:44
 msgid "Accept custom user commands from hub"
@@ -817,7 +815,7 @@ msgstr "Bip"
 
 #: win32\UploadFilteringPage.cpp:81
 msgid "Below (maximum size)"
-msgstr ""
+msgstr "Al di sotto (dimensione massima)"
 
 #: win32\ConnectivityManualPage.cpp:129
 msgid "Bind address"
@@ -836,6 +834,8 @@ msgid ""
 "Both Microsoft and DC++ are dropping support for your operating system "
 "(Windows XP). Please upgrade it as soon as possible."
 msgstr ""
+"Sia Microsoft che DC++ abbandoneranno il supporto per il tuo sistema "
+"operativo (Windows XP). Aggiornalo il prima possibile, per favore."
 
 #: win32\AdvancedPage.cpp:42
 msgid "Break on first ADLSearch match"
@@ -935,6 +935,10 @@ msgstr ""
 msgid "Click and drag to resize"
 msgstr "Clicca e trascina per ridimensionare"
 
+#: win32\AdvancedPage.cpp:51
+msgid "Clickable chat links (disable on Wine)"
+msgstr "Collegamenti della chat cliccabili (disabilitati su Wine)"
+
 #: win32\UsersFrame.cpp:101
 msgid "Client type"
 msgstr "Tipo di client"
@@ -991,7 +995,7 @@ msgstr "Canale di comunicazione"
 msgid "Community news"
 msgstr "Notizie della comunità"
 
-#: win32\AboutDlg.cpp:116
+#: win32\AboutDlg.cpp:117
 msgid "Compiler"
 msgstr "Compilatore"
 
@@ -1459,7 +1463,7 @@ msgstr "Download dell'elenco degli hub pubblici in corso..."
 msgid "Downloading public hub list... (%1%)"
 msgstr "Download dell'elenco degli hub pubblici in corso... (%1%)"
 
-#: win32\AboutDlg.cpp:162
+#: win32\AboutDlg.cpp:163
 msgid "Downloading..."
 msgstr "Download in corso..."
 
@@ -1531,7 +1535,7 @@ msgstr ""
 msgid "Enable safe and compressed transfers"
 msgstr "Abilita trasferimenti sicuri e compressi"
 
-#: win32\AdvancedPage.cpp:52
+#: win32\AdvancedPage.cpp:53
 msgid "Enable segmented downloads"
 msgstr "Abilita il download segmentato"
 
@@ -1560,7 +1564,7 @@ msgstr "errore di generazione del certificato"
 msgid "Error loading the notepad file: %1%"
 msgstr "Errore nel caricare il file del blocco note: %1%"
 
-#: win32\AboutDlg.cpp:207
+#: win32\AboutDlg.cpp:208
 msgid "Error processing version information"
 msgstr "Errore nell'ottenere le informazioni sulla versione"
 
@@ -1704,14 +1708,12 @@ msgid "File Lists"
 msgstr "Elenchi dei file"
 
 #: win32\UploadFilteringPage.cpp:103
-#, fuzzy
 msgid "File extension filtering"
-msgstr "Versione dell'estensione"
+msgstr "Filtro per estensione del file"
 
 #: win32\UploadFilteringPage.cpp:113
-#, fuzzy
 msgid "File extensions"
-msgstr "Estensioni"
+msgstr "Estensioni dei file"
 
 #: win32\QueueFrame.cpp:1114
 msgid "File is already finished"
@@ -1723,7 +1725,7 @@ msgstr "Elenco dei file scaricato"
 
 #: win32\UploadFilteringPage.cpp:87
 msgid "File name filtering with regular expressions"
-msgstr ""
+msgstr "Filtraggio del nome del file tramite delle espressioni regolari"
 
 #: win32\PluginPage.cpp:239
 msgid "File name: "
@@ -1793,9 +1795,8 @@ msgid "Filter:"
 msgstr "Filtra:"
 
 #: win32\SettingsDialog.cpp:174
-#, fuzzy
 msgid "Filtering"
-msgstr "Filtra:"
+msgstr "Filtraggio"
 
 #: win32\DirectoryListingFrame.cpp:372
 msgid "Find"
@@ -1909,7 +1910,7 @@ msgstr ""
 "Assegna uno slot all'utente remoto. Una volta connesso, o se non si connette "
 "entro 10 minuti, lo slot assegnato sarà rimosso"
 
-#: win32\AboutDlg.cpp:139
+#: win32\AboutDlg.cpp:140
 msgid "Greetz and Contributors"
 msgstr "Ringraziamenti e contribuenti"
 
@@ -2197,7 +2198,7 @@ msgstr "Numero di slot non valido"
 
 #: win32\ConnectivityManualPage.cpp:235
 msgid "Invalid value"
-msgstr ""
+msgstr "Valore non valido"
 
 #: win32\StringListDlg.cpp:81
 msgid "Item edition"
@@ -2271,11 +2272,11 @@ msgid "Language"
 msgstr "Lingua"
 
 #: win32\PrivateFrame.cpp:386
-#, fuzzy, boost-format
+#, boost-format
 msgid "Last message occured %1%"
-msgstr "Messaggio privato da %1%: %2%"
+msgstr "Ultimo messaggio ricevuto il %1%"
 
-#: win32\AboutDlg.cpp:161
+#: win32\AboutDlg.cpp:162
 msgid "Latest stable version"
 msgstr "Ultima versione stabile"
 
@@ -2284,6 +2285,8 @@ msgid ""
 "Launches your default web browser to the DuckDuckGo search engine with the "
 "specified search."
 msgstr ""
+"Apre nel tuo browser predefinito il motore di ricerca DuckDuckGo con la "
+"ricerca specificata."
 
 #: win32\WinUtil.cpp:585
 msgid ""
@@ -2305,7 +2308,7 @@ msgstr ""
 msgid "Launches your default web browser with the given URL."
 msgstr "Lancia il tuo browser predefinito con l'URL dato."
 
-#: win32\AboutDlg.cpp:103
+#: win32\AboutDlg.cpp:104
 msgid ""
 "Leading project contributor: poy\n"
 "Ex-project contributor: Todd Pederzani\n"
@@ -2351,6 +2354,7 @@ msgstr "Lista di configurazione"
 #: win32\PrivateFrame.cpp:416
 msgid "Lists the date and time when the last message was sent or received."
 msgstr ""
+"Elenca la data e l'ora in cui è stato inviato o ricevuto l'ultimo messaggio."
 
 #: win32\SplashWindow.cpp:64
 #, boost-format
@@ -2526,7 +2530,7 @@ msgstr "Inattività massima"
 
 #: win32\ExpertsPage.cpp:55
 msgid "Max protocol command length"
-msgstr ""
+msgstr "Lunghezza massima del comando del protocollo"
 
 #: win32\PublicHubsFrame.cpp:50
 msgid "Max users"
@@ -2725,7 +2729,7 @@ msgstr "Nessun nuovo download se la velocità eccede (kB/s, 0 = disabilita)"
 msgid "No plugin has been selected"
 msgstr "Non è stato selezionato alcun plugin"
 
-#: win32\AboutDlg.cpp:157
+#: win32\AboutDlg.cpp:158
 msgid "No transfers yet"
 msgstr "Nessun trasferimento"
 
@@ -2800,7 +2804,7 @@ msgstr "Utenti in linea"
 
 #: win32\UploadFilteringPage.cpp:68
 msgid "Only share files whose file size is above/below"
-msgstr ""
+msgstr "Condividi solamente dei file la cui dimensione è maggiore/minore di"
 
 #: win32\FinishedFrameBase.h:146
 msgid "Only show fully downloaded files"
@@ -2945,12 +2949,11 @@ msgstr "Percorso"
 
 #: win32\UploadFilteringPage.cpp:119
 msgid "Path filtering"
-msgstr ""
+msgstr "Filtraggio in base al percorso"
 
 #: win32\UploadFilteringPage.cpp:129
-#, fuzzy
 msgid "Paths"
-msgstr "Percorso"
+msgstr "Percorsi"
 
 #: win32\HashProgressDlg.cpp:184
 msgid "Pause hashing"
@@ -3121,7 +3124,7 @@ msgstr "Connessione rapida"
 msgid "Rating"
 msgstr "Valutazione"
 
-#: win32\AboutDlg.cpp:156
+#: win32\AboutDlg.cpp:157
 #, c-format, boost-format
 msgid "Ratio (up/down): %1$0.2f"
 msgstr "Rapporto (up/down): %1$0.2f"
@@ -3254,9 +3257,8 @@ msgid "Regular Expression"
 msgstr "Espressione regolare"
 
 #: win32\UploadFilteringPage.cpp:97
-#, fuzzy
 msgid "Regular expressions"
-msgstr "Espressione regolare"
+msgstr "Espressioni regolari"
 
 #: win32\PublicHubsFrame.cpp:51
 msgid "Reliability"
@@ -3481,6 +3483,10 @@ msgid ""
 "with the message you specified, or the default away message configured in "
 "the Personal information settings page."
 msgstr ""
+"Imposta lo stato di assenza. Si risponderà alle nuove finestre dei messaggi "
+"privati, una volta, con il messaggio specificato, oppure il messaggio "
+"predefinito di assenza configurato nella pagina delle impostazioni delle "
+"informazioni personali."
 
 #: win32\WinUtil.cpp:578
 msgid ""
@@ -3736,7 +3742,7 @@ msgstr "TB"
 msgid "TLS Keyprint"
 msgstr "Keyprint TLS"
 
-#: win32\AboutDlg.cpp:112 win32\DirectoryListingFrame.cpp:68
+#: win32\AboutDlg.cpp:113 win32\DirectoryListingFrame.cpp:68
 #: win32\QueueFrame.cpp:58 win32\SearchFrame.cpp:61 win32\TransferView.cpp:980
 msgid "TTH"
 msgstr "TTH"
@@ -3900,7 +3906,7 @@ msgstr "Dimensione totale:"
 msgid "Total slots"
 msgstr "Slot totali"
 
-#: win32\AboutDlg.cpp:148
+#: win32\AboutDlg.cpp:149
 msgid "Totals"
 msgstr "Totali"
 
@@ -4038,7 +4044,7 @@ msgstr "Slot di upload"
 msgid "Upload speed"
 msgstr "Velocità di upload"
 
-#: win32\AboutDlg.cpp:152
+#: win32\AboutDlg.cpp:153
 #, boost-format
 msgid "Upload: %1%, Download: %2%"
 msgstr "Upload: %1%, Download: %2%"
@@ -4061,7 +4067,7 @@ msgstr "Upload"
 msgid "Use CTRL for line history"
 msgstr "Usa CTRL per la cronologia delle righe"
 
-#: win32\AdvancedPage.cpp:51
+#: win32\AdvancedPage.cpp:52
 msgid "Use Coral network for HTTP downloads (improves reliability)"
 msgstr "Utilizza la rete Coral per i download HTTP (maggiore affidabilità)"
 
@@ -4079,15 +4085,16 @@ msgstr "Usa i limiti secondari sulla banda da"
 
 #: win32\UploadFilteringPage.cpp:115
 msgid "Use semicolon to separate multiple extensions."
-msgstr ""
+msgstr "Utilizza un punto e virgola per separare delle estensioni multiple."
 
 #: win32\UploadFilteringPage.cpp:131
 msgid "Use semicolon to separate multiple paths."
-msgstr ""
+msgstr "Utilizza un punto e virgola per separare dei percorsi multipli."
 
 #: win32\UploadFilteringPage.cpp:99
 msgid "Use semicolon to separate multiple regular expressions."
 msgstr ""
+"Utilizza un punto e virgola per separare delle espressioni regolari multiple."
 
 #: win32\TabsPage.cpp:79
 msgid "Use standard Windows tabs"
@@ -4234,7 +4241,7 @@ msgstr "Finestre"
 
 #: win32\MainWindow.cpp:275
 msgid "Windows XP is too old"
-msgstr ""
+msgstr "Windows XP è troppo vecchio"
 
 #: win32\ExpertsPage.cpp:44
 msgid "Write buffer size"
@@ -4282,9 +4289,8 @@ msgid "country"
 msgstr "paese"
 
 #: win32\ConnectivityManualPage.cpp:223
-#, fuzzy
 msgid "encrypted transfer"
-msgstr "Trasferimento cifrato"
+msgstr "trasferimento cifrato"
 
 #: win32\DirectoryListingFrame.cpp:1525
 msgid "end"
@@ -4319,9 +4325,5 @@ msgid "to"
 msgstr "a"
 
 #: win32\ConnectivityManualPage.cpp:228
-#, fuzzy
 msgid "transfer"
-msgstr "Trasferimento"
-
-#~ msgid "Closes the current window."
-#~ msgstr "Chiude la finestra corrente."
+msgstr "trasferimento"

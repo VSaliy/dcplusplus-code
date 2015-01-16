@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2014-03-31 14:37+0200\n"
+"POT-Creation-Date: 2015-01-04 23:10+0100\n"
 "PO-Revision-Date: 2012-05-16 01:15+0000\n"
 "Last-Translator: Launchpad Translations Administrators <Unknown>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
@@ -16,8 +16,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2014-03-30 18:16+0000\n"
-"X-Generator: Launchpad (build 16967)\n"
+"X-Launchpad-Export-Date: 2015-01-16 09:32+0000\n"
+"X-Generator: Launchpad (build 17303)\n"
 
 #: win32\PublicHubsFrame.cpp:420
 msgid " from Coral"
@@ -485,7 +485,7 @@ msgstr "ADL Search"
 msgid "ADLSearch Properties"
 msgstr "ADLSearch Properties"
 
-#: win32\AboutDlg.cpp:171 win32\MainWindow.cpp:409
+#: win32\AboutDlg.cpp:172 win32\MainWindow.cpp:409
 msgid "About DC++"
 msgstr "About DC++"
 
@@ -913,6 +913,10 @@ msgstr ""
 msgid "Click and drag to resize"
 msgstr "Click and drag to resize"
 
+#: win32\AdvancedPage.cpp:51
+msgid "Clickable chat links (disable on Wine)"
+msgstr ""
+
 #: win32\UsersFrame.cpp:101
 msgid "Client type"
 msgstr "Client type"
@@ -970,7 +974,7 @@ msgstr "Community news"
 msgid "Community news"
 msgstr "Community news"
 
-#: win32\AboutDlg.cpp:116
+#: win32\AboutDlg.cpp:117
 msgid "Compiler"
 msgstr ""
 
@@ -1433,7 +1437,7 @@ msgstr "Downloading public hub list..."
 msgid "Downloading public hub list... (%1%)"
 msgstr "Downloading public hub list... (%1%)"
 
-#: win32\AboutDlg.cpp:162
+#: win32\AboutDlg.cpp:163
 msgid "Downloading..."
 msgstr "Downloading..."
 
@@ -1505,7 +1509,7 @@ msgstr ""
 msgid "Enable safe and compressed transfers"
 msgstr "Enable safe and compressed transfers"
 
-#: win32\AdvancedPage.cpp:52
+#: win32\AdvancedPage.cpp:53
 msgid "Enable segmented downloads"
 msgstr "Enable segmented downloads"
 
@@ -1534,7 +1538,7 @@ msgstr "Error generating certificate"
 msgid "Error loading the notepad file: %1%"
 msgstr "Error loading the notepad file: %1%"
 
-#: win32\AboutDlg.cpp:207
+#: win32\AboutDlg.cpp:208
 msgid "Error processing version information"
 msgstr "Error processing version information"
 
@@ -1880,7 +1884,7 @@ msgid ""
 "in 10 minutes, the granted slot is removed."
 msgstr ""
 
-#: win32\AboutDlg.cpp:139
+#: win32\AboutDlg.cpp:140
 msgid "Greetz and Contributors"
 msgstr "Greetz and Contributors"
 
@@ -2239,7 +2243,7 @@ msgstr "Language"
 msgid "Last message occured %1%"
 msgstr "Private message from %1%: %2%"
 
-#: win32\AboutDlg.cpp:161
+#: win32\AboutDlg.cpp:162
 msgid "Latest stable version"
 msgstr "Latest stable version"
 
@@ -2265,7 +2269,7 @@ msgstr ""
 msgid "Launches your default web browser with the given URL."
 msgstr ""
 
-#: win32\AboutDlg.cpp:103
+#: win32\AboutDlg.cpp:104
 msgid ""
 "Leading project contributor: poy\n"
 "Ex-project contributor: Todd Pederzani\n"
@@ -2679,7 +2683,7 @@ msgstr "No new downloads if speed exceeds (KiB/s, 0 = disable)"
 msgid "No plugin has been selected"
 msgstr ""
 
-#: win32\AboutDlg.cpp:157
+#: win32\AboutDlg.cpp:158
 msgid "No transfers yet"
 msgstr "No transfers yet"
 
@@ -3068,7 +3072,7 @@ msgstr "Quick Connect"
 msgid "Rating"
 msgstr "Rating"
 
-#: win32\AboutDlg.cpp:156
+#: win32\AboutDlg.cpp:157
 #, c-format, boost-format
 msgid "Ratio (up/down): %1$0.2f"
 msgstr "Ratio (up/down): %1$0.2f"
@@ -3669,7 +3673,7 @@ msgstr "TB"
 msgid "TLS Keyprint"
 msgstr "TLS Keyprint"
 
-#: win32\AboutDlg.cpp:112 win32\DirectoryListingFrame.cpp:68
+#: win32\AboutDlg.cpp:113 win32\DirectoryListingFrame.cpp:68
 #: win32\QueueFrame.cpp:58 win32\SearchFrame.cpp:61 win32\TransferView.cpp:980
 msgid "TTH"
 msgstr "TTH"
@@ -3826,7 +3830,7 @@ msgstr "Total size:"
 msgid "Total slots"
 msgstr "Total slots"
 
-#: win32\AboutDlg.cpp:148
+#: win32\AboutDlg.cpp:149
 msgid "Totals"
 msgstr "Totals"
 
@@ -3964,7 +3968,7 @@ msgstr "Upload slots"
 msgid "Upload speed"
 msgstr "Upload speed"
 
-#: win32\AboutDlg.cpp:152
+#: win32\AboutDlg.cpp:153
 #, boost-format
 msgid "Upload: %1%, Download: %2%"
 msgstr "Upload: %1%, Download: %2%"
@@ -3987,7 +3991,7 @@ msgstr "Uploads"
 msgid "Use CTRL for line history"
 msgstr "Use CTRL for line history"
 
-#: win32\AdvancedPage.cpp:51
+#: win32\AdvancedPage.cpp:52
 msgid "Use Coral network for HTTP downloads (improves reliability)"
 msgstr "Use Coral network for HTTP downloads (improves reliability)"
 

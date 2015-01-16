@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2014-03-31 14:37+0200\n"
-"PO-Revision-Date: 2013-12-19 18:11+0000\n"
+"POT-Creation-Date: 2015-01-04 23:09+0100\n"
+"PO-Revision-Date: 2014-11-04 15:10+0000\n"
 "Last-Translator: Guybrush88 <Unknown>\n"
 "Language-Team: Italian language <netcelli@gmail.com>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-03-30 18:17+0000\n"
-"X-Generator: Launchpad (build 16967)\n"
+"X-Launchpad-Export-Date: 2015-01-16 09:33+0000\n"
+"X-Generator: Launchpad (build 17303)\n"
 "X-Poedit-Country: ITALY\n"
 "X-Poedit-Language: Italian\n"
 
@@ -25,32 +25,32 @@ msgstr ""
 msgid " - Queued: %1%"
 msgstr " - Accodati: %1%"
 
-#: dcpp\Util.cpp:571
+#: dcpp\Util.cpp:572
 #, c-format, boost-format
 msgid "%'lld B"
 msgstr "%'lld B"
 
-#: dcpp\Util.cpp:533
+#: dcpp\Util.cpp:534
 #, c-format, boost-format
 msgid "%.02f GiB"
 msgstr "%.02f GiB"
 
-#: dcpp\Util.cpp:529
+#: dcpp\Util.cpp:530
 #, c-format, boost-format
 msgid "%.02f KiB"
 msgstr "%.02f KiB"
 
-#: dcpp\Util.cpp:531
+#: dcpp\Util.cpp:532
 #, c-format, boost-format
 msgid "%.02f MiB"
 msgstr "%.02f MiB"
 
-#: dcpp\Util.cpp:537
+#: dcpp\Util.cpp:538
 #, c-format, boost-format
 msgid "%.02f PiB"
 msgstr "%.02f PiB"
 
-#: dcpp\Util.cpp:535
+#: dcpp\Util.cpp:536
 #, c-format, boost-format
 msgid "%.02f TiB"
 msgstr "%.02f TiB"
@@ -76,7 +76,7 @@ msgstr "%1% (%2%)"
 msgid "%1% (%2%) has same CID {%3%} as %4% (%5%), ignoring"
 msgstr "%1% (%2%) ha lo stesso CID {%3%} di %4% (%5%), ignora"
 
-#: dcpp\NmdcHub.cpp:293
+#: dcpp\NmdcHub.cpp:295
 #, boost-format
 msgid "%1% (Nick unknown)"
 msgstr "%1% (Soprannome sconosciuto)"
@@ -126,12 +126,12 @@ msgstr "%1%/s"
 msgid "%1%: File not available"
 msgstr "%1%: File non disponibile"
 
-#: dcpp\Util.cpp:527
+#: dcpp\Util.cpp:528
 #, c-format, boost-format
 msgid "%d B"
 msgstr "%d B"
 
-#: dcpp\Util.cpp:567
+#: dcpp\Util.cpp:568
 #, c-format, boost-format
 msgid "%s B"
 msgstr "%s B"
@@ -197,12 +197,14 @@ msgstr "Inconsistenza CRC32 (Controllo SFV)"
 msgid "CRC32 inconsistency (SFV-Check): %1%"
 msgstr "Inconsistenza CRC32 (SFV-Check): %1%"
 
-#: dcpp\CryptoManager.cpp:626
+#: dcpp\CryptoManager.cpp:577
 #, boost-format
 msgid ""
 "Certificate verification for %1% failed with error: %2% (certificate "
 "KeyPrint: %3%)"
 msgstr ""
+"Verifica del certificato per %1% fallita con l'errore: %2% (KeyPrint del "
+"certificato: %3%)"
 
 #: dcpp\SearchManager.cpp:38
 msgid "Compressed"
@@ -357,13 +359,13 @@ msgid "Error during compression"
 msgstr "Errore durante la compressione"
 
 #: dcpp\BZUtils.cpp:76 dcpp\BZUtils.cpp:98 dcpp\BZUtils.cpp:101
-#: dcpp\CryptoManager.cpp:664 dcpp\CryptoManager.cpp:683
-#: dcpp\CryptoManager.cpp:697 dcpp\ZUtils.cpp:106 dcpp\ZUtils.cpp:131
+#: dcpp\CryptoManager.cpp:615 dcpp\CryptoManager.cpp:634
+#: dcpp\CryptoManager.cpp:648 dcpp\ZUtils.cpp:106 dcpp\ZUtils.cpp:131
 #: dcpp\ZUtils.cpp:145
 msgid "Error during decompression"
 msgstr "Errore durante la decompressione"
 
-#: dcpp\CryptoManager.cpp:136
+#: dcpp\CryptoManager.cpp:139
 msgid "Error generating certificate"
 msgstr "Errore nel generare il certificato"
 
@@ -404,15 +406,15 @@ msgstr "Tentativo di ottenere indirizzo IP esterno fallito"
 msgid "Failed to initialize the %1% interface"
 msgstr "L'inizializzazione dell'interfaccia %1% è fallita"
 
-#: dcpp\CryptoManager.cpp:409
+#: dcpp\CryptoManager.cpp:372
 msgid "Failed to load certificate file"
 msgstr "Impossibile caricare il file del certificato"
 
-#: dcpp\CryptoManager.cpp:417
+#: dcpp\CryptoManager.cpp:380
 msgid "Failed to load private key"
 msgstr "Impossibile caricare la chiave privata"
 
-#: dcpp\CryptoManager.cpp:430
+#: dcpp\CryptoManager.cpp:393
 #, boost-format
 msgid "Failed to load trusted certificate from %1%"
 msgstr "Fallito il caricamento del certificato di affidabilità da %1%"
@@ -491,7 +493,7 @@ msgstr "Indicizzazione completata: %1% (%2%)"
 msgid "Full tree does not match TTH root"
 msgstr "L'albero delle cartelle non è coerente con la radice TTH"
 
-#: dcpp\CryptoManager.cpp:398
+#: dcpp\CryptoManager.cpp:361
 msgid "Generated new TLS certificate"
 msgstr "È stato creato un nuovo certificato TLS"
 
@@ -503,6 +505,7 @@ msgstr "Generico"
 #, boost-format
 msgid "HTTP file download failed to create file %1%, error: %2%"
 msgstr ""
+"Il download HTTP del file ha fallito la creazione del file %1%, errore: %2%"
 
 #: dcpp\DCPlusPlus.cpp:121
 msgid "Hash database"
@@ -557,7 +560,7 @@ msgstr "Nome di file non valido trovato facendo l'hashing della cartella %1%"
 msgid "Invalid regular expression: %1%"
 msgstr "Espressione regolare non valida: %1%"
 
-#: dcpp\SettingsManager.cpp:650
+#: dcpp\SettingsManager.cpp:658
 msgid "Invalid search type name"
 msgstr "NOme del tipo di file da ricercare non valido"
 
@@ -596,7 +599,7 @@ msgstr "Dipendenze mancanti per %1%"
 msgid "More bytes written than requested"
 msgstr "Sono stati scritti piu byte del necessario"
 
-#: dcpp\CryptoManager.cpp:125
+#: dcpp\CryptoManager.cpp:128
 msgid "No certificate file chosen"
 msgstr "Nessun file di certificato scelto"
 
@@ -608,7 +611,7 @@ msgstr "Nessuna cartella specificata"
 msgid "No port mapping interface available"
 msgstr "Nessuna interfaccia di mappatura delle porte disponibile"
 
-#: dcpp\CryptoManager.cpp:122
+#: dcpp\CryptoManager.cpp:125
 msgid "No private key file chosen"
 msgstr "Nessun file di chiave privata scelto"
 
@@ -616,7 +619,7 @@ msgstr "Nessun file di chiave privata scelto"
 msgid "No slots available"
 msgstr "Nessuno slot disponibile"
 
-#: dcpp\SettingsManager.cpp:708
+#: dcpp\SettingsManager.cpp:716
 msgid "No such search type"
 msgstr "Tipo di ricerca inesistente"
 
@@ -733,12 +736,12 @@ msgstr ""
 "Rimosse con successo le mappature delle porte dal dispositivo %1% con "
 "l'interfaccia %2%"
 
-#: dcpp\CryptoManager.cpp:400
+#: dcpp\CryptoManager.cpp:363
 #, boost-format
 msgid "TLS disabled, failed to generate certificate: %1%"
 msgstr "TLS disattivato, il  file di certificato non è stato creato: %1%"
 
-#: dcpp\CryptoManager.cpp:390
+#: dcpp\CryptoManager.cpp:353
 msgid "TLS disabled, no certificate file set"
 msgstr "TLS disattivato, nessun file di certificato impostato"
 
@@ -767,12 +770,16 @@ msgid ""
 "The encrypted transfer port cannot be the same as the transfer port, "
 "encrypted transfers will be disabled"
 msgstr ""
+"La porta del trasferimento cifrato non può essere la stessa della porta di "
+"trasferimento, i trasferimenti cifrati verranno disabilitati"
 
 #: dcpp\QueueManager.cpp:1494
 #, boost-format
 msgid ""
 "The queued file %1% already exists in your share, removing from the queue"
 msgstr ""
+"Il file in coda %1% esiste già nella tua condivisione, rimozione dalla coda "
+"in corso"
 
 #: dcpp\Socket.cpp:479
 msgid "The socks server doesn't support login / password authentication"
@@ -799,7 +806,7 @@ msgstr "Questo file è già stato scaricato"
 msgid "This file is already queued"
 msgstr "Questo file è già presente nella coda"
 
-#: dcpp\NmdcHub.cpp:946
+#: dcpp\NmdcHub.cpp:948
 #, boost-format
 msgid ""
 "This hub is trying to use your client to spam %1%, please urge hub owner to "
@@ -808,7 +815,7 @@ msgstr ""
 "Questo hub sta cercando di usare il tuo client per spammare %1%, avvisa il "
 "proprietario dell'hub per correggere il problema"
 
-#: dcpp\SettingsManager.cpp:654 dcpp\SettingsManager.cpp:676
+#: dcpp\SettingsManager.cpp:662 dcpp\SettingsManager.cpp:684
 msgid "This search type already exists"
 msgstr "Questo tipo di ricerca è già presente"
 
@@ -902,7 +909,7 @@ msgstr "Stai cercando di scaricare da te stesso!"
 msgid "disabled"
 msgstr "disabilitato"
 
-#: dcpp\SettingsManager.cpp:202 dcpp\SettingsManager.cpp:203
+#: dcpp\SettingsManager.cpp:204 dcpp\SettingsManager.cpp:205
 msgid "downloaded from"
 msgstr "scaricato da"
 
@@ -915,6 +922,6 @@ msgstr "abilitato - %1%"
 msgid "undefined"
 msgstr "non definito"
 
-#: dcpp\SettingsManager.cpp:204
+#: dcpp\SettingsManager.cpp:206
 msgid "uploaded to"
 msgstr "upload eseguito da"

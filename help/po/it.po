@@ -7,19 +7,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2014-03-23 23:05+0100\n"
-"PO-Revision-Date: 2013-12-19 18:16+0000\n"
+"POT-Creation-Date: 2015-01-04 23:09+0100\n"
+"PO-Revision-Date: 2015-01-13 15:17+0000\n"
 "Last-Translator: Guybrush88 <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-03-30 18:17+0000\n"
-"X-Generator: Launchpad (build 16967)\n"
+"X-Launchpad-Export-Date: 2015-01-16 09:33+0000\n"
+"X-Generator: Launchpad (build 17303)\n"
 
 #. type: Content of: <html><body><ul><li><div><placeholder><a>
-#: help/chat_commands.html:9 help/index.html:144
+#: help/chat_commands.html:9 help/index.html:148
 msgid "Chat Commands"
 msgstr "Comandi della chat"
 
@@ -153,6 +153,8 @@ msgid ""
 "Starts a direct encrypted communication channel to avoid spying on your "
 "private messages."
 msgstr ""
+"Avvia un canale diretto di comunicazione cifrata per evitare che i tuoi "
+"messaggi privati vengano spiati."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:55
@@ -197,9 +199,9 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:70
-#, fuzzy
 msgid "Lists the date and time when the last message was sent or received."
-msgstr "La data e l'ora in cui il file è stato aggiunto alla coda."
+msgstr ""
+"Elenca la data e l'ora in cui è stato inviato o ricevuto l'ultimo messaggio."
 
 #. type: Content of: <html><body><h2>
 #: help/chat_commands.html:72
@@ -277,6 +279,10 @@ msgid ""
 "with the message you specified, or the default away message configured in "
 "the <a po4a-id=0>Personal information</a> settings page."
 msgstr ""
+"Imposta lo stato di assenza. Si risponderà alle nuove finestre dei messaggi "
+"privati, una volta, con il messaggio specificato, oppure il messaggio "
+"predefinito di assenza configurato nella pagina delle impostazioni delle <a "
+"po4a-id=0>informazioni personali</a>."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:105
@@ -285,12 +291,11 @@ msgstr "Disattiva lo stato di assenza."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:107
-#, fuzzy
 msgid ""
 "Launches your default web browser to the DuckDuckGo search engine with the "
 "specified search."
 msgstr ""
-"Apre il tuo browser predefinito alla pagina di ricerca di Google con la "
+"Apre nel tuo browser predefinito il motore di ricerca DuckDuckGo con la "
 "ricerca specificata."
 
 #. type: Content of: <html><body><dl><dd>
@@ -338,11 +343,12 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:126
-#, fuzzy
 msgid ""
 "Displays available commands. (The ones listed on this page.) Optionally, you "
 "can specify &quot;brief&quot; to have a brief listing."
-msgstr "Visuazza i comandi disponibili. (Quelli elencati in questa pagina)"
+msgstr ""
+"Mostra i comandi disponibili (quelli elencati in questa pagina). In "
+"alternativa, puoi specificare &quot;brief&quot; per avere un elenco breve."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:128
@@ -498,6 +504,11 @@ msgid ""
 "list views. For commands unique to different windows refer to the Help page "
 "of the corresponding window."
 msgstr ""
+"Questi sono i comandi che sono disponibili nella maggior parte delle "
+"finestre come le opzioni del menù che appare con il tasto destro. Offrono "
+"funzioni generali per gli elementi delle varie visualizzazioni degli "
+"elenchi. Per i comandi unici per diverse finestre consulta la pagina di "
+"aiuto della finestra corrispondente."
 
 #. type: Content of: <html><body><dl><dt>
 #: H:/Dev/DC++/repo/help/commands_listview.inc:2
@@ -550,6 +561,9 @@ msgid ""
 "containing users.  For commands unique to each specific window, refer to the "
 "help page of the corresponding window."
 msgstr ""
+"Questi comandi sono disponibili nei menù di scelta rapida di vari elenchi "
+"contenenti gli utenti. Per i comandi unici per ogni finestra specifica, "
+"consulta la pagina di aiuto della finestra corrispondente."
 
 #. type: Content of: <html><body><dl><dt>
 #: H:/Dev/DC++/repo/help/commands_user_general.inc:2
@@ -574,6 +588,11 @@ msgid ""
 "certain file list functions in a partial list window until you get the whole "
 "list using the \"Download full list\" button."
 msgstr ""
+"Scarica solamente i pezzi richiestin degli elenchi di file degli utenti "
+"selezionati in forma di un elenco di file parziale. Si noti che si potrebbe "
+"non essere in grado di sfruttare pienamente alcune funzioni degli elenchi di "
+"file in una finestra di elenco parziale finché non si ottenga l'intero "
+"elenco utilizzando il pulsante \"Scarica l'elenco completo\"."
 
 #. type: Content of: <html><body><dl><dt>
 #: H:/Dev/DC++/repo/help/commands_user_general.inc:6
@@ -589,6 +608,10 @@ msgid ""
 "matches are found in one user's file list, she will be added as a source for "
 "the relevant downloads."
 msgstr ""
+"Fa corrispondere i file nella coda dei download con quelli negli elenchi dei "
+"file degli utenti selezionati. Due file sono considerati uguali se il loro "
+"TTH è lo stesso. Se le corrispondenze vengono riscontrate nell'elenco dei "
+"file di un utente, sarà aggiunto come fonte per i download relativi."
 
 #. type: Content of: <html><body><dl><dt>
 #: H:/Dev/DC++/repo/help/commands_user_general.inc:10
@@ -613,19 +636,19 @@ msgstr "Invia un messaggio privato"
 #: help/index.html:61 help/index.html:62 help/index.html:63 help/index.html:64
 #: help/index.html:65 help/index.html:66 help/index.html:72 help/index.html:73
 #: help/index.html:75 help/index.html:76 help/index.html:77 help/index.html:80
-#: help/index.html:82 help/index.html:83 help/index.html:86 help/index.html:87
-#: help/index.html:89 help/index.html:91 help/index.html:92 help/index.html:93
-#: help/index.html:96 help/index.html:98 help/index.html:100
-#: help/index.html:104 help/index.html:106 help/index.html:107
-#: help/index.html:108 help/index.html:109 help/index.html:110
-#: help/index.html:113 help/index.html:119 help/index.html:120
-#: help/index.html:121 help/index.html:122 help/index.html:123
-#: help/index.html:124 help/index.html:125 help/index.html:126
-#: help/index.html:127 help/index.html:128 help/index.html:129
-#: help/index.html:130 help/index.html:131 help/index.html:132
-#: help/index.html:138 help/index.html:139 help/index.html:140
-#: help/index.html:144 help/index.html:150 help/index.html:155
-#: help/index.html:162 help/index.html:166 help/keyboard_commands.html:35
+#: help/index.html:82 help/index.html:83 help/index.html:87 help/index.html:89
+#: help/index.html:93 help/index.html:95 help/index.html:96 help/index.html:97
+#: help/index.html:100 help/index.html:102 help/index.html:104
+#: help/index.html:108 help/index.html:110 help/index.html:111
+#: help/index.html:112 help/index.html:113 help/index.html:114
+#: help/index.html:117 help/index.html:123 help/index.html:124
+#: help/index.html:125 help/index.html:126 help/index.html:127
+#: help/index.html:128 help/index.html:129 help/index.html:130
+#: help/index.html:131 help/index.html:132 help/index.html:133
+#: help/index.html:134 help/index.html:135 help/index.html:136
+#: help/index.html:142 help/index.html:143 help/index.html:144
+#: help/index.html:148 help/index.html:154 help/index.html:159
+#: help/index.html:166 help/index.html:170 help/keyboard_commands.html:35
 #: help/keyboard_commands.html:41 help/keyboard_commands.html:46
 #: help/keyboard_commands.html:48 help/keyboard_commands.html:52
 #: help/keyboard_commands.html:55 help/keyboard_commands.html:58
@@ -848,7 +871,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/dev_applypatch.html:9 help/index.html:139
+#: help/dev_applypatch.html:9 help/index.html:143
 msgid "Applying patches"
 msgstr "Applicazione degli aggiornamenti"
 
@@ -911,7 +934,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/dev_createpatch.html:9 help/index.html:140
+#: help/dev_createpatch.html:9 help/index.html:144
 msgid "Creating patches"
 msgstr "Creazione degli aggiornamenti"
 
@@ -951,6 +974,9 @@ msgid ""
 "is placed. Other extensions for the patch (such as .txt)  are acceptable, "
 "there is no standard."
 msgstr ""
+"4. Un file, my-diff.diff, sarà ora creato nella directory in cui GNU Diff è "
+"collocato. Altre estensioni per la patch (ad esempio .txt) sono accettabili, "
+"non esiste uno standard."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dev_createpatch.html:27
@@ -981,6 +1007,8 @@ msgid ""
 "<i>dcplusplus_orig</i> is the folder that is untouched and what the changes "
 "is going to differ against."
 msgstr ""
+"<i>dcplusplus_orig</i> è la cartella intatta e a cosa verranno applicati i "
+"cambiamenti."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dev_createpatch.html:41
@@ -1208,6 +1236,9 @@ msgid ""
 "To return the toolbar to the state it was in when the dialog box was opened "
 "(undo changes), click the Reset button."
 msgstr ""
+"Per riportare la barra degli strumenti nello stato in cui era quando è stata "
+"aperta la finestra di dialogo (annullare le modifiche), fai clic sul "
+"pulsante Ripristina."
 
 #. type: Content of: <html><body><ol><li>
 #: help/dialog_customize_tb.html:18
@@ -1334,6 +1365,9 @@ msgid ""
 "Add the current group definition to the list of favorite hub groups. No "
 "other group shall have the same name as the one trying to be added."
 msgstr ""
+"Aggiungi la definizione di gruppo corrente all'elenco dei gruppi di hub "
+"preferiti. Nessun altro gruppo deve avere lo stesso nome di quello che stai "
+"cercando di aggiungere."
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
 #: help/dialog_favorite_hub.html:9 help/index.html:61
@@ -1576,6 +1610,8 @@ msgid ""
 "Add the hub list(s) specified in the field on the top left to your list of "
 "public hub lists."
 msgstr ""
+"Aggiunge l'elenco (o gli elenchi) degli hub specificato in alto a sinistra "
+"nel tuo elenco degli elenchi degli hub pubblici."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_public_hub_lists.html:22 help/dialog_string_list.html:23
@@ -2072,7 +2108,7 @@ msgstr "Definizione delle corrispondenze degli utenti"
 
 #. type: Content of: <html><body><p><placeholder><a>
 #: help/dialog_user_matching.html:13 help/dialog_user_matching.html:20
-#: help/index.html:110 help/settings_styles.html:80
+#: help/index.html:114 help/settings_styles.html:80
 msgid "User matching"
 msgstr "Corrispondenze degli utenti"
 
@@ -2085,7 +2121,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd><placeholder><a>
-#: help/dialog_user_matching.html:21 help/index.html:91
+#: help/dialog_user_matching.html:21 help/index.html:95
 #: help/settings_styles.html:9 help/settings_user_matching.html:50
 msgid "Styles"
 msgstr "Stili"
@@ -2176,7 +2212,7 @@ msgstr "La proprietà dell'utente da far corrispondere alla regola corrente."
 #. type: Content of: <html><body><h3>
 #: help/dialog_user_matching.html:56
 msgid "Pattern text-box"
-msgstr ""
+msgstr "Casella di testo del modello"
 
 #. type: Content of: <html><body><p>
 #: help/dialog_user_matching.html:58
@@ -2229,7 +2265,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_connection.html:10 help/index.html:120
+#: help/faq_connection.html:10 help/index.html:124
 msgid "How to set up connection manually?"
 msgstr "Come si imposta manualmente la connessione?"
 
@@ -2332,6 +2368,8 @@ msgid ""
 "To see your <i>internal IP address</i> go to the Windows Start menu, click "
 "Run... and type : cmd /k ipconfig"
 msgstr ""
+"Per vedere il tuo <i>indirizzo IP interno</i>, vai nel menù Start di "
+"Windows, clicca su Esegui... e digita: cmd /k ipconfig"
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_connection.html:69
@@ -2350,6 +2388,9 @@ msgid ""
 "If you are still unsure you may want to consult your ISP support hotline or "
 "system administrator (if on an organization's network)."
 msgstr ""
+"Se hai ancora dei dubbi, potresti volere consultare il tuo supporto per "
+"l'assistenza o all'amministratore del sistema ISP (se nella rete di "
+"un'organizzazione)."
 
 #. type: Content of: <html><body><p>
 #: help/faq_connection.html:76
@@ -2466,6 +2507,20 @@ msgid ""
 "by the router, the configuration should be done manually to achieve a "
 "working active connection mode."
 msgstr ""
+"Se sei dietro un router (gateway), allora il computer è <b>membro di una "
+"rete locale separata così che le connessioni provenienti da Internet devono "
+"trovare la loro strada per entrare nel tuo computer</b>, che risiede in una "
+"rete privata. Per una connettività di successo, <b>il router deve essere "
+"impostato</b> per aprire le porte di comunicazione che utilizza DC++ e "
+"trasmettere le informazioni in arrivo da Internet al computer corretto "
+"(quello che esegue DC++). Questo si chiama <b>inoltro della porta</b>, "
+"oppure <b>mappatura della porta</b>, e richiede la configurazione del "
+"dispositivo router. Ci sono diversi modi per eseguire la mappatura delle "
+"porte <i>automaticamente </i>, se il router supporta uno dei protocolli di "
+"mappatura delle porte automatiche disponibili in DC++. Se nessuno dei modi "
+"automatici della mappatura delle porte è supportato dal router, la "
+"configurazione dovrebbe essere eseguita manualmente per realizzare una "
+"modalità di connessione attiva funzionante."
 
 #. type: Content of: <html><body><h3>
 #: help/faq_connection.html:131
@@ -2503,9 +2558,9 @@ msgstr ""
 #. type: Content of: <html><body><p><ul><li>
 #: help/faq_connection.html:151
 msgid ""
-"Select the <b>Active mode (let DC++ configure my router with NAT-PMP / UPnP)"
-"</b> radio button. Leave the fields in the &quot;External / WAN IP&quot; box "
-"blank."
+"Select the <b>Active mode (let DC++ configure my router with NAT-PMP / "
+"UPnP)</b> radio button. Leave the fields in the &quot;External / WAN "
+"IP&quot; box blank."
 msgstr ""
 
 #. type: Content of: <html><body><p><ul><li>
@@ -2595,7 +2650,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_different_icons.html:9 help/index.html:127
+#: help/faq_different_icons.html:9 help/index.html:131
 msgid "What do the different user icons mean?"
 msgstr "Cosa vogliono dire le diverse icone degli utenti?"
 
@@ -2816,7 +2871,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_mapping.html:9 help/index.html:123
+#: help/faq_mapping.html:9 help/index.html:127
 msgid "What is NAT-PMP / UPnP?"
 msgstr "Cos'è NAT-PMP / UPnP?"
 
@@ -2846,7 +2901,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_nosearch.html:9 help/index.html:125
+#: help/faq_nosearch.html:9 help/index.html:129
 msgid "Why don't I get any search results?"
 msgstr "Perché non ottengo alcun risultato di ricerca?"
 
@@ -3035,11 +3090,15 @@ msgstr "A(pri uno slot extra se la velocità è al di sotto)"
 #: help/faq_plusplus_tag.html:43
 msgid "x = if total upload is below this value DC++ will open another slot"
 msgstr ""
+"x = se l'upload totale è al di sotto di questo valore, DC++ aprirà un altro "
+"slot"
 
 #. type: Content of: <html><body><div><dl><dd>
 #: help/faq_plusplus_tag.html:45
 msgid "This part of the tag is only shown when the option for it is enabled."
 msgstr ""
+"Questa parte dell'etichetta viene mostrata solamente quando la relativa "
+"opzione è abilitata."
 
 #. type: Content of: <html><body>
 #: help/faq_plusplus_tag.html:49
@@ -3051,7 +3110,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><h1>
-#: help/faq_plusplus_tag.html:54 help/index.html:98
+#: help/faq_plusplus_tag.html:54 help/index.html:102
 #: help/settings_history.html:9
 msgid "History"
 msgstr "Cronologia"
@@ -3079,7 +3138,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_portforward.html:9 help/index.html:121
+#: help/faq_portforward.html:9 help/index.html:125
 msgid "How to set up manual port forwarding?"
 msgstr "Come si imposta l'inoltro manuale delle porte?"
 
@@ -3124,6 +3183,8 @@ msgid ""
 "You have proper access to the configuration layout of your gateway (router) "
 "device"
 msgstr ""
+"Hai un accesso adeguato al layout di configurazione del dispositivo del "
+"gateway (router)"
 
 #. type: Content of: <html><body><p>
 #: help/faq_portforward.html:29
@@ -3298,7 +3359,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_secret.html:10 help/index.html:130
+#: help/faq_secret.html:10 help/index.html:134
 msgid "What secret stuff is there?"
 msgstr "Che roba segreta c'è?"
 
@@ -3399,7 +3460,7 @@ msgstr ""
 "file di registro corrispondente (se disponibile)."
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_settings_files.html:9 help/index.html:132
+#: help/faq_settings_files.html:9 help/index.html:136
 msgid "DC++ settings files guide"
 msgstr "Guida ai file delle impostazioni di DC++"
 
@@ -4345,7 +4406,7 @@ msgstr ""
 "popolari <a po4a-id=0>qui</a>."
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_units.html:9 help/index.html:128
+#: help/faq_units.html:9 help/index.html:132
 msgid "What do the units mean?"
 msgstr "Che significato hanno le unità?"
 
@@ -4595,7 +4656,7 @@ msgstr ""
 "qua sopra."
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_whyactive.html:9 help/index.html:119
+#: help/faq_whyactive.html:9 help/index.html:123
 msgid "Why do I need active mode?"
 msgstr "Perché ho bisogno della modalità attiva?"
 
@@ -4938,7 +4999,7 @@ msgstr ""
 "tutti."
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:26 help/index.html:93 help/settings_windows.html:9
+#: help/index.html:26 help/index.html:97 help/settings_windows.html:9
 msgid "Windows"
 msgstr "Finestre"
 
@@ -5087,110 +5148,109 @@ msgid "Queue"
 msgstr "Coda"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:86 help/settings_sharing.html:9
+#: help/index.html:87 help/settings_sharing.html:9
 msgid "Sharing"
 msgstr "Condivisione"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:87 help/settings_sharing_filtering.html:9
-#, fuzzy
+#: help/index.html:89 help/settings_sharing_filtering.html:9
 msgid "Filtering"
-msgstr "Filtro"
+msgstr "Filtraggio"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:89 help/settings_appearance.html:9
+#: help/index.html:93 help/settings_appearance.html:9
 msgid "Appearance"
 msgstr "Aspetto"
 
 #. type: Content of: <html><body><h2>
-#: help/index.html:92 help/window_main.html:317
+#: help/index.html:96 help/window_main.html:317
 msgid "Tabs"
 msgstr "Schede"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:96 help/settings_notifications.html:9
+#: help/index.html:100 help/settings_notifications.html:9
 msgid "Notifications"
 msgstr "Notifiche"
 
 #. type: Content of: <html><body><h3>
-#: help/index.html:100 help/settings_logs.html:9 help/settings_styles.html:40
+#: help/index.html:104 help/settings_logs.html:9 help/settings_styles.html:40
 msgid "Logs"
 msgstr "Registri"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:104 help/settings_advanced.html:9
+#: help/index.html:108 help/settings_advanced.html:9
 msgid "Advanced"
 msgstr "Avanzate"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:106 help/settings_expert.html:9
+#: help/index.html:110 help/settings_expert.html:9
 msgid "Experts only"
 msgstr "Solo per utenti esperti"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:107 help/settings_user_commands.html:9
+#: help/index.html:111 help/settings_user_commands.html:9
 msgid "User commands"
 msgstr "Comandi utente"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:108 help/settings_certs.html:9
+#: help/index.html:112 help/settings_certs.html:9
 msgid "Security certificates"
 msgstr "Certificati di sicurezza"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:109 help/settings_search_types.html:9
+#: help/index.html:113 help/settings_search_types.html:9
 msgid "Search types"
 msgstr "Tipi di ricerca"
 
 #. type: Content of: <html><body><dl><dd><ul><li><placeholder><a>
-#: help/index.html:113 help/window_main.html:57 help/window_main.html:58
+#: help/index.html:117 help/window_main.html:57 help/window_main.html:58
 #: H:/Dev/DC++/repo/help/menu_plugins.inc:6 help/window_main.html:223
 #: help/window_main.html:299 help/window_main.html:302
 msgid "Plugins"
 msgstr "Plugin"
 
 #. type: Content of: <html><body><ul><li><h3>
-#: help/index.html:117
+#: help/index.html:121
 msgid "Frequently Asked Questions"
 msgstr "Domande frequenti"
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/index.html:122
+#: help/index.html:126
 msgid "How to unblock DC++ in firewalls and other security software?"
 msgstr "Come si sblocca DC++ nei firewall e in altri software di sicurezza?"
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/index.html:124
+#: help/index.html:128
 msgid "My ISP or University blocks DC++"
 msgstr "Il mio ISP o università blocca DC++"
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/index.html:126
+#: help/index.html:130
 msgid "Why am I getting slow download speeds?"
 msgstr "Perché le velocità di download sono basse?"
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/index.html:129
+#: help/index.html:133
 msgid "How do I install/uninstall/upgrade DC++?"
 msgstr "Come posso installare/disinstallare/aggiornare DC++?"
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/index.html:131
+#: help/index.html:135
 msgid "What do the DC++ tags mean?"
 msgstr "Cosa vogliono dire le etichette di DC++?"
 
 #. type: Content of: <html><body><ul><li><h3>
-#: help/index.html:136
+#: help/index.html:140
 msgid "Development"
 msgstr "Sviluppo"
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/index.html:138
+#: help/index.html:142
 msgid "Compile instructions"
 msgstr "Istruzioni per la compilazione"
 
 #. type: Content of: <html><body><ul><li><div>
-#: help/index.html:145
+#: help/index.html:149
 msgid ""
 "These are the commands that are available in chat, private messages, or "
 "both. They offer handy keyboard shortcuts to functions in the graphical "
@@ -5202,12 +5262,12 @@ msgstr ""
 "grafica."
 
 #. type: Content of: <html><body><ul><li><div><placeholder><a>
-#: help/index.html:150
+#: help/index.html:154
 msgid "List of Available Keyboard Shortcuts"
 msgstr "Elenco delle scorciatoie da tastiera disponibili"
 
 #. type: Content of: <html><body><ul><li><div>
-#: help/index.html:151
+#: help/index.html:155
 msgid ""
 "These are the keyboard shortcuts that are available in for different "
 "commands in DC++.  They offer quick access to some of the often used "
@@ -5218,12 +5278,12 @@ msgstr ""
 "spesso dell'interfaccia grafica."
 
 #. type: Content of: <html><body><ul><li><div><placeholder><a>
-#: help/index.html:155
+#: help/index.html:159
 msgid "Changelog"
 msgstr "Registro dei cambiamenti"
 
 #. type: Content of: <html><body><ul><li><div>
-#: help/index.html:156
+#: help/index.html:160
 msgid ""
 "This page contains everything that has changed in the history of DC++.  Read "
 "this to find out about features that are poorly or not documented at all. "
@@ -5235,23 +5295,23 @@ msgstr ""
 "+."
 
 #. type: Content of: <html><body><dl><dd><dl><dt>
-#: help/index.html:162 help/links.html:9 help/settings_styles.html:35
+#: help/index.html:166 help/links.html:9 help/settings_styles.html:35
 #: help/window_main.html:172
 msgid "Links"
 msgstr "Collegamenti"
 
 #. type: Content of: <html><body><ul><li><div>
-#: help/index.html:163
+#: help/index.html:167
 msgid "View the various links for DC++."
 msgstr "Visualizza i vari collegamenti per DC++."
 
 #. type: Content of: <html><body><ul><li><div><placeholder><a>
-#: help/index.html:166
+#: help/index.html:170
 msgid "Help File Credits"
 msgstr "Crediti per il file di aiuto"
 
 #. type: Content of: <html><body><ul><li><div>
-#: help/index.html:167
+#: help/index.html:171
 msgid "View the credits and license of this help file."
 msgstr "Visualizza i crediti e la licenza di questo file di aiuto."
 
@@ -6224,28 +6284,40 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_advanced.html:122
+msgid "Clickable chat links (disable on Wine)"
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_advanced.html:124
+msgid ""
+"Pretty link formatting in the chat control. Disable on messed up systems "
+"(such as old versions of Wine) should chat links fail to show up."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dt>
+#: help/settings_advanced.html:127
 msgid "Use Coral network for HTTP downloads (improves reliability)"
 msgstr "Utilizza la rete Coral per i download HTTP (maggiore affidabilità)"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_advanced.html:124
+#: help/settings_advanced.html:129
 msgid ""
 "With this option enabled, DC++ uses <a po4a-id=0>The Coral Content "
 "Distribution Network</a> when establishing HTTP connections."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_advanced.html:127
+#: help/settings_advanced.html:132
 msgid "If the download fails, DC++ tries again with the non-Coralized address."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/settings_advanced.html:129
+#: help/settings_advanced.html:134
 msgid "Enable segmented downloads"
 msgstr "Abilita il download segmentato"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_advanced.html:130
+#: help/settings_advanced.html:135
 msgid ""
 "With this option enabled, DC++ uses segmented downloading. i.e. it downloads "
 "each file in many parts simultaneously from all available sources."
@@ -8664,6 +8736,8 @@ msgid ""
 "This page is for individual configuration, addition and removal of plugins "
 "made for DC++."
 msgstr ""
+"Questa pagina serve per la configurazione individuale, l'aggiunta e la "
+"rimozione di plugin creati per DC++."
 
 #. type: Content of: <html><body><h2>
 #: help/settings_plugins.html:13
@@ -8681,6 +8755,8 @@ msgid ""
 "Open a file selection dialog and offer to install the selected plugin if it "
 "is compatible with DC++."
 msgstr ""
+"Apri una finestra di dialogo per la selezione dei file e proponi di "
+"installare il plugin selezionato se è compatibile con DC++."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_plugins.html:23
@@ -8698,6 +8774,8 @@ msgid ""
 "Open the selected plugin's own configuration page in order to edit its "
 "properties."
 msgstr ""
+"Apri la pagina di configurazione propria del plugin selezionato per poter "
+"modificare le sue proprietà."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_plugins.html:31
@@ -8722,12 +8800,12 @@ msgstr "Disabilita il plugin selezionato."
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_plugins.html:43
 msgid "Move the selected plugin upwards in the list."
-msgstr ""
+msgstr "Sposta il plugin selezionato verso l'alto nell'elenco."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_plugins.html:48
 msgid "Move the selected plugin downwards in the list."
-msgstr ""
+msgstr "Sposta il plugin selezionato verso il basso nell'elenco."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_plugins.html:53
@@ -8742,7 +8820,7 @@ msgstr "Informazioni sul plugin"
 #. type: Content of: <html><body><p>
 #: help/settings_plugins.html:59
 msgid "This panel shows information about the selected plugin."
-msgstr ""
+msgstr "Questo pannello mostra delle informazioni sul plugin selezionato."
 
 #. type: Content of: <html><body><h1>
 #: help/settings_proxy.html:9
@@ -9337,27 +9415,27 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/settings_sharing_filtering.html:18
+#: help/settings_sharing_filtering.html:17
 #, fuzzy
 msgid "File minimum size"
 msgstr "Dimensione del file"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_sharing_filtering.html:20
+#: help/settings_sharing_filtering.html:19
 msgid ""
-"Only include include files in thee share that has a file size above the "
+"Only include include files in the share that has a file size above the "
 "specified value. Value is specified in bytes. The value 0 removes the filter "
 "and is the default."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/settings_sharing_filtering.html:22
+#: help/settings_sharing_filtering.html:21
 #, fuzzy
 msgid "File maximum size"
 msgstr "Dimensione del file"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_sharing_filtering.html:24
+#: help/settings_sharing_filtering.html:23
 msgid ""
 "Only include include files in the share that has a file size below the "
 "specified value. Value is specified in bytes. The value 0 removes the filter "
@@ -9365,12 +9443,12 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/settings_sharing_filtering.html:27
+#: help/settings_sharing_filtering.html:25
 msgid "File name filtering with Regular expressions"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_sharing_filtering.html:29
+#: help/settings_sharing_filtering.html:27
 msgid ""
 "Filters out any file with a name that matches a regular expression that is "
 "listed here. Use semicolon to separate multiple regular expressions. For "
@@ -9379,12 +9457,12 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/settings_sharing_filtering.html:32
+#: help/settings_sharing_filtering.html:29
 msgid "File extension filtering"
-msgstr ""
+msgstr "Filtraggio per estensione del file"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_sharing_filtering.html:34
+#: help/settings_sharing_filtering.html:31
 msgid ""
 "Filters out any file with an extension that is listed here. Use semicolon to "
 "separate multiple extensions. For example, the value txt;png will remove any "
@@ -9392,13 +9470,12 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/settings_sharing_filtering.html:35
-#, fuzzy
+#: help/settings_sharing_filtering.html:32
 msgid "Path filtering"
-msgstr "Filtro del testo"
+msgstr "Filtraggio in base al percorso"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_sharing_filtering.html:37
+#: help/settings_sharing_filtering.html:34
 msgid ""
 "Filters out any path that is listed here. Use semicolon to separate multiple "
 "paths. For example, the value \"download;secret_files\" will remove any "
@@ -9449,8 +9526,8 @@ msgstr "Upload"
 #. type: Content of: <html><body><p>
 #: help/settings_styles.html:27
 msgid ""
-"The style used to paint upload transfer bars. Default background color: RGB"
-"(205, 60, 55)."
+"The style used to paint upload transfer bars. Default background color: "
+"RGB(205, 60, 55)."
 msgstr ""
 "Lo stile utilizzato per colorare le barre di trasferimento degli upload. "
 "Colore di sfondo predefinito: RGB(205, 60, 55)."
@@ -9458,8 +9535,8 @@ msgstr ""
 #. type: Content of: <html><body><p>
 #: help/settings_styles.html:31
 msgid ""
-"The style used to paint download transfer bars. Default background color: RGB"
-"(55, 170, 85)."
+"The style used to paint download transfer bars. Default background color: "
+"RGB(55, 170, 85)."
 msgstr ""
 "Lo stile utilizzato per colorare le barre di trasferimento dei download. "
 "Colore di sfondo predefinito: RGB(55, 170, 85)."
@@ -10836,6 +10913,9 @@ msgid ""
 "Switch to the previously visited directory. This command can also be "
 "accessed via the Backspace key and the Ctrl+Left keyboard shortcut."
 msgstr ""
+"Passa alla cartella visitata precendemente. Si può accedere a questo comando "
+"anche tramite il tasto Backspace e la scorciatoia da tastiera Ctrl + freccia "
+"sinistra."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_file_list.html:18
@@ -10848,6 +10928,8 @@ msgid ""
 "Switch to the next visited directory. This command can also be accessed via "
 "the Ctrl+Right keyboard shortcut."
 msgstr ""
+"Passa alla cartella visitata successivamente. Si può accedere a questo "
+"comando anche tramite la scorciatoria da tastiera Ctrl + freccia destra."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_file_list.html:20
@@ -10861,7 +10943,7 @@ msgid ""
 "Ctrl+Up keyboard shortcut."
 msgstr ""
 "Passa alla cartella genitrice. Questo comando può essere raggiunto anche "
-"tramite alla scorciatoia da tastiera Ctrl+Sù."
+"tramite alla scorciatoia da tastiera Ctrl + freccia in su."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_file_list.html:22
@@ -12060,6 +12142,8 @@ msgid ""
 "You can find options here to close all instance of specific groups of tabs "
 "by one click."
 msgstr ""
+"Puoi trovare qui le opzioni per chiudere tutte le occorrenze di gruppi "
+"specifici di schede con un solo click."
 
 #. type: Content of: <html><body><dl><dd><dl><dt>
 #: help/window_main.html:138
@@ -12809,6 +12893,7 @@ msgstr ""
 #: help/window_pm.html:44
 msgid "Click this part to select the desired communication channel."
 msgstr ""
+"Clicca su questa parte per selezionare il canale di comunicazione desiderato."
 
 #. type: Content of: <html><body><h2>
 #: help/window_pm.html:47
@@ -12877,15 +12962,13 @@ msgstr ""
 
 #. type: Content of: <html><body><p><ul><li>
 #: help/window_pm.html:67
-#, fuzzy
 msgid "Close the private message window."
-msgstr "Chiude la finestra corrente."
+msgstr "Chiudi la finestra del messaggio privato."
 
 #. type: Content of: <html><body><p><ul><li>
 #: help/window_pm.html:68
-#, fuzzy
 msgid "Disconnect the transfer from the <placeholder id=0/> list."
-msgstr "Passa alla pagina delle impostazioni degli <placeholder id=0/>."
+msgstr "Disconnetti il trasferimento dall'elenco dei <placeholder id=0/>."
 
 #. type: Content of: <html><body><h1>
 #: help/window_public_hubs.html:10 help/window_public_hubs.html:11
@@ -13592,6 +13675,20 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_system_log.html:32
 msgid ""
+"The queued file %1% already exists in your share, removing from the queue"
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
+#: help/window_system_log.html:33
+msgid ""
+"You have the <a po4a-id=0>Don't download files already in share</a> setting "
+"enabled and tried to download an already shared file. The operation was "
+"prevented accordingly."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dt>
+#: help/window_system_log.html:34
+msgid ""
 "Duplicate file will not be shared: [path1] (Size: [size]) Dupe matched "
 "against: [path2]"
 msgstr ""
@@ -13599,7 +13696,7 @@ msgstr ""
 "[dimensione]) Duplicato trovato:  [percorso2]"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:33
+#: help/window_system_log.html:35
 msgid ""
 "This means that since you have <a po4a-id=0>Keep duplicate files in your "
 "file list</a> setting disabled, a file ([path1]) beeing indexed and already "
@@ -13607,46 +13704,46 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:35
+#: help/window_system_log.html:37
 msgid "Hash database rebuilt"
 msgstr "Ricostruito il database delle indicizzazioni"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:36
+#: help/window_system_log.html:38
 msgid ""
 "Informs you about the finish of a full hash database rebuilding process "
 "which can be initiated by the <a po4a-id=0>/rebuild</a> chat command"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:37
+#: help/window_system_log.html:39
 msgid "Disconnected user leaving the hub: [nick]"
 msgstr "Disconnesso l'utente che ha lasciato l'hub: [soprannome]"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:38
+#: help/window_system_log.html:40
 msgid ""
 "You have <a po4a-id=0>Automatically disconnect users who leave the hub</a> "
 "setting enabled and this message informs you about its effect."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:39
+#: help/window_system_log.html:41
 msgid "MAGNET Link detected: [link]"
 msgstr "Riconosciuto un collegamento magnet: [link]"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:40
+#: help/window_system_log.html:42
 msgid "The client received a <a po4a-id=0>magnet link</a> handle request."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:41
+#: help/window_system_log.html:43
 msgid "Generated new TLS certificate"
 msgstr "È stato creato un nuovo certificato TLS"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:42
+#: help/window_system_log.html:44
 msgid ""
 "As <a po4a-id=0>Security certificates</a> enabled but no existing TLS "
 "certificate files found (or they are invalid), new certificate files "
@@ -13655,7 +13752,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:43
+#: help/window_system_log.html:45
 msgid ""
 "Port mapping: Successfully created port mappings (Transfers: [port1], "
 "Searches: [port2], Encrypted transfers: [port3]) on the [router name] device "
@@ -13663,49 +13760,49 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:44
+#: help/window_system_log.html:46
 msgid ""
 "DC++ has managed to automatically create port forwarding rules on the router "
 "using <a po4a-id=0>NAT-PMP or UPnP</a>."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:45
+#: help/window_system_log.html:47
 msgid ""
 "Port mapping: Successfully removed port mappings from the [router name] "
 "device with the [interface identification] interface"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:46
+#: help/window_system_log.html:48
 msgid ""
 "DC++ has managed to remove the existing port forwarding rules from the "
 "router made by <a po4a-id=0>NAT-PMP or UPnP</a>."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:47
+#: help/window_system_log.html:49
 msgid "Connectivity: Determining the best connectivity settings..."
 msgstr ""
 "Connettività: Determinazione delle impostazioni di connettività migliori in "
 "corso..."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:48
+#: help/window_system_log.html:50
 msgid ""
 "This message signals that <a po4a-id=0>Automatic connectivity setup</a> has "
 "started."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:49
+#: help/window_system_log.html:51
 msgid ""
 "Connectivity: Public IP address detected, selecting active mode with direct "
 "connection"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:50
+#: help/window_system_log.html:52
 msgid ""
 "It means that <a po4a-id=0>Automatic connectivity setup</a> determined that "
 "you have a public IP address so it assumed that you are directly connected "
@@ -13713,14 +13810,14 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:51
+#: help/window_system_log.html:53
 msgid ""
 "Connectivity: Local network with possible NAT detected, trying to map the "
 "ports..."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:52
+#: help/window_system_log.html:54
 msgid ""
 "<a po4a-id=0>Automatic connectivity setup</a> determined that you have a <a "
 "po4a-id=1>private</a> IP address and it started to discover for a possible "
@@ -13728,14 +13825,14 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:53
+#: help/window_system_log.html:55
 msgid ""
 "Connectivity: Active mode could not be achieved; a manual configuration is "
 "recommended for better connectivity"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:54
+#: help/window_system_log.html:56
 msgid ""
 "<a po4a-id=0>Automatic connectivity setup</a> did not find any way to "
 "configure any kind of active connection so as a last resort it selected "
@@ -13743,12 +13840,12 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><h2>
-#: help/window_system_log.html:57
+#: help/window_system_log.html:59
 msgid "Error messages"
 msgstr "Messaggi di errore"
 
 #. type: Content of: <html><body><p>
-#: help/window_system_log.html:58
+#: help/window_system_log.html:60
 msgid ""
 "Some errors shown in the log contain additional system messages provided by "
 "the operating system. These messages usually tell you more about the exact "
@@ -13759,22 +13856,22 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:60
+#: help/window_system_log.html:62
 msgid "Error registering dchub:// link handler"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:61
+#: help/window_system_log.html:63
 msgid "Error registering adc(s):// link handler"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:62
+#: help/window_system_log.html:64
 msgid "Error registering Magnet link handler"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:63
+#: help/window_system_log.html:65
 msgid ""
 "These errors mean that DC++ was unable to register the appropriate link "
 "handler(s) in Windows, per the <a po4a-id=0>Register with Windows to handle "
@@ -13786,12 +13883,12 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:64
+#: help/window_system_log.html:66
 msgid "Port mapping: Failed to get external IP"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:65
+#: help/window_system_log.html:67
 msgid ""
 "This error message can appear when DC++ tries to map ports for incoming "
 "connections via NAT-PMP / UPnP and means that although port mappings were "
@@ -13803,12 +13900,12 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:66
+#: help/window_system_log.html:68
 msgid "Port mapping: Another port mapping attempt is in progress..."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:67
+#: help/window_system_log.html:69
 msgid ""
 "This means that an <a po4a-id=0>Automatic connectivity setup</a> attempt was "
 "started too soon (the previous operation has not been finished). Try "
@@ -13818,27 +13915,27 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:68
+#: help/window_system_log.html:70
 msgid ""
 "Port mapping: Failed to initalize the [interface identification] interface"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:69
+#: help/window_system_log.html:71
 msgid ""
 "DC++ failed to initalize one of its NAT-PMP or UPnP interfaces and will try "
 "to use the next one in the row."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:70
+#: help/window_system_log.html:72
 msgid ""
 "Port mapping: Failed to map the [Transfer/Encrypted transfer/Search] port "
 "([port number] [TCP/UDP]) with the [interface identification] interface"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:71
+#: help/window_system_log.html:73
 msgid ""
 "The currently used port mapping interface failed to map the shown port. This "
 "error message can appear when DC++ tries to map ports for incoming "
@@ -13854,14 +13951,14 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:72
+#: help/window_system_log.html:74
 msgid ""
 "Port mapping: Failed to remove port mappings from the [router name] device "
 "with the [interface identification] interface"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:73
+#: help/window_system_log.html:75
 msgid ""
 "DC++ has failed to remove the existing port forwarding rules from the router "
 "made by <a po4a-id=0>NAT-PMP or UPnP</a>. This message can appear at "
@@ -13872,14 +13969,14 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:74
+#: help/window_system_log.html:76
 msgid ""
 "Connectivity: Unable to open TCP/UDP/TLS port(s); connectivity settings must "
 "be configured manually"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:75
+#: help/window_system_log.html:77
 msgid ""
 "You can get this message only when <a po4a-id=0>Automatic connectivity "
 "setup</a> is enabled and DC++ failed to open port(s) before trying to "
@@ -13889,29 +13986,45 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:76
+#: help/window_system_log.html:78
+msgid ""
+"The encrypted transfer port cannot be the same as the transfer port, "
+"encrypted transfers will be disabled"
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
+#: help/window_system_log.html:79
+msgid ""
+"The two kind of transfers cannot use the same port therfore the secure one "
+"had to be disabled. You have to specify different TCP port for the different "
+"transfers in the <a po4a-id=0>Incoming connection settings</a> or review the "
+"current <a po4a-id=1>connectivity setup</a>."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dt>
+#: help/window_system_log.html:80
 msgid "Not listening for connections - please restart DC++"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:77
+#: help/window_system_log.html:81
 msgid ""
 "An unrecoverable low level networking error keeps DC++ from listening for "
 "connections. Search and download won't work until you restart DC++."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:78
+#: help/window_system_log.html:82
 msgid "Connectivity error: [error message]"
 msgstr "Errore di connettività: [messaggio di errore]"
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:79
+#: help/window_system_log.html:83
 msgid "Connectivity restored"
 msgstr "Connessione ripristinata"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:80
+#: help/window_system_log.html:84
 msgid ""
 "Because of a low level networking error DC++ does not listen for file "
 "transfer connections. The problem lasts until the next 'Connectivity "
@@ -13919,68 +14032,68 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:81
+#: help/window_system_log.html:85
 msgid "Search disabled: [error message]"
 msgstr "Ricerche disabilitate: [messaggio di errore]"
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:82
+#: help/window_system_log.html:86
 msgid "Search enabled again"
 msgstr "Ricerca nuovamente abilitata"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:83
+#: help/window_system_log.html:87
 msgid ""
 "Because of a low level networking error DC++ does not listen for search "
 "results. The problem lasts until the next 'Search enabled again' message."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:84
+#: help/window_system_log.html:88
 msgid "Failed to load certificate file"
 msgstr "Impossibile caricare il file di certificato"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:85
+#: help/window_system_log.html:89
 msgid ""
 "There was a problem loading your own certificate file, its contents are "
 "damaged or invalid."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:86
+#: help/window_system_log.html:90
 msgid "Failed to load private key"
 msgstr "Impossibile caricare la chiave privata"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:87
+#: help/window_system_log.html:91
 msgid ""
 "There was a problem loading your own private key file, its contents are "
 "damaged or invalid."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:88
+#: help/window_system_log.html:92
 msgid "Failed to load trusted certificate from [path]"
 msgstr ""
 "Non è stato possibile caricare il certificato di affibilità da [percorso]"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:89
+#: help/window_system_log.html:93
 msgid ""
 "There was a problem loading one of the trusted certificate files, its "
 "contents are damaged or invalid."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:90
+#: help/window_system_log.html:94
 msgid "TLS disabled, failed to generate certificate: [error message]"
 msgstr ""
 "TLS disattivato, il  file di certificato non è stato creato: [messaggio di "
 "errore]"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:91
+#: help/window_system_log.html:95
 msgid ""
 "TLS certificate files are missing or could not be opened. DC++ tried to "
 "regenrerate them but it wasn't successful, either. Make sure you have write "
@@ -13989,31 +14102,45 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:92
+#: help/window_system_log.html:96
 msgid "TLS disabled, no certificate file set"
 msgstr "TLS disattivato, nessun file di certificato impostato"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:93
+#: help/window_system_log.html:97
 msgid ""
 "TLS can't be used because no certificate files set. You should set or "
 "generate them properly in the <a po4a-id=0>Security certificates</a> page."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:94
+#: help/window_system_log.html:98
+msgid ""
+"Certificate verification for [CA name] failed with error: [error message] "
+"(certificate KeyPrint: [keyprint])"
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
+#: help/window_system_log.html:99
+msgid ""
+"The security certificate verification of user or hub with keyprint "
+"[keyprint] has failed because of [error message]."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dt>
+#: help/window_system_log.html:100
 msgid "CRC32 inconsistency (SFV-Check) : [path]"
 msgstr "Inconsistenza CRC32 (SFV-Check) : [percorso]"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:95
+#: help/window_system_log.html:101
 msgid ""
 "You have <a po4a-id=0>automatic SFV checking enabled</a> and a downloaded "
 "file is not passed the SFV-check. The file will be downloaded again."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:96
+#: help/window_system_log.html:102
 msgid ""
 "File list refresh in progress, please wait for it to finish before trying to "
 "refresh again"
@@ -14022,68 +14149,68 @@ msgstr ""
 "riprovare ad aggiornare l'elenco dei file"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:97
+#: help/window_system_log.html:103
 msgid "Only one file list refreshing operation can be run at the same time."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:98
+#: help/window_system_log.html:104
 msgid "File list refresh failed: [error message]"
 msgstr ""
 "Non è stato possibile aggiornare dell'elenco dei file: [messaggio di errore]"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:99
+#: help/window_system_log.html:105
 msgid "The background process for refreshing file list is failed to start."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:100
+#: help/window_system_log.html:106
 msgid "Hashing failed: [error message]"
 msgstr "Indicizzazione fallita: [messaggio di errore]"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:101
+#: help/window_system_log.html:107
 msgid "Error occured during indexing or share rebuilding."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:102
+#: help/window_system_log.html:108
 msgid "Error hashing [path]: [error message]"
 msgstr "Errore durante l'indicizzazione di [percorso]: [messaggio di errore]"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:103
+#: help/window_system_log.html:109
 msgid "Error when hashing the file specified in [path]."
 msgstr "Errore durante l'indicizzazione del file specificato in [percorso]."
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:104
+#: help/window_system_log.html:110
 msgid "Error saving hash data: [error message]"
 msgstr ""
 "Errore durante il salvataggio dei dati di indicizzazione: [messaggio di "
 "errore]"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:105
+#: help/window_system_log.html:111
 msgid "Error when creating or updating hash index file (HashIndex.xml)."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:106
+#: help/window_system_log.html:112
 msgid "Error creating hash data file: [error message]"
 msgstr ""
 "Errore durante la creazione del file di indicizzazione: [messaggio di errore]"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:107
+#: help/window_system_log.html:113
 msgid "Error when creating hash data file (HashData.dat)."
 msgstr ""
 "Errore durante la creazione del file dei dati dell'indicizzazione (HashData."
 "dat)."
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:108
+#: help/window_system_log.html:114
 msgid ""
 "[path] not shared; calculated CRC32 does not match the one found in SFV file."
 msgstr ""
@@ -14091,7 +14218,7 @@ msgstr ""
 "trovato nel file SFV."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:109
+#: help/window_system_log.html:115
 msgid ""
 "Before sharing files DC++ will automatically check them against an .SFV file "
 "(if one exists in the same directory) to make sure that no corrupted files "
@@ -14100,14 +14227,14 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:110
+#: help/window_system_log.html:116
 msgid "Unable to move [path1] to [path2] ([error message]); renamed to [path3]"
 msgstr ""
 "Impossibile spostare [percorso 1] in [percorso 2] ([messaggio di errore]); "
 "rinominato in [percorso 3]"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:111
+#: help/window_system_log.html:117
 msgid ""
 "Moving a finished download [path1] from the unfinished downloads folder to "
 "its target place [path2] wasn't successful because of [error message] so the "
@@ -14116,7 +14243,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:112
+#: help/window_system_log.html:118
 msgid ""
 "Unable to move [path1] to [path2] ([error message1]) nor to rename to "
 "[path3] ([error message2])"
@@ -14125,7 +14252,7 @@ msgstr ""
 "rinominarlo in [percorso 3] ([errore di messaggio 2])"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:113
+#: help/window_system_log.html:119
 msgid ""
 "Moving a finished download [path1] from the unfinished downloads folder to "
 "its target place [path2] wasn't successful because of [error message1] so "
@@ -14135,12 +14262,12 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:114
+#: help/window_system_log.html:120
 msgid "Unable to open filelist: [filename]"
 msgstr "Impossibile aprire l'elenco dei file: [nome del file]"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:115
+#: help/window_system_log.html:121
 msgid ""
 "There were problems opening a downloaded filelist, its corrupted or its size "
 "is <a po4a-id=0>bigger than the maximum size allowed to open</a>."
@@ -14150,26 +14277,42 @@ msgstr ""
 "dimensione consentita</a>."
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:116
+#: help/window_system_log.html:122
 msgid "Unable to send file [path]: [error message]"
 msgstr "Impossibile inviare il file [percorso]: [messaggio di errore]"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:117
+#: help/window_system_log.html:123
 msgid ""
 "There was a problem preparing file [path] upon an upload request by a peer."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_system_log.html:118
+#: help/window_system_log.html:124
 msgid "Invalid regular expression: [regex]"
 msgstr "Espressione regolare non valida: [regex]"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_system_log.html:119
+#: help/window_system_log.html:125
 msgid ""
 "There was a problem applying a regular experssion [regex] specified in one "
 "of the filter functions."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dt>
+#: help/window_system_log.html:126
+#, fuzzy
+msgid ""
+"HTTP file download failed to create file [filename], error: [error message]"
+msgstr ""
+"TLS disattivato, il  file di certificato non è stato creato: [messaggio di "
+"errore]"
+
+#. type: Content of: <html><body><dl><dd>
+#: help/window_system_log.html:127
+msgid ""
+"The built-in HTTP downloader couldn't save the file it has downloaded "
+"because of [error message]."
 msgstr ""
 
 #. type: Content of: <html><body><p>
@@ -14381,6 +14524,11 @@ msgid ""
 "slot; you can click the icon to toggle. The function works only for users "
 "already set to favorite."
 msgstr ""
+"L'icona indica che DC ++ dovrebbe concedere automaticamente ad un utente "
+"preferito uno slot o no. Se l'indicatore è verde, DC ++ concederà "
+"automaticamente all'utente uno slot; è possibile fare clic sull'icona per "
+"attivare o no questa funzione. La funzione è disponibile solamente per gli "
+"utenti già impostati come preferiti."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_users.html:23
@@ -14409,6 +14557,9 @@ msgid ""
 "shows which specific date and time you saw this user the last time; or "
 "\"Online\" if the favorite user is currently online."
 msgstr ""
+"Per gli utenti normali questa colonna mostra lo stato online. Per gli utenti "
+"preferiti mostra in che data e ora hai visto questo utente l'ultima volta; "
+"oppure \"Online\" se l'utente preferito è attualmente online."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_users.html:29
@@ -14417,6 +14568,9 @@ msgid ""
 "selecting \"Description\" from the context menu or by pressing the Enter "
 "key. The description is saved for favorite users only."
 msgstr ""
+"Breve descrizione dell'utente. È possibile modificare questa descrizione sia "
+"selezionando \"Descrizione\" dal menù contestuale sia premendo il tasto "
+"Invio. La descrizione viene salvata soltanto per gli utenti preferiti."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_users.html:31
@@ -14441,6 +14595,10 @@ msgid ""
 "you can use this function to connect to the hub where this favorite user "
 "last seen in."
 msgstr ""
+"Questa voce di menù mostra solo gli utenti preferiti. Se l'utente è in "
+"linea, questo selezionerà il primo hub dove lui/lei è collegato. Se l'utente "
+"è offline, è possibile utilizzare questa funzione per la connessione all'hub "
+"dove questo utente preferito è stato visto per l'ultima volta."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_users.html:39
@@ -14506,6 +14664,9 @@ msgid ""
 "users who are currently offline (not connected to any hub where you are "
 "currently logged in)."
 msgstr ""
+"Se abilitato, l'elenco degli utenti mostra soltanto gli utenti online, "
+"filtrerà tutti gli utenti che sono attualmente offline (non connessi a "
+"qualunque hub dove sei attualmente connesso)."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_users.html:70
