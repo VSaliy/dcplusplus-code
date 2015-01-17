@@ -1,3 +1,4 @@
+-- 0.850 2015-01-17 --
 * [L#1308290] Enable TLS v1.1 and TLS v1.2-based ADCS connections (cologic)
 * Update OpenSSL to version 1.0.1k
 * Fix DWT button rendering on WINE (cologic)
