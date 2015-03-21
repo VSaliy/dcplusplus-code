@@ -1,9 +1,9 @@
 def get_rev_id(env):
     try:
         import subprocess
-        ret = subprocess.check_output('hg identify -i', shell=True)
+        ret = subprocess.check_output('hg tip -T \"r{short(node)}, {date(date, \'%Y.%m.%d %H:%M\')}\"', shell=True)
         if ret:
-            return ret[:-1]  # Remove the trailing line-ending char.
+            return ret
     except:
         pass
     return '[unknown]'
