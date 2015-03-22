@@ -220,22 +220,12 @@ bool ClientManager::isHubConnected(const string& aUrl) const {
 string ClientManager::findHub(const string& ipPort) const {
 	Lock l(cs);
 
-	string ip;
-	string port;
-	string::size_type i = ipPort.rfind(':');
-	if(i == string::npos) {
-		ip = ipPort;
-		port = "411";
-	} else {
-		ip = ipPort.substr(0, i);
-		port = ipPort.substr(i+1);
-	}
-
 	string url;
 	for(auto c: clients) {
-		if(c->getIp() == ip) {
+		auto ipPortPair = NmdcHub::parseIpPort(ipPort);
+		if(c->getIp() == ipPortPair.first) {
 			// If exact match is found, return it
-			if(c->getPort() == port)
+			if(c->getPort() == ipPortPair.second)
 				return c->getHubUrl();
 
 			// Port is not always correct, so use this as a best guess...
@@ -513,10 +503,13 @@ void ClientManager::on(NmdcSearch, Client* aClient, const string& aSeeker, int a
 				aClient->send(str);
 
 		} else {
-			string ip, port, file, proto, query, fragment;
-			Util::decodeUrl(aSeeker, proto, ip, port, file, query, fragment);
+			string ip, port;
 
-			ip = Socket::resolve(ip, AF_INET);
+			auto ipPortPair = NmdcHub::parseIpPort(aSeeker);
+
+			port = ipPortPair.second;
+			ip = Socket::resolve(ipPortPair.first, AF_INET);
+
 			if(static_cast<NmdcHub*>(aClient)->isProtectedIP(ip))
 				return;
 

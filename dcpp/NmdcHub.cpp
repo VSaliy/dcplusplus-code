@@ -255,18 +255,18 @@ void NmdcHub::onLine(const string& aLine) noexcept {
 
 		string seeker = param.substr(i, j-i);
 
+		const auto isPassive = seeker.size() > 4 && seeker.compare(0, 4, "Hub:") == 0;
+
 		// Filter own searches
-		if(ClientManager::getInstance()->isActive()) {
+		if(ClientManager::getInstance()->isActive() && !isPassive) {
 			if(seeker == localIp + ":" + SearchManager::getInstance()->getPort()) {
 				return;
 			}
-		} else {
-			// Hub:seeker
-			if(seeker.size() > 4 &&
-				Util::stricmp(seeker.c_str() + 4, getMyNick().c_str()) == 0)
-			{
-				return;
-			}
+		} else if(
+			isPassive &&
+			Util::stricmp(seeker.c_str() + 4 /* Hub:seeker */, getMyNick().c_str()) == 0
+		) {
+			return;
 		}
 
 		i = j + 1;
@@ -320,11 +320,14 @@ void NmdcHub::onLine(const string& aLine) noexcept {
 		i = j + 1;
 		string terms = unescape(param.substr(i));
 
+		// without terms, this is an invalid search.
 		if(!terms.empty()) {
-			if(seeker.compare(0, 4, "Hub:") == 0) {
-				OnlineUser* u = findUser(seeker.substr(4));
 
-				if(u == NULL) {
+			if(isPassive) {
+				// mark the user as passive.
+
+				auto u = findUser(seeker.substr(4));
+				if(!u) {
 					return;
 				}
 
@@ -336,6 +339,7 @@ void NmdcHub::onLine(const string& aLine) noexcept {
 
 			fire(ClientListener::NmdcSearch(), this, seeker, a, Util::toInt64(size), type, terms);
 		}
+
 	} else if(cmd == "$MyINFO") {
 		string::size_type i, j;
 		i = 5;
@@ -970,6 +974,20 @@ void NmdcHub::refreshLocalIp() noexcept {
 			}
 		}
 	}
+}
+
+pair<string, string> NmdcHub::parseIpPort(const string& aIpPort) {
+	string ip, port;
+
+	auto i = aIpPort.rfind(':');
+	if (i == string::npos) {
+		ip = aIpPort;
+	} else {
+		ip = aIpPort.substr(0, i);
+		port = aIpPort.substr(i + 1);
+	}
+
+	return make_pair(move(ip), move(port));
 }
 
 void NmdcHub::on(Connected) noexcept {
