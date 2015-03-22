@@ -120,6 +120,7 @@ private:
 		tstring blog;
 		tstring community;
 		tstring pluginrepo;
+		tstring contribute;
 	} links;
 
 	enum {

@@ -14,4 +14,11 @@
 	<EXECUTE_QUERY>Installation complete. Do you want to run DC++?</EXECUTE_QUERY>
 	<SM_UNINSTALL>Uninstall</SM_UNINSTALL>
 	<UN_REMOVE_QUESTION>Also remove queue, settings and the whole DC++ program directory ($INSTDIR) with all of its sub-directories?</UN_REMOVE_QUESTION>
+	<RUNNING_PROCESS_WARNING>An installed DC++ process is currently running. Please close it and try again.</RUNNING_PROCESS_WARNING>
+	<DONATION_INFO_1>Contribute to the Direct Connect Network Foundation</DONATION_INFO_1>
+	<DONATION_INFO_2>To help the development of DC++ and all other DC related software please consider to contribute or donate. Your generous donations will be used for the following:</DONATION_INFO_2>
+	<DONATION_INFO_3>* Development infrastructure (domains, server costs)</DONATION_INFO_3>
+	<DONATION_INFO_4>* Certificates for supported projects</DONATION_INFO_4>
+	<DONATION_INFO_5>All donations are completly transparent, will be individually listed and published in the DCNF website, either under the your own name or as an anonymous donation, according to your choice.</DONATION_INFO_5>
+	<DONATE_BUTTON>Donate or Contribute</DONATE_BUTTON>
 </Strings>
