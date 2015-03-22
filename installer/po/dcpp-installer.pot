@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcpp-installer VERSION\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2014-03-23 23:05+0100\n"
+"POT-Creation-Date: 2015-03-22 20:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -108,4 +108,46 @@ msgstr ""
 msgid ""
 "Also remove queue, settings and the whole DC++ program directory ($INSTDIR) "
 "with all of its sub-directories?"
+msgstr ""
+
+#. type: Content of: <Strings><DONATION_INFO_1>
+#: installer/Strings.xml:17
+#, no-wrap
+msgid "Contribute to the Direct Connect Network Foundation"
+msgstr ""
+
+#. type: Content of: <Strings><DONATION_INFO_2>
+#: installer/Strings.xml:18
+#, no-wrap
+msgid ""
+"To help the development of DC++ and other DC related software, please "
+"consider contributing or donating. Your generous donations will be used for "
+"the following:"
+msgstr ""
+
+#. type: Content of: <Strings><DONATION_INFO_3>
+#: installer/Strings.xml:19
+#, no-wrap
+msgid "* Development infrastructure (domains, server costs)"
+msgstr ""
+
+#. type: Content of: <Strings><DONATION_INFO_4>
+#: installer/Strings.xml:20
+#, no-wrap
+msgid "* Certificates for supported projects"
+msgstr ""
+
+#. type: Content of: <Strings><DONATION_INFO_5>
+#: installer/Strings.xml:21
+#, no-wrap
+msgid ""
+"All donations are completly transparent, will be individually listed and "
+"published on the DCNF website, either under your own name or as an anonymous "
+"donation, according to your choice."
+msgstr ""
+
+#. type: Content of: <Strings><DONATE_BUTTON>
+#: installer/Strings.xml:22
+#, no-wrap
+msgid "Donate / Contribute"
 msgstr ""
