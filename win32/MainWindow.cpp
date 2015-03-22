@@ -421,7 +421,7 @@ void MainWindow::initMenu() {
 		help->appendItem(T_("Donate (paypal)"), [this] { WinUtil::openLink(links.donate); }, WinUtil::menuIcon(IDI_DONATE));
 		help->appendItem(T_("Contribute"), [this] { WinUtil::openLink(links.contribute); });
 		help->appendItem(T_("Blog"), [this] { WinUtil::openLink(links.blog); });
-		help->appendItem(T_("DC Netwok Foundation community"), [this] { WinUtil::openLink(links.community); });
+		help->appendItem(T_("DC Network Foundation community"), [this] { WinUtil::openLink(links.community); });
 		help->appendItem(T_("Plugin repository"), [this] { WinUtil::openLink(links.pluginrepo); });
 	}
 
