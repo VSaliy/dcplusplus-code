@@ -486,20 +486,46 @@ RSA* CryptoManager::tmp_rsa_cb(SSL* /*ssl*/, int /*is_export*/, int keylength) {
 	return (RSA*)(tmpRSA ? tmpRSA : tmpKeysMap[KEY_RSA_2048]);
 }
 
+string CryptoManager::formatError(X509_STORE_CTX *ctx, const string& message) {
+	X509* cert = NULL;
+	if((cert = X509_STORE_CTX_get_current_cert(ctx)) != NULL) {
+		X509_NAME* subject = X509_get_subject_name(cert);
+		string tmp, line;
+
+		tmp = getNameEntryByNID(subject, NID_commonName);
+		if(!tmp.empty()) {
+			CID certCID(tmp);
+			if(tmp.length() == 39 && certCID)
+				tmp = Util::toString(ClientManager::getInstance()->getNicks(certCID));
+			line += (!line.empty() ? ", " : "") + tmp;
+		}
+
+		tmp = getNameEntryByNID(subject, NID_organizationName);
+		if(!tmp.empty())
+			line += (!line.empty() ? ", " : "") + tmp;
+
+		ByteVector kp = ssl::X509_digest(cert, EVP_sha256());
+		string keyp = "SHA256/" + Encoder::toBase32(&kp[0], kp.size());
+
+		return str(F_("Certificate verification for %1% failed with error: %2% (certificate KeyPrint: %3%)") % line % message % keyp);
+	}
+
+	return Util::emptyString;
+}
+
 int CryptoManager::verify_callback(int preverify_ok, X509_STORE_CTX *ctx) {
 	int err = X509_STORE_CTX_get_error(ctx);
 	SSL* ssl = (SSL*)X509_STORE_CTX_get_ex_data(ctx, SSL_get_ex_data_X509_STORE_CTX_idx());
 	SSLVerifyData* verifyData = (SSLVerifyData*)SSL_get_ex_data(ssl, CryptoManager::idxVerifyData);
 
-	// TODO: we should make sure that the trusted certificate store never overules KeyPrint, if present, because certificate pinning on an individual certificate is a stronger method of verification.
-
-	// verifyData is unset only when KeyPrint has been pinned and we are not skipping errors due to incomplete chains
+	// This happens only when KeyPrint has been pinned and we are not skipping errors due to incomplete chains
 	// we can fail here f.ex. if the certificate has expired but is still pinned with KeyPrint
 	if(!verifyData)
 		return preverify_ok;
 
 	bool allowUntrusted = verifyData->first;
 	string keyp = verifyData->second;
+	string error = Util::emptyString;
 
 	if(!keyp.empty()) {
 		X509* cert = X509_STORE_CTX_get_current_cert(ctx);
@@ -513,6 +539,8 @@ int CryptoManager::verify_callback(int preverify_ok, X509_STORE_CTX *ctx) {
 				X509_STORE_CTX_set_error(ctx, X509_V_OK);
 				return 1;
 			}
+
+			return preverify_ok;
 		} else if(kp2.compare(0, 7, "SHA256/") != 0)
 			return allowUntrusted ? 1 : 0;
 
@@ -546,42 +574,36 @@ int CryptoManager::verify_callback(int preverify_ok, X509_STORE_CTX *ctx) {
 				}
 			}
 
-			return (err == X509_V_OK) ? 1 : 0;
+			if(err == X509_V_OK)
+				return 1;
+
+			preverify_ok = 0;
 		} else {
 			if(X509_STORE_CTX_get_error_depth(ctx) > 0)
 				return 1;
+
+			// TODO: How to get this into HubFrame?
+			preverify_ok = 0;
+			err = X509_V_ERR_APPLICATION_VERIFICATION;
+			error = _("Keyprint mismatch");
+
+			X509_STORE_CTX_set_error(ctx, err);
 		}
 	}
 
-	if(allowUntrusted) {
-		// We let untrusted certificates through unconditionally, when allowed, but we like to complain
-		if(!preverify_ok && err != X509_V_ERR_DEPTH_ZERO_SELF_SIGNED_CERT) {
-			X509* cert = NULL;
-			if((cert = X509_STORE_CTX_get_current_cert(ctx)) != NULL) {
-				X509_NAME* subject = X509_get_subject_name(cert);
-				string tmp, line;
+	// We let untrusted certificates through unconditionally, when allowed, but we like to complain
+	if(!preverify_ok  && (!allowUntrusted || err != X509_V_ERR_DEPTH_ZERO_SELF_SIGNED_CERT)) {
+		if (error.empty())
+			error = X509_verify_cert_error_string(err);
 
-				tmp = getNameEntryByNID(subject, NID_commonName);
-				if(!tmp.empty()) {
-					CID certCID(tmp);
-					if(certCID)
-						tmp = Util::toString(ClientManager::getInstance()->getNicks(certCID));
-					line += (!line.empty() ? ", " : "") + tmp;
-				}
+		auto fullError = formatError(ctx, error);
+		if(!fullError.empty() && (!keyp.empty() || !allowUntrusted))
+			LogManager::getInstance()->message(fullError);
+	}
 
-				tmp = getNameEntryByNID(subject, NID_organizationName);
-				if(!tmp.empty())
-					line += (!line.empty() ? ", " : "") + tmp;
-
-				ByteVector kp = ssl::X509_digest(cert, EVP_sha256());
-				string keyp = "SHA256/" + Encoder::toBase32(&kp[0], kp.size());
-
-				LogManager::getInstance()->message(str(F_("Certificate verification for %1% failed with error: %2% (certificate KeyPrint: %3%)") % line % X509_verify_cert_error_string(err) % keyp));
-			}
-		}
-
+	// Don't allow untrusted connections on keyprint mismatch
+	if(allowUntrusted && err != X509_V_ERR_APPLICATION_VERIFICATION)
 		return 1;
-	}
 
 	return preverify_ok;
 }

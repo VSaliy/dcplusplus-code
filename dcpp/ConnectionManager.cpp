@@ -704,12 +704,14 @@ void ConnectionManager::on(AdcCommand::INF, UserConnection* aSource, const AdcCo
 		return;
 	}
 
-	aSource->setUser(ClientManager::getInstance()->findUser(CID(cid)));
-
 	if(!aSource->getUser()) {
-		aSource->send(AdcCommand(AdcCommand::SEV_FATAL, AdcCommand::ERROR_INF_FIELD, "INF ID: user not found").addParam("FB", "ID"));
-		putConnection(aSource);
-		return;
+		aSource->setUser(ClientManager::getInstance()->findUser(CID(cid)));
+
+		if(!aSource->getUser()) {
+			aSource->send(AdcCommand(AdcCommand::SEV_FATAL, AdcCommand::ERROR_INF_FIELD, "INF ID: user not found").addParam("FB", "ID"));
+			putConnection(aSource);
+			return;
+		}
 	}
 
 	// without a valid KeyPrint this degrades into normal turst check
