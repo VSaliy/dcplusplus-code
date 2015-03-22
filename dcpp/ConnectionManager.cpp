@@ -363,6 +363,9 @@ void ConnectionManager::nmdcConnect(const string& aServer, const string& aPort, 
 	if(shuttingDown)
 		return;
 
+	if (checkHubCCBlock(aServer, aPort, hubUrl))
+		return;
+
 	UserConnection* uc = getConnection(true, false);
 	uc->setToken(aNick);
 	uc->setHubUrl(hubUrl);
@@ -827,11 +830,42 @@ void ConnectionManager::failed(UserConnection* aSource, const string& aError, bo
 	putConnection(aSource);
 }
 
+bool ConnectionManager::checkHubCCBlock(const string& aServer, const string& aPort, const string& aHubUrl)
+{
+	const auto server_lower = Text::toLower(aServer);
+	dcassert(server_lower == aServer);
+
+	bool cc_blocked = false;
+
+	{
+		Lock l(cs);
+		cc_blocked = !hubsBlockingCC.empty() && hubsBlockingCC.find(server_lower) != hubsBlockingCC.end();
+	}
+
+    if(cc_blocked)
+	{
+		LogManager::getInstance()->message(str(F_("Blocked a C-C connection to a hub ('%1%:%2%'; request from '%3%')") % aServer % aPort % aHubUrl));
+		return true;
+	}
+
+	return false;
+}
+
 void ConnectionManager::on(UserConnectionListener::Failed, UserConnection* aSource, const string& aError) noexcept {
 	failed(aSource, aError, false);
 }
 
 void ConnectionManager::on(UserConnectionListener::ProtocolError, UserConnection* aSource, const string& aError) noexcept {
+	if(aError.compare(0, 7, "CTM2HUB", 7 == 0)) {
+		{
+			Lock l(cs);
+			hubsBlockingCC.insert(Text::toLower(aSource->getRemoteIp()));
+		}
+
+		string aServerPort = aSource->getRemoteIp() + ":" + aSource->getPort();
+		LogManager::getInstance()->message(str(F_("Blocking '%1%', potential DDoS detected (originating hub '%2%')") % aServerPort % aSource->getHubUrl() ));
+	}
+
 	failed(aSource, aError, true);
 }
 
