@@ -33,7 +33,7 @@ void StringMatch::setMethod(Method method) {
 	switch(method) {
 	case PARTIAL: search = StringSearch::List(); break;
 	case EXACT: search = string(); break;
-	case REGEX: search = std::regex(); break;
+	case REGEX: search = boost::regex(); break;
 	case METHOD_LAST: break;
 	}
 }
@@ -61,7 +61,7 @@ struct Prepare : boost::static_visitor<bool> {
 		return true;
 	}
 
-	bool operator()(std::regex& r) const {
+	bool operator()(boost::regex& r) const {
 		try {
 			r.assign(pattern);
 			return true;
@@ -95,9 +95,9 @@ struct Match : boost::static_visitor<bool> {
 		return str == s;
 	}
 
-	bool operator()(const std::regex& r) const {
+	bool operator()(const boost::regex& r) const {
 		try {
-			return std::regex_search(str, r);
+			return !r.empty() && boost::regex_search(str, r);
 		} catch(const std::runtime_error&) {
 			// most likely a stack overflow, ignore...
 			return false;
