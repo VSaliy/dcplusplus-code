@@ -58,6 +58,7 @@ public:
 	virtual void send(const AdcCommand&) { dcassert(0); }
 
 	static string validateMessage(string tmp, bool reverse);
+	
 private:
 	friend class ClientManager;
 	enum SupportFlags {
@@ -114,6 +115,9 @@ private:
 
 	void updateFromTag(Identity& id, const string& tag);
 	void refreshLocalIp() noexcept;
+
+	/** split an "IP:port" string in 2. */
+	static pair<string, string> parseIpPort(const string& aIpPort);
 
 	virtual void checkNick(string& nick);
 	virtual bool v4only() const { return true; }
