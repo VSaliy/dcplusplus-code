@@ -164,6 +164,7 @@ private:
 	ExpectedMap expectedConnections;
 
 	uint32_t floodCounter;
+	unordered_set<string> hubsBlockingCC;
 
 	unique_ptr<Server> server;
 	unique_ptr<Server> secureServer;
@@ -191,6 +192,8 @@ private:
 	bool checkDownload(const UserConnection* uc) const;
 
 	void failed(UserConnection* aSource, const string& aError, bool protocolError);
+
+	bool checkHubCCBlock(const string& aServer, const string& aPort, const string& aHubUrl);
 
 	// UserConnectionListener
 	virtual void on(Connected, UserConnection*) noexcept;
