@@ -127,10 +127,11 @@ fullSlots(false)
 	links.discuss = links.homepage + _T("discussion/");
 	links.features = links.homepage + _T("featurereq/");
 	links.bugs = links.homepage + _T("bugs/");
-	links.donate = _T("https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=arnetheduck%40gmail%2ecom&item_name=DCPlusPlus&no_shipping=1&return=http%3a%2f%2fdcplusplus%2esf%2enet%2f&cancel_return=http%3a%2f%2fdcplusplus%2esf%2enet%2f&cn=Greeting&tax=0&currency_code=EUR&bn=PP%2dDonationsBF&charset=UTF%2d8");
+	links.donate = links.homepage + _T("donate/");
 	links.blog = _T("http://dcpp.wordpress.com");
 	links.community = _T("http://dcbase.org");
 	links.pluginrepo = links.homepage + _T("plugins/");
+	links.contribute = _T("http://dcbase.org/contribute/");
 
 	initWindow();
 	initTabs();
@@ -418,8 +419,9 @@ void MainWindow::initMenu() {
 		help->appendItem(T_("Request a feature"), [this] { WinUtil::openLink(links.features); });
 		help->appendItem(T_("Report a bug"), [this] { WinUtil::openLink(links.bugs); });
 		help->appendItem(T_("Donate (paypal)"), [this] { WinUtil::openLink(links.donate); }, WinUtil::menuIcon(IDI_DONATE));
+		help->appendItem(T_("Contribute"), [this] { WinUtil::openLink(links.contribute); });
 		help->appendItem(T_("Blog"), [this] { WinUtil::openLink(links.blog); });
-		help->appendItem(T_("Community news"), [this] { WinUtil::openLink(links.community); });
+		help->appendItem(T_("DC Netwok Foundation community"), [this] { WinUtil::openLink(links.community); });
 		help->appendItem(T_("Plugin repository"), [this] { WinUtil::openLink(links.pluginrepo); });
 	}
 
