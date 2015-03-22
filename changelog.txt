@@ -20,6 +20,7 @@
 * [L#1502650] Add whitelist of URIs that can be directly opened without prompt (ullner)
 * [L#710249] Show popup info text in text prompots (ullner)
 * Update OpenSSL to version 1.0.2e
+* [L#1436105] Improve KeyPrint checks (crise)
 
 -- 0.851 2015-04-06 --
 * [L#1414362] Prefer boost regex over std regex for the time being (poy)
