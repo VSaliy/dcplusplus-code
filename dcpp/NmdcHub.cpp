@@ -258,7 +258,7 @@ void NmdcHub::onLine(const string& aLine) noexcept {
 		const auto isPassive = seeker.size() > 4 && seeker.compare(0, 4, "Hub:") == 0;
 
 		// Filter own searches
-		if(ClientManager::getInstance()->isActive() && !isPassive) {
+		if(!isPassive && ClientManager::getInstance()->isActive()) {
 			if(seeker == localIp + ":" + SearchManager::getInstance()->getPort()) {
 				return;
 			}
