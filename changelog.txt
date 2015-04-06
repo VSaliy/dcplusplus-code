@@ -1,3 +1,4 @@
+-- 0.851 2015-04-06 --
 * [L#1414362] Prefer boost regex over std regex for the time being (poy)
 * [L#1419454] [NMDC] Disallow malicious search requests (iceman50)
 * [L#1419478] [NMDC] Block C-C connections to hubs (pavel pimenov, ullner)
