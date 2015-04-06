@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2015-01-04 23:09+0100\n"
+"POT-Creation-Date: 2015-04-06 21:35+0200\n"
 "PO-Revision-Date: 2012-01-16 14:30+0000\n"
 "Last-Translator: Sérgio Marques <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-01-16 09:33+0000\n"
-"X-Generator: Launchpad (build 17303)\n"
+"X-Launchpad-Export-Date: 2015-04-06 19:21+0000\n"
+"X-Generator: Launchpad (build 17413)\n"
 
 #: dcpp\DownloadManager.cpp:360
 #, boost-format
@@ -79,19 +79,19 @@ msgstr "%1% (%2%) tem o mesmo CID {%3%} de %4% (%5%). Ignorando..."
 msgid "%1% (Nick unknown)"
 msgstr "%1% (alcunha desconhecido)"
 
-#: dcpp\PluginManager.cpp:155 dcpp\PluginManager.cpp:175
-#: dcpp\PluginManager.cpp:578
+#: dcpp\PluginManager.cpp:156 dcpp\PluginManager.cpp:176
+#: dcpp\PluginManager.cpp:579
 #, boost-format
 msgid "%1% is already installed"
 msgstr ""
 
-#: dcpp\PluginManager.cpp:141 dcpp\PluginManager.cpp:540
+#: dcpp\PluginManager.cpp:142 dcpp\PluginManager.cpp:541
 #, fuzzy, boost-format
 msgid "%1% is not a valid plugin"
 msgstr "%1%: ficheiro não disponível"
 
-#: dcpp\PluginManager.cpp:107 dcpp\PluginManager.cpp:144
-#: dcpp\PluginManager.cpp:545
+#: dcpp\PluginManager.cpp:108 dcpp\PluginManager.cpp:145
+#: dcpp\PluginManager.cpp:546
 #, boost-format
 msgid "%1% is not compatible with %2%"
 msgstr ""
@@ -185,6 +185,16 @@ msgstr "Tudo"
 msgid "Audio"
 msgstr "Áudio"
 
+#: dcpp\ConnectionManager.cpp:847
+#, boost-format
+msgid "Blocked a C-C connection to a hub ('%1%:%2%'; request from '%3%')"
+msgstr ""
+
+#: dcpp\ConnectionManager.cpp:866
+#, boost-format
+msgid "Blocking '%1%', potential DDoS detected (originating hub '%2%')"
+msgstr ""
+
 #: dcpp\QueueManager.cpp:1660
 msgid "CRC32 inconsistency (SFV-Check)"
 msgstr "Inconsistência CRC32 (verificação SFV)"
@@ -194,7 +204,7 @@ msgstr "Inconsistência CRC32 (verificação SFV)"
 msgid "CRC32 inconsistency (SFV-Check): %1%"
 msgstr "Inconsistência CRC32 (verificação SFV): %1%"
 
-#: dcpp\CryptoManager.cpp:577
+#: dcpp\CryptoManager.cpp:579
 #, boost-format
 msgid ""
 "Certificate verification for %1% failed with error: %2% (certificate "
@@ -340,13 +350,13 @@ msgid "Error during compression"
 msgstr "Erro durante a compressão"
 
 #: dcpp\BZUtils.cpp:76 dcpp\BZUtils.cpp:98 dcpp\BZUtils.cpp:101
-#: dcpp\CryptoManager.cpp:615 dcpp\CryptoManager.cpp:634
-#: dcpp\CryptoManager.cpp:648 dcpp\ZUtils.cpp:106 dcpp\ZUtils.cpp:131
+#: dcpp\CryptoManager.cpp:617 dcpp\CryptoManager.cpp:636
+#: dcpp\CryptoManager.cpp:650 dcpp\ZUtils.cpp:106 dcpp\ZUtils.cpp:131
 #: dcpp\ZUtils.cpp:145
 msgid "Error during decompression"
 msgstr "Erro durante a descompressão"
 
-#: dcpp\CryptoManager.cpp:139
+#: dcpp\CryptoManager.cpp:141
 msgid "Error generating certificate"
 msgstr "Erro ao gerar certificado"
 
@@ -355,12 +365,12 @@ msgstr "Erro ao gerar certificado"
 msgid "Error hashing %1%: %2%"
 msgstr "Erro de hashing %1%: %2%"
 
-#: dcpp\PluginManager.cpp:600
+#: dcpp\PluginManager.cpp:601
 #, fuzzy, boost-format
 msgid "Error loading %1%"
 msgstr "Erro de hashing %1%: %2%"
 
-#: dcpp\PluginManager.cpp:532
+#: dcpp\PluginManager.cpp:533
 #, fuzzy, boost-format
 msgid "Error loading %1%: %2%"
 msgstr "Erro de hashing %1%: %2%"
@@ -387,15 +397,15 @@ msgstr "Falha ao obter o IP"
 msgid "Failed to initialize the %1% interface"
 msgstr "Falha ao iniciar a interface %1%"
 
-#: dcpp\CryptoManager.cpp:372
+#: dcpp\CryptoManager.cpp:374
 msgid "Failed to load certificate file"
 msgstr "Falha ao carregar o ficheiro do certificado"
 
-#: dcpp\CryptoManager.cpp:380
+#: dcpp\CryptoManager.cpp:382
 msgid "Failed to load private key"
 msgstr "Falha ao carregar a chave privada"
 
-#: dcpp\CryptoManager.cpp:393
+#: dcpp\CryptoManager.cpp:395
 #, boost-format
 msgid "Failed to load trusted certificate from %1%"
 msgstr ""
@@ -472,7 +482,7 @@ msgstr "Hashing terminado: %1% (%2%)"
 msgid "Full tree does not match TTH root"
 msgstr "O caminho não coincide com o TTH root"
 
-#: dcpp\CryptoManager.cpp:361
+#: dcpp\CryptoManager.cpp:363
 msgid "Generated new TLS certificate"
 msgstr "Foi gerado um novo certificado TLS"
 
@@ -567,7 +577,7 @@ msgstr "Detetada um rede local com NAT. A tentar mapear as portas..."
 msgid "Maximum command length exceeded"
 msgstr "O limite do comando foi excedido"
 
-#: dcpp\PluginManager.cpp:551
+#: dcpp\PluginManager.cpp:552
 #, boost-format
 msgid "Missing dependencies for %1%"
 msgstr ""
@@ -576,7 +586,7 @@ msgstr ""
 msgid "More bytes written than requested"
 msgstr "Foram escritos mais bytes do que solicitados"
 
-#: dcpp\CryptoManager.cpp:128
+#: dcpp\CryptoManager.cpp:130
 msgid "No certificate file chosen"
 msgstr "Não escolheu o certificado"
 
@@ -588,7 +598,7 @@ msgstr "Não escolheu o diretório"
 msgid "No port mapping interface available"
 msgstr "Nenhuma interface de mapeamento disponível"
 
-#: dcpp\CryptoManager.cpp:125
+#: dcpp\CryptoManager.cpp:127
 msgid "No private key file chosen"
 msgstr "Não escolheu a chave privada"
 
@@ -706,12 +716,12 @@ msgid ""
 msgstr ""
 "Removidos os mapeamentos de porta do dispositivo %1% com a interface %2%"
 
-#: dcpp\CryptoManager.cpp:363
+#: dcpp\CryptoManager.cpp:365
 #, boost-format
 msgid "TLS disabled, failed to generate certificate: %1%"
 msgstr "TLS inativo. Falha ao gerar o certificado: %1%"
 
-#: dcpp\CryptoManager.cpp:353
+#: dcpp\CryptoManager.cpp:355
 msgid "TLS disabled, no certificate file set"
 msgstr "TLS inativo. Nenhum certificado definido"
 
@@ -772,7 +782,7 @@ msgstr "O ficheiro já foi transferido com sucesso"
 msgid "This file is already queued"
 msgstr "O ficheiro já está na fila de espera"
 
-#: dcpp\NmdcHub.cpp:948
+#: dcpp\NmdcHub.cpp:952
 #, boost-format
 msgid ""
 "This hub is trying to use your client to spam %1%, please urge hub owner to "
@@ -853,7 +863,7 @@ msgstr "Erro desconhecido: 0x%1$x"
 msgid "Unknown protocol %d"
 msgstr "Protocolo desconhecido %d"
 
-#: dcpp\PluginManager.cpp:565
+#: dcpp\PluginManager.cpp:566
 #, boost-format
 msgid "Updating the %1% plugin from version %2% to version %3%"
 msgstr ""

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2015-01-04 23:09+0100\n"
+"POT-Creation-Date: 2015-04-06 21:35+0200\n"
 "PO-Revision-Date: 2012-09-09 21:22+0000\n"
 "Last-Translator: Mank <Unknown>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-01-16 09:33+0000\n"
-"X-Generator: Launchpad (build 17303)\n"
+"X-Launchpad-Export-Date: 2015-04-06 19:21+0000\n"
+"X-Generator: Launchpad (build 17413)\n"
 
 #: dcpp\DownloadManager.cpp:360
 #, boost-format
@@ -79,19 +79,19 @@ msgstr "%1% (%2%) má stejné CID {%3%} jako %4% (%5%), ignoruji"
 msgid "%1% (Nick unknown)"
 msgstr "%1% (Nick neznámý)"
 
-#: dcpp\PluginManager.cpp:155 dcpp\PluginManager.cpp:175
-#: dcpp\PluginManager.cpp:578
+#: dcpp\PluginManager.cpp:156 dcpp\PluginManager.cpp:176
+#: dcpp\PluginManager.cpp:579
 #, boost-format
 msgid "%1% is already installed"
 msgstr "%1% je jiz instalován"
 
-#: dcpp\PluginManager.cpp:141 dcpp\PluginManager.cpp:540
+#: dcpp\PluginManager.cpp:142 dcpp\PluginManager.cpp:541
 #, boost-format
 msgid "%1% is not a valid plugin"
 msgstr "%1% není validní plugin"
 
-#: dcpp\PluginManager.cpp:107 dcpp\PluginManager.cpp:144
-#: dcpp\PluginManager.cpp:545
+#: dcpp\PluginManager.cpp:108 dcpp\PluginManager.cpp:145
+#: dcpp\PluginManager.cpp:546
 #, boost-format
 msgid "%1% is not compatible with %2%"
 msgstr ""
@@ -182,6 +182,16 @@ msgstr "Jakýkoliv"
 msgid "Audio"
 msgstr "Zvuk"
 
+#: dcpp\ConnectionManager.cpp:847
+#, boost-format
+msgid "Blocked a C-C connection to a hub ('%1%:%2%'; request from '%3%')"
+msgstr ""
+
+#: dcpp\ConnectionManager.cpp:866
+#, boost-format
+msgid "Blocking '%1%', potential DDoS detected (originating hub '%2%')"
+msgstr ""
+
 #: dcpp\QueueManager.cpp:1660
 msgid "CRC32 inconsistency (SFV-Check)"
 msgstr "CRC32 nesuhlasí (SFV kontrola)"
@@ -191,7 +201,7 @@ msgstr "CRC32 nesuhlasí (SFV kontrola)"
 msgid "CRC32 inconsistency (SFV-Check): %1%"
 msgstr "CRC32 nesuhlasí (SFV kontrola)"
 
-#: dcpp\CryptoManager.cpp:577
+#: dcpp\CryptoManager.cpp:579
 #, boost-format
 msgid ""
 "Certificate verification for %1% failed with error: %2% (certificate "
@@ -338,13 +348,13 @@ msgid "Error during compression"
 msgstr "Chyba pocesu komprese"
 
 #: dcpp\BZUtils.cpp:76 dcpp\BZUtils.cpp:98 dcpp\BZUtils.cpp:101
-#: dcpp\CryptoManager.cpp:615 dcpp\CryptoManager.cpp:634
-#: dcpp\CryptoManager.cpp:648 dcpp\ZUtils.cpp:106 dcpp\ZUtils.cpp:131
+#: dcpp\CryptoManager.cpp:617 dcpp\CryptoManager.cpp:636
+#: dcpp\CryptoManager.cpp:650 dcpp\ZUtils.cpp:106 dcpp\ZUtils.cpp:131
 #: dcpp\ZUtils.cpp:145
 msgid "Error during decompression"
 msgstr "Chyba během dekomprese"
 
-#: dcpp\CryptoManager.cpp:139
+#: dcpp\CryptoManager.cpp:141
 msgid "Error generating certificate"
 msgstr "Chyba generovaného certifikátu"
 
@@ -353,12 +363,12 @@ msgstr "Chyba generovaného certifikátu"
 msgid "Error hashing %1%: %2%"
 msgstr "Chyba hashování %1%: %2%"
 
-#: dcpp\PluginManager.cpp:600
+#: dcpp\PluginManager.cpp:601
 #, fuzzy, boost-format
 msgid "Error loading %1%"
 msgstr "Chyba hashování %1%: %2%"
 
-#: dcpp\PluginManager.cpp:532
+#: dcpp\PluginManager.cpp:533
 #, fuzzy, boost-format
 msgid "Error loading %1%: %2%"
 msgstr "Chyba hashování %1%: %2%"
@@ -385,15 +395,15 @@ msgstr "Selhalo získání externí IP adresy"
 msgid "Failed to initialize the %1% interface"
 msgstr "Selhala inicializace  %1%  rozhraní"
 
-#: dcpp\CryptoManager.cpp:372
+#: dcpp\CryptoManager.cpp:374
 msgid "Failed to load certificate file"
 msgstr "Nemohu nahrát soubor s certifikátem"
 
-#: dcpp\CryptoManager.cpp:380
+#: dcpp\CryptoManager.cpp:382
 msgid "Failed to load private key"
 msgstr "Nemohu nahrát privátní klíč"
 
-#: dcpp\CryptoManager.cpp:393
+#: dcpp\CryptoManager.cpp:395
 #, boost-format
 msgid "Failed to load trusted certificate from %1%"
 msgstr ""
@@ -468,7 +478,7 @@ msgstr "Hash hotov:: %1% (%2%)"
 msgid "Full tree does not match TTH root"
 msgstr "Stáhnutý strom neodpovídá porovnanému TTH základu (TTH root)"
 
-#: dcpp\CryptoManager.cpp:361
+#: dcpp\CryptoManager.cpp:363
 msgid "Generated new TLS certificate"
 msgstr "Vygenerovaný nový TLS certifikát"
 
@@ -563,7 +573,7 @@ msgstr ""
 msgid "Maximum command length exceeded"
 msgstr "Překročena maximální délka příkazu"
 
-#: dcpp\PluginManager.cpp:551
+#: dcpp\PluginManager.cpp:552
 #, boost-format
 msgid "Missing dependencies for %1%"
 msgstr ""
@@ -572,7 +582,7 @@ msgstr ""
 msgid "More bytes written than requested"
 msgstr "Zapsáno více dat, než je požadováno"
 
-#: dcpp\CryptoManager.cpp:128
+#: dcpp\CryptoManager.cpp:130
 msgid "No certificate file chosen"
 msgstr "Certifikát není vybrán"
 
@@ -584,7 +594,7 @@ msgstr "Nebyl zvolen adresář"
 msgid "No port mapping interface available"
 msgstr ""
 
-#: dcpp\CryptoManager.cpp:125
+#: dcpp\CryptoManager.cpp:127
 msgid "No private key file chosen"
 msgstr "Soukromý klíč není vybrán"
 
@@ -699,12 +709,12 @@ msgid ""
 "Successfully removed port mappings from the %1% device with the %2% interface"
 msgstr "Nepodařilo se vytvořit připojení"
 
-#: dcpp\CryptoManager.cpp:363
+#: dcpp\CryptoManager.cpp:365
 #, boost-format
 msgid "TLS disabled, failed to generate certificate: %1%"
 msgstr "TLS zakázáno, nelze vygenerovat certifikát: %1%"
 
-#: dcpp\CryptoManager.cpp:353
+#: dcpp\CryptoManager.cpp:355
 msgid "TLS disabled, no certificate file set"
 msgstr "TLS zakázáno, chybí certifikát"
 
@@ -765,7 +775,7 @@ msgstr "Soubor je již stažen"
 msgid "This file is already queued"
 msgstr "Tento soubor je již ve frontě"
 
-#: dcpp\NmdcHub.cpp:948
+#: dcpp\NmdcHub.cpp:952
 #, boost-format
 msgid ""
 "This hub is trying to use your client to spam %1%, please urge hub owner to "
@@ -844,7 +854,7 @@ msgstr "Neznámá chyba: 0x%1$x"
 msgid "Unknown protocol %d"
 msgstr "Neznámá chyba: 0x%1$x"
 
-#: dcpp\PluginManager.cpp:565
+#: dcpp\PluginManager.cpp:566
 #, boost-format
 msgid "Updating the %1% plugin from version %2% to version %3%"
 msgstr ""

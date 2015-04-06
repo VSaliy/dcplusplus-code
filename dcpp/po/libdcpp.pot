@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libdcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2015-03-22 20:39+0100\n"
+"POT-Creation-Date: 2015-04-06 21:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -194,7 +194,7 @@ msgstr ""
 msgid "CRC32 inconsistency (SFV-Check): %1%"
 msgstr ""
 
-#: dcpp\CryptoManager.cpp:577
+#: dcpp\CryptoManager.cpp:579
 #, boost-format
 msgid "Certificate verification for %1% failed with error: %2% (certificate KeyPrint: %3%)"
 msgstr ""
@@ -334,13 +334,13 @@ msgid "Error during compression"
 msgstr ""
 
 #: dcpp\BZUtils.cpp:76 dcpp\BZUtils.cpp:98 dcpp\BZUtils.cpp:101
-#: dcpp\CryptoManager.cpp:615 dcpp\CryptoManager.cpp:634
-#: dcpp\CryptoManager.cpp:648 dcpp\ZUtils.cpp:106 dcpp\ZUtils.cpp:131
+#: dcpp\CryptoManager.cpp:617 dcpp\CryptoManager.cpp:636
+#: dcpp\CryptoManager.cpp:650 dcpp\ZUtils.cpp:106 dcpp\ZUtils.cpp:131
 #: dcpp\ZUtils.cpp:145
 msgid "Error during decompression"
 msgstr ""
 
-#: dcpp\CryptoManager.cpp:139
+#: dcpp\CryptoManager.cpp:141
 msgid "Error generating certificate"
 msgstr ""
 
@@ -381,15 +381,15 @@ msgstr ""
 msgid "Failed to initialize the %1% interface"
 msgstr ""
 
-#: dcpp\CryptoManager.cpp:372
+#: dcpp\CryptoManager.cpp:374
 msgid "Failed to load certificate file"
 msgstr ""
 
-#: dcpp\CryptoManager.cpp:380
+#: dcpp\CryptoManager.cpp:382
 msgid "Failed to load private key"
 msgstr ""
 
-#: dcpp\CryptoManager.cpp:393
+#: dcpp\CryptoManager.cpp:395
 #, boost-format
 msgid "Failed to load trusted certificate from %1%"
 msgstr ""
@@ -457,7 +457,7 @@ msgstr ""
 msgid "Full tree does not match TTH root"
 msgstr ""
 
-#: dcpp\CryptoManager.cpp:361
+#: dcpp\CryptoManager.cpp:363
 msgid "Generated new TLS certificate"
 msgstr ""
 
@@ -552,7 +552,7 @@ msgstr ""
 msgid "More bytes written than requested"
 msgstr ""
 
-#: dcpp\CryptoManager.cpp:128
+#: dcpp\CryptoManager.cpp:130
 msgid "No certificate file chosen"
 msgstr ""
 
@@ -564,7 +564,7 @@ msgstr ""
 msgid "No port mapping interface available"
 msgstr ""
 
-#: dcpp\CryptoManager.cpp:125
+#: dcpp\CryptoManager.cpp:127
 msgid "No private key file chosen"
 msgstr ""
 
@@ -674,12 +674,12 @@ msgstr ""
 msgid "Successfully removed port mappings from the %1% device with the %2% interface"
 msgstr ""
 
-#: dcpp\CryptoManager.cpp:363
+#: dcpp\CryptoManager.cpp:365
 #, boost-format
 msgid "TLS disabled, failed to generate certificate: %1%"
 msgstr ""
 
-#: dcpp\CryptoManager.cpp:353
+#: dcpp\CryptoManager.cpp:355
 msgid "TLS disabled, no certificate file set"
 msgstr ""
 

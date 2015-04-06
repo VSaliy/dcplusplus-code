@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2015-01-04 23:09+0100\n"
-"PO-Revision-Date: 2011-12-04 04:17+0000\n"
-"Last-Translator: Q <Unknown>\n"
+"POT-Creation-Date: 2015-03-22 20:39+0100\n"
+"PO-Revision-Date: 2015-03-30 22:09+0000\n"
+"Last-Translator: Fredrik Ullner <ullner@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-01-16 09:34+0000\n"
-"X-Generator: Launchpad (build 17303)\n"
+"X-Launchpad-Export-Date: 2015-04-06 19:22+0000\n"
+"X-Generator: Launchpad (build 17413)\n"
 
 #. type: Content of: <html><body><ul><li><div><placeholder><a>
 #: help/chat_commands.html:9 help/index.html:148
@@ -67,6 +67,8 @@ msgid ""
 "chosen connection mode, IP and ports that DC++ is currently using for "
 "connections with all users."
 msgstr ""
+"Visar anslutningsstatus, automatiskt eller manuellt angiven anslutningsläge, "
+"IP och portar som DC++ använder för att ansluta till alla användare."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:30
@@ -104,6 +106,8 @@ msgid ""
 "Adds a user matching definition (or modifies an existing one, if possible) "
 "to ignore chat messages from the specified user."
 msgstr ""
+"Lägger till en användarmatchad definition (eller modifierar en befintlig, om "
+"möjligt) för ignorering av chattmeddelanden från den valda användaren."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:44
@@ -111,6 +115,8 @@ msgid ""
 "Adds a user matching definition (or modifies an existing one, if possible) "
 "to stop ignoring chat messages from the specified user."
 msgstr ""
+"Lägger till en användarmatchad definition (eller modifierar en befintlig, om "
+"möjligt) för att sluta ignorera chattmeddelanden från den valda användaren."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:47
@@ -118,6 +124,8 @@ msgid ""
 "Prints the current hub's topic. Useful if you want to copy the topic or it "
 "contains a link you'd like to easily open."
 msgstr ""
+"Skriver ut den nuvarande hubbens ämne. Användsningsbart om du vill kopiera "
+"ämnet eller om det innehåller en länk som man kan enkelt öppna."
 
 #. type: Content of: <html><body><dl><dd><placeholder><a>
 #: help/chat_commands.html:49
@@ -140,6 +148,8 @@ msgid ""
 "Starts a direct encrypted communication channel to avoid spying on your "
 "private messages."
 msgstr ""
+"Startar en direkt och krypterad kommunikationskanal för att undvika att "
+"andra kan spionera på dina privata meddelanden."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:55
@@ -167,6 +177,8 @@ msgid ""
 "Adds a user matching definition (or modifies an existing one, if possible) "
 "to ignore chat messages from the current user."
 msgstr ""
+"Lägger till en användarmatchad definition (eller modifierar en befintlig, om "
+"möjligt) för ignorering av chattmeddelanden från den nuvarande användaren."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:67
@@ -174,12 +186,15 @@ msgid ""
 "Adds a user matching definition (or modifies an existing one, if possible) "
 "to stop ignoring chat messages from the current user."
 msgstr ""
+"Lägger till en användarmatchad definition (eller modifierar en befintlig, om "
+"möjligt) för att sluta ignorera chattmeddelanden från den nuvarande "
+"användaren."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:70
-#, fuzzy
 msgid "Lists the date and time when the last message was sent or received."
-msgstr "Datum och tid när filen köades upp."
+msgstr ""
+"Visa datum och tid när det senaste meddelandet skickades eller togs emot."
 
 #. type: Content of: <html><body><h2>
 #: help/chat_commands.html:72
@@ -266,12 +281,12 @@ msgstr "Stänger av Bortastatus."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:107
-#, fuzzy
 msgid ""
 "Launches your default web browser to the DuckDuckGo search engine with the "
 "specified search."
 msgstr ""
-"Öppnar Googles söksida i din standardwebbläsare med den inskriva sökningen."
+"Öppnar DuckDuckGos söksida i din standardwebbläsaren med den inskrivna "
+"sökningen."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:110
@@ -317,11 +332,12 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:126
-#, fuzzy
 msgid ""
 "Displays available commands. (The ones listed on this page.) Optionally, you "
 "can specify &quot;brief&quot; to have a brief listing."
-msgstr "Visar tillgängliga kommandon. (De som finns listade på denna sida.)"
+msgstr ""
+"Visar tillgängliga kommandon. (De som visas på denna sida.) Alternativt, du "
+"kan specifera &quot;brief&quot; för att ha en kort lista."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:128
@@ -704,9 +720,8 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: H:/Dev/DC++/repo/help/commands_user_general.inc:19
-#, fuzzy
 msgid "Ignore chat"
-msgstr "Ignorera TTH-sökningar"
+msgstr "Ignorera chatt"
 
 #. type: Content of: <html><body><dl><dd>
 #: H:/Dev/DC++/repo/help/commands_user_general.inc:20
@@ -718,7 +733,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: H:/Dev/DC++/repo/help/commands_user_general.inc:22
 msgid "Un-ignore chat"
-msgstr ""
+msgstr "Ej ignorera chatten"
 
 #. type: Content of: <html><body><dl><dd>
 #: H:/Dev/DC++/repo/help/commands_user_general.inc:23
@@ -729,9 +744,8 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: H:/Dev/DC++/repo/help/commands_user_general.inc:25
-#, fuzzy
 msgid "Copy user information"
-msgstr "Personlig information"
+msgstr "Kopiera användarinformation"
 
 #. type: Content of: <html><body><dl><dd>
 #: H:/Dev/DC++/repo/help/commands_user_general.inc:26
@@ -794,6 +808,7 @@ msgstr ""
 "  Anders Landin https://launchpad.net/~127594-gmail\n"
 "  Erik Simmesgård https://launchpad.net/~ersi\n"
 "  Fredrik https://launchpad.net/~fffredde\n"
+"  Fredrik Ullner https://launchpad.net/~ullner\n"
 "  Lightgirl_xp https://launchpad.net/~lxp\n"
 "  Mattias Ohlsson https://launchpad.net/~mattias-oh\n"
 "  Mr.Jester https://launchpad.net/~jarfallais\n"
@@ -1035,7 +1050,7 @@ msgstr "Detta är den uppsättning av söksträngar att söka efter."
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_adls_properties.html:13
 msgid "Regular Expression"
-msgstr ""
+msgstr "Reguljära uttryck"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_adls_properties.html:14
@@ -1464,7 +1479,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_favorite_hub.html:27 help/settings_general.html:31
 msgid "Email"
-msgstr ""
+msgstr "E-post"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_favorite_hub.html:28
@@ -2137,9 +2152,8 @@ msgstr ""
 #. type: Content of: <html><body><p><placeholder><a>
 #: help/dialog_user_matching.html:13 help/dialog_user_matching.html:20
 #: help/index.html:114 help/settings_styles.html:80
-#, fuzzy
 msgid "User matching"
-msgstr "Användarkommandon"
+msgstr "Användarmatchning"
 
 #. type: Content of: <html><body><p>
 #: help/dialog_user_matching.html:11
@@ -2153,7 +2167,7 @@ msgstr ""
 #: help/dialog_user_matching.html:21 help/index.html:95
 #: help/settings_styles.html:9 help/settings_user_matching.html:50
 msgid "Styles"
-msgstr ""
+msgstr "Tema"
 
 #. type: Content of: <html><body><p>
 #: help/dialog_user_matching.html:19
@@ -2167,9 +2181,8 @@ msgstr ""
 
 #. type: Content of: <html><body><h2>
 #: help/dialog_user_matching.html:24
-#, fuzzy
 msgid "Match favorite users"
-msgstr "Favoritanvändare"
+msgstr "Matcha favoritanvändare"
 
 #. type: Content of: <html><body><h1>
 #: help/dialog_user_matching.html:27 help/index.html:34
@@ -2194,7 +2207,7 @@ msgstr ""
 #. type: Content of: <html><body><h2>
 #: help/dialog_user_matching.html:31
 msgid "Match operators"
-msgstr ""
+msgstr "Matcha operatörer"
 
 #. type: Content of: <html><body><p>
 #: help/dialog_user_matching.html:33
@@ -2206,7 +2219,7 @@ msgstr ""
 #. type: Content of: <html><body><h2>
 #: help/dialog_user_matching.html:37
 msgid "Match bots"
-msgstr ""
+msgstr "Matcha bottar"
 
 #. type: Content of: <html><body><p>
 #: help/dialog_user_matching.html:39
@@ -2218,13 +2231,12 @@ msgstr ""
 #. type: Content of: <html><body><h2>
 #: help/dialog_user_matching.html:43
 msgid "Rules"
-msgstr ""
+msgstr "Regler"
 
 #. type: Content of: <html><body><h3>
 #: help/dialog_user_matching.html:45
-#, fuzzy
 msgid "Add a rule"
-msgstr "Lägg till map"
+msgstr "Lägg till en regel"
 
 #. type: Content of: <html><body><p>
 #: help/dialog_user_matching.html:47
@@ -2292,9 +2304,8 @@ msgstr ""
 
 #. type: Content of: <html><body><h2>
 #: help/dialog_user_matching.html:78
-#, fuzzy
 msgid "Ignore chat messages"
-msgstr "Meddelanden i huvudchatten"
+msgstr "Ignorera chattmeddelanden"
 
 #. type: Content of: <html><body><p>
 #: help/dialog_user_matching.html:80
@@ -2755,7 +2766,7 @@ msgstr "Grön"
 #. type: Content of: <html><body><dl><dd>
 #: help/faq_different_icons.html:13
 msgid "Standard user icon (no particular attribute)."
-msgstr ""
+msgstr "Standard användarikon (Inga speciella betydelser)"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/faq_different_icons.html:14
@@ -2782,12 +2793,12 @@ msgstr ""
 #. type: Content of: <html><body>
 #: help/faq_different_icons.html:19
 msgid "Icon modifiers:"
-msgstr ""
+msgstr "Ikonmodifierare:"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/faq_different_icons.html:21
 msgid "Red bricks"
-msgstr ""
+msgstr "Tegelstenar"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/faq_different_icons.html:22
@@ -3011,7 +3022,7 @@ msgstr ""
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
 #: help/faq_mapping.html:9 help/index.html:127
 msgid "What is NAT-PMP / UPnP?"
-msgstr ""
+msgstr "Vad är NAT-PMP / UPnP?"
 
 #. type: Content of: <html><body><p>
 #: help/faq_mapping.html:10
@@ -3335,9 +3346,8 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
 #: help/faq_portforward.html:9 help/index.html:125
-#, fuzzy
 msgid "How to set up manual port forwarding?"
-msgstr "Hur konfigurerar man aktivt läge?"
+msgstr "Hur ställer man in manuell port forwarding?"
 
 #. type: Content of: <html><body><p>
 #: help/faq_portforward.html:11
@@ -3354,7 +3364,7 @@ msgstr ""
 #. type: Content of: <html><body><p>
 #: help/faq_portforward.html:19
 msgid "This FAQ assumes that"
-msgstr ""
+msgstr "Denna FAQ antar att"
 
 #. type: Content of: <html><body><p><ul><li>
 #: help/faq_portforward.html:21
@@ -3372,7 +3382,7 @@ msgstr ""
 #. type: Content of: <html><body><p><ul><li>
 #: help/faq_portforward.html:24
 msgid "You have basic understanding of computer networking"
-msgstr ""
+msgstr "Du har en grundläggande förståelse för datornätverk"
 
 #. type: Content of: <html><body><p><ul><li>
 #: help/faq_portforward.html:25
@@ -4082,6 +4092,8 @@ msgid ""
 "How do I move my incomplete downloads, plugins configuration and other "
 "(temporary) data of DC++ to another installation?"
 msgstr ""
+"Hur flyttar jag mina nerladdningar som inte är färdiga, konfigurationer för "
+"plugin och annat (temporär) data för DC++ till en annan installation?"
 
 #. type: Content of: <html><body><p>
 #: help/faq_settings_files.html:72
@@ -4210,23 +4222,21 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/faq_settings_files.html:87
-#, fuzzy
 msgid ""
 "<i>C:\\Documents And Settings\\[your username]\\Local Settings\\Application "
 "Data\\DC++\\</i> for <u>Windows XP</u>;"
 msgstr ""
-"<i>C:\\Documents And Settings\\[ditt användarnamn i Windows]\\Local Settings"
-"\\Application Data\\DC++\\</i> för <u>Windows 2000 och XP</u>;"
+"<i>C:\\Documents And Settings\\[ditt användarnamn]\\Local Settings"
+"\\Application Data\\DC++\\</i> för <u>Windows XP</u>;"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/faq_settings_files.html:90
-#, fuzzy
 msgid ""
 "<i>C:\\Users\\[your username]\\AppData\\Local\\DC++\\</i> in case of "
 "<u>Windows Vista, 7 or 8</u>."
 msgstr ""
-"<i>C:\\Users\\[ditt användarnamn i Windows]\\AppData\\Local\\DC++\\</i> för "
-"<u>Windows Vista och Windows 7</u>."
+"<i>C:\\Users\\[ditt användarnamn]\\AppData\\Local\\DC++\\</i> för <u>Windows "
+"Vista, 7 or 8</u>."
 
 #. type: Content of: <html><body><h1>
 #: help/faq_slowdownload.html:9
@@ -4258,7 +4268,7 @@ msgstr "Långsamma nedladdningar från specifik(a) användare"
 #. type: Content of: <html><body><p>
 #: help/faq_slowdownload.html:17
 msgid "Reasons connections with some users may be too slow:"
-msgstr ""
+msgstr "Anledningar anslutningar med vissa användare kan vara för långsamt:"
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_slowdownload.html:20
@@ -4283,15 +4293,16 @@ msgid ""
 "It is also possible that either your ISP or the other user's provider has "
 "limited overseas bandwitdh available."
 msgstr ""
+"Det är också möjligt antingen den internetleveratör eller den andres "
+"internetleveratör har begränsad bandbredd tillgänglig."
 
 #. type: Content of: <html><body><h1>
 #: help/faq_slowdownload.html:31 help/faq_slowdownload.html:71
 #: help/index.html:44 help/settings_styles.html:24
 #: help/window_download_queue.html:36 help/window_pm.html:69
 #: help/window_transfers.html:9
-#, fuzzy
 msgid "Transfers"
-msgstr "Överfört"
+msgstr "Överföringar"
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_slowdownload.html:30
@@ -4374,7 +4385,7 @@ msgstr ""
 #. type: Content of: <html><body><p>
 #: help/faq_slowdownload.html:66
 msgid "Solution: try to find more sources for your downloads:"
-msgstr ""
+msgstr "Lösning: försök att hitta fler källor för dina nerladdningar"
 
 #. type: Content of: <html><body><dl><dd><placeholder><a>
 #: help/faq_slowdownload.html:70 help/index.html:35
@@ -4451,7 +4462,7 @@ msgstr "Långsamma nedladdningar oavsett användare"
 #. type: Content of: <html><body><p>
 #: help/faq_slowdownload.html:97
 msgid "Slow downloads within DC++ may be caused by the following:"
-msgstr ""
+msgstr "Långsamma nerladdningar med DC++ kan vara orsakade av följande:"
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_slowdownload.html:99
@@ -4638,7 +4649,7 @@ msgstr ""
 #. type: Content of: <html><body><h1>
 #: help/faq_unblock.html:10
 msgid "How to unblock DC++ in firewalls and other installed security software?"
-msgstr ""
+msgstr "Hur avblockerar man DC++ i brandväggar och andra säkerhetsprogram?"
 
 #. type: Content of: <html><body><p>
 #: help/faq_unblock.html:12
@@ -4664,9 +4675,8 @@ msgstr ""
 
 #. type: Content of: <html><body><h2>
 #: help/faq_unblock.html:24
-#, fuzzy
 msgid "Signs of blocking"
-msgstr "Portblockering"
+msgstr "Tecken på blockering"
 
 #. type: Content of: <html><body><p>
 #: help/faq_unblock.html:25
@@ -4674,33 +4684,34 @@ msgid ""
 "You might suspect that DC++ is blocked if you experience any combination of "
 "the following:"
 msgstr ""
+"Du kanske misstänker att DC++ är blockerat om du upplever en kombination av "
+"följande:"
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_unblock.html:27
-#, fuzzy
 msgid "you are unable to connect to any hub"
-msgstr "Om du inte för sökträffar i någon hubb"
+msgstr "du kan inte ansluta till någon hubb"
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_unblock.html:28
-#, fuzzy
 msgid "you can't download any hublist"
-msgstr "Aktuell nedladdningsgräns"
+msgstr "du kan inte ladda ner någon hubblista"
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_unblock.html:29
 msgid "no file transfers (neither uploads nor downloads)"
-msgstr ""
+msgstr "inga filöverföringar (varken upp- eller nerladdningar)"
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_unblock.html:30
 msgid "weird messages at start complaining about unable to open ports"
 msgstr ""
+"konstiga meddelanden vid uppstart som pekar på problem med att öppna portar."
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_unblock.html:31
 msgid "cannot start DC++ itself at all"
-msgstr ""
+msgstr "inte kan starta DC++ över huvud taget"
 
 #. type: Content of: <html><body><p>
 #: help/faq_unblock.html:34
@@ -4733,31 +4744,32 @@ msgstr ""
 #: help/faq_unblock.html:47
 msgid "What OS components or software can block DC++?"
 msgstr ""
+"Vilka operativsystemkomponenter eller annan mjukvara kan blockera DC++?"
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_unblock.html:49
 msgid "Windows internal firewall"
-msgstr ""
+msgstr "Windows interna brandvägg"
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_unblock.html:50
 msgid "3rd party firewall software"
-msgstr ""
+msgstr "Tredjeparts brandväggsmjukvara"
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_unblock.html:51
 msgid "Anti-virus software"
-msgstr ""
+msgstr "Antivirusmjukvara"
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_unblock.html:52
 msgid "Anti-spyware software"
-msgstr ""
+msgstr "Antispywaremjukvara"
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_unblock.html:53
 msgid "Security suites with features combined of the above"
-msgstr ""
+msgstr "Säkerhetssviter med funktioner kombinerade av det ovanstående"
 
 #. type: Content of: <html><body><h2>
 #: help/faq_unblock.html:56
@@ -4868,7 +4880,7 @@ msgstr ""
 #. type: Content of: <html><body><h2>
 #: help/faq_unblock.html:88
 msgid "Unblock DC++ in various 3rd party security software"
-msgstr ""
+msgstr "Avblockera DC++ i tredjeparts säkerhetsmjukvara"
 
 #. type: Content of: <html><body><p>
 #: help/faq_unblock.html:90
@@ -4901,7 +4913,7 @@ msgstr ""
 #. type: Content of: <html><body><p>
 #: help/faq_unblock.html:99
 msgid "Some additional tips:"
-msgstr ""
+msgstr "Några ytterligare förslag:"
 
 #. type: Content of: <html><body><p><ul><li>
 #: help/faq_unblock.html:101
@@ -5498,7 +5510,7 @@ msgstr ""
 #. type: Content of: <html><body><h2>
 #: help/get_started.html:90
 msgid "Troubleshooting connectivity problems"
-msgstr ""
+msgstr "Felsök anslutningsproblem"
 
 #. type: Content of: <html><body><p>
 #: help/get_started.html:92
@@ -5722,7 +5734,7 @@ msgstr "Anteckningar"
 #. type: Content of: <html><body><h1>
 #: help/index.html:41 help/window_main.html:47 help/window_text_viewer.html:10
 msgid "Text viewer"
-msgstr ""
+msgstr "Textläsare"
 
 #. type: Content of: <html><body><dl><dd><dl><dd><div><placeholder><a>
 #: help/index.html:42 help/settings_connectivity.html:54
@@ -5779,28 +5791,25 @@ msgstr "Personlig information"
 #. type: Content of: <html><body><h1>
 #: help/index.html:73 help/settings_connectivity.html:9
 #: help/settings_connectivity_manual.html:9
-#, fuzzy
 msgid "Connectivity"
-msgstr "Anslut"
+msgstr "Anslutbarhet"
 
 #. type: Content of: <html><body><h1>
 #: help/index.html:75 help/settings_connectivity.html:17
 #: help/settings_connectivity.html:64
 #: help/settings_connectivity_manual.html:10
-#, fuzzy
 msgid "Manual configuration"
-msgstr "Visa inställningar"
+msgstr "Manuell konfiguration"
 
 #. type: Content of: <html><body><ul><li><ul><ul><li><placeholder><a>
 #: help/index.html:76
-#, fuzzy
 msgid "Bandwidth Limiting"
-msgstr "Bandbreddsbegränsning"
+msgstr "Bandbreddsbegränsare"
 
 #. type: Content of: <html><body><ul><li><ul><ul><li><placeholder><a>
 #: help/index.html:77
 msgid "Proxy"
-msgstr ""
+msgstr "Proxyserver"
 
 #. type: Content of: <html><body><dl><dd><dl><dd><dl><dt>
 #: help/index.html:80 help/links.html:17 help/settings_downloads.html:9
@@ -5825,9 +5834,8 @@ msgstr "Delning"
 
 #. type: Content of: <html><body><h1>
 #: help/index.html:89 help/settings_sharing_filtering.html:9
-#, fuzzy
 msgid "Filtering"
-msgstr "Filtrera"
+msgstr "Filtrering"
 
 #. type: Content of: <html><body><h1>
 #: help/index.html:93 help/settings_appearance.html:9
@@ -5841,9 +5849,8 @@ msgstr "Flikar"
 
 #. type: Content of: <html><body><h1>
 #: help/index.html:100 help/settings_notifications.html:9
-#, fuzzy
 msgid "Notifications"
-msgstr "Meddelandeljud"
+msgstr "Aviseringar"
 
 #. type: Content of: <html><body><h3>
 #: help/index.html:104 help/settings_logs.html:9 help/settings_styles.html:40
@@ -5862,28 +5869,25 @@ msgstr "Enbart experter"
 
 #. type: Content of: <html><body><h1>
 #: help/index.html:111 help/settings_user_commands.html:9
-#, fuzzy
 msgid "User commands"
 msgstr "Användarkommandon"
 
 #. type: Content of: <html><body><h1>
 #: help/index.html:112 help/settings_certs.html:9
-#, fuzzy
 msgid "Security certificates"
 msgstr "Säkerhetscertifikat"
 
 #. type: Content of: <html><body><h1>
 #: help/index.html:113 help/settings_search_types.html:9
-#, fuzzy
 msgid "Search types"
-msgstr "Källtyp"
+msgstr "Söktyper"
 
 #. type: Content of: <html><body><dl><dd><ul><li><placeholder><a>
 #: help/index.html:117 help/window_main.html:57 help/window_main.html:58
 #: H:/Dev/DC++/repo/help/menu_plugins.inc:6 help/window_main.html:223
 #: help/window_main.html:299 help/window_main.html:302
 msgid "Plugins"
-msgstr ""
+msgstr "Insticksmoduler"
 
 #. type: Content of: <html><body><ul><li><h3>
 #: help/index.html:121
@@ -5893,7 +5897,7 @@ msgstr "Vanliga frågor (FAQ)"
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
 #: help/index.html:126
 msgid "How to unblock DC++ in firewalls and other security software?"
-msgstr ""
+msgstr "Hur avblockerar man DC++ i brandväggar och annan säkerhetsmjukvara?"
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
 #: help/index.html:128
@@ -6074,9 +6078,8 @@ msgstr "Stäng det aktuella fönstret."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/keyboard_commands.html:23
-#, fuzzy
 msgid "Ctrl + 0"
-msgstr "Ctrl + W"
+msgstr "Ctrl + 0"
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/keyboard_commands.html:25 help/window_main.html:120
@@ -6155,7 +6158,7 @@ msgstr "Uppdaterar egen fillista."
 #. type: Content of: <html><body><dl><dt>
 #: help/keyboard_commands.html:39
 msgid "F3"
-msgstr ""
+msgstr "F3"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/keyboard_commands.html:40
@@ -6190,9 +6193,8 @@ msgstr "Snabbansluter till favorithubbar i en grupp."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/keyboard_commands.html:45
-#, fuzzy
 msgid "Ctrl + H"
-msgstr "Ctrl + W"
+msgstr "Ctrl + H"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/keyboard_commands.html:47
@@ -6440,7 +6442,7 @@ msgstr "Donera (Paypal)"
 #. type: Content of: <html><body><dl><dd><dl><dd><dl><dt>
 #: help/links.html:45 help/window_main.html:192
 msgid "Blog"
-msgstr ""
+msgstr "Blogg"
 
 #. type: Content of: <html><body><table><tbody><tr><td>
 #: help/links.html:49
@@ -6780,7 +6782,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_advanced.html:44
 msgid "Register with Windows to handle .dcext files"
-msgstr ""
+msgstr "Registrera med Windows för att hantera .dcext-filer"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_advanced.html:46
@@ -7038,7 +7040,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_advanced.html:122
 msgid "Clickable chat links (disable on Wine)"
-msgstr ""
+msgstr "Klickbara chattlänkar (avstängd med Wine)"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_advanced.html:124
@@ -7144,9 +7146,8 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_appearance.html:26
-#, fuzzy
 msgid "View status messages in chat"
-msgstr "Visa statusmeddelanden i huvudchatten"
+msgstr "Visa statusmeddelanden i chatten"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_appearance.html:27
@@ -7234,7 +7235,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_appearance.html:47
 msgid "City-level geolocation database (allows parameters such as %[city])"
-msgstr ""
+msgstr "Lokaliseringsdatabas på stadsnivå (tillåter parametrar som %[city])"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_appearance.html:49
@@ -7263,7 +7264,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_appearance.html:58
 msgid "Region name geolocation database (allows %[region])"
-msgstr ""
+msgstr "Lokaliseringsdatabas för region (tillåter (%[region])"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_appearance.html:60
@@ -7277,9 +7278,8 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_appearance.html:68
-#, fuzzy
 msgid "Timestamp format"
-msgstr "Format för filnamn"
+msgstr "Format för tidsstämpel"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_appearance.html:69
@@ -7298,9 +7298,8 @@ msgstr "(Standard: %H:%M)"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_appearance.html:73
-#, fuzzy
 msgid "Country format"
-msgstr "Land"
+msgstr "Landsformat"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_appearance.html:75
@@ -7311,9 +7310,8 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_appearance.html:77
-#, fuzzy
 msgid "Available variables:"
-msgstr "Kompabilitetsvariabler"
+msgstr "Tillgängliga variabler:"
 
 #. type: Content of: <html><body><dl><dd><ul><li>
 #: help/settings_appearance.html:79
@@ -7436,7 +7434,6 @@ msgstr ""
 
 #. type: Content of: <html><body><h1>
 #: help/settings_bwlimit.html:10
-#, fuzzy
 msgid "Bandwidth limiting"
 msgstr "Bandbreddsbegränsning"
 
@@ -7628,9 +7625,8 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_certs.html:24
-#, fuzzy
 msgid "Support direct encrypted private message channels"
-msgstr "Genväg till kommandot \"Skicka privatmeddelanden\": Alt + P."
+msgstr "Stöd direkta och krypterade privata meddelandekanaler"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_certs.html:26
@@ -7643,6 +7639,8 @@ msgstr ""
 #: help/settings_certs.html:29
 msgid "Always attempt to establish direct encrypted private message channels"
 msgstr ""
+"Försök alltid att etablera direkta och krypterade kanaler för privata "
+"meddelanden"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_certs.html:31
@@ -7668,9 +7666,8 @@ msgstr ""
 
 #. type: Content of: <html><body><h2>
 #: help/settings_connectivity.html:11
-#, fuzzy
 msgid "Automatic connectivity setup"
-msgstr "Utgående anslutningsinställningar"
+msgstr "Automatisk anslutningsinställning"
 
 #. type: Content of: <html><body><p>
 #: help/settings_connectivity.html:13
@@ -7686,7 +7683,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_connectivity.html:23
 msgid "Let DC++ determine the best connectivity settings"
-msgstr ""
+msgstr "Låt DC++ välja de bästa anslutningsinställningarna"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_connectivity.html:25
@@ -7765,9 +7762,8 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_connectivity.html:59
-#, fuzzy
 msgid "Edit detected settings"
-msgstr "Inställningar för nedladdningskön"
+msgstr "Ändra detekterade inställningar"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_connectivity.html:61
@@ -7795,9 +7791,8 @@ msgstr ""
 
 #. type: Content of: <html><body><h2>
 #: help/settings_connectivity_manual.html:16
-#, fuzzy
 msgid "Manual incoming connection settings"
-msgstr "Inkommande anslutningsinställningar"
+msgstr "Manuella inkommande anslutningsinställningar"
 
 #. type: Content of: <html><body><p>
 #: help/settings_connectivity_manual.html:17
@@ -7816,7 +7811,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_connectivity_manual.html:23
 msgid "Active mode (I have no router / I have configured my router)"
-msgstr ""
+msgstr "Aktivt läge (Jag har ingen router / Jag har konfigurerat min router)"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_connectivity_manual.html:25
@@ -7830,9 +7825,8 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_connectivity_manual.html:31
-#, fuzzy
 msgid "Active mode (let DC++ configure my router with NAT-PMP / UPnP)"
-msgstr "Använd UPnP för att låta DC++ konfigurera min router"
+msgstr "Aktivt läge (låt DC++ konfigurera min router med NAT-PMP / UPnP)"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_connectivity_manual.html:33
@@ -7872,24 +7866,25 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd><ul><li>
 #: help/settings_connectivity_manual.html:46
-#, fuzzy
 msgid "only 5 results per user will be returned in response to searches."
-msgstr "bara 5 resultat per användare fås vid sökningar;"
+msgstr ""
+"endast 5 resultat per användare kommer att visas som ett svar på sökningar"
 
 #. type: Content of: <html><body><dl><dd><ul><li>
 #: help/settings_connectivity_manual.html:47
-#, fuzzy
 msgid ""
 "you may not be able to download / receive search results from passive users."
-msgstr "du kan inte ladda ner från andra passiva användare;"
+msgstr ""
+"du kanske inte kan ladda ner / ta emot sökresultat från passiva användare."
 
 #. type: Content of: <html><body><dl><dd><ul><li>
 #: help/settings_connectivity_manual.html:48
-#, fuzzy
 msgid ""
 "you may not be able to fully enjoy certain hubs (because of their "
 "regulations)."
-msgstr "du kommer inte kunna söka och/eller ladda ner i vissa hubbar;"
+msgstr ""
+"du kanske inte kan fullt utnyttja och ta del av vissa hubbar (på grund av "
+"deras begränsningar och regler)."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_connectivity_manual.html:50
@@ -7897,6 +7892,8 @@ msgid ""
 "Note that DC++ tries NAT Traversal on ADC hubs to allow passive users to "
 "connect with each other."
 msgstr ""
+"Notera att DC++ försöker använda NAT Traversal på ADC hubbar för att tillåta "
+"passiva användare att ansluta med varandra"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_connectivity_manual.html:55
@@ -7927,9 +7924,8 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_connectivity_manual.html:64
-#, fuzzy
 msgid "Don't allow hubs/NAT-PMP/UPnP to override"
-msgstr "Tillåt inte hubben/UPnP att skriva åsidosätta"
+msgstr "Tillåt inte att hubbar/NAT-PMP/UPnP får ändra"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_connectivity_manual.html:66
@@ -7970,9 +7966,8 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd><dl><dt>
 #: help/settings_connectivity_manual.html:77
-#, fuzzy
 msgid "Transfer port (TCP)"
-msgstr "Överfört (förhållande)"
+msgstr "Överföringsport (TCP)"
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/settings_connectivity_manual.html:78
@@ -7984,7 +7979,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd><dl><dt>
 #: help/settings_connectivity_manual.html:81
 msgid "Encrypted transfer port (TCP)"
-msgstr ""
+msgstr "Krypterad överföringsport (TCP)"
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/settings_connectivity_manual.html:82
@@ -8006,9 +8001,8 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd><dl><dt>
 #: help/settings_connectivity_manual.html:87
-#, fuzzy
 msgid "Search port (UDP)"
-msgstr "Sök efter"
+msgstr "Sökport (UDP)"
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/settings_connectivity_manual.html:88
@@ -8026,7 +8020,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_connectivity_manual.html:94
 msgid "Preferred port mapping interface"
-msgstr ""
+msgstr "Föredragen portmappningsgränssnitt"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_connectivity_manual.html:96
@@ -8045,7 +8039,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd><ul><li>
 #: help/settings_connectivity_manual.html:101
 msgid "MiniUPnP: An open-source UPnP library."
-msgstr ""
+msgstr "MiniUPnP: Ett öppen källkodsbibliotek för UPnP"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_connectivity_manual.html:103
@@ -8126,23 +8120,21 @@ msgstr ""
 
 #. type: Content of: <html><body><div><dl><dd><ul><li>
 #: help/settings_downloads.html:25
-#, fuzzy
 msgid ""
 "<i>C:\\Documents And Settings\\[your username]\\Application Data\\DC++"
 "\\Downloads\\</i> for <u>Windows XP</u>;"
 msgstr ""
-"<i>C:\\Documents And Settings\\[ditt användarnamn i Windows]\\Application "
-"Data\\DC++\\Downloads\\</i> för <u>Windows 2000 and XP</u>;"
+"<i>C:\\Documents And Settings\\[ditt användarnamn]\\Application Data\\DC++"
+"\\Downloads\\</i> för <u>Windows XP</u>;"
 
 #. type: Content of: <html><body><div><dl><dd><ul><li>
 #: help/settings_downloads.html:28
-#, fuzzy
 msgid ""
 "<i>C:\\Users\\[your username]\\Downloads\\</i> in case of <u>Windows Vista, "
 "Windows 7 or Windows 8</u>."
 msgstr ""
-"<i>C:\\Users\\[ditt användarnamn i Windows]\\Downloads\\</i> för <u>Windows "
-"Vista och 7</u>."
+"<i>C:\\Users\\[ditt användarnamn]\\Downloads\\</i> för <u>Windows Vista, "
+"Windows 7 eller Windows 8</u>."
 
 #. type: Content of: <html><body><div><dl><dd><p>
 #: help/settings_downloads.html:31
@@ -8203,23 +8195,21 @@ msgstr ""
 
 #. type: Content of: <html><body><div><dl><dd><ul><li>
 #: help/settings_downloads.html:44
-#, fuzzy
 msgid ""
 "<i>C:\\Documents And Settings\\[your username]\\Local Settings\\Application "
 "Data\\DC++\\Incomplete</i> for <u>Windows XP</u>;"
 msgstr ""
-"<i>C:\\Documents And Settings\\[ditt användarnamn i Windows]\\Application "
-"Data\\DC++\\Downloads\\</i> för <u>Windows 2000 and XP</u>;"
+"<i>C:\\Documents And Settings\\[ditt användarnamn]\\Local Settings"
+"\\Application Data\\DC++\\Incomplete</i> för <u>Windows XP</u>;"
 
 #. type: Content of: <html><body><div><dl><dd><ul><li>
 #: help/settings_downloads.html:47
-#, fuzzy
 msgid ""
 "<i>C:\\Users\\[your username]\\AppData\\Local\\DC++\\Incomplete</i> in case "
 "of <u>Windows Vista, Windows 7 or Windows 8</u>."
 msgstr ""
-"<i>C:\\Users\\[ditt användarnamn i Windows]\\Downloads\\</i> för <u>Windows "
-"Vista och 7</u>."
+"<i>C:\\Users\\[ditt användarnamn]\\AppData\\Local\\DC++\\Incomplete</i> för "
+"<u>Windows Vista, Windows 7 eller Windows 8</u>."
 
 #. type: Content of: <html><body><div><dl><dd><p>
 #: help/settings_downloads.html:51
@@ -8444,9 +8434,8 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_expert.html:22
-#, fuzzy
 msgid "Auto-search interval"
-msgstr "Begränsning för automatiska sökningar"
+msgstr "Intervall för automatisk sökning"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_expert.html:23
@@ -8568,7 +8557,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_expert.html:49
 msgid "Max PM windows"
-msgstr ""
+msgstr "Max PM fönster"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_expert.html:51
@@ -8588,7 +8577,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_expert.html:58
 msgid "Max protocol command length"
-msgstr ""
+msgstr "Max protokollkommandolängd"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_expert.html:59
@@ -8709,7 +8698,7 @@ msgstr ""
 #. type: Content of: <html><body><h2>
 #: help/settings_general.html:47
 msgid "Away mode"
-msgstr ""
+msgstr "Frånvaroläge"
 
 #. type: Content of: <html><body><p>
 #: help/settings_general.html:49
@@ -8725,7 +8714,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_general.html:58
 msgid "Away message (empty = no away message)"
-msgstr ""
+msgstr "Frånvaromeddelande (tom = inget frånvaromeddelande)"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_general.html:60
@@ -8742,7 +8731,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_general.html:68
 msgid "Enable away mode when DC++ is minimized"
-msgstr ""
+msgstr "Aktivera bortaläge när DC++ minimeras"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_general.html:70
@@ -8755,7 +8744,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_general.html:74
 msgid "Enable away mode when the Windows session is locked"
-msgstr ""
+msgstr "Aktivera bortaläge när Windowssessionen låses"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_general.html:76
@@ -8764,21 +8753,24 @@ msgid ""
 "Windows key + L or via Ctrl + Alt + Del); disable away mode when the Windows "
 "session is unlocked."
 msgstr ""
+"Byta till bortaläge när Windows låser sig (generellt med hjälp av Windows-"
+"knappen + L eller via Ctrl + Alt +Del); stäng av bortaläge när Windows låses "
+"upp."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_general.html:80
 msgid "Add timestamp to end of away messages"
-msgstr ""
+msgstr "Lägg till tidstämpel till slutet av bortameddelande"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_general.html:82
 msgid "Display time at which DC++ entered away mode in away message."
-msgstr ""
+msgstr "Visa tiden då DC++ gick i bortaläge i bortameddelandet,"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_general.html:85
 msgid "Enable away mode after X minutes of inactivity"
-msgstr ""
+msgstr "Sätt igång bortaläge efter X minuters inaktivitet"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_general.html:87
@@ -8942,9 +8934,8 @@ msgstr "%[message] - Privat meddelande"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_logs.html:30
-#, fuzzy
 msgid "Log downloaded segments"
-msgstr "Logga nerladdningar"
+msgstr "Logga nerladdade segment"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_logs.html:31
@@ -8958,9 +8949,8 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_logs.html:33
-#, fuzzy
 msgid "Log finished downloads"
-msgstr "Färdiga nedladdningar"
+msgstr "Logga avslutade nerladdningar"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_logs.html:34
@@ -8970,9 +8960,8 @@ msgstr "Aktivera segmenterade nedladdningar"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_logs.html:36
-#, fuzzy
 msgid "Log uploaded segments"
-msgstr "Logga uppladdningar"
+msgstr "Logga uppladdade segment"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_logs.html:37
@@ -8998,33 +8987,28 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd><table><tbody><tr><td>
 #: help/settings_logs.html:43
-#, fuzzy
 msgid "Parameter"
-msgstr "Parametrar"
+msgstr "Parameter"
 
 #. type: Content of: <html><body><dl><dd><table><tbody><tr><td>
 #: help/settings_logs.html:44
-#, fuzzy
 msgid "Downloaded segments log"
-msgstr "Nedladdning: Downloads.log"
+msgstr "Logg för nerladdade segment"
 
 #. type: Content of: <html><body><dl><dd><table><tbody><tr><td>
 #: help/settings_logs.html:45
-#, fuzzy
 msgid "Finished downloads log"
-msgstr "Färdiga nedladdningar"
+msgstr "Logg för färdiga nerladdningar"
 
 #. type: Content of: <html><body><dl><dd><table><tbody><tr><td>
 #: help/settings_logs.html:46
-#, fuzzy
 msgid "Uploaded segments log"
-msgstr "Uppladdningsslottar"
+msgstr "Logg för uppladdade segment"
 
 #. type: Content of: <html><body><dl><dd><table><tbody><tr><td>
 #: help/settings_logs.html:50 help/settings_logs.html:51
-#, fuzzy
 msgid "Local target path and filename"
-msgstr "Endast i nedladdningsloggen: %[target] - Lokal sökväg och filnamn"
+msgstr "Lokal plats och filnamn"
 
 #. type: Content of: <html><body><dl><dd><table><tbody><tr><td>
 #: help/settings_logs.html:52 help/settings_logs.html:56
@@ -9033,7 +9017,7 @@ msgstr "Endast i nedladdningsloggen: %[target] - Lokal sökväg och filnamn"
 #: help/settings_logs.html:112 help/settings_logs.html:146
 #: help/settings_logs.html:148
 msgid "N/A"
-msgstr ""
+msgstr "Inte tillgänglig"
 
 #. type: Content of: <html><body><dl><dd><table><tbody><tr><td>
 #: help/settings_logs.html:58
@@ -9043,92 +9027,78 @@ msgstr "Till vem filen laddas upp."
 
 #. type: Content of: <html><body><dl><dd><table><tbody><tr><td>
 #: help/settings_logs.html:62 help/settings_logs.html:64
-#, fuzzy
 msgid "User's nickname"
-msgstr "Användarens användarnamn."
+msgstr "Användarens smeknamn"
 
 #. type: Content of: <html><body><dl><dd><table><tbody><tr><td>
 #: help/settings_logs.html:63
-#, fuzzy
 msgid "User nicknames"
-msgstr "Användarens användarnamn."
+msgstr "Användarsmeknamn"
 
 #. type: Content of: <html><body><dl><dd><table><tbody><tr><td>
 #: help/settings_logs.html:68 help/settings_logs.html:70
-#, fuzzy
 msgid "User's CID"
-msgstr "Användare"
+msgstr "Användarens CID"
 
 #. type: Content of: <html><body><dl><dd><table><tbody><tr><td>
 #: help/settings_logs.html:69
-#, fuzzy
 msgid "User CIDs"
-msgstr "Användarikoner"
+msgstr "Användares CIDs"
 
 #. type: Content of: <html><body><dl><dd><table><tbody><tr><td>
 #: help/settings_logs.html:74 help/settings_logs.html:76
-#, fuzzy
 msgid "User's IPv4 address"
-msgstr "%[userI4] - Användarens IP-adress"
+msgstr "Användarens IPv4-adress"
 
 #. type: Content of: <html><body><dl><dd><table><tbody><tr><td>
 #: help/settings_logs.html:75
 msgid "User IPv4 addresses (available for ADC users only)"
-msgstr ""
+msgstr "Användares IPv4-adresser (tillgängligt enbart för ADC-användare)"
 
 #. type: Content of: <html><body><dl><dd><table><tbody><tr><td>
 #: help/settings_logs.html:80 help/settings_logs.html:82
-#, fuzzy
 msgid "Hub name"
-msgstr "Hubbaddress"
+msgstr "Hubbnamn"
 
 #. type: Content of: <html><body><dl><dd><table><tbody><tr><td>
 #: help/settings_logs.html:81
-#, fuzzy
 msgid "Hub names"
-msgstr "Hubbaddress"
+msgstr "Hubbnamn"
 
 #. type: Content of: <html><body><dl><dd><table><tbody><tr><td>
 #: help/settings_logs.html:86 help/settings_logs.html:88
-#, fuzzy
 msgid "Hub's URL or IP address"
-msgstr "%[hubURL] - Hubbens IP-adress"
+msgstr "Hubbs domän eller IPaddress"
 
 #. type: Content of: <html><body><dl><dd><table><tbody><tr><td>
 #: help/settings_logs.html:87
-#, fuzzy
 msgid "Hub URLs or IP addresses"
-msgstr "%[hubURL] - Hubbens IP-adress"
+msgstr "Hubbs domän eller IPaddresser"
 
 #. type: Content of: <html><body><dl><dd><table><tbody><tr><td>
 #: help/settings_logs.html:92 help/settings_logs.html:94
-#, fuzzy
 msgid "Chunk size"
-msgstr "Block"
+msgstr "Segmentstorlek"
 
 #. type: Content of: <html><body><dl><dd><table><tbody><tr><td>
 #: help/settings_logs.html:93
-#, fuzzy
 msgid "Total file size"
-msgstr "Filens storlek."
+msgstr "Total filstorlek"
 
 #. type: Content of: <html><body><dl><dd><table><tbody><tr><td>
 #: help/settings_logs.html:98 help/settings_logs.html:100
-#, fuzzy
 msgid "Chunk size, shortened and including units"
-msgstr "%[fileSIshort] - Filstorlek, förkortad inklusive enhet"
+msgstr "Segmentstorlek, förkortad och inkluderar enheter"
 
 #. type: Content of: <html><body><dl><dd><table><tbody><tr><td>
 #: help/settings_logs.html:99
-#, fuzzy
 msgid "Total file size, shortened and including units"
-msgstr "%[fileSIshort] - Filstorlek, förkortad inklusive enhet"
+msgstr "Total filstorlek, förkortad och inkluderar enheter"
 
 #. type: Content of: <html><body><dl><dd><table><tbody><tr><td>
 #: help/settings_logs.html:105
-#, fuzzy
 msgid "File size transferred in the current session"
-msgstr "Visar de filer du laddat upp till andra användera för aktuell session."
+msgstr "Filstorlek överförd i denna sessionen"
 
 #. type: Content of: <html><body><dl><dd><table><tbody><tr><td>
 #: help/settings_logs.html:111
@@ -9169,9 +9139,8 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd><table><tbody><tr><td>
 #: help/settings_logs.html:128 help/settings_logs.html:130
-#, fuzzy
 msgid "Average speed of the transfer"
-msgstr "%[speed] - Filöverföringshastighet"
+msgstr "Genomsnittlig hastighet på överföringen"
 
 #. type: Content of: <html><body><dl><dd><table><tbody><tr><td>
 #: help/settings_logs.html:129
@@ -9542,17 +9511,17 @@ msgstr "Privatameddelande: %[userNI].%[userCID].log"
 #. type: Content of: <html><body><dl><dd><ul><li>
 #: help/settings_logs.html:233
 msgid "Finished downloads: Finished_downloads.log"
-msgstr ""
+msgstr "Färdiga nerladdningar: Finished_downloads.log"
 
 #. type: Content of: <html><body><dl><dd><ul><li>
 #: help/settings_logs.html:234
 msgid "Downloaded segments: Downloads.log"
-msgstr ""
+msgstr "Nerladdade segment: Downloads.log"
 
 #. type: Content of: <html><body><dl><dd><ul><li>
 #: help/settings_logs.html:235
 msgid "Uploaded segments: Uploads.log"
-msgstr ""
+msgstr "Uppladdade segment: Uploads.log"
 
 #. type: Content of: <html><body><dl><dd><ul><li>
 #: help/settings_logs.html:236
@@ -9561,9 +9530,8 @@ msgstr "System: system.log"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_notifications.html:13
-#, fuzzy
 msgid "Download finished"
-msgstr "Nedladdad"
+msgstr "Nerladdning klar"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_notifications.html:15
@@ -9574,9 +9542,8 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_notifications.html:18
-#, fuzzy
 msgid "File list downloaded"
-msgstr "Färdiga nedladdningar"
+msgstr "Fillista nerladdad"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_notifications.html:20
@@ -9586,9 +9553,8 @@ msgstr "Hastigheten som vald fil laddades ner i."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_notifications.html:23
-#, fuzzy
 msgid "Main chat message received"
-msgstr "Meddelanden i huvudchatten"
+msgstr "Huvudchattmeddande mottaget"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_notifications.html:25
@@ -9599,9 +9565,8 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_notifications.html:29
-#, fuzzy
 msgid "Private message received"
-msgstr "Mottagaren av det privat meddelandet"
+msgstr "Privat meddelande mottaget"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_notifications.html:31
@@ -9611,9 +9576,8 @@ msgstr "Varje gång ett privatmeddelande tas emot"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_notifications.html:34
-#, fuzzy
 msgid "Private message window opened"
-msgstr "När ett privat meddelandefönster öppnas"
+msgstr "Privatmeddelandefönster öppnat"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_notifications.html:36
@@ -9627,9 +9591,8 @@ msgstr ""
 
 #. type: Content of: <html><body><h2>
 #: help/settings_notifications.html:43
-#, fuzzy
 msgid "Play a sound"
-msgstr "Färger och ljud"
+msgstr "Spela upp ett ljud"
 
 #. type: Content of: <html><body><p><placeholder>
 #: help/settings_notifications.html:47
@@ -9654,12 +9617,12 @@ msgstr ""
 #. type: Content of: <html><body><h2>
 #: help/settings_notifications.html:52
 msgid "Display a balloon popup"
-msgstr ""
+msgstr "Visa en ballongpopup"
 
 #. type: Content of: <html><body><h2>
 #: help/settings_notifications.html:56 help/settings_notifications.html:76
 msgid "Fire a balloon popup example"
-msgstr ""
+msgstr "Visa ett ballong-popup exempel"
 
 #. type: Content of: <html><body><p>
 #: help/settings_notifications.html:54
@@ -9678,9 +9641,8 @@ msgstr ""
 
 #. type: Content of: <html><body><h2>
 #: help/settings_notifications.html:61
-#, fuzzy
 msgid "Sound settings"
-msgstr "Inställningar"
+msgstr "Ljudinställningar"
 
 #. type: Content of: <html><body><p>
 #: help/settings_notifications.html:63
@@ -9698,14 +9660,13 @@ msgstr ""
 
 #. type: Content of: <html><body><h2>
 #: help/settings_notifications.html:68
-#, fuzzy
 msgid "Balloon settings"
-msgstr "Anslutningsinställni9ngar"
+msgstr "Ballonginställningar"
 
 #. type: Content of: <html><body><h3>
 #: help/settings_notifications.html:69
 msgid "Display the balloon only when DC++ is in the background"
-msgstr ""
+msgstr "Visa endast ballongen när DC++ är i bakgrunden"
 
 #. type: Content of: <html><body><p>
 #: help/settings_notifications.html:71
@@ -9719,12 +9680,12 @@ msgstr ""
 #. type: Content of: <html><body><p><i><placeholder>
 #: help/settings_notifications.html:80
 msgid "Balloon popup example"
-msgstr ""
+msgstr "Exempel på ballongpopup"
 
 #. type: Content of: <html><body><p><i><placeholder>
 #: help/settings_notifications.html:82
 msgid "This is an example of a balloon popup notification!"
-msgstr ""
+msgstr "Detta är ett exempel på en balongnotifiering!"
 
 #. type: Content of: <html><body><p>
 #: help/settings_notifications.html:78
@@ -9737,9 +9698,8 @@ msgstr ""
 
 #. type: Content of: <html><body><h1>
 #: help/settings_plugins.html:9
-#, fuzzy
 msgid "Plugin configuration"
-msgstr "Visa inställningar"
+msgstr "Insticksmodulkonfiguration"
 
 #. type: Content of: <html><body><p>
 #: help/settings_plugins.html:11
@@ -9751,13 +9711,12 @@ msgstr ""
 #. type: Content of: <html><body><h2>
 #: help/settings_plugins.html:13
 msgid "Installed plugins"
-msgstr ""
+msgstr "Installerade insticksmoduler"
 
 #. type: Content of: <html><body><p>
 #: help/settings_plugins.html:15
-#, fuzzy
 msgid "List of currently installed plugins."
-msgstr "Lista på aktuella hubblistor."
+msgstr "Lista på installerade insticksmoduler."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_plugins.html:21
@@ -9769,12 +9728,12 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_plugins.html:23
 msgid "Some plugins may require you to restart DC++."
-msgstr ""
+msgstr "Några plugin kan kräva att du startar om DC++."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_plugins.html:26
 msgid "Configure"
-msgstr ""
+msgstr "Konfigurera"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_plugins.html:28
@@ -9786,48 +9745,47 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_plugins.html:31
 msgid "Enable"
-msgstr ""
+msgstr "Aktivera"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_plugins.html:33
 msgid "Enable the selected plugin."
-msgstr ""
+msgstr "Aktivera den valda insticksmodulen"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_plugins.html:36
 msgid "Disable"
-msgstr ""
+msgstr "Avaktivera"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_plugins.html:38
 msgid "Disable the selected plugin."
-msgstr ""
+msgstr "Avaktivera den nuvarande insticksmodulen."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_plugins.html:43
 msgid "Move the selected plugin upwards in the list."
-msgstr ""
+msgstr "Flytta den nuvarande insticksmodulen upp i listan."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_plugins.html:48
 msgid "Move the selected plugin downwards in the list."
-msgstr ""
+msgstr "Flytta den nuvarande insticksmodulen ner i listan."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_plugins.html:53
 msgid "Disable and uninstall the selected plugin."
-msgstr ""
+msgstr "Stäng av och avinstallera den nuvarande insticksmodulen."
 
 #. type: Content of: <html><body><h1>
 #: help/settings_plugins.html:57
-#, fuzzy
 msgid "Plugin information"
-msgstr "Personlig information"
+msgstr "Insticksmodulsinformation"
 
 #. type: Content of: <html><body><p>
 #: help/settings_plugins.html:59
 msgid "This panel shows information about the selected plugin."
-msgstr ""
+msgstr "Denna panel visar information om den valda insticksmodulen."
 
 #. type: Content of: <html><body><h1>
 #: help/settings_proxy.html:9
@@ -10518,9 +10476,8 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_sharing_filtering.html:17
-#, fuzzy
 msgid "File minimum size"
-msgstr "Filstorlek"
+msgstr "Minsta filstorlek"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_sharing_filtering.html:19
@@ -10532,9 +10489,8 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_sharing_filtering.html:21
-#, fuzzy
 msgid "File maximum size"
-msgstr "Filstorlek"
+msgstr "Största filstorlek"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_sharing_filtering.html:23
@@ -10547,7 +10503,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_sharing_filtering.html:25
 msgid "File name filtering with Regular expressions"
-msgstr ""
+msgstr "Filnamnsfiltrering med reguljära uttryck"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_sharing_filtering.html:27
@@ -10560,9 +10516,8 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_sharing_filtering.html:29
-#, fuzzy
 msgid "File extension filtering"
-msgstr "Filändelse (filtyp)."
+msgstr "Filändelsefiltrering"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_sharing_filtering.html:31
@@ -10575,7 +10530,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_sharing_filtering.html:32
 msgid "Path filtering"
-msgstr ""
+msgstr "Sökvägsfiltrering"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_sharing_filtering.html:34
@@ -10609,18 +10564,17 @@ msgstr ""
 #. type: Content of: <html><body><h2>
 #: help/settings_styles.html:18
 msgid "General"
-msgstr ""
+msgstr "Generell"
 
 #. type: Content of: <html><body><h3>
 #: help/settings_styles.html:19
-#, fuzzy
 msgid "Global application style"
-msgstr "Bekräfta vid avsluta program"
+msgstr "Global programstil"
 
 #. type: Content of: <html><body><p>
 #: help/settings_styles.html:21
 msgid "The style used throughout all DC++ windows."
-msgstr ""
+msgstr "Denna stil används i alla DC++-fönster."
 
 #. type: Content of: <html><body><h3>
 #: help/settings_styles.html:25
@@ -10683,9 +10637,8 @@ msgstr ""
 
 #. type: Content of: <html><body><h2>
 #: help/settings_styles.html:58
-#, fuzzy
 msgid "Font customization"
-msgstr "Inställning av verktygsrad"
+msgstr "Textsnittinställningar"
 
 #. type: Content of: <html><body><p>
 #: help/settings_styles.html:60
@@ -10815,7 +10768,7 @@ msgstr ""
 #. type: Content of: <html><body><h2>
 #: help/settings_tabs.html:27
 msgid "Tab width"
-msgstr ""
+msgstr "Flikbredd"
 
 #. type: Content of: <html><body><p>
 #: help/settings_tabs.html:29
@@ -10833,9 +10786,8 @@ msgstr ""
 
 #. type: Content of: <html><body><h2>
 #: help/settings_tabs.html:35
-#, fuzzy
 msgid "Preview"
-msgstr "Översikt"
+msgstr "Förhandsvisning"
 
 #. type: Content of: <html><body><p>
 #: help/settings_tabs.html:37
@@ -10977,7 +10929,7 @@ msgstr "Ta bort valt användarkommando."
 #. type: Content of: <html><body><h1>
 #: help/settings_user_matching.html:9
 msgid "User matching definitions"
-msgstr ""
+msgstr "Användarmatchningsdefinitioner"
 
 #. type: Content of: <html><body><p>
 #: help/settings_user_matching.html:11
@@ -11039,6 +10991,8 @@ msgstr "Ta bort valt användarkommando."
 #: help/settings_user_matching.html:48
 msgid "Configure styles (fonts / colors) for these user matching definitions"
 msgstr ""
+"Konfigurera stiler (typsnitt / färger) för dessa användarmatchande "
+"definitioner"
 
 #. type: Content of: <html><body><h2>
 #: help/settings_windows.html:10
@@ -11941,7 +11895,7 @@ msgstr "Tar bort källan från alla filer i nedladdningskön"
 #. type: Content of: <html><body><dl><dt>
 #: H:/Dev/DC++/repo/help/commands_copy.inc:2
 msgid "Copy"
-msgstr ""
+msgstr "Kopiera"
 
 #. type: Content of: <html><body><dl><dd>
 #: H:/Dev/DC++/repo/help/commands_copy.inc:3
@@ -12103,9 +12057,8 @@ msgstr "Tar bort valda hubbar från favoritlistan."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_favorite_hubs.html:49
-#, fuzzy
 msgid "Move to group"
-msgstr "Flytta uppåt"
+msgstr "Flytta till grupp"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_favorite_hubs.html:50
@@ -12122,7 +12075,7 @@ msgstr "Verktygsfält"
 #. type: Content of: <html><body><dl><dt>
 #: help/window_file_list.html:16
 msgid "Back"
-msgstr ""
+msgstr "Tillbaka"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_file_list.html:17
@@ -12134,7 +12087,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_file_list.html:18
 msgid "Forward"
-msgstr ""
+msgstr "Framåt"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_file_list.html:19
@@ -12146,7 +12099,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_file_list.html:20
 msgid "Up one level"
-msgstr ""
+msgstr "Upp en nivå"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_file_list.html:21
@@ -12181,7 +12134,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_file_list.html:26
 msgid "Download full list"
-msgstr ""
+msgstr "Ladda ner hel lista"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_file_list.html:28
@@ -12235,7 +12188,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_file_list.html:47
 msgid "Previous"
-msgstr ""
+msgstr "Föregående"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_file_list.html:48
@@ -13250,7 +13203,7 @@ msgstr "Öppnar din nedladdningskatalog i ett Windows Explorerfönster."
 #. type: Content of: <html><body><dl><dd><dl><dt>
 #: help/window_main.html:43
 msgid "Open crash log"
-msgstr ""
+msgstr "Öppna kraschlogg"
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/window_main.html:45
@@ -13442,7 +13395,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd><dl><dt>
 #: help/window_main.html:118
 msgid "Menu bar"
-msgstr ""
+msgstr "Menyrad"
 
 #. type: Content of: <html><body><dl><dd><dl><dt>
 #: help/window_main.html:127
@@ -13608,9 +13561,8 @@ msgstr "Öppnar DC++ hemsida i din webbläsare."
 
 #. type: Content of: <html><body><dl><dd><dl><dd><dl><dt>
 #: help/window_main.html:176
-#, fuzzy
 msgid "Homepage"
-msgstr "DC++ hemsida"
+msgstr "Hemsida"
 
 #. type: Content of: <html><body><dl><dd><dl><dd><dl><dd>
 #: help/window_main.html:177
@@ -13631,9 +13583,8 @@ msgstr "Öppnar DC++ hemsida i din webbläsare."
 
 #. type: Content of: <html><body><dl><dd><dl><dd><dl><dt>
 #: help/window_main.html:182
-#, fuzzy
 msgid "Help center"
-msgstr "Hjälpmeny"
+msgstr "Hjälpcenter"
 
 #. type: Content of: <html><body><dl><dd><dl><dd><dl><dd>
 #: help/window_main.html:183
@@ -13642,9 +13593,8 @@ msgstr "Pekar mot DC++ supportforum"
 
 #. type: Content of: <html><body><dl><dd><dl><dd><dl><dt>
 #: help/window_main.html:184
-#, fuzzy
 msgid "Discussion forum"
-msgstr "DC++ diskussionsforum"
+msgstr "Diskussionsforum"
 
 #. type: Content of: <html><body><dl><dd><dl><dd><dl><dd>
 #: help/window_main.html:185
@@ -13658,9 +13608,8 @@ msgstr "Du kan föreslå förändringar eller nya funktioner här."
 
 #. type: Content of: <html><body><dl><dd><dl><dd><dl><dd>
 #: help/window_main.html:189
-#, fuzzy
 msgid "You can report problems about DC++ here."
-msgstr "Du kan rapportera problem i DC++ här."
+msgstr "Du kan rapportera problem med DC++ här."
 
 #. type: Content of: <html><body><dl><dd><dl><dd><dl><dd>
 #: help/window_main.html:191
@@ -13674,20 +13623,18 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd><dl><dd><dl><dd>
 #: help/window_main.html:193
-#, fuzzy
 msgid "Opens the DC++ blog in your web browser."
-msgstr "Öppnar DC++ hemsida i din webbläsare."
+msgstr "Öppnar DC++-bloggen i din webbläsare."
 
 #. type: Content of: <html><body><dl><dd><dl><dd><dl><dt>
 #: help/window_main.html:194
 msgid "Community news"
-msgstr ""
+msgstr "Gemenskapsnyheter"
 
 #. type: Content of: <html><body><dl><dd><dl><dd><dl><dd>
 #: help/window_main.html:195
-#, fuzzy
 msgid "Opens the DCBase portal in your web browser."
-msgstr "Öppnar DC++ hemsida i din webbläsare."
+msgstr "Öppnar DCBase-portalen i din webbläsare"
 
 #. type: Content of: <html><body><h2>
 #: help/window_main.html:204
@@ -13908,14 +13855,13 @@ msgstr "Skift + vänster musknapp"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/window_main.html:331
-#, fuzzy
 msgid "Left mouse click on the"
-msgstr "Skift + vänster musknapp"
+msgstr "Vänsterklicka på"
 
 #. type: Attribute 'alt' of: <html><body><ul><li><ul><li><img>
 #: help/window_main.html:331
 msgid "Close tab button"
-msgstr ""
+msgstr "Stänga flikknapp"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/window_main.html:331
@@ -14064,9 +14010,8 @@ msgstr ""
 
 #. type: Attribute 'alt' of: <html><body><dl><dt><img>
 #: help/window_main.html:363
-#, fuzzy
 msgid "Downloaded bytes"
-msgstr "Totalt antal nedladdade bytes"
+msgstr "Nerladdade bytes"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_main.html:363
@@ -14090,9 +14035,8 @@ msgstr "Dubbelklicka för att öppna <placeholder id=0/>fönstret."
 
 #. type: Attribute 'alt' of: <html><body><dl><dt><img>
 #: help/window_main.html:367
-#, fuzzy
 msgid "Uploaded bytes"
-msgstr "Totala antalet uppladdade bytes"
+msgstr "Uppladdade bytes"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_main.html:367
@@ -14110,9 +14054,8 @@ msgstr ""
 
 #. type: Attribute 'alt' of: <html><body><dl><dt><img>
 #: help/window_main.html:371
-#, fuzzy
 msgid "Download speed"
-msgstr "Nedladdad"
+msgstr "Nerladdningshastighet"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_main.html:371
@@ -14130,9 +14073,8 @@ msgstr ""
 
 #. type: Attribute 'alt' of: <html><body><dl><dt><img>
 #: help/window_main.html:375
-#, fuzzy
 msgid "Upload speed"
-msgstr "Uppladdningar"
+msgstr "Uppladdningshastighet"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_main.html:375
@@ -14150,9 +14092,8 @@ msgstr ""
 
 #. type: Attribute 'alt' of: <html><body><dl><dt><img>
 #: help/window_main.html:379
-#, fuzzy
 msgid "Download speed limit"
-msgstr "Nedladdad"
+msgstr "Nerladdningshastighetsbegränsning"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_main.html:379
@@ -14170,9 +14111,8 @@ msgstr ""
 
 #. type: Attribute 'alt' of: <html><body><dl><dt><img>
 #: help/window_main.html:382
-#, fuzzy
 msgid "Upload speed limit"
-msgstr "Uppladdningar"
+msgstr "Uppladdningshastighetsbegränsning"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_main.html:382
@@ -14258,9 +14198,8 @@ msgstr ""
 
 #. type: Content of: <html><body><h3>
 #: help/window_pm.html:33
-#, fuzzy
 msgid "Message part (left)"
-msgstr "Meddelandedel (vänster)"
+msgstr "Meddelandedel (kvar)"
 
 #. type: Content of: <html><body><p>
 #: help/window_pm.html:35
@@ -14280,12 +14219,12 @@ msgstr ""
 #. type: Content of: <html><body><h3>
 #: help/window_pm.html:39
 msgid "Communication channel"
-msgstr ""
+msgstr "Kommunikationskanal"
 
 #. type: Content of: <html><body><p><placeholder>
 #: help/window_pm.html:42
 msgid "Direct encrypted channel"
-msgstr ""
+msgstr "Direkt och krypterad kanal"
 
 #. type: Content of: <html><body><p>
 #: help/window_pm.html:41
@@ -14331,7 +14270,7 @@ msgstr ""
 #. type: Content of: <html><body><p><ul><li><placeholder>
 #: help/window_pm.html:58
 msgid "Start a direct encrypted channel"
-msgstr ""
+msgstr "Starta en direkt och krypterad kanal"
 
 #. type: Content of: <html><body><p><ul><li>
 #: help/window_pm.html:57 help/window_pm.html:64
@@ -14880,7 +14819,7 @@ msgstr "Filnamnet."
 #. type: Content of: <html><body><dl><dt>
 #: help/window_search.html:66
 msgid "Hits"
-msgstr ""
+msgstr "Träffar"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_search.html:67
@@ -14990,9 +14929,8 @@ msgstr ""
 
 #. type: Content of: <html><body><h2>
 #: help/window_search.html:114
-#, fuzzy
 msgid "Filter search results"
-msgstr "Filtrera skräpmeddelanden"
+msgstr "Filtrera sökresultat"
 
 #. type: Content of: <html><body><p><div>
 #: help/window_search.html:117
@@ -15193,6 +15131,8 @@ msgstr ""
 msgid ""
 "The queued file %1% already exists in your share, removing from the queue"
 msgstr ""
+"Den köade filen %1% finns redan i din lista av utdelade filer, raderar från "
+"kön."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_system_log.html:33
@@ -15704,6 +15644,8 @@ msgid ""
 "File list refresh in progress, please wait for it to finish before trying to "
 "refresh again"
 msgstr ""
+"Uppdatering av fillistan pågår, var god vänta tills den är klar innan du "
+"försöker uppdatera igen"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_system_log.html:103
@@ -15889,7 +15831,7 @@ msgstr ""
 #. type: Content of: <html><body><h2>
 #: help/window_text_viewer.html:17
 msgid "Change the text viewer font"
-msgstr ""
+msgstr "Ändra textvisartypsnittet"
 
 #. type: Content of: <html><body><p>
 #: help/window_text_viewer.html:19
@@ -15994,7 +15936,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd>
 #: help/window_transfers.html:69
 msgid "Size of the transfer."
-msgstr ""
+msgstr "Storlek på överföringen."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_transfers.html:72
@@ -16055,9 +15997,8 @@ msgstr "Användarikoner"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_users.html:18 help/window_users.html:68
-#, fuzzy
 msgid "Favorite"
-msgstr "Favoriter"
+msgstr "Favorit"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_users.html:19
@@ -16068,9 +16009,8 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_users.html:20
-#, fuzzy
 msgid "Auto grant slot"
-msgstr "Bevilja slott automatiskt / Användarnamn"
+msgstr "Bevilja plats automatiskt"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_users.html:21
@@ -16083,9 +16023,8 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_users.html:23
-#, fuzzy
 msgid "The nick of the user."
-msgstr "Användarnamnet för ansluta användaren"
+msgstr "Användarens smeknamn"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_users.html:24
@@ -16099,9 +16038,8 @@ msgstr "I vilken hubb DC++ senast såg användaren i"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_users.html:26
-#, fuzzy
 msgid "Status / Time last seen"
-msgstr "Senast sedd"
+msgstr "Status / Tid senaste syntes"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_users.html:27
@@ -16189,7 +16127,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_users.html:54
 msgid "Text filter"
-msgstr ""
+msgstr "Textfilter"
 
 #. type: Content of: <html><body><dl><dd><p><div>
 #: help/window_users.html:59
@@ -16205,7 +16143,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_users.html:64
 msgid "Online"
-msgstr ""
+msgstr "Uppkopplad"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_users.html:66
@@ -16222,9 +16160,8 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_users.html:72
-#, fuzzy
 msgid "Pending download"
-msgstr "Logga nerladdningar"
+msgstr "Väntande nerladdning"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_users.html:74
@@ -16235,9 +16172,8 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_users.html:76
-#, fuzzy
 msgid "Pending upload"
-msgstr "Logga uppladdningar"
+msgstr "Väntande uppladdning"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_users.html:78
