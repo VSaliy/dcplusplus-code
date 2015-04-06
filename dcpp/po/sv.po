@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2015-01-04 23:09+0100\n"
-"PO-Revision-Date: 2014-03-31 20:02+0000\n"
+"POT-Creation-Date: 2015-04-06 21:35+0200\n"
+"PO-Revision-Date: 2015-03-30 21:23+0000\n"
 "Last-Translator: Fredrik Ullner <ullner@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-01-16 09:33+0000\n"
-"X-Generator: Launchpad (build 17303)\n"
+"X-Launchpad-Export-Date: 2015-04-06 19:21+0000\n"
+"X-Generator: Launchpad (build 17413)\n"
 
 #: dcpp\DownloadManager.cpp:360
 #, boost-format
@@ -79,19 +79,19 @@ msgstr "%1% (%2%) har samma CID {%3%} som %4% (%5%), ignorerar"
 msgid "%1% (Nick unknown)"
 msgstr "%1% (Okänt smeknamn)"
 
-#: dcpp\PluginManager.cpp:155 dcpp\PluginManager.cpp:175
-#: dcpp\PluginManager.cpp:578
+#: dcpp\PluginManager.cpp:156 dcpp\PluginManager.cpp:176
+#: dcpp\PluginManager.cpp:579
 #, boost-format
 msgid "%1% is already installed"
 msgstr "%1% är redan installerad"
 
-#: dcpp\PluginManager.cpp:141 dcpp\PluginManager.cpp:540
+#: dcpp\PluginManager.cpp:142 dcpp\PluginManager.cpp:541
 #, boost-format
 msgid "%1% is not a valid plugin"
 msgstr "%1% är inget giltigt plugin"
 
-#: dcpp\PluginManager.cpp:107 dcpp\PluginManager.cpp:144
-#: dcpp\PluginManager.cpp:545
+#: dcpp\PluginManager.cpp:108 dcpp\PluginManager.cpp:145
+#: dcpp\PluginManager.cpp:546
 #, boost-format
 msgid "%1% is not compatible with %2%"
 msgstr "%1% är inte kompatibel med %2%"
@@ -183,6 +183,16 @@ msgstr "Alla"
 msgid "Audio"
 msgstr "Ljud"
 
+#: dcpp\ConnectionManager.cpp:847
+#, boost-format
+msgid "Blocked a C-C connection to a hub ('%1%:%2%'; request from '%3%')"
+msgstr "Blockerat C-C anslutning till hubb ('%1%:%2%'; förfrågan från '%3%')"
+
+#: dcpp\ConnectionManager.cpp:866
+#, boost-format
+msgid "Blocking '%1%', potential DDoS detected (originating hub '%2%')"
+msgstr "Blockerar '%1%', möjlig DDoS detekterad (från hubb '%2%')"
+
 #: dcpp\QueueManager.cpp:1660
 msgid "CRC32 inconsistency (SFV-Check)"
 msgstr "CRC32-inkonsekvens (SFV-kontroll)"
@@ -192,7 +202,7 @@ msgstr "CRC32-inkonsekvens (SFV-kontroll)"
 msgid "CRC32 inconsistency (SFV-Check): %1%"
 msgstr "CRC32-inkonsekvens (SFV-kontroll):  %1%"
 
-#: dcpp\CryptoManager.cpp:577
+#: dcpp\CryptoManager.cpp:579
 #, boost-format
 msgid ""
 "Certificate verification for %1% failed with error: %2% (certificate "
@@ -352,13 +362,13 @@ msgid "Error during compression"
 msgstr "Fel under komprimering"
 
 #: dcpp\BZUtils.cpp:76 dcpp\BZUtils.cpp:98 dcpp\BZUtils.cpp:101
-#: dcpp\CryptoManager.cpp:615 dcpp\CryptoManager.cpp:634
-#: dcpp\CryptoManager.cpp:648 dcpp\ZUtils.cpp:106 dcpp\ZUtils.cpp:131
+#: dcpp\CryptoManager.cpp:617 dcpp\CryptoManager.cpp:636
+#: dcpp\CryptoManager.cpp:650 dcpp\ZUtils.cpp:106 dcpp\ZUtils.cpp:131
 #: dcpp\ZUtils.cpp:145
 msgid "Error during decompression"
 msgstr "Fel under avkomprimering"
 
-#: dcpp\CryptoManager.cpp:139
+#: dcpp\CryptoManager.cpp:141
 msgid "Error generating certificate"
 msgstr "Fel vid skapande av ceritikat"
 
@@ -367,12 +377,12 @@ msgstr "Fel vid skapande av ceritikat"
 msgid "Error hashing %1%: %2%"
 msgstr "Fel under hashning %1%: %2%"
 
-#: dcpp\PluginManager.cpp:600
+#: dcpp\PluginManager.cpp:601
 #, boost-format
 msgid "Error loading %1%"
 msgstr "Fel vid laddning av %1%"
 
-#: dcpp\PluginManager.cpp:532
+#: dcpp\PluginManager.cpp:533
 #, boost-format
 msgid "Error loading %1%: %2%"
 msgstr "Fel vid laddning av %1%: %2%"
@@ -399,15 +409,15 @@ msgstr "Kunde inte hämta externt IP"
 msgid "Failed to initialize the %1% interface"
 msgstr "Kunde inte initialisera gränssnittet %1%"
 
-#: dcpp\CryptoManager.cpp:372
+#: dcpp\CryptoManager.cpp:374
 msgid "Failed to load certificate file"
 msgstr "Kunde inte ladda certifikatfil"
 
-#: dcpp\CryptoManager.cpp:380
+#: dcpp\CryptoManager.cpp:382
 msgid "Failed to load private key"
 msgstr "Kunde inte ladda privat nyckel"
 
-#: dcpp\CryptoManager.cpp:393
+#: dcpp\CryptoManager.cpp:395
 #, boost-format
 msgid "Failed to load trusted certificate from %1%"
 msgstr "Kunde inte ladda betrott certifikat från %1%"
@@ -485,7 +495,7 @@ msgstr "Hashning färdig: %1% (%2%)"
 msgid "Full tree does not match TTH root"
 msgstr "Fullt träd matchar inte TTH-roten"
 
-#: dcpp\CryptoManager.cpp:361
+#: dcpp\CryptoManager.cpp:363
 msgid "Generated new TLS certificate"
 msgstr "Genererade nytt TLS-certifikat"
 
@@ -579,7 +589,7 @@ msgstr "Lokalt nätverk med möjlig NAT upptäckt, försöker att mappa portarna
 msgid "Maximum command length exceeded"
 msgstr "Maximal kommandolängd överskriden"
 
-#: dcpp\PluginManager.cpp:551
+#: dcpp\PluginManager.cpp:552
 #, boost-format
 msgid "Missing dependencies for %1%"
 msgstr "Saknar samband för %1%"
@@ -588,7 +598,7 @@ msgstr "Saknar samband för %1%"
 msgid "More bytes written than requested"
 msgstr "Skrev fler byte än efterfrågat"
 
-#: dcpp\CryptoManager.cpp:128
+#: dcpp\CryptoManager.cpp:130
 msgid "No certificate file chosen"
 msgstr "Ingen certifikatfil vald"
 
@@ -600,7 +610,7 @@ msgstr "Ingen mapp specificerad"
 msgid "No port mapping interface available"
 msgstr "Inget portmappningsgränssnitt tillgängligt"
 
-#: dcpp\CryptoManager.cpp:125
+#: dcpp\CryptoManager.cpp:127
 msgid "No private key file chosen"
 msgstr "Ingen privat nyckelfil vald"
 
@@ -719,12 +729,12 @@ msgid ""
 msgstr ""
 "Lyckades ta bort portmappningar från enhet %1% med användargränssnittet %2%"
 
-#: dcpp\CryptoManager.cpp:363
+#: dcpp\CryptoManager.cpp:365
 #, boost-format
 msgid "TLS disabled, failed to generate certificate: %1%"
 msgstr "TLS avaktiverat. Misslyckades att generera certifikat: %1%"
 
-#: dcpp\CryptoManager.cpp:353
+#: dcpp\CryptoManager.cpp:355
 msgid "TLS disabled, no certificate file set"
 msgstr "TLS avaktiverat. Ingen certifikatsfil angiven"
 
@@ -789,7 +799,7 @@ msgstr "Denna fil har redan laddats ned"
 msgid "This file is already queued"
 msgstr "Denna fil finns redan i kön"
 
-#: dcpp\NmdcHub.cpp:948
+#: dcpp\NmdcHub.cpp:952
 #, boost-format
 msgid ""
 "This hub is trying to use your client to spam %1%, please urge hub owner to "
@@ -869,7 +879,7 @@ msgstr "Okänt fel: 0x%1$x"
 msgid "Unknown protocol %d"
 msgstr "Okänt protokoll %d"
 
-#: dcpp\PluginManager.cpp:565
+#: dcpp\PluginManager.cpp:566
 #, boost-format
 msgid "Updating the %1% plugin from version %2% to version %3%"
 msgstr "Uppdaterar plugin %1% från version %2% till version %3%"
