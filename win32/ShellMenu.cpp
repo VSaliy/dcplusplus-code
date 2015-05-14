@@ -16,7 +16,7 @@
 * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 
-// Based on <http://www.codeproject.com/shell/shellcontextmenu.asp> by R. Engels.
+// Based on <http://www.codeproject.com/Articles/4025/Use-Shell-ContextMenu-in-your-applications> by R. Engels.
 
 #include "stdafx.h"
 #include "ShellMenu.h"

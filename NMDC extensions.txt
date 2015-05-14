@@ -219,7 +219,7 @@ Should be sent: After $Lock, before $Key
 Feature: UserCommand
 Since: 0.300
 
-Usage: See http://dcplusplus.sf.net/wiki/
+Usage: See http://nmdc.sourceforge.net/Versions/NMDC-1.3.html#_usercommand
 
 --------------------------------------------------------------------
 
@@ -235,7 +235,8 @@ implement and does half of QuickList's job.
 Feature: UserIP2
 Since: 0.305
 
-Usage: This indicates support for $UserIP, see http://dcplusplus.sf.net/wiki/
+Usage: This indicates support for $UserIP; see
+http://nmdc.sourceforge.net/Versions/NMDC-1.3.html#_userip_extension
 
 --------------------------------------------------------------------
 
