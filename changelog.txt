@@ -1,3 +1,6 @@
+--
+* Switch feasible http links to https (cologic)
+
 -- 0.851 2015-04-06 --
 * [L#1414362] Prefer boost regex over std regex for the time being (poy)
 * [L#1419454] [NMDC] Disallow malicious search requests (iceman50)
@@ -6,7 +9,6 @@
 * Update some links (emtee)
 * Update OpenSSL to version 1.0.2a
 * Support only secp256r1/prime256v1/P-256 elliptic curve for ECDHE (cologic)
-* Switch feasible http links to https (cologic)
 
 -- 0.850 2015-01-17 --
 * [L#1308290] Enable TLS v1.1 and TLS v1.2-based ADCS connections (cologic)
