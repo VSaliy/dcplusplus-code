@@ -211,7 +211,7 @@ tstring Parser::Context::getBegin() const {
 
 	if(!link.empty()) {
 		/* Wine doesn't support chat links so display them as plain text.
-		 * See <http://bugs.winehq.org/show_bug.cgi?id=34824>. */
+		 * See <https://bugs.winehq.org/show_bug.cgi?id=34824>. */
 		if(SETTING(CLICKABLE_CHAT_LINKS)) {
 			ret += "\\field{\\*\\fldinst HYPERLINK \"" + link + "\"}{\\fldrslt";
 		} else {

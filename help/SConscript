@@ -1,8 +1,8 @@
 # Build help files for DC++
 # Dependencies:
-# - Perl, in order to use po4a <http://po4a.alioth.debian.org/>
+# - Perl, in order to use po4a <https://po4a.alioth.debian.org/>
 # - Microsoft HTML Help Workshop
-#   <http://msdn2.microsoft.com/en-us/library/ms670169.aspx>
+#   <https://msdn.microsoft.com/en-us/library/ms670169.aspx>
 
 Import('dev')
 env = dev.env.Clone()

@@ -230,7 +230,7 @@ DH* CryptoManager::getTmpDH(int keyLen) {
 	DH* tmpDH = DH_new();
 	if(!tmpDH) return NULL;
 
-	// From RFC 3526; checked via http://wiki.openssl.org/index.php/Diffie-Hellman_parameters#Validating_Parameters
+	// From RFC 3526; checked via https://wiki.openssl.org/index.php/Diffie-Hellman_parameters#Validating_Parameters
 	switch (keyLen) {
 		case 2048: {
 			static unsigned char dh2048_p[]={

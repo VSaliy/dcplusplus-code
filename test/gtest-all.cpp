@@ -708,7 +708,7 @@ void ShuffleRange(internal::Random* random, int begin, int end,
       << begin << ", " << size << "].";
 
   // Fisher-Yates shuffle, from
-  // http://en.wikipedia.org/wiki/Fisher-Yates_shuffle
+  // https://en.wikipedia.org/wiki/Fisher-Yates_shuffle
   for (int range_width = end - begin; range_width >= 2; range_width--) {
     const int last_in_range = begin + range_width - 1;
     const int selected = begin + random->Generate(range_width);
@@ -1817,7 +1817,7 @@ int UnitTestOptions::GTestShouldProcessSEH(DWORD exception_code) {
   //      apparently).
   //
   // SEH exception code for C++ exceptions.
-  // (see http://support.microsoft.com/kb/185294 for more information).
+  // (see https://support.microsoft.com/kb/185294 for more information).
   const DWORD kCxxExceptionCode = 0xe06d7363;
 
   bool should_handle = true;
@@ -6883,7 +6883,7 @@ DeathTest::TestRole WindowsDeathTest::AssumeRole() {
       static_cast<unsigned int>(::GetCurrentProcessId()),
       // size_t has the same with as pointers on both 32-bit and 64-bit
       // Windows platforms.
-      // See http://msdn.microsoft.com/en-us/library/tcxf1dw6.aspx.
+      // See https://msdn.microsoft.com/en-us/library/tcxf1dw6.aspx.
       reinterpret_cast<size_t>(write_handle),
       reinterpret_cast<size_t>(event_handle_.Get()));
 

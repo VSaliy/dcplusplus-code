@@ -30,7 +30,7 @@
 namespace dcpp {
 /**
  * Manager for throttling traffic flow.
- * Inspired by Token Bucket algorithm: http://en.wikipedia.org/wiki/Token_bucket
+ * Inspired by Token Bucket algorithm: https://en.wikipedia.org/wiki/Token_bucket
  */
 
 /*

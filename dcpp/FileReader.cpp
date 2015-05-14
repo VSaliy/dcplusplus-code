@@ -203,8 +203,8 @@ size_t FileReader::readMapped(const string& file, const DataCallback& callback) 
 	(at the moment this file reader is only used in places where overlapped reads make the most
 	sense).
 	more info:
-	<http://msdn.microsoft.com/en-us/library/aa366801(VS.85).aspx>
-	<http://stackoverflow.com/q/7244645> */
+	<https://msdn.microsoft.com/en-us/library/aa366801(VS.85).aspx>
+	<https://stackoverflow.com/q/7244645> */
 #if 1
 	return READ_FAILED;
 #else

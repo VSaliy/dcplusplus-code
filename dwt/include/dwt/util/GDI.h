@@ -38,7 +38,7 @@ namespace dwt { namespace util {
 
 IconPtr merge(const ImageList& icons);
 
-/// Conversion factor for DPI awareness, see <http://msdn.microsoft.com/en-us/library/dd464660(VS.85).aspx>.
+/// Conversion factor for DPI awareness, see <https://msdn.microsoft.com/en-us/library/dn469266(v=vs.85)>.
 const float& dpiFactor();
 
 } }

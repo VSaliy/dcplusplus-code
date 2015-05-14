@@ -282,7 +282,7 @@ ScreenCoordinate TextBoxBase::getContextMenuPos() {
 }
 
 Point TextBoxBase::getPreferredSize() {
-	// Taken from http://support.microsoft.com/kb/124315
+	// Taken from https://support.microsoft.com/kb/124315
 	UpdateCanvas c(this);
 
 	TEXTMETRIC tmSys = { 0 };
