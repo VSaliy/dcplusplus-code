@@ -128,7 +128,7 @@ fullSlots(false)
 	links.features = links.homepage + _T("featurereq/");
 	links.bugs = links.homepage + _T("bugs/");
 	links.donate = links.homepage + _T("donate/");
-	links.blog = _T("http://dcpp.wordpress.com");
+	links.blog = _T("https://dcpp.wordpress.com");
 	links.community = _T("http://dcbase.org");
 	links.pluginrepo = links.homepage + _T("plugins/");
 	links.contribute = _T("http://dcbase.org/contribute/");

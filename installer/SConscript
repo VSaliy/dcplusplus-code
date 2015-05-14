@@ -1,8 +1,8 @@
 # Build the DC++ installer
 # Dependencies:
 # - hg (this tree must be under hg version control)
-# - Perl, in order to use po4a <http://po4a.alioth.debian.org/>
-# - Unicode NSIS <http://code.google.com/p/unsis/>
+# - Perl, in order to use po4a <https://po4a.alioth.debian.org/>
+# - Unicode NSIS <https://code.google.com/p/unsis/>
 # - zip (MSYS / Cygwin provide one)
 
 Import('dev')

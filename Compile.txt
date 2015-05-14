@@ -16,7 +16,7 @@
 		Have a look at section 4 for alternative compilers.
 
 		* Python - 2.7.x
-		<http://www.python.org>
+		<https://www.python.org>
 
 		Note: Python 3.x is incompatible with SCons as of writing this.
 		Make sure that Python is in your PATH environment variable.
@@ -28,7 +28,7 @@
 		Make sure that SCons is in your PATH environment variable.
 
 		* Perl - 5.12.0.1 (from MSYS, Cygwin or ActivePerl; only needed to build help files)
-		<http://www.perl.org/get.html>
+		<https://www.perl.org/get.html>
 
 		Make sure that Perl is in your PATH environment variable.
 
@@ -38,7 +38,7 @@
 		Make sure that the gettext tools are in your PATH environment variable.
 
 		* Html Help Workshop (only needed to build help files)
-		<http://msdn.microsoft.com/en-us/library/ms669985%28VS.85%29.aspx>
+		<https://msdn.microsoft.com/en-us/library/ms669985%28VS.85%29.aspx>
 
 		Make sure that hhc.exe is in your PATH environment variable.
 
@@ -48,7 +48,7 @@
 		Make sure that asciidoc is in your PATH environment variable.
 
 		* Unicode NSIS (only needed to build the installer)
-		<http://code.google.com/p/unsis/>
+		<https://code.google.com/p/unsis/>
 
 		Make sure that makensis.exe is in your PATH environment variable.
 		Make sure that you are using the Unicode version of the installer builder.
@@ -70,7 +70,7 @@
 		Lib/win8/um/x64/Htmlhelp.Lib -> mingw/lib/x64/htmlhelp.lib
 
 		The latest Windows SDK is currently at
-		<http://msdn.microsoft.com/en-US/windows/desktop/hh852363>; it installs into
+		<https://msdn.microsoft.com/en-US/windows/desktop/hh852363>; it installs into
 		"C:\Program Files (x86)\Windows Kits\8.0".
 
 	b. OpenSSL (only for Visual Studio)
@@ -140,10 +140,10 @@
 		Note that building with MinGW compilers provided by Cygwin is not often tested.
 
 	b. Microsoft Visual Studio 2013:
-	<http://msdn.microsoft.com/en-us/visualc/default.aspx>
+	<https://msdn.microsoft.com/en-us/visualc/default.aspx>
 
 		Make sure VS is up-to-date; in particular, you will need the Nov 2013 CTP from
-		<http://www.microsoft.com/en-us/download/details.aspx?id=41151>. Use the patch in
+		<https://www.microsoft.com/en-us/download/details.aspx?id=41151>. Use the patch in
 		msvc/nov2013ctp.patch to patch your VC/vcvarsall.bat file to make use of it (if you
 		generate project files and compile from the VS GUI, that won't be necessary).
 
@@ -168,7 +168,7 @@
 
 		c. Linux / Unix:
 
-			Look at <http://launchpad.net/linuxdcpp> for the *nix port of DC++ - they'll gladly accept any help. 	
+			Look at <https://launchpad.net/linuxdcpp> for the *nix port of DC++ - they'll gladly accept any help. 	
 
 		d. Submitting patches
 

@@ -83,7 +83,7 @@ int dwtMain(dwt::Application& app) {
 #endif
 #endif
 
-	// http://www.kb.cert.org/vuls/id/707943 part III, "For Developers".
+	// https://www.kb.cert.org/vuls/id/707943 part III, "For Developers".
 	::SetDllDirectory(_T(""));
 
 	WinUtil::enableDEP();

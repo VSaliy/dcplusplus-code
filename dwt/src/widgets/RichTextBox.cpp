@@ -99,7 +99,7 @@ void RichTextBox::create(const Seed& cs) {
 	});
 
 	/* unlike other common controls, Rich Edits ignore WM_PRINTCLIENT messages. as per
-	<http://msdn.microsoft.com/en-us/library/bb787875(VS.85).aspx>, we have to handle the printing
+	<https://msdn.microsoft.com/en-us/library/bb787875(VS.85).aspx>, we have to handle the printing
 	by ourselves. this is crucial for taskbar thumbnails and "Aero Peek" previews. */
 	onPrinting([this](Canvas& canvas) {
 		Rectangle rect { getClientSize() };

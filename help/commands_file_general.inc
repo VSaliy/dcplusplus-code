@@ -6,6 +6,6 @@
   <dd>Will trigger the default browser to lookup the TTH of the selected file
       at Bitzi.com.</dd>
   <dt>Copy magnet link to clipboard</dt>
-  <dd>Will copy the file's <a href="http://en.wikipedia.org/wiki/Magnet_link"
+  <dd>Will copy the file's <a href="https://en.wikipedia.org/wiki/Magnet_URI_scheme"
   	  target="_blank" class="external">magnet link</a> to the clipboard.</dd>
 </dl>

@@ -13,7 +13,7 @@ from build_util import Dev, gen_po_name
 # TODO enable LTO when it doesn't ICE... (-flto)
 
 # TODO remove -Wno-format when
-# <http://cygwin.com/ml/cygwin/2012-01/msg00061.html>
+# <https://cygwin.com/ml/cygwin/2012-01/msg00061.html>
 # ("mingw64-i686-gcc-4.5.3-4: -Wformat warnings broken in C++") fixed
 
 # TODO remove -Wno-unused-local-typedefs when boost doesn't trigger it
@@ -194,7 +194,7 @@ env.Append(CPPPATH=['#/'])
 
 if dev.is_win32():
     # Windows header defines
-    # <http://msdn.microsoft.com/en-us/library/aa383745(VS.85).aspx>
+    # <https://msdn.microsoft.com/en-us/library/aa383745(VS.85).aspx>
     env.Append(CPPDEFINES=[
         '_WIN32_WINNT=0x502',  # Windows XP SP2
         'WINVER=0x502',  # Windows XP SP2
