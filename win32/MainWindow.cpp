@@ -117,11 +117,11 @@ fullSlots(false)
 	// Don't forget to update version.xml when changing these links!
 	links.homepage = _T("http://dcplusplus.sourceforge.net/");
 	links.downloads = links.homepage + _T("download/");
-	links.geoip6 = _T("http://geolite.maxmind.com/download/geoip/database/GeoIPv6.dat.gz");
-	links.geoip4 = _T("http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz");
-	links.geoip6_city = _T("http://geolite.maxmind.com/download/geoip/database/GeoLiteCityv6-beta/GeoLiteCityv6.dat.gz");
-	links.geoip4_city = _T("http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz");
-	links.geoip_regions = _T("http://dev.maxmind.com/static/csv/codes/maxmind/region.csv");
+	links.geoip6 = _T("https://geolite.maxmind.com/download/geoip/database/GeoIPv6.dat.gz");
+	links.geoip4 = _T("https://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz");
+	links.geoip6_city = _T("https://geolite.maxmind.com/download/geoip/database/GeoLiteCityv6-beta/GeoLiteCityv6.dat.gz");
+	links.geoip4_city = _T("https://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz");
+	links.geoip_regions = _T("https://dev.maxmind.com/static/csv/codes/maxmind/region.csv");
 	links.faq = links.homepage + _T("faq/");
 	links.help = links.homepage + _T("help/");
 	links.discuss = links.homepage + _T("discussion/");
