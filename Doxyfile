@@ -815,8 +815,9 @@ HTML_DYNAMIC_SECTIONS  = NO
 # HTML output directory. Running make will produce the docset in that 
 # directory and running "make install" will install the docset in 
 # ~/Library/Developer/Shared/Documentation/DocSets so that Xcode will find 
-# it at startup. 
-# See http://developer.apple.com/tools/creatingdocsetswithdoxygen.html for more information.
+# it at startup.
+# See https://developer.apple.com/legacy/library/featuredarticles/DoxygenXcode/_index.html
+# for more information. 
 
 GENERATE_DOCSET        = NO
 
@@ -893,30 +894,30 @@ QCH_FILE               =
 
 # The QHP_NAMESPACE tag specifies the namespace to use when generating 
 # Qt Help Project output. For more information please see 
-# http://doc.trolltech.com/qthelpproject.html#namespace
+# http://doc.qt.io/qt-4.8/qthelpproject.html#namespace
 
 QHP_NAMESPACE          = 
 
 # The QHP_VIRTUAL_FOLDER tag specifies the namespace to use when generating 
 # Qt Help Project output. For more information please see 
-# http://doc.trolltech.com/qthelpproject.html#virtual-folders
+# http://doc.qt.io/qt-4.8/qthelpproject.html#virtual-folders
 
 QHP_VIRTUAL_FOLDER     = doc
 
 # If QHP_CUST_FILTER_NAME is set, it specifies the name of a custom filter to add. 
 # For more information please see 
-# http://doc.trolltech.com/qthelpproject.html#custom-filters
+# http://doc.qt.io/qt-4.8/qthelpproject.html#custom-filters
 
 QHP_CUST_FILTER_NAME   = 
 
 # The QHP_CUST_FILT_ATTRS tag specifies the list of the attributes of the custom filter to add.For more information please see 
-# <a href="http://doc.trolltech.com/qthelpproject.html#custom-filters">Qt Help Project / Custom Filters</a>.
+# <a href="http://doc.qt.io/qt-4.8/qthelpproject.html#custom-filters">Qt Help Project / Custom Filters</a>.
 
 QHP_CUST_FILTER_ATTRS  = 
 
 # The QHP_SECT_FILTER_ATTRS tag specifies the list of the attributes this project's 
 # filter section matches. 
-# <a href="http://doc.trolltech.com/qthelpproject.html#filter-attributes">Qt Help Project / Filter Attributes</a>.
+# <a href="http://doc.qt.io/qt-4.8/qthelpproject.html#filter-section">Qt Help Project / Filter Attributes</a>.
 
 QHP_SECT_FILTER_ATTRS  = 
 
