@@ -85,6 +85,9 @@ void Client::reloadSettings(bool updateNick) {
 
 		if(!fav->getPassword().empty())
 			setPassword(fav->getPassword());
+
+		if(!fav->fav->getEncoding().empty())
+			setEncoding(fav->getEncoding());
 	}
 
 	if(updateNick)
