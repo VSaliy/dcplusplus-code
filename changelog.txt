@@ -1,5 +1,6 @@
 --
 * Switch feasible http links to https (cologic)
+* Set hub text encoding based on favorite hubs setting (cologic)
 
 -- 0.851 2015-04-06 --
 * [L#1414362] Prefer boost regex over std regex for the time being (poy)
