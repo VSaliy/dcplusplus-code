@@ -163,7 +163,7 @@ void HttpManager::on(HttpConnectionListener::Data, HttpConnection* c, const uint
 		stream = findConn(c)->stream;
 	}
 	stream->write(data, len);
-	fire(HttpManagerListener::Updated(), c);
+	fire(HttpManagerListener::Updated(), c, data, len);
 }
 
 void HttpManager::on(HttpConnectionListener::Failed, HttpConnection* c, const string& str) noexcept {

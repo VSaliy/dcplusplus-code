@@ -49,6 +49,9 @@ public:
 	static ConfigValuePtr DCAPI copyData(const ConfigValuePtr val);
 	static void DCAPI releaseData(ConfigValuePtr val);
 
+	static DataArrayPtr DCAPI copyData(const DataArrayPtr val);
+	static void DCAPI releaseData(DataArrayPtr val);
+
 private:
 	// Functions for DCCore
 	static intfHandle DCAPI registerInterface(const char* guid, dcptr_t funcs);
@@ -122,6 +125,8 @@ private:
 
 	static UserDataPtr DCAPI findUser(const char* cid, const char* hubUrl);
 
+	static void DCAPI getHTTPFile(const char* uri, const char* localPath);
+
 	static DCHooks dcHooks;
 	static DCConfig dcConfig;
 	static DCLog dcLog;
@@ -131,6 +136,7 @@ private:
 	static DCQueue dcQueue;
 	static DCUtils dcUtils;
 	static DCTagger dcTagger;
+	static DCDataAccess dcDataAccess;
 
 	static Socket* udpSocket;
 	static Socket& getUdpSocket();

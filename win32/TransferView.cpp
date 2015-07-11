@@ -1087,7 +1087,7 @@ void TransferView::on(HttpManagerListener::Added, HttpConnection* c) noexcept {
 	addedConn(ui);
 }
 
-void TransferView::on(HttpManagerListener::Updated, HttpConnection* c) noexcept {
+void TransferView::on(HttpManagerListener::Updated, HttpConnection* c, const uint8_t* data, size_t len) noexcept {
 	auto ui = makeHttpUI(c);
 	ui->setTransferred(c->getDone(), c->getDone(), c->getSize());
 	ui->setSpeed(c->getSpeed());

@@ -294,7 +294,7 @@ private:
 	virtual void on(QueueManagerListener::CRCFailed, Download* d, const string& aReason) noexcept;
 
 	virtual void on(HttpManagerListener::Added, HttpConnection*) noexcept;
-	virtual void on(HttpManagerListener::Updated, HttpConnection*) noexcept;
+	virtual void on(HttpManagerListener::Updated, HttpConnection*, const uint8_t* data, size_t len) noexcept;
 	virtual void on(HttpManagerListener::Failed, HttpConnection*, const string&) noexcept;
 	virtual void on(HttpManagerListener::Complete, HttpConnection*, OutputStream*) noexcept;
 	virtual void on(HttpManagerListener::Removed, HttpConnection*) noexcept;
