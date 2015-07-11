@@ -40,7 +40,7 @@ public:
 	typedef X<5> Removed;
 
 	virtual void on(Added, HttpConnection*) noexcept { }
-	virtual void on(Updated, HttpConnection*) noexcept { }
+	virtual void on(Updated, HttpConnection*, const uint8_t* data, size_t len) noexcept { }
 	virtual void on(Failed, HttpConnection*, const string&) noexcept { }
 	virtual void on(Complete, HttpConnection*, OutputStream*) noexcept { }
 	virtual void on(ResetStream, HttpConnection*) noexcept { }

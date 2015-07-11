@@ -39,10 +39,12 @@
 #include "Tagger.h"
 #include "UserConnection.h"
 #include "version.h"
+#include "HttpManager.h"
+#include "HttpConnection.h"
 
 namespace dcpp {
 
-#define IMPL_HOOKS_COUNT 23
+#define IMPL_HOOKS_COUNT 25
 
 static const char* hookGuids[IMPL_HOOKS_COUNT] = {
 	HOOK_CHAT_IN,
@@ -72,7 +74,10 @@ static const char* hookGuids[IMPL_HOOKS_COUNT] = {
 	HOOK_UI_CHAT_TAGS,
 	HOOK_UI_CHAT_DISPLAY,
 	HOOK_UI_CHAT_COMMAND,
-	HOOK_UI_CHAT_COMMAND_PM
+	HOOK_UI_CHAT_COMMAND_PM,
+
+	HOOK_DATAACESSOR_HTTP_FILE_NOTIFICATION,
+	HOOK_DATAACESSOR_HTTP_FILE_STREAM
 };
 
 static const char* hostName = APPNAME;
@@ -178,6 +183,15 @@ DCTagger PluginApiImpl::dcTagger = {
 	&PluginApiImpl::replaceText
 };
 
+DCDataAccess PluginApiImpl::dcDataAccess = {
+	DCINTF_DCPP_DATAACCESSOR_VER,
+
+	&PluginApiImpl::getHTTPFile,
+
+	&PluginApiImpl::copyData,
+	&PluginApiImpl::releaseData
+};
+
 Socket* PluginApiImpl::udpSocket = nullptr;
 Socket& PluginApiImpl::getUdpSocket() {
 	if(!udpSocket) {
@@ -210,6 +224,7 @@ void PluginApiImpl::init() {
 	dcCore.register_interface(DCINTF_DCPP_QUEUE, &dcQueue);
 	dcCore.register_interface(DCINTF_DCPP_UTILS, &dcUtils);
 	dcCore.register_interface(DCINTF_DCPP_TAGGER, &dcTagger);
+	dcCore.register_interface(DCINTF_DCPP_DATAACCESSOR, &dcDataAccess);
 
 	// Create provided hooks (since these outlast any plugin they don't need to be explictly released)
 	for(int i = 0; i < IMPL_HOOKS_COUNT; ++i)
@@ -771,6 +786,123 @@ void PluginApiImpl::releaseData(UserDataPtr user) {
 	free((char*)user->cid);
 
 	free(user);
+}
+
+/* Functions for DataAccess */
+void PluginApiImpl::getHTTPFile(const char* uri, const char* localPath) {
+	try {
+		class HTTPDownloader : private dcpp::HttpManagerListener
+		{
+		public:
+
+			HTTPDownloader() { }
+			virtual ~HTTPDownloader() { };
+
+			void getFile(const char* uri, const char* file)
+			{
+				HttpManager::getInstance()->addListener(this);
+				if(strlen(file) == 0)
+				{
+					HttpManager::getInstance()->download(uri);
+				}
+				else
+				{
+					HttpManager::getInstance()->download(uri, file);
+				}
+			}
+
+		private:
+
+			DataArrayPtr getDataArrayPtr(const std::string& str)
+			{
+				DataArrayPtr pDataArray = (DataArrayPtr)malloc(sizeof(DataArray));
+				memset(pDataArray, 0, sizeof(DataArray));
+
+				size_t bufLen = str.size() + 1;
+				char* pData = (char*)malloc(bufLen);
+				memcpy(pData, str.c_str(), bufLen);
+				pDataArray->pData = pData;
+
+				pDataArray->size = bufLen;
+
+				return pDataArray;
+			};
+
+			DataArrayPtr getDataArrayPtr(const uint8_t* data, size_t len)
+			{
+				DataArrayPtr pDataArray = (DataArrayPtr)malloc(sizeof(DataArray));
+				memset(pDataArray, 0, sizeof(DataArray));
+
+				size_t bufLen = len;
+				uint8_t* pData = (uint8_t*)malloc(bufLen);
+				memcpy(pData, (uint8_t*)data, bufLen);
+				pDataArray->pData = pData;
+
+				pDataArray->size = bufLen;
+
+				return pDataArray;
+			};
+
+			void runHookCompleted(const std::string& url)
+			{
+				PluginManager::getInstance()->runHook(HOOK_DATAACESSOR_HTTP_FILE_NOTIFICATION, const_cast<char*>(url.c_str()));
+
+				HttpManager::getInstance()->removeListener(this);
+
+				delete this;
+			}
+
+			void runHookPartial(const std::string& url, const uint8_t* data, size_t len)
+			{
+				DataArrayPtr streamArray = getDataArrayPtr(data, len);
+
+				PluginManager::getInstance()->runHook(HOOK_DATAACESSOR_HTTP_FILE_STREAM, const_cast<char*>(url.c_str()), streamArray);
+				
+			}
+
+			// HttpManagerListener
+			void on(HttpManagerListener::Failed, HttpConnection* c, const string&) noexcept
+			{
+				runHookCompleted(c->getUrl());
+			}
+
+			void on(HttpManagerListener::Complete, HttpConnection* c, OutputStream* stream) noexcept
+			{
+				runHookCompleted(c->getUrl());
+			}
+
+			void on(HttpManagerListener::Updated, HttpConnection* c, const uint8_t* data, size_t len) noexcept
+			{
+				runHookPartial(c->getUrl(), data, len);
+			}
+		};
+
+		HTTPDownloader* downloader = new HTTPDownloader();
+		downloader->getFile(uri, localPath);
+
+	} catch(const Exception& e) {
+		LogManager::getInstance()->message(e.getError());
+	}
+}
+
+DataArrayPtr PluginApiImpl::copyData(const DataArrayPtr val)
+{
+	DataArrayPtr copy = (DataArrayPtr)malloc(sizeof(DataArray));
+	memcpy(copy, val, sizeof(DataArray));
+
+	size_t bufLen = strlen((char*)val->pData) + 1;
+	char* pData = (char*)malloc(bufLen);
+	strncpy(pData, (char*)val->pData, bufLen);
+	copy->pData = pData;
+
+	return copy;
+}
+
+void PluginApiImpl::releaseData(DataArrayPtr val)
+{
+	free(const_cast<void*>(val->pData));
+
+	free(val);
 }
 
 } // namespace dcpp

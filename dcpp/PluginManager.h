@@ -132,7 +132,7 @@ public:
 	bool onChatCommandPM(const HintedUser& user, const string& line);
 
 	// runHook wrappers for host calls
-	bool runHook(const string& guid, dcptr_t pObject, dcptr_t pData) {
+	bool runHook(const string& guid, dcptr_t pObject, dcptr_t pData = NULL) {
 		if(shutdown) return false;
 		auto i = hooks.find(guid);
 		dcassert(i != hooks.end());
