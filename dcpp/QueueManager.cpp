@@ -1284,6 +1284,7 @@ void QueueManager::removeSource(const UserPtr& aUser, int reason) noexcept {
 
 void QueueManager::setPriority(const string& aTarget, QueueItem::Priority p) noexcept {
 	HintedUserList getConn;
+	UserList fileConnections;
 
 	{
 		Lock l(cs);
@@ -1294,6 +1295,16 @@ void QueueManager::setPriority(const string& aTarget, QueueItem::Priority p) noe
 				// Problem, we have to request connections to all these users...
 				q->getOnlineUsers(getConn);
 			}
+
+			// Cancel current connections if the intention is to pause the item
+			if(p == QueueItem::PAUSED) {
+				if(q->isRunning()) {
+					for(auto& i: q->getDownloads()) {
+						fileConnections.push_back(i->getUser());
+					}
+				}
+			}
+
 			userQueue.setPriority(q, p);
 			setDirty();
 			fire(QueueManagerListener::StatusUpdated(), q);
@@ -1302,6 +1313,10 @@ void QueueManager::setPriority(const string& aTarget, QueueItem::Priority p) noe
 
 	for(auto& i: getConn) {
 		ConnectionManager::getInstance()->getDownloadConnection(i);
+	}
+
+	for(auto& i: fileConnections) {
+		ConnectionManager::getInstance()->disconnect(i, CONNECTION_TYPE_DOWNLOAD);
 	}
 }
 
