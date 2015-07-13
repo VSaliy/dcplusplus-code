@@ -305,6 +305,10 @@ public:
 	static void registerMagnetHandler();
 	static void registerDcextHandler();
 
+	static void setApplicationStartupRegister();
+	static void setApplicationStartupUnregister();
+	static void setApplicationStartup();
+
 	static void addUserItems(Menu* menu, const HintedUserList& users, TabViewPtr parent, const StringList& dirs = StringList());
 
 	/* utility functions to create icons. use these throughout the prog to make it easier to change

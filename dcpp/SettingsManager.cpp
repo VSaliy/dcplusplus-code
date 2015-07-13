@@ -110,6 +110,7 @@ const string SettingsManager::settingTags[] =
 	"StatusInChat", "TimeDependentThrottle", "TimeStamps",
 	"ToggleActiveTab", "UrlHandler", "UseCTRLForLineHistory", "UseSystemIcons",
 	"UsersFilterFavorite", "UsersFilterOnline", "UsersFilterQueue", "UsersFilterWaiting",
+	"RegisterSystemStartup",
 	"SENTRY",
 	// Int64
 	"TotalUpload", "TotalDownload", "SharingSkiplistMinSize", "SharingSkiplistMaxSize",
@@ -361,6 +362,7 @@ SettingsManager::SettingsManager() {
 	setDefault(SHARING_SKIPLIST_PATHS, Util::emptyString);
 	setDefault(SHARING_SKIPLIST_MINSIZE, 0);
 	setDefault(SHARING_SKIPLIST_MAXSIZE, 0);
+	setDefault(REGISTER_SYSTEM_STARTUP, false);
 
 	setSearchTypeDefaults();
 
