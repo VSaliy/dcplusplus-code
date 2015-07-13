@@ -1,6 +1,5 @@
 --
 * Switch feasible http links to https (cologic)
-* Set hub text encoding based on favorite hubs setting (cologic)
 * Added support for a HTTP downloader in the plugin interface (ullner)
 
 -- 0.851 2015-04-06 --
