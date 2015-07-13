@@ -1,6 +1,7 @@
 --
 * Switch feasible http links to https (cologic)
 * Added support for a HTTP downloader in the plugin interface (ullner)
+* Added option to autostart DC++ when Windows starts (ullner)
 
 -- 0.851 2015-04-06 --
 * [L#1414362] Prefer boost regex over std regex for the time being (poy)

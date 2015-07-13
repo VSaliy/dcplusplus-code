@@ -1289,6 +1289,7 @@ void MainWindow::handleSettings() {
 	auto prevURLReg = SETTING(URL_HANDLER);
 	auto prevMagnetReg = SETTING(MAGNET_REGISTER);
 	auto prevDcextReg = SETTING(DCEXT_REGISTER);
+	auto prevSystemStartupReg = SETTING(REGISTER_SYSTEM_STARTUP);
 	auto prevSettingsSave = SETTING(SETTINGS_SAVE_INTERVAL);
 
 	if(SettingsDialog(this).run() == IDOK) {
@@ -1366,6 +1367,9 @@ void MainWindow::handleSettings() {
 			WinUtil::registerMagnetHandler();
 		if(SETTING(DCEXT_REGISTER) != prevDcextReg)
 			WinUtil::registerDcextHandler();
+		
+		if(SETTING(REGISTER_SYSTEM_STARTUP) != prevSystemStartupReg)
+			WinUtil::setApplicationStartup();
 
 		if(SETTING(SETTINGS_SAVE_INTERVAL) != prevSettingsSave)
 			setSaveTimer();

@@ -1454,6 +1454,84 @@ void WinUtil::registerDcextHandler() {
 	}
 }
 
+void WinUtil::setApplicationStartupRegister()
+{
+	HKEY hk;
+	DWORD ret = 0;
+
+	if(::RegOpenKeyEx(HKEY_CURRENT_USER, _T("Software\\Microsoft\\Windows\\CurrentVersion\\Run"),
+		0, KEY_WRITE | KEY_READ, &hk) != ERROR_SUCCESS)
+	{
+		ret = ::RegCreateKeyEx(HKEY_CURRENT_USER, _T("Software\\Microsoft\\Windows\\CurrentVersion\\Run"),
+							   0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hk, NULL);
+
+		if(ret != ERROR_SUCCESS)
+		{
+			LogManager::getInstance()->message(str(F_("Error registering DC++ for automatic startup (could not find or create key)")));
+			return;
+		}
+	}
+
+	tstring app = _T("\"") + dwt::Application::instance().getModuleFileName() + _T("\"");
+
+	ret = ::RegSetValueEx(hk, _T("DC++"), 0, REG_SZ, (LPBYTE) app.c_str(), sizeof(TCHAR) * (app.length() + 1));
+	if(ret != ERROR_SUCCESS)
+	{
+		LogManager::getInstance()->message(str(F_("Error registering DC++ for automatic startup (could not set key value)")));
+	}
+
+	::RegCloseKey(hk);
+}
+
+void WinUtil::setApplicationStartupUnregister()
+{
+	HKEY hk;
+	DWORD ret = 0;
+
+	ret = ::RegOpenKeyEx(HKEY_CURRENT_USER, _T("Software\\Microsoft\\Windows\\CurrentVersion\\Run"),
+						 0, KEY_WRITE | KEY_READ, &hk);
+	if(ret != ERROR_SUCCESS)
+	{
+		// Could not find key, well, that's OK.
+		return;
+	}
+
+	tstring app = _T("\"") + dwt::Application::instance().getModuleFileName() + _T("\"");
+
+	TCHAR Buf[512];
+	Buf[0] = 0;
+	DWORD bufLen = sizeof(Buf);
+	DWORD type;
+
+	ret = ::RegQueryValueEx(hk, _T("DC++"), 0, &type, (LPBYTE) Buf, &bufLen);
+	if(ret == ERROR_SUCCESS)
+	{
+		bool bEqualApplications = Util::stricmp(app.c_str(), Buf) == 0;
+		if(bEqualApplications) 
+		{
+			ret = ::RegDeleteValue(hk, _T("DC++"));
+			if(ret != ERROR_SUCCESS)
+			{
+				LogManager::getInstance()->message(str(F_("Error unregistering DC++ for automatic startup (could not delete key value)")));
+			}
+		}
+	}
+
+	::RegCloseKey(hk);
+}
+
+void WinUtil::setApplicationStartup()
+{
+	if(SETTING(REGISTER_SYSTEM_STARTUP))
+	{
+		setApplicationStartupRegister();
+	}
+	else
+	{
+		setApplicationStartupUnregister();
+	}
+}
+
 void WinUtil::openLink(const tstring& url) {
 	::ShellExecute(NULL, NULL, url.c_str(), NULL, NULL, SW_SHOWNORMAL);
 }
