@@ -84,6 +84,11 @@
 #define IDI_PLUGINS 178
 #define IDI_UPLOAD_FILTERING 179
 #define IDI_USER_REG 180
+#define IDI_DELETE 181
+#define IDI_PAUSE 182
+#define IDI_PLAY 183
+#define IDI_INCREMENT 184
+#define IDI_DECREMENT 185
 
 // Stuff that uses multiple id's
 

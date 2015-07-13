@@ -188,7 +188,11 @@ private:
 
 	typedef unique_ptr<QueueItemInfo> QueueItemPtr;
 
+	ToolBarPtr toolbar;
+	RebarPtr rebar;
 	SplitterContainerPtr paned;
+
+	StringList toolbarIds;
 
 	typedef TypedTree<DirItemInfo> WidgetDirs;
 	typedef WidgetDirs* WidgetDirsPtr;
@@ -204,6 +208,8 @@ private:
 
 	bool dirty;
 	bool filesDirty;
+
+	bool toolbarItemsStatus;
 
 	bool usingDirMenu;
 
@@ -248,6 +254,8 @@ private:
 	MenuPtr makeSingleMenu(QueueItemInfo* qii);
 	MenuPtr makeMultiMenu();
 	MenuPtr makeDirMenu();
+
+	void reEvaluateToolbar();
 
 	void addBrowseMenu(Menu* menu, QueueItemInfo* qii);
 	void addRemoveMenu(Menu* menu, QueueItemInfo* qii);

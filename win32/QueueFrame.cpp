@@ -25,7 +25,9 @@
 #include <dwt/widgets/Grid.h>
 #include <dwt/widgets/FolderDialog.h>
 #include <dwt/widgets/MessageBox.h>
+#include <dwt/widgets/Rebar.h>
 #include <dwt/widgets/SplitterContainer.h>
+#include <dwt/widgets/ToolBar.h>
 #include <dwt/widgets/Tree.h>
 
 #include "WinUtil.h"
@@ -38,8 +40,10 @@
 using dwt::Grid;
 using dwt::GridInfo;
 using dwt::Label;
+using dwt::Rebar;
 using dwt::SplitterContainer;
 using dwt::FolderDialog;
+using dwt::ToolBar;
 
 const string QueueFrame::id = "Queue";
 const string& QueueFrame::getId() const { return id; }
@@ -61,11 +65,14 @@ static const ColumnInfo filesColumns[] = {
 
 QueueFrame::QueueFrame(TabViewPtr parent) :
 BaseType(parent, T_("Download Queue"), IDH_QUEUE, IDI_QUEUE),
+toolbar(0),
+rebar(0),
 paned(0),
 dirs(0),
 files(0),
 dirty(true),
 filesDirty(true),
+toolbarItemsStatus(true),
 usingDirMenu(false),
 queueSize(0),
 queueItems(0),
@@ -95,14 +102,44 @@ fileLists(0)
 
 		files->onKeyDown([this](int c) { return handleKeyDownFiles(c); });
 		files->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleFilesContextMenu(sc); });
-		files->onSelectionChanged([this] { filesDirty = true; });
+		files->onSelectionChanged([this] { filesDirty = true; reEvaluateToolbar(); });
 
 		if(!SETTING(QUEUEFRAME_SHOW_TREE)) {
 			paned->maximize(files);
 		}
 	}
 
+	{
+		// create the rebar after the rest to make sure it doesn't grab the default focus.
+		rebar = addChild(Rebar::Seed());
+
+		// create the first toolbar (on the left of the address bar).
+		auto seed = ToolBar::Seed();
+		seed.style &= ~CCS_ADJUSTABLE;
+		toolbar = addChild(seed);
+
+		auto addButton = [this](unsigned icon, const tstring& text, bool showText,
+			unsigned helpId, const dwt::Dispatchers::VoidVoid<>::F& f)
+		{
+			toolbarIds.emplace_back(1, '0' + toolbarIds.size());
+			toolbar->addButton(toolbarIds.back(), icon ? WinUtil::toolbarIcon(icon) : 0, 0, text, showText, helpId, f);
+		};
+
+		addButton(IDI_PLAY, T_("Start"), false, IDH_QUEUE_TOOLBAR_START, [this] { handlePriority(QueueItem::NORMAL); });
+		addButton(IDI_PAUSE, T_("Pause"), false, IDH_QUEUE_TOOLBAR_PAUSE, [this] { handlePriority(QueueItem::PAUSED); });
+		addButton(IDI_INCREMENT, T_("Increase priority"), false, IDH_QUEUE_TOOLBAR_INCREASE_PRIO, [this] { changePriority(true); });
+		addButton(IDI_DECREMENT, T_("Decrease priority"), false, IDH_QUEUE_TOOLBAR_DECREASE_PRIO, [this] { changePriority(false); });
+		addButton(IDI_DELETE, T_("Remove file"), false, IDH_QUEUE_TOOLBAR_REMOVE_FILE, [this] { handleRemove(); });
+
+		toolbarIds.emplace_back();
+
+		toolbar->setLayout(toolbarIds);
+
+		rebar->add(toolbar, RBBS_NOGRIPPER);
+	}
+
 	initStatus();
+	reEvaluateToolbar();
 
 	{
 		auto showTree = addChild(WinUtil::Seeds::splitCheckBox);
@@ -135,6 +172,10 @@ QueueFrame::~QueueFrame() {
 
 void QueueFrame::layout() {
 	dwt::Rectangle r { getClientSize() };
+
+	auto y = rebar->refresh();
+	r.pos.y += y;
+	r.size.y -= y;
 
 	r.size.y -= status->refresh();
 
@@ -896,6 +937,19 @@ MenuPtr QueueFrame::makeDirMenu() {
 	menu->appendSeparator();
 	menu->appendItem(T_("&Remove"), [this] { handleRemove(); });
 	return menu;
+}
+
+void QueueFrame::reEvaluateToolbar() {
+	auto cnt = files->countSelected();
+
+	bool statusToolbar = cnt != 0;
+	if(toolbarItemsStatus != statusToolbar) {
+		toolbarItemsStatus = statusToolbar;
+
+		for(auto& i : toolbarIds) {
+			toolbar->setButtonEnabled(i, statusToolbar);
+		}
+	}
 }
 
 void QueueFrame::addPriorityMenu(Menu* menu) {

@@ -154,10 +154,20 @@ public:
 	  */
 	void setButtonEnabled( unsigned id, bool enable );
 
+	/// Enables (or disables) the button in the toolbar with the given id
+	/** id is the identification of which button you want to enable.
+	  */
+	void setButtonEnabled( const std::string& id, bool enable );
+
 	/// Returns a boolean indicating if the button with the current id is enabled or not
 	/** id is the identification you supplied when you called addButton.
 	  */
 	bool getButtonEnabled( unsigned int id );
+
+	/// Returns a boolean indicating if the button with the current id is enabled or not
+	/** id is the identification you supplied when you called addButton.
+	  */
+	bool getButtonEnabled( const std::string& id );
 
 	/// Returns a boolean indicating if the button with the current id is checked or not
 	/** id is the identification you supplied when you called addButton.
@@ -325,11 +335,27 @@ inline void ToolBar::setButtonEnabled( unsigned id, bool enable )
 	sendMessage(TB_ENABLEBUTTON, static_cast< LPARAM >( id ), MAKELONG( ( enable ? TRUE : FALSE ), 0 ) );
 }
 
+inline void ToolBar::setButtonEnabled( const std::string& id, bool enable )
+{
+	int intId = getIntId(id);
+	if(intId != -1)
+		setButtonEnabled(intId, enable);
+}
+
 inline bool ToolBar::getButtonEnabled( unsigned int id )
 {
 	TBBUTTONINFO tb = { sizeof(TBBUTTONINFO), TBIF_STATE, static_cast<int>(id) };
 	sendMessage(TB_GETBUTTONINFO, id, reinterpret_cast< LPARAM >( & tb ) );
 	return ( tb.fsState & TBSTATE_ENABLED ) == TBSTATE_ENABLED;
+}
+
+inline bool ToolBar::getButtonEnabled( const std::string& id )
+{
+	int intId = getIntId(id);
+	if(intId != -1)
+		return getButtonEnabled(intId);
+
+	return false;
 }
 
 inline bool ToolBar::getButtonChecked( unsigned int id )
