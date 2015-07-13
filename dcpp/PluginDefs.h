@@ -117,8 +117,9 @@ extern "C" {
 #define HOOK_UI_CHAT_COMMAND		"dcpp.ui.onChatCommand"			/* Client side commands in hub chat (obj: HubData; data: CommandData) */
 #define HOOK_UI_CHAT_COMMAND_PM		"dcpp.ui.onChatCommandPM"		/* Client side commands in private chat (obj: UserData; data: CommandData) */
 
-#define HOOK_DATAACESSOR_HTTP_FILE_NOTIFICATION		"dcpp.dataaccessor.onHTTPFileNotification"		/* Notification that transfer has completed or failed */
-#define HOOK_DATAACESSOR_HTTP_FILE_STREAM		"dcpp.dataaccessor.onHTTPFileStream"		/* Notification that transfer has updated */
+#define HOOK_DATAACESSOR_HTTP_RESOURCE_NOTIFICATION		"dcpp.dataaccessor.onHTTPResourceNotification"		/* Notification that transfer has completed */
+#define HOOK_DATAACESSOR_HTTP_RESOURCE_NOTIFICATION_FAILED		"dcpp.dataaccessor.onHTTPResourceNotificationFailed"		/* Notification that transfer has failed */
+#define HOOK_DATAACESSOR_HTTP_RESOURCE_STREAM		"dcpp.dataaccessor.onHTTPResourceStream"		/* Notification that transfer has updated */
 
 /* Main hook events (returned by pluginInit) */
 typedef enum tagPluginState {
@@ -477,7 +478,7 @@ typedef struct DCDataAccess {
 	/* "uri" is the HTTP file path to grab.
 	"localPath" is the local file path to download to.
 	"localPath" may be NULL or empty to not download to a specific file. */
-	void		(DCAPI *get_http_file)	(const char* uri, const char* localPath);
+	void		(DCAPI *get_http_resource)	(const char* uri, const char* localPath);
 
 	DataArrayPtr	(DCAPI *copy)					(const DataArrayPtr hItem);
 	void			(DCAPI *release)				(DataArrayPtr hCopy);
