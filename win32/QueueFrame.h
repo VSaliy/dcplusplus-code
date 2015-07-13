@@ -249,7 +249,10 @@ private:
 
 	void removeDir(HTREEITEM ht);
 	void setPriority(HTREEITEM ht, const QueueItem::Priority& p);
+
 	void changePriority(bool inc);
+	void changePriority(HTREEITEM ht, bool inc);
+	void changePriority(QueueItemInfo* ii, bool inc);
 
 	MenuPtr makeSingleMenu(QueueItemInfo* qii);
 	MenuPtr makeMultiMenu();

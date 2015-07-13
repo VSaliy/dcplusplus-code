@@ -86,7 +86,8 @@ fileLists(0)
 
 		dirs->setNormalImageList(WinUtil::fileImages);
 
-		dirs->onSelectionChanged([this] { updateFiles(); });
+		dirs->onClicked([this] { usingDirMenu = true; filesDirty = true; reEvaluateToolbar(); });
+		dirs->onSelectionChanged([this] { updateFiles(); usingDirMenu = true; filesDirty = true; reEvaluateToolbar(); });
 		dirs->onKeyDown([this](int c) { return handleKeyDownDirs(c); });
 		dirs->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleDirsContextMenu(sc); });
 	}
@@ -102,7 +103,8 @@ fileLists(0)
 
 		files->onKeyDown([this](int c) { return handleKeyDownFiles(c); });
 		files->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleFilesContextMenu(sc); });
-		files->onSelectionChanged([this] { filesDirty = true; reEvaluateToolbar(); });
+		files->onSelectionChanged([this] { usingDirMenu = false; filesDirty = true; reEvaluateToolbar(); });
+		files->onClicked([this] { usingDirMenu = false; filesDirty = true; reEvaluateToolbar(); });
 
 		if(!SETTING(QUEUEFRAME_SHOW_TREE)) {
 			paned->maximize(files);
@@ -821,28 +823,57 @@ void QueueFrame::removeDir(HTREEITEM ht) {
  * @param inc True = increase, False = decrease
  */
 void QueueFrame::changePriority(bool inc){
-	for(auto i: files->getSelection()) {
-		QueueItemInfo* ii = files->getData(i);
-		QueueItem::Priority p = ii->getPriority();
-
-		if ((inc && p == QueueItem::HIGHEST) || (!inc && p == QueueItem::PAUSED)){
-			// Trying to go higher than HIGHEST or lower than PAUSED
-			// so do nothing
-			continue;
-		}
-
-		switch(p){
-			case QueueItem::HIGHEST: p = inc ? QueueItem::HIGHEST : QueueItem::HIGH; break;
-			case QueueItem::HIGH:    p = inc ? QueueItem::HIGHEST : QueueItem::NORMAL; break;
-			case QueueItem::NORMAL:  p = inc ? QueueItem::HIGH    : QueueItem::LOW; break;
-			case QueueItem::LOW:     p = inc ? QueueItem::NORMAL  : QueueItem::LOWEST; break;
-			case QueueItem::LOWEST:  p = inc ? QueueItem::LOW     : QueueItem::PAUSED; break;
-			case QueueItem::PAUSED:  p = inc ? QueueItem::LOWEST : QueueItem::PAUSED; break;
-			default: dcassert(false); break;
-		}
-
-		QueueManager::getInstance()->setPriority(ii->getTarget(), p);
+	if(usingDirMenu)
+	{
+		changePriority(dirs->getSelected(), inc);
 	}
+	else
+	{
+		for(auto i: files->getSelection()) {
+			QueueItemInfo* ii = files->getData(i);
+			changePriority(ii, inc);
+		}
+	}
+}
+
+void QueueFrame::changePriority(HTREEITEM ht, bool inc)
+{
+	if(ht == NULL)
+		return;
+
+	HTREEITEM child = dirs->getChild(ht);
+	while(child) {
+		changePriority(child, inc);
+		child = dirs->getNextSibling(child);
+	}
+	const string& name = getDir(ht);
+	auto dp = directories.equal_range(name);
+	for(auto i = dp.first; i != dp.second; ++i) {
+		changePriority(i->second.get(), inc);
+	}
+}
+
+void QueueFrame::changePriority(QueueItemInfo* ii, bool inc)
+{
+	QueueItem::Priority p = ii->getPriority();
+
+	if ((inc && p == QueueItem::HIGHEST) || (!inc && p == QueueItem::PAUSED)){
+		// Trying to go higher than HIGHEST or lower than PAUSED
+		// so do nothing
+		return;
+	}
+
+	switch(p){
+		case QueueItem::HIGHEST: p = inc ? QueueItem::HIGHEST : QueueItem::HIGH; break;
+		case QueueItem::HIGH:    p = inc ? QueueItem::HIGHEST : QueueItem::NORMAL; break;
+		case QueueItem::NORMAL:  p = inc ? QueueItem::HIGH    : QueueItem::LOW; break;
+		case QueueItem::LOW:     p = inc ? QueueItem::NORMAL  : QueueItem::LOWEST; break;
+		case QueueItem::LOWEST:  p = inc ? QueueItem::LOW     : QueueItem::PAUSED; break;
+		case QueueItem::PAUSED:  p = inc ? QueueItem::LOWEST : QueueItem::PAUSED; break;
+		default: dcassert(false); break;
+	}
+
+	QueueManager::getInstance()->setPriority(ii->getTarget(), p);
 }
 
 void QueueFrame::setPriority(HTREEITEM ht, const QueueItem::Priority& p) {
@@ -940,7 +971,12 @@ MenuPtr QueueFrame::makeDirMenu() {
 }
 
 void QueueFrame::reEvaluateToolbar() {
-	auto cnt = files->countSelected();
+	int cnt = 0;
+
+	if(usingDirMenu)
+		cnt = dirs->countSelected();
+	else
+		cnt = files->countSelected();
 
 	bool statusToolbar = cnt != 0;
 	if(toolbarItemsStatus != statusToolbar) {
