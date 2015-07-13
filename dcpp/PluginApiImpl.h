@@ -125,7 +125,7 @@ private:
 
 	static UserDataPtr DCAPI findUser(const char* cid, const char* hubUrl);
 
-	static void DCAPI getHTTPFile(const char* uri, const char* localPath);
+	static void DCAPI getHTTPResource(const char* uri, const char* localPath);
 
 	static DCHooks dcHooks;
 	static DCConfig dcConfig;

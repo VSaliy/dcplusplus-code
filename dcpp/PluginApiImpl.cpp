@@ -44,7 +44,7 @@
 
 namespace dcpp {
 
-#define IMPL_HOOKS_COUNT 25
+#define IMPL_HOOKS_COUNT 26
 
 static const char* hookGuids[IMPL_HOOKS_COUNT] = {
 	HOOK_CHAT_IN,
@@ -76,8 +76,9 @@ static const char* hookGuids[IMPL_HOOKS_COUNT] = {
 	HOOK_UI_CHAT_COMMAND,
 	HOOK_UI_CHAT_COMMAND_PM,
 
-	HOOK_DATAACESSOR_HTTP_FILE_NOTIFICATION,
-	HOOK_DATAACESSOR_HTTP_FILE_STREAM
+	HOOK_DATAACESSOR_HTTP_RESOURCE_NOTIFICATION,
+	HOOK_DATAACESSOR_HTTP_RESOURCE_NOTIFICATION_FAILED,
+	HOOK_DATAACESSOR_HTTP_RESOURCE_STREAM
 };
 
 static const char* hostName = APPNAME;
@@ -186,7 +187,7 @@ DCTagger PluginApiImpl::dcTagger = {
 DCDataAccess PluginApiImpl::dcDataAccess = {
 	DCINTF_DCPP_DATAACCESSOR_VER,
 
-	&PluginApiImpl::getHTTPFile,
+	&PluginApiImpl::getHTTPResource,
 
 	&PluginApiImpl::copyData,
 	&PluginApiImpl::releaseData
@@ -789,7 +790,7 @@ void PluginApiImpl::releaseData(UserDataPtr user) {
 }
 
 /* Functions for DataAccess */
-void PluginApiImpl::getHTTPFile(const char* uri, const char* localPath) {
+void PluginApiImpl::getHTTPResource(const char* uri, const char* localPath) {
 	try {
 		class HTTPDownloader : private dcpp::HttpManagerListener
 		{
@@ -798,7 +799,7 @@ void PluginApiImpl::getHTTPFile(const char* uri, const char* localPath) {
 			HTTPDownloader() { }
 			virtual ~HTTPDownloader() { };
 
-			void getFile(const char* uri, const char* file)
+			void getResource(const char* uri, const char* file)
 			{
 				HttpManager::getInstance()->addListener(this);
 				if(strlen(file) == 0)
@@ -815,27 +816,22 @@ void PluginApiImpl::getHTTPFile(const char* uri, const char* localPath) {
 
 			DataArrayPtr getDataArrayPtr(const std::string& str)
 			{
-				DataArrayPtr pDataArray = (DataArrayPtr)malloc(sizeof(DataArray));
-				memset(pDataArray, 0, sizeof(DataArray));
-
-				size_t bufLen = str.size() + 1;
-				char* pData = (char*)malloc(bufLen);
-				memcpy(pData, str.c_str(), bufLen);
-				pDataArray->pData = pData;
-
-				pDataArray->size = bufLen;
-
-				return pDataArray;
+				return getDataArrayPtr((void*)str.c_str(), str.size() + 1);
 			};
 
 			DataArrayPtr getDataArrayPtr(const uint8_t* data, size_t len)
+			{
+				return getDataArrayPtr((void*)data, len);
+			};
+
+			DataArrayPtr getDataArrayPtr(const void* data, size_t len)
 			{
 				DataArrayPtr pDataArray = (DataArrayPtr)malloc(sizeof(DataArray));
 				memset(pDataArray, 0, sizeof(DataArray));
 
 				size_t bufLen = len;
-				uint8_t* pData = (uint8_t*)malloc(bufLen);
-				memcpy(pData, (uint8_t*)data, bufLen);
+				void* pData = (void*)malloc(bufLen);
+				memcpy(pData, data, bufLen);
 				pDataArray->pData = pData;
 
 				pDataArray->size = bufLen;
@@ -845,7 +841,16 @@ void PluginApiImpl::getHTTPFile(const char* uri, const char* localPath) {
 
 			void runHookCompleted(const std::string& url)
 			{
-				PluginManager::getInstance()->runHook(HOOK_DATAACESSOR_HTTP_FILE_NOTIFICATION, const_cast<char*>(url.c_str()));
+				PluginManager::getInstance()->runHook(HOOK_DATAACESSOR_HTTP_RESOURCE_NOTIFICATION, const_cast<char*>(url.c_str()));
+
+				HttpManager::getInstance()->removeListener(this);
+
+				delete this;
+			}
+
+			void runHookFailed(const std::string& url)
+			{
+				PluginManager::getInstance()->runHook(HOOK_DATAACESSOR_HTTP_RESOURCE_NOTIFICATION_FAILED, const_cast<char*>(url.c_str()));
 
 				HttpManager::getInstance()->removeListener(this);
 
@@ -856,14 +861,14 @@ void PluginApiImpl::getHTTPFile(const char* uri, const char* localPath) {
 			{
 				DataArrayPtr streamArray = getDataArrayPtr(data, len);
 
-				PluginManager::getInstance()->runHook(HOOK_DATAACESSOR_HTTP_FILE_STREAM, const_cast<char*>(url.c_str()), streamArray);
+				PluginManager::getInstance()->runHook(HOOK_DATAACESSOR_HTTP_RESOURCE_STREAM, const_cast<char*>(url.c_str()), streamArray);
 				
 			}
 
 			// HttpManagerListener
 			void on(HttpManagerListener::Failed, HttpConnection* c, const string&) noexcept
 			{
-				runHookCompleted(c->getUrl());
+				runHookFailed(c->getUrl());
 			}
 
 			void on(HttpManagerListener::Complete, HttpConnection* c, OutputStream* stream) noexcept
@@ -878,7 +883,7 @@ void PluginApiImpl::getHTTPFile(const char* uri, const char* localPath) {
 		};
 
 		HTTPDownloader* downloader = new HTTPDownloader();
-		downloader->getFile(uri, localPath);
+		downloader->getResource(uri, localPath);
 
 	} catch(const Exception& e) {
 		LogManager::getInstance()->message(e.getError());
