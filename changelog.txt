@@ -3,6 +3,7 @@
 * Added support for a HTTP downloader in the plugin interface (ullner)
 * Added option to autostart DC++ when Windows starts (ullner)
 * Added toolbar to download queue (ullner)
+* Better security and certs related settings layout (emtee)
 
 -- 0.851 2015-04-06 --
 * [L#1414362] Prefer boost regex over std regex for the time being (poy)

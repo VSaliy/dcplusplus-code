@@ -192,7 +192,7 @@ bool SettingsDialog::initDialog() {
 			HTREEITEM item = addPage(T_("Advanced"), new AdvancedPage(container), IDI_ADVANCED, TVI_ROOT);
 			addPage(T_("Experts only"), new ExpertsPage(container), IDI_EXPERT, item);
 			addPage(T_("User commands"), new UCPage(container), IDI_USER_OP, item);
-			addPage(T_("Security certificates"), new CertificatesPage(container), IDI_SECURE, item);
+			addPage(T_("Security & certificates"), new CertificatesPage(container), IDI_SECURE, item);
 			addPage(T_("Search types"), new SearchTypesPage(container), IDI_SEARCH, item);
 			addPage(T_("User matching"), new UserMatchPage(container), IDI_USERS, item);
 		}
