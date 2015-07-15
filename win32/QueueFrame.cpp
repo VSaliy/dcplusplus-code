@@ -131,7 +131,7 @@ fileLists(0)
 		addButton(IDI_PAUSE, T_("Pause"), false, IDH_QUEUE_TOOLBAR_PAUSE, [this] { handlePriority(QueueItem::PAUSED); });
 		addButton(IDI_INCREMENT, T_("Increase priority"), false, IDH_QUEUE_TOOLBAR_INCREASE_PRIO, [this] { changePriority(true); });
 		addButton(IDI_DECREMENT, T_("Decrease priority"), false, IDH_QUEUE_TOOLBAR_DECREASE_PRIO, [this] { changePriority(false); });
-		addButton(IDI_DELETE, T_("Remove file"), false, IDH_QUEUE_TOOLBAR_REMOVE_FILE, [this] { handleRemove(); });
+		addButton(IDI_REMOVEQUEUE, T_("Remove file"), false, IDH_QUEUE_TOOLBAR_REMOVE_FILE, [this] { handleRemove(); });
 
 		toolbarIds.emplace_back();
 
