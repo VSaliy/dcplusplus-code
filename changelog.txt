@@ -1,8 +1,8 @@
 --
 * Switch feasible http links to https (cologic)
-* Added support for a HTTP downloader in the plugin interface (ullner)
-* Added option to autostart DC++ when Windows starts (ullner)
-* Added toolbar to download queue (ullner)
+* [L#1451223] Added support for a HTTP downloader in the plugin interface (ullner)
+* [L#1353402] Added option to autostart DC++ when Windows starts (ullner)
+* [L#1265578] Added toolbar to download queue (ullner)
 * Better security and certs related settings layout (emtee)
 * [L#1262319] Add option to quick-check encrypted hubs in search frame (ullner)
 
