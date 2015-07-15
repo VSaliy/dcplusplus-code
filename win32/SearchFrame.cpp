@@ -229,9 +229,9 @@ droppedResults(0)
 
 		hubs->onRaw([this](WPARAM w, LPARAM l) { return handleHubItemChanged(w, l); }, dwt::Message(WM_NOTIFY, LVN_ITEMCHANGED));
 
-		hubs->insert(new HubInfo(Util::emptyStringT, T_("Only where I'm op"), true, true));
+		hubs->insert(new HubInfo(Util::emptyStringT, T_("Hubs where I'm op"), true, true));
 		hubs->setChecked(OPTION_ONLY_AS_OP, false);
-		hubs->insert(new HubInfo(Util::emptyStringT, T_("Only encrypted transfers"), true, true));
+		hubs->insert(new HubInfo(Util::emptyStringT, T_("Hubs with secure transfers"), true, true));
 		hubs->setChecked(OPTION_ONLY_SECURE, false);
 	}
 
