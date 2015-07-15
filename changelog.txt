@@ -4,6 +4,7 @@
 * Added option to autostart DC++ when Windows starts (ullner)
 * Added toolbar to download queue (ullner)
 * Better security and certs related settings layout (emtee)
+* [L#1262319] Add option to quick-check encrypted hubs in search frame (ullner)
 
 -- 0.851 2015-04-06 --
 * [L#1414362] Prefer boost regex over std regex for the time being (poy)

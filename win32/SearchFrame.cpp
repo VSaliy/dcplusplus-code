@@ -229,8 +229,10 @@ droppedResults(0)
 
 		hubs->onRaw([this](WPARAM w, LPARAM l) { return handleHubItemChanged(w, l); }, dwt::Message(WM_NOTIFY, LVN_ITEMCHANGED));
 
-		hubs->insert(new HubInfo(Util::emptyStringT, T_("Only where I'm op"), false));
-		hubs->setChecked(0, false);
+		hubs->insert(new HubInfo(Util::emptyStringT, T_("Only where I'm op"), true, true));
+		hubs->setChecked(OPTION_ONLY_AS_OP, false);
+		hubs->insert(new HubInfo(Util::emptyStringT, T_("Only encrypted transfers"), true, true));
+		hubs->setChecked(OPTION_ONLY_SECURE, false);
 	}
 
 	{
@@ -675,7 +677,8 @@ void SearchFrame::handlePurgeClicked() {
 
 LRESULT SearchFrame::handleHubItemChanged(WPARAM wParam, LPARAM lParam) {
 	LPNMLISTVIEW lv = (LPNMLISTVIEW)lParam;
-	if(lv->iItem == 0 && (lv->uNewState ^ lv->uOldState) & LVIS_STATEIMAGEMASK) {
+
+	if((lv->iItem == OPTION_ONLY_AS_OP) && (lv->uNewState ^ lv->uOldState) & LVIS_STATEIMAGEMASK) {
 		if (((lv->uNewState & LVIS_STATEIMAGEMASK) >> 12) - 1) {
 			for(int iItem = 0; (iItem = hubs->getNext(iItem, LVNI_ALL)) != -1; ) {
 				HubInfo* client = hubs->getData(iItem);
@@ -683,7 +686,26 @@ LRESULT SearchFrame::handleHubItemChanged(WPARAM wParam, LPARAM lParam) {
 					hubs->setChecked(iItem, false);
 			}
 		}
+
+		// Treat the option as a radio button
+		if(hubs->isChecked(OPTION_ONLY_AS_OP))
+			hubs->setChecked(OPTION_ONLY_SECURE, false);
 	}
+
+	if((lv->iItem == OPTION_ONLY_SECURE) && (lv->uNewState ^ lv->uOldState) & LVIS_STATEIMAGEMASK) {
+		if (((lv->uNewState & LVIS_STATEIMAGEMASK) >> 12) - 1) {
+			for(int iItem = 0; (iItem = hubs->getNext(iItem, LVNI_ALL)) != -1; ) {
+				HubInfo* client = hubs->getData(iItem);
+				if (!client->secure)
+					hubs->setChecked(iItem, false);
+			}
+		}
+
+		// Treat the option as a radio button
+		if(hubs->isChecked(OPTION_ONLY_SECURE))
+			hubs->setChecked(OPTION_ONLY_AS_OP, false);
+	}
+
 	return 0;
 }
 
@@ -904,7 +926,16 @@ void SearchFrame::on(SearchManagerListener::SR, const SearchResultPtr& sr) noexc
 
 void SearchFrame::onHubAdded(HubInfo* info, bool defaultHubState) {
 	int nItem = hubs->insert(info);
-	hubs->setChecked(nItem, (hubs->isChecked(0) ? info->op : defaultHubState));
+
+	if (hubs->isChecked(OPTION_ONLY_AS_OP) && hubs->isChecked(OPTION_ONLY_SECURE))
+		hubs->setChecked(nItem, info->op && info->secure);
+	else if(hubs->isChecked(OPTION_ONLY_AS_OP))
+		hubs->setChecked(nItem, info->op);
+	else if(hubs->isChecked(OPTION_ONLY_SECURE))
+		hubs->setChecked(nItem, info->secure);
+	else
+		hubs->setChecked(nItem, defaultHubState);
+
 	hubs->setColumnWidth(0, LVSCW_AUTOSIZE);
 }
 
@@ -921,8 +952,12 @@ void SearchFrame::onHubChanged(HubInfo* info) {
 	hubs->setData(nItem, info);
 	hubs->update(nItem);
 
-	if (hubs->isChecked(0))
+	if (hubs->isChecked(OPTION_ONLY_AS_OP) && hubs->isChecked(OPTION_ONLY_SECURE))
+		hubs->setChecked(nItem, info->op && info->secure);
+	else if(hubs->isChecked(OPTION_ONLY_AS_OP))
 		hubs->setChecked(nItem, info->op);
+	else if(hubs->isChecked(OPTION_ONLY_SECURE))
+		hubs->setChecked(nItem, info->secure);
 
 	hubs->setColumnWidth(0, LVSCW_AUTOSIZE);
 }
