@@ -89,6 +89,7 @@
 #define IDI_PLAY 183
 #define IDI_INCREMENT 184
 #define IDI_DECREMENT 185
+#define IDI_REMOVEQUEUE 186
 
 // Stuff that uses multiple id's
 
