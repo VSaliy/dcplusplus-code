@@ -80,6 +80,11 @@ private:
 		COLUMN_LAST
 	};
 
+	enum {
+		OPTION_ONLY_AS_OP = 0,
+		OPTION_ONLY_SECURE = 1
+	};
+
 	struct SearchInfo {
 		SearchInfo(const SearchResultPtr& aSR);
 		~SearchInfo();
@@ -139,10 +144,10 @@ private:
 	};
 
 	struct HubInfo : public FastAlloc<HubInfo> {
-		HubInfo(const tstring& aUrl, const tstring& aName, bool aOp) : url(aUrl),
-			name(aName), op(aOp) { }
+		HubInfo(const tstring& aUrl, const tstring& aName, bool aOp, bool aSecure) : url(aUrl),
+			name(aName), op(aOp), secure(aSecure) { }
 		HubInfo(Client* client) : url(Text::toT(client->getHubUrl())),
-			name(Text::toT(client->getHubName())), op(client->getMyIdentity().isOp()) { }
+			name(Text::toT(client->getHubName())), op(client->getMyIdentity().isOp()), secure(client->isSecure()) { }
 
 		const tstring& getText(int col) const {
 			return (col == 0) ? name : Util::emptyStringT;
@@ -156,6 +161,7 @@ private:
 		tstring url;
 		tstring name;
 		bool op;
+		bool secure;
 	};
 
 	typedef set<SearchFrame*> FrameSet;
