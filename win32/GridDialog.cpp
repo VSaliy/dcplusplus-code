@@ -53,7 +53,7 @@ void GridDialog::layout() {
 	sz.y += spacing * 2;
 
 	RECT rect = { 0, 0, 0, sz.y };
-	::AdjustWindowRectEx(&rect, ::GetWindowLong(handle(), GWL_STYLE), FALSE, ::GetWindowLong(handle(), GWL_EXSTYLE));
+	::AdjustWindowRectEx(&rect, ::GetWindowLongPtr(handle(), GWL_STYLE), FALSE, ::GetWindowLongPtr(handle(), GWL_EXSTYLE));
 	sz.y = rect.bottom - rect.top;
 
 	resize(dwt::Rectangle(getWindowRect().pos, sz));
