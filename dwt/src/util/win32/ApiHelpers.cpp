@@ -47,7 +47,7 @@ tstring getWindowText(HWND hWnd) {
 }
 
 void updateStyle(HWND hwnd, int which, DWORD style, bool add) {
-	DWORD newStyle = ::GetWindowLong(hwnd, which);
+	DWORD newStyle = ::GetWindowLongPtr(hwnd, which);
 	bool mustUpdate = false;
 	if(add && (newStyle & style) != style) {
 		mustUpdate = true;
@@ -58,7 +58,7 @@ void updateStyle(HWND hwnd, int which, DWORD style, bool add) {
 	}
 
 	if(mustUpdate) {
-		::SetWindowLong(hwnd, which, newStyle);
+		::SetWindowLongPtr(hwnd, which, newStyle);
 
 		// Faking a recheck in the window to read new style... (hack)
 		::SetWindowPos(hwnd, NULL, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);

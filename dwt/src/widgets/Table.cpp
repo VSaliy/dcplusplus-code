@@ -542,10 +542,10 @@ void Table::setView( int view ) {
 		dwtWin32DebugFail("Invalid View type");
 	}
 	//little hack because there is no way to do this with Widget::addRemoveStyle
-	int newStyle = GetWindowLong( handle(), GWL_STYLE );
+	int newStyle = GetWindowLongPtr( handle(), GWL_STYLE );
 	if ( ( newStyle & LVS_TYPEMASK ) != view )
 	{
-		SetWindowLong( handle(), GWL_STYLE, ( newStyle & ~LVS_TYPEMASK ) | view );
+		SetWindowLongPtr( handle(), GWL_STYLE, ( newStyle & ~LVS_TYPEMASK ) | view );
 	}
 }
 

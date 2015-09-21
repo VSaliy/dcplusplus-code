@@ -288,11 +288,11 @@ inline Widget* Widget::getParent() const {
 }
 
 inline bool Widget::hasStyle(DWORD style) const {
-	return (::GetWindowLong(handle(), GWL_STYLE) & style) == style;
+	return (::GetWindowLongPtr(handle(), GWL_STYLE) & style) == style;
 }
 
 inline bool Widget::hasExStyle(DWORD style) const {
-	return (::GetWindowLong(handle(), GWL_EXSTYLE) & style) == style;
+	return (::GetWindowLongPtr(handle(), GWL_EXSTYLE) & style) == style;
 }
 
 inline HWND Widget::getParentHandle() {
