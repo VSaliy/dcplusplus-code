@@ -5,6 +5,7 @@
 * [L#1265578] Added toolbar to download queue (ullner)
 * Better security and certs related settings layout (emtee)
 * [L#1262319] Add option to quick-check encrypted hubs in search frame (ullner)
+* [L#1494809] Fix chat tab selection on Windows 10 (iceman50)
 
 -- 0.851 2015-04-06 --
 * [L#1414362] Prefer boost regex over std regex for the time being (poy)
