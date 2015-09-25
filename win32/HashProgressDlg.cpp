@@ -145,6 +145,7 @@ bool HashProgressDlg::updateStats() {
 		speed->setText(str(TF_("-.-- B/s, %1% left") % Text::toT(Util::formatBytes(bytes))));
 		if(paused) {
 			left->setText(T_("Paused"));
+			progress->sendMessage(PBM_SETSTATE, PBST_PAUSED, 0);
 		} else {
 			left->setText(str(TF_("%1% left") % T_("-:--:--")));
 			progress->setPosition(0);
@@ -173,6 +174,7 @@ bool HashProgressDlg::updateStats() {
 void HashProgressDlg::handlePauseResume() {
 	if(HashManager::getInstance()->isHashingPaused()) {
 		HashManager::getInstance()->resumeHashing();
+		progress->sendMessage(PBM_SETSTATE, PBST_NORMAL, 0);
 	} else {
 		HashManager::getInstance()->pauseHashing();
 	}

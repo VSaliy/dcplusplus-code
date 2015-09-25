@@ -102,6 +102,7 @@ private:
 	void putUser(const uint32_t sid, bool disconnect);
 
 	void clearUsers();
+	void appendConnectivity(StringMap& lastInfoMap, AdcCommand& c, bool v4, bool v6);
 
 	void handle(AdcCommand::SUP, AdcCommand& c) noexcept;
 	void handle(AdcCommand::SID, AdcCommand& c) noexcept;

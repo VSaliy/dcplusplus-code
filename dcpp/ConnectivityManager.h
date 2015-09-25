@@ -19,9 +19,11 @@
 #ifndef DCPLUSPLUS_DCPP_CONNECTIVITY_MANAGER_H
 #define DCPLUSPLUS_DCPP_CONNECTIVITY_MANAGER_H
 
+#include "CriticalSection.h"
 #include "SettingsManager.h"
 #include "Singleton.h"
 #include "Speaker.h"
+#include "MappingManager.h"
 
 #include <string>
 #include <unordered_map>
@@ -43,8 +45,8 @@ public:
 	typedef X<3> SettingChanged; // auto-detection has been enabled / disabled
 
 	virtual void on(Message, const string&) noexcept { }
-	virtual void on(Started) noexcept { }
-	virtual void on(Finished) noexcept { }
+	virtual void on(Started, bool /*v6*/) noexcept { }
+	virtual void on(Finished, bool /*v6*/, bool /*failed*/) noexcept { }
 	virtual void on(SettingChanged) noexcept { }
 };
 
@@ -57,13 +59,16 @@ public:
 	void set(SettingsManager::StrSetting setting, const string& str);
 
 	void detectConnection();
-	void setup(bool settingsChanged);
+	void setup(bool v4SettingsChanged, bool v6SettingsChanged);
 	void editAutoSettings();
-	bool ok() const { return autoDetected; }
-	bool isRunning() const { return running; }
-	const string& getStatus() const { return status; }
+	bool ok(bool v6) const { return v6 ? autoDetectedV6 : autoDetectedV4; }
+	bool isRunning() const { return runningV4 || runningV6; }
+	const string& getStatus(bool v6) const;
 	string getInformation() const;
 
+	void close();
+	void disconnect();
+	StringList getMappers(bool v6) const;
 private:
 	friend class Singleton<ConnectivityManager>;
 	friend class MappingManager;
@@ -72,22 +77,40 @@ private:
 	virtual ~ConnectivityManager() { }
 
 	void startMapping();
-	void mappingFinished(const string& mapper);
-	void log(string&& message);
+	void startMapping(bool v6);
+	void mappingFinished(const string& mapper, bool v6);
+
+	void clearAutoSettings(bool v6, bool resetDefaults);
+
+	enum LogType {
+		TYPE_NORMAL,
+		TYPE_V4,
+		TYPE_V6,
+		TYPE_BOTH
+	};
+
+	void log(const string& message, LogType aType);
 
 	void startSocket();
 	void listen();
-	void disconnect();
 
-	bool autoDetected;
-	bool running;
+	bool autoDetectedV4 = false;
+	bool autoDetectedV6 = false;
+	bool runningV4 = false;
+	bool runningV6 = false;
 
-	string status;
+	string statusV4;
+	string statusV6;
 
 	/* contains auto-detected settings. they are stored separately from manual connectivity
 	settings (stored in SettingsManager) in case the user wants to keep the manually set ones for
 	future use. */
 	unordered_map<int, boost::variant<bool, int, string>> autoSettings;
+
+	MappingManager mapperV4;
+	MappingManager mapperV6;
+
+	mutable CriticalSection cs;
 };
 
 #define CONNSETTING(k) ConnectivityManager::getInstance()->get(SettingsManager::k)

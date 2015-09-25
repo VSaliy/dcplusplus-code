@@ -90,6 +90,10 @@
 #define IDI_INCREMENT 184
 #define IDI_DECREMENT 185
 #define IDI_REMOVEQUEUE 186
+/* FavHubProperties */
+#define IDH_FAVORITE_HUB_USER_IP6						11771
+/* ConnectivityManualPage */
+#define IDH_SETTINGS_CONNECTIVITY_BIND_ADDRESS6	11780
 
 // Stuff that uses multiple id's
 

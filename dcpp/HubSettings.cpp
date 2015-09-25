@@ -22,21 +22,34 @@
 namespace dcpp {
 
 const string HubSettings::stringNames[StringCount] = {
-	"Nick", "UserDescription", "Email", "UserIp" // not "Description" for compat with prev fav hub lists
+	"Nick", "UserDescription", "Email", "UserIp", "UserIp6", // not "Description" for compat with prev fav hub lists
 };
 const string HubSettings::boolNames[BoolCount] = {
 	"ShowJoins", "FavShowJoins", "LogMainChat"
 };
 
+const string HubSettings::intNames[IntCount] = {
+	"IncomingConnections", "IncomingConnections6"
+};
+
 namespace {
 inline bool defined(const string& s) { return !s.empty(); }
 inline bool defined(tribool b) { return !indeterminate(b); }
+inline bool defined(int i) { return i > numeric_limits<int>::min(); }
+}
+
+int HubSettings::getMinInt() { 
+	return numeric_limits<int>::min(); 
 }
 
 HubSettings::HubSettings() {
 	// tribools default to false; init them to an indeterminate value.
 	for(auto& setting: bools) {
 		setting = indeterminate;
+	}
+
+	for(auto& setting: ints) {
+		setting = getMinInt();
 	}
 }
 
@@ -48,12 +61,20 @@ const tribool& HubSettings::get(HubBoolSetting setting) const {
 	return bools[setting - HubBoolFirst];
 }
 
+const int& HubSettings::get(HubIntSetting setting) const {
+	return ints[setting - HubIntFirst];
+}
+
 string& HubSettings::get(HubStrSetting setting) {
 	return strings[setting - HubStrFirst];
 }
 
 tribool& HubSettings::get(HubBoolSetting setting) {
 	return bools[setting - HubBoolFirst];
+}
+
+int& HubSettings::get(HubIntSetting setting) {
+	return ints[setting - HubIntFirst];
 }
 
 void HubSettings::merge(const HubSettings& sub) {
@@ -67,6 +88,11 @@ void HubSettings::merge(const HubSettings& sub) {
 			bools[i] = sub.bools[i];
 		}
 	}
+	for(uint8_t i = 0; i < IntCount; ++i) {
+		if(defined(sub.ints[i])) {
+			ints[i] = sub.ints[i];
+		}
+	}
 }
 
 void HubSettings::load(SimpleXML& xml) {
@@ -75,6 +101,11 @@ void HubSettings::load(SimpleXML& xml) {
 	}
 	for(uint8_t i = 0; i < BoolCount; ++i) {
 		bools[i] = to3bool(xml.getIntChildAttrib(boolNames[i]));
+	}
+	for(uint8_t i = 0; i < IntCount; ++i) {
+		auto tmp = xml.getChildAttrib(intNames[i]);
+		if (!tmp.empty())
+			ints[i] = Util::toInt(tmp);
 	}
 }
 
@@ -87,6 +118,11 @@ void HubSettings::save(SimpleXML& xml) const {
 	for(uint8_t i = 0; i < BoolCount; ++i) {
 		if(defined(bools[i])) {
 			xml.addChildAttrib(boolNames[i], toInt(bools[i]));
+		}
+	}
+	for(uint8_t i = 0; i < IntCount; ++i) {
+		if(defined(ints[i])) {
+			xml.addChildAttrib(intNames[i], ints[i]);
 		}
 	}
 }

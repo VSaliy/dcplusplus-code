@@ -83,8 +83,12 @@ public:
 
 	static string getCounts();
 
+	void setActive();
 	void reconnect();
 	void shutdown();
+	bool isActive() const;
+	bool isActiveV4() const;
+	bool isActiveV6() const;
 
 	void send(const string& aMessage) { send(aMessage.c_str(), aMessage.length()); }
 	void send(const char* aMessage, size_t aLen);
@@ -154,7 +158,8 @@ protected:
 	/** Reload details from favmanager or settings */
 	void reloadSettings(bool updateNick);
 	/// Get the external IP the user has defined for this hub, if any.
-	const string& getUserIp() const;
+	const string& getUserIp4() const;
+	const string& getUserIp6() const;
 
 	virtual void checkNick(string& nick) = 0;
 

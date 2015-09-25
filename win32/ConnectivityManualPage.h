@@ -36,17 +36,19 @@ private:
 
 	GroupBoxPtr autoGroup;
 	CheckBoxPtr autoDetect;
+	CheckBoxPtr autoDetect6;
 
 	RadioButtonPtr active;
 	RadioButtonPtr upnp;
 	RadioButtonPtr passive;
 
 	ComboBoxPtr mapper;
+	ComboBoxPtr v4Bind, v6Bind;
 
 	TextBoxPtr transferBox;
 	TextBoxPtr tlstransferBox;
 
-	void handleAutoClicked();
+	void handleAutoClicked(bool v6);
 
 	void read();
 	void updateAuto();

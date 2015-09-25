@@ -40,10 +40,13 @@ ConnectivityManualPage::ConnectivityManualPage(dwt::Widget* parent) :
 PropPage(parent, 5, 1),
 autoGroup(0),
 autoDetect(0),
+autoDetect6(0),
 active(0),
 upnp(0),
 passive(0),
 mapper(0),
+v4Bind(0),
+v6Bind(0),
 transferBox(0),
 tlstransferBox(0)
 {
@@ -55,8 +58,15 @@ tlstransferBox(0)
 		autoGroup = grid->addChild(GroupBox::Seed(T_("Automatic connectivity setup")));
 		autoGroup->setHelpId(IDH_SETTINGS_CONNECTIVITY_AUTODETECT);
 
-		autoDetect = autoGroup->addChild(CheckBox::Seed(T_("Let DC++ determine the best connectivity settings")));
-		autoDetect->onClicked([this] { handleAutoClicked(); });
+		auto cur = autoGroup->addChild(Grid::Seed(1, 2));
+		cur->column(1).mode = GridInfo::FILL;
+		cur->column(1).align = GridInfo::BOTTOM_RIGHT;
+
+		autoDetect = cur->addChild(CheckBox::Seed(T_("Let DC++ determine IPv4 settings")));
+		autoDetect->onClicked([this] { handleAutoClicked(false); });
+
+		autoDetect6 = cur->addChild(CheckBox::Seed(T_("Let DC++ determine IPv6 settings")));
+		autoDetect6->onClicked([this] { handleAutoClicked(true); });
 	}
 
 	{
@@ -75,15 +85,21 @@ tlstransferBox(0)
 	}
 
 	{
-		auto group = grid->addChild(GroupBox::Seed(T_("External / WAN IP")));
+		auto group = grid->addChild(GroupBox::Seed(T_("External / WAN IPv4 and IPv6")));
 		group->setHelpId(IDH_SETTINGS_CONNECTIVITY_EXTERNAL_IP);
 
-		auto cur = group->addChild(Grid::Seed(2, 1));
+		auto cur = group->addChild(Grid::Seed(3, 1));
 		cur->column(0).mode = GridInfo::FILL;
 
-		auto externalIP = cur->addChild(WinUtil::Seeds::Dialog::textBox);
-		items.emplace_back(externalIP, SettingsManager::EXTERNAL_IP, PropPage::T_STR);
-		WinUtil::preventSpaces(externalIP);
+		auto externalIPv4 = cur->addChild(WinUtil::Seeds::Dialog::textBox);
+		externalIPv4->setCue(T_("Enter your external IPv4 address here"));
+		items.emplace_back(externalIPv4, SettingsManager::EXTERNAL_IP, PropPage::T_STR);
+		WinUtil::preventSpaces(externalIPv4);
+
+		auto externalIPv6 = cur->addChild(WinUtil::Seeds::Dialog::textBox);
+		externalIPv6->setCue(T_("Enter your external IPv6 address here"));
+		items.emplace_back(externalIPv6, SettingsManager::EXTERNAL_IP6, PropPage::T_STR);
+		WinUtil::preventSpaces(externalIPv6);
 
 		auto overrideIP = cur->addChild(CheckBox::Seed(T_("Don't allow hubs/NAT-PMP/UPnP to override")));
 		items.emplace_back(overrideIP, SettingsManager::NO_IP_OVERRIDE, PropPage::T_BOOL);
@@ -118,18 +134,22 @@ tlstransferBox(0)
 	}
 
 	{
-		auto cur = grid->addChild(Grid::Seed(1, 2));
-		cur->column(1).mode = GridInfo::FILL;
+		auto cur = grid->addChild(Grid::Seed(3, 1));
+		cur->setSpacing(grid->getSpacing());
 
-		auto group = cur->addChild(GroupBox::Seed(T_("Preferred port mapping interface")));
+
+		auto group = cur->addChild(GroupBox::Seed(T_("Preferred port mapper")));
 		group->setHelpId(IDH_SETTINGS_CONNECTIVITY_MAPPER);
 
 		mapper = group->addChild(WinUtil::Seeds::Dialog::comboBox);
 
-		group = cur->addChild(GroupBox::Seed(T_("Bind address")));
+		group = cur->addChild(GroupBox::Seed(T_("IPv4 Bind Address")));
 		group->setHelpId(IDH_SETTINGS_CONNECTIVITY_BIND_ADDRESS);
+		v4Bind = group->addChild(WinUtil::Seeds::Dialog::comboBox);
 
-		items.emplace_back(group->addChild(WinUtil::Seeds::Dialog::textBox), SettingsManager::BIND_ADDRESS, PropPage::T_STR);
+		group = cur->addChild(GroupBox::Seed(T_("IPv6 Bind Address")));
+		group->setHelpId(IDH_SETTINGS_CONNECTIVITY_BIND_ADDRESS6);
+		v6Bind = group->addChild(WinUtil::Seeds::Dialog::comboBox);
 	}
 
 	read();
@@ -159,23 +179,39 @@ void ConnectivityManualPage::write() {
 		SettingsManager::getInstance()->set(SettingsManager::INCOMING_CONNECTIONS, c);
 	}
 
+
+	auto saveBind = [](ComboBoxPtr bind, bool v6) {
+		auto setting = Text::fromT(bind->getText());
+		size_t found = setting.rfind(" - "); // "friendly_name - ip_address"
+		setting.erase(0, found+3);
+		v6 ?
+			SettingsManager::getInstance()->set(SettingsManager::BIND_ADDRESS6, setting):
+			SettingsManager::getInstance()->set(SettingsManager::BIND_ADDRESS, setting);
+	};
+
 	SettingsManager::getInstance()->set(SettingsManager::MAPPER, Text::fromT(mapper->getText()));
+	saveBind(v4Bind, false);
+	saveBind(v6Bind, true);
 }
 
-void ConnectivityManualPage::handleAutoClicked() {
+void ConnectivityManualPage::handleAutoClicked(bool v6) {
 	// apply immediately so that ConnectivityManager updates.
-	SettingsManager::getInstance()->set(SettingsManager::AUTO_DETECT_CONNECTION, autoDetect->getChecked());
+	v6?
+		SettingsManager::getInstance()->set(SettingsManager::AUTO_DETECT_CONNECTION6, autoDetect6->getChecked()):
+		SettingsManager::getInstance()->set(SettingsManager::AUTO_DETECT_CONNECTION, autoDetect->getChecked());
 	ConnectivityManager::getInstance()->fire(ConnectivityManagerListener::SettingChanged());
 }
 
-void ConnectivityManualPage::updateAuto() {
+void ConnectivityManualPage::updateAuto(/*Add type*/) {
 	bool setting = SETTING(AUTO_DETECT_CONNECTION);
+	bool setting6 = SETTING(AUTO_DETECT_CONNECTION6);
 	autoDetect->setChecked(setting);
+	autoDetect6->setChecked(setting6);
 
 	auto controls = grid->getChildren<Control>();
-	boost::for_each(controls, [this, setting](Control* control) {
+	boost::for_each(controls, [this, setting, setting6](Control* control) {
 		if(control != autoGroup) {
-			control->setEnabled(!setting);
+			control->setEnabled(!setting || !setting6);
 		}
 	});
 }
@@ -189,17 +225,36 @@ void ConnectivityManualPage::read() {
 
 	PropPage::read(items);
 
-	const auto& setting = SETTING(MAPPER);
-	int sel = 0;
+	{
+		const auto& setting = SETTING(MAPPER);
+		int sel = 0;
 
-	auto mappers = MappingManager::getInstance()->getMappers();
-	for(const auto& name: mappers) {
-		auto pos = mapper->addValue(Text::toT(name));
-		if(!sel && name == setting)
-			sel = pos;
+		auto mappers = ConnectivityManager::getInstance()->getMappers(false);
+		for (const auto& name : mappers) {
+			auto pos = mapper->addValue(Text::toT(name));
+			if (!sel && name == setting)
+				sel = pos;
+		}
+		mapper->setSelected(sel);
 	}
 
-	mapper->setSelected(sel);
+	auto fillBind = [](ComboBoxPtr bindBox, bool v6) {
+		const auto& setting = v6 ? SETTING(BIND_ADDRESS6) : SETTING(BIND_ADDRESS);
+		int sel = 0;
+
+		const auto& addresses = Util::getIpAddresses(v6);
+		for (const auto& ipstr : addresses) {
+			auto valStr = Text::toT(ipstr.adapterName) + _T(" - ") + Text::toT(ipstr.ip);
+			auto pos = bindBox->addValue(valStr);
+			if (!sel && Text::fromT(valStr) == setting) {
+				sel = pos;
+			}
+		}
+		bindBox->setSelected(sel);
+	};
+
+	fillBind(v4Bind, false);
+	fillBind(v6Bind, true);
 }
 
 void ConnectivityManualPage::on(SettingChanged) noexcept {
@@ -213,6 +268,8 @@ void ConnectivityManualPage::on(SettingChanged) noexcept {
 		passive->setChecked(false);
 
 		mapper->clear();
+		v4Bind->clear();
+		v6Bind->clear();
 
 		read();
 	});

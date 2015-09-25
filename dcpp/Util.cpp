@@ -22,6 +22,7 @@
 #ifdef _WIN32
 
 #include "w.h"
+#include <iphlpapi.h>
 #include <shlobj.h>
 
 #endif
@@ -47,6 +48,8 @@
 #include <sys/utsname.h>
 #include <cctype>
 #include <cstring>
+#include <ifaddrs.h>
+#include <net/if.h>
 #endif
 #include <clocale>
 
@@ -574,49 +577,140 @@ string Util::formatExactSize(int64_t aBytes) {
 #endif
 }
 
-string Util::getLocalIp() {
-	const auto& bindAddr = CONNSETTING(BIND_ADDRESS);
-	if(!bindAddr.empty() && bindAddr != SettingsManager::getInstance()->getDefault(SettingsManager::BIND_ADDRESS)) {
+vector<Util::AddressInfo> Util::getIpAddresses(bool v6) {
+	Util::IpList addrV6, addrV4;
+#ifdef _WIN32
+	int v4Count = 0, v6Count = 0;
+	ULONG len = 15000; // MSDN states the recommended size should be 15 KB to prevent buffer overflows
+
+	if (v6 && v6Count == 1 && !addrV6.empty()) {
+		return addrV6;
+	} else if (!v6 && v4Count == 1 && !addrV4.empty()) {
+		return addrV4;
+	}
+
+	for (int i = 0; i < 3; ++i) {
+		auto adapterInfo = (PIP_ADAPTER_ADDRESSES) HeapAlloc(GetProcessHeap(), HEAP_GENERATE_EXCEPTIONS | HEAP_ZERO_MEMORY, len);
+
+		ULONG ret = GetAdaptersAddresses(v6 ? AF_INET6 : AF_INET, GAA_FLAG_SKIP_DNS_SERVER | GAA_FLAG_SKIP_ANYCAST | GAA_FLAG_SKIP_MULTICAST, NULL, adapterInfo, &len);
+		bool freeObject = true;
+
+		if (ret == ERROR_SUCCESS) {
+			for (PIP_ADAPTER_ADDRESSES pAdapterInfo = adapterInfo; pAdapterInfo != NULL; pAdapterInfo = pAdapterInfo->Next) {
+				// we want only enabled Ethernet interfaces
+				if (pAdapterInfo->OperStatus == IfOperStatusUp && (pAdapterInfo->IfType == IF_TYPE_ETHERNET_CSMACD || pAdapterInfo->IfType == IF_TYPE_IEEE80211)) {
+					PIP_ADAPTER_UNICAST_ADDRESS ua;
+					for (ua = pAdapterInfo->FirstUnicastAddress; ua != NULL; ua = ua->Next) {
+						//get the name of the adapter
+						char buf[BUFSIZ];
+						memset(buf, 0, BUFSIZ);
+						getnameinfo(ua->Address.lpSockaddr, ua->Address.iSockaddrLength, buf, sizeof(buf), NULL, 0, NI_NUMERICHOST);
+						v6 ?
+							addrV6.emplace_back(Text::fromT(tstring(pAdapterInfo->FriendlyName)), buf, ua->OnLinkPrefixLength):
+							addrV4.emplace_back(Text::fromT(tstring(pAdapterInfo->FriendlyName)), buf, ua->OnLinkPrefixLength);
+					}
+					freeObject = false;
+				}
+			}
+		}
+
+		if (freeObject) {
+			HeapFree(GetProcessHeap(), 0, adapterInfo);
+		}
+
+		if (ret != ERROR_BUFFER_OVERFLOW) {
+			break;
+		}
+	}
+
+
+#else
+
+#ifdef HAVE_IFADDRS_H
+	struct ifaddrs *ifap = nullptr;
+
+	if (getifaddrs(&ifap) == 0) {
+		for (struct ifaddrs *i = ifap; i != NULL; i = i->ifa_next) {
+			struct sockaddr *sa = i->ifa_addr;
+
+			// If the interface is up, is not a loopback and it has an address
+			if ((i->ifa_flags & IFF_UP) && !(i->ifa_flags & IFF_LOOPBACK) && sa != NULL) {
+				void* src = nullptr;
+				socklen_t len;
+				uint32_t scope = 0;
+
+				if (!v6 && sa->sa_family == AF_INET) {
+					// IPv4 address
+					struct sockaddr_in* sai = (struct sockaddr_in*)sa;
+					src = (void*) &(sai->sin_addr);
+					len = INET_ADDRSTRLEN;
+					scope = 4;
+				} else if (v6 && sa->sa_family == AF_INET6) {
+					// IPv6 address
+					struct sockaddr_in6* sai6 = (struct sockaddr_in6*)sa;
+					src = (void*) &(sai6->sin6_addr);
+					len = INET6_ADDRSTRLEN;
+					scope = sai6->sin6_scope_id;
+				}
+				char *name = i->ifa_name;
+				// Convert the binary address to a string and add it to the output list
+				if (src) {
+					char address[len];
+					inet_ntop(sa->sa_family, src, address, len);
+					v6 ?
+						addrV6.emplace_back(string(name), string(address), scope):
+						addrV4.emplace_back(string(name), string(address), scope);
+				}
+			}
+		}
+		freeifaddrs(ifap);
+	}
+#endif
+
+#endif
+	if (v6) {
+		++v6Count; return addrV6;
+	} else {
+		++v4Count; return addrV4;
+	}
+}
+
+string Util::getLocalIp(bool v6, bool allowPrivate /*true*/) {
+	const auto& bindAddr = v6 ? CONNSETTING(BIND_ADDRESS6) : CONNSETTING(BIND_ADDRESS);
+	if(!bindAddr.empty() && bindAddr != SettingsManager::getInstance()->getDefault(v6 ? SettingsManager::BIND_ADDRESS6 : SettingsManager::BIND_ADDRESS)) {
 		return bindAddr;
 	}
 
-	string tmp;
+	auto addresses = getIpAddresses(v6);
 
-	char buf[256];
-	gethostname(buf, 255);
-	hostent* he = gethostbyname(buf);
-	if(he == NULL || he->h_addr_list[0] == 0)
+	if (addresses.empty()) {
 		return Util::emptyString;
-	sockaddr_in dest;
-	int i = 0;
-
-	// We take the first ip as default, but if we can find a better one, use it instead...
-	memcpy(&(dest.sin_addr), he->h_addr_list[i++], he->h_length);
-	tmp = inet_ntoa(dest.sin_addr);
-	if(Util::isPrivateIp(tmp) || strncmp(tmp.c_str(), "169", 3) == 0) {
-		while(he->h_addr_list[i]) {
-			memcpy(&(dest.sin_addr), he->h_addr_list[i], he->h_length);
-			string tmp2 = inet_ntoa(dest.sin_addr);
-			if(!Util::isPrivateIp(tmp2) && strncmp(tmp2.c_str(), "169", 3) != 0) {
-				tmp = tmp2;
-			}
-			i++;
-		}
 	}
-	return tmp;
+
+	auto p = boost::find_if(addresses, [v6](const AddressInfo& aAddress) { return !Util::isPrivateIp(aAddress.ip, v6); });
+	if (p != addresses.end()) {
+		return p->ip;
+	}
+
+	return allowPrivate ? addresses.front().ip : Util::emptyString;
 }
 
-bool Util::isPrivateIp(string const& ip) {
-	struct in_addr addr;
+bool Util::isPrivateIp(string const& ip, bool v6) {
+	if(v6) {
+		return ip.length() > 5 && ip.substr(0, 4) == "fe80";
+	} else {
+		in_addr addr;
 
-	addr.s_addr = inet_addr(ip.c_str());
+		addr.s_addr = inet_addr(ip.c_str());
 
-	if (addr.s_addr != INADDR_NONE) {
-		unsigned long haddr = ntohl(addr.s_addr);
-		return ((haddr & 0xff000000) == 0x0a000000 || // 10.0.0.0/8
-				(haddr & 0xff000000) == 0x7f000000 || // 127.0.0.0/8
-				(haddr & 0xfff00000) == 0xac100000 || // 172.16.0.0/12
-				(haddr & 0xffff0000) == 0xc0a80000);  // 192.168.0.0/16
+		if (addr.s_addr  != INADDR_NONE) {
+			unsigned long haddr = ntohl(addr.s_addr);
+			return ((haddr & 0xff000000) == 0x0a000000 || // 10.0.0.0/8
+					(haddr & 0xff000000) == 0x7f000000 || // 127.0.0.0/8
+					(haddr & 0xffff0000) == 0xa9fe0000 || // 169.254.0.0/16
+					(haddr & 0xfff00000) == 0xac100000 || // 172.16.0.0/12
+					(haddr & 0xffff0000) == 0xc0a80000);  // 192.168.0.0/16
+		}
 	}
 	return false;
 }

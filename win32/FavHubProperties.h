@@ -38,6 +38,7 @@ private:
 	TextBoxPtr description;
 	TextBoxPtr email;
 	TextBoxPtr userIp;
+	TextBoxPtr userIp6;
 	ComboBoxPtr showJoins;
 	ComboBoxPtr favShowJoins;
 	ComboBoxPtr logMainChat;
