@@ -61,18 +61,18 @@
 #define _LL(x) x##ll
 #define _ULL(x) x##ull
 #define I64_FMT "%I64d"
-#define U64_FMT "%I64d"
+#define U64_FMT "%I64u"
 
 #elif defined(SIZEOF_LONG) && SIZEOF_LONG == 8
 #define _LL(x) x##l
 #define _ULL(x) x##ul
 #define I64_FMT "%ld"
-#define U64_FMT "%ld"
+#define U64_FMT "%lu"
 #else
 #define _LL(x) x##ll
 #define _ULL(x) x##ull
 #define I64_FMT "%lld"
-#define U64_FMT "%lld"
+#define U64_FMT "%llu"
 #endif
 
 #ifndef _REENTRANT
@@ -81,8 +81,8 @@
 
 #ifdef _WIN32
 
-#if _WIN32_WINNT < 0x502 || WINVER < 0x502
-#error _WIN32_WINNT / WINVER must require Windows XP SP2 (0x502)
+#if _WIN32_WINNT < 0x601 || WINVER < 0x601
+#error _WIN32_WINNT / WINVER must require Windows 7 (0x601)
 #endif
 
 #if _WIN32_IE < 0x600

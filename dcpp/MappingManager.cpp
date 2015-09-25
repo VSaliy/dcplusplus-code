@@ -27,15 +27,17 @@
 #include "Mapper_NATPMP.h"
 #include "ScopedFunctor.h"
 #include "SearchManager.h"
+#include "Util.h"
 #include "version.h"
 
 namespace dcpp {
 
-atomic_flag MappingManager::busy = ATOMIC_FLAG_INIT;
-
-MappingManager::MappingManager() : renewal(0) {
-	addMapper<Mapper_NATPMP>();
+MappingManager::MappingManager(bool v6) : renewal(0), v6(v6) {
+	busy.clear();
 	addMapper<Mapper_MiniUPnPc>();
+	if(!v6) {
+		addMapper<Mapper_NATPMP>();
+	}
 }
 
 StringList MappingManager::getMappers() const {
@@ -79,7 +81,7 @@ void MappingManager::close() {
 }
 
 bool MappingManager::getOpened() const {
-	return working.get();
+	return working.get() ? true : false;
 }
 
 string MappingManager::getStatus() const {
@@ -140,7 +142,8 @@ int MappingManager::run() {
 	}
 
 	for(auto& i: mappers) {
-		unique_ptr<Mapper> pMapper(i.second(Util::getLocalIp()));
+		auto setting = v6 ? SettingsManager::BIND_ADDRESS6 : SettingsManager::BIND_ADDRESS;
+		unique_ptr<Mapper> pMapper(i.second((SettingsManager::getInstance()->isDefault(setting) ? Util::emptyString : SettingsManager::getInstance()->get(setting)), v6));
 		Mapper& mapper = *pMapper;
 
 		ScopedFunctor([&mapper] { mapper.uninit(); });
@@ -171,17 +174,18 @@ int MappingManager::run() {
 
 		working = move(pMapper);
 
-		if(!CONNSETTING(NO_IP_OVERRIDE)) {
+		if ((!v6 && !CONNSETTING(NO_IP_OVERRIDE)) || (v6 && !CONNSETTING(NO_IP_OVERRIDE6))) {
+			auto setting = v6 ? SettingsManager::EXTERNAL_IP6 : SettingsManager::EXTERNAL_IP;
 			string externalIP = mapper.getExternalIP();
 			if(!externalIP.empty()) {
-				ConnectivityManager::getInstance()->set(SettingsManager::EXTERNAL_IP, externalIP);
+				ConnectivityManager::getInstance()->set(setting, externalIP);
 			} else {
 				// no cleanup because the mappings work and hubs will likely provide the correct IP.
 				log(_("Failed to get external IP"));
 			}
 		}
 
-		ConnectivityManager::getInstance()->mappingFinished(mapper.getName());
+		ConnectivityManager::getInstance()->mappingFinished(mapper.getName(), v6);
 
 		renewLater(mapper);
 		break;
@@ -189,7 +193,7 @@ int MappingManager::run() {
 
 	if(!getOpened()) {
 		log(_("Failed to create port mappings"));
-		ConnectivityManager::getInstance()->mappingFinished(Util::emptyString);
+		ConnectivityManager::getInstance()->mappingFinished(Util::emptyString, v6);
 	}
 
 	return 0;
@@ -206,7 +210,7 @@ void MappingManager::close(Mapper& mapper) {
 }
 
 void MappingManager::log(const string& message) {
-	ConnectivityManager::getInstance()->log(str(F_("Port mapping: %1%") % message));
+	ConnectivityManager::getInstance()->log(str(F_("Port mapping: %1%") % message), v6 ? ConnectivityManager::TYPE_V6 : ConnectivityManager::TYPE_V4);
 }
 
 string MappingManager::deviceString(Mapper& mapper) const {

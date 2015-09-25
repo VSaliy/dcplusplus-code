@@ -956,21 +956,21 @@ bool NmdcHub::isProtectedIP(const string& ip) {
 }
 
 void NmdcHub::refreshLocalIp() noexcept {
-	if((!CONNSETTING(NO_IP_OVERRIDE) || getUserIp().empty()) && !getMyIdentity().getIp().empty()) {
+	if((!CONNSETTING(NO_IP_OVERRIDE) || getUserIp4().empty()) && !getMyIdentity().getIp().empty()) {
 		// Best case - the server detected it
 		localIp = getMyIdentity().getIp();
 	} else {
 		localIp.clear();
 	}
 	if(localIp.empty()) {
-		localIp = getUserIp();
+		localIp = getUserIp4();
 		if(!localIp.empty()) {
 			localIp = Socket::resolve(localIp, AF_INET);
 		}
 		if(localIp.empty()) {
 			localIp = sock->getLocalIp();
 			if(localIp.empty()) {
-				localIp = Util::getLocalIp();
+				localIp = Util::getLocalIp(false);
 			}
 		}
 	}
@@ -1041,7 +1041,7 @@ void NmdcHub::on(Minute, uint64_t aTick) noexcept {
 		};
 		for(auto i = protectedIPs.begin(); i != protectedIPs.end();) {
 			*i = Socket::resolve(*i, AF_INET);
-			if(Util::isPrivateIp(*i))
+			if(Util::isPrivateIp(*i, false))
 				i = protectedIPs.erase(i);
 			else
 				i++;

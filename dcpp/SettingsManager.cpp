@@ -25,6 +25,7 @@
 #include "version.h"
 #include "AdcHub.h"
 #include "CID.h"
+#include "ConnectivityManager.h"
 #include "SearchManager.h"
 #include "StringTokenizer.h"
 
@@ -63,7 +64,7 @@ const string SettingsManager::settingTags[] =
 	"SharingSkiplistExtensions", "SharingSkiplistRegEx", "SharingSkiplistPaths",
 	"SENTRY",
 	// Ints
-	"IncomingConnections", "OutgoingConnections", "InPort", "UDPPort", "TLSPort",
+	"IncomingConnections", "IncomingConnections6", "OutgoingConnections", "InPort", "UDPPort", "TLSPort",
 	"SocksPort", "SocketInBuffer", "SocketOutBuffer",
 	"TextColor", "BackgroundColor", "UploadTextColor", "UploadBgColor", "DownloadTextColor",
 	"DownloadBgColor", "LinkColor", "LogColor",
@@ -88,7 +89,7 @@ const string SettingsManager::settingTags[] =
 	// Bools
 	"AddFinishedInstantly", "AdlsBreakOnFirst",
 	"AllowUntrustedClients", "AllowUntrustedHubs", "AlwaysCCPM", "AlwaysTray", "AutoAway",
-	"AutoDetectIncomingConnection", "AutoFollow", "AutoKick", "AutoKickNoFavs", "AutoSearch",
+	"AutoDetectIncomingConnection", "AutoDetectIncomingConnection6", "AutoFollow", "AutoKick", "AutoKickNoFavs", "AutoSearch",
 	"AutoSearchAutoMatch", "AutoDropAll", "AutoDropDisconnect", "AutoDropFilelists",
 	"AwayCompLock", "AwayTimeStamp", "BoldFinishedDownloads", "BoldFinishedUploads", "BoldFL",
 	"BoldHub", "BoldPm", "BoldQueue", "BoldSearch", "BoldSystemLog", "ClearSearch",
@@ -101,7 +102,7 @@ const string SettingsManager::settingTags[] =
 	"HubUserCommands", "IgnoreBotPms", "IgnoreHubPms", "OpenNewWindow", "KeepFinishedFiles",
 	"KeepLists", "ListDuplicates", "LogDownloads", "LogFilelistTransfers", "LogFinishedDownloads",
 	"LogMainChat", "LogPrivateChat", "LogStatusMessages", "LogSystem", "LogUploads", "MagnetAsk",
-	"MagnetRegister", "MinimizeToTray", "NoAwayMsgToBots", "NoIpOverride", "OpenUserCmdHelp",
+	"MagnetRegister", "MinimizeToTray", "NoAwayMsgToBots", "NoIpOverride", "NoIpOverride6", "OpenUserCmdHelp",
 	"OwnerDrawnMenus", "PopupBotPms", "PopupHubPms", "PopupPMs", "PopunderFilelist", "PopunderPm",
 	"LowestPrio", "PromptPassword", "QueueFrameShowTree", "RequireTLS", "SearchFilterShared",
 	"SearchOnlyFreeSlots", "SegmentedDL", "SendBloom", "SendUnknownCommands",
@@ -169,8 +170,10 @@ SettingsManager::SettingsManager() {
 	setDefault(UDP_PORT, 0);
 	setDefault(TLS_PORT, 0);
 	setDefault(INCOMING_CONNECTIONS, INCOMING_ACTIVE);
+	setDefault(INCOMING_CONNECTIONS6, INCOMING_ACTIVE);
 	setDefault(OUTGOING_CONNECTIONS, OUTGOING_DIRECT);
 	setDefault(AUTO_DETECT_CONNECTION, true);
+	setDefault(AUTO_DETECT_CONNECTION6, true);
 	setDefault(AUTO_FOLLOW, true);
 	setDefault(CLEAR_SEARCH, true);
 	setDefault(CLICKABLE_CHAT_LINKS, true);
@@ -652,6 +655,10 @@ HubSettings SettingsManager::getHubSettings() const {
 	ret.get(HubSettings::ShowJoins) = get(SHOW_JOINS);
 	ret.get(HubSettings::FavShowJoins) = get(FAV_SHOW_JOINS);
 	ret.get(HubSettings::LogMainChat) = get(LOG_MAIN_CHAT);
+
+	ret.get(HubSettings::Connection) = CONNSETTING(INCOMING_CONNECTIONS);
+	ret.get(HubSettings::Connection6) = CONNSETTING(INCOMING_CONNECTIONS6);
+	
 	return ret;
 }
 

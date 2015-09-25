@@ -95,7 +95,7 @@ bool FavHubProperties::handleInitDialog() {
 		auto group = grid->addChild(GroupBox::Seed(T_("Identification (leave blank for defaults)")));
 		grid->setWidget(group, 1, 0, 1, 2);
 
-		auto cur = group->addChild(Grid::Seed(5, 2));
+		auto cur = group->addChild(Grid::Seed(6, 2));
 		cur->column(0).align = GridInfo::BOTTOM_RIGHT;
 		cur->column(1).mode = GridInfo::FILL;
 
@@ -122,11 +122,17 @@ bool FavHubProperties::handleInitDialog() {
 		email->setText(Text::toT(entry->get(HubSettings::Email)));
 		email->setHelpId(IDH_FAVORITE_HUB_EMAIL);
 
-		cur->addChild(Label::Seed(T_("IP")))->setHelpId(IDH_FAVORITE_HUB_USER_IP);
+		cur->addChild(Label::Seed(T_("IPv4")))->setHelpId(IDH_FAVORITE_HUB_USER_IP);
 		userIp = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		userIp->setText(Text::toT(entry->get(HubSettings::UserIp)));
 		userIp->setHelpId(IDH_FAVORITE_HUB_USER_IP);
 		WinUtil::preventSpaces(userIp);
+
+		cur->addChild(Label::Seed(T_("IPv6")))->setHelpId(IDH_FAVORITE_HUB_USER_IP6);
+		userIp6 = cur->addChild(WinUtil::Seeds::Dialog::textBox);
+		userIp6->setText(Text::toT(entry->get(HubSettings::UserIp6)));
+		userIp6->setHelpId(IDH_FAVORITE_HUB_USER_IP6);
+		WinUtil::preventSpaces(userIp6);
 	}
 
 	{
@@ -196,6 +202,7 @@ void FavHubProperties::handleOKClicked() {
 	entry->get(HubSettings::Description) = Text::fromT(description->getText());
 	entry->get(HubSettings::Email) = Text::fromT(email->getText());
 	entry->get(HubSettings::UserIp) = Text::fromT(userIp->getText());
+	entry->get(HubSettings::UserIp6) = Text::fromT(userIp6->getText());
 	entry->get(HubSettings::ShowJoins) = to3bool(showJoins->getSelected());
 	entry->get(HubSettings::FavShowJoins) = to3bool(favShowJoins->getSelected());
 	entry->get(HubSettings::LogMainChat) = to3bool(logMainChat->getSelected());

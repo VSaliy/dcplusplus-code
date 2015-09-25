@@ -109,7 +109,7 @@ OnlineUser* AdcHub::findUser(const CID& aCID) const {
 }
 
 void AdcHub::putUser(const uint32_t aSID, bool disconnect) {
-	OnlineUser* ou = 0;
+	OnlineUser* ou = nullptr;
 	{
 		Lock l(cs);
 		auto i = users.find(aSID);
@@ -936,6 +936,42 @@ static void addParam(StringMap& lastInfoMap, AdcCommand& c, const string& var, c
 	}
 }
 
+void AdcHub::appendConnectivity(StringMap& lastInfoMap, AdcCommand& c, bool v4, bool v6) {
+	if (v4) {
+		if(CONNSETTING(NO_IP_OVERRIDE) && !getUserIp4().empty()) {
+			addParam(lastInfoMap, c, "I4", Socket::resolve(getUserIp4(), AF_INET));
+		} else {
+			addParam(lastInfoMap, c, "I4", "0.0.0.0");
+		}
+
+		if(isActiveV4()) {
+			addParam(lastInfoMap, c, "U4", SearchManager::getInstance()->getPort());
+		} else {
+			addParam(lastInfoMap, c, "U4", "");
+		}
+	} else {
+		addParam(lastInfoMap, c, "I4", "");
+		addParam(lastInfoMap, c, "U4", "");
+	}
+
+	if (v6) {
+		if (CONNSETTING(NO_IP_OVERRIDE6) && !getUserIp6().empty()) {
+			addParam(lastInfoMap, c, "I6", Socket::resolve(getUserIp6(), AF_INET6));
+		} else {
+			addParam(lastInfoMap, c, "I6", "::");
+		}
+
+		if(isActiveV6()) {
+			addParam(lastInfoMap, c, "U6", SearchManager::getInstance()->getPort());
+		} else {
+			addParam(lastInfoMap, c, "U6", "");
+		}
+	} else {
+		addParam(lastInfoMap, c, "I6", "");
+		addParam(lastInfoMap, c, "U6", "");
+	}
+}
+
 void AdcHub::infoImpl() {
 	if(state != STATE_IDENTIFY && state != STATE_NORMAL)
 		return;
@@ -991,21 +1027,28 @@ void AdcHub::infoImpl() {
 		addParam(lastInfoMap, c, "KP", "SHA256/" + Encoder::toBase32(&kp[0], kp.size()));
 	}
 
-	if(CONNSETTING(NO_IP_OVERRIDE) && !getUserIp().empty()) {
-		addParam(lastInfoMap, c, "I4", Socket::resolve(getUserIp(), AF_INET));
-	} else {
-		addParam(lastInfoMap, c, "I4", "0.0.0.0");
-	}
-	if(ClientManager::getInstance()->isActive()) {
-		addParam(lastInfoMap, c, "U4", SearchManager::getInstance()->getPort());
+	bool addV4 = !sock->isV6Valid() || (get(HubSettings::Connection) != SettingsManager::INCOMING_DISABLED);
+	bool addV6 = sock->isV6Valid() || (get(HubSettings::Connection6) != SettingsManager::INCOMING_DISABLED);
+	
+	
+	if(addV4 && isActiveV4()) {
 		su += "," + TCP4_FEATURE;
 		su += "," + UDP4_FEATURE;
-	} else {
-		addParam(lastInfoMap, c, "U4", "");
+	}
+
+	if(addV6 && isActiveV6()) {
+		su += "," + TCP6_FEATURE;
+		su += "," + UDP6_FEATURE;
+	}
+
+	if ((addV6 && !isActiveV6() && get(HubSettings::Connection6) != SettingsManager::INCOMING_DISABLED) || 
+		(addV4 && !isActiveV4() && get(HubSettings::Connection) != SettingsManager::INCOMING_DISABLED)) {
 		su += "," + NAT0_FEATURE;
 	}
 
 	addParam(lastInfoMap, c, "SU", su);
+	
+	appendConnectivity(lastInfoMap, c, addV4, addV6);
 
 	if(!c.getParameters().empty()) {
 		send(c);

@@ -96,11 +96,30 @@ void Client::reloadSettings(bool updateNick) {
 		get(Nick) = prevNick;
 }
 
-const string& Client::getUserIp() const {
+const string& Client::getUserIp4() const {
 	if(!get(UserIp).empty()) {
 		return get(UserIp);
 	}
 	return CONNSETTING(EXTERNAL_IP);
+}
+
+const string& Client::getUserIp6() const {
+	if(!get(UserIp6).empty()) {
+		return get(UserIp6);
+	}
+	return CONNSETTING(EXTERNAL_IP6);
+}
+
+bool Client::isActive() const {
+	return isActiveV4() || isActiveV6();
+}
+
+bool Client::isActiveV4() const {
+	return get(HubSettings::Connection) != SettingsManager::INCOMING_PASSIVE && get(HubSettings::Connection) != SettingsManager::INCOMING_DISABLED;
+}
+
+bool Client::isActiveV6() const {
+	return !v4only() && get(HubSettings::Connection6) != SettingsManager::INCOMING_PASSIVE && get(HubSettings::Connection6) != SettingsManager::INCOMING_DISABLED;
 }
 
 void Client::connect() {

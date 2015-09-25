@@ -185,6 +185,8 @@ public:
 
 	static int getLastError();
 
+	bool isV6Valid() const noexcept;
+
 	GETSET(string, ip, Ip);
 	GETSET(string, localIp4, LocalIp4);
 	GETSET(string, localIp6, LocalIp6);

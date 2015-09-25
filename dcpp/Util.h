@@ -396,8 +396,17 @@ public:
 	static string cssFont(const string& font);
 
 	static string encodeURI(const string& /*aString*/, bool reverse = false);
-	static string getLocalIp();
-	static bool isPrivateIp(string const& ip);
+	static string getLocalIp(bool v6, bool allowPrivate = true);
+	static bool isPrivateIp(string const& ip, bool v6);
+	
+	struct AddressInfo {
+		AddressInfo(const string& aName, const string& aIP, uint8_t aPrefix) : adapterName(aName), ip(aIP), prefix(aPrefix) { }
+		string adapterName;
+		string ip;
+		uint32_t prefix;
+	};
+	typedef vector<AddressInfo> IpList;
+	static vector<AddressInfo> getIpAddresses(bool v6);
 	/**
 	 * Case insensitive substring search.
 	 * @return First position found or string::npos

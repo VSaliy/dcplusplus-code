@@ -70,7 +70,7 @@ void ConnectionManager::addToken(const string& token, const OnlineUser& user, Co
 }
 
 void ConnectionManager::listen() {
-	server.reset(new Server(false, Util::toString(CONNSETTING(TCP_PORT)), CONNSETTING(BIND_ADDRESS)));
+	server.reset(new Server(false, Util::toString(CONNSETTING(TCP_PORT)), CONNSETTING(BIND_ADDRESS), CONNSETTING(BIND_ADDRESS6)));
 
 	if(!CryptoManager::getInstance()->TLSOk()) {
 		dcdebug("Skipping secure port: %d\n", CONNSETTING(TLS_PORT));
@@ -81,7 +81,7 @@ void ConnectionManager::listen() {
 		LogManager::getInstance()->message(_("The encrypted transfer port cannot be the same as the transfer port, encrypted transfers will be disabled"));
 		return;
 	}
-	secureServer.reset(new Server(true, Util::toString(CONNSETTING(TLS_PORT)), CONNSETTING(BIND_ADDRESS)));
+	secureServer.reset(new Server(true, Util::toString(CONNSETTING(TLS_PORT)), CONNSETTING(BIND_ADDRESS), CONNSETTING(BIND_ADDRESS6)));
 }
 
 ConnectionQueueItem::ConnectionQueueItem(const HintedUser& user, ConnectionType type) :
@@ -271,10 +271,12 @@ const string& ConnectionManager::getSecurePort() const {
 static const uint32_t FLOOD_TRIGGER = 20000;
 static const uint32_t FLOOD_ADD = 2000;
 
-ConnectionManager::Server::Server(bool secure, const string& port_, const string& ip) :
+ConnectionManager::Server::Server(bool secure, const string& port_, const string& ipv4, const string& ipv6) :
 sock(Socket::TYPE_TCP), secure(secure), die(false)
 {
-	sock.setLocalIp4(ip);
+	sock.setLocalIp4(ipv4);
+	sock.setLocalIp6(ipv6);
+	sock.setV4only(false);
 	port = sock.listen(port_);
 
 	start();

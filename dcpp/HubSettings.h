@@ -19,6 +19,7 @@
 #ifndef DCPLUSPLUS_DCPP_HUBSETTINGS_H
 #define DCPLUSPLUS_DCPP_HUBSETTINGS_H
 
+#include <limits>
 #include <string>
 
 #include "SimpleXML.h"
@@ -26,10 +27,12 @@
 
 namespace dcpp {
 
+using std::numeric_limits;
 using std::string;
 
 /** Stores settings to be applied to a hub. There are 3 HubSettings levels in DC++: global; per
 favorite hub group; per favorite hub entry. */
+class SimpleXML;
 struct HubSettings
 {
 	enum HubStrSetting {
@@ -39,6 +42,7 @@ struct HubSettings
 		Description,
 		Email,
 		UserIp,
+		UserIp6,
 		// don't forget to edit stringNames in HubSettings.cpp when adding a def here!
 
 		HubStrLast
@@ -54,13 +58,27 @@ struct HubSettings
 
 		HubBoolLast
 	};
+	
+	enum HubIntSetting {
+		HubIntFirst = HubBoolLast + 1,
+		
+		Connection = HubIntFirst,
+		Connection6,
+	
+		HubIntLast
+	};
 
 	HubSettings();
 
+	static int getMinInt();
 	const string& get(HubStrSetting setting) const;
 	const tribool& get(HubBoolSetting setting) const;
+	const int& get(HubIntSetting setting) const;
 	string& get(HubStrSetting setting);
 	tribool& get(HubBoolSetting setting);
+	int& get(HubIntSetting setting);
+
+	bool ensureBool(HubBoolSetting setting);
 
 	/** Apply a set of sub-settings that may override current ones. Strings are overridden when not
 	null. Tribools are overridden when not in an indeterminate state. */
@@ -71,13 +89,16 @@ struct HubSettings
 
 private:
 	enum { StringCount = HubStrLast - HubStrFirst,
-		BoolCount = HubBoolLast - HubBoolFirst };
+		BoolCount = HubBoolLast - HubBoolFirst,
+		IntCount = HubIntLast - HubIntFirst };
 
 	static const string stringNames[StringCount];
 	static const string boolNames[BoolCount];
+	static const string intNames[IntCount];
 
 	string strings[StringCount];
 	tribool bools[BoolCount];
+	int ints[IntCount];
 };
 
 } // namespace dcpp

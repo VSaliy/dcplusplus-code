@@ -46,10 +46,14 @@ const string Mapper_NATPMP::name = "NAT-PMP";
 
 static natpmp_t nat;
 
-Mapper_NATPMP::Mapper_NATPMP(string&& localIp) :
-Mapper(move(localIp)),
+Mapper_NATPMP::Mapper_NATPMP(const string& localIp, bool v6) :
+Mapper(localIp, v6),
 lifetime(0)
 {
+}
+
+bool Mapper_NATPMP::supportsProtocol(bool v6) const {
+	return !v6;
 }
 
 bool Mapper_NATPMP::init() {
@@ -98,7 +102,7 @@ bool read(natpmpresp_t& response) {
 		if(getnatpmprequesttimeout(&nat, &timeout) >= 0) {
 			fd_set fds;
 			FD_ZERO(&fds);
-			FD_SET(nat.s, &fds);
+			FD_SET((unsigned int)(nat.s), &fds);
 			select(FD_SETSIZE, &fds, 0, 0, &timeout);
 		}
 

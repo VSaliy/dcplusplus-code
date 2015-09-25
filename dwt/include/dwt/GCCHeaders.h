@@ -389,7 +389,7 @@ typedef int (WINAPI *DTT_CALLBACK_PROC)(HDC hdc, LPWSTR pszText, int cchText, LP
 #define DTT_COMPOSITED      (1UL << 13)     // Draws text with antialiased alpha (needs a DIB section)
 #define DTT_VALIDBITS       (DTT_TEXTCOLOR | DTT_BORDERCOLOR | DTT_SHADOWCOLOR | DTT_SHADOWTYPE | DTT_SHADOWOFFSET | DTT_BORDERSIZE | \
                              DTT_FONTPROP | DTT_COLORPROP | DTT_STATEID | DTT_CALCRECT | DTT_APPLYOVERLAY | DTT_GLOWSIZE | DTT_COMPOSITED)
-
+/*
 typedef struct _DTTOPTS
 {
     DWORD             dwSize;              // size of the struct
@@ -408,6 +408,7 @@ typedef struct _DTTOPTS
     DTT_CALLBACK_PROC pfnDrawTextCallback; // Callback for DrawText
     LPARAM            lParam;              // Parameter for callback
 } DTTOPTS, *PDTTOPTS; 
+*/
 #endif
 
 #ifdef HAVE_OLD_MINGW // mingw64 already has this

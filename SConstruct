@@ -196,8 +196,8 @@ if dev.is_win32():
     # Windows header defines
     # <https://msdn.microsoft.com/en-us/library/aa383745(VS.85).aspx>
     env.Append(CPPDEFINES=[
-        '_WIN32_WINNT=0x502',  # Windows XP SP2
-        'WINVER=0x502',  # Windows XP SP2
+        '_WIN32_WINNT=0x601',  # Windows XP SP2
+        'WINVER=0x601',  # Windows XP SP2
         '_WIN32_IE=0x600',  # Common Controls 6
 
         # other defs that influence Windows headers
