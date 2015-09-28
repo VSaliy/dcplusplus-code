@@ -93,7 +93,7 @@ edit(0)
 	PropPage::read(items);
 
 	callAsync([this] {
-		updateAuto(); updateAuto6();
+		updateAuto();
 	});
 
 	if(SETTING(AUTO_DETECT_CONNECTION) || SETTING(AUTO_DETECT_CONNECTION6)) {
@@ -139,21 +139,18 @@ void ConnectivityPage::handleEdit() {
 }
 
 void ConnectivityPage::updateAuto() {
+	bool isRunning = ConnectivityManager::getInstance()->isRunning();
+
 	bool enableV4 = SETTING(AUTO_DETECT_CONNECTION);
 	autoDetectV4->setChecked(enableV4);
+	enableV4 = enableV4 && !isRunning;
 
-	enableV4 = enableV4 && !ConnectivityManager::getInstance()->isRunning();
-	detectNow->setEnabled(enableV4);
-	edit->setEnabled(enableV4 && ConnectivityManager::getInstance()->ok(false));
-}
-
-void ConnectivityPage::updateAuto6() {
 	bool enableV6 = SETTING(AUTO_DETECT_CONNECTION6);
-	autoDetectV6->setChecked(enableV6);	
-	
-	enableV6 = enableV6 && !ConnectivityManager::getInstance()->isRunning();
-	detectNow->setEnabled(enableV6);
-	edit->setEnabled(enableV6 && ConnectivityManager::getInstance()->ok(true));
+	autoDetectV6->setChecked(enableV6);
+	enableV6 = enableV6 && !isRunning;
+
+	detectNow->setEnabled(enableV4 || enableV6);
+	edit->setEnabled((enableV4 && ConnectivityManager::getInstance()->ok(false)) || (enableV6 && ConnectivityManager::getInstance()->ok(true)));
 }
 
 void ConnectivityPage::addLogLine(const tstring& msg) {
@@ -185,5 +182,5 @@ void ConnectivityPage::on(Finished, bool v6, bool failed) noexcept {
 }
 
 void ConnectivityPage::on(SettingChanged) noexcept {
-	callAsync([this] { updateAuto(); updateAuto6(); });
+	callAsync([this] { updateAuto(); });
 }
