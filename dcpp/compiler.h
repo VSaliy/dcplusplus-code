@@ -81,8 +81,8 @@
 
 #ifdef _WIN32
 
-#if _WIN32_WINNT < 0x601 || WINVER < 0x601
-#error _WIN32_WINNT / WINVER must require Windows 7 (0x601)
+#if _WIN32_WINNT < 0x600 || WINVER < 0x600
+#error _WIN32_WINNT / WINVER must require Windows Vista (0x600)
 #endif
 
 #if _WIN32_IE < 0x600

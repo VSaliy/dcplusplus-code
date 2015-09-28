@@ -53,7 +53,9 @@ const TCHAR Table::windowClass[] = WC_LISTVIEW;
 /* the following dance adds Vista members to LVGROUP (notably iTitleImage to have group icons)
 without requiring a global switch of WINVER / _WIN32_WINNT / etc to Vista values. */
 typedef LVGROUP legacyLVGROUP;
-#if(_WIN32_WINNT < 0x600)
+
+//@TODO Logically the following code would not needed when targeting Vista, however it doesn't compile without...
+//#if(_WIN32_WINNT < 0x600)
 struct LVGROUP_ : LVGROUP {
 	LPWSTR  pszSubtitle;
     UINT    cchSubtitle;
@@ -75,7 +77,7 @@ struct LVGROUP_ : LVGROUP {
 #define LVGF_TITLEIMAGE 0x00001000
 #define ListView_SetGroupHeaderImageList(hwnd, himl) \
     (HIMAGELIST)SNDMSG((hwnd), LVM_SETIMAGELIST, (WPARAM)LVSIL_GROUPHEADER, (LPARAM)(HIMAGELIST)(himl))
-#endif
+//#endif
 
 namespace { legacyLVGROUP makeLVGROUP() {
 	legacyLVGROUP lvg = { util::win32::ensureVersion(util::win32::VISTA) ? sizeof(LVGROUP) : sizeof(legacyLVGROUP) };
