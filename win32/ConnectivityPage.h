@@ -50,7 +50,6 @@ private:
 	void handleEdit();
 
 	void updateAuto();
-	void updateAuto6();
 	void addLogLine(const tstring& msg);
 
 	// ConnectivityManagerListener
