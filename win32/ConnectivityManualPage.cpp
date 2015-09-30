@@ -57,12 +57,8 @@ tlstransferBox(0)
 		autoGroup = grid->addChild(GroupBox::Seed(T_("Automatic connectivity setup")));
 		autoGroup->setHelpId(IDH_SETTINGS_CONNECTIVITY_AUTODETECT);
 
-		auto cur = autoGroup->addChild(Grid::Seed(1, 1));
-		cur->column(1).mode = GridInfo::FILL;
-		cur->column(1).align = GridInfo::BOTTOM_RIGHT;
-
-		autoDetect = cur->addChild(CheckBox::Seed(T_("Let DC++ determine IPv4 settings")));
-		autoDetect->onClicked([this] { handleAutoClicked(/*false*/); });
+		autoDetect = autoGroup->addChild(CheckBox::Seed(T_("Let DC++ determine the best connectivity settings")));
+		autoDetect->onClicked([this] { handleAutoClicked(); });
 	}
 
 	{
@@ -144,7 +140,7 @@ tlstransferBox(0)
 		v4Bind = group->addChild(WinUtil::Seeds::Dialog::comboBox);
 
 		group = cur->addChild(GroupBox::Seed(T_("IPv6 Bind Address")));
-		group->setHelpId(IDH_SETTINGS_CONNECTIVITY_BIND_ADDRESS6);
+		group->setHelpId(IDH_SETTINGS_CONNECTIVITY_BIND_ADDRESS);
 		v6Bind = group->addChild(WinUtil::Seeds::Dialog::comboBox);
 	}
 
