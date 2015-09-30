@@ -508,6 +508,7 @@ inline void writePlatformInfo() {
 		"[unknown architecture]");
 
 	MEMORYSTATUSEX	memoryStatusEx;
+	memoryStatusEx.dwLength = sizeof(MEMORYSTATUSEX);
 	::GlobalMemoryStatusEx(&memoryStatusEx);
 	fprintf(f, "System memory installed: %s", Util::formatBytes(memoryStatusEx.ullTotalPhys).c_str());
 }

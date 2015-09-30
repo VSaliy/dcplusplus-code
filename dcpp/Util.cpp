@@ -590,7 +590,7 @@ vector<Util::AddressInfo> Util::getIpAddresses(bool v6) {
 	}
 
 	for (int i = 0; i < 3; ++i) {
-		auto adapterInfo = (PIP_ADAPTER_ADDRESSES) ::HeapAlloc(::GetProcessHeap(), HEAP_GENERATE_EXCEPTIONS | HEAP_ZERO_MEMORY, len);
+		auto adapterInfo = (PIP_ADAPTER_ADDRESSES) HeapAlloc(GetProcessHeap(), HEAP_GENERATE_EXCEPTIONS | HEAP_ZERO_MEMORY, len);
 
 		ULONG ret = GetAdaptersAddresses(v6 ? AF_INET6 : AF_INET, GAA_FLAG_SKIP_DNS_SERVER | GAA_FLAG_SKIP_ANYCAST | GAA_FLAG_SKIP_MULTICAST, NULL, adapterInfo, &len);
 		bool freeObject = true;
