@@ -40,7 +40,6 @@ ConnectivityManualPage::ConnectivityManualPage(dwt::Widget* parent) :
 PropPage(parent, 5, 1),
 autoGroup(0),
 autoDetect(0),
-autoDetect6(0),
 active(0),
 upnp(0),
 passive(0),
@@ -58,15 +57,12 @@ tlstransferBox(0)
 		autoGroup = grid->addChild(GroupBox::Seed(T_("Automatic connectivity setup")));
 		autoGroup->setHelpId(IDH_SETTINGS_CONNECTIVITY_AUTODETECT);
 
-		auto cur = autoGroup->addChild(Grid::Seed(1, 2));
+		auto cur = autoGroup->addChild(Grid::Seed(1, 1));
 		cur->column(1).mode = GridInfo::FILL;
 		cur->column(1).align = GridInfo::BOTTOM_RIGHT;
 
 		autoDetect = cur->addChild(CheckBox::Seed(T_("Let DC++ determine IPv4 settings")));
-		autoDetect->onClicked([this] { handleAutoClicked(false); });
-
-		autoDetect6 = cur->addChild(CheckBox::Seed(T_("Let DC++ determine IPv6 settings")));
-		autoDetect6->onClicked([this] { handleAutoClicked(true); });
+		autoDetect->onClicked([this] { handleAutoClicked(/*false*/); });
 	}
 
 	{
@@ -88,7 +84,7 @@ tlstransferBox(0)
 		auto group = grid->addChild(GroupBox::Seed(T_("External / WAN IPv4 and IPv6")));
 		group->setHelpId(IDH_SETTINGS_CONNECTIVITY_EXTERNAL_IP);
 
-		auto cur = group->addChild(Grid::Seed(3, 1));
+		auto cur = group->addChild(Grid::Seed(2, 1));
 		cur->column(0).mode = GridInfo::FILL;
 
 		auto externalIPv4 = cur->addChild(WinUtil::Seeds::Dialog::textBox);
@@ -194,24 +190,20 @@ void ConnectivityManualPage::write() {
 	saveBind(v6Bind, true);
 }
 
-void ConnectivityManualPage::handleAutoClicked(bool v6) {
+void ConnectivityManualPage::handleAutoClicked() {
 	// apply immediately so that ConnectivityManager updates.
-	v6?
-		SettingsManager::getInstance()->set(SettingsManager::AUTO_DETECT_CONNECTION6, autoDetect6->getChecked()):
-		SettingsManager::getInstance()->set(SettingsManager::AUTO_DETECT_CONNECTION, autoDetect->getChecked());
+	SettingsManager::getInstance()->set(SettingsManager::AUTO_DETECT_CONNECTION, autoDetect->getChecked());
 	ConnectivityManager::getInstance()->fire(ConnectivityManagerListener::SettingChanged());
 }
 
-void ConnectivityManualPage::updateAuto(/*Add type*/) {
+void ConnectivityManualPage::updateAuto() {
 	bool setting = SETTING(AUTO_DETECT_CONNECTION);
-	bool setting6 = SETTING(AUTO_DETECT_CONNECTION6);
 	autoDetect->setChecked(setting);
-	autoDetect6->setChecked(setting6);
 
 	auto controls = grid->getChildren<Control>();
-	boost::for_each(controls, [this, setting, setting6](Control* control) {
+	boost::for_each(controls, [this, setting](Control* control) {
 		if(control != autoGroup) {
-			control->setEnabled(!setting || !setting6);
+			control->setEnabled(!setting);
 		}
 	});
 }

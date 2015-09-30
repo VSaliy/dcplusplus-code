@@ -212,12 +212,8 @@ void ConnectivityManager::detectConnection() {
 
 			log(_("Public IP address detected, selecting active mode with direct connection"), TYPE_V6);
 		} else {
-			//disable IPv6 if no public IP address is available
-			{
-				Lock l(cs);
-				autoSettings[SettingsManager::INCOMING_CONNECTIONS6] = SettingsManager::INCOMING_DISABLED;
-			}
-			log(_("IPv6 connectivity has been disabled as no public IPv6 address was detected"), TYPE_V6);
+			//Leave IPv6 going when no public IP is found as there are use-cases for having a link-local address only (LAN/Intranet)
+			log(_("IPv6 connectivity is limited, no public address found"), TYPE_V6);
 		}
 
 		fire(ConnectivityManagerListener::Finished(), true, false);

@@ -506,6 +506,10 @@ inline void writePlatformInfo() {
 		(info.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_INTEL) ? "x86" :
 		(info.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_IA64) ? "ia64" :
 		"[unknown architecture]");
+
+	MEMORYSTATUSEX	memoryStatusEx;
+	::GlobalMemoryStatusEx(&memoryStatusEx);
+	fprintf(f, "System memory installed: %s", Util::formatBytes(memoryStatusEx.ullTotalPhys).c_str());
 }
 
 #ifndef NO_BACKTRACE
