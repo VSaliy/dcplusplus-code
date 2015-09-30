@@ -62,7 +62,7 @@ edit(0)
 		cur2->column(2).mode = GridInfo::FILL;
 		cur2->column(2).align = GridInfo::BOTTOM_RIGHT;
 
-		autoDetectV4 = cur2->addChild(CheckBox::Seed(T_("Let DC++ detect IPv4 settings")));
+		autoDetectV4 = cur2->addChild(CheckBox::Seed(T_("Let DC++ determine the best connectivity settings")));
 		items.emplace_back(autoDetectV4, SettingsManager::AUTO_DETECT_CONNECTION, PropPage::T_BOOL);
 		autoDetectV4->onClicked([this] { handleAutoClicked(); });
 

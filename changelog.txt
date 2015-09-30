@@ -6,6 +6,11 @@
 * Better security and certs related settings layout (emtee)
 * [L#1262319] Add option to quick-check encrypted hubs in search frame (ullner)
 * [L#1494809] Fix chat tab selection on Windows 10 (iceman50)
+* Improve IPv6 connectivity (iceman50, AirDC)
+* Show list of available network interfaces for binding; add IPv6 binding setting (iceman50)
+* Add setting for external IPv6 addresses to be used globally and for specific favorite hubs (iceman50)
+* Drop Windows XP support, Vista is the minumum Windows version required to run DC++ from now (iceman50)
+* Add system memory size information to the crashlog (iceman50)
 
 -- 0.851 2015-04-06 --
 * [L#1414362] Prefer boost regex over std regex for the time being (poy)
