@@ -36,7 +36,6 @@ private:
 
 	GroupBoxPtr autoGroup;
 	CheckBoxPtr autoDetect;
-	CheckBoxPtr autoDetect6;
 
 	RadioButtonPtr active;
 	RadioButtonPtr upnp;
@@ -48,7 +47,7 @@ private:
 	TextBoxPtr transferBox;
 	TextBoxPtr tlstransferBox;
 
-	void handleAutoClicked(bool v6);
+	void handleAutoClicked();
 
 	void read();
 	void updateAuto();

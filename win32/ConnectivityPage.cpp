@@ -39,7 +39,6 @@ using dwt::GroupBox;
 ConnectivityPage::ConnectivityPage(dwt::Widget* parent) :
 PropPage(parent, 1, 1),
 autoDetectV4(0),
-autoDetectV6(0),
 detectNow(0),
 log(0),
 edit(0)
@@ -59,17 +58,13 @@ edit(0)
 		cur->row(1).mode = GridInfo::FILL;
 		cur->row(1).align = GridInfo::STRETCH;
 
-		auto cur2 = cur->addChild(Grid::Seed(1, 3));
+		auto cur2 = cur->addChild(Grid::Seed(1, 2));
 		cur2->column(2).mode = GridInfo::FILL;
 		cur2->column(2).align = GridInfo::BOTTOM_RIGHT;
 
-		autoDetectV4 = cur2->addChild(CheckBox::Seed(T_("Let " APPNAME " detect IPv4 settings")));
+		autoDetectV4 = cur2->addChild(CheckBox::Seed(T_("Let DC++ detect IPv4 settings")));
 		items.emplace_back(autoDetectV4, SettingsManager::AUTO_DETECT_CONNECTION, PropPage::T_BOOL);
 		autoDetectV4->onClicked([this] { handleAutoClicked(); });
-		
-		autoDetectV6 = cur2->addChild(CheckBox::Seed(T_("Let " APPNAME " detect IPv6 settings")));
-		items.emplace_back(autoDetectV6, SettingsManager::AUTO_DETECT_CONNECTION6, PropPage::T_BOOL);
-		autoDetectV6->onClicked([this] { handleAuto6Clicked(); });
 
 		detectNow = cur2->addChild(Button::Seed(T_("Detect now")));
 		detectNow->setHelpId(IDH_SETTINGS_CONNECTIVITY_DETECT_NOW);
@@ -96,7 +91,7 @@ edit(0)
 		updateAuto();
 	});
 
-	if(SETTING(AUTO_DETECT_CONNECTION) || SETTING(AUTO_DETECT_CONNECTION6)) {
+	if(SETTING(AUTO_DETECT_CONNECTION)) {
 		const auto& status = ConnectivityManager::getInstance()->getStatus(false);
 		const auto& status6 = ConnectivityManager::getInstance()->getStatus(true);
 		if(!status.empty()) {
@@ -122,11 +117,6 @@ void ConnectivityPage::handleAutoClicked() {
 	ConnectivityManager::getInstance()->fire(ConnectivityManagerListener::SettingChanged());
 }
 
-void ConnectivityPage::handleAuto6Clicked() { 
-	SettingsManager::getInstance()->set(SettingsManager::AUTO_DETECT_CONNECTION6, autoDetectV6->getChecked());
-	ConnectivityManager::getInstance()->fire(ConnectivityManagerListener::SettingChanged());
-}
-
 void ConnectivityPage::handleEdit() {
 	if(dwt::MessageBox(this).show(T_(
 		"Automatic connectivity setup will be disabled.\n\n"
@@ -145,12 +135,8 @@ void ConnectivityPage::updateAuto() {
 	autoDetectV4->setChecked(enableV4);
 	enableV4 = enableV4 && !isRunning;
 
-	bool enableV6 = SETTING(AUTO_DETECT_CONNECTION6);
-	autoDetectV6->setChecked(enableV6);
-	enableV6 = enableV6 && !isRunning;
-
-	detectNow->setEnabled(enableV4 || enableV6);
-	edit->setEnabled((enableV4 && ConnectivityManager::getInstance()->ok(false)) || (enableV6 && ConnectivityManager::getInstance()->ok(true)));
+	detectNow->setEnabled(enableV4);
+	edit->setEnabled(enableV4 && ConnectivityManager::getInstance()->ok(false));
 }
 
 void ConnectivityPage::addLogLine(const tstring& msg) {
@@ -162,22 +148,20 @@ void ConnectivityPage::on(Message, const string& message) noexcept {
 	callAsync([this, message] { addLogLine(Text::toT(message)); });
 }
 
-void ConnectivityPage::on(Started, bool v6) noexcept {
+void ConnectivityPage::on(Started) noexcept {
 	callAsync([this] {
 		detectNow->setEnabled(false);
 		this->log->setText(Util::emptyStringT);
 		edit->setEnabled(false);
 		autoDetectV4->setEnabled(false);
-		autoDetectV6->setEnabled(false);
 	});
 }
 
-void ConnectivityPage::on(Finished, bool v6, bool failed) noexcept {
+void ConnectivityPage::on(Finished, bool failed) noexcept {
 	callAsync([this] {
 		detectNow->setEnabled(true);
 		edit->setEnabled(true);
 		autoDetectV4->setEnabled(true);
-		autoDetectV6->setEnabled(true);
 	});
 }
 

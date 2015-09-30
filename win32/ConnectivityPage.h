@@ -33,7 +33,6 @@ private:
 	ItemList items;
 
 	CheckBoxPtr autoDetectV4;
-	CheckBoxPtr autoDetectV6;
 	ButtonPtr detectNow;
 	RichTextBoxPtr log;
 	ButtonPtr edit;
@@ -46,7 +45,6 @@ private:
 	};
 
 	void handleAutoClicked();
-	void handleAuto6Clicked();
 	void handleEdit();
 
 	void updateAuto();
@@ -54,8 +52,8 @@ private:
 
 	// ConnectivityManagerListener
 	void on(Message, const string& message) noexcept;
-	void on(Started, bool /*v6*/) noexcept;
-	void on(Finished, bool /*v6*/, bool /*failed*/) noexcept;
+	void on(Started) noexcept;
+	void on(Finished, bool /*failed*/) noexcept;
 	void on(SettingChanged) noexcept;
 };
 
