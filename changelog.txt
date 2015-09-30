@@ -9,7 +9,7 @@
 * Improve IPv6 connectivity (iceman50, AirDC)
 * Show list of available network interfaces for binding; add IPv6 binding setting (iceman50)
 * Add setting for external IPv6 addresses to be used globally and for specific favorite hubs (iceman50)
-* Drop Windows XP support, Vista is the minumum Windows version required to run DC++ from now (iceman50)
+* Drop Windows XP support, Vista is the minimum Windows version required to run DC++ from now (iceman50)
 * Add system memory size information to the crashlog (iceman50)
 
 -- 0.851 2015-04-06 --

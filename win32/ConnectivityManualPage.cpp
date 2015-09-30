@@ -80,7 +80,7 @@ tlstransferBox(0)
 		auto group = grid->addChild(GroupBox::Seed(T_("External / WAN IPv4 and IPv6")));
 		group->setHelpId(IDH_SETTINGS_CONNECTIVITY_EXTERNAL_IP);
 
-		auto cur = group->addChild(Grid::Seed(2, 1));
+		auto cur = group->addChild(Grid::Seed(3, 1));
 		cur->column(0).mode = GridInfo::FILL;
 
 		auto externalIPv4 = cur->addChild(WinUtil::Seeds::Dialog::textBox);
@@ -129,7 +129,6 @@ tlstransferBox(0)
 		auto cur = grid->addChild(Grid::Seed(3, 1));
 		cur->setSpacing(grid->getSpacing());
 
-
 		auto group = cur->addChild(GroupBox::Seed(T_("Preferred port mapper")));
 		group->setHelpId(IDH_SETTINGS_CONNECTIVITY_MAPPER);
 
@@ -175,7 +174,11 @@ void ConnectivityManualPage::write() {
 	auto saveBind = [](ComboBoxPtr bind, bool v6) {
 		auto setting = Text::fromT(bind->getText());
 		size_t found = setting.rfind(" - "); // "friendly_name - ip_address"
-		setting.erase(0, found+3);
+		if (found == string::npos) {
+			setting = Util::emptyString;
+		} else {
+			setting.erase(0, found + 3);			
+		}
 		v6 ?
 			SettingsManager::getInstance()->set(SettingsManager::BIND_ADDRESS6, setting):
 			SettingsManager::getInstance()->set(SettingsManager::BIND_ADDRESS, setting);
@@ -230,14 +233,18 @@ void ConnectivityManualPage::read() {
 		const auto& setting = v6 ? SETTING(BIND_ADDRESS6) : SETTING(BIND_ADDRESS);
 		int sel = 0;
 
-		const auto& addresses = Util::getIpAddresses(v6);
-		for (const auto& ipstr : addresses) {
-			auto valStr = Text::toT(ipstr.adapterName) + _T(" - ") + Text::toT(ipstr.ip);
-			auto pos = bindBox->addValue(valStr);
-			if (!sel && Text::fromT(valStr) == setting) {
-				sel = pos;
+		bindBox->addValue(T_("Default"));
+		
+		if (!setting.empty()) {
+			const auto& addresses = Util::getIpAddresses(v6);
+				for (const auto& ipstr : addresses) {
+					auto valStr = Text::toT(ipstr.adapterName) + _T(" - ") + Text::toT(ipstr.ip);
+					auto pos = bindBox->addValue(valStr);
+					if (!sel && (ipstr.ip == setting)) {
+						sel = pos;					
+					}
+				}
 			}
-		}
 		bindBox->setSelected(sel);
 	};
 

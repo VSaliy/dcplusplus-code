@@ -51,6 +51,7 @@ nick(0),
 description(0),
 email(0),
 userIp(0),
+userIp6(0),
 showJoins(0),
 favShowJoins(0),
 logMainChat(0),
@@ -145,10 +146,15 @@ bool FavHubGroupsDlg::handleInitDialog() {
 			email = cur2->addChild(WinUtil::Seeds::Dialog::textBox);
 			email->setHelpId(IDH_FAVORITE_HUB_EMAIL);
 
-			cur2->addChild(Label::Seed(T_("IP")))->setHelpId(IDH_FAVORITE_HUB_USER_IP);
+			cur2->addChild(Label::Seed(T_("IPv4")))->setHelpId(IDH_FAVORITE_HUB_USER_IP);
 			userIp = cur2->addChild(WinUtil::Seeds::Dialog::textBox);
 			userIp->setHelpId(IDH_FAVORITE_HUB_USER_IP);
 			WinUtil::preventSpaces(userIp);
+
+			cur2->addChild(Label::Seed(T_("IPv6")))->setHelpId(IDH_FAVORITE_HUB_USER_IP6);
+			userIp6 = cur2->addChild(WinUtil::Seeds::Dialog::textBox);
+			userIp6->setHelpId(IDH_FAVORITE_HUB_USER_IP6);
+			WinUtil::preventSpaces(userIp6);
 		}
 
 		{
@@ -235,6 +241,7 @@ void FavHubGroupsDlg::handleSelectionChanged() {
 	description->setText(Text::toT(settings.get(HubSettings::Description)));
 	email->setText(Text::toT(settings.get(HubSettings::Email)));
 	userIp->setText(Text::toT(settings.get(HubSettings::UserIp)));
+	userIp6->setText(Text::toT(settings.get(HubSettings::UserIp6)));
 	showJoins->setSelected(toInt(settings.get(HubSettings::ShowJoins)));
 	favShowJoins->setSelected(toInt(settings.get(HubSettings::FavShowJoins)));
 	logMainChat->setSelected(toInt(settings.get(HubSettings::LogMainChat)));
@@ -297,6 +304,7 @@ HubSettings FavHubGroupsDlg::getSettings() const {
 	settings.get(HubSettings::Description) = Text::fromT(description->getText());
 	settings.get(HubSettings::Email) = Text::fromT(email->getText());
 	settings.get(HubSettings::UserIp) = Text::fromT(userIp->getText());
+	settings.get(HubSettings::UserIp6) = Text::fromT(userIp6->getText());
 	settings.get(HubSettings::ShowJoins) = to3bool(showJoins->getSelected());
 	settings.get(HubSettings::FavShowJoins) = to3bool(favShowJoins->getSelected());
 	settings.get(HubSettings::LogMainChat) = to3bool(logMainChat->getSelected());
