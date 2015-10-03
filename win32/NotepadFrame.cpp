@@ -39,6 +39,8 @@ NotepadFrame::NotepadFrame(TabViewPtr parent) :
 		pad = addChild(cs);
 		addWidget(pad, AUTO_FOCUS, false);
 		WinUtil::handleDblClicks(pad);
+
+		pad->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleMenu(sc); });
 	}
 
 	initStatus();
@@ -87,4 +89,25 @@ void NotepadFrame::save() {
 
 void NotepadFrame::on(SettingsManagerListener::Save, SimpleXML&) noexcept {
 	callAsync([this] { save(); });
+}
+
+bool NotepadFrame::handleMenu(dwt::ScreenCoordinate pt) {
+	if(pt.x() == -1 && pt.y() == -1) {
+		pt = pad->getContextMenuPos();
+	}
+
+	makeMenu(pt)->open(pt);
+
+	return true;
+}
+
+MenuPtr NotepadFrame::makeMenu(dwt::ScreenCoordinate pt) {
+	auto menu = pad->getMenu();
+
+	menu->appendSeparator();
+
+	menu->appendItem(T_("Search"), [this, pt] { WinUtil::searchAny(pad->textUnderCursor(pt)); });
+	menu->appendItem(T_("Search by TTH"), [this, pt] { WinUtil::searchHash(TTHValue(Text::fromT(pad->textUnderCursor(pt)))); });
+
+	return menu;
 }

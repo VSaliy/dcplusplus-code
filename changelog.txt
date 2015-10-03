@@ -11,6 +11,7 @@
 * Add setting for external IPv6 addresses to be used globally and for specific favorite hubs (iceman50)
 * Drop Windows XP support, Vista is the minimum Windows version required to run DC++ from now (iceman50)
 * Add system memory size information to the crashlog (iceman50)
+* [L#236056] Add search options to right click menu in the notepad (ullner)
 
 -- 0.851 2015-04-06 --
 * [L#1414362] Prefer boost regex over std regex for the time being (poy)
