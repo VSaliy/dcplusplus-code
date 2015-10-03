@@ -85,6 +85,7 @@ const string SettingsManager::settingTags[] =
 	"MaxFilelistSize", "MaxHashSpeed", "MaxMessageLines", "MaxPMWindows", "MinMessageLines",
 	"MinUploadSpeed", "PMLastLogLines", "SearchHistory", "SetMinislotSize",
 	"SettingsSaveInterval", "Slots", "TabStyle", "TabWidth", "ToolbarSize", "AutoSearchInterval",
+	"MaxExtraSlots",
 	"SENTRY",
 	// Bools
 	"AddFinishedInstantly", "AdlsBreakOnFirst",
@@ -366,6 +367,7 @@ SettingsManager::SettingsManager() {
 	setDefault(SHARING_SKIPLIST_MINSIZE, 0);
 	setDefault(SHARING_SKIPLIST_MAXSIZE, 0);
 	setDefault(REGISTER_SYSTEM_STARTUP, false);
+	setDefault(MAX_EXTRA_SLOTS, 3);
 
 	setSearchTypeDefaults();
 

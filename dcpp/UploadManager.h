@@ -71,7 +71,7 @@ public:
 	int getFreeSlots() { return max((SETTING(SLOTS) - running), 0); }
 
 	/** @internal */
-	int getFreeExtraSlots() { return max(3 - getExtra(), 0); }
+	int getFreeExtraSlots() { return max(max(SETTING(MAX_EXTRA_SLOTS), 1) - getExtra(), 0); }
 
 	/** @param aUser Reserve an upload slot for this user and connect. */
 	void reserveSlot(const HintedUser& aUser);
