@@ -38,7 +38,7 @@ using dwt::GroupBox;
 
 ConnectivityPage::ConnectivityPage(dwt::Widget* parent) :
 PropPage(parent, 1, 1),
-autoDetectV4(0),
+autoDetect(0),
 detectNow(0),
 log(0),
 edit(0)
@@ -59,12 +59,12 @@ edit(0)
 		cur->row(1).align = GridInfo::STRETCH;
 
 		auto cur2 = cur->addChild(Grid::Seed(1, 2));
-		cur2->column(2).mode = GridInfo::FILL;
-		cur2->column(2).align = GridInfo::BOTTOM_RIGHT;
+		cur2->column(1).mode = GridInfo::FILL;
+		cur2->column(1).align = GridInfo::BOTTOM_RIGHT;
 
-		autoDetectV4 = cur2->addChild(CheckBox::Seed(T_("Let DC++ determine the best connectivity settings")));
-		items.emplace_back(autoDetectV4, SettingsManager::AUTO_DETECT_CONNECTION, PropPage::T_BOOL);
-		autoDetectV4->onClicked([this] { handleAutoClicked(); });
+		autoDetect = cur2->addChild(CheckBox::Seed(T_("Let DC++ determine the best connectivity settings")));
+		items.emplace_back(autoDetect, SettingsManager::AUTO_DETECT_CONNECTION, PropPage::T_BOOL);
+		autoDetect->onClicked([this] { handleAutoClicked(); });
 
 		detectNow = cur2->addChild(Button::Seed(T_("Detect now")));
 		detectNow->setHelpId(IDH_SETTINGS_CONNECTIVITY_DETECT_NOW);
@@ -113,7 +113,9 @@ ConnectivityPage::~ConnectivityPage() {
 
 void ConnectivityPage::handleAutoClicked() {
 	// apply immediately so that ConnectivityManager updates.
-	SettingsManager::getInstance()->set(SettingsManager::AUTO_DETECT_CONNECTION, autoDetectV4->getChecked());
+	bool enabled = autoDetect->getChecked();
+	SettingsManager::getInstance()->set(SettingsManager::AUTO_DETECT_CONNECTION, enabled);
+	SettingsManager::getInstance()->set(SettingsManager::AUTO_DETECT_CONNECTION6, enabled);
 	ConnectivityManager::getInstance()->fire(ConnectivityManagerListener::SettingChanged());
 }
 
@@ -131,12 +133,13 @@ void ConnectivityPage::handleEdit() {
 void ConnectivityPage::updateAuto() {
 	bool isRunning = ConnectivityManager::getInstance()->isRunning();
 
-	bool enableV4 = SETTING(AUTO_DETECT_CONNECTION);
-	autoDetectV4->setChecked(enableV4);
-	enableV4 = enableV4 && !isRunning;
+	bool enable = SETTING(AUTO_DETECT_CONNECTION);
+	autoDetect->setChecked(enable);
+	enable = enable && !isRunning;
 
-	detectNow->setEnabled(enableV4);
-	edit->setEnabled(enableV4 && ConnectivityManager::getInstance()->ok(false));
+	detectNow->setEnabled(enable);
+	/// @todo use the v6 detection result [ ConnectivityManager::getInstance()->ok(true) ] once it does real detection and when we have separate manual connection settings for ipv6
+	edit->setEnabled(enable && ConnectivityManager::getInstance()->ok(false));
 }
 
 void ConnectivityPage::addLogLine(const tstring& msg) {
@@ -153,7 +156,7 @@ void ConnectivityPage::on(Started) noexcept {
 		detectNow->setEnabled(false);
 		this->log->setText(Util::emptyStringT);
 		edit->setEnabled(false);
-		autoDetectV4->setEnabled(false);
+		autoDetect->setEnabled(false);
 	});
 }
 
@@ -161,7 +164,7 @@ void ConnectivityPage::on(Finished, bool failed) noexcept {
 	callAsync([this] {
 		detectNow->setEnabled(true);
 		edit->setEnabled(true);
-		autoDetectV4->setEnabled(true);
+		autoDetect->setEnabled(true);
 	});
 }
 

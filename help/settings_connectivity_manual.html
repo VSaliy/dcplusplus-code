@@ -50,15 +50,16 @@ you may want to follow the <a href="faq_connection.html">Manual connection setup
 	Note that DC++ tries NAT Traversal on ADC hubs to allow passive users to connect with each other.
 	</dd>
 
-	<dt id="extip">External / WAN IP</dt>
+	<dt id="extip">External / WAN IPv4 and IPv6 addresses</dt>
 	<dd cshelp="IDH_SETTINGS_CONNECTIVITY_EXTERNAL_IP">
-	This field specifies your external IP address. <i>Note: most hubs are able to determine your
-		external IP and forward it to your DC++, making a manual configuration of this field
-		unnecessary.</i> If your computer is directly connected to the internet, your internal and
-	external IP will be the same and can easily be automatically detected. Fill this box
-	<b>only</b> if you need to override said auto-detection. Ordinarily, only users behind a router
-	(NAT device) need to fill in this box. If you put a DNS name here, DC++ will try to resolve it
-	into an IP address before use. For additional information like how to determine your external IP
+	These fields specify your external IP addresses for IPv4 and IPv6 protocols. 
+	<i>Note: most hubs are able to determine your external IPs and forward it to your DC++, making 
+	a manual configuration of this field unnecessary.</i> If your computer is directly connected to 
+	the internet, your internal and external IP will be the same and can easily be automatically 
+	detected. Fill these boxes <b>only</b> if you need to override said auto-detection. 
+	Ordinarily, only users behind a router (NAT device) need to fill in this boxes. 
+	If you put a DNS name here, DC++ will try to resolve it into an IP address before use. 
+	For additional information like how to determine your external IP
 	address, follow the <a href="faq_connection.html">Manual connection setup guide</a>.</dd>
 
 	<dt id="noipoverride">Don't allow hubs/NAT-PMP/UPnP to override</dt>
@@ -110,12 +111,10 @@ you may want to follow the <a href="faq_connection.html">Manual connection setup
 	IPv6 addresses. Useful when you have more than one physical or virtual network adapter installed and
 	you want to assign a specfic device for all the network traffic generated for a certain IP protocol 
 	by DC++.<br/>
-	<!-- If this setting is empty (it is by default) it means that DC++ is relying on the operating
+	If this setting is set to 'Default' it means that DC++ is relying on the operating
 	system to find the best adapter. In case of the adapter offered by the operating system does
-	not suit you, you can override it here by specifying the local IP address of the required
-	adapter. To get the list of available network adapters with their IP adresses open up a Command
-	Prompt window and use the 'ipconfig' command.<br/>
-	If binding with the given IP address fails, it will do so silently and the default value
+	not suit you, you can override it here by selecting the required adapter. <br/>
+	If binding with the selected adapter fails, it will do so silently and the 'Default' setting
 	(INADDR_ANY) will be used instead. --> This setting is ignored when
 	<a href="settings_connectivity.html#autoconn">Automatic connectivity setup</a> is enabled.
 	</dd>

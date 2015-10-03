@@ -32,7 +32,7 @@ public:
 private:
 	ItemList items;
 
-	CheckBoxPtr autoDetectV4;
+	CheckBoxPtr autoDetect;
 	ButtonPtr detectNow;
 	RichTextBoxPtr log;
 	ButtonPtr edit;
