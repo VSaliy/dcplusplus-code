@@ -26,6 +26,7 @@
 #include <dcpp/PluginManager.h>
 
 #include <dwt/WidgetCreator.h>
+#include <dwt/Point.h>
 
 #include "HoldRedraw.h"
 #include "HtmlToRtf.h"
@@ -161,9 +162,17 @@ protected:
 				unsigned lineCount = chat->getLineCount();
 				if(linesToKeep < lineCount) {
 					{
+						dwt::Point scrollPos = chat->getScrollPos();
+						bool scroll = chat->scrollIsAtEnd();
+
 						HoldRedraw hold { chat };
 						chat->setSelection(0, chat->lineIndex(lineCount - linesToKeep));
 						chat->replaceSelection(_T(""));
+						
+						if(scroll)
+							chat->scrollToBottom();
+						else
+							chat->setScrollPos(scrollPos);
 					}
 					chat->redraw();
 				}
