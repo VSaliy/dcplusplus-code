@@ -50,6 +50,9 @@ private:
 
 	void save();
 	virtual void on(SettingsManagerListener::Save, SimpleXML&) noexcept;
+
+	bool handleMenu(dwt::ScreenCoordinate pt);
+	MenuPtr makeMenu(dwt::ScreenCoordinate pt);
 };
 
 #endif
