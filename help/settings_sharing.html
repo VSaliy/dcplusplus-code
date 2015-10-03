@@ -35,12 +35,6 @@ the file list.</dd>
   <dd cshelp="IDH_SETTINGS_UPLOAD_REMOVE">Remove the selected folder(s).</dd>
 </dl>
 <dl>
-  <dt>Automatically open an extra slot if speed is below (0 = disable)</dt>
-  <dd cshelp="IDH_SETTINGS_UPLOAD_MIN_UPLOAD_SPEED">If the average upload speed drops below the given number,
-an
-additional upload slot will be granted. These slots are granted
-once every 30 seconds at maximum. If the speed of the original
-uploads increases, the granted slot will not be closed.</dd>
   <dt id="slots">Upload slots</dt>
   <dd cshelp="IDH_SETTINGS_UPLOAD_SLOTS">Configure the number of slots
 that other users can occupy to
@@ -56,6 +50,14 @@ happen if <a href="settings_advanced.html#disconnect">Automatically
 disconnect users who leave the hub</a> is enabled.) This can cause your
 upload slots to go over the maximum set in settings.
 </dd>
+     <dt>Automatically open an extra slot if speed is below (0 = disable)</dt>
+  <dd cshelp="IDH_SETTINGS_UPLOAD_MIN_UPLOAD_SPEED">If the average upload speed drops below the given number,
+an
+additional upload slot will be granted. These slots are granted
+once every 30 seconds at maximum. If the speed of the original
+uploads increases, the granted slot will not be closed.</dd>
+    <dt id="extraslots">Max extra upload slots</dt>
+  <dd cshelp="IDH_SETTINGS_MAX_EXTRA_UPLOAD_SLOTS">Configure the number of maximum extra slots. Default is 3.</dd>
 </dl>
 </body>
 </html>
