@@ -20,8 +20,11 @@
 #define DCPLUSPLUS_WIN32_FAV_HUB_PROPERTIES_H
 
 #include <dcpp/forward.h>
+#include <dcpp/Text.h>
 
 #include "GridDialog.h"
+
+#include <map>
 
 class FavHubProperties : public GridDialog
 {
@@ -39,6 +42,7 @@ private:
 	TextBoxPtr email;
 	TextBoxPtr userIp;
 	TextBoxPtr userIp6;
+	ComboBoxPtr encoding;
 	ComboBoxPtr showJoins;
 	ComboBoxPtr favShowJoins;
 	ComboBoxPtr logMainChat;
@@ -51,6 +55,11 @@ private:
 	void handleOKClicked();
 
 	void fillGroups();
+
+	void fillEncodings();
+
+	static std::map<UINT, std::wstring> encodings;
+	static BOOL CALLBACK EnumCodePageProc(LPTSTR lpCodePageString);
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_FAV_HUB_PROPERTIES_H)

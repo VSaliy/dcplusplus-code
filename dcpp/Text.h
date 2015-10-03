@@ -42,20 +42,20 @@ namespace Text {
 
 	void initialize();
 
-	const string& acpToUtf8(const string& str, string& tmp) noexcept;
-	inline string acpToUtf8(const string& str) noexcept {
+	const string& acpToUtf8(const string& str, string& tmp, const string& fromCharset = "") noexcept;
+	inline string acpToUtf8(const string& str, const string& fromCharset = "") noexcept {
 		string tmp;
 		return acpToUtf8(str, tmp);
 	}
 
-	const wstring& acpToWide(const string& str, wstring& tmp) noexcept;
-	inline wstring acpToWide(const string& str) noexcept {
+	const wstring& acpToWide(const string& str, wstring& tmp, const string& fromCharset = "") noexcept;
+	inline wstring acpToWide(const string& str, const string& fromCharset = "") noexcept {
 		wstring tmp;
 		return acpToWide(str, tmp);
 	}
 
-	const string& utf8ToAcp(const string& str, string& tmp) noexcept;
-	inline string utf8ToAcp(const string& str) noexcept {
+	const string& utf8ToAcp(const string& str, string& tmp, const string& fromCharset = "") noexcept;
+	inline string utf8ToAcp(const string& str, const string& fromCharset = "") noexcept {
 		string tmp;
 		return utf8ToAcp(str, tmp);
 	}
@@ -66,8 +66,8 @@ namespace Text {
 		return utf8ToWide(str, tmp);
 	}
 
-	const string& wideToAcp(const wstring& str, string& tmp) noexcept;
-	inline string wideToAcp(const wstring& str) noexcept {
+	const string& wideToAcp(const wstring& str, string& tmp, const string& fromCharset = "") noexcept;
+	inline string wideToAcp(const wstring& str, const string& fromCharset = "") noexcept {
 		string tmp;
 		return wideToAcp(str, tmp);
 	}
@@ -161,6 +161,8 @@ namespace Text {
 			f(str.substr(j));
 
 	}
+
+	int getCodePage(const string& charset);
 }
 
 } // namespace dcpp

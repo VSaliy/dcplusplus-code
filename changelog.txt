@@ -13,6 +13,7 @@
 * Add system memory size information to the crashlog (iceman50)
 * [L#236056] Add search options to right click menu in the notepad (ullner)
 * [L#1435007] Fix /clear-command scrolling problem (ullner)
+* [L#1473791] Added support to specify encoding in NMDC (favorite) hubs (ullner)
 
 -- 0.851 2015-04-06 --
 * [L#1414362] Prefer boost regex over std regex for the time being (poy)

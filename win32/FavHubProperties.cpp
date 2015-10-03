@@ -36,6 +36,8 @@ using dwt::Grid;
 using dwt::GridInfo;
 using dwt::Label;
 
+std::map<UINT, std::wstring> FavHubProperties::encodings;
+
 FavHubProperties::FavHubProperties(dwt::Widget* parent, FavoriteHubEntry *_entry) :
 GridDialog(parent, 320, DS_CONTEXTHELP),
 name(0),
@@ -46,6 +48,8 @@ password(0),
 description(0),
 email(0),
 userIp(0),
+userIp6(0),
+encoding(0),
 showJoins(0),
 favShowJoins(0),
 logMainChat(0),
@@ -70,7 +74,7 @@ bool FavHubProperties::handleInitDialog() {
 		auto group = grid->addChild(GroupBox::Seed(T_("Hub")));
 		grid->setWidget(group, 0, 0, 1, 2);
 
-		auto cur = group->addChild(Grid::Seed(3, 2));
+		auto cur = group->addChild(Grid::Seed(4, 2));
 		cur->column(0).align = GridInfo::BOTTOM_RIGHT;
 		cur->column(1).mode = GridInfo::FILL;
 
@@ -89,6 +93,12 @@ bool FavHubProperties::handleInitDialog() {
 		hubDescription = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		hubDescription->setText(Text::toT(entry->getHubDescription()));
 		hubDescription->setHelpId(IDH_FAVORITE_HUB_DESC);
+
+		cur->addChild(Label::Seed(T_("Encoding")))->setHelpId(IDH_FAVORITE_HUB_ENCODING);
+		encoding = cur->addChild(WinUtil::Seeds::Dialog::comboBox);
+		encoding->setHelpId(IDH_FAVORITE_HUB_ENCODING);
+
+		fillEncodings();
 	}
 
 	{
@@ -197,6 +207,7 @@ void FavHubProperties::handleOKClicked() {
 	entry->setServer(Text::fromT(addressText));
 	entry->setName(Text::fromT(name->getText()));
 	entry->setHubDescription(Text::fromT(hubDescription->getText()));
+	entry->setEncoding(Text::fromT(encoding->getText()));
 	entry->get(HubSettings::Nick) = Text::fromT(nick->getText());
 	entry->setPassword(Text::fromT(password->getText()));
 	entry->get(HubSettings::Description) = Text::fromT(description->getText());
@@ -236,4 +247,47 @@ void FavHubProperties::fillGroups() {
 
 	if(needSel)
 		groups->setSelected(0);
+}
+
+void FavHubProperties::fillEncodings()
+{
+	// Load all available code pages
+	::EnumSystemCodePages(EnumCodePageProc, CP_INSTALLED);
+
+	// Get the currently selected code page
+	UINT currentCodePage = Text::getCodePage(entry->getEncoding());
+
+	// Go through all code pages and add them to the view
+	int selectedItem = 0, counter = 0;
+	for(auto& e: encodings)
+	{
+		encoding->addValue(e.second);
+
+		// This is so we keep track of which code page should be the one to be selected
+		if(currentCodePage == e.first)
+		{
+			selectedItem = counter;
+		}
+		counter++;
+	}
+
+	encoding->setSelected(selectedItem);
+}
+
+BOOL CALLBACK FavHubProperties::EnumCodePageProc(LPTSTR lpCodePageString)
+{
+	if(wcslen(lpCodePageString) != 0)
+	{
+		UINT pageId = _ttoi(lpCodePageString);
+
+		CPINFOEX cpInfoEx = { 0 };
+		GetCPInfoEx(pageId, 0, &cpInfoEx);
+
+		if(wcslen(cpInfoEx.CodePageName) != 0)
+		{
+			encodings[pageId] = cpInfoEx.CodePageName;
+		}
+	}
+
+	return TRUE;
 }
