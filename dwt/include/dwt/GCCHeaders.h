@@ -318,6 +318,35 @@ typedef struct tagLVGROUPMETRICS
 } LVGROUPMETRICS, *PLVGROUPMETRICS;
 #endif
 
+// MinGW doesn't have all the fields in the following structure, so re-define it better.
+typedef struct tagNMLVCUSTOMDRAW_
+{
+    NMCUSTOMDRAW nmcd;
+    COLORREF clrText;
+    COLORREF clrTextBk;
+#if (_WIN32_IE >= 0x0400)
+    int iSubItem;
+#endif
+#if (_WIN32_WINNT >= 0x0501)
+    DWORD dwItemType;
+
+    // Item custom draw
+    COLORREF clrFace;
+    int iIconEffect;
+    int iIconPhase;
+    int iPartId;
+    int iStateId;
+
+    // Group Custom Draw
+    RECT rcText;
+    UINT uAlign;      // Alignment. Use LVGA_HEADER_CENTER, LVGA_HEADER_RIGHT, LVGA_HEADER_LEFT
+#endif
+} NMLVCUSTOMDRAW_, *LPNMLVCUSTOMDRAW_;
+
+#define tagNMLVCUSTOMDRAW tagNMLVCUSTOMDRAW_
+#define NMLVCUSTOMDRAW NMLVCUSTOMDRAW_
+#define LPNMLVCUSTOMDRAW LPNMLVCUSTOMDRAW_
+
 // dwItemType
 #ifndef LVCDI_ITEM
 #define LVCDI_ITEM      0x00000000
@@ -360,6 +389,26 @@ typedef int (WINAPI *DTT_CALLBACK_PROC)(HDC hdc, LPWSTR pszText, int cchText, LP
 #define DTT_COMPOSITED      (1UL << 13)     // Draws text with antialiased alpha (needs a DIB section)
 #define DTT_VALIDBITS       (DTT_TEXTCOLOR | DTT_BORDERCOLOR | DTT_SHADOWCOLOR | DTT_SHADOWTYPE | DTT_SHADOWOFFSET | DTT_BORDERSIZE | \
                              DTT_FONTPROP | DTT_COLORPROP | DTT_STATEID | DTT_CALCRECT | DTT_APPLYOVERLAY | DTT_GLOWSIZE | DTT_COMPOSITED)
+/*
+typedef struct _DTTOPTS
+{
+    DWORD             dwSize;              // size of the struct
+    DWORD             dwFlags;             // which options have been specified
+    COLORREF          crText;              // color to use for text fill
+    COLORREF          crBorder;            // color to use for text outline
+    COLORREF          crShadow;            // color to use for text shadow
+    int               iTextShadowType;     // TST_SINGLE or TST_CONTINUOUS
+    POINT             ptShadowOffset;      // where shadow is drawn (relative to text)
+    int               iBorderSize;         // Border radius around text
+    int               iFontPropId;         // Font property to use for the text instead of TMT_FONT
+    int               iColorPropId;        // Color property to use for the text instead of TMT_TEXTCOLOR
+    int               iStateId;            // Alternate state id
+    BOOL              fApplyOverlay;       // Overlay text on top of any text effect?
+    int               iGlowSize;           // Glow radious around text
+    DTT_CALLBACK_PROC pfnDrawTextCallback; // Callback for DrawText
+    LPARAM            lParam;              // Parameter for callback
+} DTTOPTS, *PDTTOPTS; 
+*/
 #endif
 
 #ifdef HAVE_OLD_MINGW // mingw64 already has this
