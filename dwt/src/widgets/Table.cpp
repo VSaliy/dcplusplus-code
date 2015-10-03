@@ -50,6 +50,40 @@ using boost::range::for_each;
 
 const TCHAR Table::windowClass[] = WC_LISTVIEW;
 
+/* the following dance adds Vista members to LVGROUP (notably iTitleImage to have group icons)
+without requiring a global switch of WINVER / _WIN32_WINNT / etc to Vista values. */
+typedef LVGROUP legacyLVGROUP;
+
+//@TODO Logically the following code would not needed when targeting Vista, however it doesn't compile without...
+//#if(_WIN32_WINNT < 0x600)
+struct LVGROUP_ : LVGROUP {
+	LPWSTR  pszSubtitle;
+    UINT    cchSubtitle;
+    LPWSTR  pszTask;
+    UINT    cchTask;
+    LPWSTR  pszDescriptionTop;
+    UINT    cchDescriptionTop;
+    LPWSTR  pszDescriptionBottom;
+    UINT    cchDescriptionBottom;
+    int     iTitleImage;
+    int     iExtendedImage;
+    int     iFirstItem;
+    UINT    cItems;
+    LPWSTR  pszSubsetTitle;
+    UINT    cchSubsetTitle;
+	LVGROUP_(const LVGROUP& lvg) : LVGROUP(lvg) { }
+};
+#define LVGROUP LVGROUP_
+#define LVGF_TITLEIMAGE 0x00001000
+#define ListView_SetGroupHeaderImageList(hwnd, himl) \
+    (HIMAGELIST)SNDMSG((hwnd), LVM_SETIMAGELIST, (WPARAM)LVSIL_GROUPHEADER, (LPARAM)(HIMAGELIST)(himl))
+//#endif
+
+namespace { legacyLVGROUP makeLVGROUP() {
+	legacyLVGROUP lvg = { util::win32::ensureVersion(util::win32::VISTA) ? sizeof(LVGROUP) : sizeof(legacyLVGROUP) };
+	return lvg;
+} }
+
 Table::Seed::Seed() :
 	BaseType::Seed(WS_CHILD | WS_TABSTOP | LVS_REPORT),
 	font(0),
@@ -324,7 +358,7 @@ void Table::setGroups(const std::vector<tstring>& groups) {
 		initGroupSupport();
 	}
 
-	LVGROUP group { };
+	LVGROUP group = makeLVGROUP();
 	for(auto& i: groups) {
 		if(i.empty()) {
 			group.mask = LVGF_GROUPID;
