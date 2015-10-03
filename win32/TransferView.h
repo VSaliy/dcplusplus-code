@@ -30,6 +30,7 @@
 #include <dcpp/forward.h>
 #include <dcpp/MerkleTree.h>
 #include <dcpp/Util.h>
+#include <dcpp/QueueItem.h>
 
 #include <dwt/widgets/Container.h>
 
@@ -100,6 +101,7 @@ private:
 		virtual void force() = 0;
 		virtual void disconnect() = 0;
 		virtual void removeFileFromQueue() = 0;
+		virtual void setPriority(QueueItem::Priority p) = 0;
 
 		int64_t timeleft;
 		int64_t speed;
@@ -126,6 +128,7 @@ private:
 		virtual void force();
 		virtual void disconnect();
 		virtual void removeFileFromQueue();
+		virtual void setPriority(QueueItem::Priority p);
 
 		bool transferFailed;
 		Status status;
@@ -149,6 +152,7 @@ private:
 		virtual void force();
 		virtual void disconnect();
 		virtual void removeFileFromQueue();
+		virtual void setPriority(QueueItem::Priority p);
 
 		TTHValue tth;
 		ConnectionType type;
@@ -246,6 +250,7 @@ private:
 	void handleForce();
 	void handleDisconnect();
 	void handleRemoveFileFromQueue();
+	void handlePriority(QueueItem::Priority p);
 	bool handleKeyDown(int c);
 	void handleDblClicked();
 	LRESULT handleCustomDraw(NMLVCUSTOMDRAW& data);

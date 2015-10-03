@@ -274,6 +274,10 @@ void TransferView::ConnectionInfo::removeFileFromQueue() {
 	QueueManager::getInstance()->remove(transfer().path);
 }
 
+void TransferView::ConnectionInfo::setPriority(QueueItem::Priority p) {
+	QueueManager::getInstance()->setPriority(transfer().path, p);
+}
+
 TransferView::TransferInfo::TransferInfo(const TTHValue& tth, ConnectionType type, const string& path, const string& tempPath) :
 	ItemInfo(),
 	tth(tth),
@@ -399,6 +403,12 @@ void TransferView::TransferInfo::disconnect() {
 void TransferView::TransferInfo::removeFileFromQueue() {
 	for(auto& conn: conns) {
 		conn.removeFileFromQueue();
+	}
+}
+
+void TransferView::TransferInfo::setPriority(QueueItem::Priority p) {
+	for(auto& conn: conns) {
+		conn.setPriority(p);
 	}
 }
 
@@ -534,6 +544,16 @@ bool TransferView::handleContextMenu(dwt::ScreenCoordinate pt) {
 
 		if(!onlyHttp) {
 			menu->appendSeparator();
+
+			auto sub = menu->appendPopup(T_("Set priority"), dwt::IconPtr(), onlyDownloads);
+			sub->appendItem(T_("Paused"), [this] { handlePriority(QueueItem::PAUSED); }, dwt::IconPtr(), onlyDownloads);
+			sub->appendItem(T_("Lowest"), [this] { handlePriority(QueueItem::LOWEST); }, dwt::IconPtr(), onlyDownloads);
+			sub->appendItem(T_("Low"), [this] { handlePriority(QueueItem::LOW); }, dwt::IconPtr(), onlyDownloads);
+			sub->appendItem(T_("Normal"), [this] { handlePriority(QueueItem::NORMAL); }, dwt::IconPtr(), onlyDownloads);
+			sub->appendItem(T_("High"), [this] { handlePriority(QueueItem::HIGH); }, dwt::IconPtr(), onlyDownloads);
+			sub->appendItem(T_("Highest"), [this] { handlePriority(QueueItem::HIGHEST); }, dwt::IconPtr(), onlyDownloads);
+			menu->appendSeparator();
+
 			menu->appendItem(T_("&Force attempt"), [this] { handleForce(); }, dwt::IconPtr(), onlyDownloads);
 			menu->appendSeparator();
 
@@ -555,6 +575,10 @@ bool TransferView::handleContextMenu(dwt::ScreenCoordinate pt) {
 		return true;
 	}
 	return false;
+}
+
+void TransferView::handlePriority(QueueItem::Priority p) {
+	transfers->forEachSelectedT([this, &p](ItemInfo* ii) { ii->setPriority(p); });
 }
 
 void TransferView::handleForce() {
