@@ -1258,4 +1258,14 @@ string Util::getTempPath() {
 #endif
 }
 
+bool Util::isAdcUrl(const string& aHubURL) { 
+	return Util::strnicmp("adc://", aHubURL.c_str(), 6) == 0; 
+}
+bool Util::isAdcsUrl(const string& aHubURL) { 
+	return Util::strnicmp("adcs://", aHubURL.c_str(), 7) == 0; 
+}
+bool Util::isNmdcUrl(const string& aHubURL) { 
+	return Util::strnicmp("dchub://", aHubURL.c_str(), 8) == 0; 
+}
+
 } // namespace dcpp

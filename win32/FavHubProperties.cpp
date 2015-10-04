@@ -74,7 +74,11 @@ bool FavHubProperties::handleInitDialog() {
 		auto group = grid->addChild(GroupBox::Seed(T_("Hub")));
 		grid->setWidget(group, 0, 0, 1, 2);
 
-		auto cur = group->addChild(Grid::Seed(4, 2));
+		bool isAdcHub = Util::isAdcUrl(entry->getServer()) || Util::isAdcsUrl(entry->getServer());
+
+		int rows = isAdcHub ? 3 : 4;
+
+		auto cur = group->addChild(Grid::Seed(rows, 2));
 		cur->column(0).align = GridInfo::BOTTOM_RIGHT;
 		cur->column(1).mode = GridInfo::FILL;
 
@@ -94,11 +98,14 @@ bool FavHubProperties::handleInitDialog() {
 		hubDescription->setText(Text::toT(entry->getHubDescription()));
 		hubDescription->setHelpId(IDH_FAVORITE_HUB_DESC);
 
-		cur->addChild(Label::Seed(T_("Encoding")))->setHelpId(IDH_FAVORITE_HUB_ENCODING);
-		encoding = cur->addChild(WinUtil::Seeds::Dialog::comboBox);
-		encoding->setHelpId(IDH_FAVORITE_HUB_ENCODING);
+		if(!isAdcHub)
+		{
+			cur->addChild(Label::Seed(T_("Encoding")))->setHelpId(IDH_FAVORITE_HUB_ENCODING);
+			encoding = cur->addChild(WinUtil::Seeds::Dialog::comboBox);
+			encoding->setHelpId(IDH_FAVORITE_HUB_ENCODING);
 
-		fillEncodings();
+			fillEncodings();
+		}
 	}
 
 	{
@@ -207,7 +214,9 @@ void FavHubProperties::handleOKClicked() {
 	entry->setServer(Text::fromT(addressText));
 	entry->setName(Text::fromT(name->getText()));
 	entry->setHubDescription(Text::fromT(hubDescription->getText()));
-	entry->setEncoding(Text::fromT(encoding->getText()));
+	if(encoding != nullptr) {
+		entry->setEncoding(Text::fromT(encoding->getText()));
+	}
 	entry->get(HubSettings::Nick) = Text::fromT(nick->getText());
 	entry->setPassword(Text::fromT(password->getText()));
 	entry->get(HubSettings::Description) = Text::fromT(description->getText());
