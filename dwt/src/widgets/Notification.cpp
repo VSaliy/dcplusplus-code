@@ -217,7 +217,9 @@ bool Notification::trayHandler(const MSG& msg) {
 	case NIN_BALLOONHIDE: // fall through
 	case NIN_BALLOONTIMEOUT:
 		{
-			balloons.pop_front();
+			if(!balloons.empty()) {
+				balloons.pop_front();
+			}
 			if(onlyBalloons && balloons.empty()) {
 				setVisible(false);
 			}
