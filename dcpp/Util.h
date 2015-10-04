@@ -449,6 +449,10 @@ public:
 	static uint32_t rand(uint32_t low, uint32_t high) { return rand(high-low) + low; }
 	static double randd() { return ((double)rand()) / ((double)0xffffffff); }
 
+	static bool isAdcUrl(const string& aHubURL);
+	static bool isAdcsUrl(const string& aHubURL);
+	static bool isNmdcUrl(const string& aHubURL);
+
 private:
 	/** In local mode, all config and temp files are kept in the same dir as the executable */
 	static bool localMode;
