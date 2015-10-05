@@ -322,6 +322,8 @@ public:
 
 	static dwt::IconPtr mergeIcons(const std::vector<int>& iconIds);
 
+	static void getHubStatus(const string& aUrl, tstring& statusText, int& statusIcon);
+
 private:
 	static void initUserMatching();
 	static void initHelpPath();
