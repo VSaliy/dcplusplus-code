@@ -1748,3 +1748,30 @@ dwt::IconPtr WinUtil::mergeIcons(const std::vector<int>& iconIds)
 	
 	return dwt::util::merge(icons);
 }
+
+void WinUtil::getHubStatus(const string& url, tstring& statusText, int& statusIcon)
+{
+	enum {
+		HUB_ON_ICON,
+		HUB_OFF_ICON
+	};
+
+	statusText = Util::emptyStringT;
+	statusIcon = -1;
+
+	// This checks if the hub is opened at all, but does not say whether it's connected or not.
+	if(ClientManager::getInstance()->isConnected(url))
+	{
+		// This will check the actual connectivity to the hub.
+		if(ClientManager::getInstance()->isHubConnected(url))
+		{
+			statusText = T_("Connected");
+			statusIcon = HUB_ON_ICON;
+		}
+		else
+		{
+			statusText = T_("Disconnected");
+			statusIcon = HUB_OFF_ICON;
+		}
+	}
+}

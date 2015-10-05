@@ -19,6 +19,7 @@
 #ifndef DCPLUSPLUS_WIN32_PUBLIC_HUBS_FRAME_H
 #define DCPLUSPLUS_WIN32_PUBLIC_HUBS_FRAME_H
 
+#include <dcpp/ClientManagerListener.h>
 #include <dcpp/FavoriteManagerListener.h>
 #include <dcpp/HubEntry.h>
 
@@ -27,7 +28,8 @@
 
 class PublicHubsFrame :
 	public StaticFrame<PublicHubsFrame>,
-	public FavoriteManagerListener
+	public FavoriteManagerListener,
+	private ClientManagerListener
 {
 	typedef StaticFrame<PublicHubsFrame> BaseType;
 public:
@@ -50,7 +52,8 @@ private:
 
 	enum {
 		COLUMN_FIRST,
-		COLUMN_NAME = COLUMN_FIRST,
+		COLUMN_STATUS = COLUMN_FIRST,
+		COLUMN_NAME,
 		COLUMN_DESCRIPTION,
 		COLUMN_USERS,
 		COLUMN_SERVER,
@@ -67,8 +70,9 @@ private:
 
 	class HubInfo {
 	public:
-		HubInfo(const HubEntry* entry_);
+		HubInfo(const HubEntry* entry_, const tstring& statusText);
 
+		void setText(int column, const tstring& value) { columns[column] = value; }
 		const tstring& getText(int column) const { return columns[column]; }
 		static int compareItems(const HubInfo* a, const HubInfo* b, int col);
 
@@ -77,6 +81,8 @@ private:
 	private:
 		tstring columns[COLUMN_LAST];
 	};
+
+	static dwt::ImageListPtr hubIcons;
 
 	GridPtr grid;
 
@@ -116,11 +122,18 @@ private:
 
 	void onFinished(const tstring& s, bool success);
 
+	void changeHubStatus(const string& aUrl);
+
 	virtual void on(DownloadStarting, const string& l) noexcept;
 	virtual void on(DownloadFailed, const string& l) noexcept;
 	virtual void on(DownloadFinished, const string& l, bool fromCoral) noexcept;
 	virtual void on(LoadedFromCache, const string& l, const string& d) noexcept;
 	virtual void on(Corrupted, const string& l) noexcept;
+
+	// ClientManagerListener
+	virtual void on(ClientManagerListener::ClientConnected, Client*) noexcept;
+	virtual void on(ClientManagerListener::ClientUpdated, Client*) noexcept;
+	virtual void on(ClientManagerListener::ClientDisconnected, Client*) noexcept;
 };
 
 #endif // !defined(PUBLIC_HUBS_FRM_H)

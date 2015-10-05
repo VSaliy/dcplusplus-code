@@ -19,6 +19,7 @@
 #include "stdafx.h"
 #include "PublicHubsFrame.h"
 
+#include <dcpp/ClientManager.h>
 #include <dcpp/FavoriteManager.h>
 #include <dcpp/GeoManager.h>
 #include <dcpp/version.h>
@@ -37,7 +38,10 @@ using dwt::GridInfo;
 const string PublicHubsFrame::id = "PublicHubs";
 const string& PublicHubsFrame::getId() const { return id; }
 
+dwt::ImageListPtr PublicHubsFrame::hubIcons;
+
 static const ColumnInfo hubsColumns[] = {
+	{ N_("Status"), 25, false },
 	{ N_("Name"), 200, false },
 	{ N_("Description"), 290, false },
 	{ N_("Users"), 50, true },
@@ -52,7 +56,8 @@ static const ColumnInfo hubsColumns[] = {
 	{ N_("Rating"), 100, false }
 };
 
-PublicHubsFrame::HubInfo::HubInfo(const HubEntry* entry_) : entry(entry_) {
+PublicHubsFrame::HubInfo::HubInfo(const HubEntry* entry_, const tstring& statusText) : entry(entry_) {
+	columns[COLUMN_STATUS] = statusText;
 	columns[COLUMN_NAME] = Text::toT(entry->getName());
 	columns[COLUMN_DESCRIPTION] = Text::toT(entry->getDescription());
 	columns[COLUMN_USERS] = Text::toT(Util::toString(entry->getUsers()));
@@ -125,6 +130,14 @@ users(0)
 		WinUtil::makeColumns(hubs, hubsColumns, COLUMN_LAST, SETTING(PUBLICHUBSFRAME_ORDER), SETTING(PUBLICHUBSFRAME_WIDTHS));
 		WinUtil::setTableSort(hubs, COLUMN_LAST, SettingsManager::PUBLICHUBSFRAME_SORT, COLUMN_USERS, false);
 
+		if(!hubIcons) {
+			const dwt::Point size(16, 16);
+			hubIcons = dwt::ImageListPtr(new dwt::ImageList(size));
+			hubIcons->add(dwt::Icon(IDI_HUB, size));
+			hubIcons->add(dwt::Icon(IDI_HUB_OFF, size));
+		}
+		hubs->setSmallImageList(hubIcons);
+
 		hubs->onDblClicked([this] { openSelected(); });
 		hubs->onKeyDown([this](int c) { return handleKeyDown(c); });
 		hubs->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleContextMenu(sc); });
@@ -196,6 +209,7 @@ users(0)
 	status->setHelpId(STATUS_USERS, IDH_PUBLIC_HUBS_USERS);
 
 	FavoriteManager::getInstance()->addListener(this);
+	ClientManager::getInstance()->addListener(this);
 
 	entries	 = FavoriteManager::getInstance()->getPublicHubs();
 
@@ -221,6 +235,7 @@ PublicHubsFrame::~PublicHubsFrame() {
 
 bool PublicHubsFrame::preClosing() {
 	FavoriteManager::getInstance()->removeListener(this);
+	ClientManager::getInstance()->removeListener(this);
 
 	return true;
 }
@@ -295,7 +310,17 @@ void PublicHubsFrame::updateList() {
 	hubs->clear();
 	for(; i != iend; ++i) {
 		if(filter.empty() || filter.match(filterPrep, filterInfoF)) {
-			hubs->insert(hubs->size(), new HubInfo(&*i));
+			auto hubEntry = &*i;
+
+			tstring statusText;
+			int statusIcon;
+			WinUtil::getHubStatus(hubEntry->getServer(), statusText, statusIcon);
+
+			auto hubInfo = new HubInfo(hubEntry, statusText);
+
+			auto row = hubs->insert(hubs->size(), hubInfo);
+			hubs->setIcon(row, COLUMN_STATUS, statusIcon);
+
 			visibleHubs++;
 			users += i->getUsers();
 		}
@@ -304,6 +329,46 @@ void PublicHubsFrame::updateList() {
 	hubs->resort();
 
 	updateStatus();
+}
+
+void PublicHubsFrame::changeHubStatus(const string& url)
+{
+	if(url == Util::emptyString)
+	{
+		return;
+	}
+
+	auto aUrl = Text::toT(url);
+
+	for(unsigned int row = 0; row < hubs->size(); ++row)
+	{
+		HubInfo* hubInfo = hubs->getData(row);
+		if(hubInfo == nullptr)
+		{
+			continue;
+		}
+
+		if(aUrl == hubInfo->getText(COLUMN_SERVER))
+		{
+			tstring statusText;
+			int statusIcon;
+			WinUtil::getHubStatus(url, statusText, statusIcon);
+
+			{
+				HoldRedraw hold { hubs };
+
+				hubInfo->setText(COLUMN_STATUS, statusText);
+				hubs->setIcon(row, COLUMN_STATUS, statusIcon);
+
+				hubs->update(hubInfo);
+
+				if(hubs->getSortColumn() == COLUMN_STATUS)
+					hubs->resort();
+			}
+
+			break;
+		}
+	}
 }
 
 string PublicHubsFrame::getText(const HubEntry& entry, size_t column) const {
@@ -429,5 +494,32 @@ void PublicHubsFrame::on(Corrupted, const string& l) noexcept {
 		callAsync([this] { onFinished(T_("Cached hub list is corrupted or unsupported"), false); });
 	} else {
 		callAsync([=] { onFinished(str(TF_("Downloaded hub list is corrupted or unsupported (%1%)") % Text::toT(l)), false); });
+	}
+}
+
+void PublicHubsFrame::on(ClientManagerListener::ClientConnected, Client* client) noexcept
+{
+	if(client != nullptr)
+	{
+		auto url = client->getHubUrl();
+		callAsync([=] { changeHubStatus(url); });
+	}
+}
+
+void PublicHubsFrame::on(ClientManagerListener::ClientUpdated, Client* client) noexcept
+{
+	if(client != nullptr)
+	{
+		auto url = client->getHubUrl();
+		callAsync([=] { changeHubStatus(url); });
+	}
+}
+
+void PublicHubsFrame::on(ClientManagerListener::ClientDisconnected, Client* client) noexcept
+{
+	if(client != nullptr)
+	{
+		auto url = client->getHubUrl();
+		callAsync([=] { changeHubStatus(url); });
 	}
 }

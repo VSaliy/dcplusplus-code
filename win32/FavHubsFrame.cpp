@@ -419,13 +419,9 @@ void FavHubsFrame::fillList() {
 		} else
 			index = -1;
 
-		auto statusText = Util::emptyStringT;
-		auto statusIcon = HUB_OFF_ICON;
-		if(ClientManager::getInstance()->isHubConnected(entry->getServer()))
-		{
-			statusText = T_("Connected");
-			statusIcon = HUB_ON_ICON;
-		}
+		tstring statusText;
+		int statusIcon;
+		WinUtil::getHubStatus(entry->getServer(), statusText, statusIcon);
 
 		auto row = hubs->insert({
 			statusText,
