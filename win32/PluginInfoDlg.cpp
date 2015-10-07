@@ -79,7 +79,7 @@ bool PluginInfoDlg::handleInitDialog(const string& path) {
 		}
 		grid->addChild(Label::Seed(name));
 		if(type == Website && !value.empty()) {
-			grid->addChild(Link::Seed(Text::toT(value), true));
+			grid->addChild(Link::Seed(Text::toT(value), true, WinUtil::parseLink));
 		} else {
 			grid->addChild(Label::Seed(value.empty() ?
 				T_("<Information unavailable>") : Text::toT(value)));

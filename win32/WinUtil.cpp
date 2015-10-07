@@ -1544,23 +1544,17 @@ bool WinUtil::parseLink(const tstring& str, bool followExternal) {
 	Util::decodeUrl(url, proto, host, port, file, query, fragment);
 
 	if(Util::stricmp(proto.c_str(), "adc") == 0 ||
-		Util::stricmp(proto.c_str(), "adcs") == 0 ||
-		Util::stricmp(proto.c_str(), "dchub") == 0 )
+	   Util::stricmp(proto.c_str(), "adcs") == 0 ||
+	   Util::stricmp(proto.c_str(), "dchub") == 0 )
 	{
 		HubFrame::openWindow(mainWindow->getTabView(), url);
 
 		/// @todo parse other params when RFCs for these schemes have been published.
 
 		return true;
+	}
 
-	} else if(followExternal && (!proto.empty() ||
-		Util::strnicmp(str.c_str(), _T("www."), 4) == 0 ||
-		Util::strnicmp(str.c_str(), _T("mailto:"), 7) == 0))
-	{
-		openLink(str);
-		return true;
-
-	} else if(host == "magnet") {
+	if(host == "magnet") {
 		string hash, name, key;
 		if(Magnet::parseUri(Text::fromT(str), hash, name, key)) {
 			MagnetDlg(mainWindow, Text::toT(hash), Text::toT(name), Text::toT(key)).run();
@@ -1570,6 +1564,36 @@ bool WinUtil::parseLink(const tstring& str, bool followExternal) {
 				T_("MAGNET Link detected"), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONEXCLAMATION);
 		}
 		return true;
+	}
+
+	if(followExternal)
+	{
+		TStringList lst = StringTokenizer<tstring>(Text::toT(SETTING(WHITELIST_OPEN_URIS)), ';').getTokens();
+		for(auto& s : lst)
+		{
+			if(Util::strnicmp(str.c_str(), s.c_str(), s.size()) == 0)
+			{
+				openLink(str);
+				return true;
+			}
+		}
+
+		if(!proto.empty())
+		{
+			auto boxResult = dwt::MessageBox(mainWindow).show(
+									T_(
+									"Warning: Allowing content to open a program can be useful, but it can potentially harm your computer. "
+									"Do not allow it unless you trust the source of the content.") + _T("\n\n") +
+									T_("Any program that is launched will have the same access rights as DC++.") + _T("\n\n") +
+									T_("The requested link is ") + str + _T("\n\n") +
+									T_("Do you still want to allow to open a program on your computer?"),
+									T_("External protocol request"),
+									dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONEXCLAMATION);
+			if(boxResult == dwt::MessageBox::RETBOX_YES) {
+				openLink(str);
+			}
+			return true;
+		}
 	}
 
 	return false;

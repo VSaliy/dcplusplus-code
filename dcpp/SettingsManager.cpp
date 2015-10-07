@@ -61,7 +61,7 @@ const string SettingsManager::settingTags[] =
 	"TLSPrivateKeyFile", "TLSCertificateFile", "TLSTrustedCertificatesPath",
 	"Language", "Toolbar", "LastSearchType", "Mapper",
 	"SoundMainChat", "SoundPM", "SoundPMWindow", "SoundFinishedDL", "SoundFinishedFL", "LastSharedFolder",
-	"SharingSkiplistExtensions", "SharingSkiplistRegEx", "SharingSkiplistPaths",
+	"SharingSkiplistExtensions", "SharingSkiplistRegEx", "SharingSkiplistPaths", "WhitelistOpenURIs",
 	"SENTRY",
 	// Ints
 	"IncomingConnections", "IncomingConnections6", "OutgoingConnections", "InPort", "UDPPort", "TLSPort",
@@ -368,6 +368,7 @@ SettingsManager::SettingsManager() {
 	setDefault(SHARING_SKIPLIST_MAXSIZE, 0);
 	setDefault(REGISTER_SYSTEM_STARTUP, false);
 	setDefault(MAX_EXTRA_SLOTS, 3);
+	setDefault(WHITELIST_OPEN_URIS, "http:;https:;www;mailto:");
 
 	setSearchTypeDefaults();
 

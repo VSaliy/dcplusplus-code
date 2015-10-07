@@ -30,9 +30,17 @@ public:
 	virtual void write();
 
 private:
+
+	ButtonPtr modifyWhitelistButton;
+
 	ItemList items;
 
+private:
+
 	void addItem(const tstring& text, int setting, bool isInt, unsigned helpId, const tstring& text2 = _T(""));
+
+	void AddWhitelistUI();
+
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_EXPERTS_PAGE_H)

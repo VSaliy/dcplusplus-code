@@ -56,7 +56,9 @@ public:
 
 		/** @param link whether to treat the initial text as a link of its own, or as a mixed
 		link/text (with <a> tags). */
-		Seed(const tstring& caption = tstring(), bool link = false);
+		Seed(const tstring& caption = tstring(), bool link = false, std::function<bool (const tstring&, bool)> linkManager = nullptr);
+
+		std::function<bool (const tstring&, bool)> fpLinkManager;
 	};
 
 	void create(const Seed& seed = Seed());

@@ -27,13 +27,15 @@
 
 #include "resource.h"
 #include "WinUtil.h"
+#include "ItemsEditDlg.h"
 
 using dwt::Grid;
 using dwt::GridInfo;
 using dwt::Label;
 
 ExpertsPage::ExpertsPage(dwt::Widget* parent) :
-PropPage(parent, 7, 2)
+PropPage(parent, 7, 2),
+modifyWhitelistButton(nullptr)
 {
 	setHelpId(IDH_EXPERTSPAGE);
 
@@ -53,6 +55,8 @@ PropPage(parent, 7, 2)
 	addItem(T_("Socket write buffer"), SettingsManager::SOCKET_OUT_BUFFER, true, IDH_SETTINGS_EXPERT_SOCKET_OUT_BUFFER, T_("B"));
 	addItem(T_("Max PM windows"), SettingsManager::MAX_PM_WINDOWS, true, IDH_SETTINGS_EXPERT_MAX_PM_WINDOWS);
 	addItem(T_("Max protocol command length"), SettingsManager::MAX_COMMAND_LENGTH, true, IDH_SETTINGS_EXPERT_MAX_COMMAND_LENGTH, T_("B"));
+
+	AddWhitelistUI();
 
 	PropPage::read(items);
 }
@@ -89,4 +93,39 @@ void ExpertsPage::addItem(const tstring& text, int setting, bool isInt, unsigned
 		cur->setWidget(box, 0, 0, 1, 2);
 	else
 		cur->addChild(Label::Seed(text2));
+}
+
+void ExpertsPage::AddWhitelistUI()
+{
+	auto group = grid->addChild(GroupBox::Seed(T_("Whitelisted URIs to open")));
+	group->setHelpId(IDH_SETTINGS_EXPERT_WHITELIST_OPEN_URIS);
+
+	auto cur = group->addChild(Grid::Seed(1, 2));
+	cur->column(0).mode = GridInfo::FILL;
+
+	TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::textBox);
+	items.emplace_back(box, SettingsManager::WHITELIST_OPEN_URIS, PropPage::T_STR);
+
+	box->setText(Text::toT(SETTING(WHITELIST_OPEN_URIS)));
+
+	modifyWhitelistButton = cur->addChild(Button::Seed(T_("M&odify")));
+	modifyWhitelistButton->onClicked([this, box] 
+	{ 
+		tstring strName = T_("Whitelisted URIs to open");
+
+		TStringList lst = StringTokenizer<tstring>(box->getText(), ';').getTokens();
+
+		ItemsEditDlg dlg(this, strName, lst);
+		dlg.setTitle(strName);
+		dlg.setDescription(strName);
+		dlg.setEditTitle(strName);
+
+		if(dlg.run() == IDOK)
+		{
+			StringList lstValue;
+			Text::fromT(dlg.getValues(), lstValue);
+
+			box->setText(Text::toT(Util::toString(";", lstValue)));
+		}
+	});
 }

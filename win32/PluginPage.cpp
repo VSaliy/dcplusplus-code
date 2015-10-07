@@ -222,7 +222,7 @@ void PluginPage::handleSelectionChanged() {
 		}
 		infoGrid->addChild(Label::Seed(name));
 		if((type == Website || type == Path) && !value.empty()) {
-			infoGrid->addChild(Link::Seed(Text::toT(value), true));
+			infoGrid->addChild(Link::Seed(Text::toT(value), true, WinUtil::parseLink));
 		} else {
 			infoGrid->addChild(Label::Seed(value.empty() ?
 				T_("<Information unavailable>") : Text::toT(value)));

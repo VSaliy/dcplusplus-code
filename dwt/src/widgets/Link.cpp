@@ -37,9 +37,10 @@ namespace dwt {
 
 const TCHAR Link::windowClass[] = WC_LINK;
 
-Link::Seed::Seed(const tstring& caption, bool link) :
+Link::Seed::Seed(const tstring& caption, bool link, std::function<bool (const tstring&, bool)> linkManager) :
 	BaseType::Seed(WS_CHILD | WS_TABSTOP, 0, link ? _T("<a href=\"") + caption + _T("\">") + caption + _T("</a>") : caption),
-	font(0)
+	font(0),
+	fpLinkManager(linkManager)
 {
 }
 
@@ -52,8 +53,12 @@ void Link::create(const Seed& seed) {
 	BaseType::create(seed);
 	setFont(seed.font);
 
-	auto openLink = [](WPARAM, LPARAM lParam) -> LRESULT {
-		::ShellExecute(0, 0, reinterpret_cast<NMLINK*>(lParam)->item.szUrl, 0, 0, SW_SHOWNORMAL);
+	auto openLink = [seed](WPARAM, LPARAM lParam) -> LRESULT {
+		if(seed.fpLinkManager) {
+			seed.fpLinkManager(reinterpret_cast<NMLINK*>(lParam)->item.szUrl, true);
+		} else {
+			::ShellExecute(0, 0, reinterpret_cast<NMLINK*>(lParam)->item.szUrl, 0, 0, SW_SHOWNORMAL);
+		}
 		return 0;
 	};
 	onRaw(openLink, Message(WM_NOTIFY, NM_CLICK));
