@@ -23,42 +23,108 @@
 
 #include "PropPage.h"
 
-class ConnectivityManualPage : public PropPage, private ConnectivityManagerListener
+class ConnectivityManualPage;
+
+class PageContent
 {
+
 public:
-	ConnectivityManualPage(dwt::Widget* parent);
-	virtual ~ConnectivityManualPage();
+
+	PageContent(ConnectivityManualPage* parent, dwt::GridPtr grid);
+
+	void read();
 
 	void write();
+	
+	void onSettingsChange();
+
+protected:
+
+	void Initialize();
+	
+protected:
+
+	SettingsManager::IntSetting settingIncomingConnections;
+	SettingsManager::StrSetting settingExternalIP;
+	SettingsManager::BoolSetting settingNoIPOverride;
+	SettingsManager::IntSetting settingTCPPort;
+	SettingsManager::IntSetting settingTLSPort;
+	SettingsManager::IntSetting settingUDPPort;
+	SettingsManager::StrSetting settingBindAddress;
+	SettingsManager::StrSetting settingMapper;
+
+	bool isV6;
+	
+private:
+
+	void InitializeUI();
+
+	void onTransferPortUpdated();
+	void onTLSTransferPortUpdated();
+	void validatePort(TextBoxPtr sourceBox, TextBoxPtr otherBox, const tstring& source, const tstring& other);
 
 private:
-	ItemList items;
-
-	GroupBoxPtr autoGroup;
-	CheckBoxPtr autoDetect;
 
 	RadioButtonPtr active;
 	RadioButtonPtr upnp;
 	RadioButtonPtr passive;
+	RadioButtonPtr inactive;
 
 	ComboBoxPtr mapper;
-	ComboBoxPtr v4Bind, v6Bind;
+	ComboBoxPtr bind;
 
 	TextBoxPtr transferBox;
 	TextBoxPtr tlstransferBox;
 
-	void handleAutoClicked();
+	PropPage::ItemList items;
+
+	ConnectivityManualPage* parent;
+	dwt::GridPtr grid;
+	
+};
+
+class PageContentV4 : public PageContent
+{
+public:
+	PageContentV4(ConnectivityManualPage* parent, dwt::GridPtr grid);
+};
+
+class PageContentV6 : public PageContent
+{
+public:
+	PageContentV6(ConnectivityManualPage* parent, dwt::GridPtr grid);
+};
+
+class ConnectivityManualPage : public PropPage, private ConnectivityManagerListener
+{
+public:
+
+	ConnectivityManualPage(dwt::Widget* parent);
+	virtual ~ConnectivityManualPage();
+
+public:
+
+	void read(const PropPage::ItemList& items);
+	void write(const PropPage::ItemList& items);
 
 	void read();
+	void write();
+
+private:
+
+	GroupBoxPtr autoGroup;
+	CheckBoxPtr autoDetect;
+	void handleAutoClicked();
 	void updateAuto();
-
-	void onTransferPortUpdated();
-	void onTLSTransferPortUpdated();
-
-	void validatePort(TextBoxPtr sourceBox, TextBoxPtr otherBox, const tstring& source, const tstring& other);
 
 	// ConnectivityManagerListener
 	void on(SettingChanged) noexcept;
+
+	PageContent* v4Content;
+	dwt::GridPtr v4Grid;
+
+	PageContent* v6Content;
+	dwt::GridPtr v6Grid;
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_CONNECTIVITY_MANUAL_PAGE_H)

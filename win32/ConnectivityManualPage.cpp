@@ -37,17 +37,11 @@ using dwt::GridInfo;
 using dwt::RadioButton;
 
 ConnectivityManualPage::ConnectivityManualPage(dwt::Widget* parent) :
-PropPage(parent, 5, 1),
+PropPage(parent, 3, 1),
 autoGroup(0),
 autoDetect(0),
-active(0),
-upnp(0),
-passive(0),
-mapper(0),
-v4Bind(0),
-v6Bind(0),
-transferBox(0),
-tlstransferBox(0)
+v4Content(nullptr),
+v6Content(nullptr)
 {
 	setHelpId(IDH_CONNECTIVITYMANUALPAGE);
 
@@ -59,10 +53,115 @@ tlstransferBox(0)
 
 		autoDetect = autoGroup->addChild(CheckBox::Seed(T_("Let DC++ determine the best connectivity settings")));
 		autoDetect->onClicked([this] { handleAutoClicked(); });
+
+	}
+	
+	v4Grid = grid->addChild(GroupBox::Seed(T_("IPv4")))->addChild(Grid::Seed(4, 1));
+	v4Grid->column(0).mode = GridInfo::FILL;
+
+	v6Grid = grid->addChild(GroupBox::Seed(T_("IPv6")))->addChild(Grid::Seed(4, 1));
+	v6Grid->column(0).mode = GridInfo::FILL;
+
+	v4Content = new PageContentV4(this, v4Grid);
+	v6Content = new PageContentV6(this, v6Grid);
+
+	updateAuto();
+
+	ConnectivityManager::getInstance()->addListener(this);
+}
+
+ConnectivityManualPage::~ConnectivityManualPage() {
+	ConnectivityManager::getInstance()->removeListener(this);
+
+	if(v4Content != nullptr) {
+		delete v4Content;
+		v4Content = nullptr;
 	}
 
+	if(v6Content != nullptr) {
+		delete v6Content;
+		v6Content = nullptr;
+	}
+}
+
+void ConnectivityManualPage::handleAutoClicked() {
+	// apply immediately so that ConnectivityManager updates.
+	SettingsManager::getInstance()->set(SettingsManager::AUTO_DETECT_CONNECTION, autoDetect->getChecked());
+	ConnectivityManager::getInstance()->fire(ConnectivityManagerListener::SettingChanged());
+}
+
+void ConnectivityManualPage::updateAuto() {
+	bool setting = SETTING(AUTO_DETECT_CONNECTION);
+	autoDetect->setChecked(setting);
+	v4Grid->setEnabled(!setting);
+	v6Grid->setEnabled(!setting);
+
+}
+
+void ConnectivityManualPage::read()
+{
+	autoDetect->setChecked(SETTING(AUTO_DETECT_CONNECTION));
+
+	if(v4Content != nullptr)
+		v4Content->read();
+	if(v6Content != nullptr)
+		v6Content->read();
+}
+
+void ConnectivityManualPage::read(const PropPage::ItemList& items)
+{
+	PropPage::read(items);
+}
+
+void ConnectivityManualPage::write()
+{
+	if(v4Content != nullptr)
+		v4Content->write();
+	if(v6Content != nullptr)
+		v6Content->write();
+}
+
+void ConnectivityManualPage::write(const PropPage::ItemList& items)
+{
+	PropPage::write(items);
+}
+
+void ConnectivityManualPage::on(SettingChanged) noexcept {
+	callAsync([this] {
+		updateAuto();
+
+		v4Content->onSettingsChange();
+
+		v6Content->onSettingsChange();
+	});
+}
+
+PageContent::PageContent(ConnectivityManualPage* parent_, dwt::GridPtr grid_) :
+	active(0),
+	upnp(0),
+	passive(0),
+	inactive(0),
+	mapper(0),
+	bind(0),
+	transferBox(0),
+	tlstransferBox(0),
+	parent(parent_),
+	grid(grid_)
+{
+}
+
+void PageContent::Initialize()
+{
+	InitializeUI();
+
+	read();
+}
+
+void PageContent::InitializeUI()
+{
+
 	{
-		auto cur = grid->addChild(GroupBox::Seed())->addChild(Grid::Seed(3, 1));
+		auto cur = grid->addChild(GroupBox::Seed())->addChild(Grid::Seed(4, 1));
 		cur->column(0).mode = GridInfo::FILL;
 		cur->setSpacing(grid->getSpacing());
 
@@ -74,30 +173,30 @@ tlstransferBox(0)
 
 		passive = cur->addChild(RadioButton::Seed(T_("Passive mode (last resort - has serious limitations)")));
 		passive->setHelpId(IDH_SETTINGS_CONNECTIVITY_PASSIVE);
+
+		inactive = cur->addChild(RadioButton::Seed(T_("Disable connectivity")));
+		passive->setHelpId(IDH_SETTINGS_CONNECTIVITY_DISABLE);
 	}
 
+
 	{
-		auto group = grid->addChild(GroupBox::Seed(T_("External / WAN IPv4 and IPv6 addresses")));
+		auto group = grid->addChild(GroupBox::Seed(T_("External / WAN IP address")));
 		group->setHelpId(IDH_SETTINGS_CONNECTIVITY_EXTERNAL_IP);
 
-		auto cur = group->addChild(Grid::Seed(3, 1));
+		auto cur = group->addChild(Grid::Seed(2, 1));
 		cur->column(0).mode = GridInfo::FILL;
 
-		auto externalIPv4 = cur->addChild(WinUtil::Seeds::Dialog::textBox);
-		externalIPv4->setCue(T_("Enter your external IPv4 address here"));
-		items.emplace_back(externalIPv4, SettingsManager::EXTERNAL_IP, PropPage::T_STR);
-		WinUtil::preventSpaces(externalIPv4);
-
-		auto externalIPv6 = cur->addChild(WinUtil::Seeds::Dialog::textBox);
-		externalIPv6->setCue(T_("Enter your external IPv6 address here"));
-		items.emplace_back(externalIPv6, SettingsManager::EXTERNAL_IP6, PropPage::T_STR);
-		WinUtil::preventSpaces(externalIPv6);
+		auto externalIP = cur->addChild(WinUtil::Seeds::Dialog::textBox);
+		externalIP->setCue(T_("Enter your external address here"));
+		items.emplace_back(externalIP, settingExternalIP, PropPage::T_STR);
+		WinUtil::preventSpaces(externalIP);
 
 		auto overrideIP = cur->addChild(CheckBox::Seed(T_("Don't allow hubs/NAT-PMP/UPnP to override")));
-		items.emplace_back(overrideIP, SettingsManager::NO_IP_OVERRIDE, PropPage::T_BOOL);
+		items.emplace_back(overrideIP, settingNoIPOverride, PropPage::T_BOOL);
 		overrideIP->setHelpId(IDH_SETTINGS_CONNECTIVITY_OVERRIDE);
 	}
 
+	if(!isV6) // todo: Remove this once ports are properly implemented for V6
 	{
 		auto cur = grid->addChild(Grid::Seed(1, 3));
 		cur->setSpacing(grid->getSpacing());
@@ -116,108 +215,47 @@ tlstransferBox(0)
 			return inputBox;
 		};
 
-		transferBox = addPortBox(T_("Transfer"), SettingsManager::TCP_PORT, IDH_SETTINGS_CONNECTIVITY_PORT_TCP);
+		transferBox = addPortBox(T_("Transfer"), settingTCPPort, IDH_SETTINGS_CONNECTIVITY_PORT_TCP);
 		transferBox->onUpdated([this] { onTransferPortUpdated(); });
 
-		tlstransferBox = addPortBox(T_("Encrypted transfer"), SettingsManager::TLS_PORT, IDH_SETTINGS_CONNECTIVITY_PORT_TLS);
+		tlstransferBox = addPortBox(T_("Encrypted transfer"), settingTLSPort, IDH_SETTINGS_CONNECTIVITY_PORT_TLS);
 		tlstransferBox->onUpdated([this] { onTLSTransferPortUpdated(); });
 
-		addPortBox(T_("Search"), SettingsManager::UDP_PORT, IDH_SETTINGS_CONNECTIVITY_PORT_UDP);
+		addPortBox(T_("Search"), settingUDPPort, IDH_SETTINGS_CONNECTIVITY_PORT_UDP);
 	}
 
 	{
-		auto cur = grid->addChild(Grid::Seed(3, 1));
+		auto cur = grid->addChild(Grid::Seed(2, 1));
 		cur->setSpacing(grid->getSpacing());
 
-		auto group = cur->addChild(GroupBox::Seed(T_("Preferred port mapper")));
-		group->setHelpId(IDH_SETTINGS_CONNECTIVITY_MAPPER);
+		if(!isV6) // todo: Remove this once ports are properly implemented for V6
+		{
+			auto group = cur->addChild(GroupBox::Seed(T_("Preferred port mapper")));
+			group->setHelpId(IDH_SETTINGS_CONNECTIVITY_MAPPER);
 
-		mapper = group->addChild(WinUtil::Seeds::Dialog::comboBox);
-
-		group = cur->addChild(GroupBox::Seed(T_("IPv4 Bind Address")));
-		group->setHelpId(IDH_SETTINGS_CONNECTIVITY_BIND_ADDRESS);
-		v4Bind = group->addChild(WinUtil::Seeds::Dialog::comboBox);
-
-		group = cur->addChild(GroupBox::Seed(T_("IPv6 Bind Address")));
-		group->setHelpId(IDH_SETTINGS_CONNECTIVITY_BIND_ADDRESS);
-		v6Bind = group->addChild(WinUtil::Seeds::Dialog::comboBox);
-	}
-
-	read();
-
-	updateAuto();
-
-	ConnectivityManager::getInstance()->addListener(this);
-}
-
-ConnectivityManualPage::~ConnectivityManualPage() {
-	ConnectivityManager::getInstance()->removeListener(this);
-}
-
-void ConnectivityManualPage::write() {
-	if(transferBox->getText() == tlstransferBox->getText())
-	{
-		tlstransferBox->setText(Util::emptyStringT);
-	}
-
-	PropPage::write(items);
-
-	// Set the connection mode
-	int c = upnp->getChecked() ? SettingsManager::INCOMING_ACTIVE_UPNP :
-		passive->getChecked() ? SettingsManager::INCOMING_PASSIVE :
-		SettingsManager::INCOMING_ACTIVE;
-	if(SETTING(INCOMING_CONNECTIONS) != c) {
-		SettingsManager::getInstance()->set(SettingsManager::INCOMING_CONNECTIONS, c);
-	}
-
-
-	auto saveBind = [](ComboBoxPtr bind, bool v6) {
-		auto setting = Text::fromT(bind->getText());
-		size_t found = setting.rfind(" - "); // "friendly_name - ip_address"
-		if (found == string::npos) {
-			setting = Util::emptyString;
-		} else {
-			setting.erase(0, found + 3);
+			mapper = group->addChild(WinUtil::Seeds::Dialog::comboBox);
 		}
-		v6 ?
-			SettingsManager::getInstance()->set(SettingsManager::BIND_ADDRESS6, setting):
-			SettingsManager::getInstance()->set(SettingsManager::BIND_ADDRESS, setting);
-	};
 
-	SettingsManager::getInstance()->set(SettingsManager::MAPPER, Text::fromT(mapper->getText()));
-	saveBind(v4Bind, false);
-	saveBind(v6Bind, true);
+		auto group = cur->addChild(GroupBox::Seed(T_("Bind Address")));
+		group->setHelpId(IDH_SETTINGS_CONNECTIVITY_BIND_ADDRESS);
+		bind = group->addChild(WinUtil::Seeds::Dialog::comboBox);
+	}
 }
 
-void ConnectivityManualPage::handleAutoClicked() {
-	// apply immediately so that ConnectivityManager updates.
-	SettingsManager::getInstance()->set(SettingsManager::AUTO_DETECT_CONNECTION, autoDetect->getChecked());
-	ConnectivityManager::getInstance()->fire(ConnectivityManagerListener::SettingChanged());
-}
-
-void ConnectivityManualPage::updateAuto() {
-	bool setting = SETTING(AUTO_DETECT_CONNECTION);
-	autoDetect->setChecked(setting);
-
-	auto controls = grid->getChildren<Control>();
-	boost::for_each(controls, [this, setting](Control* control) {
-		if(control != autoGroup) {
-			control->setEnabled(!setting);
-		}
-	});
-}
-
-void ConnectivityManualPage::read() {
-	switch(SETTING(INCOMING_CONNECTIONS)) {
-	case SettingsManager::INCOMING_ACTIVE_UPNP: upnp->setChecked(); break;
-	case SettingsManager::INCOMING_PASSIVE: passive->setChecked(); break;
-	default: active->setChecked(); break;
+void PageContent::read() {
+	switch(SettingsManager::getInstance()->get(settingIncomingConnections)) {
+		case SettingsManager::INCOMING_DISABLED: inactive->setChecked(); break;
+		case SettingsManager::INCOMING_ACTIVE: active->setChecked(); break;
+		case SettingsManager::INCOMING_ACTIVE_UPNP: upnp->setChecked(); break;
+		case SettingsManager::INCOMING_PASSIVE: passive->setChecked(); break;
+		default: break;
 	}
 
-	PropPage::read(items);
+	parent->read(items);
 
+	if(!isV6) // todo: Remove this once ports are properly implemented for V6
 	{
-		const auto& setting = SETTING(MAPPER);
+		const auto& setting = SettingsManager::getInstance()->get(settingMapper);
 		int sel = 0;
 
 		auto mappers = ConnectivityManager::getInstance()->getMappers(false);
@@ -228,62 +266,130 @@ void ConnectivityManualPage::read() {
 		}
 		mapper->setSelected(sel);
 	}
-
-	auto fillBind = [](ComboBoxPtr bindBox, bool v6) {
-		const auto& setting = v6 ? SETTING(BIND_ADDRESS6) : SETTING(BIND_ADDRESS);
+	
+	{
+		const auto& setting = SettingsManager::getInstance()->get(settingBindAddress);
 		int sel = 0;
 
-		bindBox->addValue(T_("Default"));
+		bind->addValue(T_("Default"));
 
 		if (!setting.empty()) {
-			const auto& addresses = Util::getIpAddresses(v6);
+			const auto& addresses = Util::getIpAddresses(isV6);
 				for (const auto& ipstr : addresses) {
 					auto valStr = Text::toT(ipstr.adapterName) + _T(" - ") + Text::toT(ipstr.ip);
-					auto pos = bindBox->addValue(valStr);
+					auto pos = bind->addValue(valStr);
 					if (!sel && (ipstr.ip == setting)) {
 						sel = pos;
 					}
 				}
 			}
-		bindBox->setSelected(sel);
-	};
-
-	fillBind(v4Bind, false);
-	fillBind(v6Bind, true);
+		bind->setSelected(sel);
+	}
 }
 
-void ConnectivityManualPage::on(SettingChanged) noexcept {
-	callAsync([this] {
-		updateAuto();
+void PageContent::write() {
+	if(!isV6) // todo: Remove this once ports are properly implemented for V6
+	{
+		if(transferBox->getText() == tlstransferBox->getText())
+		{
+			tlstransferBox->setText(Util::emptyStringT);
+		}
+	}
 
-		// reload settings in case they have been changed (eg by the "Edit detected settings" feature).
+	parent->write(items);
 
-		active->setChecked(false);
-		upnp->setChecked(false);
-		passive->setChecked(false);
+	// Set the connection mode
+	int c = inactive->getChecked() ? SettingsManager::INCOMING_DISABLED :
+		upnp->getChecked() ? SettingsManager::INCOMING_ACTIVE_UPNP :
+		passive->getChecked() ? SettingsManager::INCOMING_PASSIVE :
+		SettingsManager::INCOMING_ACTIVE;
+	if(SettingsManager::getInstance()->get(settingIncomingConnections) != c) {
+		SettingsManager::getInstance()->set(settingIncomingConnections, c);
+	}
 
+	if(!isV6) // todo: Remove this once ports are properly implemented for V6
+	{
+		SettingsManager::getInstance()->set(settingMapper, Text::fromT(mapper->getText()));
+	}
+
+	{
+		auto setting = Text::fromT(bind->getText());
+		size_t found = setting.rfind(" - "); // "friendly_name - ip_address"
+		if (found == string::npos) {
+			setting = Util::emptyString;
+		} else {
+			setting.erase(0, found + 3);
+		}
+		
+		SettingsManager::getInstance()->set(settingBindAddress, setting);
+	}
+}
+
+void PageContent::onSettingsChange()
+{
+	// reload settings in case they have been changed (eg by the "Edit detected settings" feature).
+
+	active->setChecked(false);
+	upnp->setChecked(false);
+	passive->setChecked(false);
+	inactive->setChecked(false);
+
+	if(!isV6) // todo: Remove this once ports are properly implemented for V6
+	{
 		mapper->clear();
-		v4Bind->clear();
-		v6Bind->clear();
+	}
 
-		read();
-	});
+	bind->clear();
+
+	read();
 }
 
-void ConnectivityManualPage::onTransferPortUpdated()
+void PageContent::onTransferPortUpdated()
 {
 	validatePort(transferBox, tlstransferBox, T_("Transfer"), T_("encrypted transfer"));
 }
 
-void ConnectivityManualPage::onTLSTransferPortUpdated()
+void PageContent::onTLSTransferPortUpdated()
 {
 	validatePort(tlstransferBox, transferBox, T_("Encrypted transfer"), T_("transfer"));
 }
 
-void ConnectivityManualPage::validatePort(TextBoxPtr sourcebox, TextBoxPtr otherbox, const tstring& source, const tstring& other)
+void PageContent::validatePort(TextBoxPtr sourcebox, TextBoxPtr otherbox, const tstring& source, const tstring& other)
 {
 	if(sourcebox->getText() == otherbox->getText())
 	{
 		sourcebox->showPopup(T_("Invalid value"), str(TF_("%1% port cannot be the same as the %2% port") % source % other), TTI_ERROR);
 	}
+}
+
+PageContentV4::PageContentV4(ConnectivityManualPage* parent, dwt::GridPtr grid) : PageContent(parent, grid)
+{
+	settingIncomingConnections = SettingsManager::INCOMING_CONNECTIONS;
+	settingExternalIP = SettingsManager::EXTERNAL_IP;
+	settingNoIPOverride = SettingsManager::NO_IP_OVERRIDE;
+	settingTCPPort = SettingsManager::TCP_PORT;
+	settingTLSPort = SettingsManager::TLS_PORT;
+	settingUDPPort = SettingsManager::UDP_PORT;
+	settingBindAddress = SettingsManager::BIND_ADDRESS;
+	settingMapper = SettingsManager::MAPPER;
+
+	isV6 = false;
+
+	Initialize();
+}
+
+PageContentV6::PageContentV6(ConnectivityManualPage* parent, dwt::GridPtr grid) : PageContent(parent, grid)
+{
+	settingIncomingConnections = SettingsManager::INCOMING_CONNECTIONS6;
+	settingExternalIP = SettingsManager::EXTERNAL_IP6;
+	settingNoIPOverride = SettingsManager::NO_IP_OVERRIDE6;
+	settingTCPPort = SettingsManager::TCP_PORT;
+	settingTLSPort = SettingsManager::TLS_PORT;
+	settingUDPPort = SettingsManager::UDP_PORT;
+	settingBindAddress = SettingsManager::BIND_ADDRESS6;
+	settingMapper = SettingsManager::MAPPER;
+
+	isV6 = true;
+
+	Initialize();
 }
