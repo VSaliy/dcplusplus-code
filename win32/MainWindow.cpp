@@ -1297,9 +1297,12 @@ void MainWindow::handleSettings() {
 		SettingsManager::getInstance()->save();
 
 		try {
-			ConnectivityManager::getInstance()->setup((SETTING(INCOMING_CONNECTIONS) != prevConn || SETTING(INCOMING_CONNECTIONS6) != prevConn6),
+			ConnectivityManager::getInstance()->setup((SETTING(INCOMING_CONNECTIONS) != prevConn ||
 				SETTING(TCP_PORT) != prevTCP || SETTING(UDP_PORT) != prevUDP || SETTING(TLS_PORT) != prevTLS ||
-				SETTING(MAPPER) != prevMapper || SETTING(BIND_ADDRESS) != prevBind || SETTING(BIND_ADDRESS6) != prevBind6);
+				SETTING(MAPPER) != prevMapper || SETTING(BIND_ADDRESS) != prevBind), 
+				(SETTING(INCOMING_CONNECTIONS6) != prevConn6 || 
+				SETTING(TCP_PORT) != prevTCP || SETTING(UDP_PORT) != prevUDP || SETTING(TLS_PORT) != prevTLS ||
+				SETTING(MAPPER) != prevMapper || SETTING(BIND_ADDRESS6) != prevBind6));
 		} catch (const Exception& e) {
 			showPortsError(e.getError());
 		}

@@ -59,12 +59,13 @@ const string SettingsManager::settingTags[] =
 	"LogFileStatus", "LogFileUpload", "LogFileDownload", "LogFileFinishedDownload", "LogFileSystem",
 	"LogFormatSystem", "LogFormatStatus",
 	"TLSPrivateKeyFile", "TLSCertificateFile", "TLSTrustedCertificatesPath",
-	"Language", "Toolbar", "LastSearchType", "Mapper",
+	"Language", "Toolbar", "LastSearchType", "Mapper", "Mapper6",
 	"SoundMainChat", "SoundPM", "SoundPMWindow", "SoundFinishedDL", "SoundFinishedFL", "LastSharedFolder",
 	"SharingSkiplistExtensions", "SharingSkiplistRegEx", "SharingSkiplistPaths", "WhitelistOpenURIs",
 	"SENTRY",
 	// Ints
-	"IncomingConnections", "IncomingConnections6", "OutgoingConnections", "InPort", "UDPPort", "TLSPort",
+	"IncomingConnections", "IncomingConnections6", "OutgoingConnections", "InPort", "InPort6", 
+	"UDPPort", "UDPPort6", "TLSPort", "TLSPort6",
 	"SocksPort", "SocketInBuffer", "SocketOutBuffer",
 	"TextColor", "BackgroundColor", "UploadTextColor", "UploadBgColor", "DownloadTextColor",
 	"DownloadBgColor", "LinkColor", "LogColor",
@@ -170,11 +171,14 @@ SettingsManager::SettingsManager() {
 	setDefault(TCP_PORT, 0);
 	setDefault(UDP_PORT, 0);
 	setDefault(TLS_PORT, 0);
+	setDefault(TCP_PORT6, 0);
+	setDefault(UDP_PORT6, 0);
+	setDefault(TLS_PORT6, 0);
 	setDefault(INCOMING_CONNECTIONS, INCOMING_ACTIVE);
-	setDefault(INCOMING_CONNECTIONS6, INCOMING_ACTIVE);
+	setDefault(INCOMING_CONNECTIONS6, INCOMING_DISABLED);
 	setDefault(OUTGOING_CONNECTIONS, OUTGOING_DIRECT);
 	setDefault(AUTO_DETECT_CONNECTION, true);
-	setDefault(AUTO_DETECT_CONNECTION6, true);
+	setDefault(AUTO_DETECT_CONNECTION6, false);
 	setDefault(AUTO_FOLLOW, true);
 	setDefault(CLEAR_SEARCH, true);
 	setDefault(CLICKABLE_CHAT_LINKS, true);

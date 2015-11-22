@@ -100,7 +100,9 @@ void ConnectivityManager::clearAutoSettings(bool v6, bool resetDefaults) {
 	for(const auto setting: v6 ? settings6 : settings4) {
 		autoSettings.erase(setting);
 	}
-
+	for(const auto setting: portSettings) {
+		autoSettings.erase(setting);
+	}
 
 	if (resetDefaults) {
 		for(const auto setting: v6 ? settings6 : settings4) {
@@ -114,13 +116,7 @@ void ConnectivityManager::clearAutoSettings(bool v6, bool resetDefaults) {
 				dcassert(0);
 			}
 		}
-	}
 
-	if ((!SETTING(AUTO_DETECT_CONNECTION) && SETTING(INCOMING_CONNECTIONS) != SettingsManager::INCOMING_DISABLED) || (!SETTING(AUTO_DETECT_CONNECTION6) && SETTING(INCOMING_CONNECTIONS6) != SettingsManager::INCOMING_DISABLED)) {
-		//we must prefer the configured port instead of default now...
-		for(const auto setting: portSettings)
-			autoSettings[setting] = SettingsManager::getInstance()->get(static_cast<SettingsManager::IntSetting>(setting));
-	} else if (resetDefaults) {
 		for(const auto setting: portSettings)
 			autoSettings[setting] = SettingsManager::getInstance()->getDefault(static_cast<SettingsManager::IntSetting>(setting));
 	}
@@ -131,13 +127,13 @@ void ConnectivityManager::detectConnection() {
 		return;
 
 	bool detectV4 = false;
-	if (SETTING(AUTO_DETECT_CONNECTION) && SETTING(INCOMING_CONNECTIONS) != SettingsManager::INCOMING_DISABLED) {
+	if (SETTING(AUTO_DETECT_CONNECTION)) {
 		detectV4 = true;
 		runningV4 = true;
 	}
 
 	bool detectV6 = false;
-	if (SETTING(AUTO_DETECT_CONNECTION6) && SETTING(INCOMING_CONNECTIONS6) != SettingsManager::INCOMING_DISABLED) {
+	if (SETTING(AUTO_DETECT_CONNECTION6)) {
 		detectV6 = true;
 		runningV6 = true;
 	}
@@ -174,8 +170,10 @@ void ConnectivityManager::detectConnection() {
 	} catch(const Exception& e) {
 		{
 			Lock l(cs);
-			autoSettings[SettingsManager::INCOMING_CONNECTIONS] = SettingsManager::INCOMING_PASSIVE;
-			autoSettings[SettingsManager::INCOMING_CONNECTIONS6] = SettingsManager::INCOMING_PASSIVE;
+			if (detectV4)
+				autoSettings[SettingsManager::INCOMING_CONNECTIONS] = SettingsManager::INCOMING_PASSIVE;
+			if (detectV6)
+				autoSettings[SettingsManager::INCOMING_CONNECTIONS6] = SettingsManager::INCOMING_PASSIVE;
 		}
 
 		log(str(F_("Unable to open %1% port(s); connectivity settings must be configured manually") % e.getError()), TYPE_NORMAL);
@@ -212,8 +210,12 @@ void ConnectivityManager::detectConnection() {
 
 			log(_("Public IP address detected, selecting active mode with direct connection"), TYPE_V6);
 		} else {
-			//Leave IPv6 going when no public IP is found as there are use-cases for having a link-local address only (LAN/Intranet)
-			log(_("IPv6 connectivity is limited, no public address found"), TYPE_V6);
+			//disable IPv6 if no public IP address is available
+			{
+				Lock l(cs);
+				autoSettings[SettingsManager::INCOMING_CONNECTIONS6] = SettingsManager::INCOMING_DISABLED;
+			}
+			log(_("IPv6 connectivity has been disabled as no public IPv6 address was detected"), TYPE_V6);
 		}
 
 		fire(ConnectivityManagerListener::Finished(), true, false);
@@ -245,8 +247,8 @@ void ConnectivityManager::detectConnection() {
 }
 
 void ConnectivityManager::setup(bool v4SettingsChanged, bool v6SettingsChanged) {
-	bool autoDetect4 = SETTING(AUTO_DETECT_CONNECTION) &&  SETTING(INCOMING_CONNECTIONS) != SettingsManager::INCOMING_DISABLED;
-	bool autoDetect6 = SETTING(AUTO_DETECT_CONNECTION6) &&  SETTING(INCOMING_CONNECTIONS6) != SettingsManager::INCOMING_DISABLED;
+	bool autoDetect4 = SETTING(AUTO_DETECT_CONNECTION);
+	bool autoDetect6 = SETTING(AUTO_DETECT_CONNECTION6);
 
 	if(v4SettingsChanged || (autoDetectedV4 && !autoDetect4)) {
 		mapperV4.close();

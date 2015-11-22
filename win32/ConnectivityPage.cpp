@@ -113,9 +113,7 @@ ConnectivityPage::~ConnectivityPage() {
 
 void ConnectivityPage::handleAutoClicked() {
 	// apply immediately so that ConnectivityManager updates.
-	bool enabled = autoDetect->getChecked();
-	SettingsManager::getInstance()->set(SettingsManager::AUTO_DETECT_CONNECTION, enabled);
-	SettingsManager::getInstance()->set(SettingsManager::AUTO_DETECT_CONNECTION6, enabled);
+	SettingsManager::getInstance()->set(SettingsManager::AUTO_DETECT_CONNECTION, autoDetect->getChecked());
 	ConnectivityManager::getInstance()->fire(ConnectivityManagerListener::SettingChanged());
 }
 
@@ -131,14 +129,12 @@ void ConnectivityPage::handleEdit() {
 }
 
 void ConnectivityPage::updateAuto() {
-	bool isRunning = ConnectivityManager::getInstance()->isRunning();
-
 	bool enable = SETTING(AUTO_DETECT_CONNECTION);
 	autoDetect->setChecked(enable);
-	enable = enable && !isRunning;
 
+	enable = enable && !ConnectivityManager::getInstance()->isRunning();
 	detectNow->setEnabled(enable);
-	/// @todo use the v6 detection result [ ConnectivityManager::getInstance()->ok(true) ] once it does real detection and when we have separate manual connection settings for ipv6
+	/// @todo use the v6 detection result [ ConnectivityManager::getInstance()->ok(true) ] here, too, once we enabled v6 detection
 	edit->setEnabled(enable && ConnectivityManager::getInstance()->ok(false));
 }
 
