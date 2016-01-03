@@ -21,6 +21,7 @@
 
 #include <dwt/widgets/Grid.h>
 #include <dwt/widgets/Spinner.h>
+#include <dwt/widgets/ToolTip.h>
 
 #include "WinUtil.h"
 
@@ -70,6 +71,8 @@ void ParamDlg::initTextBox(const tstring& name, const tstring& value, bool passw
 	}
 	box->setText(value);
 	valueFs.push_back([box] { return box->getText(); });
+
+	addTooltip(name);
 }
 
 void ParamDlg::initIntTextBox(const tstring& name, const tstring& value, const int min, const int max) {
@@ -82,6 +85,8 @@ void ParamDlg::initIntTextBox(const tstring& name, const tstring& value, const i
 	cur->setWidget(cur->addChild(Spinner::Seed(min, max, box)));
 
 	valueFs.push_back([box] { return box->getText(); });
+
+	addTooltip(name);
 }
 
 void ParamDlg::initComboBox(const tstring& name, const TStringList& choices, size_t sel, bool edit) {
@@ -90,6 +95,8 @@ void ParamDlg::initComboBox(const tstring& name, const TStringList& choices, siz
 		box->addValue(i);
 	box->setSelected(sel);
 	valueFs.push_back([box] { return box->getText(); });
+
+	addTooltip(name);
 }
 
 bool ParamDlg::initDialog(const tstring& title) {
@@ -122,4 +129,10 @@ void ParamDlg::okClicked() {
 	for(size_t i = 0; i < n; ++i)
 		values[i] = valueFs[i]();
 	endDialog(IDOK);
+}
+
+void ParamDlg::addTooltip(const tstring& name) {
+	auto tip = left->addChild(dwt::ToolTip::Seed());
+	tip->setText(name);
+	onDestroy([tip] { tip->close(); });
 }

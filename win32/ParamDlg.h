@@ -58,6 +58,8 @@ private:
 
 	bool initDialog(const tstring& title);
 	void okClicked();
+
+	void addTooltip(const tstring& name);
 };
 
 #endif
