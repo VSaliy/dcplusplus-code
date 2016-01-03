@@ -18,6 +18,7 @@
 * Add safeguarding for notification balloons (might fix some odd crashes?) (ullner)
 * [L#1306825] Add connectivity status for hubs to the public hubs window (ullner)
 * [L#1502650] Add whitelist of URIs that can be directly opened without prompt (ullner)
+* [L#710249] Show popup info text in text prompots (ullner)
 
 -- 0.851 2015-04-06 --
 * [L#1414362] Prefer boost regex over std regex for the time being (poy)
