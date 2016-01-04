@@ -21,33 +21,82 @@
 
 #include <boost/noncopyable.hpp>
 
-#include <boost/interprocess/sync/interprocess_semaphore.hpp>
-#include <boost/date_time/posix_time/posix_time_types.hpp>
+#ifdef _WIN32
+#include "w.h"
+#else
+#include <errno.h>
+#include <semaphore.h>
+#include <sys/time.h>
+#endif
 
 namespace dcpp {
 
 class Semaphore : boost::noncopyable
 {
+#ifdef _WIN32
 public:
-	Semaphore() noexcept : semaphore(0) {
+	Semaphore() noexcept {
+		h = CreateSemaphore(NULL, 0, MAXLONG, NULL);
 	}
 
 	void signal() noexcept {
-		semaphore.post();
+		ReleaseSemaphore(h, 1, NULL);
+	}
+
+	bool wait() noexcept { return WaitForSingleObject(h, INFINITE) == WAIT_OBJECT_0; }
+	bool wait(uint32_t millis) noexcept { return WaitForSingleObject(h, millis) == WAIT_OBJECT_0; }
+
+	~Semaphore() {
+		CloseHandle(h);
+	}
+
+private:
+	HANDLE h;
+#else
+public:
+	Semaphore() noexcept { 
+		sem_init(&semaphore, 0, 0); 
+	}
+	
+	~Semaphore() {
+		sem_destroy(&semaphore); 
+	}
+
+	void signal() noexcept { 
+		sem_post(&semaphore); 
 	}
 
 	bool wait() noexcept {
-		semaphore.wait();
+		int retval = 0;
+		do {
+			retval = sem_wait(&semaphore);
+		} while (retval != 0);
+
 		return true;
 	}
 
 	bool wait(uint32_t millis) noexcept {
-		return semaphore.timed_wait(
-			boost::posix_time::microsec_clock::universal_time() + boost::posix_time::millisec(millis));
+		timeval timev;
+		timespec t;
+		gettimeofday(&timev, NULL);
+		millis+=timev.tv_usec/1000;
+		t.tv_sec = timev.tv_sec + (millis/1000);
+		t.tv_nsec = (millis%1000)*1000*1000;
+		int ret;
+		do {
+			ret = sem_timedwait(&semaphore, &t);
+		} while (ret != 0 && errno == EINTR);
+
+		if (ret != 0) {
+			return false;
+		}
+
+		return true;
 	}
 
 private:
-	boost::interprocess::interprocess_semaphore semaphore;
+	sem_t semaphore;
+#endif
 };
 
 } // namespace dcpp
