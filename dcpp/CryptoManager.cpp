@@ -495,7 +495,7 @@ string CryptoManager::formatError(X509_STORE_CTX *ctx, const string& message) {
 		tmp = getNameEntryByNID(subject, NID_commonName);
 		if(!tmp.empty()) {
 			CID certCID(tmp);
-			if(tmp.length() == 39 && certCID)
+			if(tmp.length() == 39 && !certCID)
 				tmp = Util::toString(ClientManager::getInstance()->getNicks(certCID));
 			line += (!line.empty() ? ", " : "") + tmp;
 		}
@@ -504,10 +504,7 @@ string CryptoManager::formatError(X509_STORE_CTX *ctx, const string& message) {
 		if(!tmp.empty())
 			line += (!line.empty() ? ", " : "") + tmp;
 
-		ByteVector kp = ssl::X509_digest(cert, EVP_sha256());
-		string keyp = "SHA256/" + Encoder::toBase32(&kp[0], kp.size());
-
-		return str(F_("Certificate verification for %1% failed with error: %2% (certificate KeyPrint: %3%)") % line % message % keyp);
+		return str(F_("Certificate verification for %1% failed with error: %2%") % line % message);
 	}
 
 	return Util::emptyString;
@@ -520,7 +517,7 @@ int CryptoManager::verify_callback(int preverify_ok, X509_STORE_CTX *ctx) {
 
 	// This happens only when KeyPrint has been pinned and we are not skipping errors due to incomplete chains
 	// we can fail here f.ex. if the certificate has expired but is still pinned with KeyPrint
-	if(!verifyData)
+	if(!verifyData || SSL_get_shutdown(ssl) != 0)
 		return preverify_ok;
 
 	bool allowUntrusted = verifyData->first;
@@ -532,8 +529,7 @@ int CryptoManager::verify_callback(int preverify_ok, X509_STORE_CTX *ctx) {
 		if(!cert)
 			return 0;
 
-		string kp2(keyp);
-		if(kp2.compare(0, 12, "trusted_keyp") == 0) {
+		if(keyp.compare(0, 12, "trusted_keyp") == 0) {
 			// Possible follow up errors, after verification of a partial chain
 			if(err == X509_V_ERR_CERT_UNTRUSTED || err == X509_V_ERR_UNABLE_TO_VERIFY_LEAF_SIGNATURE) {
 				X509_STORE_CTX_set_error(ctx, X509_V_OK);
@@ -541,28 +537,46 @@ int CryptoManager::verify_callback(int preverify_ok, X509_STORE_CTX *ctx) {
 			}
 
 			return preverify_ok;
-		} else if(kp2.compare(0, 7, "SHA256/") != 0)
+		} else if(keyp.compare(0, 7, "SHA256/") != 0)
 			return allowUntrusted ? 1 : 0;
 
 		ByteVector kp = ssl::X509_digest(cert, EVP_sha256());
-		ByteVector kp2v(kp.size());
+		string expected_keyp = "SHA256/" + Encoder::toBase32(&kp[0], kp.size());
 
-		Encoder::fromBase32(&kp2[7], &kp2v[0], kp2v.size());
-		if(std::equal(kp.begin(), kp.end(), kp2v.begin())) {
+		// Do a full string comparison to avoid potential false positives caused by invalid inputs
+		if(keyp.compare(expected_keyp) == 0) {
 			// KeyPrint validated, we can get rid of it (to avoid unnecessary passes)
 			SSL_set_ex_data(ssl, CryptoManager::idxVerifyData, NULL);
 
 			if(err != X509_V_OK) {
-				// This is the right way to get the certificate store, although it is rather roundabout
-				X509_STORE* store = SSL_CTX_get_cert_store(SSL_get_SSL_CTX(ssl));
-				dcassert(store == ctx->ctx);
+				X509_STORE* store = X509_STORE_CTX_get0_store(ctx);
 
 				// Hide the potential library error about trying to add a dupe
 				ERR_set_mark();
 				if(X509_STORE_add_cert(store, cert)) {
-					X509_STORE_CTX_set_error(ctx, X509_V_OK);
-					X509_verify_cert(ctx);
-					err = X509_STORE_CTX_get_error(ctx);
+					// We are fine, but can't leave mark on the stack
+					ERR_pop_to_mark();
+
+					// After the store has been updated, perform a *complete* recheck of the peer certificate, the existing context can be in mid recursion, so hands off!
+					X509_STORE_CTX* vrfy_ctx = X509_STORE_CTX_new();
+
+					if(vrfy_ctx && X509_STORE_CTX_init(vrfy_ctx, store, cert, X509_STORE_CTX_get_chain(ctx))) {
+						// Welcome to recursion hell... it should at most be 2n, where n is the number of certificates in the chain
+						X509_STORE_CTX_set_ex_data(vrfy_ctx, SSL_get_ex_data_X509_STORE_CTX_idx(), ssl);
+						X509_STORE_CTX_set_verify_cb(vrfy_ctx, SSL_get_verify_callback(ssl));
+
+						int verify_result = X509_verify_cert(vrfy_ctx);
+						if(verify_result >= 0) {
+							err = X509_STORE_CTX_get_error(vrfy_ctx);
+
+							// Watch out for weird library errors that might not set the context error code
+							if(err == X509_V_OK && verify_result == 0)
+								err = X509_V_ERR_UNSPECIFIED;
+						}
+					}
+
+					X509_STORE_CTX_set_error(ctx, err); // Set the current cert error to the context being verified.
+					if(vrfy_ctx) X509_STORE_CTX_free(vrfy_ctx);
 				} else ERR_pop_to_mark();
 
 				// KeyPrint was not root certificate or we don't have the issuer certificate, the best we can do is trust the pinned KeyPrint
@@ -577,6 +591,7 @@ int CryptoManager::verify_callback(int preverify_ok, X509_STORE_CTX *ctx) {
 			if(err == X509_V_OK)
 				return 1;
 
+			// We are still here, something went wrong, complain below...
 			preverify_ok = 0;
 		} else {
 			if(X509_STORE_CTX_get_error_depth(ctx) > 0)
@@ -585,14 +600,18 @@ int CryptoManager::verify_callback(int preverify_ok, X509_STORE_CTX *ctx) {
 			// TODO: How to get this into HubFrame?
 			preverify_ok = 0;
 			err = X509_V_ERR_APPLICATION_VERIFICATION;
-			error = _("Keyprint mismatch");
+#if NDEBUG
+			error = _("Supplied KeyPrint did not match any certificate.");
+#else
+			error = str(F_("Supplied KeyPrint %1% did not match %2%.") % keyp % expected_keyp);
+#endif
 
 			X509_STORE_CTX_set_error(ctx, err);
 		}
 	}
 
-	// We let untrusted certificates through unconditionally, when allowed, but we like to complain
-	if(!preverify_ok  && (!allowUntrusted || err != X509_V_ERR_DEPTH_ZERO_SELF_SIGNED_CERT)) {
+	// We let untrusted certificates through unconditionally, when allowed, but we like to complain regardless
+	if(!preverify_ok) {
 		if (error.empty())
 			error = X509_verify_cert_error_string(err);
 
