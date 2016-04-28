@@ -61,7 +61,7 @@ static const char thanks[] = "Big thanks to all donators and people who have con
 "stanislav maslovski, david grundberg, pavel andreev, yakov suraev, kulmegil, smir, emtee, individ, "
 "pseudonym, crise, ben, ximin luo, razzloss, andrew browne, darkklor, vasily.n, netcelli, "
 "gennady proskurin, iceman50, flow84, alexander sashnov, yorhel, irainman, maksis, "
-"pavel pimenov, konstantin. Keep it coming!";
+"pavel pimenov, konstantin, night. Keep it coming!";
 
 AboutDlg::AboutDlg(dwt::Widget* parent) :
 dwt::ModalDialog(parent),
