@@ -19,7 +19,7 @@
 * [L#1306825] Add connectivity status for hubs to the public hubs window (ullner)
 * [L#1502650] Add whitelist of URIs that can be directly opened without prompt (ullner)
 * [L#710249] Show popup info text in text prompots (ullner)
-* Update OpenSSL to version 1.0.2g
+* Update OpenSSL to version 1.0.2h
 * [L#1436105] Improve KeyPrint checks (crise)
 * [L#1516181] Fix the KeyPrint check for hubs (konstantin)
 * [L#1543595] Fix issues with encrypted transfers (night)
