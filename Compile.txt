@@ -21,7 +21,7 @@
 		Note: Python 3.x is incompatible with SCons as of writing this.
 		Make sure that Python is in your PATH environment variable.
 
-		* SCons - 2.3.0 but using the most recent stable version is recommended
+		* SCons - versions between 2.3.0 and 2.3.6 (more recent versions won't work at the moment)
 		<http://www.scons.org/download.php>
 
 		Note: SCons relies on Python so you need to have Python installed first.
