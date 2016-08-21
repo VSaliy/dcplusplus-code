@@ -237,43 +237,33 @@ void RichTextBox::addText(const std::string & txt) {
 }
 
 void RichTextBox::addTextSteady(const tstring& txtRaw) {
-	Point scrollPos = getScrollPos();
-	bool scroll = scrollIsAtEnd();
+	HoldScroll hold { this };
 
-	{
-		util::HoldRedraw hold { this };
-		std::pair<int, int> cr = getCaretPosRange();
-		std::string txt = escapeUnicode(txtRaw);
+	std::pair<int, int> cr = getCaretPosRange();
+	std::string txt = escapeUnicode(txtRaw);
 
-		unsigned charsRemoved = 0;
-		int multipler = 1;
+	unsigned charsRemoved = 0;
+	int multipler = 1;
 
-		/* this will include more chars than there actually are because of RTF codes. not a problem
-		here; accuracy isn't necessary since whole lines are getting chopped anyway. */
-		size_t len = txtRaw.size();
-		size_t limit = getTextLimit();
-		if(length() + len > limit) {
-			if(len >= limit) {
-				charsRemoved = length();
-			} else {
-				while (charsRemoved < len)
-					charsRemoved = lineIndex(lineFromChar(multipler++ * limit / 10));
-			}
-
-			scrollPos.y -= posFromChar(charsRemoved).y;
-			setSelection(0, charsRemoved);
-			replaceSelection(_T(""));
+	/* this will include more chars than there actually are because of RTF codes. not a problem
+	here; accuracy isn't necessary since whole lines are getting chopped anyway. */
+	size_t len = txtRaw.size();
+	size_t limit = getTextLimit();
+	if(length() + len > limit) {
+		if(len >= limit) {
+			charsRemoved = length();
+		} else {
+			while (charsRemoved < len)
+				charsRemoved = lineIndex(lineFromChar(multipler++ * limit / 10));
 		}
 
-		addText(txt);
-		setSelection(cr.first-charsRemoved, cr.second-charsRemoved);
-
-		if(scroll)
-			scrollToBottom();
-		else
-			setScrollPos(scrollPos);
+		hold.scrollPos.y -= posFromChar(charsRemoved).y;
+		setSelection(0, charsRemoved);
+		replaceSelection(_T(""));
 	}
-	redraw();
+
+	addText(txt);
+	setSelection(cr.first-charsRemoved, cr.second-charsRemoved);
 }
 
 void RichTextBox::findText(tstring const& needle) {
@@ -430,6 +420,24 @@ bool RichTextBox::handleMessage(const MSG& msg, LRESULT& retVal) {
 	}
 
 	return handled;
+}
+
+RichTextBox::HoldScroll::HoldScroll(RichTextBox* box) : box(box) {
+	scrollPos = box->getScrollPos();
+	scroll = box->scrollIsAtEnd();
+
+	box->sendMessage(WM_SETREDRAW, FALSE);
+}
+
+RichTextBox::HoldScroll::~HoldScroll() {
+	if(scroll) {
+		box->scrollToBottom();
+	} else {
+		box->setScrollPos(scrollPos);
+	}
+
+	box->sendMessage(WM_SETREDRAW, TRUE);
+	box->redraw();
 }
 
 }
