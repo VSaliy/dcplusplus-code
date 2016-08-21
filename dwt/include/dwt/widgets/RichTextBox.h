@@ -115,6 +115,7 @@ public:
 	  */
 	void addText( const std::string & txt );
 
+	/** Append text into the box, keeping the scroll position steady. */
 	void addTextSteady(const tstring& txtRaw);
 
 	void findText(tstring const& needle);
@@ -129,6 +130,16 @@ public:
 	COLORREF getBgColor() const { return bgColor; }
 
 	virtual bool handleMessage(const MSG& msg, LRESULT& retVal);
+
+	/** Utility structure to surround "scroll-steady" rich text-box operations; when an instance of
+	 * this structure goes out of scope, the scroll position is guaranteed to be kept. */
+	struct HoldScroll  {
+		HoldScroll(RichTextBox* box);
+		~HoldScroll();
+		RichTextBox* box;
+		Point scrollPos;
+		bool scroll;
+	};
 
 protected:
 	tstring currentNeedle;		// search in chat window
