@@ -25,11 +25,12 @@ namespace dwt { namespace util {
 
 class HoldRedraw {
 public:
-	HoldRedraw(Widget* w_, bool reallyHold = true) : w(w_) {
+	HoldRedraw(Widget* w_, bool reallyHold = true) {
 		if(reallyHold) {
+			w = w_;
 			w->sendMessage(WM_SETREDRAW, FALSE);
 		} else {
-			w = 0;
+			w = nullptr;
 		}
 	}
 	~HoldRedraw() {
