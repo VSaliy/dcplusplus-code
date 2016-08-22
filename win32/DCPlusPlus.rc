@@ -128,7 +128,7 @@ BEGIN
             VALUE "FileDescription", "DC++"
             VALUE "FileVersion", "0, 8, 5, 1"
             VALUE "InternalName", "DC++"
-            VALUE "LegalCopyright", "Copyright 2001-2015 Jacek Sieka"
+            VALUE "LegalCopyright", "Copyright 2001-2016 Jacek Sieka"
             VALUE "OriginalFilename", "DCPlusPlus.exe"
             VALUE "ProductName", "DC++"
             VALUE "ProductVersion", "0, 8, 5, 1"
