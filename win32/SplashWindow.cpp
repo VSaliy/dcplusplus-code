@@ -136,7 +136,7 @@ void SplashWindow::draw() {
 
 	// draw text borders and fill the text background.
 	::RECT rc = textRect;
-	::DrawEdge(canvas.handle(), &rc, EDGE_ETCHED, BF_RECT | BF_MIDDLE);
+	::DrawEdge(canvas.handle(), &rc, EDGE_BUMP, BF_RECT | BF_MIDDLE);
 
 	// draw the text.
 	auto bkMode(canvas.setBkMode(true));
