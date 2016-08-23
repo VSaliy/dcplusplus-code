@@ -247,8 +247,16 @@ void ConnectivityManager::detectConnection() {
 }
 
 void ConnectivityManager::setup(bool v4SettingsChanged, bool v6SettingsChanged) {
-	bool autoDetect4 = SETTING(AUTO_DETECT_CONNECTION);
-	bool autoDetect6 = SETTING(AUTO_DETECT_CONNECTION6);
+	auto settingsChanged = v4SettingsChanged || v6SettingsChanged;
+
+	auto autoDetect4 = SETTING(AUTO_DETECT_CONNECTION);
+	auto autoDetect6 = SETTING(AUTO_DETECT_CONNECTION6);
+
+	// whether automatic detection is enabled.
+	auto autoDetect = autoDetect4 || autoDetect6;
+
+	// whether automatic detection has run before.
+	auto autoDetected = autoDetectedV4 || autoDetectedV6;
 
 	if(v4SettingsChanged || (autoDetectedV4 && !autoDetect4)) {
 		mapperV4.close();
@@ -260,7 +268,6 @@ void ConnectivityManager::setup(bool v4SettingsChanged, bool v6SettingsChanged) 
 		autoDetectedV6 = false;
 	}
 
-
 	if(!autoDetect6) {
 		clearAutoSettings(true, false);
 	}
@@ -269,15 +276,16 @@ void ConnectivityManager::setup(bool v4SettingsChanged, bool v6SettingsChanged) 
 		clearAutoSettings(false, false);
 	}
 
-	bool autoDetect = false;
-	if(autoDetect4  || autoDetect6) {
+	if(autoDetect) {
 		if ((!autoDetectedV4 && autoDetect4) || (!autoDetectedV6 && autoDetect6) || autoSettings.empty()) {
 			detectConnection();
-			autoDetect = true;
 		}
 	}
 
-	if(!autoDetect && (v4SettingsChanged || v6SettingsChanged)) {
+	// reset listening connections when:
+	// - auto-detection is disabled.
+	// - settings have changed.
+	if(!autoDetect && (autoDetected || settingsChanged)) {
 		startSocket();
 	}
 
