@@ -28,8 +28,8 @@ const char* Mapper::protocols[PROTOCOL_LAST] = {
 	"UDP"
 };
 
-Mapper::Mapper(const string& localIp, bool v6) :
-localIp(localIp), v6(v6)
+Mapper::Mapper(string&& localIp, bool v6) :
+localIp(move(localIp)), v6(v6)
 {
 }
 

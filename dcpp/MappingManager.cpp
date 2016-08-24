@@ -34,10 +34,10 @@ namespace dcpp {
 
 MappingManager::MappingManager(bool v6) : renewal(0), v6(v6) {
 	busy.clear();
-	addMapper<Mapper_MiniUPnPc>();
 	if(!v6) {
 		addMapper<Mapper_NATPMP>();
 	}
+	addMapper<Mapper_MiniUPnPc>();
 }
 
 StringList MappingManager::getMappers() const {
@@ -81,7 +81,7 @@ void MappingManager::close() {
 }
 
 bool MappingManager::getOpened() const {
-	return working.get() ? true : false;
+	return working.get();
 }
 
 string MappingManager::getStatus() const {
@@ -142,8 +142,7 @@ int MappingManager::run() {
 	}
 
 	for(auto& i: mappers) {
-		auto setting = v6 ? SettingsManager::BIND_ADDRESS6 : SettingsManager::BIND_ADDRESS;
-		unique_ptr<Mapper> pMapper(i.second((SettingsManager::getInstance()->isDefault(setting) ? Util::emptyString : SettingsManager::getInstance()->get(setting)), v6));
+		unique_ptr<Mapper> pMapper(i.second(Util::getLocalIp(v6), v6));
 		Mapper& mapper = *pMapper;
 
 		ScopedFunctor([&mapper] { mapper.uninit(); });

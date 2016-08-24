@@ -44,8 +44,8 @@ public:
 	/** add an implementation derived from the base Mapper class, passed as template parameter.
 	the first added mapper will be tried first, unless the "MAPPER" setting is not empty. */
 	template<typename T> void addMapper() {
-		mappers.emplace_back(T::name, [](const string& localIp, bool v6) {
-			return new T(localIp, v6);
+		mappers.emplace_back(T::name, [](string&& localIp, bool v6) {
+			return new T(move(localIp), v6);
 		});
 	}
 	StringList getMappers() const;
@@ -63,7 +63,7 @@ public:
 private:
 	//friend class Singleton<MappingManager>;
 
-	vector<pair<string, function<Mapper* (const string&, bool)>>> mappers;
+	vector<pair<string, function<Mapper* (string&&, bool)>>> mappers;
 
 	atomic_flag busy;
 	unique_ptr<Mapper> working; /// currently working implementation.
