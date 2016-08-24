@@ -292,7 +292,7 @@ void ConnectivityManager::setup(bool v4SettingsChanged, bool v6SettingsChanged) 
 	if(!autoDetect4 && SETTING(INCOMING_CONNECTIONS) == SettingsManager::INCOMING_ACTIVE_UPNP && !runningV4) // previous mappings had failed; try again
 		startMapping(false);
 
-	if(!autoDetect6 && SETTING(INCOMING_CONNECTIONS6) == SettingsManager::INCOMING_ACTIVE_UPNP && !runningV4) // previous mappings had failed; try again
+	if(!autoDetect6 && SETTING(INCOMING_CONNECTIONS6) == SettingsManager::INCOMING_ACTIVE_UPNP && !runningV6) // previous mappings had failed; try again
 		startMapping(true);
 }
 
