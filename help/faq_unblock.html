@@ -57,10 +57,10 @@ case above applies to you, you may solve the problem sooner if you follow the
 
 <p>The firewall component included in recent Windows operating systems is enabled by default. While it does not offer a plethora of options, its suitable to use by itself for protection. If it's enabled and you have problems accessing the Internet with DC++ the best practice is to check for and delete existing exception(s) for DC++ then let the operating system properly readd it at next start of the DC++ application. To do this, close DC++ and
 <ul> 
-  <li><u>in Windows XP Service Pack 2 & 3 or Windows Vista</u>:
+  <li><u>in Windows Vista</u>:
 go to Control Panel -&gt; Windows Firewall -&gt; Exceptions Tab. Select DC++ and click Delete.
   </li>
-  <li><u>in Windows 7 or 8</u>:
+  <li><u>in Windows 7 or later</u>:
 go to Control Panel -&gt; Windows Firewall -&gt; Allow a program or feature through Windows Firewall. Select DC++ and click Remove.
   </li>
 </ul>
@@ -69,20 +69,11 @@ Start DC++ again and if a firewall popup window appears asking permission for DC
 
 <p>If the above doesn't help its wise to enable logging of packets that the firewall drops for troubleshooting DC++ (or any other applications') access. To do this,
 <ul>
-  <li><u>in Windows XP (Service Pack 2 or 3)</u>:
-go to Control Panel -&gt; Windows Firewall -&gt; Advanced Tab -&gt; Security Logging -&gt; Settings. Enable <i>Log
-Dropped Packets</i>. The log file is located at: C:\WINDOWS\pfirewall.log</li>
   <li><u>in Windows Vista</u>:
 you can find the firewall logging properties at Start Menu -&gt; All Programs -&gt; Administrative Tools -&gt; Windows Firewall with Advanced Security -&gt; Windows Firewall Properties -&gt; Profile tabs -&gt; Customize button under the Logging section under each of the profile tabs. You can also specify the path of the log file there.</li>
-  <li><u>in Windows 7 or 8</u>:
+  <li><u>in Windows 7 and later</u>:
 go to Control Panel -&gt; Windows Firewall -&gt; Advanced Settings -&gt; Monitoring -&gt; Firewall. You can browse the firewall events here in great detail.</li>
 </ul>
-</p>
-
-<p>
-Here's a complete guide of <a
- href="https://technet.microsoft.com/library/Cc875811"
- target="_blank" class="external">How to Configure Windows Firewall on Windows XP SP2 & SP3</a> which seems to be largely apply to Windows Vista as well.
 </p>
 
 <h2>Unblock DC++ in various 3rd party security software</h2>
