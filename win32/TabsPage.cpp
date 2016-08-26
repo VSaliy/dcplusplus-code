@@ -24,7 +24,6 @@
 #include <dwt/widgets/Grid.h>
 #include <dwt/widgets/RadioButton.h>
 #include <dwt/widgets/Slider.h>
-#include <dwt/util/win32/Version.h>
 
 #include "resource.h"
 #include "WinUtil.h"
@@ -71,11 +70,7 @@ options(0)
 		GridPtr cur2 = group->addChild(Grid::Seed(2, 1));
 		dcppDraw = cur2->addChild(RadioButton::Seed(T_("Let DC++ draw tabs")));
 		dcppDraw->onClicked(cp);
-		dcppDraw->onClicked([this]() {
-			themeGroup->setEnabled(true);
-			if(!dwt::util::win32::ensureVersion(dwt::util::win32::VISTA))
-				browserTheme->setEnabled(false);
-		});
+		dcppDraw->onClicked([this]() { themeGroup->setEnabled(true); });
 		RadioButtonPtr button = cur2->addChild(RadioButton::Seed(T_("Use standard Windows tabs")));
 		button->onClicked(cp);
 		button->onClicked([this]() { themeGroup->setEnabled(false); });
@@ -102,10 +97,7 @@ options(0)
 		button = cur2->addChild(RadioButton::Seed(T_("Default theme")));
 		button->onClicked(cp);
 		browserTheme = cur2->addChild(RadioButton::Seed(T_("Browser theme")));
-		if(dwt::util::win32::ensureVersion(dwt::util::win32::VISTA))
-			browserTheme->onClicked(cp);
-		else
-			browserTheme->setEnabled(false);
+		browserTheme->onClicked(cp);
 		if(browserTheme->getEnabled() && (SETTING(TAB_STYLE) & SettingsManager::TAB_STYLE_BROWSER))
 			browserTheme->setChecked();
 		else
