@@ -37,24 +37,49 @@ using dwt::GridInfo;
 using dwt::RadioButton;
 
 ConnectivityManualPage::ConnectivityManualPage(dwt::Widget* parent) :
-PropPage(parent, 3, 1),
+PropPage(parent, 4, 1),
 autoGroup(0),
 autoDetect(0),
-v4Content(nullptr),
-v6Content(nullptr)
+portGrid(0),
+v4Grid(0),
+v6Grid(0),
+transferBox(0),
+tlstransferBox(0)
 {
 	setHelpId(IDH_CONNECTIVITYMANUALPAGE);
 
 	grid->column(0).mode = GridInfo::FILL;
 
-	{
-		autoGroup = grid->addChild(GroupBox::Seed(T_("Automatic connectivity setup")));
-		autoGroup->setHelpId(IDH_SETTINGS_CONNECTIVITY_AUTODETECT);
+	autoGroup = grid->addChild(GroupBox::Seed(T_("Automatic connectivity setup")));
+	autoGroup->setHelpId(IDH_SETTINGS_CONNECTIVITY_AUTODETECT);
 
-		autoDetect = autoGroup->addChild(CheckBox::Seed(T_("Let DC++ determine the best connectivity settings")));
-		autoDetect->onClicked([this] { handleAutoClicked(); });
+	autoDetect = autoGroup->addChild(CheckBox::Seed(T_("Let DC++ determine the best connectivity settings")));
+	autoDetect->onClicked([this] { handleAutoClicked(); });
 
-	}
+	portGrid = grid->addChild(Grid::Seed(1, 3));
+	portGrid->setSpacing(grid->getSpacing());
+
+	auto addPortBox = [this](const tstring& text, int setting, unsigned helpId) {
+		auto group = portGrid->addChild(GroupBox::Seed(str(TF_("%1% port") % text)));
+		group->setHelpId(helpId);
+
+		auto boxGrid = group->addChild(Grid::Seed(1, 1));
+		boxGrid->column(0).size = 40;
+		boxGrid->column(0).mode = GridInfo::STATIC;
+
+		auto inputBox = boxGrid->addChild(WinUtil::Seeds::Dialog::intTextBox);
+		items.emplace_back(inputBox, setting, PropPage::T_INT);
+
+		return inputBox;
+	};
+
+	transferBox = addPortBox(T_("Transfer"), SettingsManager::TCP_PORT, IDH_SETTINGS_CONNECTIVITY_PORT_TCP);
+	transferBox->onUpdated([this] { onTransferPortUpdated(); });
+
+	tlstransferBox = addPortBox(T_("Encrypted transfer"), SettingsManager::TLS_PORT, IDH_SETTINGS_CONNECTIVITY_PORT_TLS);
+	tlstransferBox->onUpdated([this] { onTLSTransferPortUpdated(); });
+
+	addPortBox(T_("Search"), SettingsManager::UDP_PORT, IDH_SETTINGS_CONNECTIVITY_PORT_UDP);
 	
 	v4Grid = grid->addChild(GroupBox::Seed(T_("IPv4")))->addChild(Grid::Seed(4, 1));
 	v4Grid->column(0).mode = GridInfo::FILL;
@@ -62,8 +87,10 @@ v6Content(nullptr)
 	v6Grid = grid->addChild(GroupBox::Seed(T_("IPv6")))->addChild(Grid::Seed(4, 1));
 	v6Grid->column(0).mode = GridInfo::FILL;
 
-	v4Content = new PageContentV4(this, v4Grid);
-	v6Content = new PageContentV6(this, v6Grid);
+	v4Content.reset(new PageContentV4(v4Grid));
+	v6Content.reset(new PageContentV6(v6Grid));
+
+	read();
 
 	updateAuto();
 
@@ -72,16 +99,18 @@ v6Content(nullptr)
 
 ConnectivityManualPage::~ConnectivityManualPage() {
 	ConnectivityManager::getInstance()->removeListener(this);
+}
 
-	if(v4Content != nullptr) {
-		delete v4Content;
-		v4Content = nullptr;
+void ConnectivityManualPage::write() {
+	if(transferBox->getText() == tlstransferBox->getText())
+	{
+		tlstransferBox->setText(Util::emptyStringT);
 	}
 
-	if(v6Content != nullptr) {
-		delete v6Content;
-		v6Content = nullptr;
-	}
+	PropPage::write(items);
+
+	v4Content->write();
+	v6Content->write();
 }
 
 void ConnectivityManualPage::handleAutoClicked() {
@@ -93,71 +122,60 @@ void ConnectivityManualPage::handleAutoClicked() {
 void ConnectivityManualPage::updateAuto() {
 	bool setting = SETTING(AUTO_DETECT_CONNECTION);
 	autoDetect->setChecked(setting);
+
+	portGrid->setEnabled(!setting);
 	v4Grid->setEnabled(!setting);
 	v6Grid->setEnabled(!setting);
-
 }
 
-void ConnectivityManualPage::read()
-{
+void ConnectivityManualPage::read() {
 	autoDetect->setChecked(SETTING(AUTO_DETECT_CONNECTION));
 
-	if(v4Content != nullptr)
-		v4Content->read();
-	if(v6Content != nullptr)
-		v6Content->read();
-}
-
-void ConnectivityManualPage::read(const PropPage::ItemList& items)
-{
 	PropPage::read(items);
+
+	v4Content->read();
+	v6Content->read();
 }
 
-void ConnectivityManualPage::write()
-{
-	if(v4Content != nullptr)
-		v4Content->write();
-	if(v6Content != nullptr)
-		v6Content->write();
+void ConnectivityManualPage::onTransferPortUpdated() {
+	validatePort(transferBox, tlstransferBox, T_("Transfer"), T_("encrypted transfer"));
 }
 
-void ConnectivityManualPage::write(const PropPage::ItemList& items)
-{
-	PropPage::write(items);
+void ConnectivityManualPage::onTLSTransferPortUpdated() {
+	validatePort(tlstransferBox, transferBox, T_("Encrypted transfer"), T_("transfer"));
+}
+
+void ConnectivityManualPage::validatePort(
+	TextBoxPtr sourcebox, TextBoxPtr otherbox, const tstring& source, const tstring& other
+) {
+	if(sourcebox->getText() == otherbox->getText()) {
+		sourcebox->showPopup(T_("Invalid value"), str(TF_("%1% port cannot be the same as the %2% port") % source % other), TTI_ERROR);
+	}
 }
 
 void ConnectivityManualPage::on(SettingChanged) noexcept {
 	callAsync([this] {
 		updateAuto();
 
-		v4Content->onSettingsChange();
-
-		v6Content->onSettingsChange();
+		// reload settings in case they have been changed (eg by the "Edit detected settings" feature).
+		v4Content->clear();
+		v6Content->clear();
+		read();
 	});
 }
 
-PageContent::PageContent(ConnectivityManualPage* parent_, dwt::GridPtr grid_) :
+PageContent::PageContent(dwt::GridPtr grid_) :
 	active(0),
 	upnp(0),
 	passive(0),
 	inactive(0),
 	mapper(0),
 	bind(0),
-	transferBox(0),
-	tlstransferBox(0),
-	parent(parent_),
 	grid(grid_)
 {
 }
 
-void PageContent::Initialize()
-{
-	InitializeUI();
-
-	read();
-}
-
-void PageContent::InitializeUI()
+void PageContent::initializeUI()
 {
 
 	{
@@ -196,34 +214,6 @@ void PageContent::InitializeUI()
 		overrideIP->setHelpId(IDH_SETTINGS_CONNECTIVITY_OVERRIDE);
 	}
 
-	if(!isV6) // todo: Remove this once ports are properly implemented for V6
-	{
-		auto cur = grid->addChild(Grid::Seed(1, 3));
-		cur->setSpacing(grid->getSpacing());
-
-		auto addPortBox = [this, cur](const tstring& text, int setting, unsigned helpId) {
-			auto group = cur->addChild(GroupBox::Seed(str(TF_("%1% port") % text)));
-			group->setHelpId(helpId);
-
-			auto boxGrid = group->addChild(Grid::Seed(1, 1));
-			boxGrid->column(0).size = 40;
-			boxGrid->column(0).mode = GridInfo::STATIC;
-
-			auto inputBox = boxGrid->addChild(WinUtil::Seeds::Dialog::intTextBox);
-			items.emplace_back(inputBox, setting, PropPage::T_INT);
-
-			return inputBox;
-		};
-
-		transferBox = addPortBox(T_("Transfer"), settingTCPPort, IDH_SETTINGS_CONNECTIVITY_PORT_TCP);
-		transferBox->onUpdated([this] { onTransferPortUpdated(); });
-
-		tlstransferBox = addPortBox(T_("Encrypted transfer"), settingTLSPort, IDH_SETTINGS_CONNECTIVITY_PORT_TLS);
-		tlstransferBox->onUpdated([this] { onTLSTransferPortUpdated(); });
-
-		addPortBox(T_("Search"), settingUDPPort, IDH_SETTINGS_CONNECTIVITY_PORT_UDP);
-	}
-
 	{
 		auto cur = grid->addChild(Grid::Seed(2, 1));
 		cur->setSpacing(grid->getSpacing());
@@ -248,8 +238,6 @@ void PageContent::read() {
 		case SettingsManager::INCOMING_PASSIVE: passive->setChecked(); break;
 		default: break;
 	}
-
-	parent->read(items);
 
 	{
 		const auto& setting = SettingsManager::getInstance()->get(settingMapper);
@@ -285,16 +273,6 @@ void PageContent::read() {
 }
 
 void PageContent::write() {
-	if(!isV6) // todo: Remove this once ports are properly implemented for V6
-	{
-		if(transferBox->getText() == tlstransferBox->getText())
-		{
-			tlstransferBox->setText(Util::emptyStringT);
-		}
-	}
-
-	parent->write(items);
-
 	// Set the connection mode
 	int c = inactive->getChecked() ? SettingsManager::INCOMING_DISABLED :
 		upnp->getChecked() ? SettingsManager::INCOMING_ACTIVE_UPNP :
@@ -319,10 +297,8 @@ void PageContent::write() {
 	}
 }
 
-void PageContent::onSettingsChange()
+void PageContent::clear()
 {
-	// reload settings in case they have been changed (eg by the "Edit detected settings" feature).
-
 	active->setChecked(false);
 	upnp->setChecked(false);
 	passive->setChecked(false);
@@ -331,56 +307,30 @@ void PageContent::onSettingsChange()
 	mapper->clear();
 
 	bind->clear();
-
-	read();
 }
 
-void PageContent::onTransferPortUpdated()
-{
-	validatePort(transferBox, tlstransferBox, T_("Transfer"), T_("encrypted transfer"));
-}
-
-void PageContent::onTLSTransferPortUpdated()
-{
-	validatePort(tlstransferBox, transferBox, T_("Encrypted transfer"), T_("transfer"));
-}
-
-void PageContent::validatePort(TextBoxPtr sourcebox, TextBoxPtr otherbox, const tstring& source, const tstring& other)
-{
-	if(sourcebox->getText() == otherbox->getText())
-	{
-		sourcebox->showPopup(T_("Invalid value"), str(TF_("%1% port cannot be the same as the %2% port") % source % other), TTI_ERROR);
-	}
-}
-
-PageContentV4::PageContentV4(ConnectivityManualPage* parent, dwt::GridPtr grid) : PageContent(parent, grid)
+PageContentV4::PageContentV4(dwt::GridPtr grid) : PageContent(grid)
 {
 	settingIncomingConnections = SettingsManager::INCOMING_CONNECTIONS;
 	settingExternalIP = SettingsManager::EXTERNAL_IP;
 	settingNoIPOverride = SettingsManager::NO_IP_OVERRIDE;
-	settingTCPPort = SettingsManager::TCP_PORT;
-	settingTLSPort = SettingsManager::TLS_PORT;
-	settingUDPPort = SettingsManager::UDP_PORT;
 	settingBindAddress = SettingsManager::BIND_ADDRESS;
 	settingMapper = SettingsManager::MAPPER;
 
 	isV6 = false;
 
-	Initialize();
+	initializeUI();
 }
 
-PageContentV6::PageContentV6(ConnectivityManualPage* parent, dwt::GridPtr grid) : PageContent(parent, grid)
+PageContentV6::PageContentV6(dwt::GridPtr grid) : PageContent(grid)
 {
 	settingIncomingConnections = SettingsManager::INCOMING_CONNECTIONS6;
 	settingExternalIP = SettingsManager::EXTERNAL_IP6;
 	settingNoIPOverride = SettingsManager::NO_IP_OVERRIDE6;
-	settingTCPPort = SettingsManager::TCP_PORT;
-	settingTLSPort = SettingsManager::TLS_PORT;
-	settingUDPPort = SettingsManager::UDP_PORT;
 	settingBindAddress = SettingsManager::BIND_ADDRESS6;
 	settingMapper = SettingsManager::MAPPER;
 
 	isV6 = true;
 
-	Initialize();
+	initializeUI();
 }

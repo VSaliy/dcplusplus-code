@@ -27,44 +27,25 @@ class ConnectivityManualPage;
 
 class PageContent
 {
-
 public:
-
-	PageContent(ConnectivityManualPage* parent, dwt::GridPtr grid);
+	PageContent(dwt::GridPtr grid);
 
 	void read();
-
 	void write();
-	
-	void onSettingsChange();
+	void clear();
 
 protected:
-
-	void Initialize();
-	
-protected:
+	void initializeUI();
 
 	SettingsManager::IntSetting settingIncomingConnections;
 	SettingsManager::StrSetting settingExternalIP;
 	SettingsManager::BoolSetting settingNoIPOverride;
-	SettingsManager::IntSetting settingTCPPort;
-	SettingsManager::IntSetting settingTLSPort;
-	SettingsManager::IntSetting settingUDPPort;
 	SettingsManager::StrSetting settingBindAddress;
 	SettingsManager::StrSetting settingMapper;
 
 	bool isV6;
-	
-private:
-
-	void InitializeUI();
-
-	void onTransferPortUpdated();
-	void onTLSTransferPortUpdated();
-	void validatePort(TextBoxPtr sourceBox, TextBoxPtr otherBox, const tstring& source, const tstring& other);
 
 private:
-
 	RadioButtonPtr active;
 	RadioButtonPtr upnp;
 	RadioButtonPtr passive;
@@ -73,58 +54,55 @@ private:
 	ComboBoxPtr mapper;
 	ComboBoxPtr bind;
 
-	TextBoxPtr transferBox;
-	TextBoxPtr tlstransferBox;
-
 	PropPage::ItemList items;
 
-	ConnectivityManualPage* parent;
 	dwt::GridPtr grid;
-	
 };
 
 class PageContentV4 : public PageContent
 {
 public:
-	PageContentV4(ConnectivityManualPage* parent, dwt::GridPtr grid);
+	PageContentV4(dwt::GridPtr grid);
 };
 
 class PageContentV6 : public PageContent
 {
 public:
-	PageContentV6(ConnectivityManualPage* parent, dwt::GridPtr grid);
+	PageContentV6(dwt::GridPtr grid);
 };
 
 class ConnectivityManualPage : public PropPage, private ConnectivityManagerListener
 {
 public:
-
 	ConnectivityManualPage(dwt::Widget* parent);
 	virtual ~ConnectivityManualPage();
 
-public:
-
-	void read(const PropPage::ItemList& items);
-	void write(const PropPage::ItemList& items);
-
-	void read();
 	void write();
 
 private:
+	ItemList items;
 
 	GroupBoxPtr autoGroup;
 	CheckBoxPtr autoDetect;
+
+	dwt::GridPtr portGrid, v4Grid, v6Grid;
+
+	TextBoxPtr transferBox;
+	TextBoxPtr tlstransferBox;
+
+	std::unique_ptr<PageContent> v4Content, v6Content;
+
 	void handleAutoClicked();
+
+	void read();
 	void updateAuto();
+
+	void onTransferPortUpdated();
+	void onTLSTransferPortUpdated();
+	void validatePort(TextBoxPtr sourceBox, TextBoxPtr otherBox, const tstring& source, const tstring& other);
 
 	// ConnectivityManagerListener
 	void on(SettingChanged) noexcept;
-
-	PageContent* v4Content;
-	dwt::GridPtr v4Grid;
-
-	PageContent* v6Content;
-	dwt::GridPtr v6Grid;
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_CONNECTIVITY_MANUAL_PAGE_H)
