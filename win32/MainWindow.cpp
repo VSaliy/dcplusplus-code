@@ -1257,6 +1257,7 @@ void MainWindow::handleSettings() {
 	auto prevConn = SETTING(INCOMING_CONNECTIONS);
 	auto prevConn6 = SETTING(INCOMING_CONNECTIONS6);
 	auto prevMapper = SETTING(MAPPER);
+	auto prevMapper6 = SETTING(MAPPER6);
 	auto prevBind = SETTING(BIND_ADDRESS);
 	auto prevBind6 = SETTING(BIND_ADDRESS6);
 	auto prevProxy = CONNSETTING(OUTGOING_CONNECTIONS);
@@ -1287,7 +1288,7 @@ void MainWindow::handleSettings() {
 				SETTING(MAPPER) != prevMapper || SETTING(BIND_ADDRESS) != prevBind), 
 				(SETTING(INCOMING_CONNECTIONS6) != prevConn6 || 
 				SETTING(TCP_PORT) != prevTCP || SETTING(UDP_PORT) != prevUDP || SETTING(TLS_PORT) != prevTLS ||
-				SETTING(MAPPER) != prevMapper || SETTING(BIND_ADDRESS6) != prevBind6));
+				SETTING(MAPPER6) != prevMapper6 || SETTING(BIND_ADDRESS6) != prevBind6));
 		} catch (const Exception& e) {
 			showPortsError(e.getError());
 		}

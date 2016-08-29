@@ -134,8 +134,7 @@ void ConnectivityPage::updateAuto() {
 
 	enable = enable && !ConnectivityManager::getInstance()->isRunning();
 	detectNow->setEnabled(enable);
-	/// @todo use the v6 detection result [ ConnectivityManager::getInstance()->ok(true) ] here, too, once we enabled v6 detection
-	edit->setEnabled(enable && ConnectivityManager::getInstance()->ok(false));
+	edit->setEnabled(enable && ConnectivityManager::getInstance()->ok());
 }
 
 void ConnectivityPage::addLogLine(const tstring& msg) {
@@ -156,7 +155,7 @@ void ConnectivityPage::on(Started) noexcept {
 	});
 }
 
-void ConnectivityPage::on(Finished, bool failed) noexcept {
+void ConnectivityPage::on(Finished) noexcept {
 	callAsync([this] {
 		detectNow->setEnabled(true);
 		edit->setEnabled(true);

@@ -28,55 +28,59 @@
 #include "Mapper.h"
 #include "TimerManager.h"
 #include "atomic.h"
+#include "tribool.h"
 
 namespace dcpp {
 
+using std::atomic;
 using std::function;
-using std::make_pair;
 using std::unique_ptr;
 using std::vector;
 
 class MappingManager :
+	public Singleton<MappingManager>,
 	private Thread,
 	private TimerManagerListener
 {
 public:
 	/** add an implementation derived from the base Mapper class, passed as template parameter.
 	the first added mapper will be tried first, unless the "MAPPER" setting is not empty. */
-	template<typename T> void addMapper() {
-		mappers.emplace_back(T::name, [](string&& localIp, bool v6) {
+	template<typename T> void addMapper(bool v6) {
+		(v6 ? mappers6 : mappers4).emplace_back(T::name, [v6](string&& localIp) {
 			return new T(move(localIp), v6);
 		});
 	}
-	StringList getMappers() const;
+	StringList getMappers(bool v6) const;
 
-	bool open();
-	void close();
+	bool open(bool v4, bool v6);
+	void close(tribool v6 = indeterminate);
 	/** whether a working port mapping implementation is currently in use. */
-	bool getOpened() const;
+	bool getOpened(bool v6) const;
 	/** get information about the currently working implementation, if there is one; or a status
 	string stating otherwise. */
-	string getStatus() const;
+	string getStatus(bool v6) const;
 
-	MappingManager(bool v6);
-	virtual ~MappingManager() { }
 private:
-	//friend class Singleton<MappingManager>;
+	friend class Singleton<MappingManager>;
 
-	vector<pair<string, function<Mapper* (string&&, bool)>>> mappers;
+	vector<pair<string, function<Mapper* (string&&)>>> mappers4, mappers6;
 
-	atomic_flag busy;
-	unique_ptr<Mapper> working; /// currently working implementation.
-	uint64_t renewal = 0; /// when the next renewal should happen, if requested by the mapper.
+	static atomic_flag busy;
+	atomic<bool> needsV4PortMap, needsV6PortMap;
+	unique_ptr<Mapper> working4, working6; /// currently working implementations.
+	uint64_t renewal; /// when the next renewal should happen, if requested by the mapper.
+
+	MappingManager();
+	virtual ~MappingManager() { }
 
 	int run();
+	void runPortMapping(bool v6, const string& conn_port, const string& secure_port, const string& search_port);
 
 	void close(Mapper& mapper);
-	void log(const string& message);
+	void log(const string& message, tribool v6 = indeterminate);
 	string deviceString(Mapper& mapper) const;
 	void renewLater(Mapper& mapper);
 
-	bool v6;
 	void on(TimerManagerListener::Minute, uint64_t tick) noexcept;
 };
 

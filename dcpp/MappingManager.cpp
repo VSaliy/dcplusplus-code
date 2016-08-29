@@ -32,61 +32,78 @@
 
 namespace dcpp {
 
-MappingManager::MappingManager(bool v6) : renewal(0), v6(v6) {
-	busy.clear();
-	if(!v6) {
-		addMapper<Mapper_NATPMP>();
-	}
-	addMapper<Mapper_MiniUPnPc>();
+atomic_flag MappingManager::busy = ATOMIC_FLAG_INIT;
+
+MappingManager::MappingManager() :
+needsV4PortMap(false),
+needsV6PortMap(false),
+renewal(0)
+{
+	// IPv4 mappers.
+	addMapper<Mapper_NATPMP>(false);
+	addMapper<Mapper_MiniUPnPc>(false);
+
+	// IPv6 mappers.
+	addMapper<Mapper_MiniUPnPc>(true);
 }
 
-StringList MappingManager::getMappers() const {
+StringList MappingManager::getMappers(bool v6) const {
 	StringList ret;
-	for(auto& i: mappers)
-		ret.push_back(i.first);
+	for(const auto& mapper: (v6 ? mappers6 : mappers4))
+		ret.push_back(mapper.first);
 	return ret;
 }
 
-bool MappingManager::open() {
-	if(getOpened())
-		return false;
-
-	if(mappers.empty()) {
-		log(_("No port mapping interface available"));
-		return false;
-	}
+bool MappingManager::open(bool v4, bool v6) {
+	// find out whether port mapping has already worked for an interface, in which case we don't
+	// want to redo it.
+	if(v4 && getOpened(false)) { v4 = false; }
+	if(v6 && getOpened(true)) { v6 = false; }
+	if(!v4 && !v6) { return false; }
 
 	if(busy.test_and_set()) {
 		log(_("Another port mapping attempt is in progress..."));
 		return false;
 	}
 
-	start();
+	// save the requested port mapping flags.
+	needsV4PortMap = v4;
+	needsV6PortMap = v6;
 
+	// all good! launch the port mapping thread.
+	start();
 	return true;
 }
 
-void MappingManager::close() {
+void MappingManager::close(tribool v6) {
 	join();
+
+	needsV4PortMap = false;
+	needsV6PortMap = false;
 
 	if(renewal) {
 		renewal = 0;
 		TimerManager::getInstance()->removeListener(this);
 	}
 
-	if(working.get()) {
-		close(*working);
-		working.reset();
-	}
+	auto closeWorkingMapper = [this](unique_ptr<Mapper>& pMapper) {
+		if(pMapper.get()) {
+			close(*pMapper);
+			pMapper.reset();
+		}
+	};
+	if(!v6 || indeterminate(v6)) { closeWorkingMapper(working4); }
+	if(v6 || indeterminate(v6)) { closeWorkingMapper(working6); }
 }
 
-bool MappingManager::getOpened() const {
-	return working.get();
+bool MappingManager::getOpened(bool v6) const {
+	return (v6 ? working6 : working4).get();
 }
 
-string MappingManager::getStatus() const {
-	if(working.get()) {
-		auto& mapper = *working;
+string MappingManager::getStatus(bool v6) const {
+	auto& pMapper = v6 ? working6 : working4;
+	if(pMapper.get()) {
+		auto& mapper = *pMapper;
 		return str(F_("Successfully created port mappings on the %1% device with the %2% interface") %
 			deviceString(mapper) % mapper.getName());
 	}
@@ -102,8 +119,10 @@ int MappingManager::run() {
 		secure_port = ConnectionManager::getInstance()->getSecurePort(),
 		search_port = SearchManager::getInstance()->getPort();
 
-	if(renewal) {
-		Mapper& mapper = *working;
+	/** @todo for now renewal is only supported for IPv4 port mappers, which is fine since it is
+	 * for NAT-PMP which has not yet been ported to IPv6. */
+	if(renewal && working4.get()) {
+		Mapper& mapper = *working4;
 
 		ScopedFunctor([&mapper] { mapper.uninit(); });
 		if(!mapper.init()) {
@@ -128,10 +147,23 @@ int MappingManager::run() {
 		return 0;
 	}
 
+	if(needsV4PortMap) { runPortMapping(false, conn_port, secure_port, search_port); }
+	if(needsV6PortMap) { runPortMapping(true, conn_port, secure_port, search_port); }
+
+	ConnectivityManager::getInstance()->mappingFinished();
+
+	return 0;
+}
+
+void MappingManager::runPortMapping(
+	bool v6, const string& conn_port, const string& secure_port, const string& search_port
+) {
+	auto& mappers = v6 ? mappers6 : mappers4;
+
 	// move the preferred mapper to the top of the stack.
-	const auto& setting = SETTING(MAPPER);
+	const auto& prefMapper = v6 ? SETTING(MAPPER6) : SETTING(MAPPER);
 	for(auto i = mappers.begin(); i != mappers.end(); ++i) {
-		if(i->first == setting) {
+		if(i->first == prefMapper) {
 			if(i != mappers.begin()) {
 				auto mapper = *i;
 				mappers.erase(i);
@@ -141,22 +173,23 @@ int MappingManager::run() {
 		}
 	}
 
+	// go through available port mappers, until one works.
 	for(auto& i: mappers) {
-		unique_ptr<Mapper> pMapper(i.second(Util::getLocalIp(v6), v6));
+		unique_ptr<Mapper> pMapper(i.second(Util::getLocalIp(v6)));
 		Mapper& mapper = *pMapper;
 
 		ScopedFunctor([&mapper] { mapper.uninit(); });
 		if(!mapper.init()) {
-			log(str(F_("Failed to initialize the %1% interface") % mapper.getName()));
+			log(str(F_("Failed to initialize the %1% interface") % mapper.getName()), v6);
 			continue;
 		}
 
-		auto addRule = [this, &mapper](const string& port, Mapper::Protocol protocol, const string& description) -> bool {
+		auto addRule = [this, v6, &mapper](const string& port, Mapper::Protocol protocol, const string& description) -> bool {
 			if(!port.empty() && !mapper.open(port, protocol, str(F_("%1% %2% port (%3% %4%)") %
 				APPNAME % description % port % Mapper::protocols[protocol])))
 			{
 				this->log(str(F_("Failed to map the %1% port (%2% %3%) with the %4% interface") %
-					description % port % Mapper::protocols[protocol] % mapper.getName()));
+					description % port % Mapper::protocols[protocol] % mapper.getName()), v6);
 				mapper.close();
 				return false;
 			}
@@ -169,18 +202,18 @@ int MappingManager::run() {
 			continue;
 
 		log(str(F_("Successfully created port mappings (Transfers: %1%, Encrypted transfers: %2%, Search: %3%) on the %4% device with the %5% interface") %
-			conn_port % secure_port % search_port % deviceString(mapper) % mapper.getName()));
+			conn_port % secure_port % search_port % deviceString(mapper) % mapper.getName()), v6);
 
-		working = move(pMapper);
+		(v6 ? working6 : working4) = move(pMapper);
 
-		if ((!v6 && !CONNSETTING(NO_IP_OVERRIDE)) || (v6 && !CONNSETTING(NO_IP_OVERRIDE6))) {
+		if((!v6 && !CONNSETTING(NO_IP_OVERRIDE)) || (v6 && !CONNSETTING(NO_IP_OVERRIDE6))) {
 			auto setting = v6 ? SettingsManager::EXTERNAL_IP6 : SettingsManager::EXTERNAL_IP;
 			string externalIP = mapper.getExternalIP();
 			if(!externalIP.empty()) {
 				ConnectivityManager::getInstance()->set(setting, externalIP);
 			} else {
 				// no cleanup because the mappings work and hubs will likely provide the correct IP.
-				log(_("Failed to get external IP"));
+				log(_("Failed to get external IP"), v6);
 			}
 		}
 
@@ -190,12 +223,7 @@ int MappingManager::run() {
 		break;
 	}
 
-	if(!getOpened()) {
-		log(_("Failed to create port mappings"));
-		ConnectivityManager::getInstance()->mappingFinished(Util::emptyString, v6);
-	}
-
-	return 0;
+	if(!getOpened(v6)) { log(_("Failed to create port mappings"), v6); }
 }
 
 void MappingManager::close(Mapper& mapper) {
@@ -208,8 +236,8 @@ void MappingManager::close(Mapper& mapper) {
 	}
 }
 
-void MappingManager::log(const string& message) {
-	ConnectivityManager::getInstance()->log(str(F_("Port mapping: %1%") % message), v6 ? ConnectivityManager::TYPE_V6 : ConnectivityManager::TYPE_V4);
+void MappingManager::log(const string& message, tribool v6) {
+	ConnectivityManager::getInstance()->log(str(F_("Port mapping: %1%") % message), v6);
 }
 
 string MappingManager::deviceString(Mapper& mapper) const {

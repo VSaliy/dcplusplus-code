@@ -228,11 +228,9 @@ void PageContent::InitializeUI()
 		auto cur = grid->addChild(Grid::Seed(2, 1));
 		cur->setSpacing(grid->getSpacing());
 
-		if(!isV6) // todo: Remove this once ports are properly implemented for V6
 		{
 			auto group = cur->addChild(GroupBox::Seed(T_("Preferred port mapper")));
 			group->setHelpId(IDH_SETTINGS_CONNECTIVITY_MAPPER);
-
 			mapper = group->addChild(WinUtil::Seeds::Dialog::comboBox);
 		}
 
@@ -253,15 +251,14 @@ void PageContent::read() {
 
 	parent->read(items);
 
-	if(!isV6) // todo: Remove this once ports are properly implemented for V6
 	{
 		const auto& setting = SettingsManager::getInstance()->get(settingMapper);
 		int sel = 0;
 
-		auto mappers = ConnectivityManager::getInstance()->getMappers(false);
-		for (const auto& name : mappers) {
+		auto mappers = MappingManager::getInstance()->getMappers(isV6);
+		for(const auto& name : mappers) {
 			auto pos = mapper->addValue(Text::toT(name));
-			if (!sel && name == setting)
+			if(!sel && name == setting)
 				sel = pos;
 		}
 		mapper->setSelected(sel);
@@ -307,10 +304,7 @@ void PageContent::write() {
 		SettingsManager::getInstance()->set(settingIncomingConnections, c);
 	}
 
-	if(!isV6) // todo: Remove this once ports are properly implemented for V6
-	{
-		SettingsManager::getInstance()->set(settingMapper, Text::fromT(mapper->getText()));
-	}
+	SettingsManager::getInstance()->set(settingMapper, Text::fromT(mapper->getText()));
 
 	{
 		auto setting = Text::fromT(bind->getText());
@@ -334,10 +328,7 @@ void PageContent::onSettingsChange()
 	passive->setChecked(false);
 	inactive->setChecked(false);
 
-	if(!isV6) // todo: Remove this once ports are properly implemented for V6
-	{
-		mapper->clear();
-	}
+	mapper->clear();
 
 	bind->clear();
 
