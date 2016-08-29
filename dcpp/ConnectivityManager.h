@@ -23,7 +23,7 @@
 #include "SettingsManager.h"
 #include "Singleton.h"
 #include "Speaker.h"
-#include "MappingManager.h"
+#include "tribool.h"
 
 #include <string>
 #include <unordered_map>
@@ -45,8 +45,8 @@ public:
 	typedef X<3> SettingChanged; // auto-detection has been enabled / disabled
 
 	virtual void on(Message, const string&) noexcept { }
-	virtual void on(Started, bool /*v6*/) noexcept { }
-	virtual void on(Finished, bool /*v6*/, bool /*failed*/) noexcept { }
+	virtual void on(Started) noexcept { }
+	virtual void on(Finished) noexcept { }
 	virtual void on(SettingChanged) noexcept { }
 };
 
@@ -61,14 +61,11 @@ public:
 	void detectConnection();
 	void setup(bool v4SettingsChanged, bool v6SettingsChanged);
 	void editAutoSettings();
-	bool ok(bool v6) const { return v6 ? autoDetectedV6 : autoDetectedV4; }
-	bool isRunning() const { return runningV4 || runningV6; }
+	bool ok() const { return autoDetected; }
+	bool isRunning() const { return running; }
 	const string& getStatus(bool v6) const;
 	string getInformation() const;
 
-	void close();
-	void disconnect();
-	StringList getMappers(bool v6) const;
 private:
 	friend class Singleton<ConnectivityManager>;
 	friend class MappingManager;
@@ -76,28 +73,21 @@ private:
 	ConnectivityManager();
 	virtual ~ConnectivityManager() { }
 
-	void startMapping();
-	void startMapping(bool v6);
-	void mappingFinished(const string& mapper, bool v6);
-
+	/** Utility funciton to launch detection for one IP version.
+	 * @return Whether port mapping is needed. */
+	bool detectConnection(bool v6);
+	void startMapping(bool needsPortMapping4, bool needsPortMapping6);
+	void mappingFinished();
+	void mappingFinished(const string& mapperName, bool v6);
 	void clearAutoSettings(bool v6, bool resetDefaults);
-
-	enum LogType {
-		TYPE_NORMAL,
-		TYPE_V4,
-		TYPE_V6,
-		TYPE_BOTH
-	};
-
-	void log(const string& message, LogType aType);
+	void log(string&& message, tribool v6 = indeterminate);
 
 	void startSocket();
 	void listen();
+	void disconnect();
 
-	bool autoDetectedV4 = false;
-	bool autoDetectedV6 = false;
-	bool runningV4 = false;
-	bool runningV6 = false;
+	bool autoDetected;
+	bool running;
 
 	string statusV4;
 	string statusV6;
@@ -106,9 +96,6 @@ private:
 	settings (stored in SettingsManager) in case the user wants to keep the manually set ones for
 	future use. */
 	unordered_map<int, boost::variant<bool, int, string>> autoSettings;
-
-	MappingManager mapperV4;
-	MappingManager mapperV6;
 
 	mutable CriticalSection cs;
 };

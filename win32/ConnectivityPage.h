@@ -53,7 +53,7 @@ private:
 	// ConnectivityManagerListener
 	void on(Message, const string& message) noexcept;
 	void on(Started) noexcept;
-	void on(Finished, bool /*failed*/) noexcept;
+	void on(Finished) noexcept;
 	void on(SettingChanged) noexcept;
 };
 

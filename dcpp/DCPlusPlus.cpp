@@ -31,6 +31,7 @@
 #include "HashManager.h"
 #include "HttpManager.h"
 #include "LogManager.h"
+#include "MappingManager.h"
 #include "PluginApiImpl.h"
 #include "QueueManager.h"
 #include "ResourceManager.h"
@@ -81,7 +82,7 @@ void startup() {
 	FinishedManager::newInstance();
 	ADLSearchManager::newInstance();
 	ConnectivityManager::newInstance();
-
+	MappingManager::newInstance();
 	GeoManager::newInstance();
 	UserMatchManager::newInstance();
 	WindowManager::newInstance();
@@ -139,8 +140,8 @@ void shutdown() {
 	ThrottleManager::getInstance()->shutdown();
 	ConnectionManager::getInstance()->shutdown();
 	HttpManager::getInstance()->shutdown();
-	ConnectivityManager::getInstance()->close();
-	GeoManager::getInstance()->close();	
+	MappingManager::getInstance()->close();
+	GeoManager::getInstance()->close();
 	BufferedSocket::waitShutdown();
 	FavoriteManager::getInstance()->shutdown();
 
@@ -154,6 +155,7 @@ void shutdown() {
 	WindowManager::deleteInstance();
 	UserMatchManager::deleteInstance();
 	GeoManager::deleteInstance();
+	MappingManager::deleteInstance();
 	ConnectivityManager::deleteInstance();
 	ADLSearchManager::deleteInstance();
 	FinishedManager::deleteInstance();
