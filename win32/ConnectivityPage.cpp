@@ -92,13 +92,13 @@ edit(0)
 	});
 
 	if(SETTING(AUTO_DETECT_CONNECTION)) {
-		const auto& status = ConnectivityManager::getInstance()->getStatus(false);
+		const auto& status4 = ConnectivityManager::getInstance()->getStatus(false);
 		const auto& status6 = ConnectivityManager::getInstance()->getStatus(true);
-		if(!status.empty()) {
-			addLogLine(Text::toT(status));
+		if(!status4.empty()) {
+			addLogLine(Text::toT(str(F_("IPv4: %1%") % status4)));
 		}
 		if(!status6.empty()) {
-			addLogLine(Text::toT(status6));
+			addLogLine(Text::toT(str(F_("IPv6: %1%") % status6)));
 		}
 	} else {
 		addLogLine(T_("Automatic connectivity setup is currently disabled"));
