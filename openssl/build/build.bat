@@ -14,9 +14,10 @@ rm -rf openssl*/
 tar -xzf openssl-*.tar.gz
 cd openssl*
 bash --login -i -c "cd '%CD%' && find ../patches -name '*.patch' -exec patch -p1 -i '{}' \;"
-bash --login -i -c "cd '%CD%' && ./Configure mingw --cross-compile-prefix=i686-w64-mingw32- && make"
+bash --login -i -c "cd '%CD%' && ./Configure mingw no-shared --cross-compile-prefix=i686-w64-mingw32- && make"
 if errorlevel 1 goto end
-mv crypto/opensslconf.h ../../include/openssl/opensslconf-mingw-x86.h
+mv include/openssl/opensslconf.h ../../include/openssl/opensslconf-mingw-x86.h
+mv include/openssl/*.h ../../include/openssl
 mv libcrypto.a libssl.a ../../lib
 cd ..
 
@@ -24,11 +25,17 @@ rm -rf openssl*/
 tar -xzf openssl-*.tar.gz
 cd openssl*
 bash --login -i -c "cd '%CD%' && find ../patches -name '*.patch' -exec patch -p1 -i '{}' \;"
-bash --login -i -c "cd '%CD%' && ./Configure mingw64 --cross-compile-prefix=x86_64-w64-mingw32- && make"
+bash --login -i -c "cd '%CD%' && ./Configure mingw64 no-shared --cross-compile-prefix=x86_64-w64-mingw32- && make"
 if errorlevel 1 goto end
-mv crypto/opensslconf.h ../../include/openssl/opensslconf-mingw-x64.h
+mv include/openssl/opensslconf.h ../../include/openssl/opensslconf-mingw-x64.h
 mv libcrypto.a libssl.a ../../lib/x64
 cd ..
+
+REM ------------------
+REM TODO Fix VC builds
+rm -rf openssl*/
+goto end
+REM ------------------
 
 rm -rf openssl*/
 tar -xzf openssl-*.tar.gz
@@ -36,12 +43,11 @@ cd openssl*
 bash --login -i -c "cd '%CD%' && find ../patches -name '*.patch' -exec patch -p1 -i '{}' \;"
 call "%VCDIR%\vcvarsall.bat" x86
 echo on
-perl Configure VC-WIN32 --prefix=.
+perl Configure VC-WIN32 no-shared --prefix=%CD%
 call ms\do_nasm
 nmake -f ms\nt.mak clean install
 if errorlevel 1 goto end
 mv inc32/openssl/opensslconf.h ../../include/openssl/opensslconf-msvc-x86.h
-mv inc32/openssl/* ../../include/openssl
 mv lib/libeay32.lib lib/ssleay32.lib tmp32/lib.pdb ../../lib
 nmake -f ms\ntdebug.mak clean install
 if errorlevel 1 goto end
@@ -56,7 +62,7 @@ cd openssl*
 bash --login -i -c "cd '%CD%' && find ../patches -name '*.patch' -exec patch -p1 -i '{}' \;"
 call "%VCDIR%\vcvarsall.bat" amd64
 echo on
-perl Configure VC-WIN64A --prefix=.
+perl Configure VC-WIN64A no-shared --prefix=%CD%
 call ms\do_win64a
 nmake -f ms\nt.mak clean install
 if errorlevel 1 goto end
