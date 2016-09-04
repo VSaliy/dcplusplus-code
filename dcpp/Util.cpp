@@ -631,17 +631,11 @@ bool Util::isPublicIp(const string& ip, bool v6) noexcept {
 }
 
 vector<Util::AddressInfo> Util::getIpAddresses(bool v6) {
-	Util::IpList addrV6, addrV4;
+	vector<Util::AddressInfo> adapterData;
+
 #ifdef _WIN32
-	int v4Count = 0, v6Count = 0;
 	ULONG len = 15000; // MSDN states the recommended size should be 15 KB to prevent buffer overflows
-
-	if (v6 && v6Count == 1 && !addrV6.empty()) {
-		return addrV6;
-	} else if (!v6 && v4Count == 1 && !addrV4.empty()) {
-		return addrV4;
-	}
-
+	// Prepare 3 runs in case that buffer size is not enough.
 	for (int i = 0; i < 3; ++i) {
 		auto adapterInfo = (PIP_ADAPTER_ADDRESSES) HeapAlloc(GetProcessHeap(), HEAP_GENERATE_EXCEPTIONS | HEAP_ZERO_MEMORY, len);
 
@@ -649,18 +643,15 @@ vector<Util::AddressInfo> Util::getIpAddresses(bool v6) {
 		bool freeObject = true;
 
 		if (ret == ERROR_SUCCESS) {
-			for (PIP_ADAPTER_ADDRESSES pAdapterInfo = adapterInfo; pAdapterInfo != NULL; pAdapterInfo = pAdapterInfo->Next) {
+			for (PIP_ADAPTER_ADDRESSES pAdapterInfo = adapterInfo; pAdapterInfo; pAdapterInfo = pAdapterInfo->Next) {
 				// we want only enabled Ethernet interfaces
 				if (pAdapterInfo->OperStatus == IfOperStatusUp && (pAdapterInfo->IfType == IF_TYPE_ETHERNET_CSMACD || pAdapterInfo->IfType == IF_TYPE_IEEE80211)) {
 					PIP_ADAPTER_UNICAST_ADDRESS ua;
-					for (ua = pAdapterInfo->FirstUnicastAddress; ua != NULL; ua = ua->Next) {
-						//get the name of the adapter
-						char buf[BUFSIZ];
-						memset(buf, 0, BUFSIZ);
+					for (ua = pAdapterInfo->FirstUnicastAddress; ua; ua = ua->Next) {
+						// get the name of the adapter
+						char buf[BUFSIZ] = { 0 };
 						getnameinfo(ua->Address.lpSockaddr, ua->Address.iSockaddrLength, buf, sizeof(buf), NULL, 0, NI_NUMERICHOST);
-						v6 ?
-							addrV6.emplace_back(Text::fromT(tstring(pAdapterInfo->FriendlyName)), buf, ua->OnLinkPrefixLength):
-							addrV4.emplace_back(Text::fromT(tstring(pAdapterInfo->FriendlyName)), buf, ua->OnLinkPrefixLength);
+						adapterData.emplace_back(Text::fromT(tstring(pAdapterInfo->FriendlyName)), buf, ua->OnLinkPrefixLength);
 					}
 					freeObject = false;
 				}
@@ -710,9 +701,7 @@ vector<Util::AddressInfo> Util::getIpAddresses(bool v6) {
 				if (src) {
 					char address[len];
 					inet_ntop(sa->sa_family, src, address, len);
-					v6 ?
-						addrV6.emplace_back(string(name), string(address), scope):
-						addrV4.emplace_back(string(name), string(address), scope);
+					adapterData.emplace_back(string(name), string(address), scope);
 				}
 			}
 		}
@@ -721,11 +710,7 @@ vector<Util::AddressInfo> Util::getIpAddresses(bool v6) {
 #endif
 
 #endif
-	if (v6) {
-		++v6Count; return addrV6;
-	} else {
-		++v4Count; return addrV4;
-	}
+	return adapterData;
 }
 
 typedef const uint8_t* ccp;
