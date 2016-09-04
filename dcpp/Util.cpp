@@ -577,6 +577,59 @@ string Util::formatExactSize(int64_t aBytes) {
 #endif
 }
 
+string Util::getLocalIp(bool v6, bool allowPrivate /*true*/) {
+	const auto& bindAddr = v6 ? CONNSETTING(BIND_ADDRESS6) : CONNSETTING(BIND_ADDRESS);
+	if(!bindAddr.empty() && bindAddr != SettingsManager::getInstance()->getDefault(v6 ? SettingsManager::BIND_ADDRESS6 : SettingsManager::BIND_ADDRESS)) {
+		return bindAddr;
+	}
+
+	// No bind address configured, try to find a public address
+	auto addresses = getIpAddresses(v6);
+	if(addresses.empty()) {
+		return string();
+	}
+
+	auto p = boost::find_if(addresses, [v6](const AddressInfo& aAddress) { return Util::isPublicIp(aAddress.ip, v6); });
+	if (p != addresses.end()) {
+		return p->ip;
+	}
+
+	return allowPrivate ? addresses.front().ip : string();
+}
+
+bool Util::isLocalIp(const string& ip, bool v6) noexcept {
+	if(v6) {
+		return (ip.length() > 4 && ip.substr(0, 4) == "fe80") || ip == "::1";
+	}
+
+	return (ip.length() > 3 && strncmp(ip.c_str(), "169", 3) == 0) || ip == "127.0.0.1";
+}
+
+bool Util::isPrivateIp(const string& ip, bool v6) noexcept {
+	if(v6) {
+		// https://en.wikipedia.org/wiki/Unique_local_address
+		return ip.length() > 2 && ip.substr(0, 2) == "fd";
+
+	} else {
+		in_addr addr;
+
+		addr.s_addr = inet_addr(ip.c_str());
+
+		if(addr.s_addr != INADDR_NONE) {
+			unsigned long haddr = ntohl(addr.s_addr);
+			return ((haddr & 0xff000000) == 0x0a000000 || // 10.0.0.0/8
+					(haddr & 0xfff00000) == 0xac100000 || // 172.16.0.0/12
+					(haddr & 0xffff0000) == 0xc0a80000);  // 192.168.0.0/16
+		}
+	}
+
+	return false;
+}
+
+bool Util::isPublicIp(const string& ip, bool v6) noexcept {
+	return !isLocalIp(ip, v6) && !isPrivateIp(ip, v6);
+}
+
 vector<Util::AddressInfo> Util::getIpAddresses(bool v6) {
 	Util::IpList addrV6, addrV4;
 #ifdef _WIN32
@@ -673,46 +726,6 @@ vector<Util::AddressInfo> Util::getIpAddresses(bool v6) {
 	} else {
 		++v4Count; return addrV4;
 	}
-}
-
-string Util::getLocalIp(bool v6, bool allowPrivate /*true*/) {
-	const auto& bindAddr = v6 ? CONNSETTING(BIND_ADDRESS6) : CONNSETTING(BIND_ADDRESS);
-	if(!bindAddr.empty() && bindAddr != SettingsManager::getInstance()->getDefault(v6 ? SettingsManager::BIND_ADDRESS6 : SettingsManager::BIND_ADDRESS)) {
-		return bindAddr;
-	}
-
-	auto addresses = getIpAddresses(v6);
-
-	if (addresses.empty()) {
-		return Util::emptyString;
-	}
-
-	auto p = boost::find_if(addresses, [v6](const AddressInfo& aAddress) { return !Util::isPrivateIp(aAddress.ip, v6); });
-	if (p != addresses.end()) {
-		return p->ip;
-	}
-
-	return allowPrivate ? addresses.front().ip : Util::emptyString;
-}
-
-bool Util::isPrivateIp(string const& ip, bool v6) {
-	if(v6) {
-		return ip.length() > 5 && ip.substr(0, 4) == "fe80";
-	} else {
-		in_addr addr;
-
-		addr.s_addr = inet_addr(ip.c_str());
-
-		if (addr.s_addr  != INADDR_NONE) {
-			unsigned long haddr = ntohl(addr.s_addr);
-			return ((haddr & 0xff000000) == 0x0a000000 || // 10.0.0.0/8
-					(haddr & 0xff000000) == 0x7f000000 || // 127.0.0.0/8
-					(haddr & 0xffff0000) == 0xa9fe0000 || // 169.254.0.0/16
-					(haddr & 0xfff00000) == 0xac100000 || // 172.16.0.0/12
-					(haddr & 0xffff0000) == 0xc0a80000);  // 192.168.0.0/16
-		}
-	}
-	return false;
 }
 
 typedef const uint8_t* ccp;
