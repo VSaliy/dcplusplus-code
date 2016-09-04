@@ -214,11 +214,10 @@ void FavHubProperties::handleOKClicked() {
 	entry->setServer(Text::fromT(addressText));
 	entry->setName(Text::fromT(name->getText()));
 	entry->setHubDescription(Text::fromT(hubDescription->getText()));
-	if(encoding != nullptr) {
-		auto encodingText = encoding->getText();
-		if(encodingText == _T("Default"))
-			encodingText = _T("");
-		entry->setEncoding(Text::fromT(encodingText));
+	if(encoding) { // the box is optional.
+		entry->setEncoding(
+			encoding->getSelected() == 0 ? string() : // "Default" item.
+			Text::fromT(encoding->getText()));
 	}
 	entry->get(HubSettings::Nick) = Text::fromT(nick->getText());
 	entry->setPassword(Text::fromT(password->getText()));
@@ -267,7 +266,7 @@ void FavHubProperties::fillEncodings()
 	::EnumSystemCodePages(EnumCodePageProc, CP_INSTALLED);
 
 	// Add a default code page
-	encoding->addValue(_T("Default"));
+	encoding->addValue(T_("Default"));
 
 	UINT currentCodePage = Text::getCodePage(entry->getEncoding());
 
