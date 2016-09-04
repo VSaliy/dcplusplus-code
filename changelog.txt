@@ -6,7 +6,7 @@
 * Better security and certs related settings layout (emtee)
 * [L#1262319] Add option to quick-check encrypted hubs in search frame (ullner)
 * [L#1494809] Fix chat tab selection on Windows 10 (iceman50)
-* [L#1506210] Improve IPv6 connectivity, add more IPv6 connectivity settings (maksis, iceman50, emtee, poy, ullner)
+* [L#1506210] Improve IPv6 connectivity & add more settings (maksis, iceman50, emtee, poy, ullner)
 * Show list of available network interfaces for binding; add IPv6 binding setting (iceman50, emtee)
 * Add setting for external IPv6 addresses to be used for specific favorite hubs and hub groups (iceman50)
 * Drop Windows XP support, Vista is the minimum Windows version required to run DC++ from now (iceman50)
@@ -18,7 +18,7 @@
 * Add safeguarding for notification balloons (might fix some odd crashes?) (ullner)
 * [L#1306825] Add connectivity status for hubs to the public hubs window (ullner)
 * [L#1502650] Add whitelist of URIs that can be directly opened without prompt (ullner)
-* [L#710249] Show popup info text in text prompots (ullner)
+* [L#710249] Show popup info text in text prompts (ullner)
 * Update OpenSSL to version 1.0.2h
 * [L#1436105] Improve KeyPrint checks (crise)
 * [L#1516181] Fix the KeyPrint check for hubs (konstantin)
