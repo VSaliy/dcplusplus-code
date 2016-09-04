@@ -167,12 +167,24 @@ bool ConnectivityManager::detectConnection(bool v6) {
 		}
 	}
 
-	if(!Util::getLocalIp(v6, false).empty()) { // public IP
+	auto ip = Util::getLocalIp(v6);
+
+	if(Util::isPublicIp(ip, v6)) {
 		{
 			Lock l(cs);
 			autoSettings[incomingConnSetting] = SettingsManager::INCOMING_ACTIVE;
 		}
 		log(_("Public IP address detected, selecting active mode with direct connection"), logType);
+		return false;
+	}
+
+	// Disable connectivity when local & IPv6.
+	if(v6 && Util::isLocalIp(ip, v6)) {
+		{
+			Lock l(cs);
+			autoSettings[incomingConnSetting] = SettingsManager::INCOMING_DISABLED;
+		}
+		log(_("All IPv6 addresses found are local; disabling connectivity"), logType);
 		return false;
 	}
 

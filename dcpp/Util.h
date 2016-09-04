@@ -397,10 +397,13 @@ public:
 
 	static string encodeURI(const string& /*aString*/, bool reverse = false);
 
-	// Get current bind address
-	// The best adapter address is returned if no bind address is configured
-	// (public addresses are preferred over local/private ones
-	static string getLocalIp(bool v6, bool allowPrivate = true);
+	/** Get an address to bind to, in the following order of preference:
+	 * - Bind address setting.
+	 * - Public IP.
+	 * - Private (but not local) IP.
+	 * - Local IP.
+	 */
+	static string getLocalIp(bool v6);
 
 	// Return whether the IP is localhost or a link-local address (169.254.0.0/16 or fe80)
 	static bool isLocalIp(const string& ip, bool v6) noexcept;

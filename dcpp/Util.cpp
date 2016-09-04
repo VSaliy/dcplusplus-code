@@ -577,24 +577,31 @@ string Util::formatExactSize(int64_t aBytes) {
 #endif
 }
 
-string Util::getLocalIp(bool v6, bool allowPrivate /*true*/) {
+string Util::getLocalIp(bool v6) {
+	// First off, find out whether a specific IP is defined in settings.
 	const auto& bindAddr = v6 ? CONNSETTING(BIND_ADDRESS6) : CONNSETTING(BIND_ADDRESS);
 	if(!bindAddr.empty() && bindAddr != SettingsManager::getInstance()->getDefault(v6 ? SettingsManager::BIND_ADDRESS6 : SettingsManager::BIND_ADDRESS)) {
 		return bindAddr;
 	}
 
-	// No bind address configured, try to find a public address
-	auto addresses = getIpAddresses(v6);
-	if(addresses.empty()) {
+	// No bind address configured; get the adapter list to see what we can find.
+	auto adapterDataList = getIpAddresses(v6);
+	if(adapterDataList.empty()) {
 		return string();
 	}
 
-	auto p = boost::find_if(addresses, [v6](const AddressInfo& aAddress) { return Util::isPublicIp(aAddress.ip, v6); });
-	if (p != addresses.end()) {
-		return p->ip;
-	}
+	// Prefer public IP addresses.
+	for(const auto& adapterData: adapterDataList)
+		if(isPublicIp(adapterData.ip, v6))
+			return adapterData.ip;
 
-	return allowPrivate ? addresses.front().ip : string();
+	// No public IP; prefer private (non-local) ones.
+	for(const auto& adapterData: adapterDataList)
+		if(isPrivateIp(adapterData.ip, v6) && !isLocalIp(adapterData.ip, v6))
+			return adapterData.ip;
+
+	// Dang - Return the first local IP of the list.
+	return adapterDataList.front().ip;
 }
 
 bool Util::isLocalIp(const string& ip, bool v6) noexcept {
