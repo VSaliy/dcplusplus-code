@@ -396,9 +396,24 @@ public:
 	static string cssFont(const string& font);
 
 	static string encodeURI(const string& /*aString*/, bool reverse = false);
+
+	// Get current bind address
+	// The best adapter address is returned if no bind address is configured
+	// (public addresses are preferred over local/private ones
 	static string getLocalIp(bool v6, bool allowPrivate = true);
-	static bool isPrivateIp(string const& ip, bool v6);
-	
+
+	// Return whether the IP is localhost or a link-local address (169.254.0.0/16 or fe80)
+	static bool isLocalIp(const string& ip, bool v6) noexcept;
+
+	// Return whether the IP is a private one (non-local)
+	//
+	// Private ranges:
+	// IPv4: 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16
+	// IPv6: fd prefix
+	static bool isPrivateIp(const string& ip, bool v6) noexcept;
+
+	static bool isPublicIp(const string& ip, bool v6) noexcept;
+
 	struct AddressInfo {
 		AddressInfo(const string& aName, const string& aIP, uint8_t aPrefix) : adapterName(aName), ip(aIP), prefix(aPrefix) { }
 		string adapterName;
@@ -407,6 +422,7 @@ public:
 	};
 	typedef vector<AddressInfo> IpList;
 	static vector<AddressInfo> getIpAddresses(bool v6);
+
 	/**
 	 * Case insensitive substring search.
 	 * @return First position found or string::npos
