@@ -544,6 +544,12 @@ void SettingsManager::load(string const& aFileName)
 			unset(FAVHUBSFRAME_WIDTHS);
 		}
 
+		if(v <= 0.851) {
+			// reset as a column has been added to show status icons.
+			unset(PUBLICHUBSFRAME_ORDER);
+			unset(PUBLICHUBSFRAME_WIDTHS);
+		}
+
 		if(SETTING(SET_MINISLOT_SIZE) < 512)
 			set(SET_MINISLOT_SIZE, 512);
 		if(SETTING(AUTODROP_INTERVAL) < 1)
