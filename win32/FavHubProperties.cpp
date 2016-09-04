@@ -215,7 +215,10 @@ void FavHubProperties::handleOKClicked() {
 	entry->setName(Text::fromT(name->getText()));
 	entry->setHubDescription(Text::fromT(hubDescription->getText()));
 	if(encoding != nullptr) {
-		entry->setEncoding(Text::fromT(encoding->getText()));
+		auto encodingText = encoding->getText();
+		if(encodingText == _T("Default"))
+			encodingText = _T("");
+		entry->setEncoding(Text::fromT(encodingText));
 	}
 	entry->get(HubSettings::Nick) = Text::fromT(nick->getText());
 	entry->setPassword(Text::fromT(password->getText()));
@@ -263,11 +266,13 @@ void FavHubProperties::fillEncodings()
 	// Load all available code pages
 	::EnumSystemCodePages(EnumCodePageProc, CP_INSTALLED);
 
-	// Get the currently selected code page
+	// Add a default code page
+	encoding->addValue(_T("Default"));
+
 	UINT currentCodePage = Text::getCodePage(entry->getEncoding());
 
 	// Go through all code pages and add them to the view
-	int selectedItem = 0, counter = 0;
+	int selectedItem = 0, counter = 1;
 	for(auto& e: encodings)
 	{
 		encoding->addValue(e.second);
