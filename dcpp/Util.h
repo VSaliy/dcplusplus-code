@@ -420,7 +420,6 @@ public:
 		string ip;
 		uint32_t prefix;
 	};
-	typedef vector<AddressInfo> IpList;
 	static vector<AddressInfo> getIpAddresses(bool v6);
 
 	/**
