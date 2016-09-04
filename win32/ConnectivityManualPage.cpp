@@ -193,7 +193,7 @@ void PageContent::initializeUI()
 		passive->setHelpId(IDH_SETTINGS_CONNECTIVITY_PASSIVE);
 
 		inactive = cur->addChild(RadioButton::Seed(T_("Disable connectivity")));
-		passive->setHelpId(IDH_SETTINGS_CONNECTIVITY_DISABLE);
+		inactive->setHelpId(IDH_SETTINGS_CONNECTIVITY_DISABLE);
 	}
 
 
