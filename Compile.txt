@@ -50,9 +50,6 @@
 		* NSIS - 3.0 or later (only needed to build the installer)
 		<http://nsis.sourceforge.net> 
 
-		Alternatively you can still use the old Unicode NSIS branch to build the installer
-		<https://code.google.com/p/unsis/> 
-
 		Make sure that makensis.exe is in your PATH environment variable.
 
 		* zip (from MSYS or Cygwin; only needed to build the official distro)
