@@ -47,11 +47,13 @@
 
 		Make sure that asciidoc is in your PATH environment variable.
 
-		* Unicode NSIS (only needed to build the installer)
-		<https://code.google.com/p/unsis/>
+		* NSIS - 3.0 or later (only needed to build the installer)
+		<http://nsis.sourceforge.net> 
+
+		Alternatively you can still use the old Unicode NSIS branch to build the installer
+		<https://code.google.com/p/unsis/> 
 
 		Make sure that makensis.exe is in your PATH environment variable.
-		Make sure that you are using the Unicode version of the installer builder.
 
 		* zip (from MSYS or Cygwin; only needed to build the official distro)
 
