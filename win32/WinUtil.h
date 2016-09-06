@@ -178,8 +178,6 @@ public:
 	static void init();
 	static void uninit();
 
-	static void enableDEP();
-
 	static void initSeeds();
 
 	static void initFont();
