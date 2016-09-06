@@ -86,8 +86,6 @@ int dwtMain(dwt::Application& app) {
 	// https://www.kb.cert.org/vuls/id/707943 part III, "For Developers".
 	::SetDllDirectory(_T(""));
 
-	WinUtil::enableDEP();
-
 	Util::initialize();
 
 	CrashLogger crashLogger;
