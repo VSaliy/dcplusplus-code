@@ -6,18 +6,24 @@ Translations currently happen in Launchpad <https://translations.launchpad.net/d
 
 --- 1) Creating translation templates ---
 
-Translation templates are .pot files. Update them with:
+Translation templates are .pot files.
 
-	scons i18n=1 dcpp/po/libdcpp.pot help/po/dcpp-help.pot installer/po/dcpp-installer.pot win32/po/dcpp-win32.pot
+First, clean up with:
 
-Then commit them with:
+	scons -c help=1 i18n=1 dcpp/po/libdcpp.pot help/po/dcpp-help.pot installer/po/dcpp-installer.pot win32/po/dcpp-win32.pot
 
-	hg ci
+Then build translation templates with:
+
+	scons help=1 i18n=1 dcpp/po/libdcpp.pot help/po/dcpp-help.pot installer/po/dcpp-installer.pot win32/po/dcpp-win32.pot
+
+Commit them with:
+
+	hg ci -m "Update translation templates"
 	hg push
 
 Copy the files to the Bazaar repository at Launchpad and commit them with:
 
-	bzr ci
+	bzr ci -m "Update translation templates"
 	bzr push
 
 Launchpad should then update the translation templates by itself.
