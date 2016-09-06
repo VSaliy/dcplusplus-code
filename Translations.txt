@@ -26,9 +26,12 @@ Copy the files to the Bazaar repository at Launchpad and commit them with:
 	bzr ci -m "Update translation templates"
 	bzr push
 
-Launchpad should then update the translation templates by itself.
+Launchpad should then update the translation templates by itself. Follow the import status on
+<https://translations.launchpad.net/dcplusplus/+imports>; once all translation templates are marked
+as "Imported", announce translations are ready by providing links to
+<https://translations.launchpad.net/dcplusplus>:
 
-Send a message to <https://lists.sourceforge.net/lists/listinfo/dcplusplus-devel> to announce it.
+	- Send a message to <https://lists.sourceforge.net/lists/listinfo/dcplusplus-devel>.
 
 --- 2) Updating translations ---
 
