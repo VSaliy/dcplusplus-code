@@ -48,6 +48,7 @@ MouseEvent::MouseEvent(const MSG& msg) {
 	pos = ScreenCoordinate(Point(pt));
 
 	DWORD keys;
+
 	if(msg.message == WM_XBUTTONDOWN || msg.message == WM_XBUTTONUP || msg.message == WM_XBUTTONDBLCLK) {
 		keys = GET_KEYSTATE_WPARAM(msg.wParam);
 
@@ -57,8 +58,10 @@ MouseEvent::MouseEvent(const MSG& msg) {
 				XBUTTON2 & button ? MouseEvent::X2 : MouseEvent::OTHER
 			)
 		);
+
 	} else {
-		keys = msg.wParam;
+		// Special case for WM_MOUSEWHEEL, where keys do not make up the whole WPARAM.
+		keys = (msg.message != WM_MOUSEWHEEL) ? msg.wParam : GET_KEYSTATE_WPARAM(msg.wParam);
 
 		// These might be an issue when porting to Windows CE since CE does only support LEFT and RIGHT (or something...)
 		ButtonPressed = (

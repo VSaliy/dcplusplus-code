@@ -198,6 +198,21 @@ public:
 		onMouse(WM_MOUSEMOVE, f);
 	}
 
+	/** Handle mouse wheel events.
+	 *
+	 * In addition to a regular MouseEvent structure, a scrolling delta
+	 * is also provided. On Windows, that delta is a multiple of the WHEEL_DELTA macro, which is
+	 * 120. See the WM_MOUSEWHEEL doc for more information.
+	 *
+	 * Note: Dispatching rules for this message on Windows are special: the OS starts with the
+	 * focus window and goes up the chain on its own - check the doc for more information. */
+	void onMouseWheel(std::function<void (const MouseEvent&, int)> f) {
+		W().addCallback(Message(WM_MOUSEWHEEL), [f](const MSG& msg, LRESULT&) {
+			f(MouseEvent(msg), static_cast<int>(GET_WHEEL_DELTA_WPARAM(msg.wParam)));
+			return true;
+		});
+	}
+
 	void onMouseLeave(std::function<void ()> f) {
 		TRACKMOUSEEVENT t = { sizeof(TRACKMOUSEEVENT), TME_LEAVE, H() };
 		if(::TrackMouseEvent(&t)) {
