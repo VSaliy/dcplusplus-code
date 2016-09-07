@@ -142,7 +142,7 @@ typedef enum tagConfigType {
 } ConfigType;
 
 typedef enum tagProtocolType {
-	PROTOCOL_ADC = 0,											/* Protocol used ís ADC */
+	PROTOCOL_ADC = 0,											/* Protocol used is ADC */
 	PROTOCOL_NMDC,												/* Protocol used is NMDC */
 	PROTOCOL_DHT												/* DHT node (not used, reserved) */
 } ProtocolType;
