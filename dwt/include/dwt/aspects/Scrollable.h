@@ -40,7 +40,7 @@
 
 namespace dwt { namespace aspects {
 
-/// Aspect class used by Widgets that have the possibility of scrolling
+/// Aspect class used by Widgets that have the possibility of scrolling through a scroll bar.
 template<typename WidgetType>
 class Scrollable
 {
