@@ -22,8 +22,8 @@ fi
 
 echo Replacing from $OLD_YEAR to $NEW_YEAR...
 
-find ../COPYING.TXT ../License.txt ../dcpp ../dwt ../utils ../win32 \
-	-type f \( -name "COPYING.TXT" -o -name "License.txt" -o -name "*.h" -o -name "*.cpp" -o -name "*.py" -o -name "*.rc" \) \
+find ../COPYING.TXT ../License.txt ../help/credits.html ../dcpp ../dwt ../utils ../win32 \
+	-type f \( -name "COPYING.TXT" -o -name "License.txt" -o -name "credits.html" -o -name "*.h" -o -name "*.cpp" -o -name "*.py" -o -name "*.rc" \) \
 	-exec sed -i -r "s/([Cc]opyright )(\\([Cc]\\) )?([0-9]{4}-)?$OLD_YEAR([ ,A-Za-z]*Jacek Sieka)/\1\2\3$NEW_YEAR\4/g" '{}' \;
 
 echo Done.
