@@ -39,7 +39,7 @@ using dwt::Label;
 std::map<UINT, std::wstring> FavHubProperties::encodings;
 
 FavHubProperties::FavHubProperties(dwt::Widget* parent, FavoriteHubEntry *_entry) :
-GridDialog(parent, 320, DS_CONTEXTHELP),
+GridDialog(parent, 400, DS_CONTEXTHELP),
 name(0),
 address(0),
 hubDescription(0),
