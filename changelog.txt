@@ -24,6 +24,7 @@
 * [L#1516181] Fix the KeyPrint check for hubs (konstantin)
 * [L#1543595] Fix issues with encrypted transfers (night)
 * Update MiniUPnP to version 2.0
+* Scroll through tabs using the mouse wheel (poy)
 
 -- 0.851 2015-04-06 --
 * [L#1414362] Prefer boost regex over std regex for the time being (poy)

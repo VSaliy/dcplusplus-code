@@ -209,6 +209,7 @@ void TabView::create(const Seed & cs) {
 	onMiddleMouseDown([this](const MouseEvent& me) { return handleMiddleMouseDown(me); });
 	onMiddleMouseUp([this](const MouseEvent& me) { return handleMiddleMouseUp(me); });
 	onXMouseUp([this](const MouseEvent& me) { return handleXMouseUp(me); });
+	onMouseWheel([this](const MouseEvent&, int delta) { handleMouseWheel(delta); });
 
 	if(cs.style & TCS_TOOLTIPS) {
 		tip = WidgetCreator<ToolTip>::attach(this, TabCtrl_GetToolTips(handle())); // created and managed by the tab control thanks to the TCS_TOOLTIPS style
@@ -732,6 +733,29 @@ bool TabView::handleXMouseUp(const MouseEvent& mouseEvent) {
 	return true;
 }
 
+void TabView::handleMouseWheel(int delta) {
+	if(active == -1) {
+		return; // no active tab; ignore.
+	}
+
+	// find out where the mouse is. don't trust the MouseEvent data; it contains garbage when switching windows...
+	auto pt = ClientCoordinate(ScreenCoordinate(Point::fromLParam(::GetMessagePos())), this).getPoint();
+	if(pt.x < 0 || pt.x > clientSize.right() || pt.y < 0 || pt.y > clientSize.top()) {
+		return; // outside of the tab control itself; ignore.
+	}
+
+	// note: we don't handle small increments (when delta < 120).
+
+	if(delta > 0 && active > 0) {
+		// go left when scrolling upwards.
+		setActive(active - 1);
+
+	} else if(delta < 0 && active < static_cast<int>(size()) - 1) {
+		// go right when scrolling downwards.
+		setActive(active + 1);
+	}
+}
+
 bool TabView::handleMouseMove(const MouseEvent& mouseEvent) {
 	int i = hitTest(mouseEvent.pos);
 	if(highlighted != -1 && i != highlighted) {
@@ -956,6 +980,15 @@ bool TabView::filter(const MSG& msg) {
 		if(ti) {
 			setTop(ti->w);
 		}
+	}
+
+	/* WM_MOUSEWHEEL have a special dispatching mechanism; they start from the window that has
+	 * focus and the caller then handles their forwarding. we catch them all here (assuming the
+	 * main application does call this "filter" method, which it should) and handle them as regular
+	 * messages. */
+	if(msg.message == WM_MOUSEWHEEL) {
+		LRESULT dispachResult = 0;
+		BaseType::handleMessage(msg, dispachResult);
 	}
 
 	return false;

@@ -205,6 +205,7 @@ private:
 	bool handleMiddleMouseDown(const MouseEvent& mouseEvent);
 	bool handleMiddleMouseUp(const MouseEvent& mouseEvent);
 	bool handleXMouseUp(const MouseEvent& mouseEvent);
+	void handleMouseWheel(int delta);
 	bool handleMouseMove(const MouseEvent& mouseEvent);
 	void handleMouseLeave();
 	bool handlePainting(DRAWITEMSTRUCT& info, TabInfo* ti);
