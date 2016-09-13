@@ -197,8 +197,8 @@ def gen_installer(target, source, env):
     # make the zip binary archives
     zip_cmd = lambda path: env.Execute(
         'cd "' + build_dir + '" && zip -9 -r "' + nixify(path) +
-        '" . -x "\\*-x64" -x "dcppboot.nonlocal.xml" -x "\\*.ico" '
-        '-x "\\*.log" -x "\\*.nsh" -x "\\*.nsi" > zip.log && cd "' +
+        '" . -x "*-x64" -x "dcppboot.nonlocal.xml" -x "*.ico" '
+        '-x "*.log" -x "*.nsh" -x "*.nsi" > zip.log && cd "' +
         env.Dir('#').abspath + '"'
     )
     zip_cmd(target[1].abspath)
