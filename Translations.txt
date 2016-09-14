@@ -64,6 +64,10 @@ Make sure updated languages build fine; eg for the "fr" language::
 
 	scons i18n=1 build/debug-mingw/bin/locale/fr
 
+Should there be errors, it is usually just a matter of a mis-matched tag, missing placeholder or
+some such. No need to interrupt the whole process in that case; fix / delete the translation in 2
+places: 1) the relevant ``.po`` file; 2) on the Launchpad translation interface.
+
 Commit new translations::
 
 	hg ci
