@@ -12,7 +12,8 @@ This document describes the steps involved in producing a DC++ release:
 6) Check and rename the files
 7) Upload the files
 8) Update the web site
-9) Testing -> Stable status
+9) Update launchpad bugs
+10) Testing -> Stable status
 
 
 0) Requirements
@@ -55,6 +56,8 @@ Set the first line of the ``changelog.txt`` file to refer to the new version. Ex
 
 5) Distro build (in 2 steps)
 ----------------------------
+
+Ensure your repo is clean (no ``.sconsign.dblite`` file; no ``build`` directory), then:
 
 - Build the x64 version::
 
@@ -102,8 +105,15 @@ The ``build/distro`` directory should contain 4 files; check their contents:
   corresponding directory of the DC++ website.
 
 
-9) Testing -> Stable status
----------------------------
+9) Update launchpad bugs
+------------------------
+
+Update launchpad bugs from "Fix Committed" to "Fix Released", either by hand or by using the
+``scripts/commited_released.py`` script.
+
+
+10) Testing -> Stable status
+----------------------------
 
 After some time (usually a week or two), the testing version can be considered stable.
 
