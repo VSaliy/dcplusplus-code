@@ -135,40 +135,43 @@ def gen_installer(target, source, env):
                 'Chinese (Simplified)'
             ]:
                 name = 'SimpChinese'
-            if os.path.exists(
+
+            # ensure the base language is supported by NSIS.
+            if not os.path.exists(
                 os.path.dirname(nsis) + '/Contrib/Language files/' +
                 name + '.nlf'
             ):
-                f_i18n.write(
-                    '!insertmacro MUI_LANGUAGE "' + name +
-                    '"\n!insertmacro LANGFILE_INCLUDE "_' + name + '.nsh"\n'
-                )
-                xml_file = build_path + 'Strings.xml'
-                # translate our strings
-                env.Execute(env['po4a_cmd'](
-                    'po4a-translate',
-                    '-m "installer/Strings.xml" -l "' + xml_file + '" -p "' +
-                    nixify(str(node)) + '" -k 0'
-                ))
-                # parse translated strings to generate a message catalog
-                # included by i18n.nsh
-                f_nsh = codecs.open(
-                    build_path + '_' + name + '.nsh',
-                    'wb',
-                    'utf_16_le'
-                )
-                f_nsh.write(unicode(codecs.BOM_UTF16_LE, 'utf_16_le'))
-                f_nsh.write('!insertmacro LANGFILE_EXT "' + name + '"\n')
-                dom = parse(xml_file)
-                for elem in dom.firstChild.childNodes:
-                    if elem.nodeType == elem.ELEMENT_NODE:
-                        f_nsh.write(
-                            '${LangFileString} ' + elem.nodeName + ' "' +
-                            elem.firstChild.nodeValue + '"\n'
-                        )
-                f_nsh.close()
-                dom.unlink()
-                env.Execute(Delete(xml_file))
+                print('NSIS base language file %s.nlf not found' % name)
+                continue
+
+            f_i18n.write(
+                '!insertmacro MUI_LANGUAGE "' + name +
+                '"\n!insertmacro LANGFILE_INCLUDE "_' + name + '.nsh"\n'
+            )
+            xml_file = build_path + 'Strings.xml'
+            # translate our strings
+            env.Execute(env['po4a_cmd'](
+                'po4a-translate',
+                '-m "installer/Strings.xml" -l "' + xml_file + '" -p "' +
+                nixify(str(node)) + '" -k 0'
+            ))
+            # parse translated strings to generate a message catalog included
+            # by i18n.nsh
+            f_nsh = codecs.open(
+                build_path + '_' + name + '.nsh', 'wb', 'utf_16_le',
+            )
+            f_nsh.write(unicode(codecs.BOM_UTF16_LE, 'utf_16_le'))
+            f_nsh.write('!insertmacro LANGFILE_EXT "' + name + '"\n')
+            dom = parse(xml_file)
+            for elem in dom.firstChild.childNodes:
+                if elem.nodeType == elem.ELEMENT_NODE:
+                    f_nsh.write(
+                        '${LangFileString} ' + elem.nodeName + ' "' +
+                        elem.firstChild.nodeValue + '"\n'
+                    )
+            f_nsh.close()
+            dom.unlink()
+            env.Execute(Delete(xml_file))
 
         else:
             suffix = ''
