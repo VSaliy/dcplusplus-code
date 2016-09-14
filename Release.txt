@@ -95,8 +95,11 @@ The ``build/distro`` directory should contain 4 files; check their contents:
 8) Update the web site
 ----------------------
 
-Mention the new version in the ``download.html`` page of the web site. The new version should be
-marked as "testing".
+- Mention the new version in the ``download.html`` page of the web site. The new version should be
+  marked as "testing".
+
+- The build step should also have generated ``build/webhelp``, which can be uploaded as is to the
+  corresponding directory of the DC++ website.
 
 
 9) Testing -> Stable status
