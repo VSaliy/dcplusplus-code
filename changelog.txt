@@ -1,4 +1,4 @@
---
+-- 0.860 2016-09-14 --
 * Switch feasible http links to https (cologic)
 * [L#1451223] Added support for a HTTP downloader in the plugin interface (ullner)
 * [L#1353402] Added option to autostart DC++ when Windows starts (ullner)
@@ -26,8 +26,9 @@
 * Update MiniUPnP to version 2.0
 * Scroll through tabs using the mouse wheel (poy)
 * Invert extra mouse button effects on tabs to be more intuitive (poy)
-* Installer: Update to NSIS 3 (emtee)
+* [L#1620100] Installer: Update to NSIS 3 (emtee)
 * Installer: Fix cut lines in the donation text (poy)
+* Documentation and translations updated as usual, thanks everyone
 
 -- 0.851 2015-04-06 --
 * [L#1414362] Prefer boost regex over std regex for the time being (poy)
