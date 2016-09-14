@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2015-03-22 20:39+0100\n"
-"PO-Revision-Date: 2011-01-24 20:06+0000\n"
-"Last-Translator: andreas Lurz <Unknown>\n"
+"POT-Creation-Date: 2016-09-14 20:52+0300\n"
+"PO-Revision-Date: 2015-07-21 12:37+0000\n"
+"Last-Translator: Tobias Bannert <tobannert@gmail.com>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-04-06 19:22+0000\n"
-"X-Generator: Launchpad (build 17413)\n"
+"X-Launchpad-Export-Date: 2016-09-14 18:22+0000\n"
+"X-Generator: Launchpad (build 18186)\n"
 
 #. type: Content of: <Strings><SECTION_DCPP>
 #: installer/Strings.xml:3
@@ -28,43 +28,43 @@ msgstr "DC++ (notwendig)"
 #: installer/Strings.xml:4
 #, no-wrap
 msgid "A previous installation of DC++ has been found; backup settings and queue to '$R0'?"
-msgstr "Eine alte DC++ Installation wurde gefunden. Sollen die Einstellungen und die Warteschlange '$R0' gesichert werden?"
+msgstr "Eine vorherige Installation von DC++ wurde gefunden, wollen Sie Ihre Einstellungen sichern und an »$R0« weitergeben?"
 
 #. type: Content of: <Strings><SECTION_START_MENU>
 #: installer/Strings.xml:5
 #, no-wrap
 msgid "Start menu shortcuts"
-msgstr "Startmenü-Verknüpfungen"
+msgstr "Startmenüverknüpfungen"
 
 #. type: Content of: <Strings><SECTION_LOCAL>
 #: installer/Strings.xml:6
 #, no-wrap
 msgid "Store settings in the user profile directory"
-msgstr "Speichere Einstellungen im Profilverzeichnis des Benutzers"
+msgstr "Einstellungen im Profilverzeichnis des Benutzers speichern"
 
 #. type: Content of: <Strings><SECTION_ARCH>
 #: installer/Strings.xml:7
 #, no-wrap
 msgid "Install the 32-bit version"
-msgstr ""
+msgstr "Die 32-Bit-Version installieren"
 
 #. type: Content of: <Strings><LOCAL_WARNING>
 #: installer/Strings.xml:8
 #, no-wrap
 msgid "Unchecking this box will make DC++ store its settings in the program directory. This is strongly discouraged on Windows Vista and later; settings or downloads might get lost."
-msgstr "Wenn sie diesen Haken entfernen werden die DC++ Einstellungen im Programmverzeichnis gespeichert. Nutzern von Windows Vista (oder neuer) wird on dieser Einstellung stark abgeraten, da Einstellungen oder Downloads verloren gehen könnten."
+msgstr "Wenn Sie diesen Haken entfernen werden die Einstellungen für DC++ im Programmverzeichnis gespeichert. Nutzer von Windows Vista (oder neuer) wird von dieser Einstellung stark abgeraten, da Einstellungen oder Übertragungen verloren gehen könnten."
 
 #. type: Content of: <Strings><WARNING_LOCALE_ERASED>
 #: installer/Strings.xml:9
 #, no-wrap
 msgid "Warning: the 'locale' directory ($INSTDIR\\locale) will be completely erased!"
-msgstr "Warnung: das 'locale' Verzeichnis ($INSTDIR\\locale) wird vollständig gelöscht!"
+msgstr "Achtung: Das Verzeichnis »locale« ($INSTDIR\\locale) wird vollständig gelöscht!"
 
 #. type: Content of: <Strings><SM_DCPP_DESCR>
 #: installer/Strings.xml:10
 #, no-wrap
 msgid "DC++ (file sharing application)"
-msgstr "DC++ (File-sharing Anwendung)"
+msgstr "DC++ (Datenaustauschanwendung)"
 
 #. type: Content of: <Strings><SM_LICENSE>
 #: installer/Strings.xml:11
@@ -82,13 +82,13 @@ msgstr "Hilfe"
 #: installer/Strings.xml:13
 #, no-wrap
 msgid "Change Log"
-msgstr "Change Log"
+msgstr "Änderungsprotokoll"
 
 #. type: Content of: <Strings><EXECUTE_QUERY>
 #: installer/Strings.xml:14
 #, no-wrap
 msgid "Installation complete. Do you want to run DC++?"
-msgstr ""
+msgstr "Installation vollständig: Möchten Sie DC++ starten?"
 
 #. type: Content of: <Strings><SM_UNINSTALL>
 #: installer/Strings.xml:15
@@ -100,7 +100,7 @@ msgstr "Deinstallieren"
 #: installer/Strings.xml:16
 #, no-wrap
 msgid "Also remove queue, settings and the whole DC++ program directory ($INSTDIR) with all of its sub-directories?"
-msgstr "Warteschlange, Einstellungen und das komplette DC++ Programmverzeichnis ($INSTDIR) mit all seinen Unterverzeichnissen ebenfalls entfernen?"
+msgstr "Warteschlange, Einstellungen und das komplette Programmverzeichnis von DC++ ($INSTDIR) mit all seinen Unterverzeichnissen ebenfalls entfernen?"
 
 #. type: Content of: <Strings><DONATION_INFO_1>
 #: installer/Strings.xml:17
@@ -136,4 +136,4 @@ msgstr ""
 #: installer/Strings.xml:22
 #, no-wrap
 msgid "Donate / Contribute"
-msgstr ""
+msgstr "Spenden/Beteiligen"
