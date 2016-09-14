@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2015-04-06 21:35+0200\n"
+"POT-Creation-Date: 2016-09-14 20:51+0200\n"
 "PO-Revision-Date: 2014-04-03 19:50+0000\n"
 "Last-Translator: Igor Jerosimić <Unknown>\n"
 "Language-Team: Serbian <sr@li.org>\n"
@@ -15,40 +15,40 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-04-06 19:21+0000\n"
-"X-Generator: Launchpad (build 17413)\n"
+"X-Launchpad-Export-Date: 2016-09-14 18:21+0000\n"
+"X-Generator: Launchpad (build 18186)\n"
 
 #: dcpp\DownloadManager.cpp:360
 #, boost-format
 msgid " - Queued: %1%"
 msgstr " - U redu: %1%"
 
-#: dcpp\Util.cpp:572
+#: dcpp\Util.cpp:575
 #, c-format, boost-format
 msgid "%'lld B"
 msgstr "%'lld B"
 
-#: dcpp\Util.cpp:534
+#: dcpp\Util.cpp:537
 #, c-format, boost-format
 msgid "%.02f GiB"
 msgstr "%.02f GiB"
 
-#: dcpp\Util.cpp:530
+#: dcpp\Util.cpp:533
 #, c-format, boost-format
 msgid "%.02f KiB"
 msgstr "%.02f KiB"
 
-#: dcpp\Util.cpp:532
+#: dcpp\Util.cpp:535
 #, c-format, boost-format
 msgid "%.02f MiB"
 msgstr "%.02f MiB"
 
-#: dcpp\Util.cpp:538
+#: dcpp\Util.cpp:541
 #, c-format, boost-format
 msgid "%.02f PiB"
 msgstr "%.02f PiB"
 
-#: dcpp\Util.cpp:536
+#: dcpp\Util.cpp:539
 #, c-format, boost-format
 msgid "%.02f TiB"
 msgstr "%.02f TiB"
@@ -58,7 +58,7 @@ msgstr "%.02f TiB"
 msgid "%1% %2% (added by %3%)"
 msgstr "%1% %2% (dodato od %3%)"
 
-#: dcpp\MappingManager.cpp:116 dcpp\MappingManager.cpp:153
+#: dcpp\MappingManager.cpp:137 dcpp\MappingManager.cpp:188
 #, boost-format
 msgid "%1% %2% port (%3% %4%)"
 msgstr "%1% %2% port (%3% %4%)"
@@ -118,17 +118,22 @@ msgstr "%1% je izbačen: %2%"
 msgid "%1%/s"
 msgstr "%1%/s"
 
+#: dcpp\ConnectivityManager.cpp:323
+#, boost-format
+msgid "%1%: %2%"
+msgstr ""
+
 #: dcpp\DownloadManager.cpp:461
 #, boost-format
 msgid "%1%: File not available"
 msgstr "%1%: Datoteka nije dostupna"
 
-#: dcpp\Util.cpp:528
+#: dcpp\Util.cpp:531
 #, c-format, boost-format
 msgid "%d B"
 msgstr "%d B"
 
-#: dcpp\Util.cpp:568
+#: dcpp\Util.cpp:571
 #, c-format, boost-format
 msgid "%s B"
 msgstr "%s B"
@@ -149,18 +154,18 @@ msgstr "Datoteka različite veličine već postoji u redu"
 msgid "A file with the same hash already exists in your share"
 msgstr "Datoteka sa istim hashom već postoji u vašim deljenim datotekama"
 
-#: dcpp\ConnectivityManager.cpp:189
+#: dcpp\ConnectivityManager.cpp:259
 msgid "Active mode"
 msgstr "Aktivni režim"
 
-#: dcpp\ConnectivityManager.cpp:194
+#: dcpp\ConnectivityManager.cpp:261
 #, boost-format
 msgid ""
 "Active mode behind a router that %1% can configure; port mapping status: %2%"
 msgstr ""
 "Aktivni režim iza rutera kog %1% može da podesi; status mapiranja porta: %2%"
 
-#: dcpp\ConnectivityManager.cpp:236
+#: dcpp\ConnectivityManager.cpp:310
 msgid ""
 "Active mode could not be achieved; a manual configuration is recommended for "
 "better connectivity"
@@ -168,11 +173,15 @@ msgstr ""
 "Aktivni režim nije postignut; ručna konfiguracija je preporučena zbog bolje "
 "povezanosti"
 
+#: dcpp\ConnectivityManager.cpp:187
+msgid "All IPv6 addresses found are local; disabling connectivity"
+msgstr ""
+
 #: dcpp\ConnectionManager.cpp:214
 msgid "All download slots taken"
 msgstr "Svi slotovi za preuzimanje su popunjeni"
 
-#: dcpp\MappingManager.cpp:58
+#: dcpp\MappingManager.cpp:65
 msgid "Another port mapping attempt is in progress..."
 msgstr "Još jedno mapiranje portova je u toku..."
 
@@ -184,30 +193,28 @@ msgstr "Bilo koji"
 msgid "Audio"
 msgstr "Zvuk"
 
-#: dcpp\ConnectionManager.cpp:847
+#: dcpp\ConnectionManager.cpp:851
 #, boost-format
 msgid "Blocked a C-C connection to a hub ('%1%:%2%'; request from '%3%')"
 msgstr ""
 
-#: dcpp\ConnectionManager.cpp:866
+#: dcpp\ConnectionManager.cpp:870
 #, boost-format
 msgid "Blocking '%1%', potential DDoS detected (originating hub '%2%')"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:1660
+#: dcpp\QueueManager.cpp:1675
 msgid "CRC32 inconsistency (SFV-Check)"
 msgstr "CRC32 neusaglašenost (SFV-Check)"
 
-#: dcpp\QueueManager.cpp:1651
+#: dcpp\QueueManager.cpp:1666
 #, boost-format
 msgid "CRC32 inconsistency (SFV-Check): %1%"
 msgstr "CRC32 neusaglašenost (SFV-Check): %1%"
 
-#: dcpp\CryptoManager.cpp:579
-#, boost-format
-msgid ""
-"Certificate verification for %1% failed with error: %2% (certificate "
-"KeyPrint: %3%)"
+#: dcpp\CryptoManager.cpp:507
+#, fuzzy, boost-format
+msgid "Certificate verification for %1% failed with error: %2%"
 msgstr "Provera sertifikata ya %1% nije uspela sa greškom: %2% (KeyPrint: %3%)"
 
 #: dcpp\SearchManager.cpp:38
@@ -219,30 +226,36 @@ msgid "Connection closed"
 msgstr "Veza je prekinuta"
 
 #: dcpp\BufferedSocket.cpp:170 dcpp\BufferedSocket.cpp:188
-#: dcpp\ConnectionManager.cpp:221 dcpp\Socket.cpp:385
+#: dcpp\ConnectionManager.cpp:221 dcpp\Socket.cpp:389
 msgid "Connection timeout"
 msgstr "Vreme povezivanja je isteklo"
 
-#: dcpp\ConnectionManager.cpp:313
+#: dcpp\ConnectivityManager.cpp:322
+#, fuzzy, boost-format
+msgid "Connectivity (%1%): %2%"
+msgstr "Povezanost "
+
+#: dcpp\ConnectionManager.cpp:315
 #, boost-format
 msgid "Connectivity error: %1%"
 msgstr "Greška pri povezivanju: %1%"
 
-#: dcpp\ConnectivityManager.cpp:208
-#, boost-format
+#: dcpp\ConnectivityManager.cpp:271
+#, fuzzy, boost-format
 msgid ""
 "Connectivity information:\n"
 "\n"
 "Automatic connectivity setup is: %1%\n"
 "\n"
-"\t%2%\n"
-"\tExternal IP (v4): %3%\n"
-"\tExternal IP (v6): %4%\n"
-"\tBound interface (v4): %5%\n"
-"\tBound interface (v6): %6%\n"
-"\tTransfer port: %7%\n"
-"\tEncrypted transfer port: %8%\n"
-"\tSearch port: %9%"
+"\tIPv4: %2%\n"
+"\tIPv6: %3%\n"
+"\tExternal IP (v4): %4%\n"
+"\tExternal IP (v6): %5%\n"
+"\tBound interface (v4): %6%\n"
+"\tBound interface (v6): %7%\n"
+"\tTransfer port: %8%\n"
+"\tEncrypted transfer port: %9%\n"
+"\tSearch port: %10%"
 msgstr ""
 "Informacije o vezi:\n"
 "\n"
@@ -257,19 +270,15 @@ msgstr ""
 "\tEnkriptovani port za prenos: %8%\n"
 "\tPort za pretragu: %9%"
 
-#: dcpp\ConnectionManager.cpp:305
+#: dcpp\ConnectionManager.cpp:307
 msgid "Connectivity restored"
 msgstr "Veza ponovo uspostavljena"
 
-#: dcpp\ConnectivityManager.cpp:179
+#: dcpp\ConnectivityManager.cpp:249
 msgid "Connectivity settings are being configured; try again later"
 msgstr "Parametri veze se trenutno podešavaju; pokušajte ponovo kasnije"
 
-#: dcpp\ConnectivityManager.cpp:249
-msgid "Connectivity: "
-msgstr "Povezanost "
-
-#: dcpp\Socket.cpp:336
+#: dcpp\Socket.cpp:340
 msgid "Could not open port for listening"
 msgstr "Ne mogu da otvorim port"
 
@@ -282,7 +291,7 @@ msgstr "Ne mogu da otvorim datoteku: %1%"
 msgid "Country information"
 msgstr "Informacije o zemlji"
 
-#: dcpp\ConnectivityManager.cpp:109
+#: dcpp\ConnectivityManager.cpp:151
 msgid "Determining the best connectivity settings..."
 msgstr "Određujem najbolja podešavanja za povezivanje..."
 
@@ -301,6 +310,11 @@ msgstr "Direktorijum je sakriven"
 #: dcpp\DirectoryListing.cpp:203
 msgid "Directory missing name attribute"
 msgstr "Direktorijumu nedostaje atribut ime"
+
+#: dcpp\ConnectivityManager.cpp:264
+#, fuzzy
+msgid "Disabled"
+msgstr "onemogućen"
 
 #: dcpp\ADLSearch.cpp:411
 msgid "Discard"
@@ -339,7 +353,7 @@ msgstr "Duplikat u listi"
 msgid "Duplicate source: %1%"
 msgstr "Izvor duplikata: %1%"
 
-#: dcpp\MappingManager.cpp:122 dcpp\MappingManager.cpp:165
+#: dcpp\MappingManager.cpp:143 dcpp\MappingManager.cpp:200
 msgid "Encrypted transfer"
 msgstr "Enkriptovani prenos"
 
@@ -359,8 +373,8 @@ msgid "Error during compression"
 msgstr "Greška tokom pakovanja"
 
 #: dcpp\BZUtils.cpp:76 dcpp\BZUtils.cpp:98 dcpp\BZUtils.cpp:101
-#: dcpp\CryptoManager.cpp:617 dcpp\CryptoManager.cpp:636
-#: dcpp\CryptoManager.cpp:650 dcpp\ZUtils.cpp:106 dcpp\ZUtils.cpp:131
+#: dcpp\CryptoManager.cpp:658 dcpp\CryptoManager.cpp:677
+#: dcpp\CryptoManager.cpp:691 dcpp\ZUtils.cpp:106 dcpp\ZUtils.cpp:131
 #: dcpp\ZUtils.cpp:145
 msgid "Error during decompression"
 msgstr "Greška tokom otpakivanja"
@@ -393,15 +407,15 @@ msgstr "Greška pri čuvanju hash podataka: %1%"
 msgid "Executable"
 msgstr "Izvršni fajl"
 
-#: dcpp\MappingManager.cpp:91 dcpp\MappingManager.cpp:191
+#: dcpp\MappingManager.cpp:110 dcpp\MappingManager.cpp:226
 msgid "Failed to create port mappings"
 msgstr "Mapiranje portova neuspešno"
 
-#: dcpp\MappingManager.cpp:180
+#: dcpp\MappingManager.cpp:216
 msgid "Failed to get external IP"
 msgstr "Neuspešno uzimanje spoljne IP adrese"
 
-#: dcpp\MappingManager.cpp:148
+#: dcpp\MappingManager.cpp:183
 #, boost-format
 msgid "Failed to initialize the %1% interface"
 msgstr "Neuspešna inicijalizacija %1% interfejsa"
@@ -419,7 +433,7 @@ msgstr "Ne mogu da učitam privatni ključ"
 msgid "Failed to load trusted certificate from %1%"
 msgstr "Neuspešno učitavanje poverljivog sertifikata od %1%"
 
-#: dcpp\MappingManager.cpp:156
+#: dcpp\MappingManager.cpp:191
 #, boost-format
 msgid "Failed to map the %1% port (%2% %3%) with the %4% interface"
 msgstr "Neuspešno mapiranje %1% port (%2% %3%) sa %4% interfejsom"
@@ -428,14 +442,14 @@ msgstr "Neuspešno mapiranje %1% port (%2% %3%) sa %4% interfejsom"
 msgid "Failed to negotiate base protocol"
 msgstr "Ne mogu da uspostavim bazni protokol"
 
-#: dcpp\MappingManager.cpp:204
+#: dcpp\MappingManager.cpp:235
 #, boost-format
 msgid ""
 "Failed to remove port mappings from the %1% device with the %2% interface"
 msgstr ""
 "Nisam uspeo da obrišem mapiranje port sa %1% uređaja sa %2% interfejsom"
 
-#: dcpp\Socket.cpp:617
+#: dcpp\Socket.cpp:621
 msgid ""
 "Failed to set up the socks server for UDP relay (check socks address and "
 "port)"
@@ -496,7 +510,7 @@ msgstr "Celo stablo ne odgovara TTH osnovi"
 msgid "Generated new TLS certificate"
 msgstr "Napravljen je novi TLS sertifikat"
 
-#: dcpp\MappingManager.cpp:215
+#: dcpp\MappingManager.cpp:246
 msgid "Generic"
 msgstr "Opšte"
 
@@ -559,7 +573,7 @@ msgstr "Pronašao neispravno ime datoteke tokom hashovanja direktorijuma %1%"
 msgid "Invalid regular expression: %1%"
 msgstr "Regular expression nije validan: %1%"
 
-#: dcpp\SettingsManager.cpp:658
+#: dcpp\SettingsManager.cpp:679
 msgid "Invalid search type name"
 msgstr "Neispravan tip pretrage"
 
@@ -579,7 +593,7 @@ msgstr ""
 msgid "Kick user(s)"
 msgstr "Izbaci korisnika(e)"
 
-#: dcpp\ConnectivityManager.cpp:131
+#: dcpp\ConnectivityManager.cpp:195
 msgid "Local network with possible NAT detected, trying to map the ports..."
 msgstr ""
 "Pronađena lokalna mreža sa mogućim prisustvom NAT-a, pokušavam da remapiram "
@@ -606,10 +620,6 @@ msgstr "Izabrana datoteka za sertifikat"
 msgid "No directory specified"
 msgstr "Nije određen direktorijum"
 
-#: dcpp\MappingManager.cpp:53
-msgid "No port mapping interface available"
-msgstr "Ne postoji interfejs za mapiranje portova"
-
 #: dcpp\CryptoManager.cpp:127
 msgid "No private key file chosen"
 msgstr "Nije izabarana datoteka za privatni ključ"
@@ -618,7 +628,7 @@ msgstr "Nije izabarana datoteka za privatni ključ"
 msgid "No slots available"
 msgstr "Nema slobodnih slotova"
 
-#: dcpp\SettingsManager.cpp:716
+#: dcpp\SettingsManager.cpp:737
 msgid "No such search type"
 msgstr "Ne postojeći tip pretrage"
 
@@ -642,7 +652,7 @@ msgstr "Nije na mreži"
 msgid "Partial file list"
 msgstr "Delimična lista datoteka"
 
-#: dcpp\ConnectivityManager.cpp:200
+#: dcpp\ConnectivityManager.cpp:263
 msgid "Passive mode"
 msgstr "Pasivni režim"
 
@@ -650,12 +660,12 @@ msgstr "Pasivni režim"
 msgid "Picture"
 msgstr "Slika"
 
-#: dcpp\MappingManager.cpp:209
+#: dcpp\MappingManager.cpp:240
 #, boost-format
 msgid "Port mapping: %1%"
 msgstr "Mapiranje portova: %1%"
 
-#: dcpp\ConnectivityManager.cpp:124
+#: dcpp\ConnectivityManager.cpp:177
 msgid ""
 "Public IP address detected, selecting active mode with direct connection"
 msgstr "Pronašao javnu IP adresu, biram aktivni režim sa direktnom vezom"
@@ -672,11 +682,11 @@ msgstr "Ukloni sve poddirektorijume pre dodavanja ovog"
 msgid "Response does not match request"
 msgstr "Odgovor se ne poklapa sa zahtevom"
 
-#: dcpp\MappingManager.cpp:123 dcpp\MappingManager.cpp:166
+#: dcpp\MappingManager.cpp:144 dcpp\MappingManager.cpp:201
 msgid "Search"
 msgstr "Pretraga"
 
-#: dcpp\ConnectivityManager.cpp:280
+#: dcpp\ConnectivityManager.cpp:361
 msgid "Search (UDP)"
 msgstr "Pretraga (UDP)"
 
@@ -702,11 +712,11 @@ msgstr "Poslao %1%"
 msgid "Shared Files"
 msgstr "Deljene datoteke"
 
-#: dcpp\Socket.cpp:493 dcpp\Socket.cpp:497
+#: dcpp\Socket.cpp:497 dcpp\Socket.cpp:501
 msgid "Socks server authentication failed (bad login / password?)"
 msgstr "Socks server provera nije uspela (loše korisničko ime / lozinka?)"
 
-#: dcpp\MappingManager.cpp:169
+#: dcpp\MappingManager.cpp:204
 #, boost-format
 msgid ""
 "Successfully created port mappings (Transfers: %1%, Encrypted transfers: "
@@ -715,17 +725,26 @@ msgstr ""
 "Mapiranje portova uspešno (Transferi: %1%, Enrkiptovani prenosi: %2%, "
 "Pretraga: %3%) na %4% uređaju sa %5% interfejsom"
 
-#: dcpp\MappingManager.cpp:88
+#: dcpp\MappingManager.cpp:107
 #, boost-format
 msgid ""
 "Successfully created port mappings on the %1% device with the %2% interface"
 msgstr "Uspešno mapirani portovi na %1% uređaju sa %2% interfejsom"
 
-#: dcpp\MappingManager.cpp:203
+#: dcpp\MappingManager.cpp:234
 #, boost-format
 msgid ""
 "Successfully removed port mappings from the %1% device with the %2% interface"
 msgstr "Uspešno uklonjeno mapiranje portova na uređaju %1% sa %2% interfejsom"
+
+#: dcpp\CryptoManager.cpp:606
+#, boost-format
+msgid "Supplied KeyPrint %1% did not match %2%."
+msgstr ""
+
+#: dcpp\CryptoManager.cpp:604
+msgid "Supplied KeyPrint did not match any certificate."
+msgstr ""
 
 #: dcpp\CryptoManager.cpp:365
 #, boost-format
@@ -762,22 +781,22 @@ msgid ""
 "encrypted transfers will be disabled"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:1494
+#: dcpp\QueueManager.cpp:1509
 #, boost-format
 msgid ""
 "The queued file %1% already exists in your share, removing from the queue"
 msgstr ""
 
-#: dcpp\Socket.cpp:479
+#: dcpp\Socket.cpp:483
 msgid "The socks server doesn't support login / password authentication"
 msgstr "Socks server ne podržava proveru korisničko ime / lozinka"
 
-#: dcpp\Socket.cpp:392 dcpp\Socket.cpp:400 dcpp\Socket.cpp:433
-#: dcpp\Socket.cpp:437 dcpp\Socket.cpp:461 dcpp\Socket.cpp:476
+#: dcpp\Socket.cpp:396 dcpp\Socket.cpp:404 dcpp\Socket.cpp:437
+#: dcpp\Socket.cpp:441 dcpp\Socket.cpp:465 dcpp\Socket.cpp:480
 msgid "The socks server failed establish a connection"
 msgstr "Socks server nije uspeo uspostaviti vezu"
 
-#: dcpp\Socket.cpp:465
+#: dcpp\Socket.cpp:469
 msgid "The socks server requires authentication"
 msgstr "Socks server zahteva proveru"
 
@@ -802,7 +821,7 @@ msgstr ""
 "Ovaj hab pokušava da iskoristi vaš klijent za spam %1%, molimo naglasite "
 "vlasniku haba da popravi ovo."
 
-#: dcpp\SettingsManager.cpp:662 dcpp\SettingsManager.cpp:684
+#: dcpp\SettingsManager.cpp:683 dcpp\SettingsManager.cpp:705
 msgid "This search type already exists"
 msgstr "Ovaj tip pretrage već postoji"
 
@@ -811,11 +830,11 @@ msgstr "Ovaj tip pretrage već postoji"
 msgid "Too much data in response body (%1%)"
 msgstr "Previše podataka u telu odgovora (%1%)"
 
-#: dcpp\MappingManager.cpp:121 dcpp\MappingManager.cpp:164
+#: dcpp\MappingManager.cpp:142 dcpp\MappingManager.cpp:199
 msgid "Transfer"
 msgstr "Prenos"
 
-#: dcpp\ConnectivityManager.cpp:274
+#: dcpp\ConnectivityManager.cpp:355
 msgid "Transfer (TCP)"
 msgstr "Prenos (TCP)"
 
@@ -842,7 +861,7 @@ msgstr "Ne mogu da pomerim %1% u %2% (%3%) biti da promenim ime u %4% (%5%)"
 msgid "Unable to move %1% to %2% (%3%); renamed to %4%"
 msgstr "Ne mogu da pomerim %1% u %2% (%3%); promenjeno ime u %4%"
 
-#: dcpp\ConnectivityManager.cpp:114
+#: dcpp\ConnectivityManager.cpp:165
 #, boost-format
 msgid ""
 "Unable to open %1% port(s); connectivity settings must be configured manually"
@@ -890,23 +909,26 @@ msgstr "Video"
 msgid "You're trying to download from yourself!"
 msgstr "Pokušavate skidati od samog sebe!"
 
-#: dcpp\ConnectivityManager.cpp:182
+#: dcpp\ConnectivityManager.cpp:255
 msgid "disabled"
 msgstr "onemogućen"
 
-#: dcpp\SettingsManager.cpp:204 dcpp\SettingsManager.cpp:205
+#: dcpp\SettingsManager.cpp:212 dcpp\SettingsManager.cpp:213
 msgid "downloaded from"
 msgstr "skinuto od"
 
-#: dcpp\ConnectivityManager.cpp:182
+#: dcpp\ConnectivityManager.cpp:253
 #, boost-format
-msgid "enabled - %1%"
-msgstr "omogućen - %1%"
+msgid ""
+"enabled\n"
+"\tIPv4 detection: %1%\n"
+"\tIPv6 detection: %2%"
+msgstr ""
 
-#: dcpp\ConnectivityManager.cpp:205
+#: dcpp\ConnectivityManager.cpp:268
 msgid "undefined"
 msgstr "neodređen"
 
-#: dcpp\SettingsManager.cpp:206
+#: dcpp\SettingsManager.cpp:214
 msgid "uploaded to"
 msgstr "poslato do"

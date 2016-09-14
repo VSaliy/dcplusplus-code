@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2015-03-22 20:39+0100\n"
-"PO-Revision-Date: 2013-05-12 14:22+0000\n"
+"POT-Creation-Date: 2016-09-14 20:52+0300\n"
+"PO-Revision-Date: 2016-03-23 11:57+0000\n"
 "Last-Translator: Guybrush88 <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-04-06 19:22+0000\n"
-"X-Generator: Launchpad (build 17413)\n"
+"X-Launchpad-Export-Date: 2016-09-14 18:22+0000\n"
+"X-Generator: Launchpad (build 18186)\n"
 
 #. type: Content of: <Strings><SECTION_DCPP>
 #: installer/Strings.xml:3
@@ -106,34 +106,34 @@ msgstr "Rimuovere anche la coda, le configurazioni e tutta la cartella DC++ ($IN
 #: installer/Strings.xml:17
 #, no-wrap
 msgid "Contribute to the Direct Connect Network Foundation"
-msgstr ""
+msgstr "Contribuisci alla Direct Connect Network Foundation"
 
 #. type: Content of: <Strings><DONATION_INFO_2>
 #: installer/Strings.xml:18
 #, no-wrap
 msgid "To help the development of DC++ and other DC related software, please consider contributing or donating. Your generous donations will be used for the following:"
-msgstr ""
+msgstr "Per aiutare lo sviluppo di DC++ e di altri software correlati a DC, prendi in considerazione l'idea di contribuire o di effettuare una donazione. Le vostre donazioni generose saranno utilizzati per le seguenti cose:"
 
 #. type: Content of: <Strings><DONATION_INFO_3>
 #: installer/Strings.xml:19
 #, no-wrap
 msgid "* Development infrastructure (domains, server costs)"
-msgstr ""
+msgstr "* Infrastruttura dello sviluppo (domini, costi del server)"
 
 #. type: Content of: <Strings><DONATION_INFO_4>
 #: installer/Strings.xml:20
 #, no-wrap
 msgid "* Certificates for supported projects"
-msgstr ""
+msgstr "* Certificati per i progetti supportati"
 
 #. type: Content of: <Strings><DONATION_INFO_5>
 #: installer/Strings.xml:21
 #, no-wrap
 msgid "All donations are completly transparent, will be individually listed and published on the DCNF website, either under your own name or as an anonymous donation, according to your choice."
-msgstr ""
+msgstr "Tutte le donazioni sono completamente trasparenti, saranno elencate e pubblicate sul sito DCNF individualmente, sia sotto il proprio nome o come donazione anonima, secondo la vostra scelta."
 
 #. type: Content of: <Strings><DONATE_BUTTON>
 #: installer/Strings.xml:22
 #, no-wrap
 msgid "Donate / Contribute"
-msgstr ""
+msgstr "Dona / Contribuisci"

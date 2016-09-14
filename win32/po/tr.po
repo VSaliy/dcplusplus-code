@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2015-04-06 21:35+0200\n"
+"POT-Creation-Date: 2016-09-14 20:52+0200\n"
 "PO-Revision-Date: 2013-05-22 06:48+0000\n"
 "Last-Translator: H. Cem ÖZTÜRK <Unknown>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -16,10 +16,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2015-04-06 19:21+0000\n"
-"X-Generator: Launchpad (build 17413)\n"
+"X-Launchpad-Export-Date: 2016-09-14 18:21+0000\n"
+"X-Generator: Launchpad (build 18186)\n"
 
-#: win32\PublicHubsFrame.cpp:420
+#: win32\PublicHubsFrame.cpp:485
 msgid " from Coral"
 msgstr " Coral'dan"
 
@@ -27,7 +27,7 @@ msgstr " Coral'dan"
 msgid "% transferred"
 msgstr "% aktarıldı"
 
-#: win32\MainWindow.cpp:1492
+#: win32\MainWindow.cpp:1486
 #, boost-format
 msgid ""
 "%1%\n"
@@ -46,19 +46,19 @@ msgstr "%1% %2%: %3%"
 msgid "%1% (%2$0.2f)"
 msgstr "%1% (%2$0.2f)"
 
-#: win32\SearchFrame.cpp:524
+#: win32\SearchFrame.cpp:526
 #, boost-format
 msgid "%1% (%2%)"
 msgstr "%1% (%2%)"
 
-#: win32\SearchFrame.cpp:1072
+#: win32\SearchFrame.cpp:1107
 #, boost-format
 msgid "%1% / %2% item"
 msgid_plural "%1% / %2% items"
 msgstr[0] "%1% / %2% öğe"
 msgstr[1] "%1% / %2% öğe"
 
-#: win32\SearchFrame.cpp:1103
+#: win32\SearchFrame.cpp:1138
 #, boost-format
 msgid "%1% / %2% sources ignored: %3%"
 msgstr "%1% / %2% kaynak göz ardı edildi: %3%"
@@ -68,34 +68,34 @@ msgstr "%1% / %2% kaynak göz ardı edildi: %3%"
 msgid "%1% doesn't need any additional configuration"
 msgstr ""
 
-#: win32\SearchFrame.cpp:1078
+#: win32\SearchFrame.cpp:1113
 #, boost-format
 msgid "%1% dropped"
 msgstr "%1% bırakıldı"
 
 #: win32\PluginApiWin.cpp:71 win32\PluginApiWin.cpp:72
-#: win32\QueueFrame.cpp:877 win32\WinUtil.cpp:872
+#: win32\QueueFrame.cpp:949 win32\WinUtil.cpp:861
 #: win32\FinishedFrameBase.h:461
 #, boost-format
 msgid "%1% files"
 msgstr "%1% dosya"
 
-#: win32\HashProgressDlg.cpp:160
+#: win32\HashProgressDlg.cpp:161
 #, boost-format
 msgid "%1% files/h, %2% files left"
 msgstr "%1% dosya/saat, %2% dosya kaldı"
 
-#: win32\MainWindow.cpp:1197
+#: win32\MainWindow.cpp:1182
 #, fuzzy, boost-format
 msgid "%1% free slots of %2% total upload slots - Click to adjust"
 msgstr "Toplam %2% yuvadan %1% tanesi boş"
 
-#: win32\FavHubsFrame.cpp:363 win32\TransferView.cpp:355
+#: win32\FavHubsFrame.cpp:363 win32\TransferView.cpp:359
 #, boost-format
 msgid "%1% hubs"
 msgstr "%1% merkez"
 
-#: win32\SearchFrame.cpp:1070 win32\FinishedFrameBase.h:572
+#: win32\SearchFrame.cpp:1105 win32\FinishedFrameBase.h:572
 #, boost-format
 msgid "%1% item"
 msgid_plural "%1% items"
@@ -103,37 +103,37 @@ msgstr[0] "%1% öğe"
 msgstr[1] "%1% öğe"
 
 #: win32\ADLSearchFrame.cpp:318 win32\DirectoryListingFrame.cpp:877
-#: win32\TransferView.cpp:489
+#: win32\TransferView.cpp:499
 #, boost-format
 msgid "%1% items"
 msgstr "%1% öğe"
 
-#: win32\HashProgressDlg.cpp:149 win32\HashProgressDlg.cpp:164
+#: win32\HashProgressDlg.cpp:150 win32\HashProgressDlg.cpp:165
 #, boost-format
 msgid "%1% left"
 msgstr "%1% kaldı"
 
-#: win32\ConnectivityManualPage.cpp:98
+#: win32\ConnectivityManualPage.cpp:63
 #, boost-format
 msgid "%1% port"
 msgstr "%1% bağlantı kapısı"
 
-#: win32\ConnectivityManualPage.cpp:235
+#: win32\ConnectivityManualPage.cpp:152
 #, boost-format
 msgid "%1% port cannot be the same as the %2% port"
 msgstr ""
 
-#: win32\MainWindow.cpp:881
+#: win32\MainWindow.cpp:866
 #, boost-format
 msgid "%1% recent items will be saved from now on."
 msgstr "%1% en son kullanılanlar şu andan itibaren kaydedilecek."
 
-#: win32\SearchFrame.cpp:826
+#: win32\SearchFrame.cpp:848
 #, boost-format
 msgid "%1% results"
 msgstr "%1% sonuç"
 
-#: win32\SearchFrame.cpp:1104
+#: win32\SearchFrame.cpp:1139
 #, boost-format
 msgid "%1% sources added"
 msgstr "%1% kaynak eklendi"
@@ -145,43 +145,43 @@ msgid_plural "%1% users"
 msgstr[0] "%1% kullanıcı"
 msgstr[1] "%1% kullanıcı"
 
-#: win32\HubFrame.cpp:1287 win32\TransferView.cpp:351 win32\UsersFrame.cpp:462
+#: win32\HubFrame.cpp:1287 win32\TransferView.cpp:355 win32\UsersFrame.cpp:462
 #: win32\FinishedFrameBase.h:490
 #, boost-format
 msgid "%1% users"
 msgstr "%1% kullanıcı"
 
-#: win32\MainWindow.cpp:1616
+#: win32\MainWindow.cpp:1610
 #, fuzzy, boost-format
 msgid "%1%-level %2%"
 msgstr "%1%: %2%"
 
-#: win32\MainWindow.cpp:1196 win32\UserInfoBase.cpp:140
+#: win32\MainWindow.cpp:1181 win32\UserInfoBase.cpp:140
 #, boost-format
 msgid "%1%/%2%"
 msgstr "%1%/%2%"
 
-#: win32\MainWindow.cpp:926 win32\MainWindow.cpp:1212
-#: win32\MainWindow.cpp:1216 win32\MainWindow.cpp:1220
-#: win32\MainWindow.cpp:1224 win32\TransferView.cpp:227
-#: win32\TransferView.cpp:363 win32\TransferView.cpp:442
+#: win32\MainWindow.cpp:911 win32\MainWindow.cpp:1197
+#: win32\MainWindow.cpp:1201 win32\MainWindow.cpp:1205
+#: win32\MainWindow.cpp:1209 win32\TransferView.cpp:227
+#: win32\TransferView.cpp:367 win32\TransferView.cpp:452
 #: win32\UsersFrame.cpp:73 win32\FinishedFrameBase.h:574
 #, boost-format
 msgid "%1%/s"
 msgstr "%1%/s"
 
-#: win32\HashProgressDlg.cpp:161
+#: win32\HashProgressDlg.cpp:162
 #, boost-format
 msgid "%1%/s, %2% left"
 msgstr "%1%/s, %2% kaldı"
 
 #: win32\DirectoryListingFrame.cpp:833 win32\UserInfoBase.cpp:116
-#: win32\UserInfoBase.cpp:141 win32\WinUtil.cpp:1628
+#: win32\UserInfoBase.cpp:141 win32\WinUtil.cpp:1719
 #, boost-format
 msgid "%1%: %2%"
 msgstr "%1%: %2%"
 
-#: win32\FavHubGroupsDlg.cpp:97 win32\PluginPage.cpp:94
+#: win32\FavHubGroupsDlg.cpp:98 win32\PluginPage.cpp:94
 #: win32\PluginPage.cpp:254 win32\SearchTypesPage.cpp:82
 #: win32\StringListDlg.cpp:124 win32\UCPage.cpp:60 win32\UserMatchPage.cpp:82
 msgid "&Add"
@@ -191,13 +191,13 @@ msgstr "&Ekle"
 msgid "&Add folder"
 msgstr "&Klasör Ekle"
 
-#: win32\WinUtil.cpp:1560 win32\UserInfoBase.h:156
+#: win32\WinUtil.cpp:1651 win32\UserInfoBase.h:156
 msgid "&Browse file list"
 msgstr "&Dosya listesine gözat"
 
 #: win32\DirectoryListingFrame.cpp:932 win32\LogPage.cpp:79
-#: win32\NotificationsPage.cpp:112 win32\SearchFrame.cpp:865
-#: win32\SearchFrame.cpp:893
+#: win32\NotificationsPage.cpp:112 win32\SearchFrame.cpp:887
+#: win32\SearchFrame.cpp:915
 msgid "&Browse..."
 msgstr "&Gözat..."
 
@@ -205,21 +205,21 @@ msgstr "&Gözat..."
 msgid "&Change"
 msgstr "&Değiştir"
 
-#: win32\FavHubGroupsDlg.cpp:184 win32\MDIChildFrame.h:233
+#: win32\FavHubGroupsDlg.cpp:190 win32\MDIChildFrame.h:233
 msgid "&Close"
 msgstr "&Kapat"
 
 #: win32\PluginPage.cpp:98 win32\PluginPage.cpp:256
-#: win32\PublicHubsFrame.cpp:180
+#: win32\PublicHubsFrame.cpp:193
 msgid "&Configure"
 msgstr "&Yapılandır"
 
-#: win32\MainWindow.cpp:835
+#: win32\MainWindow.cpp:820
 msgid "&Configure..."
 msgstr "&Yapılandır..."
 
 #: win32\FavHubsFrame.cpp:104 win32\FavHubsFrame.cpp:364
-#: win32\PublicHubsFrame.cpp:335
+#: win32\PublicHubsFrame.cpp:400
 msgid "&Connect"
 msgstr "&Bağlan"
 
@@ -231,7 +231,7 @@ msgstr "&Kopyala"
 msgid "&Copy\tCtrl+C"
 msgstr "&Kopyala\tCtrl+C"
 
-#: win32\MainWindow.cpp:1756
+#: win32\MainWindow.cpp:1750
 msgid "&Customize\tDouble-click"
 msgstr "&Kişiselleştir\tÇift-tıklama"
 
@@ -247,16 +247,16 @@ msgstr "&Sil\tDel"
 msgid "&Description"
 msgstr "&Açıklama"
 
-#: win32\HubFrame.cpp:1311 win32\TransferView.cpp:544
+#: win32\HubFrame.cpp:1311 win32\TransferView.cpp:564
 msgid "&Disconnect"
 msgstr "&Bağlantıyı kes"
 
 #: win32\DirectoryListingFrame.cpp:852 win32\DirectoryListingFrame.cpp:879
-#: win32\DirectoryListingFrame.cpp:892 win32\SearchFrame.cpp:829
+#: win32\DirectoryListingFrame.cpp:892 win32\SearchFrame.cpp:851
 msgid "&Download"
 msgstr "&İndir"
 
-#: win32\MainWindow.cpp:356
+#: win32\MainWindow.cpp:341
 msgid "&Download Queue\tCtrl+D"
 msgstr "&İndirme Kuyruğu\tCtrl+D"
 
@@ -264,11 +264,11 @@ msgstr "&İndirme Kuyruğu\tCtrl+D"
 msgid "&Edit"
 msgstr "&Düzenle"
 
-#: win32\MainWindow.cpp:351
+#: win32\MainWindow.cpp:336
 msgid "&Favorite Hubs\tCtrl+H"
 msgstr "&Gözde Merkezler\tCtrl+H"
 
-#: win32\MainWindow.cpp:314
+#: win32\MainWindow.cpp:299
 msgid "&File"
 msgstr "&Dosya"
 
@@ -276,11 +276,11 @@ msgstr "&Dosya"
 msgid "&Find...\tCtrl+F"
 msgstr "&Bul...\tCtrl+F"
 
-#: win32\TransferView.cpp:537
+#: win32\TransferView.cpp:557
 msgid "&Force attempt"
 msgstr "&Zorla dene"
 
-#: win32\QueueFrame.cpp:913 win32\WinUtil.cpp:1557 win32\UserInfoBase.h:155
+#: win32\QueueFrame.cpp:1003 win32\WinUtil.cpp:1648 win32\UserInfoBase.h:155
 msgid "&Get file list"
 msgstr "Dosya listesini &al"
 
@@ -288,15 +288,15 @@ msgstr "Dosya listesini &al"
 msgid "&Go to directory"
 msgstr "Klasöre &git"
 
-#: win32\MainWindow.cpp:404
+#: win32\MainWindow.cpp:389
 msgid "&Help"
 msgstr "&Yardım"
 
-#: win32\MainWindow.cpp:1772
+#: win32\MainWindow.cpp:1766
 msgid "&Hide\tCtrl+1"
 msgstr "&Gizle\tCtrl+1"
 
-#: win32\WinUtil.cpp:1563 win32\UserInfoBase.h:157
+#: win32\WinUtil.cpp:1654 win32\UserInfoBase.h:157
 msgid "&Match queue"
 msgstr "&Kuyruğu eşleştir"
 
@@ -305,7 +305,7 @@ msgstr "&Kuyruğu eşleştir"
 msgid "&Move to group"
 msgstr "&Gruba taşı"
 
-#: win32\QueueFrame.cpp:860 win32\QueueFrame.cpp:879 win32\QueueFrame.cpp:895
+#: win32\QueueFrame.cpp:932 win32\QueueFrame.cpp:951 win32\QueueFrame.cpp:967
 msgid "&Move/Rename"
 msgstr "&Taşı/Yeniden adlandır"
 
@@ -314,7 +314,7 @@ msgstr "&Taşı/Yeniden adlandır"
 msgid "&New..."
 msgstr "&Yeni..."
 
-#: win32\MainWindow.cpp:367
+#: win32\MainWindow.cpp:352
 msgid "&Notepad\tCtrl+N"
 msgstr "&Not Defteri\tCtrl+N"
 
@@ -332,27 +332,27 @@ msgstr "&Yapıştır\tCtrl+V"
 msgid "&Properties"
 msgstr "&Özellikler"
 
-#: win32\MainWindow.cpp:349
+#: win32\MainWindow.cpp:334
 msgid "&Public Hubs\tCtrl+P"
 msgstr "&Ortak Merkezler\tCtrl+P"
 
-#: win32\MainWindow.cpp:316
+#: win32\MainWindow.cpp:301
 msgid "&Quick connect...\tCtrl+Q"
 msgstr "&Hızlı bağlan...\tCtrl+Q"
 
-#: win32\HubFrame.cpp:1308 win32\MainWindow.cpp:320
+#: win32\HubFrame.cpp:1308 win32\MainWindow.cpp:305
 msgid "&Reconnect\tCtrl+R"
 msgstr "&Yeniden Bağlan\tCtrl+R"
 
-#: win32\PublicHubsFrame.cpp:185
+#: win32\PublicHubsFrame.cpp:198
 msgid "&Refresh"
 msgstr "&Yenile"
 
 #: win32\ADLSearchFrame.cpp:110 win32\ADLSearchFrame.cpp:321
-#: win32\FavHubGroupsDlg.cpp:107 win32\FavHubsFrame.cpp:140
+#: win32\FavHubGroupsDlg.cpp:108 win32\FavHubsFrame.cpp:140
 #: win32\FavHubsFrame.cpp:371 win32\FavoriteDirsPage.cpp:78
-#: win32\PluginPage.cpp:120 win32\PluginPage.cpp:263 win32\QueueFrame.cpp:869
-#: win32\QueueFrame.cpp:883 win32\QueueFrame.cpp:897 win32\SearchFrame.cpp:845
+#: win32\PluginPage.cpp:120 win32\PluginPage.cpp:263 win32\QueueFrame.cpp:941
+#: win32\QueueFrame.cpp:955 win32\QueueFrame.cpp:969 win32\SearchFrame.cpp:867
 #: win32\SearchTypesPage.cpp:94 win32\StringListDlg.cpp:160
 #: win32\UCPage.cpp:76 win32\UploadPage.cpp:90 win32\UserMatchPage.cpp:98
 #: win32\UsersFrame.cpp:466 win32\FinishedFrameBase.h:467
@@ -360,12 +360,12 @@ msgstr "&Yenile"
 msgid "&Remove"
 msgstr "&Kaldır"
 
-#: win32\TransferView.cpp:540
+#: win32\TransferView.cpp:560
 #, fuzzy
 msgid "&Remove file from queue"
 msgstr "Kullanıcıyı indirme listesinden kaldır"
 
-#: win32\MainWindow.cpp:363
+#: win32\MainWindow.cpp:348
 msgid "&Search\tCtrl+S"
 msgstr "&Ara\tCtrl+S"
 
@@ -374,7 +374,7 @@ msgstr "&Ara\tCtrl+S"
 msgid "&Search hub"
 msgstr "Arama Sonuçlarında"
 
-#: win32\QueueFrame.cpp:920 win32\WinUtil.cpp:1566 win32\UserInfoBase.h:159
+#: win32\QueueFrame.cpp:1010 win32\WinUtil.cpp:1657 win32\UserInfoBase.h:159
 msgid "&Send private message"
 msgstr "&Özel mesaj yolla"
 
@@ -382,33 +382,33 @@ msgstr "&Özel mesaj yolla"
 msgid "&Undo\tCtrl+Z"
 msgstr "&Geri al\tCtrl+Z"
 
-#: win32\FavHubGroupsDlg.cpp:102
+#: win32\FavHubGroupsDlg.cpp:103
 msgid "&Update"
 msgstr "&Güncelle"
 
-#: win32\MainWindow.cpp:353
+#: win32\MainWindow.cpp:338
 msgid "&Users\tCtrl+U"
 msgstr "&Kullanıcılar\tCtrl+U"
 
-#: win32\MainWindow.cpp:347
+#: win32\MainWindow.cpp:332
 msgid "&View"
 msgstr "&Görünüm"
 
-#: win32\DirectoryListingFrame.cpp:856 win32\SearchFrame.cpp:833
+#: win32\DirectoryListingFrame.cpp:856 win32\SearchFrame.cpp:855
 #: win32\FinishedFrameBase.h:463
 msgid "&View as text"
 msgstr "Metin olarak &görüntüle"
 
-#: win32\MainWindow.cpp:382
+#: win32\MainWindow.cpp:367
 msgid "&Window"
 msgstr "&Pencere"
 
-#: win32\TransferView.cpp:985
+#: win32\TransferView.cpp:1009
 #, boost-format
 msgid "(%1%)"
 msgstr ""
 
-#: win32\MainWindow.cpp:842
+#: win32\MainWindow.cpp:827
 msgid "(No recent item found)"
 msgstr "(Yakın zamanda kullanılan herhangi bir dosya bulunamadı)"
 
@@ -433,7 +433,7 @@ msgstr "-.-- B/s, %1% kaldı"
 msgid "-.-- files/h, %1% files left"
 msgstr "-.-- dosya/saat, %1% dosya kaldı"
 
-#: win32\HashProgressDlg.cpp:149 win32\HashProgressDlg.cpp:164
+#: win32\HashProgressDlg.cpp:150 win32\HashProgressDlg.cpp:165
 msgid "-:--:--"
 msgstr "-:--:--"
 
@@ -442,7 +442,7 @@ msgstr "-:--:--"
 msgid "<Information unavailable>"
 msgstr "Yardım bilgisi yok"
 
-#: win32\WinUtil.cpp:1491
+#: win32\WinUtil.cpp:1552
 msgid ""
 "A MAGNET link was given to DC++, but it didn't contain a valid file hash for "
 "use on the Direct Connect network.  No action will be taken."
@@ -463,7 +463,7 @@ msgid ""
 "A secure ADC hub is required; this feature is not supported on NMDC hubs"
 msgstr ""
 
-#: win32\UploadPage.cpp:290
+#: win32\UploadPage.cpp:302
 #, boost-format
 msgid ""
 "A virtual directory named %1% already exists, do you wish to merge the "
@@ -471,7 +471,7 @@ msgid ""
 msgstr ""
 "%1% isimli sanal klasör zaten var, içerikleri birleştirmek ister misiniz?"
 
-#: win32\MainWindow.cpp:364 win32\MainWindow.cpp:469
+#: win32\MainWindow.cpp:349 win32\MainWindow.cpp:454
 msgid "ADL Search"
 msgstr "ADL arama"
 
@@ -479,7 +479,7 @@ msgstr "ADL arama"
 msgid "ADLSearch Properties"
 msgstr "ADLArama Özellikleri"
 
-#: win32\AboutDlg.cpp:172 win32\MainWindow.cpp:410
+#: win32\AboutDlg.cpp:172 win32\MainWindow.cpp:395
 msgid "About DC++"
 msgstr "DC++ Hakkında"
 
@@ -491,22 +491,22 @@ msgstr ""
 msgid "Accept custom user commands from hub"
 msgstr "Merkezden gelen bireysel kullanıcı komutlarını kabut et"
 
-#: win32\ConnectivityManualPage.cpp:67
+#: win32\ConnectivityManualPage.cpp:186
 msgid "Active mode (I have no router / I have configured my router)"
 msgstr ""
 
-#: win32\ConnectivityManualPage.cpp:70
+#: win32\ConnectivityManualPage.cpp:189
 #, fuzzy
 msgid "Active mode (let DC++ configure my router with NAT-PMP / UPnP)"
 msgstr "(NAT-PMP / UPnP) Yönlendiricimi DC++ ayarlasın"
 
-#: win32\MainWindow.cpp:723
+#: win32\MainWindow.cpp:708
 #, fuzzy
 msgid "Add"
 msgstr "&Ekle"
 
-#: win32\HubFrame.cpp:1305 win32\PublicHubsFrame.cpp:336
-#: win32\WinUtil.cpp:1569 win32\UserInfoBase.h:161
+#: win32\HubFrame.cpp:1305 win32\PublicHubsFrame.cpp:401
+#: win32\WinUtil.cpp:1660 win32\UserInfoBase.h:161
 msgid "Add To &Favorites"
 msgstr "&Favorilere Ekle"
 
@@ -523,7 +523,7 @@ msgstr "İndirilen dosyaları (paylaşıldıysa) hemen paylaşıma dahil et"
 msgid "Add timestamp to the end of away messages"
 msgstr "Dışarda iletisi (boş= dışarda iletisi yok)"
 
-#: win32\QueueFrame.cpp:57
+#: win32\QueueFrame.cpp:61
 msgid "Added"
 msgstr "Eklenme Tarihi"
 
@@ -531,8 +531,8 @@ msgstr "Eklenme Tarihi"
 msgid "Adding a plugin"
 msgstr ""
 
-#: win32\FavHubProperties.cpp:82 win32\HubListsDlg.cpp:52
-#: win32\PublicHubsFrame.cpp:44
+#: win32\FavHubProperties.cpp:90 win32\HubListsDlg.cpp:52
+#: win32\PublicHubsFrame.cpp:48
 msgid "Address"
 msgstr "Merkez Bulunağı"
 
@@ -582,21 +582,21 @@ msgstr ""
 msgid "Advanced"
 msgstr "Gelişmiş"
 
-#: win32\QueueFrame.cpp:928 win32\QueueFrame.cpp:937 win32\WinUtil.cpp:1524
+#: win32\QueueFrame.cpp:1018 win32\QueueFrame.cpp:1027 win32\WinUtil.cpp:1615
 msgid "All"
 msgstr "Tümü"
 
-#: win32\QueueFrame.cpp:340
+#: win32\QueueFrame.cpp:383
 #, boost-format
 msgid "All %1% users offline"
 msgstr "Tüm %1% kullanıcı çevrimdışı"
 
-#: win32\WinUtil.cpp:1622
+#: win32\WinUtil.cpp:1713
 #, fuzzy
 msgid "All columns"
 msgstr "Tüm dosyalar"
 
-#: win32\WinUtil.cpp:875 win32\WinUtil.cpp:882
+#: win32\WinUtil.cpp:864 win32\WinUtil.cpp:871
 msgid "All files"
 msgstr "Tüm dosyalar"
 
@@ -628,7 +628,7 @@ msgstr "Bu pencere her açıldığında yardımı görüntüle"
 msgid "Always show chat messages"
 msgstr "Sohbet iletilerini her zaman göster"
 
-#: win32\FavHubGroupsDlg.cpp:317
+#: win32\FavHubGroupsDlg.cpp:325
 #, boost-format
 msgid "Another group with the name \"%1%\" already exists"
 msgstr "\"%1%\" adında başka bir grup zaten var"
@@ -636,6 +636,10 @@ msgstr "\"%1%\" adında başka bir grup zaten var"
 #: win32\ListFilter.cpp:47
 msgid "Any"
 msgstr "Herhangi biri"
+
+#: win32\WinUtil.cpp:1576
+msgid "Any program that is launched will have the same access rights as DC++."
+msgstr ""
 
 #: win32\SettingsDialog.cpp:178
 msgid "Appearance"
@@ -669,16 +673,16 @@ msgstr "Özişler olarak yuva ver"
 msgid "Auto priority settings"
 msgstr "Otomatik öncelik ayarları"
 
-#: win32\ExpertsPage.cpp:50
+#: win32\ExpertsPage.cpp:52
 msgid "Auto refresh time"
 msgstr "Otomatik yenileme zamanı"
 
-#: win32\ExpertsPage.cpp:46
+#: win32\ExpertsPage.cpp:48
 #, fuzzy
 msgid "Auto-search interval"
 msgstr "Otomatik-arama limiti"
 
-#: win32\ExpertsPage.cpp:45
+#: win32\ExpertsPage.cpp:47
 msgid "Auto-search limit"
 msgstr "Otomatik-arama limiti"
 
@@ -697,16 +701,16 @@ msgstr ""
 "ADL Hizmeti (Otomatik Dizin Listeleme, kullanıcıların dosya listelerinde "
 "verilen kelimeleri arar)"
 
-#: win32\ConnectivityManualPage.cpp:55 win32\ConnectivityPage.cpp:53
+#: win32\ConnectivityManualPage.cpp:53 win32\ConnectivityPage.cpp:53
 #: win32\ProxyPage.cpp:54
 msgid "Automatic connectivity setup"
 msgstr "Özişler bağlanılırlık ayarlaması"
 
-#: win32\ConnectivityPage.cpp:98
+#: win32\ConnectivityPage.cpp:104
 msgid "Automatic connectivity setup is currently disabled"
 msgstr "Özişler bağlanılırlık ayarlaması şu anda devre dışı"
 
-#: win32\ConnectivityPage.cpp:116
+#: win32\ConnectivityPage.cpp:122
 msgid ""
 "Automatic connectivity setup will be disabled.\n"
 "\n"
@@ -734,7 +738,7 @@ msgstr "Yönlendirmeleri her zaman izle"
 msgid "Automatically match queue for search hits"
 msgstr "Arama sonuçlarını kuyruktaki dosyalarla kendiliğinden eşleştir"
 
-#: win32\UploadPage.cpp:105
+#: win32\UploadPage.cpp:117
 msgid "Automatically open an extra slot if speed is below (0 = disable)"
 msgstr "Otomatik ek slot açılması için minimum hız(0 = Kapalı)"
 
@@ -759,17 +763,17 @@ msgstr "Dışarda iletisi (boş= dışarda iletisi yok)"
 msgid "Away mode"
 msgstr "Dışarda modu"
 
-#: win32\WinUtil.cpp:668 win32\WinUtil.cpp:677
+#: win32\WinUtil.cpp:657 win32\WinUtil.cpp:666
 msgid "Away mode off"
 msgstr "Dışarıda modu açık"
 
-#: win32\WinUtil.cpp:673
+#: win32\WinUtil.cpp:662
 #, boost-format
 msgid "Away mode on: %1%"
 msgstr "Uzakta modu açık: %1%"
 
-#: win32\ADLSProperties.cpp:100 win32\ExpertsPage.cpp:52
-#: win32\ExpertsPage.cpp:53 win32\ExpertsPage.cpp:55 win32\SearchFrame.cpp:183
+#: win32\ADLSProperties.cpp:100 win32\ExpertsPage.cpp:54
+#: win32\ExpertsPage.cpp:55 win32\ExpertsPage.cpp:57 win32\SearchFrame.cpp:183
 #: win32\UploadFilteringPage.cpp:76 win32\UploadFilteringPage.cpp:81
 msgid "B"
 msgstr "B"
@@ -806,23 +810,18 @@ msgstr "Bip"
 msgid "Below (maximum size)"
 msgstr ""
 
-#: win32\ConnectivityManualPage.cpp:129
-msgid "Bind address"
+#: win32\ConnectivityManualPage.cpp:227
+#, fuzzy
+msgid "Bind Address"
 msgstr "Bağlanan adres"
 
-#: win32\MainWindow.cpp:423
+#: win32\MainWindow.cpp:408
 msgid "Blog"
 msgstr "Web Günlüğü"
 
 #: win32\UserInfoBase.cpp:122
 msgid "Bot"
 msgstr "Bot"
-
-#: win32\MainWindow.cpp:273
-msgid ""
-"Both Microsoft and DC++ are dropping support for your operating system "
-"(Windows XP). Please upgrade it as soon as possible."
-msgstr ""
 
 #: win32\AdvancedPage.cpp:42
 msgid "Break on first ADLSearch match"
@@ -832,11 +831,11 @@ msgstr "Aranan kelime bulunduğunda aramayı durdur"
 msgid "Browse..."
 msgstr "Gözat..."
 
-#: win32\TabsPage.cpp:104
+#: win32\TabsPage.cpp:99
 msgid "Browser theme"
 msgstr "Tarayıcı teması"
 
-#: win32\TabsPage.cpp:92
+#: win32\TabsPage.cpp:87
 msgid "Button style"
 msgstr "Düğme stili"
 
@@ -850,15 +849,15 @@ msgstr "CID"
 msgid "CRC Checked"
 msgstr "CRC Kontrol edildi"
 
-#: win32\QueueFrame.cpp:388
+#: win32\QueueFrame.cpp:431
 msgid "CRC32 inconsistency (SFV-Check)"
 msgstr "CRC32 uyumsuzluğu (SFV-Kontrol)"
 
-#: win32\PublicHubsFrame.cpp:429
+#: win32\PublicHubsFrame.cpp:494
 msgid "Cached hub list is corrupted or unsupported"
 msgstr "Önbelleklenen merkez listesi bozulmuş ya da desteklenmiyor"
 
-#: win32\WinUtil.cpp:1147
+#: win32\WinUtil.cpp:1136
 msgid "Cancel"
 msgstr "İptal"
 
@@ -875,7 +874,11 @@ msgstr ""
 msgid "Cannot start the direct encrypted channel: %1%"
 msgstr ""
 
-#: win32\MainWindow.cpp:409
+#: win32\CertificatesPage.cpp:124
+msgid "Certificate generation"
+msgstr ""
+
+#: win32\MainWindow.cpp:394
 msgid "Change Log"
 msgstr "Sürüm Geçmişi"
 
@@ -907,7 +910,7 @@ msgstr ""
 msgid "Clear search box after each search"
 msgstr "Her aramadan sonra arama kutusunu temizle"
 
-#: win32\WinUtil.cpp:580
+#: win32\WinUtil.cpp:569
 msgid ""
 "Clears the current window of all text. Optionally, you can specify how many "
 "of the latest (most recent) lines should be kept."
@@ -929,35 +932,35 @@ msgstr "İstemci türü"
 msgid "Close"
 msgstr "Kapat"
 
-#: win32\MainWindow.cpp:393
+#: win32\MainWindow.cpp:378
 msgid "Close all PM windows"
 msgstr "Tüm Mesaj pencerelerini kapat"
 
-#: win32\MainWindow.cpp:397
+#: win32\MainWindow.cpp:382
 msgid "Close all file list windows"
 msgstr "Tüm DosyaListeleme Pencerelerini kapat"
 
-#: win32\MainWindow.cpp:387
+#: win32\MainWindow.cpp:372
 msgid "Close all hubs"
 msgstr "Bütün merkezleri kapat"
 
-#: win32\MainWindow.cpp:389 win32\MainWindow.cpp:1722
+#: win32\MainWindow.cpp:374 win32\MainWindow.cpp:1716
 msgid "Close all hubs of a favorite group"
 msgstr "Bir gözde gruptaki tüm merkezleri kapat"
 
-#: win32\MainWindow.cpp:394
+#: win32\MainWindow.cpp:379
 msgid "Close all offline PM windows"
 msgstr "Tüm Çevrimdışı kullanıcı mesaj pencerelerini kapat"
 
-#: win32\MainWindow.cpp:400
+#: win32\MainWindow.cpp:385
 msgid "Close all search windows"
 msgstr "Tüm arama pencerelerini kapat"
 
-#: win32\MainWindow.cpp:388
+#: win32\MainWindow.cpp:373
 msgid "Close disconnected hubs"
 msgstr "Bağlanılmamış merkezleri kapat"
 
-#: win32\MainWindow.cpp:390 win32\MainWindow.cpp:1722
+#: win32\MainWindow.cpp:375 win32\MainWindow.cpp:1716
 msgid "Close hubs not in a favorite group"
 msgstr "Bir gözde grupta olmayan merkezleri kapat"
 
@@ -978,7 +981,7 @@ msgstr "Topluluk haberleri"
 msgid "Compiler"
 msgstr ""
 
-#: win32\MainWindow.cpp:724 win32\MainWindow.cpp:742
+#: win32\MainWindow.cpp:709 win32\MainWindow.cpp:727
 #, fuzzy
 msgid "Configure"
 msgstr "&Yapılandır"
@@ -996,7 +999,7 @@ msgstr ""
 msgid "Configure user matching definitions"
 msgstr "Kullanıcı eşleme tanımlarını ayarlayın"
 
-#: win32\HubListsDlg.cpp:44 win32\PublicHubsFrame.cpp:166
+#: win32\HubListsDlg.cpp:44 win32\PublicHubsFrame.cpp:179
 msgid "Configured Public Hub Lists"
 msgstr "Ortak Merkez Listeleri"
 
@@ -1028,15 +1031,15 @@ msgstr "Merkez kapatılırken onay iste"
 msgid "Confirm item removal in download queue"
 msgstr "İndirme listesindeki öğeleri silmek için onay iste"
 
-#: win32\MainWindow.cpp:317
+#: win32\MainWindow.cpp:302
 msgid "Connect to a favorite hub &group...\tCtrl+G"
 msgstr "Bir gözde merkez &grubuna bağlan...\tCtrl+G"
 
-#: win32\MainWindow.cpp:976
+#: win32\MainWindow.cpp:961
 msgid "Connect to a favorite hub group"
 msgstr "Bir gözde merkez grubuna bağlan"
 
-#: win32\MainWindow.cpp:814
+#: win32\MainWindow.cpp:799
 msgid "Connect to all hubs in this group"
 msgstr "Bu gruptaki tüm merkezlere bağlan"
 
@@ -1044,11 +1047,11 @@ msgstr "Bu gruptaki tüm merkezlere bağlan"
 msgid "Connect to hub"
 msgstr "Merkeze Bağlan"
 
-#: win32\FavHubsFrame.cpp:426 win32\HubFrame.cpp:680
+#: win32\HubFrame.cpp:680 win32\WinUtil.cpp:1781
 msgid "Connected"
 msgstr "Bağlandı"
 
-#: win32\TransferView.cpp:953 win32\TransferView.cpp:973
+#: win32\TransferView.cpp:977 win32\TransferView.cpp:997
 msgid "Connecting"
 msgstr "Bağlanıyor"
 
@@ -1070,11 +1073,11 @@ msgstr "Bağlanılırlık"
 msgid "Context"
 msgstr "İçerik"
 
-#: win32\MainWindow.cpp:422
+#: win32\MainWindow.cpp:407
 msgid "Contribute"
 msgstr ""
 
-#: win32\WinUtil.cpp:1604
+#: win32\WinUtil.cpp:1695
 #, fuzzy
 msgid "Copy"
 msgstr "&Kopyala"
@@ -1083,7 +1086,7 @@ msgstr "&Kopyala"
 msgid "Copy &address to clipboard"
 msgstr "Adresi panoy&a yapıştır"
 
-#: win32\WinUtil.cpp:825
+#: win32\WinUtil.cpp:814
 msgid "Copy magnet link to clipboard"
 msgstr "Magnet kısayolu'nu panoya kopyala"
 
@@ -1092,7 +1095,7 @@ msgstr "Magnet kısayolu'nu panoya kopyala"
 msgid "Copy user information"
 msgstr "Genel Bilgiler"
 
-#: win32\HubFrame.cpp:64 win32\PublicHubsFrame.cpp:45
+#: win32\HubFrame.cpp:64 win32\PublicHubsFrame.cpp:49
 #: win32\TransferView.cpp:59 win32\UserInfoBase.cpp:133
 msgid "Country"
 msgstr "Ülke"
@@ -1138,21 +1141,21 @@ msgstr "Özel yazıbiçimi"
 msgid "Custom text color"
 msgstr "Özel metin rengi"
 
-#: win32\MainWindow.cpp:935
+#: win32\MainWindow.cpp:920
 msgid "Custom..."
 msgstr "Özel..."
 
-#: win32\MainWindow.cpp:1205
+#: win32\MainWindow.cpp:1190
 #, boost-format
 msgid "D: %1%"
 msgstr "A: %1%"
 
-#: win32\MainWindow.cpp:1213
+#: win32\MainWindow.cpp:1198
 #, boost-format
 msgid "D: %1%/s (%2%)"
 msgstr "A: %1%/s (%2%)"
 
-#: win32\MainWindow.cpp:1919
+#: win32\MainWindow.cpp:1913
 #, boost-format
 msgid ""
 "D: %1%/s (%2%)\r\n"
@@ -1161,11 +1164,11 @@ msgstr ""
 "A: %1%/s (%2%)\r\n"
 "G: %3%/s (%4%)"
 
-#: win32\MainWindow.cpp:424
+#: win32\MainWindow.cpp:409
 msgid "DC Network Foundation community"
 msgstr ""
 
-#: win32\MainWindow.cpp:761
+#: win32\MainWindow.cpp:746
 #, boost-format
 msgid "DC++ - %1%"
 msgstr "DC++ - %1%"
@@ -1178,8 +1181,14 @@ msgstr ""
 "DC++ Direct Connect ağında arama yapılabilecek bir dosya özüne sahip MAGNET "
 "bağlantısı algıladı. Ne yapmak istersiniz?"
 
+#: win32\QueueFrame.cpp:133
+#, fuzzy
+msgid "Decrease priority"
+msgstr "Önceliği Ayarla"
+
 #: win32\AppearancePage.cpp:142 win32\AppearancePage.cpp:175
-#: win32\WinUtil.cpp:1191
+#: win32\ConnectivityManualPage.cpp:259 win32\FavHubProperties.cpp:269
+#: win32\WinUtil.cpp:1180
 msgid "Default"
 msgstr "Varsayılan"
 
@@ -1191,14 +1200,14 @@ msgstr "Dosya indirme dizini"
 msgid "Default group"
 msgstr "Öntanımlı grup"
 
-#: win32\TabsPage.cpp:102
+#: win32\TabsPage.cpp:97
 msgid "Default theme"
 msgstr "Öntanımlı tema"
 
-#: win32\FavHubGroupsDlg.cpp:140 win32\FavHubProperties.cpp:88
-#: win32\FavHubProperties.cpp:115 win32\FavHubsFrame.cpp:51
+#: win32\FavHubGroupsDlg.cpp:141 win32\FavHubProperties.cpp:96
+#: win32\FavHubProperties.cpp:132 win32\FavHubsFrame.cpp:51
 #: win32\GeneralPage.cpp:60 win32\HubFrame.cpp:60 win32\HubFrame.cpp:440
-#: win32\PublicHubsFrame.cpp:42 win32\UserInfoBase.cpp:129
+#: win32\PublicHubsFrame.cpp:46 win32\UserInfoBase.cpp:129
 #: win32\UsersFrame.cpp:58 win32\UsersFrame.cpp:80 win32\UsersFrame.cpp:428
 msgid "Description"
 msgstr "Açıklama"
@@ -1228,7 +1237,7 @@ msgstr "Direk Bağlantı"
 msgid "Direct encrypted channel"
 msgstr ""
 
-#: win32\TransferView.cpp:952
+#: win32\TransferView.cpp:976
 #, fuzzy
 msgid "Direct encrypted private message channel"
 msgstr "&Özel mesaj yolla"
@@ -1239,7 +1248,7 @@ msgstr "Dizinler"
 
 #: win32\ADLSProperties.cpp:77 win32\DirectoryListingFrame.cpp:1573
 #: win32\FavoriteDirsPage.cpp:41 win32\LogPage.cpp:74
-#: win32\SearchFrame.cpp:488 win32\UploadPage.cpp:47
+#: win32\SearchFrame.cpp:490 win32\UploadPage.cpp:47
 msgid "Directory"
 msgstr "Dizin"
 
@@ -1247,12 +1256,17 @@ msgstr "Dizin"
 msgid "Directory or directory name already exists"
 msgstr "Dizin yada dizin adı bulunuyor (!)"
 
-#: win32\MainWindow.cpp:739 win32\PluginPage.cpp:106 win32\PluginPage.cpp:258
+#: win32\MainWindow.cpp:724 win32\PluginPage.cpp:106 win32\PluginPage.cpp:258
 #, fuzzy
 msgid "Disable"
 msgstr "Devre dışı"
 
-#: win32\MainWindow.cpp:926
+#: win32\ConnectivityManualPage.cpp:195
+#, fuzzy
+msgid "Disable connectivity"
+msgstr "Bağlanılırlık"
+
+#: win32\MainWindow.cpp:911
 msgid "Disabled"
 msgstr "Devre dışı"
 
@@ -1260,11 +1274,16 @@ msgstr "Devre dışı"
 msgid "Disconnect the direct encrypted channel"
 msgstr ""
 
+#: win32\WinUtil.cpp:1786
+#, fuzzy
+msgid "Disconnected"
+msgstr "&Bağlantıyı kes"
+
 #: win32\PrivateFrame.cpp:329
 msgid "Disconnecting the direct encrypted channel..."
 msgstr ""
 
-#: win32\MainWindow.cpp:418
+#: win32\MainWindow.cpp:403
 msgid "Discussion forum"
 msgstr "Tartışma forumu"
 
@@ -1276,7 +1295,7 @@ msgstr "Bir bildirim göster"
 msgid "Display the balloon only when DC++ is in the background"
 msgstr "Bildirimi ancak DC++ arkaplanda çalışırken göster"
 
-#: win32\WinUtil.cpp:589
+#: win32\WinUtil.cpp:578
 msgid ""
 "Displays available commands. (The ones listed on this page.) Optionally, you "
 "can specify &quot;brief&quot; to have a brief listing."
@@ -1301,7 +1320,11 @@ msgstr "Seçilen kullanıcı eşleme tanımlarını silmek istediğinize emin mi
 msgid "Do you really want to delete this search type?"
 msgstr "Bu arama türünü gerçekten silmek istiyor musunuz?"
 
-#: win32\ConnectivityManualPage.cpp:88
+#: win32\WinUtil.cpp:1578
+msgid "Do you still want to allow to open a program on your computer?"
+msgstr ""
+
+#: win32\ConnectivityManualPage.cpp:212
 msgid "Don't allow hubs/NAT-PMP/UPnP to override"
 msgstr "Merkezlerin/NAT-PMP'lerin/UPnP'lerin üste yazmasına izin verme"
 
@@ -1333,7 +1356,7 @@ msgstr "Hedefi otomatik kaldır, (Sadece bağlantısı kesilenleri)"
 msgid "Don't send the away message to bots"
 msgstr "Botlara (Dışarıda) mesajı yollama"
 
-#: win32\MainWindow.cpp:421
+#: win32\MainWindow.cpp:406
 msgid "Donate (paypal)"
 msgstr "Bağış yap (paypal ile)"
 
@@ -1341,7 +1364,7 @@ msgstr "Bağış yap (paypal ile)"
 msgid "Done"
 msgstr "Tamamlandı"
 
-#: win32\QueueFrame.cpp:1117
+#: win32\QueueFrame.cpp:1207
 msgid "Done."
 msgstr "Tamamlandı"
 
@@ -1353,16 +1376,16 @@ msgstr "B&uraya indir..."
 msgid "Download Matches"
 msgstr "Eşleşenleri İndir"
 
-#: win32\MainWindow.cpp:461 win32\QueueFrame.cpp:63 win32\TabsPage.cpp:43
+#: win32\MainWindow.cpp:446 win32\QueueFrame.cpp:67 win32\TabsPage.cpp:42
 msgid "Download Queue"
 msgstr "İndirilecekler"
 
-#: win32\PublicHubsFrame.cpp:416
+#: win32\PublicHubsFrame.cpp:481
 #, boost-format
 msgid "Download failed: %1%"
 msgstr "İndirme başarısız: %1%"
 
-#: win32\TransferView.cpp:1112 win32\WinUtil.cpp:92
+#: win32\TransferView.cpp:1136 win32\WinUtil.cpp:92
 msgid "Download finished"
 msgstr "İndirme tamamlandı"
 
@@ -1370,25 +1393,25 @@ msgstr "İndirme tamamlandı"
 msgid "Download full list"
 msgstr "Bütün listeyi indir"
 
-#: win32\MainWindow.cpp:902 win32\MainWindow.cpp:1900
+#: win32\MainWindow.cpp:887 win32\MainWindow.cpp:1894
 msgid "Download limit"
 msgstr "İndirme sınırı"
 
-#: win32\WinUtil.cpp:711
+#: win32\WinUtil.cpp:700
 msgid "Download limit disabled"
 msgstr "İndirme limiti kapatıldı"
 
-#: win32\WinUtil.cpp:711
+#: win32\WinUtil.cpp:700
 #, boost-format
 msgid "Download limit set to %1% KiB/s"
 msgstr "İndirme sınırı %1% KiB/s olarak ayarlandı"
 
-#: win32\MainWindow.cpp:1221
+#: win32\MainWindow.cpp:1206
 #, boost-format
 msgid "Download limit: %1%/s - Click to adjust"
 msgstr "İndirme sınırı: %1% - Ayarlamak için tıklayın"
 
-#: win32\WinUtil.cpp:653
+#: win32\WinUtil.cpp:642
 msgid "Download slots set"
 msgstr "İndirme slotu ayarla"
 
@@ -1396,38 +1419,38 @@ msgstr "İndirme slotu ayarla"
 msgid "Download speed"
 msgstr "İndirme hızı"
 
-#: win32\SearchFrame.cpp:855
+#: win32\SearchFrame.cpp:877
 msgid "Download to..."
 msgstr "Buraya indir..."
 
-#: win32\SearchFrame.cpp:831
+#: win32\SearchFrame.cpp:853
 msgid "Download whole directory"
 msgstr "Bütün klasör'ü indir"
 
-#: win32\SearchFrame.cpp:883
+#: win32\SearchFrame.cpp:905
 msgid "Download whole directory to..."
 msgstr "Bütün klasör'ü buraya indir..."
 
-#: win32\QueueFrame.cpp:51
+#: win32\QueueFrame.cpp:55
 msgid "Downloaded"
 msgstr "İndirilen bölüm"
 
-#: win32\PublicHubsFrame.cpp:431
+#: win32\PublicHubsFrame.cpp:496
 #, boost-format
 msgid "Downloaded hub list is corrupted or unsupported (%1%)"
 msgstr "İndirilen merkez listesi bozulmuş ya da desteklenmiyor (%1%)"
 
-#: win32\TransferView.cpp:1081
+#: win32\TransferView.cpp:1105
 #, fuzzy
 msgid "Downloading"
 msgstr "Dosya indiriliyor..."
 
-#: win32\TransferView.cpp:1017
+#: win32\TransferView.cpp:1041
 #, boost-format
 msgid "Downloading %1%"
 msgstr "İndiriliyor %1%"
 
-#: win32\TransferView.cpp:346
+#: win32\TransferView.cpp:350
 #, fuzzy, boost-format
 msgid "Downloading from %1% users"
 msgstr "%1% kullanıcıdan indiriliyor"
@@ -1436,11 +1459,11 @@ msgstr "%1% kullanıcıdan indiriliyor"
 msgid "Downloading list..."
 msgstr "Liste indiriliyor..."
 
-#: win32\PublicHubsFrame.cpp:212 win32\PublicHubsFrame.cpp:346
+#: win32\PublicHubsFrame.cpp:226 win32\PublicHubsFrame.cpp:411
 msgid "Downloading public hub list..."
 msgstr "Ortak merkez listesi indiriliyor..."
 
-#: win32\PublicHubsFrame.cpp:412
+#: win32\PublicHubsFrame.cpp:477
 #, boost-format
 msgid "Downloading public hub list... (%1%)"
 msgstr "Ortak merkez listesi indiriliyor... (%1%)"
@@ -1449,12 +1472,12 @@ msgstr "Ortak merkez listesi indiriliyor... (%1%)"
 msgid "Downloading..."
 msgstr "Dosya indiriliyor..."
 
-#: win32\MainWindow.cpp:415 win32\SettingsDialog.cpp:167
+#: win32\MainWindow.cpp:400 win32\SettingsDialog.cpp:167
 #: win32\StylesPage.cpp:165
 msgid "Downloads"
 msgstr "DC++ İndirme Sayfası"
 
-#: win32\QueueFrame.cpp:1108
+#: win32\QueueFrame.cpp:1198
 msgid "Downloads running, please disconnect them"
 msgstr "Yürürlükte indirmeler var, lütfen bağlantılarını kesin"
 
@@ -1462,7 +1485,7 @@ msgstr "Yürürlükte indirmeler var, lütfen bağlantılarını kesin"
 msgid "Drop sources below"
 msgstr "Hedeftekini durdur"
 
-#: win32\MainWindow.cpp:343
+#: win32\MainWindow.cpp:328
 msgid "E&xit\tAlt+F4"
 msgstr "&Çıkış\tAlt+F4"
 
@@ -1482,7 +1505,7 @@ msgstr "Algılanan ayarları düzenle"
 msgid "Elapsed"
 msgstr "Geçen Süre"
 
-#: win32\FavHubGroupsDlg.cpp:144 win32\FavHubProperties.cpp:120
+#: win32\FavHubGroupsDlg.cpp:145 win32\FavHubProperties.cpp:137
 #: win32\GeneralPage.cpp:65 win32\HubFrame.cpp:441
 #, fuzzy
 msgid "Email"
@@ -1492,7 +1515,7 @@ msgstr "E-posta"
 msgid "Empty hub address specified"
 msgstr ""
 
-#: win32\MainWindow.cpp:738 win32\PluginPage.cpp:102 win32\PluginPage.cpp:257
+#: win32\MainWindow.cpp:723 win32\PluginPage.cpp:102 win32\PluginPage.cpp:257
 #, fuzzy
 msgid "Enable"
 msgstr "Listeme Açık"
@@ -1529,7 +1552,12 @@ msgstr "Listeme Açık"
 msgid "Enabled / Search String"
 msgstr "Ara / Aranan Kelime"
 
-#: win32\ConnectivityManualPage.cpp:114 win32\ConnectivityManualPage.cpp:228
+#: win32\FavHubProperties.cpp:103
+#, fuzzy
+msgid "Encoding"
+msgstr "Dosya indiriliyor..."
+
+#: win32\ConnectivityManualPage.cpp:79 win32\ConnectivityManualPage.cpp:145
 msgid "Encrypted transfer"
 msgstr "Şifrelenmiş aktarım"
 
@@ -1537,11 +1565,15 @@ msgstr "Şifrelenmiş aktarım"
 msgid "Enter search here"
 msgstr "Aradığınız dosyayı buraya yazın"
 
-#: win32\CertificatesPage.cpp:118
+#: win32\ConnectivityManualPage.cpp:208
+msgid "Enter your external address here"
+msgstr ""
+
+#: win32\CertificatesPage.cpp:126
 msgid "Error generating certificate"
 msgstr "Sertifika oluşturulurken hata meydana geldi"
 
-#: win32\NotepadFrame.cpp:50
+#: win32\NotepadFrame.cpp:52
 #, boost-format
 msgid "Error loading the notepad file: %1%"
 msgstr "Not defteri dosyasını yüklerken hata oluştu: %1%"
@@ -1550,12 +1582,26 @@ msgstr "Not defteri dosyasını yüklerken hata oluştu: %1%"
 msgid "Error processing version information"
 msgstr "Sürüm bilgisini işlerken hata oluştu"
 
-#: win32\WinUtil.cpp:1412
+#: win32\WinUtil.cpp:1459
+msgid ""
+"Error registering DC++ for automatic startup (could not find or create key)"
+msgstr ""
+
+#: win32\WinUtil.cpp:1469
+msgid "Error registering DC++ for automatic startup (could not set key value)"
+msgstr ""
+
+#: win32\WinUtil.cpp:1401
 #, fuzzy, boost-format
 msgid "Error registering the %1% handler"
 msgstr "Kaydederken hata oluştu %1%:// bağlantı tutucu"
 
-#: win32\QueueFrame.cpp:56
+#: win32\WinUtil.cpp:1504
+msgid ""
+"Error unregistering DC++ for automatic startup (could not delete key value)"
+msgstr ""
+
+#: win32\QueueFrame.cpp:60
 msgid "Errors"
 msgstr "Hatalar"
 
@@ -1567,20 +1613,20 @@ msgstr ""
 msgid "Event"
 msgstr "Olay"
 
-#: win32\UserMatchPage.cpp:217 win32\WinUtil.cpp:1186
+#: win32\UserMatchPage.cpp:217 win32\WinUtil.cpp:1175
 msgid "Exact match"
 msgstr "Tam eşleşme"
 
-#: win32\DirectoryListingFrame.cpp:67 win32\QueueFrame.cpp:55
+#: win32\DirectoryListingFrame.cpp:67 win32\QueueFrame.cpp:59
 #: win32\SearchFrame.cpp:59
 msgid "Exact size"
 msgstr "Tam boyut"
 
-#: win32\TabsPage.cpp:199
+#: win32\TabsPage.cpp:191
 msgid "Example hub tab"
 msgstr "Örnek merkez sekmesi"
 
-#: win32\MainWindow.cpp:1903
+#: win32\MainWindow.cpp:1897
 msgid "Exit"
 msgstr "Çıkış"
 
@@ -1605,11 +1651,20 @@ msgstr "Uzantılar"
 msgid "Extensions for the %1% search type"
 msgstr "%1%  arama türü için uzantılar"
 
-#: win32\ConnectivityManualPage.cpp:78 win32\HubFrame.cpp:442
+#: win32\HubFrame.cpp:442
 msgid "External / WAN IP"
 msgstr "Global / WAN IP"
 
-#: win32\PublicHubsFrame.cpp:148
+#: win32\ConnectivityManualPage.cpp:201
+#, fuzzy
+msgid "External / WAN IP address"
+msgstr "Global / WAN IP"
+
+#: win32\WinUtil.cpp:1579
+msgid "External protocol request"
+msgstr ""
+
+#: win32\PublicHubsFrame.cpp:161
 msgid "F&ilter"
 msgstr "&Süzgeç"
 
@@ -1625,11 +1680,11 @@ msgstr ""
 msgid "Favorite"
 msgstr "Gözde"
 
-#: win32\FavHubProperties.cpp:177
+#: win32\FavHubProperties.cpp:200
 msgid "Favorite Hub Properties"
 msgstr "Gözde Merkez Özellikleri"
 
-#: win32\FavHubsFrame.cpp:60 win32\MainWindow.cpp:456
+#: win32\FavHubsFrame.cpp:60 win32\MainWindow.cpp:441
 msgid "Favorite Hubs"
 msgstr "Gözde Merkezler"
 
@@ -1641,7 +1696,7 @@ msgstr "Favori \"Buraya İndir\" klasörleri"
 msgid "Favorite hub added"
 msgstr "Gözde merkez eklendi"
 
-#: win32\FavHubGroupsDlg.cpp:204
+#: win32\FavHubGroupsDlg.cpp:210
 msgid "Favorite hub groups"
 msgstr "Gözde merkez grupları"
 
@@ -1658,7 +1713,7 @@ msgstr "Klasör ismi"
 msgid "Favorite user added"
 msgstr "Favori kullanıcı'lara eklendi"
 
-#: win32\WinUtil.cpp:461
+#: win32\WinUtil.cpp:450
 #, boost-format
 msgid "Favorite users (added by %1%)"
 msgstr "Gözde kullanıcılar (%1% tarafından eklendi)"
@@ -1680,11 +1735,11 @@ msgstr "Dosya"
 msgid "File Hash:"
 msgstr "Dosya Özü:"
 
-#: win32\QueueFrame.cpp:420 win32\TabsPage.cpp:40
+#: win32\QueueFrame.cpp:463 win32\TabsPage.cpp:39
 msgid "File List"
 msgstr "Dosya Listesi"
 
-#: win32\QueueFrame.cpp:464 win32\WinUtil.cpp:882
+#: win32\QueueFrame.cpp:507 win32\WinUtil.cpp:871
 msgid "File Lists"
 msgstr "Dosya Listeleri"
 
@@ -1698,7 +1753,7 @@ msgstr "Uzantı düzenleme"
 msgid "File extensions"
 msgstr "Uzantılar"
 
-#: win32\QueueFrame.cpp:1114
+#: win32\QueueFrame.cpp:1204
 msgid "File is already finished"
 msgstr "Dosya zaten bitti"
 
@@ -1715,7 +1770,7 @@ msgstr ""
 msgid "File name: "
 msgstr "Dosya Adı:"
 
-#: win32\QueueFrame.cpp:384
+#: win32\QueueFrame.cpp:427
 msgid "File not available"
 msgstr "Dosya mevcut değil"
 
@@ -1731,7 +1786,7 @@ msgstr "Dosya türü"
 msgid "Filelist Menu"
 msgstr "Dosya Listesinde"
 
-#: win32\ADLSProperties.cpp:76 win32\LogPage.cpp:94 win32\QueueFrame.cpp:48
+#: win32\ADLSProperties.cpp:76 win32\LogPage.cpp:94 win32\QueueFrame.cpp:52
 #: win32\UsersFrame.cpp:418 win32\FinishedFrameBase.h:728
 msgid "Filename"
 msgstr "Dosya İsmi"
@@ -1749,20 +1804,20 @@ msgstr "Dosyalr"
 msgid "Files (total): %1%"
 msgstr "Dosyalar: %1%"
 
-#: win32\DirectoryListingFrame.cpp:1234 win32\QueueFrame.cpp:228
+#: win32\DirectoryListingFrame.cpp:1234 win32\QueueFrame.cpp:271
 #, boost-format
 msgid "Files: %1%"
 msgstr "Dosyalar: %1%"
 
-#: win32\PublicHubsFrame.cpp:157
+#: win32\PublicHubsFrame.cpp:170
 msgid "Filter hubs"
 msgstr "Merkezleri süz"
 
-#: win32\SearchFrame.cpp:263
+#: win32\SearchFrame.cpp:265
 msgid "Filter search results"
 msgstr "Arama sonuçlarını süz"
 
-#: win32\SearchFrame.cpp:259
+#: win32\SearchFrame.cpp:261
 msgid "Filter search results:"
 msgstr "Arama sonuçlarını süz:"
 
@@ -1803,17 +1858,17 @@ msgstr "Sonrakini bul"
 msgid "Find previous"
 msgstr "Öncekini bul"
 
-#: win32\QueueFrame.cpp:346
+#: win32\QueueFrame.cpp:389
 msgid "Finished"
 msgstr "Tamamlandı"
 
-#: win32\FinishedDLFrame.cpp:28 win32\MainWindow.cpp:358
-#: win32\MainWindow.cpp:463 win32\TabsPage.cpp:44
+#: win32\FinishedDLFrame.cpp:28 win32\MainWindow.cpp:343
+#: win32\MainWindow.cpp:448 win32\TabsPage.cpp:43
 msgid "Finished Downloads"
 msgstr "İndirilen dosyalar"
 
-#: win32\FinishedULFrame.cpp:28 win32\MainWindow.cpp:360
-#: win32\MainWindow.cpp:465 win32\TabsPage.cpp:45
+#: win32\FinishedULFrame.cpp:28 win32\MainWindow.cpp:345
+#: win32\MainWindow.cpp:450 win32\TabsPage.cpp:44
 msgid "Finished Uploads"
 msgstr "Gönderilen dosyalar"
 
@@ -1833,7 +1888,7 @@ msgstr "İleri"
 msgid "Free slots"
 msgstr "Boş yuvalar"
 
-#: win32\MainWindow.cpp:416
+#: win32\MainWindow.cpp:401
 msgid "Frequently asked questions"
 msgstr "Sıkça sorulan sorular"
 
@@ -1841,7 +1896,7 @@ msgstr "Sıkça sorulan sorular"
 msgid "Full Path"
 msgstr "Tam Yol"
 
-#: win32\QueueFrame.cpp:390
+#: win32\QueueFrame.cpp:433
 msgid "Full tree does not match TTH root"
 msgstr "İndirme listesindeki TTH ile uyuşmuyor"
 
@@ -1857,7 +1912,7 @@ msgstr "Genel"
 msgid "General information"
 msgstr "Genel Bilgiler"
 
-#: win32\CertificatesPage.cpp:93
+#: win32\CertificatesPage.cpp:98
 msgid "Generate certificates"
 msgstr "Sertifika oluştur"
 
@@ -1866,11 +1921,11 @@ msgstr "Sertifika oluştur"
 msgid "Generated by %1%"
 msgstr "%1% tarafından oluşturuldu"
 
-#: win32\MainWindow.cpp:336
+#: win32\MainWindow.cpp:321
 msgid "GeoIP database update"
 msgstr "GeoIP veritabanı'nı güncelle"
 
-#: win32\MainWindow.cpp:407
+#: win32\MainWindow.cpp:392
 msgid "Get started"
 msgstr "Başla"
 
@@ -1883,7 +1938,7 @@ msgstr "GB"
 msgid "Global application style"
 msgstr "Genel uygulama biçimi"
 
-#: win32\WinUtil.cpp:1572 win32\UserInfoBase.h:162
+#: win32\WinUtil.cpp:1663 win32\UserInfoBase.h:162
 msgid "Grant &extra slot"
 msgstr "Bu kullanıcıya ekstra slot  ver"
 
@@ -1897,7 +1952,7 @@ msgstr ""
 msgid "Greetz and Contributors"
 msgstr "Karşılama ve Katkıda Bulunanlar"
 
-#: win32\FavHubProperties.cpp:155 win32\FavHubsFrame.cpp:56
+#: win32\FavHubProperties.cpp:178 win32\FavHubsFrame.cpp:56
 msgid "Group"
 msgstr "Grup"
 
@@ -1905,7 +1960,7 @@ msgstr "Grup"
 msgid "Group name"
 msgstr "Grup adı"
 
-#: win32\FavHubGroupsDlg.cpp:114
+#: win32\FavHubGroupsDlg.cpp:115
 msgid "Group properties"
 msgstr "Grup özellikleri"
 
@@ -1929,15 +1984,15 @@ msgstr "HTTP Proxy kullan (Sadece ortak merkez listeleri için)"
 msgid "Height of the message editing box"
 msgstr "Mesaj düzenleme kutusunun yüksekliği"
 
-#: win32\WinUtil.cpp:1159
+#: win32\WinUtil.cpp:1148
 msgid "Help"
 msgstr "Yardım"
 
-#: win32\MainWindow.cpp:406
+#: win32\MainWindow.cpp:391
 msgid "Help &Contents\tF1"
 msgstr "Yardım &İçeriği\tF1"
 
-#: win32\MainWindow.cpp:417
+#: win32\MainWindow.cpp:402
 msgid "Help center"
 msgstr "Yardım merkezi"
 
@@ -1949,7 +2004,8 @@ msgstr "Gizli kullanıcı"
 msgid "Hide files already in share"
 msgstr "Zaten paylaşılan dosyaları gizle"
 
-#: win32\QueueFrame.cpp:365 win32\QueueFrame.cpp:907
+#: win32\QueueFrame.cpp:408 win32\QueueFrame.cpp:997
+#: win32\TransferView.cpp:553
 msgid "High"
 msgstr "Yüksek"
 
@@ -1957,7 +2013,8 @@ msgstr "Yüksek"
 msgid "High prio max size"
 msgstr "Yüksek boyutu"
 
-#: win32\QueueFrame.cpp:366 win32\QueueFrame.cpp:908
+#: win32\QueueFrame.cpp:409 win32\QueueFrame.cpp:998
+#: win32\TransferView.cpp:554
 msgid "Highest"
 msgstr "En yüksek"
 
@@ -1965,11 +2022,11 @@ msgstr "En yüksek"
 msgid "Highest prio max size"
 msgstr "En Yüksek boyutu"
 
-#: win32\TabsPage.cpp:202
+#: win32\TabsPage.cpp:194
 msgid "Highlighted tab"
 msgstr "Vurgulanmış sekme"
 
-#: win32\WinUtil.cpp:591
+#: win32\WinUtil.cpp:580
 msgid ""
 "Highlights the last occourrence of the specified search string in the chat "
 "window."
@@ -1983,12 +2040,12 @@ msgstr "Geçmiş"
 msgid "Hits"
 msgstr ""
 
-#: win32\MainWindow.cpp:414
+#: win32\MainWindow.cpp:399
 msgid "Homepage"
 msgstr "Anasayfa"
 
-#: win32\FavHubProperties.cpp:70 win32\SearchFrame.cpp:58
-#: win32\TabsPage.cpp:38 win32\TransferView.cpp:52 win32\UCPage.cpp:39
+#: win32\FavHubProperties.cpp:74 win32\SearchFrame.cpp:58
+#: win32\TabsPage.cpp:37 win32\TransferView.cpp:52 win32\UCPage.cpp:39
 #: win32\FinishedFrameBase.h:743
 msgid "Hub"
 msgstr "Merkez"
@@ -2010,11 +2067,11 @@ msgstr "Merkez bulunağı"
 msgid "Hub address (see help for usage)"
 msgstr "Merkez bulunağı (kullanımı için yardıma bakın)"
 
-#: win32\FavHubProperties.cpp:188
+#: win32\FavHubProperties.cpp:211
 msgid "Hub address cannot be empty"
 msgstr "Merkez bulunağı boş olamaz"
 
-#: win32\MainWindow.cpp:965
+#: win32\MainWindow.cpp:950
 #, fuzzy
 msgid "Hub address or Magnet link"
 msgstr "Merkez bulunağı (kullanımı için yardıma bakın)"
@@ -2023,7 +2080,7 @@ msgstr "Merkez bulunağı (kullanımı için yardıma bakın)"
 msgid "Hub already exists as a favorite"
 msgstr "Merkez zâten gözde merkezlerinize ekli"
 
-#: win32\PublicHubsFrame.cpp:420
+#: win32\PublicHubsFrame.cpp:485
 #, boost-format
 msgid "Hub list downloaded%1% (%2%)"
 msgstr "Merkez listesi indirildi%1% (%2%)"
@@ -2061,18 +2118,26 @@ msgstr "Merkezler (yönetici)"
 msgid "Hubs (registered)"
 msgstr "Merkezler (kayıtlı)"
 
-#: win32\MainWindow.cpp:1192 win32\PublicHubsFrame.cpp:246
+#: win32\SearchFrame.cpp:232
+#, fuzzy
+msgid "Hubs where I'm op"
+msgstr "Sadece operatör olduklarımda ara"
+
+#: win32\SearchFrame.cpp:234
+msgid "Hubs with secure transfers"
+msgstr ""
+
+#: win32\MainWindow.cpp:1177 win32\PublicHubsFrame.cpp:261
 #: win32\UserInfoBase.cpp:106
 #, boost-format
 msgid "Hubs: %1%"
 msgstr "Merkezler: %1%"
 
-#: win32\PublicHubsFrame.cpp:244
+#: win32\PublicHubsFrame.cpp:259
 #, boost-format
 msgid "Hubs: %1% / %2%"
 msgstr "Merkezler: %1% / %2%"
 
-#: win32\FavHubGroupsDlg.cpp:148 win32\FavHubProperties.cpp:125
 #: win32\HubFrame.cpp:63 win32\ProxyPage.cpp:80 win32\SearchFrame.cpp:60
 #: win32\TransferView.cpp:58 win32\UserInfoBase.cpp:132
 #: win32\UserMatchDlg.cpp:223 win32\UserMatchPage.cpp:216
@@ -2087,22 +2152,42 @@ msgstr "IP (v4)"
 msgid "IP (v6)"
 msgstr "IP (v6)"
 
-#: win32\MainWindow.cpp:1610
+#: win32\MainWindow.cpp:1604
 msgid ""
 "IP -> country mappings are disabled. Turn them back on via Settings > "
 "Appearance."
 msgstr "IP -> ülke gösterimi kapalı. Ayarlar > Görünüm sekmesine giderek açın."
 
-#: win32\FavHubGroupsDlg.cpp:129 win32\FavHubProperties.cpp:95
+#: win32\ConnectivityManualPage.cpp:84 win32\FavHubGroupsDlg.cpp:149
+#: win32\FavHubProperties.cpp:142
+msgid "IPv4"
+msgstr ""
+
+#: win32\ConnectivityPage.cpp:98
+#, fuzzy, boost-format
+msgid "IPv4: %1%"
+msgstr "A: %1%"
+
+#: win32\ConnectivityManualPage.cpp:87 win32\FavHubGroupsDlg.cpp:154
+#: win32\FavHubProperties.cpp:148
+msgid "IPv6"
+msgstr ""
+
+#: win32\ConnectivityPage.cpp:101
+#, fuzzy, boost-format
+msgid "IPv6: %1%"
+msgstr "A: %1%"
+
+#: win32\FavHubGroupsDlg.cpp:130 win32\FavHubProperties.cpp:112
 msgid "Identification (leave blank for defaults)"
 msgstr "Tanımlama (varsayılan değerler için boş bırakın)"
 
-#: win32\TransferView.cpp:167 win32\TransferView.cpp:349
-#: win32\TransferView.cpp:1168
+#: win32\TransferView.cpp:167 win32\TransferView.cpp:353
+#: win32\TransferView.cpp:1192
 msgid "Idle"
 msgstr "Boşta"
 
-#: win32\WinUtil.cpp:588
+#: win32\WinUtil.cpp:577
 msgid ""
 "If no parameter is specified, it launches the log for the hub or private "
 "chat with the associated application in Windows. If one of the parameters is "
@@ -2135,7 +2220,12 @@ msgstr "Mesaj gözardı edildi: %1%"
 msgid "In away mode"
 msgstr "Uzak modunda"
 
-#: win32\MainWindow.cpp:373
+#: win32\QueueFrame.cpp:132
+#, fuzzy
+msgid "Increase priority"
+msgstr "Önceliği Ayarla"
+
+#: win32\MainWindow.cpp:358
 msgid "Indexing progress"
 msgstr "İndeksleme İşlemi"
 
@@ -2151,7 +2241,7 @@ msgstr ""
 msgid "Installed Plugins"
 msgstr ""
 
-#: win32\QueueFrame.cpp:1074
+#: win32\QueueFrame.cpp:1164
 #, boost-format
 msgid "Integrity check: %1% (%2%)"
 msgstr "Bütünlüğü kontrol et: %1% (%2%)"
@@ -2161,19 +2251,19 @@ msgstr "Bütünlüğü kontrol et: %1% (%2%)"
 msgid "Invalid extension: %1%"
 msgstr "Geçersiz uzantı: %1%"
 
-#: win32\MainWindow.cpp:1392
+#: win32\MainWindow.cpp:1386
 msgid "Invalid file list name"
 msgstr "Geçersiz dosya liste adı"
 
-#: win32\SearchFrame.cpp:965
+#: win32\SearchFrame.cpp:1000
 msgid "Invalid input value for TTH search"
 msgstr ""
 
-#: win32\WinUtil.cpp:647 win32\WinUtil.cpp:655
+#: win32\WinUtil.cpp:636 win32\WinUtil.cpp:644
 msgid "Invalid number of slots"
 msgstr "(!) Geçersiz slot sayısı"
 
-#: win32\ConnectivityManualPage.cpp:235
+#: win32\ConnectivityManualPage.cpp:152
 msgid "Invalid value"
 msgstr ""
 
@@ -2181,7 +2271,7 @@ msgstr ""
 msgid "Item edition"
 msgstr "Öğe düzenleme"
 
-#: win32\QueueFrame.cpp:221
+#: win32\QueueFrame.cpp:264
 #, boost-format
 msgid "Items: %1%"
 msgstr "Parçalar: %1%"
@@ -2234,14 +2324,14 @@ msgstr "Arada sakla"
 msgid "Key Search:"
 msgstr "Anahtar arama:"
 
-#: win32\ADLSProperties.cpp:101 win32\ExpertsPage.cpp:44
-#: win32\ExpertsPage.cpp:47 win32\ListFilter.cpp:159 win32\QueuePage.cpp:73
+#: win32\ADLSProperties.cpp:101 win32\ExpertsPage.cpp:46
+#: win32\ExpertsPage.cpp:49 win32\ListFilter.cpp:159 win32\QueuePage.cpp:73
 #: win32\QueuePage.cpp:79 win32\QueuePage.cpp:85 win32\QueuePage.cpp:91
 #: win32\QueuePage.cpp:139 win32\SearchFrame.cpp:184
 msgid "KiB"
 msgstr "kB"
 
-#: win32\UploadPage.cpp:115
+#: win32\UploadPage.cpp:127
 msgid "KiB/s"
 msgstr "kB/sn"
 
@@ -2258,25 +2348,25 @@ msgstr "%1%'den özel mesaj: %2%"
 msgid "Latest stable version"
 msgstr "Son kararlı sürüm"
 
-#: win32\WinUtil.cpp:584
+#: win32\WinUtil.cpp:573
 msgid ""
 "Launches your default web browser to the DuckDuckGo search engine with the "
 "specified search."
 msgstr ""
 
-#: win32\WinUtil.cpp:585
+#: win32\WinUtil.cpp:574
 msgid ""
 "Launches your default web browser to the Google search engine with the "
 "specified search."
 msgstr ""
 
-#: win32\WinUtil.cpp:586
+#: win32\WinUtil.cpp:575
 msgid ""
 "Launches your default web browser to the Internet Movie Database (imdb) with "
 "the specified query."
 msgstr ""
 
-#: win32\WinUtil.cpp:590
+#: win32\WinUtil.cpp:579
 msgid "Launches your default web browser with the given URL."
 msgstr ""
 
@@ -2291,12 +2381,12 @@ msgid ""
 "DC++ is licenced under GPL."
 msgstr ""
 
-#: win32\ConnectivityManualPage.cpp:58 win32\ConnectivityPage.cpp:65
+#: win32\ConnectivityManualPage.cpp:56 win32\ConnectivityPage.cpp:65
 #: win32\ProxyPage.cpp:57
 msgid "Let DC++ determine the best connectivity settings"
 msgstr "En uygun bağlanılırlık ayarlarına DC++ karar versin"
 
-#: win32\TabsPage.cpp:72
+#: win32\TabsPage.cpp:71
 msgid "Let DC++ draw tabs"
 msgstr "DC++'ın sekmeleri çizmesine izin ver"
 
@@ -2308,7 +2398,7 @@ msgstr "Limitler"
 msgid "Line speed (upload)"
 msgstr "Bağlantı Hızı (Gönderme)"
 
-#: win32\MainWindow.cpp:413 win32\StylesPage.cpp:168
+#: win32\MainWindow.cpp:398 win32\StylesPage.cpp:168
 msgid "Links"
 msgstr "Bağlantılar"
 
@@ -2330,7 +2420,7 @@ msgstr "DC++ yükleniyor, lütfen bekleyin...(%1%)"
 msgid "Loading file list: %1%"
 msgstr "Dosya listesi yükleniyor: %1%"
 
-#: win32\PublicHubsFrame.cpp:424
+#: win32\PublicHubsFrame.cpp:489
 #, boost-format
 msgid "Locally cached (as of %1%) version of the hub list loaded (%2%)"
 msgstr ""
@@ -2348,7 +2438,7 @@ msgstr "İndirilen dosya listelerini günlük rapor tut (Log)"
 msgid "Log finished downloads"
 msgstr "İnmesi biten dosyaların kaydını tut"
 
-#: win32\FavHubGroupsDlg.cpp:169 win32\FavHubProperties.cpp:148
+#: win32\FavHubGroupsDlg.cpp:175 win32\FavHubProperties.cpp:171
 #: win32\LogPage.cpp:37
 msgid "Log main chat"
 msgstr "Genel konuşma penceresi için günlük tut"
@@ -2381,7 +2471,8 @@ msgstr "Kullanıcı adı"
 msgid "Logs"
 msgstr "Günlükler"
 
-#: win32\QueueFrame.cpp:363 win32\QueueFrame.cpp:905
+#: win32\QueueFrame.cpp:406 win32\QueueFrame.cpp:995
+#: win32\TransferView.cpp:551
 msgid "Low"
 msgstr "Düşük"
 
@@ -2389,16 +2480,18 @@ msgstr "Düşük"
 msgid "Low prio max size"
 msgstr "Düşük boyutu"
 
-#: win32\QueueFrame.cpp:362 win32\QueueFrame.cpp:904
+#: win32\QueueFrame.cpp:405 win32\QueueFrame.cpp:994
+#: win32\TransferView.cpp:550
 msgid "Lowest"
 msgstr "En düşük"
 
-#: win32\SearchTypesPage.cpp:86 win32\UploadFilteringPage.cpp:96
-#: win32\UploadFilteringPage.cpp:112 win32\UploadFilteringPage.cpp:128
+#: win32\ExpertsPage.cpp:111 win32\SearchTypesPage.cpp:86
+#: win32\UploadFilteringPage.cpp:96 win32\UploadFilteringPage.cpp:112
+#: win32\UploadFilteringPage.cpp:128
 msgid "M&odify"
 msgstr "D&eğiştir"
 
-#: win32\MagnetDlg.cpp:122 win32\WinUtil.cpp:1492
+#: win32\MagnetDlg.cpp:122 win32\WinUtil.cpp:1553
 msgid "MAGNET Link detected"
 msgstr "Magnet kısayolu algılandı."
 
@@ -2410,7 +2503,7 @@ msgstr "MB"
 msgid "Main chat message received"
 msgstr "Ana sohbet iletisi alındı"
 
-#: win32\FavHubProperties.cpp:166 win32\FavHubsFrame.cpp:154
+#: win32\FavHubProperties.cpp:189 win32\FavHubsFrame.cpp:154
 #: win32\FavHubsFrame.cpp:378
 msgid "Manage &groups"
 msgstr "&Grupları yönet"
@@ -2419,7 +2512,7 @@ msgstr "&Grupları yönet"
 msgid "Manual configuration"
 msgstr "Elle ayarlama"
 
-#: win32\WinUtil.cpp:576
+#: win32\WinUtil.cpp:565
 msgid ""
 "Manually refreshes DC++'s share list by going through the shared directories "
 "and adding new folders and files. DC++ automatically refreshes once an hour "
@@ -2431,7 +2524,7 @@ msgstr ""
 msgid "Match bots"
 msgstr "Botlarla eşleştir"
 
-#: win32\MainWindow.cpp:325
+#: win32\MainWindow.cpp:310
 msgid "Match downloaded lists"
 msgstr "İndirilen listeleri eşleştir"
 
@@ -2462,7 +2555,7 @@ msgstr[1] "%1% dosya eşleşti"
 msgid "Max FileSize"
 msgstr "En fazla dosya boyutu"
 
-#: win32\ExpertsPage.cpp:54
+#: win32\ExpertsPage.cpp:56
 msgid "Max PM windows"
 msgstr "En çok Özel İleti penceresi sayısı"
 
@@ -2470,15 +2563,20 @@ msgstr "En çok Özel İleti penceresi sayısı"
 msgid "Max Size"
 msgstr "Max Size"
 
-#: win32\ExpertsPage.cpp:48
+#: win32\UploadPage.cpp:129
+#, fuzzy
+msgid "Max extra upload slots"
+msgstr "Gönderme slotları"
+
+#: win32\ExpertsPage.cpp:50
 msgid "Max filelist size"
 msgstr "Maksimum dosya boyutu"
 
-#: win32\ExpertsPage.cpp:43
+#: win32\ExpertsPage.cpp:45
 msgid "Max hash speed"
 msgstr "İndeksleme Hızı"
 
-#: win32\PublicHubsFrame.cpp:49
+#: win32\PublicHubsFrame.cpp:53
 msgid "Max hubs"
 msgstr "En fazla merkez sayısı"
 
@@ -2486,11 +2584,11 @@ msgstr "En fazla merkez sayısı"
 msgid "Max inactivity"
 msgstr "Maksimum Aktivite"
 
-#: win32\ExpertsPage.cpp:55
+#: win32\ExpertsPage.cpp:57
 msgid "Max protocol command length"
 msgstr ""
 
-#: win32\PublicHubsFrame.cpp:50
+#: win32\PublicHubsFrame.cpp:54
 msgid "Max users"
 msgstr "Maksimum kullancı sayısı"
 
@@ -2502,7 +2600,7 @@ msgstr "En yüksek İndirme Oranı (KiB/s) (0 = sonsuz)"
 msgid "Maximum Upload Rate (KiB/s) (0 = infinite)"
 msgstr "En Yüksek Yükleme Hızı (KiB/s) (0 = sınırsız)"
 
-#: win32\HistoryPage.cpp:86 win32\MainWindow.cpp:877
+#: win32\HistoryPage.cpp:86 win32\MainWindow.cpp:862
 msgid "Maximum number of recent items to save"
 msgstr "Kaydedilecek son öğelerin maksimum sayısı"
 
@@ -2510,17 +2608,17 @@ msgstr "Kaydedilecek son öğelerin maksimum sayısı"
 msgid "Maximum simultaneous downloads (0 = infinite)"
 msgstr "En fazla eşzamanlı indirme sayısı (0 = sınırsız)"
 
-#: win32\MainWindow.cpp:375
+#: win32\MainWindow.cpp:360
 #, fuzzy
 msgid "Menu bar\tCtrl+0"
 msgstr "Durum çubuğu\tCtrl+3"
 
-#: win32\ADLSProperties.cpp:102 win32\ExpertsPage.cpp:48
+#: win32\ADLSProperties.cpp:102 win32\ExpertsPage.cpp:50
 #: win32\ListFilter.cpp:157 win32\SearchFrame.cpp:185
 msgid "MiB"
 msgstr "MB"
 
-#: win32\ExpertsPage.cpp:43
+#: win32\ExpertsPage.cpp:45
 msgid "MiB/s"
 msgstr "MB/sn"
 
@@ -2548,11 +2646,11 @@ msgstr "Minimum zaman"
 msgid "Min filesize"
 msgstr "Minimum dosya boyutu"
 
-#: win32\PublicHubsFrame.cpp:47
+#: win32\PublicHubsFrame.cpp:51
 msgid "Min share"
 msgstr "En az paylaşım"
 
-#: win32\PublicHubsFrame.cpp:48
+#: win32\PublicHubsFrame.cpp:52
 msgid "Min slots"
 msgstr "En düşük slot sayısı"
 
@@ -2560,13 +2658,20 @@ msgstr "En düşük slot sayısı"
 msgid "Min sources online"
 msgstr "Minimum hedef çevrimiçi"
 
-#: win32\ExpertsPage.cpp:47
+#: win32\ExpertsPage.cpp:49
 msgid "Mini slot size"
 msgstr "Mini slot boyutu"
 
 #: win32\AppearancePage.cpp:39
 msgid "Minimize to tray"
 msgstr "Küçültüldüğünde saatin yanına taşı"
+
+#: win32\CertificatesPage.cpp:106
+#, fuzzy
+msgid "Most of these options require that you restart DC++."
+msgstr ""
+"Bilgil: Bu ayarların bazılarının etkinleşmesi için DC++ yeniden "
+"başlatılmalıdır"
 
 #: win32\ADLSearchFrame.cpp:104 win32\FavHubsFrame.cpp:133
 #: win32\FavHubsFrame.cpp:369 win32\PluginPage.cpp:115
@@ -2586,9 +2691,9 @@ msgstr "&Yukarı Taşı"
 msgid "NONE"
 msgstr "YOK"
 
-#: win32\CommandDlg.cpp:133 win32\FavHubGroupsDlg.cpp:123
-#: win32\FavHubProperties.cpp:77 win32\FavHubsFrame.cpp:50
-#: win32\PublicHubsFrame.cpp:41 win32\UCPage.cpp:37 win32\UserMatchDlg.cpp:64
+#: win32\CommandDlg.cpp:133 win32\FavHubGroupsDlg.cpp:124
+#: win32\FavHubProperties.cpp:85 win32\FavHubsFrame.cpp:50
+#: win32\PublicHubsFrame.cpp:45 win32\UCPage.cpp:37 win32\UserMatchDlg.cpp:64
 msgid "Name"
 msgstr "İsim"
 
@@ -2600,7 +2705,7 @@ msgstr "İsim ve komut boş olmamalıdır"
 msgid "Name of the new search type"
 msgstr "Yeni arama türünün adı"
 
-#: win32\UploadPage.cpp:228 win32\UploadPage.cpp:285
+#: win32\UploadPage.cpp:240 win32\UploadPage.cpp:297
 msgid "Name under which the others see the directory"
 msgstr "Başkaları dizini bu ad ile görecekler"
 
@@ -2614,11 +2719,15 @@ msgstr "Ad: %1%"
 msgid "Name: %1%"
 msgstr "Ad: %1%"
 
-#: win32\MainWindow.cpp:371 win32\MainWindow.cpp:471 win32\StatsFrame.cpp:32
+#: win32\MainWindow.cpp:356 win32\MainWindow.cpp:456 win32\StatsFrame.cpp:32
 msgid "Network Statistics"
 msgstr "Bağlantı istatistikleri"
 
-#: win32\MainWindow.cpp:937
+#: win32\CertificatesPage.cpp:124
+msgid "New certificates are successfully generated."
+msgstr ""
+
+#: win32\MainWindow.cpp:922
 msgid "New limit (KiB/s) (0 = infinite)"
 msgstr "Yeni sınır (KiB/s) (0=sınır yok)"
 
@@ -2630,11 +2739,11 @@ msgstr "Yeni isim"
 msgid "New search type"
 msgstr "Yeni arama türü"
 
-#: win32\UploadPage.cpp:237
+#: win32\UploadPage.cpp:249
 msgid "New virtual name matches old name, skipping..."
 msgstr "Eski isim ile yeni isim aynı, atlanıyor..."
 
-#: win32\FavHubGroupsDlg.cpp:135 win32\FavHubProperties.cpp:102
+#: win32\FavHubGroupsDlg.cpp:136 win32\FavHubProperties.cpp:119
 #: win32\FavHubsFrame.cpp:52 win32\GeneralPage.cpp:54 win32\HubFrame.cpp:58
 #: win32\HubFrame.cpp:439 win32\UserMatchDlg.cpp:223
 #: win32\UserMatchPage.cpp:216 win32\UsersFrame.cpp:55 win32\UsersFrame.cpp:78
@@ -2647,12 +2756,12 @@ msgid "Nicks"
 msgstr "Rumuzlar"
 
 #: win32\ADLSearchFrame.cpp:331 win32\NotificationsPage.cpp:281
-#: win32\NotificationsPage.cpp:287 win32\WinUtil.cpp:1193
+#: win32\NotificationsPage.cpp:287 win32\WinUtil.cpp:1182
 #: win32\FinishedFrameBase.h:263
 msgid "No"
 msgstr "Hayır"
 
-#: win32\WinUtil.cpp:673
+#: win32\WinUtil.cpp:662
 msgid "No away message"
 msgstr "Dışarda iletisi yok"
 
@@ -2660,19 +2769,19 @@ msgstr "Dışarda iletisi yok"
 msgid "No direct encrypted channel available"
 msgstr ""
 
-#: win32\QueueFrame.cpp:405
+#: win32\QueueFrame.cpp:448
 msgid "No errors"
 msgstr "Hata yok"
 
-#: win32\MainWindow.cpp:1032
+#: win32\MainWindow.cpp:1017
 msgid "No favorite hub group found"
 msgstr "Gözde merkez grubu bulunamadı"
 
-#: win32\QueueFrame.cpp:392 win32\QueueFrame.cpp:1111
+#: win32\QueueFrame.cpp:435 win32\QueueFrame.cpp:1201
 msgid "No full tree available"
 msgstr "Tam ağaç mevcut değil"
 
-#: win32\WinUtil.cpp:1124
+#: win32\WinUtil.cpp:1113
 msgid "No help information available"
 msgstr "Yardım bilgisi yok"
 
@@ -2693,11 +2802,11 @@ msgstr ""
 msgid "No transfers yet"
 msgstr "Henüz aktarım yok"
 
-#: win32\QueueFrame.cpp:324
+#: win32\QueueFrame.cpp:367
 msgid "No users"
 msgstr "Kullanıcı yok"
 
-#: win32\QueueFrame.cpp:336
+#: win32\QueueFrame.cpp:379
 msgid "No users to download from"
 msgstr "Dosyanın indirileceği kullanıcı yok"
 
@@ -2705,7 +2814,8 @@ msgstr "Dosyanın indirileceği kullanıcı yok"
 msgid "Noon"
 msgstr "Öğle"
 
-#: win32\QueueFrame.cpp:364 win32\QueueFrame.cpp:906 win32\SearchFrame.cpp:171
+#: win32\QueueFrame.cpp:407 win32\QueueFrame.cpp:996 win32\SearchFrame.cpp:171
+#: win32\TransferView.cpp:552
 msgid "Normal"
 msgstr "Normal"
 
@@ -2713,7 +2823,7 @@ msgstr "Normal"
 msgid "Normal prio max size"
 msgstr "Normal boyutu"
 
-#: win32\CertificatesPage.cpp:100
+#: win32\CertificatesPage.cpp:107
 msgid "Note: TLS might not protect search results and non-keyprinted hubs."
 msgstr ""
 
@@ -2739,7 +2849,7 @@ msgstr ""
 "(!)Önemli: Buradaki ayarlar değişken hızlar için %100 net doğru "
 "olmayabilir..."
 
-#: win32\MainWindow.cpp:483 win32\NotepadFrame.cpp:33
+#: win32\MainWindow.cpp:468 win32\NotepadFrame.cpp:33
 msgid "Notepad"
 msgstr "Not Defteri"
 
@@ -2747,11 +2857,11 @@ msgstr "Not Defteri"
 msgid "Notifications"
 msgstr "Bildirimler"
 
-#: win32\WinUtil.cpp:1139
+#: win32\WinUtil.cpp:1128
 msgid "OK"
 msgstr "Tamam"
 
-#: win32\UsersFrame.cpp:269 win32\UsersFrame.cpp:284 win32\WinUtil.cpp:761
+#: win32\UsersFrame.cpp:269 win32\UsersFrame.cpp:284 win32\WinUtil.cpp:750
 msgid "Offline"
 msgstr "Çevrimdışı"
 
@@ -2772,8 +2882,8 @@ msgstr ""
 msgid "Only show fully downloaded files"
 msgstr "Sadece tam indirilmiş dosyaları göster"
 
-#: win32\AppearancePage.cpp:45 win32\FavHubGroupsDlg.cpp:164
-#: win32\FavHubProperties.cpp:143
+#: win32\AppearancePage.cpp:45 win32\FavHubGroupsDlg.cpp:170
+#: win32\FavHubProperties.cpp:166
 msgid "Only show joins / parts for favorite users"
 msgstr "Giriş / Çıkışları sadece favori kullanıcılar için göster"
 
@@ -2781,27 +2891,23 @@ msgstr "Giriş / Çıkışları sadece favori kullanıcılar için göster"
 msgid "Only users with free slots"
 msgstr "Sadece boş slotu olan kullanıcılarda ara"
 
-#: win32\SearchFrame.cpp:232
-msgid "Only where I'm op"
-msgstr "Sadece operatör olduklarımda ara"
-
 #: win32\SystemFrame.cpp:127 win32\FinishedFrameBase.h:465
 msgid "Open &folder"
 msgstr "&Dizini aç"
 
-#: win32\MainWindow.cpp:330
+#: win32\MainWindow.cpp:315
 msgid "Open crash log"
 msgstr "Hata kaydını aç"
 
-#: win32\MainWindow.cpp:329 win32\MainWindow.cpp:473 win32\MainWindow.cpp:1897
+#: win32\MainWindow.cpp:314 win32\MainWindow.cpp:458 win32\MainWindow.cpp:1891
 msgid "Open downloads directory"
 msgstr "İndirilenler klasörünü aç"
 
-#: win32\MainWindow.cpp:475
+#: win32\MainWindow.cpp:460
 msgid "Open file list..."
 msgstr "Dosya &listesini aç"
 
-#: win32\MainWindow.cpp:323
+#: win32\MainWindow.cpp:308
 msgid "Open file list...\tCtrl+L"
 msgstr "Dosya listesini aç...\t Ctrl+L"
 
@@ -2817,7 +2923,7 @@ msgstr "Yeni özel mesajları arkaplanda aç"
 msgid "Open new window when using /join"
 msgstr "/join komutu kullanıldığında bağlanılacak odayı yeni bir pencerede aç"
 
-#: win32\MainWindow.cpp:324 win32\MainWindow.cpp:477
+#: win32\MainWindow.cpp:309 win32\MainWindow.cpp:462
 msgid "Open own list"
 msgstr "Kendi dosya listeni aç"
 
@@ -2833,7 +2939,7 @@ msgstr "Merkezden gelen özel iletileri kendi pencerelerinde aç"
 msgid "Open private messages in their own window"
 msgstr "Gelen kişisel mesajları üste çıkar"
 
-#: win32\WinUtil.cpp:579
+#: win32\WinUtil.cpp:568
 msgid ""
 "Opens a new search window with the specified search string. It does not "
 "automatically send the search."
@@ -2845,7 +2951,7 @@ msgid ""
 "message, if one was specified."
 msgstr ""
 
-#: win32\WinUtil.cpp:472
+#: win32\WinUtil.cpp:461
 #, boost-format
 msgid "Operators (added by %1%)"
 msgstr "Yöneticiler (%1% tarafından eklendi)"
@@ -2858,11 +2964,11 @@ msgstr "Seçenekler"
 msgid "Other queue options"
 msgstr "Diğer Queue ayarları"
 
-#: win32\CertificatesPage.cpp:71
+#: win32\CertificatesPage.cpp:78
 msgid "Own certificate file"
 msgstr "Kişisel sertifikasyon dosyası"
 
-#: win32\ExpertsPage.cpp:49
+#: win32\ExpertsPage.cpp:51
 msgid "PID"
 msgstr "PID"
 
@@ -2878,7 +2984,7 @@ msgstr "Parametreler"
 msgid "Partial file list loaded"
 msgstr "Kısmî dosya listesi yüklendi"
 
-#: win32\UserMatchPage.cpp:217 win32\WinUtil.cpp:1186
+#: win32\UserMatchPage.cpp:217 win32\WinUtil.cpp:1175
 msgid "Partial match"
 msgstr "Kısmî eşleşme"
 
@@ -2887,20 +2993,20 @@ msgstr "Kısmî eşleşme"
 msgid "Parts: %1%"
 msgstr "Parçalar: %1%"
 
-#: win32\ConnectivityManualPage.cpp:73
+#: win32\ConnectivityManualPage.cpp:192
 msgid "Passive mode (last resort - has serious limitations)"
 msgstr "Pasif mod (son çözüm - beraberinde ciddi sınırlamalar getirir)"
 
-#: win32\QueueFrame.cpp:386
+#: win32\QueueFrame.cpp:429
 msgid "Passive user"
 msgstr "Pasif kullanıcı"
 
-#: win32\FavHubProperties.cpp:108 win32\FavHubsFrame.cpp:53
+#: win32\FavHubProperties.cpp:125 win32\FavHubsFrame.cpp:53
 #: win32\ProxyPage.cpp:97
 msgid "Password"
 msgstr "Şifre"
 
-#: win32\QueueFrame.cpp:54 win32\SearchFrame.cpp:55 win32\TransferView.cpp:49
+#: win32\QueueFrame.cpp:58 win32\SearchFrame.cpp:55 win32\TransferView.cpp:49
 #: win32\FinishedFrameBase.h:729
 msgid "Path"
 msgstr "Dosya yolu"
@@ -2914,12 +3020,17 @@ msgstr ""
 msgid "Paths"
 msgstr "Dosya yolu"
 
-#: win32\HashProgressDlg.cpp:184
+#: win32\QueueFrame.cpp:131
+#, fuzzy
+msgid "Pause"
+msgstr "Duraklatıldı"
+
+#: win32\HashProgressDlg.cpp:186
 msgid "Pause hashing"
 msgstr "Hash işlemini durdur"
 
-#: win32\HashProgressDlg.cpp:147 win32\QueueFrame.cpp:361
-#: win32\QueueFrame.cpp:903
+#: win32\HashProgressDlg.cpp:147 win32\QueueFrame.cpp:404
+#: win32\QueueFrame.cpp:993 win32\TransferView.cpp:549
 msgid "Paused"
 msgstr "Duraklatıldı"
 
@@ -2951,7 +3062,7 @@ msgstr "Oynat"
 msgid "Play a sound"
 msgstr "Bir ses çal"
 
-#: win32\WinUtil.cpp:516
+#: win32\WinUtil.cpp:505
 msgid "Please enter a nickname in the settings dialog!"
 msgstr "(!) Lütfen bir isim giriniz"
 
@@ -2972,11 +3083,11 @@ msgstr ""
 msgid "Plugin information"
 msgstr "Genel Bilgiler"
 
-#: win32\MainWindow.cpp:425
+#: win32\MainWindow.cpp:410
 msgid "Plugin repository"
 msgstr ""
 
-#: win32\MainWindow.cpp:339 win32\MainWindow.cpp:487 win32\MainWindow.cpp:890
+#: win32\MainWindow.cpp:324 win32\MainWindow.cpp:472 win32\MainWindow.cpp:875
 #: win32\PluginPage.cpp:253 win32\PluginPage.cpp:338
 #: win32\SettingsDialog.cpp:200
 msgid "Plugins"
@@ -2995,11 +3106,12 @@ msgstr "Port"
 msgid "Predefined"
 msgstr "Önceden tanımlı"
 
-#: win32\ConnectivityManualPage.cpp:124
-msgid "Preferred port mapping interface"
+#: win32\ConnectivityManualPage.cpp:222
+#, fuzzy
+msgid "Preferred port mapper"
 msgstr "Tercih edilen bağlantı noktası adresleme arayüzü"
 
-#: win32\TabsPage.cpp:134
+#: win32\TabsPage.cpp:126
 msgid "Preview"
 msgstr "Önizleme"
 
@@ -3009,15 +3121,15 @@ msgid ""
 "contains a link you'd like to easily open."
 msgstr ""
 
-#: win32\QueueFrame.cpp:52
+#: win32\QueueFrame.cpp:56
 msgid "Priority"
 msgstr "Öncelik"
 
-#: win32\CertificatesPage.cpp:63
+#: win32\CertificatesPage.cpp:70
 msgid "Private key file"
 msgstr "Özel anahtar dosyası"
 
-#: win32\TabsPage.cpp:39
+#: win32\TabsPage.cpp:38
 msgid "Private message"
 msgstr "Özel mesaj"
 
@@ -3046,7 +3158,7 @@ msgstr "Vekil sunucu"
 msgid "Proxy settings for outgoing connections"
 msgstr "Giden bağlantıları için vekil sunucu ayarları"
 
-#: win32\MainWindow.cpp:452 win32\PublicHubsFrame.cpp:84
+#: win32\MainWindow.cpp:437 win32\PublicHubsFrame.cpp:89
 msgid "Public Hubs"
 msgstr "Ortak Merkezler"
 
@@ -3074,11 +3186,11 @@ msgstr "Kuyruktaki baytlar"
 msgid "Queued files"
 msgstr "Kuyruktaki dosyalar"
 
-#: win32\MainWindow.cpp:965
+#: win32\MainWindow.cpp:950
 msgid "Quick Connect"
 msgstr "Hızlı Bağlan"
 
-#: win32\PublicHubsFrame.cpp:52
+#: win32\PublicHubsFrame.cpp:56
 msgid "Rating"
 msgstr "Puanlama"
 
@@ -3091,7 +3203,7 @@ msgstr "Oran (Gönderme/Alma) : %1$0.2f"
 msgid "Raw"
 msgstr "Sunucu"
 
-#: win32\QueueFrame.cpp:861 win32\QueueFrame.cpp:880
+#: win32\QueueFrame.cpp:933 win32\QueueFrame.cpp:952
 msgid "Re&check integrity"
 msgstr "Bütünlüğü yeniden &kontrol et"
 
@@ -3100,7 +3212,7 @@ msgstr "Bütünlüğü yeniden &kontrol et"
 msgid "Re&name"
 msgstr "&Yeniden adlandır"
 
-#: win32\QueueFrame.cpp:927
+#: win32\QueueFrame.cpp:1017
 msgid "Re-add source"
 msgstr "Kaynağı tekrar ekle"
 
@@ -3109,7 +3221,7 @@ msgstr "Kaynağı tekrar ekle"
 msgid "Reached the %1% of the file list, continuing from the %2%"
 msgstr "Dosya listesinde %1%'ye ulaşıldı, %2%'den devam ediliyor"
 
-#: win32\SearchFrame.cpp:1094
+#: win32\SearchFrame.cpp:1129
 msgid "Ready to search..."
 msgstr "Aramaya hazır..."
 
@@ -3122,17 +3234,17 @@ msgstr "%1% merkez pencerelerini gerçekten kapatmak istiyor musunuz?"
 msgid "Really close?"
 msgstr "Gerçekten kapatmak istiyor musunuz?"
 
-#: win32\MainWindow.cpp:1093
+#: win32\MainWindow.cpp:1078
 msgid "Really exit?"
 msgstr "Gerçekten çıkmak istiyor musunuz?"
 
 #: win32\ADLSearchFrame.cpp:250 win32\FavHubsFrame.cpp:303
-#: win32\PluginPage.cpp:338 win32\QueueFrame.cpp:624 win32\QueueFrame.cpp:629
+#: win32\PluginPage.cpp:338 win32\QueueFrame.cpp:667 win32\QueueFrame.cpp:672
 #: win32\UsersFrame.cpp:438
 msgid "Really remove?"
 msgstr "Gerçekten silmek istiyor musunuz?"
 
-#: win32\WinUtil.cpp:587
+#: win32\WinUtil.cpp:576
 msgid ""
 "Rebuilds the HashIndex.xml and HashData.dat files, removing entries to files "
 "that are no longer shared, or old hashes for files that have since changed. "
@@ -3147,27 +3259,27 @@ msgstr ""
 "%1% üzerine yeniden yönlendirme isteği alındı, tâkip etmek için buraya "
 "tıklayın"
 
-#: win32\HistoryPage.cpp:92 win32\MainWindow.cpp:869
+#: win32\HistoryPage.cpp:92 win32\MainWindow.cpp:854
 msgid "Recent PMs"
 msgstr "Son alınan özel mesajlar"
 
-#: win32\HistoryPage.cpp:95 win32\MainWindow.cpp:870
+#: win32\HistoryPage.cpp:95 win32\MainWindow.cpp:855
 msgid "Recent file lists"
 msgstr "Son alınan dosya listeleri"
 
-#: win32\HistoryPage.cpp:89 win32\MainWindow.cpp:868
+#: win32\HistoryPage.cpp:89 win32\MainWindow.cpp:853
 msgid "Recent hubs"
 msgstr "Son kullanılan merkezler"
 
-#: win32\MainWindow.cpp:479
+#: win32\MainWindow.cpp:464
 msgid "Recent windows"
 msgstr "Son açılan pencereler"
 
-#: win32\MainWindow.cpp:454
+#: win32\MainWindow.cpp:439
 msgid "Reconnect"
 msgstr "Yeniden bağlan"
 
-#: win32\MainWindow.cpp:384
+#: win32\MainWindow.cpp:369
 #, fuzzy
 msgid "Reconnect disconnected hubs"
 msgstr "Bağlanılmamış merkezleri kapat"
@@ -3180,11 +3292,11 @@ msgstr "Yönlendirilmek istenen merkeze zâten bağlısınız"
 msgid "Redirect request to an empty hub address"
 msgstr ""
 
-#: win32\MainWindow.cpp:485
+#: win32\MainWindow.cpp:470
 msgid "Refresh file list"
 msgstr "Dosya listesini tazele"
 
-#: win32\MainWindow.cpp:326
+#: win32\MainWindow.cpp:311
 msgid "Refresh file list\tF5"
 msgstr "Dosya listesini yeniler\tF5"
 
@@ -3207,7 +3319,7 @@ msgid "Register with Windows to handle magnet: URI links"
 msgstr "magnet://\" şeklindeki kısayolları DC++ otomatik açsın"
 
 #: win32\ADLSearchFrame.cpp:45 win32\ADLSProperties.cpp:68
-#: win32\UserMatchPage.cpp:217 win32\WinUtil.cpp:1186
+#: win32\UserMatchPage.cpp:217 win32\WinUtil.cpp:1175
 msgid "Regular Expression"
 msgstr "Düzenli İfade"
 
@@ -3216,16 +3328,16 @@ msgstr "Düzenli İfade"
 msgid "Regular expressions"
 msgstr "Düzenli İfade"
 
-#: win32\PublicHubsFrame.cpp:51
+#: win32\PublicHubsFrame.cpp:55
 msgid "Reliability"
 msgstr "Güvenilirlik"
 
-#: win32\QueueFrame.cpp:400
+#: win32\QueueFrame.cpp:443
 #, fuzzy
 msgid "Remote ADC client does not use TLS encryption"
 msgstr "Uzak bağlantı kurulamadı TTH sertifikası indirilemedi"
 
-#: win32\QueueFrame.cpp:396 win32\TransferView.cpp:965
+#: win32\QueueFrame.cpp:439 win32\TransferView.cpp:989
 msgid "Remote client does not fully support TTH - cannot download"
 msgstr "Uzak bağlantı kurulamadı TTH sertifikası indirilemedi"
 
@@ -3233,15 +3345,20 @@ msgstr "Uzak bağlantı kurulamadı TTH sertifikası indirilemedi"
 msgid "Remove &all"
 msgstr "&Hepsini kaldır"
 
+#: win32\QueueFrame.cpp:134
+#, fuzzy
+msgid "Remove file"
+msgstr "&Hepsini kaldır"
+
 #: win32\QueuePage.cpp:37
 msgid "Remove slow filelists"
 msgstr "Yavaş dosya listelerini sil"
 
-#: win32\QueueFrame.cpp:936
+#: win32\QueueFrame.cpp:1026
 msgid "Remove source"
 msgstr "Kaynağı kaldır"
 
-#: win32\QueueFrame.cpp:945 win32\WinUtil.cpp:1575 win32\UserInfoBase.h:166
+#: win32\QueueFrame.cpp:1035 win32\WinUtil.cpp:1666 win32\UserInfoBase.h:166
 msgid "Remove user from queue"
 msgstr "Kullanıcıyı indirme listesinden kaldır"
 
@@ -3253,15 +3370,15 @@ msgstr ""
 msgid "Rename a search type"
 msgstr "Arama türünü yeniden adlandır"
 
-#: win32\MainWindow.cpp:420
+#: win32\MainWindow.cpp:405
 msgid "Report a bug"
 msgstr "Hata bildirin"
 
-#: win32\MainWindow.cpp:419
+#: win32\MainWindow.cpp:404
 msgid "Request a feature"
 msgstr "İstekte bulunun"
 
-#: win32\TransferView.cpp:1033
+#: win32\TransferView.cpp:1057
 #, boost-format
 msgid "Requesting %1%"
 msgstr "İstek Yapılıyor %1%"
@@ -3270,7 +3387,7 @@ msgstr "İstek Yapılıyor %1%"
 msgid "Require TLS ADC client-client connections"
 msgstr ""
 
-#: win32\HashProgressDlg.cpp:184
+#: win32\HashProgressDlg.cpp:186
 msgid "Resume hashing"
 msgstr "Hash işlemine devam et"
 
@@ -3278,7 +3395,7 @@ msgstr "Hash işlemine devam et"
 msgid "Run in background"
 msgstr "Arkaplanda çalış"
 
-#: win32\QueueFrame.cpp:344
+#: win32\QueueFrame.cpp:387
 msgid "Running..."
 msgstr "Şu anda indiriliyor..."
 
@@ -3286,19 +3403,19 @@ msgstr "Şu anda indiriliyor..."
 msgid "SOCKS5"
 msgstr "SOCKS5"
 
-#: win32\ConnectivityManualPage.cpp:117 win32\MainWindow.cpp:467
-#: win32\RichTextBox.cpp:112 win32\SearchFrame.cpp:104
-#: win32\SearchFrame.cpp:156 win32\TabsPage.cpp:41
+#: win32\ConnectivityManualPage.cpp:82 win32\MainWindow.cpp:452
+#: win32\NotepadFrame.cpp:109 win32\RichTextBox.cpp:112
+#: win32\SearchFrame.cpp:104 win32\SearchFrame.cpp:156 win32\TabsPage.cpp:40
 msgid "Search"
 msgstr "Arama"
 
-#: win32\SearchFrame.cpp:967 win32\SearchFrame.cpp:1048
-#: win32\SearchFrame.cpp:1060 win32\SearchFrame.cpp:1090
+#: win32\SearchFrame.cpp:1002 win32\SearchFrame.cpp:1083
+#: win32\SearchFrame.cpp:1095 win32\SearchFrame.cpp:1125
 #, boost-format
 msgid "Search - %1%"
 msgstr "Ara - %1%"
 
-#: win32\SearchFrame.cpp:1095
+#: win32\SearchFrame.cpp:1130
 msgid "Search - Ready to search..."
 msgstr "Arama - Arama için hazır"
 
@@ -3310,11 +3427,16 @@ msgstr "Arama Sonuçlarında"
 msgid "Search String"
 msgstr "Aratılan kelime"
 
+#: win32\NotepadFrame.cpp:110
+#, fuzzy
+msgid "Search by TTH"
+msgstr "Arama Sonuçlarında"
+
 #: win32\SearchFrame.cpp:131
 msgid "Search for"
 msgstr "Aranacak dosyanın adını yazın"
 
-#: win32\WinUtil.cpp:824
+#: win32\WinUtil.cpp:813
 msgid "Search for alternates"
 msgstr "Alternatifleri ara"
 
@@ -3347,7 +3469,7 @@ msgstr "Arama Türü"
 msgid "Search types"
 msgstr "Arama türleri"
 
-#: win32\SearchFrame.cpp:1042
+#: win32\SearchFrame.cpp:1077
 #, boost-format
 msgid "Searching for %1%..."
 msgstr "%1% aranıyor"
@@ -3357,7 +3479,7 @@ msgstr "%1% aranıyor"
 msgid "Searching for: %1%"
 msgstr "Aranıyor: %1%"
 
-#: win32\SearchFrame.cpp:1058 win32\SearchFrame.cpp:1088
+#: win32\SearchFrame.cpp:1093 win32\SearchFrame.cpp:1123
 #, boost-format
 msgid "Searching too soon, next search in %1% second"
 msgid_plural "Searching too soon, next search in %1% seconds"
@@ -3372,7 +3494,17 @@ msgstr "İkincil Dosya Aktarım Sınırlaması"
 msgid "Secondary Transfer Rate Limiting Settings"
 msgstr "İkincil Dosya Aktarım Sınırlama Ayarları"
 
+#: win32\CertificatesPage.cpp:104
+#, fuzzy
+msgid "Secure connection settings"
+msgstr "Direk Bağlantı"
+
 #: win32\SettingsDialog.cpp:195
+#, fuzzy
+msgid "Security & certificates"
+msgstr "Güvenlik sertifikaları"
+
+#: win32\CertificatesPage.cpp:56
 msgid "Security certificates"
 msgstr "Güvenlik sertifikaları"
 
@@ -3380,7 +3512,7 @@ msgstr "Güvenlik sertifikaları"
 msgid "Select &All\tCtrl+A"
 msgstr "Tümünü &Seç\tCtrl+A"
 
-#: win32\MainWindow.cpp:1040
+#: win32\MainWindow.cpp:1025
 msgid "Select a favorite hub group"
 msgstr "Gözde bir merkez grubu seçin"
 
@@ -3392,7 +3524,7 @@ msgstr "Renk seç"
 msgid "Select font"
 msgstr "Yazıbiçimini seç"
 
-#: win32\TabsPage.cpp:201
+#: win32\TabsPage.cpp:193
 msgid "Selected tab"
 msgstr "Seçili sekme"
 
@@ -3404,7 +3536,7 @@ msgstr "Her kişiye sadece bir kez gönder"
 msgid "Send unknown /commands to the hub"
 msgstr "Bilinmeyen komutları merkeze gönder"
 
-#: win32\WinUtil.cpp:581
+#: win32\WinUtil.cpp:570
 msgid ""
 "Sends a random DC++ advertising message to the chat, including a link to the "
 "DC++ homepage and the version number."
@@ -3422,39 +3554,39 @@ msgstr "Sunucu"
 msgid "Set lowest prio for newly added files larger than Low prio size"
 msgstr "En düşük boyut"
 
-#: win32\QueueFrame.cpp:902
+#: win32\QueueFrame.cpp:992 win32\TransferView.cpp:548
 msgid "Set priority"
 msgstr "Önceliği Ayarla"
 
-#: win32\WinUtil.cpp:582
+#: win32\WinUtil.cpp:571
 msgid ""
 "Sets Away status. New private message windows will be responded to, once, "
 "with the message you specified, or the default away message configured in "
 "the Personal information settings page."
 msgstr ""
 
-#: win32\WinUtil.cpp:578
+#: win32\WinUtil.cpp:567
 msgid ""
 "Sets the current number of download slots to the number you specify. If this "
 "is less than the current number of slots, no downloads are cancelled."
 msgstr ""
 
-#: win32\WinUtil.cpp:577
+#: win32\WinUtil.cpp:566
 msgid ""
 "Sets the current number of upload slots to the number you specify. If this "
 "is less than the current number of slots, no uploads are cancelled."
 msgstr ""
 
-#: win32\MainWindow.cpp:481 win32\MainWindow.cpp:1899
+#: win32\MainWindow.cpp:466 win32\MainWindow.cpp:1893
 #: win32\SettingsDialog.cpp:373
 msgid "Settings"
 msgstr "Ayarlar"
 
-#: win32\MainWindow.cpp:333
+#: win32\MainWindow.cpp:318
 msgid "Settings\tCtrl+F3"
 msgstr "Ayarlar\tCtrl+F3"
 
-#: win32\ExpertsPage.cpp:51
+#: win32\ExpertsPage.cpp:53
 msgid "Settings save interval"
 msgstr "Ayar kaydetme aralığı"
 
@@ -3462,7 +3594,7 @@ msgstr "Ayar kaydetme aralığı"
 msgid "Share hidden files"
 msgstr "Gizli dosyaları ekle"
 
-#: win32\HubFrame.cpp:59 win32\HubFrame.cpp:438 win32\PublicHubsFrame.cpp:46
+#: win32\HubFrame.cpp:59 win32\HubFrame.cpp:438 win32\PublicHubsFrame.cpp:50
 #: win32\UserInfoBase.cpp:128
 msgid "Shared"
 msgstr "Paylaşılan"
@@ -3491,12 +3623,12 @@ msgstr "Shell menüsü"
 msgid "Shell menus"
 msgstr "Kabuk menüleri"
 
-#: win32\MainWindow.cpp:1896
+#: win32\MainWindow.cpp:1890
 msgid "Show"
 msgstr "Göster"
 
-#: win32\AppearancePage.cpp:44 win32\FavHubGroupsDlg.cpp:159
-#: win32\FavHubProperties.cpp:138
+#: win32\AppearancePage.cpp:44 win32\FavHubGroupsDlg.cpp:165
+#: win32\FavHubProperties.cpp:161
 msgid "Show joins / parts in chat by default"
 msgstr "Odaya giriş/çıkışları göster"
 
@@ -3508,8 +3640,8 @@ msgstr "DC++ tarafından üretilenleri göster"
 msgid "Show timestamps in chat by default"
 msgstr "Konuşma penceresinde saatleri göster"
 
-#: win32\DirectoryListingFrame.cpp:66 win32\MainWindow.cpp:1760
-#: win32\QueueFrame.cpp:50 win32\SearchFrame.cpp:54 win32\SearchFrame.cpp:161
+#: win32\DirectoryListingFrame.cpp:66 win32\MainWindow.cpp:1754
+#: win32\QueueFrame.cpp:54 win32\SearchFrame.cpp:54 win32\SearchFrame.cpp:161
 #: win32\TransferView.cpp:56 win32\UploadPage.cpp:48
 msgid "Size"
 msgstr "Boyut"
@@ -3523,8 +3655,8 @@ msgstr "Boyut: %1%"
 msgid "Size Type"
 msgstr "Boyut Tipi"
 
-#: win32\DirectoryListingFrame.cpp:1236 win32\QueueFrame.cpp:222
-#: win32\QueueFrame.cpp:229
+#: win32\DirectoryListingFrame.cpp:1236 win32\QueueFrame.cpp:265
+#: win32\QueueFrame.cpp:272
 #, boost-format
 msgid "Size: %1%"
 msgstr "Boyut: %1%"
@@ -3541,15 +3673,15 @@ msgstr "Slot verildi"
 msgid "Slots"
 msgstr "Slotlar"
 
-#: win32\WinUtil.cpp:645
+#: win32\WinUtil.cpp:634
 msgid "Slots set"
 msgstr "Slot ayarı"
 
-#: win32\ExpertsPage.cpp:52
+#: win32\ExpertsPage.cpp:54
 msgid "Socket read buffer"
 msgstr "Soket okuma önbelleği"
 
-#: win32\ExpertsPage.cpp:53
+#: win32\ExpertsPage.cpp:55
 msgid "Socket write buffer"
 msgstr "Soket yazma önbelleği"
 
@@ -3574,11 +3706,11 @@ msgstr "Ses ayarları"
 msgid "Source Type"
 msgstr "Kaynak Tipi"
 
-#: win32\QueueFrame.cpp:394
+#: win32\QueueFrame.cpp:437
 msgid "Source too slow"
 msgstr "Hedef Çok yavaş"
 
-#: win32\WinUtil.cpp:698
+#: win32\WinUtil.cpp:687
 msgid "Specify a URL"
 msgstr "Url'yi Belirtin"
 
@@ -3586,8 +3718,8 @@ msgstr "Url'yi Belirtin"
 msgid "Specify a name for this user matching definition"
 msgstr "Bu kullanıcı eşleme tanımına bir ad verin"
 
-#: win32\WinUtil.cpp:661 win32\WinUtil.cpp:680 win32\WinUtil.cpp:686
-#: win32\WinUtil.cpp:692
+#: win32\WinUtil.cpp:650 win32\WinUtil.cpp:669 win32\WinUtil.cpp:675
+#: win32\WinUtil.cpp:681
 msgid "Specify a search string"
 msgstr "Aranacak kelimeyi girin"
 
@@ -3609,6 +3741,15 @@ msgstr "Hız"
 msgid "Speed: %1%/s"
 msgstr "Hız: %1%/s"
 
+#: win32\QueueFrame.cpp:130
+#, fuzzy
+msgid "Start"
+msgstr "Başlandı..."
+
+#: win32\AdvancedPage.cpp:54
+msgid "Start DC++ when Windows starts"
+msgstr ""
+
 #: win32\PrivateFrame.cpp:511
 msgid "Start a direct encrypted channel"
 msgstr ""
@@ -3617,7 +3758,7 @@ msgstr ""
 msgid "Start a search for this file"
 msgstr "Bu dosyayı aramaya başla"
 
-#: win32\QueueFrame.cpp:1099
+#: win32\QueueFrame.cpp:1189
 msgid "Started..."
 msgstr "Başlandı..."
 
@@ -3631,7 +3772,8 @@ msgstr ""
 msgid "Statistics"
 msgstr "İstatistikler"
 
-#: win32\FavHubsFrame.cpp:49 win32\QueueFrame.cpp:49 win32\TransferView.cpp:50
+#: win32\FavHubsFrame.cpp:49 win32\PublicHubsFrame.cpp:44
+#: win32\QueueFrame.cpp:53 win32\TransferView.cpp:50
 msgid "Status"
 msgstr "Durum"
 
@@ -3639,15 +3781,15 @@ msgstr "Durum"
 msgid "Status / Time last seen"
 msgstr "Durum / Son görüldüğü tarih"
 
-#: win32\MainWindow.cpp:378
+#: win32\MainWindow.cpp:363
 msgid "Status bar\tCtrl+3"
 msgstr "Durum çubuğu\tCtrl+3"
 
-#: win32\MainWindow.cpp:1231
+#: win32\MainWindow.cpp:1216
 msgid "Status: Available - Double-click to switch to Away"
 msgstr "Durum: Uygun - Dışarda olarak ayarlamak için çift tıklayın"
 
-#: win32\MainWindow.cpp:1230
+#: win32\MainWindow.cpp:1215
 msgid "Status: Away - Double-click to switch to Available"
 msgstr "Durum: Dışarda - Uygun olarak ayarlamak için çift tıklayın"
 
@@ -3667,7 +3809,7 @@ msgstr "Subtract list"
 msgid "Support direct encrypted private message channels"
 msgstr ""
 
-#: win32\MainWindow.cpp:369 win32\SystemFrame.cpp:37 win32\TabsPage.cpp:42
+#: win32\MainWindow.cpp:354 win32\SystemFrame.cpp:37 win32\TabsPage.cpp:41
 msgid "System Log"
 msgstr "System Günlüğü (Log)"
 
@@ -3680,19 +3822,20 @@ msgid "TLS Keyprint"
 msgstr "TLS Anahtarizi"
 
 #: win32\AboutDlg.cpp:113 win32\DirectoryListingFrame.cpp:68
-#: win32\QueueFrame.cpp:58 win32\SearchFrame.cpp:61 win32\TransferView.cpp:980
+#: win32\QueueFrame.cpp:62 win32\SearchFrame.cpp:61
+#: win32\TransferView.cpp:1004
 msgid "TTH"
 msgstr "TTH"
 
-#: win32\TabsPage.cpp:146
+#: win32\TabsPage.cpp:138
 msgid "Tab highlight on content change"
 msgstr "Içeriği kalın harflerle göster"
 
-#: win32\TabsPage.cpp:90
+#: win32\TabsPage.cpp:85
 msgid "Tab style"
 msgstr "Sekme biçimi"
 
-#: win32\TabsPage.cpp:118
+#: win32\TabsPage.cpp:110
 msgid "Tab width"
 msgstr "Sekme genişliği"
 
@@ -3704,13 +3847,13 @@ msgstr "Sekmeler"
 msgid "Tag"
 msgstr "Etiket(Tag)"
 
-#: win32\MainWindow.cpp:1628 win32\MainWindow.cpp:1688
+#: win32\MainWindow.cpp:1622 win32\MainWindow.cpp:1682
 #, boost-format
 msgid "The %1% GeoIP database could not be updated"
 msgstr "%1% GeoIP veritabanı güncellenemedi"
 
-#: win32\MainWindow.cpp:1655 win32\MainWindow.cpp:1657
-#: win32\MainWindow.cpp:1681
+#: win32\MainWindow.cpp:1649 win32\MainWindow.cpp:1651
+#: win32\MainWindow.cpp:1675
 #, boost-format
 msgid "The %1% GeoIP database has been successfully updated"
 msgstr "%1% GeoIP veritabanı başarılı bir şekilde güncellendi"
@@ -3724,7 +3867,7 @@ msgstr ""
 msgid "The direct encrypted channel has been disconnected"
 msgstr ""
 
-#: win32\FavHubGroupsDlg.cpp:331
+#: win32\FavHubGroupsDlg.cpp:339
 #, boost-format
 msgid ""
 "The group \"%1%\" contains %2% hubs; remove all of the hubs as well?\n"
@@ -3741,7 +3884,7 @@ msgstr ""
 "\n"
 "\"Hayır\" seçerseniz, tüm merkezler varsayılan ana gruba eklenecek."
 
-#: win32\MainWindow.cpp:1791
+#: win32\MainWindow.cpp:1785
 msgid ""
 "The menu bar is now hidden. Press Alt or F10 to temporarily bring it back "
 "into view."
@@ -3755,16 +3898,13 @@ msgstr ""
 msgid "The message cannot be delivered because the user is offline."
 msgstr ""
 
+#: win32\WinUtil.cpp:1577
+msgid "The requested link is "
+msgstr ""
+
 #: win32\PrivateFrame.cpp:316
 msgid "The user does not support the CCPM ADC extension"
 msgstr ""
-
-#: win32\CertificatesPage.cpp:99
-#, fuzzy
-msgid "These options require that you restart DC++."
-msgstr ""
-"Bilgil: Bu ayarların bazılarının etkinleşmesi için DC++ yeniden "
-"başlatılmalıdır"
 
 #: win32\HubFrame.cpp:1176
 msgid "This hub is not a favorite hub"
@@ -3822,11 +3962,11 @@ msgstr ""
 msgid "Toggles visibility of the list of users for the current hub."
 msgstr ""
 
-#: win32\MainWindow.cpp:1754
+#: win32\MainWindow.cpp:1748
 msgid "Toolbar"
 msgstr "Araç Çubuğu"
 
-#: win32\MainWindow.cpp:376
+#: win32\MainWindow.cpp:361
 msgid "Toolbar\tCtrl+1"
 msgstr "Araç Çubuğu\tCtrl+1"
 
@@ -3842,7 +3982,7 @@ msgstr "Toplam yuva"
 msgid "Totals"
 msgstr "Toplamlar"
 
-#: win32\ConnectivityManualPage.cpp:111 win32\ConnectivityManualPage.cpp:223
+#: win32\ConnectivityManualPage.cpp:76 win32\ConnectivityManualPage.cpp:141
 msgid "Transfer"
 msgstr "Aktarım"
 
@@ -3850,7 +3990,7 @@ msgstr "Aktarım"
 msgid "Transfer Rate Limiting"
 msgstr "Aktarım Limiti Oranı"
 
-#: win32\MainWindow.cpp:377
+#: win32\MainWindow.cpp:362
 msgid "Transfer view\tCtrl+2"
 msgstr "Aktarım görünümü\tCtrl+2"
 
@@ -3866,21 +4006,21 @@ msgstr "Aktarılan (Oran)"
 msgid "Transfers"
 msgstr "Aktarımlar"
 
-#: win32\CertificatesPage.cpp:79
+#: win32\CertificatesPage.cpp:86
 msgid "Trusted certificates path"
 msgstr "Güvenilir sertifika yolu"
 
-#: win32\DirectoryListingFrame.cpp:65 win32\QueueFrame.cpp:59
+#: win32\DirectoryListingFrame.cpp:65 win32\QueueFrame.cpp:63
 #: win32\SearchFrame.cpp:53
 msgid "Type"
 msgstr "Tip"
 
-#: win32\MainWindow.cpp:1209
+#: win32\MainWindow.cpp:1194
 #, boost-format
 msgid "U: %1%"
 msgstr "G: %1%"
 
-#: win32\MainWindow.cpp:1217
+#: win32\MainWindow.cpp:1202
 #, boost-format
 msgid "U: %1%/s (%2%)"
 msgstr "G: %1%/s (%2%)"
@@ -3889,11 +4029,11 @@ msgstr "G: %1%/s (%2%)"
 msgid "Un-ignore chat"
 msgstr "Sohbeti etkinleştir"
 
-#: win32\WinUtil.cpp:583
+#: win32\WinUtil.cpp:572
 msgid "Un-sets Away status."
 msgstr ""
 
-#: win32\MainWindow.cpp:1379
+#: win32\MainWindow.cpp:1373
 #, boost-format
 msgid ""
 "Unable to open %1% port. Searching or file transfers will not work correctly "
@@ -3912,15 +4052,15 @@ msgstr "Klasör adının ne olarak gözükmesini istiyorsanız yazın"
 msgid "Unfinished downloads directory"
 msgstr "Geçici dosyalar dizini (Temp)"
 
-#: win32\QueueFrame.cpp:1102
+#: win32\QueueFrame.cpp:1192
 msgid "Unfinished file not found"
 msgstr "Bitirilmeyen dosya bulunamadı"
 
-#: win32\QueueFrame.cpp:1105
+#: win32\QueueFrame.cpp:1195
 msgid "Unfinished file too small"
 msgstr "Bitirilmeyen dosya çok küçük"
 
-#: win32\QueueFrame.cpp:350 win32\QueueFrame.cpp:351
+#: win32\QueueFrame.cpp:393 win32\QueueFrame.cpp:394
 msgid "Unknown"
 msgstr "Bilinmeyen"
 
@@ -3942,7 +4082,7 @@ msgstr "&Hepsini kaldır"
 msgid "Updating a plugin"
 msgstr ""
 
-#: win32\MainWindow.cpp:1632
+#: win32\MainWindow.cpp:1626
 #, boost-format
 msgid "Updating the %1% GeoIP database..."
 msgstr "%1% GeoIP veritabanı güncelleniyor..."
@@ -3951,25 +4091,25 @@ msgstr "%1% GeoIP veritabanı güncelleniyor..."
 msgid "Upload Slots"
 msgstr "Yükleme Dilimleri"
 
-#: win32\MainWindow.cpp:902 win32\MainWindow.cpp:1901
+#: win32\MainWindow.cpp:887 win32\MainWindow.cpp:1895
 msgid "Upload limit"
 msgstr "Yükleme sınırı"
 
-#: win32\WinUtil.cpp:707
+#: win32\WinUtil.cpp:696
 msgid "Upload limit disabled"
 msgstr "Yükleme sınırı kapatıldı"
 
-#: win32\WinUtil.cpp:707
+#: win32\WinUtil.cpp:696
 #, boost-format
 msgid "Upload limit set to %1% KiB/s"
 msgstr "Yükleme sınırı %1% KiB/s olarak ayarlandı"
 
-#: win32\MainWindow.cpp:1225
+#: win32\MainWindow.cpp:1210
 #, boost-format
 msgid "Upload limit: %1%/s - Click to adjust"
 msgstr "Yükleme sınırı: %1% - Ayarlamak için tıklayın"
 
-#: win32\MainWindow.cpp:1860 win32\UploadPage.cpp:117
+#: win32\MainWindow.cpp:1854 win32\UploadPage.cpp:105
 msgid "Upload slots"
 msgstr "Gönderme slotları"
 
@@ -3982,12 +4122,12 @@ msgstr "Yükleme hızı"
 msgid "Upload: %1%, Download: %2%"
 msgstr "Aktarma: %1%, İndirme: %2%"
 
-#: win32\TransferView.cpp:1060
+#: win32\TransferView.cpp:1084
 #, boost-format
 msgid "Uploading %1%"
 msgstr "Gönderiliyor %1%"
 
-#: win32\TransferView.cpp:347
+#: win32\TransferView.cpp:351
 #, fuzzy, boost-format
 msgid "Uploading to %1% users"
 msgstr "%1% kullanıcıdan indiriliyor"
@@ -4028,7 +4168,7 @@ msgstr ""
 msgid "Use semicolon to separate multiple regular expressions."
 msgstr ""
 
-#: win32\TabsPage.cpp:79
+#: win32\TabsPage.cpp:74
 msgid "Use standard Windows tabs"
 msgstr "Windows sekmelerini kullan"
 
@@ -4051,7 +4191,7 @@ msgstr "Kullanıcı tanımı"
 msgid "User Menu"
 msgstr "Kullanıcı Menüsünde"
 
-#: win32\QueueFrame.cpp:398
+#: win32\QueueFrame.cpp:441
 msgid "User certificate not trusted"
 msgstr "Kullanıcı sertifikası güvenli değil"
 
@@ -4072,7 +4212,7 @@ msgid "User matching definitions"
 msgstr "Kullanıcı eşleme tanımları"
 
 #: win32\DirectoryListingFrame.cpp:1267 win32\PrivateFrame.cpp:310
-#: win32\PrivateFrame.cpp:434 win32\QueueFrame.cpp:338
+#: win32\PrivateFrame.cpp:434 win32\QueueFrame.cpp:381
 msgid "User offline"
 msgstr "Kullanıcı Çevrimdışı"
 
@@ -4085,12 +4225,12 @@ msgstr "Kullanıcı'nın bağlantısı kesildi"
 msgid "User went online"
 msgstr "Kullanıcı'nın bağlantısı kesildi"
 
-#: win32\MainWindow.cpp:459 win32\PublicHubsFrame.cpp:43
-#: win32\QueueFrame.cpp:53 win32\StylesPage.cpp:150 win32\UsersFrame.cpp:108
+#: win32\MainWindow.cpp:444 win32\PublicHubsFrame.cpp:47
+#: win32\QueueFrame.cpp:57 win32\StylesPage.cpp:150 win32\UsersFrame.cpp:108
 msgid "Users"
 msgstr "Kullanıcılar"
 
-#: win32\PublicHubsFrame.cpp:247
+#: win32\PublicHubsFrame.cpp:262
 #, boost-format
 msgid "Users: %1%"
 msgstr "Kullanıcılar: %1%"
@@ -4113,7 +4253,7 @@ msgstr "Genel konuşma penceresinde durum mesajlarını görüntüle"
 msgid "Viewing text file: %1%"
 msgstr "%1% metin dosyası görüntüleniyor"
 
-#: win32\UploadPage.cpp:46 win32\UploadPage.cpp:228 win32\UploadPage.cpp:285
+#: win32\UploadPage.cpp:46 win32\UploadPage.cpp:240 win32\UploadPage.cpp:297
 msgid "Virtual name"
 msgstr "Sanal Adı"
 
@@ -4121,20 +4261,27 @@ msgstr "Sanal Adı"
 msgid "Visit the DC plugin repository"
 msgstr ""
 
-#: win32\QueueFrame.cpp:332
+#: win32\QueueFrame.cpp:375
 #, boost-format
 msgid "Waiting (%1% of %2% users online)"
 msgstr "Beklemede (%1% / %2% kullanıcı çevrimiçi)"
 
-#: win32\QueueFrame.cpp:330
+#: win32\QueueFrame.cpp:373
 msgid "Waiting (User online)"
 msgstr "Bekleniyor (Kullanıcı Çevrimiçi)"
 
-#: win32\TransferView.cpp:973
+#: win32\TransferView.cpp:997
 msgid "Waiting to retry"
 msgstr "Yeniden denemek için bekliyor"
 
-#: win32\PublicHubsFrame.cpp:273
+#: win32\WinUtil.cpp:1574
+msgid ""
+"Warning: Allowing content to open a program can be useful, but it can "
+"potentially harm your computer. Do not allow it unless you trust the source "
+"of the content."
+msgstr ""
+
+#: win32\PublicHubsFrame.cpp:288
 #, boost-format
 msgid ""
 "Warning: fraudulent hub list detected!\r\n"
@@ -4161,9 +4308,13 @@ msgstr ""
 msgid "Website: "
 msgstr ""
 
-#: win32\MainWindow.cpp:490
+#: win32\MainWindow.cpp:475
 msgid "What's This?"
 msgstr "Bu Nedir?"
+
+#: win32\ExpertsPage.cpp:100 win32\ExpertsPage.cpp:114
+msgid "Whitelisted URIs to open"
+msgstr ""
 
 #: win32\WindowsPage.cpp:69
 msgid "Window options"
@@ -4173,16 +4324,12 @@ msgstr "Pencere Ayarları"
 msgid "Windows"
 msgstr "Pencereler"
 
-#: win32\MainWindow.cpp:276
-msgid "Windows XP is too old"
-msgstr ""
-
-#: win32\ExpertsPage.cpp:44
+#: win32\ExpertsPage.cpp:46
 msgid "Write buffer size"
 msgstr "Yazma önbelleği boyutu"
 
 #: win32\ADLSearchFrame.cpp:331 win32\NotificationsPage.cpp:288
-#: win32\WinUtil.cpp:1192 win32\FinishedFrameBase.h:263
+#: win32\WinUtil.cpp:1181 win32\FinishedFrameBase.h:263
 msgid "Yes"
 msgstr "Evet"
 
@@ -4190,11 +4337,11 @@ msgstr "Evet"
 msgid "Yes (bg)"
 msgstr "Evet (bg)"
 
-#: win32\TabsPage.cpp:204
+#: win32\TabsPage.cpp:196
 msgid "Yet another tab"
 msgstr "Başka sekme"
 
-#: win32\FavHubGroupsDlg.cpp:308
+#: win32\FavHubGroupsDlg.cpp:316
 msgid "You must enter a name"
 msgstr "Bir isim girmelisiniz"
 
@@ -4216,16 +4363,16 @@ msgstr "ve"
 msgid "beginning"
 msgstr "başlangıç"
 
-#: win32\MainWindow.cpp:1616
+#: win32\MainWindow.cpp:1610
 msgid "city"
 msgstr ""
 
-#: win32\MainWindow.cpp:1616
+#: win32\MainWindow.cpp:1610
 #, fuzzy
 msgid "country"
 msgstr "Ülke"
 
-#: win32\ConnectivityManualPage.cpp:223
+#: win32\ConnectivityManualPage.cpp:141
 #, fuzzy
 msgid "encrypted transfer"
 msgstr "Şifrelenmiş aktarım"
@@ -4234,7 +4381,7 @@ msgstr "Şifrelenmiş aktarım"
 msgid "end"
 msgstr "bitiş"
 
-#: win32\TransferView.cpp:983
+#: win32\TransferView.cpp:1007
 msgid "file list"
 msgstr "dosya listesi"
 
@@ -4242,7 +4389,7 @@ msgstr "dosya listesi"
 msgid "lines"
 msgstr "satırlar"
 
-#: win32\ExpertsPage.cpp:50 win32\ExpertsPage.cpp:51
+#: win32\ExpertsPage.cpp:52 win32\ExpertsPage.cpp:53
 msgid "minutes"
 msgstr "dakika"
 
@@ -4254,7 +4401,7 @@ msgstr "etkin olunmayan dakîka (0 = devre dışı)"
 msgid "s"
 msgstr "s"
 
-#: win32\ExpertsPage.cpp:46
+#: win32\ExpertsPage.cpp:48
 msgid "seconds"
 msgstr ""
 
@@ -4262,7 +4409,7 @@ msgstr ""
 msgid "to"
 msgstr "şuna"
 
-#: win32\ConnectivityManualPage.cpp:228
+#: win32\ConnectivityManualPage.cpp:145
 #, fuzzy
 msgid "transfer"
 msgstr "Aktarım"

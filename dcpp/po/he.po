@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2015-04-06 21:35+0200\n"
+"POT-Creation-Date: 2016-09-14 20:51+0200\n"
 "PO-Revision-Date: 2008-11-09 08:26+0000\n"
 "Last-Translator: Yaron <sh.yaron@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,40 +15,40 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-04-06 19:21+0000\n"
-"X-Generator: Launchpad (build 17413)\n"
+"X-Launchpad-Export-Date: 2016-09-14 18:21+0000\n"
+"X-Generator: Launchpad (build 18186)\n"
 
 #: dcpp\DownloadManager.cpp:360
 #, boost-format
 msgid " - Queued: %1%"
 msgstr ""
 
-#: dcpp\Util.cpp:572
+#: dcpp\Util.cpp:575
 #, c-format, boost-format
 msgid "%'lld B"
 msgstr "%'lld ב'"
 
-#: dcpp\Util.cpp:534
+#: dcpp\Util.cpp:537
 #, c-format, boost-format
 msgid "%.02f GiB"
 msgstr "%.02f ג\"ב"
 
-#: dcpp\Util.cpp:530
+#: dcpp\Util.cpp:533
 #, c-format, boost-format
 msgid "%.02f KiB"
 msgstr "%.02f ק\"ב"
 
-#: dcpp\Util.cpp:532
+#: dcpp\Util.cpp:535
 #, c-format, boost-format
 msgid "%.02f MiB"
 msgstr "%.02f מ\"ב"
 
-#: dcpp\Util.cpp:538
+#: dcpp\Util.cpp:541
 #, c-format, boost-format
 msgid "%.02f PiB"
 msgstr "%.02f פ\"ב"
 
-#: dcpp\Util.cpp:536
+#: dcpp\Util.cpp:539
 #, c-format, boost-format
 msgid "%.02f TiB"
 msgstr "%.02f ט\"ב"
@@ -58,7 +58,7 @@ msgstr "%.02f ט\"ב"
 msgid "%1% %2% (added by %3%)"
 msgstr ""
 
-#: dcpp\MappingManager.cpp:116 dcpp\MappingManager.cpp:153
+#: dcpp\MappingManager.cpp:137 dcpp\MappingManager.cpp:188
 #, boost-format
 msgid "%1% %2% port (%3% %4%)"
 msgstr ""
@@ -117,17 +117,22 @@ msgstr "%1% נבעט: %2%"
 msgid "%1%/s"
 msgstr ""
 
+#: dcpp\ConnectivityManager.cpp:323
+#, boost-format
+msgid "%1%: %2%"
+msgstr ""
+
 #: dcpp\DownloadManager.cpp:461
 #, boost-format
 msgid "%1%: File not available"
 msgstr "%1%: הקובץ אינו זמין"
 
-#: dcpp\Util.cpp:528
+#: dcpp\Util.cpp:531
 #, c-format, boost-format
 msgid "%d B"
 msgstr "%d ב'"
 
-#: dcpp\Util.cpp:568
+#: dcpp\Util.cpp:571
 #, c-format, boost-format
 msgid "%s B"
 msgstr "%s ב'"
@@ -149,27 +154,31 @@ msgstr "קובץ בעל גודל שונה כבר קיים בתור"
 msgid "A file with the same hash already exists in your share"
 msgstr "קובץ עם אותו הגיבוב כבר קיים בין השיתופים שלך"
 
-#: dcpp\ConnectivityManager.cpp:189
+#: dcpp\ConnectivityManager.cpp:259
 msgid "Active mode"
 msgstr ""
 
-#: dcpp\ConnectivityManager.cpp:194
+#: dcpp\ConnectivityManager.cpp:261
 #, boost-format
 msgid ""
 "Active mode behind a router that %1% can configure; port mapping status: %2%"
 msgstr ""
 
-#: dcpp\ConnectivityManager.cpp:236
+#: dcpp\ConnectivityManager.cpp:310
 msgid ""
 "Active mode could not be achieved; a manual configuration is recommended for "
 "better connectivity"
+msgstr ""
+
+#: dcpp\ConnectivityManager.cpp:187
+msgid "All IPv6 addresses found are local; disabling connectivity"
 msgstr ""
 
 #: dcpp\ConnectionManager.cpp:214
 msgid "All download slots taken"
 msgstr "כל חריצי ההורדה תפוסים"
 
-#: dcpp\MappingManager.cpp:58
+#: dcpp\MappingManager.cpp:65
 msgid "Another port mapping attempt is in progress..."
 msgstr ""
 
@@ -181,30 +190,28 @@ msgstr ""
 msgid "Audio"
 msgstr ""
 
-#: dcpp\ConnectionManager.cpp:847
+#: dcpp\ConnectionManager.cpp:851
 #, boost-format
 msgid "Blocked a C-C connection to a hub ('%1%:%2%'; request from '%3%')"
 msgstr ""
 
-#: dcpp\ConnectionManager.cpp:866
+#: dcpp\ConnectionManager.cpp:870
 #, boost-format
 msgid "Blocking '%1%', potential DDoS detected (originating hub '%2%')"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:1660
+#: dcpp\QueueManager.cpp:1675
 msgid "CRC32 inconsistency (SFV-Check)"
 msgstr "אי־רציפות ה־CRC32 (בדיקת־SFV)"
 
-#: dcpp\QueueManager.cpp:1651
+#: dcpp\QueueManager.cpp:1666
 #, fuzzy, boost-format
 msgid "CRC32 inconsistency (SFV-Check): %1%"
 msgstr "אי־רציפות ה־CRC32 (בדיקת־SFV)"
 
-#: dcpp\CryptoManager.cpp:579
+#: dcpp\CryptoManager.cpp:507
 #, boost-format
-msgid ""
-"Certificate verification for %1% failed with error: %2% (certificate "
-"KeyPrint: %3%)"
+msgid "Certificate verification for %1% failed with error: %2%"
 msgstr ""
 
 #: dcpp\SearchManager.cpp:38
@@ -216,46 +223,47 @@ msgid "Connection closed"
 msgstr "החיבור נסגר"
 
 #: dcpp\BufferedSocket.cpp:170 dcpp\BufferedSocket.cpp:188
-#: dcpp\ConnectionManager.cpp:221 dcpp\Socket.cpp:385
+#: dcpp\ConnectionManager.cpp:221 dcpp\Socket.cpp:389
 msgid "Connection timeout"
 msgstr "תם הזמן המוקצב לחיבור"
 
-#: dcpp\ConnectionManager.cpp:313
+#: dcpp\ConnectivityManager.cpp:322
+#, fuzzy, boost-format
+msgid "Connectivity (%1%): %2%"
+msgstr "שגיאת התחברות: %1%"
+
+#: dcpp\ConnectionManager.cpp:315
 #, boost-format
 msgid "Connectivity error: %1%"
 msgstr "שגיאת התחברות: %1%"
 
-#: dcpp\ConnectivityManager.cpp:208
+#: dcpp\ConnectivityManager.cpp:271
 #, boost-format
 msgid ""
 "Connectivity information:\n"
 "\n"
 "Automatic connectivity setup is: %1%\n"
 "\n"
-"\t%2%\n"
-"\tExternal IP (v4): %3%\n"
-"\tExternal IP (v6): %4%\n"
-"\tBound interface (v4): %5%\n"
-"\tBound interface (v6): %6%\n"
-"\tTransfer port: %7%\n"
-"\tEncrypted transfer port: %8%\n"
-"\tSearch port: %9%"
+"\tIPv4: %2%\n"
+"\tIPv6: %3%\n"
+"\tExternal IP (v4): %4%\n"
+"\tExternal IP (v6): %5%\n"
+"\tBound interface (v4): %6%\n"
+"\tBound interface (v6): %7%\n"
+"\tTransfer port: %8%\n"
+"\tEncrypted transfer port: %9%\n"
+"\tSearch port: %10%"
 msgstr ""
 
-#: dcpp\ConnectionManager.cpp:305
+#: dcpp\ConnectionManager.cpp:307
 msgid "Connectivity restored"
 msgstr "ההתקשרות שוחזרה"
 
-#: dcpp\ConnectivityManager.cpp:179
+#: dcpp\ConnectivityManager.cpp:249
 msgid "Connectivity settings are being configured; try again later"
 msgstr ""
 
-#: dcpp\ConnectivityManager.cpp:249
-#, fuzzy
-msgid "Connectivity: "
-msgstr "שגיאת התחברות: %1%"
-
-#: dcpp\Socket.cpp:336
+#: dcpp\Socket.cpp:340
 #, fuzzy
 msgid "Could not open port for listening"
 msgstr "לאניתן לפתוח את קובץ היעד: %1%"
@@ -269,7 +277,7 @@ msgstr "לאניתן לפתוח את קובץ היעד: %1%"
 msgid "Country information"
 msgstr ""
 
-#: dcpp\ConnectivityManager.cpp:109
+#: dcpp\ConnectivityManager.cpp:151
 msgid "Determining the best connectivity settings..."
 msgstr ""
 
@@ -290,6 +298,10 @@ msgstr "התיקייה כבר משותפת"
 #: dcpp\DirectoryListing.cpp:203
 msgid "Directory missing name attribute"
 msgstr "לתיקייה חסר מאפיין השם"
+
+#: dcpp\ConnectivityManager.cpp:264
+msgid "Disabled"
+msgstr ""
 
 #: dcpp\ADLSearch.cpp:411
 msgid "Discard"
@@ -329,7 +341,7 @@ msgstr ""
 msgid "Duplicate source: %1%"
 msgstr "מקור כפול: %1%"
 
-#: dcpp\MappingManager.cpp:122 dcpp\MappingManager.cpp:165
+#: dcpp\MappingManager.cpp:143 dcpp\MappingManager.cpp:200
 msgid "Encrypted transfer"
 msgstr ""
 
@@ -349,8 +361,8 @@ msgid "Error during compression"
 msgstr "שגיאה במהלך הדחיסה"
 
 #: dcpp\BZUtils.cpp:76 dcpp\BZUtils.cpp:98 dcpp\BZUtils.cpp:101
-#: dcpp\CryptoManager.cpp:617 dcpp\CryptoManager.cpp:636
-#: dcpp\CryptoManager.cpp:650 dcpp\ZUtils.cpp:106 dcpp\ZUtils.cpp:131
+#: dcpp\CryptoManager.cpp:658 dcpp\CryptoManager.cpp:677
+#: dcpp\CryptoManager.cpp:691 dcpp\ZUtils.cpp:106 dcpp\ZUtils.cpp:131
 #: dcpp\ZUtils.cpp:145
 msgid "Error during decompression"
 msgstr "שגיאה במהלך הדחיסה"
@@ -383,16 +395,16 @@ msgstr "שגיאה בשמירת נתוני הגיבוב: %1%"
 msgid "Executable"
 msgstr ""
 
-#: dcpp\MappingManager.cpp:91 dcpp\MappingManager.cpp:191
+#: dcpp\MappingManager.cpp:110 dcpp\MappingManager.cpp:226
 #, fuzzy
 msgid "Failed to create port mappings"
 msgstr "לא ניתן ליצור אשכול"
 
-#: dcpp\MappingManager.cpp:180
+#: dcpp\MappingManager.cpp:216
 msgid "Failed to get external IP"
 msgstr ""
 
-#: dcpp\MappingManager.cpp:148
+#: dcpp\MappingManager.cpp:183
 #, fuzzy, boost-format
 msgid "Failed to initialize the %1% interface"
 msgstr "רענון רשימת הקבצים החל"
@@ -410,7 +422,7 @@ msgstr "שגיאה בטעינת המפתח הפרטי"
 msgid "Failed to load trusted certificate from %1%"
 msgstr ""
 
-#: dcpp\MappingManager.cpp:156
+#: dcpp\MappingManager.cpp:191
 #, fuzzy, boost-format
 msgid "Failed to map the %1% port (%2% %3%) with the %4% interface"
 msgstr "לא ניתן ליצור אשכול"
@@ -419,13 +431,13 @@ msgstr "לא ניתן ליצור אשכול"
 msgid "Failed to negotiate base protocol"
 msgstr "כשל בניהול מו\"מ על פרוטוקול הבסיס"
 
-#: dcpp\MappingManager.cpp:204
+#: dcpp\MappingManager.cpp:235
 #, fuzzy, boost-format
 msgid ""
 "Failed to remove port mappings from the %1% device with the %2% interface"
 msgstr "לא ניתן ליצור אשכול"
 
-#: dcpp\Socket.cpp:617
+#: dcpp\Socket.cpp:621
 msgid ""
 "Failed to set up the socks server for UDP relay (check socks address and "
 "port)"
@@ -484,7 +496,7 @@ msgstr "העץ המלא אינו תואם ל־TTH העל"
 msgid "Generated new TLS certificate"
 msgstr "נוצרה תעודת TLS חדשה"
 
-#: dcpp\MappingManager.cpp:215
+#: dcpp\MappingManager.cpp:246
 msgid "Generic"
 msgstr ""
 
@@ -546,7 +558,7 @@ msgstr ""
 msgid "Invalid regular expression: %1%"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:658
+#: dcpp\SettingsManager.cpp:679
 msgid "Invalid search type name"
 msgstr ""
 
@@ -566,7 +578,7 @@ msgstr ""
 msgid "Kick user(s)"
 msgstr "בעט משתמש/ים"
 
-#: dcpp\ConnectivityManager.cpp:131
+#: dcpp\ConnectivityManager.cpp:195
 msgid "Local network with possible NAT detected, trying to map the ports..."
 msgstr ""
 
@@ -591,10 +603,6 @@ msgstr "לא התבקשה תעודה"
 msgid "No directory specified"
 msgstr "לא הוגדרה תיקייה"
 
-#: dcpp\MappingManager.cpp:53
-msgid "No port mapping interface available"
-msgstr ""
-
 #: dcpp\CryptoManager.cpp:127
 msgid "No private key file chosen"
 msgstr "לא נבחר קובץ מפתח פרטי"
@@ -603,7 +611,7 @@ msgstr "לא נבחר קובץ מפתח פרטי"
 msgid "No slots available"
 msgstr "אין חריצים פנויים"
 
-#: dcpp\SettingsManager.cpp:716
+#: dcpp\SettingsManager.cpp:737
 msgid "No such search type"
 msgstr ""
 
@@ -627,7 +635,7 @@ msgstr "מנותק"
 msgid "Partial file list"
 msgstr ""
 
-#: dcpp\ConnectivityManager.cpp:200
+#: dcpp\ConnectivityManager.cpp:263
 msgid "Passive mode"
 msgstr ""
 
@@ -635,12 +643,12 @@ msgstr ""
 msgid "Picture"
 msgstr ""
 
-#: dcpp\MappingManager.cpp:209
+#: dcpp\MappingManager.cpp:240
 #, boost-format
 msgid "Port mapping: %1%"
 msgstr ""
 
-#: dcpp\ConnectivityManager.cpp:124
+#: dcpp\ConnectivityManager.cpp:177
 msgid ""
 "Public IP address detected, selecting active mode with direct connection"
 msgstr ""
@@ -657,11 +665,11 @@ msgstr "הסר את כל התת־תיקיות לפני שתוסיף את זאת"
 msgid "Response does not match request"
 msgstr "התגובה אינה תואמת לבקשה"
 
-#: dcpp\MappingManager.cpp:123 dcpp\MappingManager.cpp:166
+#: dcpp\MappingManager.cpp:144 dcpp\MappingManager.cpp:201
 msgid "Search"
 msgstr ""
 
-#: dcpp\ConnectivityManager.cpp:280
+#: dcpp\ConnectivityManager.cpp:361
 msgid "Search (UDP)"
 msgstr ""
 
@@ -688,28 +696,37 @@ msgstr ""
 msgid "Shared Files"
 msgstr "קבצים משותפים"
 
-#: dcpp\Socket.cpp:493 dcpp\Socket.cpp:497
+#: dcpp\Socket.cpp:497 dcpp\Socket.cpp:501
 msgid "Socks server authentication failed (bad login / password?)"
 msgstr "האימות לשרת ה־Socks נכשל (משתמש / סיסמה שגויים?)"
 
-#: dcpp\MappingManager.cpp:169
+#: dcpp\MappingManager.cpp:204
 #, boost-format
 msgid ""
 "Successfully created port mappings (Transfers: %1%, Encrypted transfers: "
 "%2%, Search: %3%) on the %4% device with the %5% interface"
 msgstr ""
 
-#: dcpp\MappingManager.cpp:88
+#: dcpp\MappingManager.cpp:107
 #, boost-format
 msgid ""
 "Successfully created port mappings on the %1% device with the %2% interface"
 msgstr ""
 
-#: dcpp\MappingManager.cpp:203
+#: dcpp\MappingManager.cpp:234
 #, fuzzy, boost-format
 msgid ""
 "Successfully removed port mappings from the %1% device with the %2% interface"
 msgstr "לא ניתן ליצור אשכול"
+
+#: dcpp\CryptoManager.cpp:606
+#, boost-format
+msgid "Supplied KeyPrint %1% did not match %2%."
+msgstr ""
+
+#: dcpp\CryptoManager.cpp:604
+msgid "Supplied KeyPrint did not match any certificate."
+msgstr ""
 
 #: dcpp\CryptoManager.cpp:365
 #, boost-format
@@ -746,22 +763,22 @@ msgid ""
 "encrypted transfers will be disabled"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:1494
+#: dcpp\QueueManager.cpp:1509
 #, boost-format
 msgid ""
 "The queued file %1% already exists in your share, removing from the queue"
 msgstr ""
 
-#: dcpp\Socket.cpp:479
+#: dcpp\Socket.cpp:483
 msgid "The socks server doesn't support login / password authentication"
 msgstr "שרת ה־socks אינו תומך באימות משתמש / סיסמה"
 
-#: dcpp\Socket.cpp:392 dcpp\Socket.cpp:400 dcpp\Socket.cpp:433
-#: dcpp\Socket.cpp:437 dcpp\Socket.cpp:461 dcpp\Socket.cpp:476
+#: dcpp\Socket.cpp:396 dcpp\Socket.cpp:404 dcpp\Socket.cpp:437
+#: dcpp\Socket.cpp:441 dcpp\Socket.cpp:465 dcpp\Socket.cpp:480
 msgid "The socks server failed establish a connection"
 msgstr "כשל בקיום ההתחברות לשרת ה־socks"
 
-#: dcpp\Socket.cpp:465
+#: dcpp\Socket.cpp:469
 msgid "The socks server requires authentication"
 msgstr "שרת ה־socks דורש אימות"
 
@@ -785,7 +802,7 @@ msgid ""
 "fix this"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:662 dcpp\SettingsManager.cpp:684
+#: dcpp\SettingsManager.cpp:683 dcpp\SettingsManager.cpp:705
 msgid "This search type already exists"
 msgstr ""
 
@@ -794,11 +811,11 @@ msgstr ""
 msgid "Too much data in response body (%1%)"
 msgstr ""
 
-#: dcpp\MappingManager.cpp:121 dcpp\MappingManager.cpp:164
+#: dcpp\MappingManager.cpp:142 dcpp\MappingManager.cpp:199
 msgid "Transfer"
 msgstr ""
 
-#: dcpp\ConnectivityManager.cpp:274
+#: dcpp\ConnectivityManager.cpp:355
 msgid "Transfer (TCP)"
 msgstr ""
 
@@ -825,7 +842,7 @@ msgstr ""
 msgid "Unable to move %1% to %2% (%3%); renamed to %4%"
 msgstr ""
 
-#: dcpp\ConnectivityManager.cpp:114
+#: dcpp\ConnectivityManager.cpp:165
 #, boost-format
 msgid ""
 "Unable to open %1% port(s); connectivity settings must be configured manually"
@@ -872,23 +889,26 @@ msgstr ""
 msgid "You're trying to download from yourself!"
 msgstr "!אתה מנסה להוריד מעצמך"
 
-#: dcpp\ConnectivityManager.cpp:182
+#: dcpp\ConnectivityManager.cpp:255
 msgid "disabled"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:204 dcpp\SettingsManager.cpp:205
+#: dcpp\SettingsManager.cpp:212 dcpp\SettingsManager.cpp:213
 msgid "downloaded from"
 msgstr "הורד מהמיקום"
 
-#: dcpp\ConnectivityManager.cpp:182
-#, fuzzy, boost-format
-msgid "enabled - %1%"
-msgstr "בחיפוש בוטל: %1%"
+#: dcpp\ConnectivityManager.cpp:253
+#, boost-format
+msgid ""
+"enabled\n"
+"\tIPv4 detection: %1%\n"
+"\tIPv6 detection: %2%"
+msgstr ""
 
-#: dcpp\ConnectivityManager.cpp:205
+#: dcpp\ConnectivityManager.cpp:268
 msgid "undefined"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:206
+#: dcpp\SettingsManager.cpp:214
 msgid "uploaded to"
 msgstr "הועלה אל"
