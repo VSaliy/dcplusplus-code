@@ -30,10 +30,10 @@ if env['distro']:
             '"hg" is required to build the distro; this tree must be under hg '
             'version control'
         )
-    if env.WhereIs('zip') is None:
+    if env.WhereIs('zip') is None and env.WhereIs('7z') is None:
         raise Exception(
-            '"zip" is required to build the distro; get the one from MSYS or '
-            'Cygwin'
+            '"zip" or "7z" is required to build the distro; install 7z or get '
+            'zip from MSYS or use the one provided with Cygwin' 
         )
 
 from build_util import nixify
@@ -198,12 +198,22 @@ def gen_installer(target, source, env):
     ))
 
     # make the zip binary archives
-    zip_cmd = lambda path: env.Execute(
-        'cd "' + build_dir + '" && zip -9 -r "' + nixify(path) +
-        '" . -x "*-x64" -x "dcppboot.nonlocal.xml" -x "*.ico" '
-        '-x "*.log" -x "*.nsh" -x "*.nsi" > zip.log && cd "' +
-        env.Dir('#').abspath + '"'
-    )
+    zip_cmd = lambda : None
+    if env.WhereIs('7z') is None:
+        zip_cmd = lambda path: env.Execute(
+            'cd "' + build_dir + '" && zip -9 -r "' + nixify(path) +
+            '" . -x "*-x64" -x "dcppboot.nonlocal.xml" -x "*.ico" '
+            '-x "*.log" -x "*.nsh" -x "*.nsi" > zip.log && cd "' +
+            env.Dir('#').abspath + '"'
+        )
+    else:
+        zip_cmd = lambda path: env.Execute(
+            'cd "' + build_dir + '" && 7z a -mx9 -r "' + path +
+            '" . -x!*-x64 -x!dcppboot.nonlocal.xml -x!*.ico '
+            '-x!*.log -x!*.nsh -x!*.nsi > 7z.log && cd "' +
+            env.Dir('#').abspath + '"'
+        )
+
     zip_cmd(target[1].abspath)
     env.Execute(Move(
         build_path + 'DCPlusPlus.exe',
