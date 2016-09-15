@@ -52,7 +52,7 @@
 
 		Make sure that makensis.exe is in your PATH environment variable.
 
-		* zip (from MSYS or Cygwin; only needed to build the official distro)
+		* zip from MSYS / Cygwin or 7-Zip (only needed to build the official distro)
 
 		Make sure that zip is in your PATH environment variable.
 
