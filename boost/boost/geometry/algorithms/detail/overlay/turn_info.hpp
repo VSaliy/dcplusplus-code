@@ -12,6 +12,7 @@
 
 #include <boost/array.hpp>
 
+#include <boost/geometry/core/coordinate_type.hpp>
 #include <boost/geometry/algorithms/detail/overlay/segment_identifier.hpp>
 
 namespace boost { namespace geometry
@@ -54,14 +55,21 @@ enum method_type
         The class is to be included in the turn_info class, either direct
         or a derived or similar class with more (e.g. enrichment) information.
  */
+template <typename Point, typename SegmentRatio>
 struct turn_operation
 {
+    typedef SegmentRatio segment_ratio_type;
+
     operation_type operation;
     segment_identifier seg_id;
-    segment_identifier other_id;
+    SegmentRatio fraction;
+
+    typedef typename coordinate_type<Point>::type comparable_distance_type;
+    comparable_distance_type remaining_distance;
 
     inline turn_operation()
         : operation(operation_none)
+        , remaining_distance(0)
     {}
 };
 
@@ -78,32 +86,39 @@ struct turn_operation
 template
 <
     typename Point,
-    typename Operation = turn_operation,
+    typename SegmentRatio,
+    typename Operation = turn_operation<Point, SegmentRatio>,
     typename Container = boost::array<Operation, 2>
 >
 struct turn_info
 {
     typedef Point point_type;
+    typedef SegmentRatio segment_ratio_type;
     typedef Operation turn_operation_type;
     typedef Container container_type;
 
     Point point;
     method_type method;
+    int cluster_id;
     bool discarded;
-
+    bool colocated;
+    bool switch_source; // For u/u turns which can either switch or not
 
     Container operations;
 
     inline turn_info()
         : method(method_none)
+        , cluster_id(-1)
         , discarded(false)
+        , colocated(false)
+        , switch_source(false)
     {}
 
     inline bool both(operation_type type) const
     {
         return has12(type, type);
     }
-    
+
     inline bool has(operation_type type) const
     {
         return this->operations[0].operation == type
@@ -115,8 +130,6 @@ struct turn_info
         return has12(type1, type2) || has12(type2, type1);
     }
 
-
-    inline bool is_discarded() const { return discarded; }
     inline bool blocked() const
     {
         return both(operation_blocked);
