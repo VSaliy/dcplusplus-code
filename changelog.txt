@@ -1,4 +1,5 @@
 * Update to GCC 6.2 & boost 1.61 (poy)
+* Enable LTO (cologic)
 
 -- 0.860 2016-09-14 --
 * Switch feasible http links to https (cologic)

@@ -10,8 +10,6 @@ from build_util import Dev, gen_po_name
 # TODO the ipa-cp-clone optimization is disabled; it causes a crash when
 # starting a DL.
 
-# TODO enable LTO when it doesn't ICE... (-flto)
-
 # Disabled GCC warnings:
 #   -Wno-deprecated-declarations: boost emits them when including
 #   boost/ptr_container/ptr_vector.hpp (auto_ptr conversions).
@@ -29,7 +27,7 @@ gcc_flags = {
         '-fexceptions',
     ],
     'debug': [],
-    'release': ['-O3', '-fno-ipa-cp-clone']
+    'release': ['-O3', '-fno-ipa-cp-clone', '-flto']
 }
 
 gcc_xxflags = {
