@@ -19,9 +19,6 @@
 #include "stdinc.h"
 #include "Mapper_MiniUPnPc.h"
 
-#include "Util.h"
-#include "Socket.h"
-
 extern "C" {
 #ifndef MINIUPNP_STATICLIB
 #define MINIUPNP_STATICLIB
@@ -39,55 +36,6 @@ Mapper(move(localIp), v6)
 {
 }
 
-uint32_t IPToUInt(const string& ip) {
-    int a, b, c, d;
-    uint32_t addr = 0;
- 
-    if (sscanf(ip.c_str(), "%d.%d.%d.%d", &a, &b, &c, &d) != 4)
-        return 0;
-	
-	addr = a << 24;
-	addr |= b << 16;
-	addr |= c << 8;
-    addr |= d;
-    return addr;
-}
-
-bool isIPInRange(const string& aIP1, const string& aIP2, uint8_t mask, bool v6) {
-#ifndef _WIN32
-	// not implemented
-	return true;
-#else
-	if (!v6) { 
-		uint32_t mmask = (~0u) << (32-mask);
-		uint32_t result1 = IPToUInt(aIP1) & mmask;
-		uint32_t result2 = IPToUInt(aIP2) & mmask;
-
-		return result1 == result2;
-	} else {
-		if (mask & 16)
-			return false;
-
-		in6_addr addr1, addr2;
-
-		auto p = aIP1.find("%");
-		inet_pton(AF_INET6, (p != string::npos ? aIP1.substr(0, p) : aIP1).c_str(), &addr1);
-
-		p = aIP2.find("%");
-		inet_pton(AF_INET6, (p != string::npos ? aIP2.substr(0, p) : aIP2).c_str(), &addr2);
-
-		//reset the non-common bytes
-		int resetPos = 16-((128-mask) / 16);
-		for (int i = resetPos; i < 16; ++i) {
-			addr1.u.Byte[i] = 0;
-			addr2.u.Byte[i] = 0;
-		}
-
-		return memcmp(addr1.u.Byte, addr2.u.Byte, 16) == 0;
-	}
-#endif
-}
-
 bool Mapper_MiniUPnPc::init() {
 	if(!url.empty())
 		return true;
@@ -103,29 +51,6 @@ bool Mapper_MiniUPnPc::init() {
 
 	bool ok = ret == 1;
 	if(ok) {
-		/// @todo think about this
-#if 0
-		if (localIp.empty()) {
-			const auto& addresses = Util::getIpAddresses(v6);
-	
-			auto remoteIP = string(string(data.urlbase).empty() ?  urls.controlURL : data.urlbase);
-			auto start = remoteIP.find("//");
-			if (start != string::npos) {
-				start = start+2;
-				auto end = remoteIP.find(":", start);
-				if (end != string::npos) {
-					remoteIP = Socket::resolve(remoteIP.substr(start, end-start), v6 ? AF_INET6 : AF_INET);
-					if (!remoteIP.empty()) {
-						auto p = boost::find_if(addresses, [&remoteIP, this](const Util::AddressInfo& aInfo) { return isIPInRange(aInfo.ip, remoteIP, aInfo.prefix, v6); });
-						if (p != addresses.end()) {
-							localIp = p->ip;
-						}
-					}
-				}
-			}
-		}
-#endif
-
 		url = urls.controlURL;
 		service = data.first.servicetype;
 		device = data.CIF.friendlyName;
@@ -159,7 +84,7 @@ string Mapper_MiniUPnPc::getExternalIP() {
 	char buf[16] = { 0 };
 	if(UPNP_GetExternalIPAddress(url.c_str(), service.c_str(), buf) == UPNPCOMMAND_SUCCESS)
 		return buf;
-	return Util::emptyString;
+	return string();
 }
 
 } // dcpp namespace
