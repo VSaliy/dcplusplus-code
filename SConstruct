@@ -10,6 +10,11 @@ from build_util import Dev, gen_po_name
 # TODO the ipa-cp-clone optimization is disabled; it causes a crash when
 # starting a DL.
 
+# TODO enable LTO once "Link-time optimization does not work well with
+# generation of debugging information. Combining -flto with -g is currently
+# experimental and expected to produce unexpected results." disappears from
+# https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html
+
 # Disabled GCC warnings:
 #   -Wno-deprecated-declarations: boost emits them when including
 #   boost/ptr_container/ptr_vector.hpp (auto_ptr conversions).
@@ -27,7 +32,7 @@ gcc_flags = {
         '-fexceptions',
     ],
     'debug': [],
-    'release': ['-O3', '-fno-ipa-cp-clone', '-flto']
+    'release': ['-O3', '-fno-ipa-cp-clone']
 }
 
 gcc_xxflags = {
