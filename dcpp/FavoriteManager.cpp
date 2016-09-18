@@ -36,6 +36,8 @@ namespace dcpp {
 using std::make_pair;
 using std::swap;
 
+using boost::none;
+
 FavoriteManager::FavoriteManager() : lastId(0), useHttp(false), running(false), c(nullptr), lastServer(0), listType(TYPE_NORMAL), dontSave(false) {
 	ClientManager::getInstance()->addListener(this);
 	HttpManager::getInstance()->addListener(this);
@@ -615,7 +617,8 @@ FavoriteHubEntryList FavoriteManager::getFavoriteHubs(const string& group) const
 optional<FavoriteUser> FavoriteManager::getFavoriteUser(const UserPtr &aUser) const {
 	Lock l(cs);
 	auto i = users.find(aUser->getCID());
-	return i == users.end() ? optional<FavoriteUser>() : i->second;
+	if(i != users.end()) { return i->second; }
+	return none;
 }
 
 bool FavoriteManager::hasSlot(const UserPtr& aUser) const {

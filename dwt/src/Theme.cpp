@@ -31,9 +31,10 @@
 
 #include <dwt/Theme.h>
 
+#include <vssym32.h>
+
 #include <dwt/Dispatchers.h>
 #include <dwt/util/check.h>
-#include <dwt/dwt_vssym32.h>
 
 namespace dwt {
 

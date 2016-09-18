@@ -32,6 +32,8 @@
 #include <dwt/widgets/RichTextBox.h>
 
 #include <algorithm>
+#include <cmath>
+
 #include <boost/lambda/lambda.hpp>
 #include <boost/format.hpp>
 #include <boost/scoped_array.hpp>
@@ -109,7 +111,7 @@ void RichTextBox::create(const Seed& cs) {
 
 		FORMATRANGE format { canvas.handle(), canvas.handle() };
 		format.rc = rect;
-		format.rc.bottom += abs(getFont()->getLogFont().lfHeight); // make room for the last line
+		format.rc.bottom += std::abs(getFont()->getLogFont().lfHeight); // make room for the last line
 		// convert to twips and respect DPI settings.
 		format.rc.right *= 1440 / canvas.getDeviceCaps(LOGPIXELSX);
 		format.rc.bottom *= 1440 / canvas.getDeviceCaps(LOGPIXELSY);

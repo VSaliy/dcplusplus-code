@@ -31,7 +31,8 @@
 
 #include <dwt/widgets/Splitter.h>
 
-#include <dwt/dwt_vsstyle.h>
+#include <vsstyle.h>
+
 #include <dwt/Texts.h>
 #include <dwt/WidgetCreator.h>
 #include <dwt/resources/Brush.h>

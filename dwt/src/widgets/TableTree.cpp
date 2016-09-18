@@ -31,8 +31,9 @@
 
 #include <dwt/widgets/TableTree.h>
 
+#include <vsstyle.h>
+
 #include <dwt/CanvasClasses.h>
-#include <dwt/dwt_vsstyle.h>
 #include <dwt/resources/ImageList.h>
 #include <dwt/resources/Pen.h>
 #include <dwt/util/check.h>

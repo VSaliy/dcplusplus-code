@@ -28,14 +28,14 @@ enum { Path = 1, LastCompulsory = Path, Count };
 
 struct Info {
 	string root;
-	clock_t time;
+	double time;
 	double speed;
 };
 
 Info run(const string& path) {
 	// adapted from dcpp::HashManager
 
-	File f { path, File::READ, File::OPEN };
+	File f { path, static_cast<int>(File::READ), static_cast<int>(File::OPEN) };
 	auto size = f.getSize();
 	f.close();
 
@@ -54,14 +54,14 @@ Info run(const string& path) {
 	tt.finalize();
 
 	auto end = GET_TICK();
+	double time = end - start;
 
 	double speed = 0.0;
-	if(end > start) {
-		speed = static_cast<double>(size) * 1000.0 / static_cast<double>(end - start);
+	if(time > 0.0) {
+		speed = static_cast<double>(size) * 1000.0 / time;
 	}
 
-	Info ret { tt.getRoot().toBase32(), end - start, speed };
-	return ret;
+	return { tt.getRoot().toBase32(), time, speed };
 }
 
 int main(int argc, char* argv[]) {

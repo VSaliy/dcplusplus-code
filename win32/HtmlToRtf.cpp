@@ -21,6 +21,8 @@
 #include "stdafx.h"
 #include "HtmlToRtf.h"
 
+#include <cmath>
+
 #include <boost/algorithm/string/trim.hpp>
 
 #include <dcpp/debug.h>
@@ -198,7 +200,7 @@ Parser::Context::Context(dwt::RichTextBox* box, Parser& parser) {
 	// create a default context with the Rich Edit control's current formatting.
 	auto lf = box->getFont()->getLogFont();
 	font = parser.addFont("\\fnil\\fcharset" + Util::toString(lf.lfCharSet) + " " + Text::fromT(lf.lfFaceName));
-	fontSize = rtfFontSize(static_cast<float>(abs(lf.lfHeight)) / dwt::util::dpiFactor());
+	fontSize = rtfFontSize(static_cast<float>(std::abs(lf.lfHeight)) / dwt::util::dpiFactor());
 	if(lf.lfWeight >= FW_BOLD) { setFlag(Bold); }
 	if(lf.lfItalic) { setFlag(Italic); }
 

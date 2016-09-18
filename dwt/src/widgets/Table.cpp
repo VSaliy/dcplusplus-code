@@ -31,16 +31,18 @@
 
 #include <dwt/widgets/Table.h>
 
+#include <cmath>
+
 #include <boost/scoped_array.hpp>
 #include <boost/range/algorithm/for_each.hpp>
+
+#include <vsstyle.h>
+#include <vssym32.h>
 
 #include <dwt/CanvasClasses.h>
 #include <dwt/util/check.h>
 #include <dwt/util/StringUtils.h>
-#include <dwt/util/win32/Version.h>
 #include <dwt/DWTException.h>
-#include <dwt/dwt_vsstyle.h>
-#include <dwt/dwt_vssym32.h>
 #include <dwt/WidgetCreator.h>
 #include <dwt/widgets/ToolTip.h>
 
@@ -49,40 +51,6 @@ namespace dwt {
 using boost::range::for_each;
 
 const TCHAR Table::windowClass[] = WC_LISTVIEW;
-
-/* the following dance adds Vista members to LVGROUP (notably iTitleImage to have group icons)
-without requiring a global switch of WINVER / _WIN32_WINNT / etc to Vista values. */
-typedef LVGROUP legacyLVGROUP;
-
-//@TODO Logically the following code would not needed when targeting Vista, however it doesn't compile without...
-//#if(_WIN32_WINNT < 0x600)
-struct LVGROUP_ : LVGROUP {
-	LPWSTR  pszSubtitle;
-    UINT    cchSubtitle;
-    LPWSTR  pszTask;
-    UINT    cchTask;
-    LPWSTR  pszDescriptionTop;
-    UINT    cchDescriptionTop;
-    LPWSTR  pszDescriptionBottom;
-    UINT    cchDescriptionBottom;
-    int     iTitleImage;
-    int     iExtendedImage;
-    int     iFirstItem;
-    UINT    cItems;
-    LPWSTR  pszSubsetTitle;
-    UINT    cchSubsetTitle;
-	LVGROUP_(const LVGROUP& lvg) : LVGROUP(lvg) { }
-};
-#define LVGROUP LVGROUP_
-#define LVGF_TITLEIMAGE 0x00001000
-#define ListView_SetGroupHeaderImageList(hwnd, himl) \
-    (HIMAGELIST)SNDMSG((hwnd), LVM_SETIMAGELIST, (WPARAM)LVSIL_GROUPHEADER, (LPARAM)(HIMAGELIST)(himl))
-//#endif
-
-namespace { legacyLVGROUP makeLVGROUP() {
-	legacyLVGROUP lvg = { util::win32::ensureVersion(util::win32::VISTA) ? sizeof(LVGROUP) : sizeof(legacyLVGROUP) };
-	return lvg;
-} }
 
 Table::Seed::Seed() :
 	BaseType::Seed(WS_CHILD | WS_TABSTOP | LVS_REPORT),
@@ -358,7 +326,7 @@ void Table::setGroups(const std::vector<tstring>& groups) {
 		initGroupSupport();
 	}
 
-	LVGROUP group = makeLVGROUP();
+	LVGROUP group = { sizeof(LVGROUP) };
 	for(auto& i: groups) {
 		if(i.empty()) {
 			group.mask = LVGF_GROUPID;
@@ -381,12 +349,10 @@ void Table::setGroups(const std::vector<tstring>& groups) {
 }
 
 bool Table::getGroupRect(unsigned groupId, Rectangle& rect) const {
-	if(util::win32::ensureVersion(util::win32::VISTA)) {
-		::RECT rc;
-		if(ListView_GetGroupRect(handle(), groupId, LVGGR_HEADER, &rc)) {
-			rect = Rectangle(rc);
-			return true;
-		}
+	::RECT rc;
+	if(ListView_GetGroupRect(handle(), groupId, LVGGR_HEADER, &rc)) {
+		rect = Rectangle(rc);
+		return true;
 	}
 	return false;
 }
@@ -415,7 +381,7 @@ void Table::initGroupSupport() {
 				if(color == NaC)
 					color = 0; // assume black
 				auto bgColor = ListView_GetBkColor(handle());
-				if(abs(GetRValue(color) + GetGValue(color) + GetBValue(color)
+				if(std::abs(GetRValue(color) + GetGValue(color) + GetBValue(color)
 					- GetRValue(bgColor) - GetGValue(bgColor) - GetBValue(bgColor)) < 300)
 				{
 					/* the theme color and the bg color are too close to each other; start by
@@ -532,10 +498,8 @@ void Table::setStateImageList( ImageListPtr imageList ) {
 }
 
 void Table::setGroupImageList(ImageListPtr imageList) {
-	if(util::win32::ensureVersion(util::win32::VISTA)) {
-		groupImageList = imageList;
-		ListView_SetGroupHeaderImageList(handle(), groupImageList->handle());
-	}
+	groupImageList = imageList;
+	ListView_SetGroupHeaderImageList(handle(), groupImageList->handle());
 }
 
 void Table::setView( int view ) {

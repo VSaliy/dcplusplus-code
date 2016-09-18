@@ -35,16 +35,17 @@
 
 #include <dwt/widgets/Menu.h>
 
+#include <algorithm>
+
+#include <boost/scoped_array.hpp>
+
+#include <vsstyle.h>
+
 #include <dwt/resources/Brush.h>
 #include <dwt/resources/Pen.h>
 #include <dwt/DWTException.h>
 #include <dwt/util/check.h>
 #include <dwt/util/StringUtils.h>
-#include <dwt/dwt_vsstyle.h>
-
-#include <algorithm>
-#include <boost/scoped_array.hpp>
-
 #include <dwt/widgets/Control.h>
 
 namespace dwt {

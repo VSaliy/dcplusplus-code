@@ -31,12 +31,20 @@
 
 #include <dwt/Taskbar.h>
 
-#include <dwt/dwt_dwmapi.h>
+#include <dwmapi.h>
+
 #include <dwt/LibraryLoader.h>
 #include <dwt/util/check.h>
 #include <dwt/util/win32/Version.h>
 #include <dwt/widgets/Container.h>
 #include <dwt/widgets/Window.h>
+
+/* the following messages are only defined for Win 7; we can use them as everything we do wrt
+ * taskbars is dynamic and depends on the Win version. */
+#if(_WIN32_WINNT < 0x0601)
+#define WM_DWMSENDICONICTHUMBNAIL 0x0323
+#define WM_DWMSENDICONICLIVEPREVIEWBITMAP 0x0326
+#endif
 
 namespace dwt {
 

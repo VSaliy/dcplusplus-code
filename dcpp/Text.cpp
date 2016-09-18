@@ -19,6 +19,8 @@
 #include "stdinc.h"
 #include "Text.h"
 
+#include <cmath>
+
 #ifdef _WIN32
 #include "w.h"
 #else
@@ -37,6 +39,8 @@
 namespace dcpp {
 
 namespace Text {
+
+using std::abs;
 
 const string utf8 = "utf-8"; // optimization
 string systemCharset;

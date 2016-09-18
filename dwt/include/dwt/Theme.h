@@ -57,7 +57,7 @@ public:
 	* @param clip only draw within this rectangle (useful for partial painting from a PaintCanvas).
 	*/
 	void drawBackground(Canvas& canvas, int part, int state, const Rectangle& rect,
-		bool drawParent = true, boost::optional<Rectangle> clip = boost::optional<Rectangle>());
+		bool drawParent = true, boost::optional<Rectangle> clip = boost::none);
 	/// @param textFlags see the DrawText doc for possible values.
 	void drawText(Canvas& canvas, int part, int state, const tstring& text, unsigned textFlags, const Rectangle& rect);
 	void formatRect(Canvas& canvas, int part, int state, Rectangle& rect);

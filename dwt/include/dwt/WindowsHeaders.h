@@ -57,7 +57,7 @@
 #include <windowsx.h>
 #include <shellapi.h>
 #include <shlwapi.h>
-#include "dwt_shlobj.h"
+#include <shlobj.h>
 #include <commctrl.h>
 #include <commdlg.h>
 #include <assert.h>

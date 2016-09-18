@@ -12,27 +12,28 @@ from build_util import Dev, gen_po_name
 
 # TODO enable LTO when it doesn't ICE... (-flto)
 
-# TODO remove -Wno-format when
-# <https://cygwin.com/ml/cygwin/2012-01/msg00061.html>
-# ("mingw64-i686-gcc-4.5.3-4: -Wformat warnings broken in C++") fixed
-
-# TODO remove -Wno-unused-local-typedefs when boost doesn't trigger it
-
-# TODO add -fdebug-types-section when it doesn't ICE
-
+# Disabled GCC warnings:
+#   -Wno-deprecated-declarations: boost emits them when including
+#   boost/ptr_container/ptr_vector.hpp (auto_ptr conversions).
+#   -Wno-missing-field-initializers: Overzealous; makes sense to disable.
+#   -Wno-unknown-pragmas: htmlhelp.h emits these.
+#   -Wno-unused-[parameter / value]: We have a ton of these; maybe one day...
 gcc_flags = {
     'common': [
-        '-g', '-Wall', '-Wextra', '-Wno-unused-local-typedefs',
+        '-g', '-Wall', '-Wextra',
+        '-Wno-deprecated-declarations',
+        '-Wno-missing-field-initializers',
+        '-Wno-unknown-pragmas',
         '-Wno-unused-parameter', '-Wno-unused-value',
-        '-Wno-missing-field-initializers', '-Wno-address',
-        '-Wno-unknown-pragmas', '-Wno-format', '-fexceptions'
+        '-fdebug-types-section',
+        '-fexceptions',
     ],
     'debug': [],
     'release': ['-O3', '-fno-ipa-cp-clone']
 }
 
 gcc_xxflags = {
-    'common': ['-std=gnu++1y'],
+    'common': [],
     'debug': [],
     'release': []
 }
@@ -86,14 +87,21 @@ msvc_link_flags = {
     'release': []
 }
 
+# BOOST_MOVE_USE_STANDARD_LIBRARY_MOVE: Prevents conflicts in some cases where
+# we do use a properly qualified std::forward / std::move but the boost version
+# still matches - see <http://lists.boost.org/boost-users/2012/07/75176.php>.
+
 msvc_defs = {
-    'common': ['_REENTRANT', 'snprintf=_snprintf'],
+    'common': [
+        '_REENTRANT', 'BOOST_MOVE_USE_STANDARD_LIBRARY_MOVE',
+        'snprintf=_snprintf',
+    ],
     'debug': ['_DEBUG', '_HAS_ITERATOR_DEBUGGING=0', '_SECURE_SCL=0'],
     'release': ['NDEBUG']
 }
 
 gcc_defs = {
-    'common': ['_REENTRANT', 'NO_VIZ'],
+    'common': ['_REENTRANT', 'BOOST_MOVE_USE_STANDARD_LIBRARY_MOVE', 'NO_VIZ'],
     'debug': ['_DEBUG'],
     'release': ['NDEBUG']
 }
