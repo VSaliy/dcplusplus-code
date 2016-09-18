@@ -146,10 +146,9 @@ class Dev:
     def build(self, source_path, local_env=None):
         if not local_env:
             local_env = self.env
-        full_path = local_env.Dir('.').path + '/' + source_path
         return local_env.SConscript(
             source_path + 'SConscript',
-            exports={'dev': self, 'source_path': full_path}
+            exports={'dev': self, 'source_path': source_path},
         )
 
     # create a build environment and set up sources and targets.
