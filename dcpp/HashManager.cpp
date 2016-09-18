@@ -33,6 +33,8 @@ namespace dcpp {
 
 using std::swap;
 
+using boost::none;
+
 /* Version history:
 - Version 1: DC++ 0.307 to 0.68.
 - Version 2: DC++ 0.670 to DC++ 0.802. Improved efficiency.
@@ -192,7 +194,7 @@ optional<TTHValue> HashManager::HashStore::getTTH(const string& aFileName, int64
 			dirty = true;
 		}
 	}
-	return nullptr;
+	return none;
 }
 
 void HashManager::HashStore::rebuild() {

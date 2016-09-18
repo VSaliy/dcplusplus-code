@@ -311,12 +311,12 @@ public:
 
 	static string toString(short val) {
 		char buf[8];
-		snprintf(buf, sizeof(buf), "%d", (int)val);
+		snprintf(buf, sizeof(buf), "%d", static_cast<int>(val));
 		return buf;
 	}
 	static string toString(unsigned short val) {
 		char buf[8];
-		snprintf(buf, sizeof(buf), "%u", (unsigned int)val);
+		snprintf(buf, sizeof(buf), "%u", static_cast<unsigned int>(val));
 		return buf;
 	}
 	static string toString(int val) {
@@ -490,36 +490,12 @@ struct noCaseStringHash {
 	size_t operator()(const string* s) const {
 		return operator()(*s);
 	}
-
-	size_t operator()(const string& s) const {
-		size_t x = 0;
-		const char* end = s.data() + s.size();
-		for(const char* str = s.data(); str < end; ) {
-			wchar_t c = 0;
-			int n = Text::utf8ToWc(str, c);
-			if(n < 0) {
-				x = x*32 - x + '_';
-				str += abs(n);
-			} else {
-				x = x*32 - x + (size_t)Text::toLower(c);
-				str += n;
-			}
-		}
-		return x;
-	}
+	size_t operator()(const string& s) const;
 
 	size_t operator()(const wstring* s) const {
 		return operator()(*s);
 	}
-	size_t operator()(const wstring& s) const {
-		size_t x = 0;
-		const wchar_t* y = s.data();
-		wstring::size_type j = s.size();
-		for(wstring::size_type i = 0; i < j; ++i) {
-			x = x*31 + (size_t)Text::toLower(y[i]);
-		}
-		return x;
-	}
+	size_t operator()(const wstring& s) const;
 
 	bool operator()(const string* a, const string* b) const {
 		return Util::stricmp(*a, *b) < 0;

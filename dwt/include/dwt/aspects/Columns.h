@@ -125,8 +125,10 @@ inline int Columns<WidgetType>::insertColumn(const Column& column, int after) {
 
 template<typename WidgetType>
 inline void Columns<WidgetType>::setColumns(const std::vector<Column>& columns) {
-	for(auto i = 0u, iend = getColumnCount(); i < iend; ++i) eraseColumn(i);
-	for(size_t i = 0, iend = columns.size(); i < iend; ++i) insertColumn(columns[i], i);
+	/** @todo "auto" doesn't pass here; strange error on GCC 6.2:
+	 * "inconsistent deduction for 'auto': 'unsigned int' and then 'auto'" */
+	for(decltype(getColumnCount()) i = 0, iend = getColumnCount(); i < iend; ++i) eraseColumn(i);
+	for(decltype(columns.size()) i = 0, iend = columns.size(); i < iend; ++i) insertColumn(columns[i], i);
 }
 
 template<typename WidgetType>

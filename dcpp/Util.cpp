@@ -27,6 +27,8 @@
 
 #endif
 
+#include <cmath>
+
 #include <boost/algorithm/string/trim.hpp>
 
 #include "CID.h"
@@ -55,6 +57,7 @@
 
 namespace dcpp {
 
+using std::abs;
 using std::make_pair;
 
 #ifndef _DEBUG
@@ -1271,6 +1274,32 @@ bool Util::isAdcsUrl(const string& aHubURL) {
 }
 bool Util::isNmdcUrl(const string& aHubURL) { 
 	return Util::strnicmp("dchub://", aHubURL.c_str(), 8) == 0; 
+}
+
+size_t noCaseStringHash::operator()(const string& s) const {
+	size_t x = 0;
+	auto end = s.data() + s.size();
+	for(auto str = s.data(); str < end; ) {
+		wchar_t c = 0;
+		int n = Text::utf8ToWc(str, c);
+		if(n < 0) {
+			x = x * 32 - x + '_';
+			str += abs(n);
+		} else {
+			x = x * 32 - x + static_cast<size_t>(Text::toLower(c));
+			str += n;
+		}
+	}
+	return x;
+}
+
+size_t noCaseStringHash::operator()(const wstring& s) const {
+	size_t x = 0;
+	auto y = s.data();
+	for(decltype(s.size()) i = 0, j = s.size(); i < j; ++i) {
+		x = x * 31 + static_cast<size_t>(Text::toLower(y[i]));
+	}
+	return x;
 }
 
 } // namespace dcpp

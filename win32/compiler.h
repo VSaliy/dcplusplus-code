@@ -17,8 +17,8 @@
  */
 
 #if defined(__GNUC__)
-#if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 9)
-#error GCC 4.9 is required
+#if __GNUC__ < 6 || (__GNUC__ == 6 && __GNUC_MINOR__ < 2)
+#error GCC 6.2 is required
 #endif
 
 #ifdef HAVE_OLD_MINGW

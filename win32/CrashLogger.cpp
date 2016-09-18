@@ -263,7 +263,7 @@ void getDebugInfo(string path, DWORD addr, string& file, int& line, int& column,
 
 	auto image = ImageLoad(&path[0], 0);
 	if(!image) {
-		fprintf(f, "[Failed to load the debugging data into memory (error: %d)] ", GetLastError());
+		fprintf(f, "[Failed to load the debugging data into memory (error: %lu)] ", GetLastError());
 		return;
 	}
 
@@ -492,7 +492,7 @@ inline void writePlatformInfo() {
 		ver.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
 
 	if(::GetVersionEx(reinterpret_cast<LPOSVERSIONINFO>(&ver))) {
-		fprintf(f, "Windows version: major = %d, minor = %d, build = %d, SP = %d, type = %d\n",
+		fprintf(f, "Windows version: major = %lu, minor = %lu, build = %lu, SP = %u, type = %u\n",
 			ver.dwMajorVersion, ver.dwMinorVersion, ver.dwBuildNumber, ver.wServicePackMajor, ver.wProductType);
 
 	} else {
@@ -501,14 +501,13 @@ inline void writePlatformInfo() {
 
 	SYSTEM_INFO info;
 	::GetNativeSystemInfo(&info);
-	fprintf(f, "Processors: %d * %s\n", info.dwNumberOfProcessors,
+	fprintf(f, "Processors: %lu * %s\n", info.dwNumberOfProcessors,
 		(info.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_AMD64) ? "x64" :
 		(info.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_INTEL) ? "x86" :
 		(info.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_IA64) ? "ia64" :
 		"[unknown architecture]");
 
-	MEMORYSTATUSEX	memoryStatusEx;
-	memoryStatusEx.dwLength = sizeof(MEMORYSTATUSEX);
+	MEMORYSTATUSEX memoryStatusEx = { sizeof(MEMORYSTATUSEX) };
 	::GlobalMemoryStatusEx(&memoryStatusEx);
 	fprintf(f, "System memory installed: %s", Util::formatBytes(memoryStatusEx.ullTotalPhys).c_str());
 }
@@ -526,7 +525,7 @@ inline void writeBacktrace(LPCONTEXT context) {
 #endif
 
 	if(!SymInitialize(process, 0, TRUE)) {
-		fprintf(f, "Failed to initialize the symbol handler (error: %d)\n", GetLastError());
+		fprintf(f, "Failed to initialize the symbol handler (error: %lu)\n", GetLastError());
 		return;
 	}
 
@@ -634,7 +633,7 @@ LONG WINAPI exceptionFilter(LPEXCEPTION_POINTERS info) {
 	if(f) {
 		writeAppInfo();
 
-		fprintf(f, "Exception code: %x\n", info->ExceptionRecord->ExceptionCode);
+		fprintf(f, "Exception code: %lx\n", info->ExceptionRecord->ExceptionCode);
 
 		writePlatformInfo();
 

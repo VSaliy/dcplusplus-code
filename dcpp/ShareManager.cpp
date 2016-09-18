@@ -1340,7 +1340,7 @@ optional<const ShareManager::Directory::File&> ShareManager::getFile(const strin
 	if(!d) {
 		d = getDirectory(realPath);
 		if(!d) {
-			return nullptr;
+			return none;
 		}
 	}
 
@@ -1349,7 +1349,7 @@ optional<const ShareManager::Directory::File&> ShareManager::getFile(const strin
 		/* should never happen, but let's fail gracefully (maybe a synchro issue with a dir being
 		removed during hashing...)... */
 		dcdebug("ShareManager::getFile: the file <%s> could not be found, strange!\n", realPath.c_str());
-		return nullptr;
+		return none;
 	}
 
 	if(i->realPath && i->realPath == realPath) {

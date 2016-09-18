@@ -23,8 +23,8 @@
 
 #ifdef _WIN32
 
-#if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 9)
-#error GCC 4.9 is required
+#if __GNUC__ < 6 || (__GNUC__ == 6 && __GNUC_MINOR__ < 2)
+#error GCC 6.2 is required
 #endif
 
 #ifdef HAVE_OLD_MINGW
@@ -34,8 +34,8 @@
 
 #else // _WIN32
 
-#if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 9)
-#error GCC 4.9 is required
+#if __GNUC__ < 6 || (__GNUC__ == 6 && __GNUC_MINOR__ < 2)
+#error GCC 6.2 is required
 #endif
 
 #endif // _WIN32
@@ -57,7 +57,7 @@
 
 #endif
 
-#if defined(_MSC_VER) || (defined(__MINGW32__) && !defined(HAVE_MINGW64))
+#if defined(_MSC_VER)
 #define _LL(x) x##ll
 #define _ULL(x) x##ull
 #define I64_FMT "%I64d"

@@ -293,7 +293,7 @@ void PluginManager::removePlugin(const string& guid) {
 bool PluginManager::isLoaded(const string& guid) const {
 	Lock l(cs);
 	auto p = findPlugin(guid);
-	return p ? p->handle : false;
+	return p ? bool(p->handle) : false;
 }
 
 StringList PluginManager::getPluginList() const {
