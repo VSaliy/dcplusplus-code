@@ -1,9 +1,0 @@
-Import('dev')
-
-ret = []
-
-glob = dev.env.Glob('libs/*/src', strings=1)
-for path in glob:
-    ret.append(dev.build(path + '/'))
-
-Return('ret')

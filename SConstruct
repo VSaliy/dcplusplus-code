@@ -374,7 +374,7 @@ env = conf.Finish()
 
 # TODO run config tests to determine which libs to build
 
-dev.boost = dev.build('boost/') if dev.is_win32() else []
+dev.boost = dev.build('boost/libs/') if dev.is_win32() else []
 dev.dwarf = dev.build('dwarf/')
 dev.zlib = dev.build('zlib/')
 dev.bzip2 = dev.build('bzip2/') if dev.is_win32() else []
