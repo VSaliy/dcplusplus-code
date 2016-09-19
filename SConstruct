@@ -32,7 +32,7 @@ gcc_flags = {
         '-fexceptions',
     ],
     'debug': [],
-    'release': ['-O3', '-fno-ipa-cp-clone', '-msse2']
+    'release': ['-O3', '-fno-ipa-cp-clone']
 }
 
 gcc_xxflags = {
@@ -231,8 +231,10 @@ if 'gcc' in env['TOOLS']:
 
     # require i686 instructions for atomic<int64_t>, used by boost::lockfree
     # (otherwise lockfree lists won't actually be lock-free).
+    # Require SSE2 for e.g., significantly faster Tiger hashing
+    # https://www.cryptopp.com/benchmarks.html
     if env['arch'] == 'x86':
-        env.Append(CCFLAGS=['-march=i686'])
+        env.Append(CCFLAGS=['-march=pentium-m'])
 
 if 'msvc' in env['TOOLS']:
     env['pch'] = True
