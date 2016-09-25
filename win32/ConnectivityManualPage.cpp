@@ -239,6 +239,8 @@ void PageContent::read() {
 		default: break;
 	}
 
+	PropPage::read(items);
+
 	{
 		const auto& setting = SettingsManager::getInstance()->get(settingMapper);
 		int sel = 0;
@@ -273,6 +275,8 @@ void PageContent::read() {
 }
 
 void PageContent::write() {
+	PropPage::write(items);
+
 	// Set the connection mode
 	int c = inactive->getChecked() ? SettingsManager::INCOMING_DISABLED :
 		upnp->getChecked() ? SettingsManager::INCOMING_ACTIVE_UPNP :
