@@ -36,25 +36,55 @@ class Dev:
         self.env.SetOption('max_drift', 60 * 10)
         self.env.Decider('MD5-timestamp')
 
-        if 'mingw' in self.env['TOOLS']:
-            self.env.Append(LINKFLAGS=["-Wl,--enable-runtime-pseudo-reloc"])
+        if 'gcc' in self.env['TOOLS']:
 
-            prefix = ''
-            if self.env.get('prefix'):
-                prefix = self.env['prefix']
-            elif self.env['arch'] == 'x64':
-                prefix = 'x86_64-w64-mingw32-'
-            elif sys.platform != 'win32':
-                prefix = 'i386-mingw32-'
+            # when building with GCC, honor the "prefix" setting.
+            prefix = self.env.get('prefix')
 
-            self.env['CC'] = prefix + 'gcc'
-            self.env['CXX'] = prefix + 'g++'
-            self.env['LINK'] = prefix + 'g++'
-            self.env['AR'] = prefix + 'ar'
-            self.env['RANLIB'] = prefix + 'ranlib'
-            self.env['RC'] = prefix + 'windres'
-            self.env['strip'] = prefix + 'strip'
+            if prefix is None:
+                # no explicit prefix; set one for MinGW builds.
+                if 'mingw' not in self.env['TOOLS']:
+                    prefix = ''
+                elif self.env['arch'] == 'x86':
+                    prefix = 'i686-w64-mingw32-'
+                elif self.env['arch'] == 'x64':
+                    prefix = 'x86_64-w64-mingw32-'
 
+            # prefix our build tools.
+            BUILD_TOOLS = {
+                'CC': 'gcc',
+                'CXX': 'g++',
+                'LINK': 'g++',
+                'AR': 'ar',
+                'RANLIB': 'ranlib',
+                'RC': 'windres',
+                'strip': 'strip',
+            }
+            for tool_ref, tool_bin in BUILD_TOOLS.iteritems():
+                self.env[tool_ref] = prefix + tool_bin
+
+            # "gcc" should always be present.
+            gcc_path = self.env.WhereIs(self.env['CC'])
+            if not gcc_path:
+                raise Exception('GCC bin "%s" not found.' % self.env['CC'])
+
+            # set explicit paths on missing build tools, as they are not always
+            # all prefixed (though the "gcc" binary always is, so we use it to
+            # fetch a base path).
+            # <https://sourceforge.net/p/mingw-w64/mailman/message/33224826/>
+            if 'mingw' in self.env['TOOLS']:
+                for tool_ref, tool_bin in BUILD_TOOLS.iteritems():
+                    if not self.env.WhereIs(self.env[tool_ref]):
+                        base_tool_path = os.path.dirname(gcc_path)
+                        print(
+                            'Using a non-prefixed version of "%s" from "%s".' %
+                            (tool_bin, base_tool_path)
+                        )
+                        self.env[tool_ref] = os.path.join(
+                            base_tool_path, tool_bin,
+                        )
+
+            # when cross-compiling, be explicit about bin extensions.
             if sys.platform != 'win32':
                 self.env['PROGSUFFIX'] = '.exe'
                 self.env['LIBPREFIX'] = 'lib'

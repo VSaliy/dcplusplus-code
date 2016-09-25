@@ -140,7 +140,12 @@ opts.AddVariables(
     BoolVariable('webhelp',
         'Build help files for the web (requires help=1)',
         'no'),
-    ('prefix', 'Prefix to use when cross compiling', ''),
+    ('prefix',
+     'Prefix to use when calling GCC build tools; defaults to:\n'
+     '- nothing for Linux builds.\n'
+     '- "i686-w64-mingw32-" for 32-bit MinGW builds.\n'
+     '- "x86_64-w64-mingw32-" for 64-bit MinGW builds.\n'
+     'May be forced to nothing via "prefix=".'),
     EnumVariable('arch', 'Target architecture', 'x86', ['x86', 'x64', 'ia64']),
     BoolVariable('msvcproj', 'Build MSVC project files', 'no'),
     BoolVariable('distro',
@@ -243,7 +248,10 @@ if env['pch']:
 
 if 'mingw' in env['TOOLS']:
     env.Append(CCFLAGS=['-mthreads'])
-    env.Append(LINKFLAGS=['-static-libgcc', '-static-libstdc++', '-mthreads'])
+    env.Append(LINKFLAGS=[
+        '-static-libgcc', '-static-libstdc++', '-mthreads',
+        '-Wl,--enable-runtime-pseudo-reloc',
+    ])
 
     if env['mode'] == 'release' or sys.platform == 'win32':
         env.Append(CCFLAGS=['-mwindows'])
