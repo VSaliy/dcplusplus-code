@@ -369,6 +369,22 @@ void TabView::setActive(int i) {
 	handleTabSelected();
 }
 
+bool TabView::activateLeftTab() {
+	if(active > 0) {
+		setActive(active - 1);
+		return true;
+	}
+	return false;
+}
+
+bool TabView::activateRightTab() {
+	if(active < static_cast<int>(size()) - 1) {
+		setActive(active + 1);
+		return true;
+	}
+	return false;
+}
+
 void TabView::swapWidgets(ContainerPtr oldW, ContainerPtr newW) {
 	newW->resize(clientSize);
 	newW->setVisible(true);
@@ -746,16 +762,10 @@ void TabView::handleMouseWheel(int delta) {
 		return; // outside of the tab control itself; ignore.
 	}
 
-	// note: we don't handle small increments (when delta < 120).
+	// note: we don't handle small increment aggregates (when delta < 120).
 
-	if(delta > 0 && active > 0) {
-		// go left when scrolling upwards.
-		setActive(active - 1);
-
-	} else if(delta < 0 && active < static_cast<int>(size()) - 1) {
-		// go right when scrolling downwards.
-		setActive(active + 1);
-	}
+	if(delta > 0) { activateLeftTab(); } // go left when scrolling upwards.
+	else if(delta < 0) { activateRightTab(); } // go right when scrolling downwards.
 }
 
 bool TabView::handleMouseMove(const MouseEvent& mouseEvent) {
@@ -956,22 +966,19 @@ bool TabView::filter(const MSG& msg) {
 	if(tip)
 		tip->relayEvent(msg);
 
-	/* handle Alt+Left and Alt+Right here instead of setting up global accelerators in order to be
-	able to allow further dispatching if we can't move more to the left or to the right. */
+	/* handle Ctrl+PageUp, Ctrl+PageDown, Alt+Left, Alt+Right here instead of setting up global
+	 * accelerators in order to be able to allow further dispatching if we can't move more to the
+	 * left or to the right. this is of importance when imbricating TabView widgets. */
+	if(msg.message == WM_KEYDOWN && active != -1) {
+		switch(static_cast<int>(msg.wParam)) {
+		case VK_PRIOR: if(isControlPressed() && activateLeftTab()) { return true; } break;
+		case VK_NEXT: if(isControlPressed() && activateRightTab()) { return true; } break;
+		}
+	}
 	if(msg.message == WM_SYSKEYDOWN && active != -1) {
 		switch(static_cast<int>(msg.wParam)) {
-		case VK_LEFT:
-			if(isAltPressed() && active > 0) {
-				setActive(active - 1);
-				return true;
-			}
-			break;
-		case VK_RIGHT:
-			if(isAltPressed() && active < static_cast<int>(size()) - 1) {
-				setActive(active + 1);
-				return true;
-			}
-			break;
+		case VK_LEFT: if(isAltPressed() && activateLeftTab()) { return true; } break;
+		case VK_RIGHT: if(isAltPressed() && activateRightTab()) { return true; } break;
 		}
 	}
 
