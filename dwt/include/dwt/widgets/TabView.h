@@ -190,6 +190,8 @@ private:
 	int findTab(ContainerPtr w) const;
 
 	void setActive(int i);
+	bool activateLeftTab(); /// activate the tab on the left of the selected one.
+	bool activateRightTab(); /// activate the tab on the right of the selected one.
 	TabInfo* getTabInfo(ContainerPtr w) const;
 	TabInfo* getTabInfo(int i) const;
 
