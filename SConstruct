@@ -120,26 +120,34 @@ else:
     tooldef = 'default'
 
 opts.AddVariables(
-    EnumVariable('tools',
+    EnumVariable(
+        'tools',
         'Toolset to compile with, default = platform default (msvc under '
         'windows)',
-        tooldef, ['mingw', 'default']),
+        tooldef, ['mingw', 'default'],
+    ),
     EnumVariable('mode', 'Compile mode', 'debug', ['debug', 'release']),
     BoolVariable('pch', 'Use precompiled headers', 'no'),
     BoolVariable('verbose', 'Show verbose command lines', 'no'),
-    BoolVariable('savetemps',
+    BoolVariable(
+        'savetemps',
         'Save intermediate compilation files (assembly output)',
-        'no'),
+        'no',
+    ),
     BoolVariable('unicode', 'Build a Unicode version on Windows', 'yes'),
-    BoolVariable('stdatomic',
+    BoolVariable(
+        'stdatomic',
         'Use a standard implementation of <atomic> (turn off to switch to '
         'Boost.Atomic)',
-        'no'),
+        'no',
+    ),
     BoolVariable('i18n', 'Rebuild i18n files', 'no'),
     BoolVariable('help', 'Build help files (requires i18n=1)', 'yes'),
-    BoolVariable('webhelp',
+    BoolVariable(
+        'webhelp',
         'Build help files for the web (requires help=1)',
-        'no'),
+        'no',
+    ),
     ('prefix',
      'Prefix to use when calling GCC build tools; defaults to:\n'
      '- nothing for Linux builds.\n'
@@ -148,10 +156,12 @@ opts.AddVariables(
      'May be forced to nothing via "prefix=".'),
     EnumVariable('arch', 'Target architecture', 'x86', ['x86', 'x64', 'ia64']),
     BoolVariable('msvcproj', 'Build MSVC project files', 'no'),
-    BoolVariable('distro',
+    BoolVariable(
+        'distro',
         'Produce the official distro (forces tools=mingw, mode=release, '
         'unicode=1, i18n=1, help=1, webhelp=1, arch=x86)',
-        'no')
+        'no',
+    )
 )
 
 opts.Update(defEnv)
@@ -363,8 +373,12 @@ conf = Configure(
 )
 
 if dev.is_win32():
-    # some mingw distros have one but not the other, breaking linking (note: CheckLib functions do not support explicit include_quotes)
-    if conf.CheckCXXHeader(['windows.h', 'htmlhelp.h'], '<>') and conf.CheckLib('htmlhelp', 'main', None, 'C++'):
+    # some mingw distros have one but not the other, breaking linking (note:
+    # CheckLib functions do not support explicit include_quotes)
+    if (
+        conf.CheckCXXHeader(['windows.h', 'htmlhelp.h'], '<>') and
+        conf.CheckLib('htmlhelp', 'main', None, 'C++')
+    ):
         conf.env.Append(CPPDEFINES='HAVE_HTMLHELP_H')
 
 if 'mingw' in env['TOOLS']:

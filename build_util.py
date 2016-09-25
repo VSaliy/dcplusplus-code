@@ -192,7 +192,8 @@ class Dev:
 
         sources = self.get_sources(source_path, source_glob, recursive)
 
-        if (precompiled_header is not None and
+        if (
+            precompiled_header is not None and
             env['pch'] and
             not env['msvcproj']
         ):
@@ -509,7 +510,7 @@ def html_to_rtf(string):
     # <u>...</u> -> {\ul ...}
     import re
     line = r'\\line '
-    return (
+    return (  # noqa
         re.sub('<([bi])>', r'{\\\1 ', re.sub('</[biu]>', '}',
         re.sub('^(' + line + ')', '', re.sub('(' + line + ')$', '',
         re.sub('(' + line + ')+', line, re.sub('\s*<br ?/?>\s*', line,
