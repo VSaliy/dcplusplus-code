@@ -27,6 +27,8 @@
 
 using std::unordered_map;
 
+/** This class is meant to serve as a base for setting pages. It provies handy methods to handle
+ * global settings, help IDs and the like. */
 class PropPage : public dwt::Container
 {
 public:
@@ -45,6 +47,7 @@ public:
 		T_BOOL
 	};
 
+	/** An item to be read from and written to global settings; mapped to a GUI widget. */
 	struct Item {
 		Item() : widget(0), setting(0), type(T_STR) { }
 		Item(Widget* w, int s, Type t) : widget(w), setting(s), type(t) { }
@@ -55,19 +58,30 @@ public:
 
 	typedef std::vector<Item> ItemList;
 
+	/* One element in a list of boolean items; to be represented by a check-box list. */
 	struct ListItem {
 		int setting;
 		const char* desc;
 		unsigned helpId;
 	};
 
-protected:
-	void read(const ItemList& items);
+	/** Read the specified items from global settings and render the data into the GUI widgets they
+	 * map to. When settings haven't been customized by the user (default value), GUI widgets are
+	 * left blank. */
+	static void read(const ItemList& items);
+
+	/** Read the specified boolean items from global settings and render the data into the
+	 * specified GUI list widget. */
 	void read(const ListItem* listItems, TablePtr list);
 
-	void write(const ItemList& items);
+	/** Read the specified items from the GUI widgets they map to and save them into global
+	 * settings. */
+	static void write(const ItemList& items);
+	/** Read the specified boolean items from the GUI list widget they map to and save them into
+	 * global settings. */
 	void write(TablePtr list);
 
+protected:
 	void handleBrowseDir(TextBoxPtr box, int setting);
 	void handleBrowseFile(TextBoxPtr box, int setting);
 
