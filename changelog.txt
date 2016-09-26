@@ -1,6 +1,6 @@
 * Update to GCC 6.2 & boost 1.61 (poy)
 * Build with SSE2 support, Intel P4 / AMD A64 or newer CPU required to run 32-bit builds (cologic)
-* Update OpenSSL to version 1.0.2i
+* Update OpenSSL to version 1.0.2j
 * [L#1626741] Fix some connectivity settings not being loaded / saved (poy)
 * Scroll through tabs via Ctrl+PageUp / Ctrl+PageDown (poy)
 
