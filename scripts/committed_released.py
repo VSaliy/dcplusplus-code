@@ -1,6 +1,15 @@
 """Use launchpadlib to change bugs that have a "Fix Committed" status to
 "Fix Released". Authorize as "Change non-private data" when Launchpad asks for
 it.
+
+Requirements:
+    - launchpadlib
+        <https://help.launchpad.net/API/launchpadlib#Installation>
+        pip install launchpadlib
+
+Might help on odd installs:
+    pip install --upgrade pip
+    pip install keyrings.alt
 """
 
 from optparse import OptionParser
