@@ -319,7 +319,7 @@ int getdefaultgateway(in_addr_t *addr)
 #endif /* #ifdef USE_SOCKET_ROUTE */
 
 #ifdef USE_WIN32_CODE
-LIBSPEC int getdefaultgateway(in_addr_t * addr)
+int getdefaultgateway(in_addr_t * addr)
 {
 	HKEY networkCardsKey;
 	HKEY networkCardKey;
