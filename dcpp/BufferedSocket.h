@@ -25,7 +25,7 @@
 #include "typedefs.h"
 
 #include "BufferedSocketListener.h"
-#include "Semaphore.h"
+#include "SemaphoreDCpp.h"
 #include "Thread.h"
 #include "Speaker.h"
 #include "Socket.h"

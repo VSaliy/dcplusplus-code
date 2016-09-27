@@ -28,7 +28,7 @@
 #include "MerkleTree.h"
 #include "Thread.h"
 #include "CriticalSection.h"
-#include "Semaphore.h"
+#include "SemaphoreDCpp.h"
 #include "TimerManager.h"
 #include "HashManagerListener.h"
 #include "GetSet.h"

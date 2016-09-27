@@ -16,8 +16,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef DCPLUSPLUS_DCPP_SEMAPHORE_H
-#define DCPLUSPLUS_DCPP_SEMAPHORE_H
+/** @file Semaphore wrapper. This file is not simply named "Semaphore.h" to avoid conflicts with
+ * the <semaphore.h> POSIX header on Cygwin... */
+
+#ifndef DCPLUSPLUS_DCPP_SEMAPHOREDCPP_H
+#define DCPLUSPLUS_DCPP_SEMAPHOREDCPP_H
 
 #include <boost/noncopyable.hpp>
 
@@ -101,4 +104,4 @@ private:
 
 } // namespace dcpp
 
-#endif // DCPLUSPLUS_DCPP_SEMAPHORE_H
+#endif // DCPLUSPLUS_DCPP_SEMAPHOREDCPP_H
