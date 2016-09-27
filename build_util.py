@@ -93,11 +93,10 @@ class Dev:
 
             # some distros of windres fail when they receive Win paths as
             # input, so convert...
-            self.env['RCCOM'] = self.env['RCCOM'].replace(
-                '-i $SOURCE',
-                '-i ${SOURCE.posix}',
-                1
-            )
+            if 'RCCOM' in self.env:
+                self.env['RCCOM'] = self.env['RCCOM'].replace(
+                    '-i $SOURCE', '-i ${SOURCE.posix}', 1,
+                )
 
         if self.env['msvcproj']:
             if 'msvs' not in self.env['TOOLS']:
@@ -331,8 +330,6 @@ class Dev:
         else:
             boost_libs = ['atomic', 'filesystem', 'regex', 'system', 'thread']
             boost_libs = ['boost_' + lib for lib in boost_libs]
-            if sys.platform == 'cygwin':
-                boost_libs = [lib + '-mt' for lib in boost_libs]
             env.Append(LIBS=boost_libs)
 
     def add_crashlog(self, env):

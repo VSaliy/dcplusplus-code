@@ -399,6 +399,11 @@ if 'gcc' in env['TOOLS'] and env['mode'] == 'debug':
 
 env = conf.Finish()
 
+# TODO ugly! ugly! ugly! should be a test based on the GCC version.
+# this is for GCC 5, as some systems (cygwin) don't have GCC 6 yet.
+if not dev.is_win32():
+    env.Append(CXXFLAGS=['-std=gnu++14'])
+
 # TODO run config tests to determine which libs to build
 
 dev.boost = dev.build('boost/libs/') if dev.is_win32() else []
