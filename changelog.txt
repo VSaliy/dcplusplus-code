@@ -1,4 +1,5 @@
 * Update the NAT-PMP library
+* Update Boost to version 1.62
 
 -- 0.861 2016-09-26 --
 * Update to GCC 6.2 & boost 1.61 (poy)
