@@ -223,7 +223,10 @@ void MappingManager::runPortMapping(
 		break;
 	}
 
-	if(!getOpened(v6)) { log(_("Failed to create port mappings"), v6); }
+	if(!getOpened(v6)) { 
+		log(_("Failed to create port mappings"), v6); 
+		ConnectivityManager::getInstance()->mappingFinished(Util::emptyString, v6);
+	}
 }
 
 void MappingManager::close(Mapper& mapper) {
