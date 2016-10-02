@@ -1,5 +1,7 @@
+-- 0.862 2016-10-02 --
 * Update the NAT-PMP library
 * Update Boost to version 1.62
+* [L#1629574] Fix automatic connectivity detection not switching to passive mode (emtee)
 
 -- 0.861 2016-09-26 --
 * Update to GCC 6.2 & boost 1.61 (poy)
