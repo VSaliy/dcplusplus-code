@@ -10,6 +10,9 @@ from build_util import Dev, gen_po_name
 # TODO the ipa-cp-clone optimization is disabled; it causes a crash when
 # starting a DL.
 
+# TODO enable "-fdebug-types-section" when
+# <https://sourceware.org/bugzilla/show_bug.cgi?id=20645> is resolved.
+
 # TODO enable LTO once "Link-time optimization does not work well with
 # generation of debugging information. Combining -flto with -g is currently
 # experimental and expected to produce unexpected results." disappears from
@@ -28,7 +31,6 @@ gcc_flags = {
         '-Wno-missing-field-initializers',
         '-Wno-unknown-pragmas',
         '-Wno-unused-parameter', '-Wno-unused-value',
-        '-fdebug-types-section',
         '-fexceptions',
     ],
     'debug': [],
