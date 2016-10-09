@@ -1,3 +1,5 @@
+* [L#1628615] Add user nick coloring to the Search window (iceman50)
+
 -- 0.862 2016-10-02 --
 * Update the NAT-PMP library
 * Update Boost to version 1.62
