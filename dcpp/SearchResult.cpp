@@ -29,10 +29,10 @@ namespace dcpp {
 
 SearchResult::SearchResult(const HintedUser& aUser, Types aType, int aSlots, int aFreeSlots,
 	int64_t aSize, const string& aFile, const string& aHubName,
-	const string& ip, TTHValue aTTH, const string& aToken) :
+	const string& ip, TTHValue aTTH, const string& aToken, const Style& aStyle) :
 file(aFile), hubName(aHubName), user(aUser),
 	size(aSize), type(aType), slots(aSlots), freeSlots(aFreeSlots), IP(ip),
-	tth(aTTH), token(aToken) { }
+	tth(aTTH), token(aToken), style(aStyle) { }
 
 SearchResult::SearchResult(Types aType, int64_t aSize, const string& aFile, const TTHValue& aTTH) :
 	file(aFile), user(ClientManager::getInstance()->getMe(), Util::emptyString), size(aSize),

@@ -132,6 +132,7 @@ private:
 
 		const tstring& getText(int col) const { return columns[col]; }
 		int getImage(int col) const;
+		int getStyle(HFONT& font, COLORREF& textColor, COLORREF& bgColor, int col) const;
 
 		static int compareItems(const SearchInfo* a, const SearchInfo* b, int col);
 

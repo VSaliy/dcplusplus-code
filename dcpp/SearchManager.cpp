@@ -258,6 +258,12 @@ void SearchManager::onData(const string& x, const string& remoteIp) {
 			if(!user)
 				return;
 		}
+		
+		Style style;
+		{
+			auto lock = ClientManager::getInstance()->lock();
+			style = ClientManager::getInstance()->findOnlineUser(user)->getIdentity().getStyle();
+		}
 
 		string tth;
 		if(hubName.compare(0, 4, "TTH:") == 0) {
@@ -271,7 +277,7 @@ void SearchManager::onData(const string& x, const string& remoteIp) {
 		}
 
 		fire(SearchManagerListener::SR(), SearchResultPtr(new SearchResult(user, type, slots,
-			freeSlots, size, file, hubName, remoteIp, TTHValue(tth), Util::emptyString)));
+			freeSlots, size, file, hubName, remoteIp, TTHValue(tth), Util::emptyString, style)));
 
 	} else if(x.compare(1, 4, "RES ") == 0 && x[x.length() - 1] == 0x0a) {
 		AdcCommand c(x.substr(0, x.length()-1));
@@ -325,6 +331,8 @@ void SearchManager::onRES(const AdcCommand& cmd, const UserPtr& from, const stri
 	if(type == SearchResult::TYPE_FILE && tth.empty()) { return; }
 
 	string hubUrl;
+	HintedUser hUser;
+	Style style;
 
 	// token format: [per-hub unique id] "/" [per-search actual token] (see AdcHub::search)
 	auto slash = token.find('/');
@@ -336,6 +344,9 @@ void SearchManager::onRES(const AdcCommand& cmd, const UserPtr& from, const stri
 		auto i = boost::find_if(clients, [uniqueId](const Client* client) { return client->getUniqueId() == uniqueId; });
 		if(i == clients.end()) { return; }
 		hubUrl = (*i)->getHubUrl();
+
+		hUser = HintedUser(from, hubUrl);
+		style = ClientManager::getInstance()->findOnlineUser(hUser)->getIdentity().getStyle();
 	}
 	token.erase(0, slash + 1);
 
@@ -343,8 +354,8 @@ void SearchManager::onRES(const AdcCommand& cmd, const UserPtr& from, const stri
 	string hubName = names.empty() ? _("Offline") : Util::toString(names);
 
 	/// @todo Something about the slots
-	fire(SearchManagerListener::SR(), SearchResultPtr(new SearchResult(HintedUser(from, hubUrl),
-		type, 0, freeSlots, size, file, hubName, remoteIp, TTHValue(tth), token)));
+	fire(SearchManagerListener::SR(), SearchResultPtr(new SearchResult(hUser,
+		type, 0, freeSlots, size, file, hubName, remoteIp, TTHValue(tth), token, style)));
 }
 
 void SearchManager::respond(const AdcCommand& cmd, const OnlineUser& user) {
