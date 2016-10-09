@@ -77,6 +77,27 @@ int SearchFrame::SearchInfo::getImage(int col) const {
 	return sr->getType() == SearchResult::TYPE_FILE ? WinUtil::getFileIcon(sr->getFile()) : static_cast<int>(WinUtil::DIR_ICON);
 }
 
+int SearchFrame::SearchInfo::getStyle(HFONT& font, COLORREF& textColor, COLORREF& bgColor, int col) const {
+		auto style = srs[0]->getStyle();
+
+		if (!style.font.empty()) {
+			auto cached = WinUtil::getUserMatchFont(style.font);
+			if (cached.get()) {
+				font = cached->handle();
+			}
+		}
+
+		if (style.textColor != -1) {
+			textColor = style.textColor;
+		}
+
+		if (style.bgColor != -1) {
+			bgColor = style.bgColor;
+		}
+
+	return CDRF_NEWFONT;
+}
+
 int SearchFrame::SearchInfo::compareItems(const SearchInfo* a, const SearchInfo* b, int col) {
 	switch(col) {
 	case COLUMN_HITS: return compare(a->srs.size(), b->srs.size());

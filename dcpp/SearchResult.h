@@ -43,7 +43,7 @@ public:
 
 	SearchResult(const HintedUser& aUser, Types aType, int aSlots, int aFreeSlots,
 		int64_t aSize, const string& aFile, const string& aHubName,
-		const string& ip, TTHValue aTTH, const string& aToken);
+		const string& ip, TTHValue aTTH, const string& aToken, const Style& style);
 
 	string toSR(const Client& client) const;
 	AdcCommand toRES(char type) const;
@@ -60,6 +60,7 @@ public:
 	TTHValue getTTH() const { return tth; }
 	const string& getIP() const { return IP; }
 	const string& getToken() const { return token; }
+	const Style& getStyle() const { return style; }
 
 private:
 	friend class SearchManager;
@@ -76,6 +77,7 @@ private:
 	string IP;
 	TTHValue tth;
 	string token;
+	Style style;
 };
 
 }
