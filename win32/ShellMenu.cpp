@@ -52,13 +52,10 @@ void ShellMenu::appendShellMenu(const StringList& paths) {
 #define check(x) if(!(x)) { continue; }
 
 	// stores allocated PIDLs to free them afterwards.
-	typedef std::vector<LPITEMIDLIST> pidls_type;
-	pidls_type pidls;
+	std::vector<LPITEMIDLIST> pidls;
 
 	// stores paths for which we have managed to get a valid IContextMenu3 interface.
-	typedef std::pair<string, LPCONTEXTMENU3> valid_pair;
-	typedef std::vector<valid_pair> valid_type;
-	valid_type valid;
+	std::vector<std::pair<string, LPCONTEXTMENU3>> valid;
 
 	for(auto& i: paths) {
 		// ParseDisplayName creates a PIDL from a file system path relative to the IShellFolder interface
@@ -111,18 +108,17 @@ void ShellMenu::appendShellMenu(const StringList& paths) {
 			handlers.emplace_back(popup->appendPopup(escapeMenu(Text::toT(i.first)), dwt::IconPtr(), false), i.second);
 	}
 
-	callbacks.push_back(make_pair(dwt::Message(WM_DRAWITEM), getParent()->addCallback(dwt::Message(WM_DRAWITEM),
-		[this](const MSG& msg, LRESULT& ret) { return handleDrawItem(msg, ret); })));
-	callbacks.push_back(make_pair(dwt::Message(WM_MEASUREITEM), getParent()->addCallback(dwt::Message(WM_MEASUREITEM),
-		[this](const MSG& msg, LRESULT& ret) { return handleMeasureItem(msg, ret); })));
-	callbacks.push_back(make_pair(dwt::Message(WM_MENUCHAR), getParent()->addCallback(dwt::Message(WM_MENUCHAR),
-		[this](const MSG& msg, LRESULT& ret) { return dispatch(msg, ret); })));
-	callbacks.push_back(make_pair(dwt::Message(WM_INITMENUPOPUP), getParent()->addCallback(dwt::Message(WM_INITMENUPOPUP),
-		[this](const MSG& msg, LRESULT& ret) { return handleInitMenuPopup(msg, ret); })));
-	callbacks.push_back(make_pair(dwt::Message(WM_UNINITMENUPOPUP), getParent()->addCallback(dwt::Message(WM_UNINITMENUPOPUP),
-		[this](const MSG& msg, LRESULT& ret) { return handleUnInitMenuPopup(msg, ret); })));
-	callbacks.push_back(make_pair(dwt::Message(WM_MENUSELECT), getParent()->addCallback(dwt::Message(WM_MENUSELECT),
-		[this](const MSG& msg, LRESULT&) { return handleMenuSelect(msg); })));
+	auto addCB = [this](UINT messageId, auto callback) {
+		dwt::Message message { messageId };
+		callbacks.emplace_back(message, getParent()->addCallback(message,
+			[=](auto&... args) { return (this->*callback)(args...); }));
+	};
+	addCB(WM_DRAWITEM, &ShellMenu::handleDrawItem);
+	addCB(WM_MEASUREITEM, &ShellMenu::handleMeasureItem);
+	addCB(WM_MENUCHAR, &ShellMenu::dispatch);
+	addCB(WM_INITMENUPOPUP, &ShellMenu::handleInitMenuPopup);
+	addCB(WM_UNINITMENUPOPUP, &ShellMenu::handleUnInitMenuPopup);
+	addCB(WM_MENUSELECT, &ShellMenu::handleMenuSelect); /// @todo no LRESULT& 2nd arg here
 }
 
 ShellMenu::~ShellMenu() {
@@ -200,7 +196,7 @@ bool ShellMenu::handleUnInitMenuPopup(const MSG& msg, LRESULT& ret) {
 	return dispatch(msg, ret);
 }
 
-bool ShellMenu::handleMenuSelect(const MSG& msg) {
+bool ShellMenu::handleMenuSelect(const MSG& msg, LRESULT&) {
 	// make sure this isn't a "menu closed" signal
 	if((HIWORD(msg.wParam) == 0xFFFF) && (msg.lParam == 0))
 		return false;
