@@ -60,7 +60,7 @@ private:
 	bool handleMeasureItem(const MSG& msg, LRESULT& ret);
 	bool handleInitMenuPopup(const MSG& msg, LRESULT& ret);
 	bool handleUnInitMenuPopup(const MSG& msg, LRESULT& ret);
-	bool handleMenuSelect(const MSG& msg);
+	bool handleMenuSelect(const MSG& msg, LRESULT&);
 
 	bool dispatch(const MSG& msg, LRESULT& ret);
 };
