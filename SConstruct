@@ -250,8 +250,8 @@ if 'gcc' in env['TOOLS']:
     # (otherwise lockfree lists won't actually be lock-free).
     # Require SSE2 for e.g., significantly faster Tiger hashing
     # https://www.cryptopp.com/benchmarks.html
-    if env['arch'] == 'x86':
-        env.Append(CCFLAGS=['-march=pentium-m'])
+    if env['arch'] in ['x86', 'x64']:
+        env.Append(CCFLAGS=['-march=nocona'])
 
 if 'msvc' in env['TOOLS']:
     env['pch'] = True

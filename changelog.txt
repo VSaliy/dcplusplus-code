@@ -1,4 +1,5 @@
 * [L#1628615] Add user nick coloring to the Search window (iceman50)
+* Build with SSE3 support; Intel Core or AMD A64 X2 or newer CPU required, with some older steppings also working (cologic) 
 
 -- 0.862 2016-10-02 --
 * Update the NAT-PMP library
@@ -7,7 +8,7 @@
 
 -- 0.861 2016-09-26 --
 * Update to GCC 6.2 & boost 1.61 (poy)
-* Build with SSE2 support, Intel P4 / AMD A64 or newer CPU required to run 32-bit builds (cologic)
+* Build with SSE2 support; Intel P4 / AMD A64 or newer CPU required to run 32-bit builds (cologic)
 * Update OpenSSL to version 1.0.2j
 * [L#1626741] Fix some connectivity settings not being loaded / saved (emtee, poy)
 * Scroll through tabs via Ctrl+PageUp / Ctrl+PageDown (poy)
