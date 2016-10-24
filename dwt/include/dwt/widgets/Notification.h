@@ -104,7 +104,7 @@ private:
 	NOTIFYICONDATA makeNID() const;
 
 	/// Last tick that tip was updated
-	DWORD lastTick;
+	ULONGLONG lastTick;
 	bool trayHandler(const MSG& msg);
 	bool redisplay();
 

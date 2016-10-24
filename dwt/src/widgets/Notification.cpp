@@ -122,7 +122,7 @@ void Notification::setVisible(bool visible_) {
 
 void Notification::setTooltip(const tstring& tip_) {
 	tip = tip_;
-	lastTick = ::GetTickCount();
+	lastTick = ::GetTickCount64();
 
 	if(visible) {
 		NOTIFYICONDATA nid = makeNID();
@@ -201,7 +201,7 @@ bool Notification::trayHandler(const MSG& msg) {
 	case WM_MOUSEMOVE:
 		{
 			if(updateTip) {
-				DWORD now = ::GetTickCount();
+				auto now = ::GetTickCount64();
 				if(now - 1000 > lastTick) {
 					updateTip();
 					lastTick = now;
