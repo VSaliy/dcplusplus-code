@@ -1158,7 +1158,7 @@ void MainWindow::updateStatus() {
 
 	if(SETTING(AWAY_IDLE)) {
 		LASTINPUTINFO info = { sizeof(LASTINPUTINFO) };
-		if((::GetLastInputInfo(&info) && static_cast<int>(::GetTickCount() - info.dwTime) > SETTING(AWAY_IDLE) * 60 * 1000) ^ awayIdle) {
+		if((::GetLastInputInfo(&info) && static_cast<int64_t>(::GetTickCount() - info.dwTime) > SETTING(AWAY_IDLE) * 60 * 1000) ^ awayIdle) {
 			awayIdle = !awayIdle;
 			awayIdle ? Util::incAway() : Util::decAway();
 		}
