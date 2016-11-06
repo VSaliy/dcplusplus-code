@@ -250,8 +250,9 @@ if 'gcc' in env['TOOLS']:
     # (otherwise lockfree lists won't actually be lock-free).
     # Require SSE2 for e.g., significantly faster Tiger hashing
     # https://www.cryptopp.com/benchmarks.html
+    # Require SSE3 for FISTTP
     if env['arch'] in ['x86', 'x64']:
-        env.Append(CCFLAGS=['-march=nocona'])
+        env.Append(CCFLAGS=['-march=nocona', '-mtune=generic'])
 
 if 'msvc' in env['TOOLS']:
     env['pch'] = True
@@ -260,6 +261,17 @@ if env['pch']:
 
 if 'mingw' in env['TOOLS']:
     env.Append(CCFLAGS=['-mthreads'])
+
+    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=40838
+    # ("gcc shouldn't assume that the stack is aligned")
+    # https://eigen.tuxfamily.org/dox/group__TopicWrongStackAlignment.html
+    # Not necessary on either x86 or amd64 Linux or 64-bit Windows.
+    # https://msdn.microsoft.com/en-us/library/ms235286.aspx on
+    # "Overview of x64 Calling Conventions" says 64-bit Windows stacks are
+    # already 16-byte aligned.
+    if env['arch'] == 'x86':
+        env.Append(CCFLAGS=['-mstackrealign'])
+
     env.Append(LINKFLAGS=[
         '-static-libgcc', '-static-libstdc++', '-mthreads',
         '-Wl,--enable-runtime-pseudo-reloc',
