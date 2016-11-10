@@ -270,7 +270,7 @@ if 'mingw' in env['TOOLS']:
     # "Overview of x64 Calling Conventions" says 64-bit Windows stacks are
     # already 16-byte aligned.
     if env['arch'] == 'x86':
-        env.Append(CCFLAGS=['-mstackrealign'])
+        env.Append(CCFLAGS=['-mincoming-stack-boundary=2', '-mstackrealign'])
 
     env.Append(LINKFLAGS=[
         '-static-libgcc', '-static-libstdc++', '-mthreads',
