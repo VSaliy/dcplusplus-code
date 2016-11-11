@@ -1,3 +1,4 @@
+-- 0.863 2016-11-12 --
 * [L#1628615] Add user nick coloring to the Search window (iceman50)
 * Build with SSE3 support; Intel Core or AMD A64 X2 or newer CPU required, with some older steppings also working (cologic) 
 * [L#1638038] Fix alignment issues in 32-bit builds leading to crashes
