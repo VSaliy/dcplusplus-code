@@ -266,9 +266,25 @@ void Application::removeFilter(const FilterIter& i) {
 
 #ifndef DWT_SHARED
 
+namespace { bool ensureCPUSupport() {
+	// Ensure the CPU supports SSE3.
+	if(!::IsProcessorFeaturePresent(PF_SSE3_INSTRUCTIONS_AVAILABLE)) {
+		::MessageBox(nullptr, _T(
+			"Your processor does not support the SSE3 instruction set;\r\n"
+			"this program cannot start."
+		), _T("SSE3 CPU required."), MB_OK | MB_ICONERROR);
+		return false;
+	}
+	return true;
+} }
+
 extern int dwtMain(dwt::Application& app);
 
 int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+	if(!ensureCPUSupport()) {
+		return 1;
+	}
+
 	dwt::Application::init();
 
 	auto hr = ::OleInitialize(nullptr);
