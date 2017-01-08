@@ -51,7 +51,7 @@ modifyRegExButton(0),
 modifyExtensionsButton(0),
 modifyPathsButton(0)
 {
-	//setHelpId(IDH_UPLOADFILTERINGPAGE);
+	setHelpId(IDH_UPLOADFILTERINGPAGE);
 
 	grid->column(0).mode = GridInfo::FILL;
 
