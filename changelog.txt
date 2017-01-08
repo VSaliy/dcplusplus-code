@@ -1,3 +1,5 @@
+* [L#1654329] Fix search crashes when users search results are from are offline (emtee)
+
 -- 0.863 2016-11-12 --
 * [L#1628615] Add user nick coloring to the Search window (iceman50)
 * Build with SSE3 support; Intel Core or AMD A64 X2 or newer CPU required, with some older steppings also working (cologic) 

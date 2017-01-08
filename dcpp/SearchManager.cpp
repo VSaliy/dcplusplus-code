@@ -258,11 +258,14 @@ void SearchManager::onData(const string& x, const string& remoteIp) {
 			if(!user)
 				return;
 		}
-		
+
 		Style style;
 		{
 			auto lock = ClientManager::getInstance()->lock();
-			style = ClientManager::getInstance()->findOnlineUser(user)->getIdentity().getStyle();
+			auto ou = ClientManager::getInstance()->findOnlineUser(user);
+			if (ou) {
+				style = ou->getIdentity().getStyle(); 
+			}
 		}
 
 		string tth;
@@ -346,7 +349,10 @@ void SearchManager::onRES(const AdcCommand& cmd, const UserPtr& from, const stri
 		hubUrl = (*i)->getHubUrl();
 
 		hUser = HintedUser(from, hubUrl);
-		style = ClientManager::getInstance()->findOnlineUser(hUser)->getIdentity().getStyle();
+		auto ou = ClientManager::getInstance()->findOnlineUser(hUser);
+		if (ou) {
+			style = ou->getIdentity().getStyle();
+		}
 	}
 	token.erase(0, slash + 1);
 
