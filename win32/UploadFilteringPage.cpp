@@ -194,7 +194,8 @@ void UploadFilteringPage::handleModButtonClicked(const tstring& strDialogName, c
 {
 	TStringList lst = StringTokenizer<tstring>(textBox->getText(), ';').getTokens();
 
-	ItemsEditDlg dlg(this, strDialogName, lst);
+	// "ensureUniqueness" set to "false" as we don't want case-insensitive uniqueness for paths.
+	ItemsEditDlg dlg(this, strDialogName, lst, false);
 	dlg.setTitle(strTitle);
 	dlg.setDescription(strDescription);
 	dlg.setEditTitle(strEditTitle);

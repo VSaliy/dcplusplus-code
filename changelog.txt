@@ -1,5 +1,6 @@
 * [L#1654329] Fix search crashes when users search results are from are offline (emtee)
 * Update zlib to version 1.2.10
+* [L#1654411] Share filter dialog boxes: No case-insensitive uniqueness (poy)
 
 -- 0.863 2016-11-12 --
 * [L#1628615] Add user nick coloring to the Search window (iceman50)
