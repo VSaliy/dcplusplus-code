@@ -21,10 +21,15 @@
 
 #include "StringListDlg.h"
 
+/** Dialog box that allows editing a list of strings serialized as 1 single string split on
+ * semi-columns. */
 class ItemsEditDlg : public StringListDlg
 {
 public:
-	ItemsEditDlg(dwt::Widget* parent, const tstring& name_, const TStringList& extList);
+	/// @param ensureUniqueness whether items in the list are unique (case insensitive)
+	ItemsEditDlg(
+		dwt::Widget* parent, const tstring& name_, const TStringList& extList,
+		bool ensureUniqueness = true);
 
 	void setTitle(const tstring& title);
 	void setEditTitle(const tstring& title);

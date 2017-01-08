@@ -29,8 +29,9 @@
 #include "resource.h"
 #include "ParamDlg.h"
 
-ItemsEditDlg::ItemsEditDlg(dwt::Widget* parent, const tstring& name_, const TStringList& lst) :
-StringListDlg(parent, lst),
+ItemsEditDlg::ItemsEditDlg(
+	dwt::Widget* parent, const tstring& name_, const TStringList& lst, bool ensureUniqueness) :
+StringListDlg(parent, lst, ensureUniqueness),
 name(name_)
 {
 }
