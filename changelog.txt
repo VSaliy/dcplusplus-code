@@ -1,4 +1,4 @@
-* [L#1654329] Fix search crashes when users search results are from are offline (emtee)
+* [L#1654329] Fix search crashes triggered by search results from offline users (emtee)
 * Update zlib to version 1.2.10
 * [L#1654411] Share filter dialog boxes: No case-insensitive uniqueness (poy)
 
