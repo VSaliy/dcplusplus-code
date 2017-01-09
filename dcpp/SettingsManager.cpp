@@ -86,7 +86,7 @@ const string SettingsManager::settingTags[] =
 	"MaxFilelistSize", "MaxHashSpeed", "MaxMessageLines", "MaxPMWindows", "MinMessageLines",
 	"MinUploadSpeed", "PMLastLogLines", "SearchHistory", "SetMinislotSize",
 	"SettingsSaveInterval", "Slots", "TabStyle", "TabWidth", "ToolbarSize", "AutoSearchInterval",
-	"MaxExtraSlots",
+	"MaxExtraSlots", "TestingStatus",
 	"SENTRY",
 	// Bools
 	"AddFinishedInstantly", "AdlsBreakOnFirst",
@@ -371,6 +371,7 @@ SettingsManager::SettingsManager() {
 	setDefault(SHARING_SKIPLIST_MAXSIZE, 0);
 	setDefault(REGISTER_SYSTEM_STARTUP, false);
 	setDefault(MAX_EXTRA_SLOTS, 3);
+	setDefault(TESTING_STATUS, TESTING_ENABLED);
 	setDefault(WHITELIST_OPEN_URIS, "http:;https:;www;mailto:");
 
 	setSearchTypeDefaults();
@@ -477,7 +478,15 @@ void SettingsManager::load(string const& aFileName)
 		}
 
 		double v = Util::toDouble(SETTING(CONFIG_VERSION));
-		// if(v < 0.x) { // Fix old settings here }
+
+		/* Handle setting migrations here with the following pattern:
+		 *
+		 * if(v < 0.x) { // Fix old settings here } */
+
+		if(v < VERSIONFLOAT && SETTING(TESTING_STATUS) != TESTING_DISABLED) {
+			// moving up to a new version; reset preferences when not disabled.
+			unset(TESTING_STATUS);
+		}
 
 		if(v <= 0.674) {
 			// Formats changed, might as well remove these...

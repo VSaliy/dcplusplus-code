@@ -52,6 +52,16 @@ AdvancedPage::ListItem AdvancedPage::listItems[] = {
 	{ SettingsManager::CORAL, N_("Use Coral network for HTTP downloads (improves reliability)"), IDH_SETTINGS_ADVANCED_CORAL },
 	{ SettingsManager::SEGMENTED_DL, N_("Enable segmented downloads"), IDH_SETTINGS_ADVANCED_SEGMENTED_DL },
 	{ SettingsManager::REGISTER_SYSTEM_STARTUP, N_("Start DC++ when Windows starts"), IDH_SETTINGS_ADVANCED_REGISTER_SYSTEM_STARTUP },
+	{ SettingsManager::TESTING_STATUS, N_("Display testing nags"), IDH_SETTINGS_ADVANCED_DISPLAY_TESTING_NAGS,
+		[]() { return SETTING(TESTING_STATUS) != SettingsManager::TESTING_DISABLED; }, // custom read
+		[](bool checked) { // custom write
+			if(checked) {
+				SettingsManager::getInstance()->unset(SettingsManager::TESTING_STATUS); // back to defaults
+			} else {
+				SettingsManager::getInstance()->set(SettingsManager::TESTING_STATUS, SettingsManager::TESTING_DISABLED);
+			}
+		}
+	},
 	{ 0, 0 }
 };
 
