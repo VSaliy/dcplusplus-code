@@ -19,12 +19,14 @@
 #ifndef DCPLUSPLUS_WIN32_PROP_PAGE_H
 #define DCPLUSPLUS_WIN32_PROP_PAGE_H
 
+#include <functional>
 #include <unordered_map>
 #include <dcpp/typedefs.h>
 #include <dwt/widgets/Container.h>
 
 #include "forward.h"
 
+using std::function;
 using std::unordered_map;
 
 /** This class is meant to serve as a base for setting pages. It provies handy methods to handle
@@ -63,6 +65,8 @@ public:
 		int setting;
 		const char* desc;
 		unsigned helpId;
+		function<bool ()> readF; // optional function to implement custom reads.
+		function<void (bool)> writeF; // optional function to implement custom writes.
 	};
 
 	/** Read the specified items from global settings and render the data into the GUI widgets they

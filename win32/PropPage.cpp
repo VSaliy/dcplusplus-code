@@ -115,6 +115,7 @@ void PropPage::read(const ListItem* listItems, TablePtr list) {
 	SettingsManager* settings = SettingsManager::getInstance();
 	for(size_t i = 0; listItems[i].setting != 0; ++i) {
 		list->setChecked(list->insert({ T_(listItems[i].desc) }),
+			listItems[i].readF ? listItems[i].readF() :
 			settings->get(static_cast<SettingsManager::BoolSetting>(listItems[i].setting), true));
 	}
 
@@ -162,8 +163,14 @@ void PropPage::write(TablePtr list) {
 	dcassert(list);
 	const ListItem* listItems = lists[list];
 	SettingsManager* settings = SettingsManager::getInstance();
-	for(size_t i = 0; listItems[i].setting != 0; ++i)
-		settings->set(static_cast<SettingsManager::BoolSetting>(listItems[i].setting), list->isChecked(i));
+	for(size_t i = 0; listItems[i].setting != 0; ++i) {
+		auto checked = list->isChecked(i);
+		if(listItems[i].writeF) {
+			listItems[i].writeF(checked);
+		} else {
+			settings->set(static_cast<SettingsManager::BoolSetting>(listItems[i].setting), checked);
+		}
+	}
 }
 
 void PropPage::handleBrowseDir(TextBoxPtr box, int setting) {
