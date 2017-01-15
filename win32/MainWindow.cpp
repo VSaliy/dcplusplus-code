@@ -1497,20 +1497,20 @@ void MainWindow::completeVersionUpdate(bool success, const string& result) {
 				// how awesome, the user is using a testing version!
 
 				if(SETTING(TESTING_STATUS) == SettingsManager::TESTING_ENABLED) {
-					notify(T_("Testing version of DC++"), T_(
-						"Thank you for using a testing version of DC++!\n\n"
-						"Feel free to report any bug via Help > Links > Report a bug.\n\n"
-						"This message will show up in the status bar in the future.\n"
-						"Testing nags can be fully disabled via Settings > Advanced."
-					), nullptr, nullptr),
+					notify(T_("Testing version of DC++"),
+						T_("Thank you for using a testing version of DC++!") + _T("\n\n") +
+						T_("Feel free to report any bug via Help > Links > Report a bug.") + _T("\n\n") +
+						T_("This message will show up in the status bar in the future.") + _T("\n") +
+						T_("Testing nags can be fully disabled via Settings > Advanced."),
+					nullptr, nullptr),
 					SettingsManager::getInstance()->set(SettingsManager::TESTING_STATUS,
 						SettingsManager::TESTING_SEEN_ONCE);
 
 				} else if(SETTING(TESTING_STATUS) == SettingsManager::TESTING_SEEN_ONCE) {
 					if(status) {
-						status->setText(STATUS_STATUS, T_(
-							"Thank you for using a testing version of DC++! Feel free to report "
-							"any bug by following Help > Links > Report a bug."));
+						status->setText(STATUS_STATUS,
+							T_("Thank you for using a testing version of DC++!") + _T(" ") +
+							T_("Feel free to report any bug via Help > Links > Report a bug."));
 					}
 				}
 			}
