@@ -423,6 +423,7 @@ if not dev.is_win32():
 dev.boost = dev.build('boost/libs/') if dev.is_win32() else []
 dev.dwarf = dev.build('dwarf/')
 dev.zlib = dev.build('zlib/')
+dev.build('zlib/test/')
 dev.bzip2 = dev.build('bzip2/') if dev.is_win32() else []
 dev.geoip = dev.build('geoip/')
 dev.intl = dev.build('intl/') if dev.is_win32() else []
