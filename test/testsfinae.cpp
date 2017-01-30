@@ -69,20 +69,20 @@ TEST(testsfinae, test_has_func)
 {
 	X<Funcs> x;
 
-	ASSERT_EQ(true, x.test_F1());
-	ASSERT_EQ(true, x.test_F2());
-	ASSERT_EQ(true, x.test_F3());
-	ASSERT_EQ(true, x.test_F4());
-	ASSERT_EQ(true, x.test_F5());
-	ASSERT_EQ(true, x.test_F6());
-	ASSERT_EQ(true, x.test_F7());
-	ASSERT_EQ(true, x.test_F8());
-	ASSERT_EQ(true, x.test_F9());
+	ASSERT_TRUE(x.test_F1());
+	ASSERT_TRUE(x.test_F2());
+	ASSERT_TRUE(x.test_F3());
+	ASSERT_TRUE(x.test_F4());
+	ASSERT_TRUE(x.test_F5());
+	ASSERT_TRUE(x.test_F6());
+	ASSERT_TRUE(x.test_F7());
+	ASSERT_TRUE(x.test_F8());
+	ASSERT_TRUE(x.test_F9());
 
-	ASSERT_EQ(false, x.test_FN1());
-	ASSERT_EQ(false, x.test_FN2());
-	ASSERT_EQ(false, x.test_FN3());
-	ASSERT_EQ(false, x.test_FN4());
+	ASSERT_FALSE(x.test_FN1());
+	ASSERT_FALSE(x.test_FN2());
+	ASSERT_FALSE(x.test_FN3());
+	ASSERT_FALSE(x.test_FN4());
 
-	ASSERT_EQ(true, x.i());
+	ASSERT_TRUE(x.i());
 }
