@@ -52,6 +52,10 @@ bool ZFilter::operator()(const void* in, size_t& insize, void* out, size_t& outs
 	zs.next_in = (Bytef*)in;
 	zs.next_out = (Bytef*)out;
 
+#ifdef ZLIB_DEBUG
+	dcdebug("ZFilter: totalOut = %lld, totalIn = %lld, outsize = %d\n", totalOut, totalIn, outsize);
+#endif
+
 	// Check if there's any use compressing; if not, save some cpu...
 	if(compressing && insize > 0 && outsize > 16 && (totalIn > (64*1024)) && ((static_cast<double>(totalOut) / totalIn) > 0.95)) {
 		zs.avail_in = 0;
@@ -61,7 +65,7 @@ bool ZFilter::operator()(const void* in, size_t& insize, void* out, size_t& outs
 		}
 		zs.avail_in = insize;
 		compressing = false;
-		dcdebug("Dynamically disabled compression");
+		dcdebug("ZFilter: Dynamically disabled compression\n");
 
 		// Check if we ate all space already...
 		if(zs.avail_out == 0) {
