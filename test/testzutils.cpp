@@ -21,12 +21,12 @@ auto md5(auto path) {
 	return MD5Value(h.finalize());
 }
 
-auto runTransfer(auto& inStream, auto& outStream) {
+auto runTransfer(auto& inStream, auto& outStream, const size_t bufSize = 64 * 1024) {
 	try {
 		while(true) {
-			size_t bufSize = 64 * 1024;
-			ByteVector buf(bufSize);
-			auto newBufSize = inStream.read(&buf[0], bufSize);
+			auto innerBufSize = bufSize; // may be modified...
+			ByteVector buf(innerBufSize);
+			auto newBufSize = inStream.read(&buf[0], innerBufSize);
 			if(newBufSize == 0) {
 				break;
 			}
@@ -65,4 +65,36 @@ TEST(testzutils, test_decompression)
 	}
 
 	ASSERT_EQ(md5("test/gtest.h"), md5("test/data/out/gtest_h_decompressed"));
+}
+
+TEST(testzutils, test_compression_dynamically_disabled)
+{
+	// Same as test_compression, but we simulate compression being dynamically disabled during a
+	// transfer:
+	// - By using a well-compressed file.
+	// - By using a ridiculously low buffer size.
+	// Would be easier to also be able to tweak ZFilter::MIN_COMPRESSION_LEVEL, but that is
+	// undefined behavior which happens to always fail in our case (optimized out by the compiler).
+	//
+	// This test has been added to resolve <https://bugs.launchpad.net/dcplusplus/+bug/1656050>.
+
+	// Compress (with the buffer size tweak).
+	{
+		File f_in("test/data/test.dcext", File::READ, File::OPEN);
+		File f_out("test/data/out/compression_dynamically_disabled_compressed", File::WRITE, File::CREATE | File::TRUNCATE);
+		FilteredInputStream<ZFilter, false> stream_in(&f_in);
+
+		runTransfer(stream_in, f_out, 1024);
+	}
+
+	// Decompress.
+	{
+		File f_in("test/data/out/compression_dynamically_disabled_compressed", File::READ, File::OPEN);
+		File f_out("test/data/out/compression_dynamically_disabled_decompressed", File::WRITE, File::CREATE | File::TRUNCATE);
+		FilteredOutputStream<UnZFilter, false> stream_out(&f_out);
+
+		runTransfer(f_in, stream_out);
+	}
+
+	ASSERT_EQ(md5("test/data/test.dcext"), md5("test/data/out/compression_dynamically_disabled_decompressed"));
 }
