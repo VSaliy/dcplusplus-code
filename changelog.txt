@@ -1,5 +1,6 @@
 * Update zlib to version 1.2.11
 * [L#1656050] Fix compression errors when uploading due to a zlib API change (poy)
+* Update OpenSSL to version 1.0.2k
 
 -- 0.864 2017-01-09 --
 * [L#1654329] Fix search crashes triggered by search results from offline users (emtee)
