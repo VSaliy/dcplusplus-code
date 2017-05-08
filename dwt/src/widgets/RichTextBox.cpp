@@ -247,28 +247,56 @@ void RichTextBox::addTextSteady(const tstring& txtRaw) {
 	std::pair<int, int> cr = getCaretPosRange();
 	std::string txt = escapeUnicode(txtRaw);
 
-	unsigned charsRemoved = 0;
-	int multipler = 1;
+	int charsToRemove = 0;
 
 	/* this will include more chars than there actually are because of RTF codes. not a problem
 	here; accuracy isn't necessary since whole lines are getting chopped anyway. */
-	size_t len = txtRaw.size();
+	size_t prevLen = length();
+	size_t addedLen = txtRaw.size();
 	size_t limit = getTextLimit();
-	if(length() + len > limit) {
-		if(len >= limit) {
-			charsRemoved = length();
+
+	if(prevLen + addedLen > limit) {
+		/* adding text would overflow the char limit. -> remove some (or all) existing lines. */
+
+		if(addedLen >= limit) {
+			/* adding more text than the box can contain. -> remove all previous lines. */
+			charsToRemove = prevLen;
+			hold.scroll = true;
+
 		} else {
-			while (charsRemoved < len)
-				charsRemoved = lineIndex(lineFromChar(multipler++ * limit / 10));
+			/* the text being added fits within the box, but not when appended to current contents.
+			 * -> find out how many lines have to be removed. we try from 10 % to 80 % of the text
+			 *    limit. */
+			for(auto divisor = 10; divisor <= 80; divisor += 10) {
+				auto charsToDivLimit = lineIndex(lineFromChar(limit / divisor));
+				if(charsToDivLimit >= 0 && prevLen + addedLen - charsToDivLimit < limit) {
+					/* good, got enough room for the new text! */
+					charsToRemove = charsToDivLimit;
+					if(!hold.scroll) {
+						/* when not in auto-scroll mode, adjust the scroll pos to stay on the same
+						 * line, despite removing some at the top of the box. adjust based on the
+						 * origin of the box (posFromChar 0) as posFromChar coordinates are
+						 * relative to the current scroll pos (we want coordinates relative to the
+						 * origin of the box). */
+						hold.scrollPos.y -= posFromChar(charsToRemove).y - posFromChar(0).y;
+					}
+					break;
+				}
+			}
+			if(charsToRemove <= 0) {
+				/* clearing out 80 % of the current text would not be enough. -> remove all
+				 * previous lines. */
+				charsToRemove = prevLen;
+				hold.scroll = true;
+			}
 		}
 
-		hold.scrollPos.y -= posFromChar(charsRemoved).y;
-		setSelection(0, charsRemoved);
+		setSelection(0, charsToRemove);
 		replaceSelection(_T(""));
 	}
 
 	addText(txt);
-	setSelection(cr.first-charsRemoved, cr.second-charsRemoved);
+	setSelection(cr.first - charsToRemove, cr.second - charsToRemove);
 }
 
 void RichTextBox::findText(tstring const& needle) {
