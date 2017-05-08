@@ -1,3 +1,5 @@
+* [L#1681153] Better handle chats with a lot of text and prevent a remote freeze case (poy)
+
 -- 0.865 2017-02-01 --
 * Update zlib to version 1.2.11
 * [L#1656050] Fix compression errors when uploading due to a zlib API change (poy)
