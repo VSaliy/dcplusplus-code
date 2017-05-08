@@ -147,7 +147,8 @@ public:
 
 	int lineIndex(int line = -1);
 
-	int lineFromChar(int c = -1);
+	/** Retrieve the index of the line that contains the character at the specified index. */
+	virtual int lineFromChar(int c = -1);
 
 	int lineLength(int c);
 

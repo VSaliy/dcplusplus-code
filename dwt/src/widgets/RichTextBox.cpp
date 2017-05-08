@@ -160,8 +160,11 @@ inline Point RichTextBox::posFromChar(int charOffset)
 }
 
 inline int RichTextBox::lineFromPos(const ScreenCoordinate& pt) {
-	ClientCoordinate cc(pt, this);
-	return sendMessage(EM_EXLINEFROMCHAR, 0, charFromPos(pt));
+	return lineFromChar(charFromPos(pt));
+}
+
+inline int RichTextBox::lineFromChar(int c) {
+	return sendMessage(EM_EXLINEFROMCHAR, 0, c);
 }
 
 tstring RichTextBox::getSelection() const {
