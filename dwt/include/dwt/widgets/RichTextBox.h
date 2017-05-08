@@ -100,6 +100,9 @@ public:
 
 	Point posFromChar(int charOffset);
 
+	/** Declared in TextBoxBase. Override to use EM_EXLINEFROMCHAR instead of EM_LINEFROMCHAR. */
+	int lineFromChar(int c = -1);
+
 	tstring getSelection() const;
 
 	Point getScrollPos() const;
