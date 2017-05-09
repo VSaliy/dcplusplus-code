@@ -267,8 +267,8 @@ void RichTextBox::addTextSteady(const tstring& txtRaw) {
 			/* the text being added fits within the box, but not when appended to current contents.
 			 * -> find out how many lines have to be removed. we try from 10 % to 80 % of the text
 			 *    limit. */
-			for(auto divisor = 10; divisor <= 80; divisor += 10) {
-				auto charsToDivLimit = lineIndex(lineFromChar(limit / divisor));
+			for(auto multiplier = 1; multiplier <= 8; ++multiplier) {
+				auto charsToDivLimit = lineIndex(lineFromChar(limit * multiplier / 10));
 				if(charsToDivLimit >= 0 && prevLen + addedLen - charsToDivLimit < limit) {
 					/* good, got enough room for the new text! */
 					charsToRemove = charsToDivLimit;
