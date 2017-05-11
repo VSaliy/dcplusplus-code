@@ -40,7 +40,7 @@ bool Mapper_MiniUPnPc::init() {
 	if(!url.empty())
 		return true;
 
-	UPNPDev* devices = upnpDiscover(2000, localIp.empty() ? nullptr : localIp.c_str(), 0, 0, v6, '2', 0);
+	UPNPDev* devices = upnpDiscover(2000, localIp.empty() ? nullptr : localIp.c_str(), nullptr, 0, v6, 2, nullptr);
 	if(!devices)
 		return false;
 
