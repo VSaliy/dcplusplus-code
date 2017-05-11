@@ -1,4 +1,5 @@
 * [L#1681153] Better handle chats with a lot of text and prevent a remote freeze case (poy)
+* Update MiniUPnPc to version 2.0.20170509 - protocol and CVE-2017-8798 fixes
 
 -- 0.865 2017-02-01 --
 * Update zlib to version 1.2.11
