@@ -66,8 +66,6 @@ typedef WStringMap::iterator WStringMapIter;
 
 typedef vector<uint8_t> ByteVector;
 
-#ifdef UNICODE
-
 typedef wstring tstring;
 typedef WStringList TStringList;
 typedef WStringIter TStringIter;
@@ -79,22 +77,6 @@ typedef WStringPairList TStringPairList;
 
 typedef WStringMap TStringMap;
 typedef WStringMapIter TStringMapIter;
-
-#else
-
-typedef string tstring;
-typedef StringList TStringList;
-typedef StringIter TStringIter;
-typedef StringIterC TStringIterC;
-
-typedef StringPair TStringPair;
-typedef StringPairIter TStringPairIter;
-typedef StringPairList TStringPairList;
-
-typedef StringMap TStringMap;
-typedef StringMapIter TStringMapIter;
-
-#endif
 
 typedef vector<DownloadPtr> DownloadList;
 typedef vector<FavoriteHubEntryPtr> FavoriteHubEntryList;

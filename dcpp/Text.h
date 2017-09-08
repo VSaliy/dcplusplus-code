@@ -81,19 +81,11 @@ namespace Text {
 	int utf8ToWc(const char* str, wchar_t& c);
 	void wcToUtf8(wchar_t c, string& str);
 
-#ifdef UNICODE
 	inline const tstring& toT(const string& str, tstring& tmp) noexcept { return utf8ToWide(str, tmp); }
 	inline tstring toT(const string& str) noexcept { return utf8ToWide(str); }
 
 	inline const string& fromT(const tstring& str, string& tmp) noexcept { return wideToUtf8(str, tmp); }
 	inline string fromT(const tstring& str) noexcept { return wideToUtf8(str); }
-#else
-	inline const tstring& toT(const string& str, tstring& tmp) noexcept { return utf8ToAcp(str, tmp); }
-	inline tstring toT(const string& str) noexcept { return utf8ToAcp(str); }
-
-	inline const string& fromT(const tstring& str, string& tmp) noexcept { return acpToUtf8(str, tmp); }
-	inline string fromT(const tstring& str) noexcept { return acpToUtf8(str); }
-#endif
 
 	inline const TStringList& toT(const StringList& lst, TStringList& tmp) noexcept {
 		for(auto& i: lst)

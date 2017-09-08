@@ -56,11 +56,7 @@ void setData(const tstring& str, Control* w) {
 	_tcscpy(buf, str.c_str());
 	::GlobalUnlock(handle);
 
-#ifdef _UNICODE
 	::SetClipboardData(CF_UNICODETEXT, handle);
-#else
-	::SetClipboardData(CF_TEXT, handle);
-#endif
 
 	::CloseClipboard();
 }
