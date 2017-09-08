@@ -82,13 +82,6 @@ int getCodePage(const string& charset) {
 	return CP_ACP;
 }
 #endif
-bool isAscii(const char* str) noexcept {
-	for(const uint8_t* p = (const uint8_t*)str; *p; ++p) {
-		if(*p & 0x80)
-			return false;
-	}
-	return true;
-}
 
 int utf8ToWc(const char* str, wchar_t& c) {
 	const auto c0 = static_cast<uint8_t>(str[0]);
