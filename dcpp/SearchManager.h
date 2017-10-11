@@ -21,6 +21,7 @@
 
 #include "SettingsManager.h"
 
+#include "AdcCommand.h"
 #include "Socket.h"
 #include "Thread.h"
 #include "Singleton.h"
@@ -33,7 +34,7 @@ namespace dcpp {
 class SearchManager;
 class SocketException;
 
-class SearchManager : public Speaker<SearchManagerListener>, public Singleton<SearchManager>, public Thread
+class SearchManager : public Speaker<SearchManagerListener>, public Singleton<SearchManager>, public Thread, private CommandHandler<SearchManager>
 {
 public:
 	enum SizeModes {
@@ -78,6 +79,7 @@ public:
 
 	void onData(const string& data, const string& remoteIp = Util::emptyString);
 	void onRES(const AdcCommand& cmd, const UserPtr& from, const string& removeIp = Util::emptyString);
+	void onSR(const string& x, const string& remoteIP = Util::emptyString);
 
 	int32_t timeToSearch() {
 		return 5 - (static_cast<int64_t>(GET_TICK() - lastSearch) / 1000);
@@ -88,6 +90,12 @@ public:
 	}
 
 private:
+	friend class CommandHandler<SearchManager>;
+
+	void handle(AdcCommand::RES, AdcCommand& c, const string& remoteIp) noexcept;
+
+	// Ignore any other ADC commands for now
+	template<typename T> void handle(T, AdcCommand&, const string&) { }
 
 	std::unique_ptr<Socket> socket;
 	string port;
