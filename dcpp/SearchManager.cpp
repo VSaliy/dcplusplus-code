@@ -172,139 +172,161 @@ int SearchManager::run() {
 }
 
 void SearchManager::onData(const string& x, const string& remoteIp) {
-	if(x.compare(0, 4, "$SR ") == 0) {
-		string::size_type i, j;
-		// Directories: $SR <nick><0x20><directory><0x20><free slots>/<total slots><0x05><Hubname><0x20>(<Hubip:port>)
-		// Files:		$SR <nick><0x20><filename><0x05><filesize><0x20><free slots>/<total slots><0x05><Hubname><0x20>(<Hubip:port>)
-		i = 4;
-		if( (j = x.find(' ', i)) == string::npos) {
+	if (x.compare(0, 1, "$") == 0) {
+		// NMDC commands
+		if (x.compare(1, 3, "SR ") == 0) {
+			onSR(x, remoteIp);
+		} else {
+			dcdebug("Unknown NMDC command received via UDP: %s\n", x.c_str());
+		}
+
+		return;
+	}
+
+	// ADC commands
+
+	// ADC commands must end with \n
+	if (x[x.length() - 1] != 0x0a) {
+		dcdebug("Invalid UDP data received: %s (no newline)\n", x.c_str());
+		return;
+	}
+
+	if (!Text::validateUtf8(x)) {
+		dcdebug("UTF-8 valition failed for received UDP data: %s\n", x.c_str());
+		return;
+	}
+
+	// Dispatch without newline
+	dispatch(x.substr(0, x.length() - 1), false, remoteIp);
+}
+
+void SearchManager::handle(AdcCommand::RES, AdcCommand& c, const string& remoteIp) noexcept {
+	if (c.getParameters().empty())
+		return;
+
+	string cid = c.getParam(0);
+	if (cid.size() != 39)
+		return;
+
+	UserPtr user = ClientManager::getInstance()->findUser(CID(cid));
+	if (!user)
+		return;
+
+	// This should be handled by AdcCommand really...
+	c.getParameters().erase(c.getParameters().begin());
+
+	onRES(c, user, remoteIp);
+}
+
+void SearchManager::onSR(const string& x, const string& remoteIp) {
+	string::size_type i, j;
+	// Directories: $SR <nick><0x20><directory><0x20><free slots>/<total slots><0x05><Hubname><0x20>(<Hubip:port>)
+	// Files:		$SR <nick><0x20><filename><0x05><filesize><0x20><free slots>/<total slots><0x05><Hubname><0x20>(<Hubip:port>)
+	i = 4;
+	if ((j = x.find(' ', i)) == string::npos) {
+		return;
+	}
+	string nick = x.substr(i, j - i);
+	i = j + 1;
+
+	// A file has 2 0x05, a directory only one
+	size_t cnt = count(x.begin() + j, x.end(), 0x05);
+
+	SearchResult::Types type = SearchResult::TYPE_FILE;
+	string file;
+	int64_t size = 0;
+
+	if (cnt == 1) {
+		// We have a directory...find the first space beyond the first 0x05 from the back
+		// (dirs might contain spaces as well...clever protocol, eh?)
+		type = SearchResult::TYPE_DIRECTORY;
+		// Get past the hubname that might contain spaces
+		if ((j = x.rfind(0x05)) == string::npos) {
 			return;
 		}
-		string nick = x.substr(i, j-i);
+		// Find the end of the directory info
+		if ((j = x.rfind(' ', j - 1)) == string::npos) {
+			return;
+		}
+		if (j < i + 1) {
+			return;
+		}
+		file = x.substr(i, j - i) + '\\';
+	} else if (cnt == 2) {
+		if ((j = x.find((char)5, i)) == string::npos) {
+			return;
+		}
+		file = x.substr(i, j - i);
 		i = j + 1;
-
-		// A file has 2 0x05, a directory only one
-		size_t cnt = count(x.begin() + j, x.end(), 0x05);
-
-		SearchResult::Types type = SearchResult::TYPE_FILE;
-		string file;
-		int64_t size = 0;
-
-		if(cnt == 1) {
-			// We have a directory...find the first space beyond the first 0x05 from the back
-			// (dirs might contain spaces as well...clever protocol, eh?)
-			type = SearchResult::TYPE_DIRECTORY;
-			// Get past the hubname that might contain spaces
-			if((j = x.rfind(0x05)) == string::npos) {
-				return;
-			}
-			// Find the end of the directory info
-			if((j = x.rfind(' ', j-1)) == string::npos) {
-				return;
-			}
-			if(j < i + 1) {
-				return;
-			}
-			file = x.substr(i, j-i) + '\\';
-		} else if(cnt == 2) {
-			if( (j = x.find((char)5, i)) == string::npos) {
-				return;
-			}
-			file = x.substr(i, j-i);
-			i = j + 1;
-			if( (j = x.find(' ', i)) == string::npos) {
-				return;
-			}
-			size = Util::toInt64(x.substr(i, j-i));
-		}
-		i = j + 1;
-
-		if( (j = x.find('/', i)) == string::npos) {
+		if ((j = x.find(' ', i)) == string::npos) {
 			return;
 		}
-		int freeSlots = Util::toInt(x.substr(i, j-i));
-		i = j + 1;
-		if( (j = x.find((char)5, i)) == string::npos) {
+		size = Util::toInt64(x.substr(i, j - i));
+	}
+	i = j + 1;
+
+	if ((j = x.find('/', i)) == string::npos) {
+		return;
+	}
+	int freeSlots = Util::toInt(x.substr(i, j - i));
+	i = j + 1;
+	if ((j = x.find((char)5, i)) == string::npos) {
+		return;
+	}
+	int slots = Util::toInt(x.substr(i, j - i));
+	i = j + 1;
+	if ((j = x.rfind(" (")) == string::npos) {
+		return;
+	}
+	string hubName = x.substr(i, j - i);
+	i = j + 2;
+	if ((j = x.rfind(')')) == string::npos) {
+		return;
+	}
+
+	HintedUser user;
+
+	user.hint = ClientManager::getInstance()->findHub(x.substr(i, j - i));
+	if (user.hint.empty()) {
+		// Could happen if hub has multiple URLs / IPs
+		user = ClientManager::getInstance()->findLegacyUser(nick);
+		if (!user)
 			return;
-		}
-		int slots = Util::toInt(x.substr(i, j-i));
-		i = j + 1;
-		if( (j = x.rfind(" (")) == string::npos) {
+	}
+
+	string encoding = ClientManager::getInstance()->findHubEncoding(user.hint);
+	nick = Text::toUtf8(nick, encoding);
+	file = Text::toUtf8(file, encoding);
+	hubName = Text::toUtf8(hubName, encoding);
+
+	if (!user) {
+		user.user = ClientManager::getInstance()->findUser(nick, user.hint);
+		if (!user)
 			return;
+	}
+
+	Style style;
+	{
+		auto lock = ClientManager::getInstance()->lock();
+		auto ou = ClientManager::getInstance()->findOnlineUser(user);
+		if (ou) {
+			style = ou->getIdentity().getStyle();
 		}
-		string hubName = x.substr(i, j-i);
-		i = j + 2;
-		if( (j = x.rfind(')')) == string::npos) {
-			return;
-		}
+	}
 
-		HintedUser user;
+	string tth;
+	if (hubName.compare(0, 4, "TTH:") == 0) {
+		tth = hubName.substr(4);
+		StringList names = ClientManager::getInstance()->getHubNames(user);
+		hubName = names.empty() ? _("Offline") : Util::toString(names);
+	}
 
-		user.hint = ClientManager::getInstance()->findHub(x.substr(i, j - i));
-		if(user.hint.empty()) {
-			// Could happen if hub has multiple URLs / IPs
-			user = ClientManager::getInstance()->findLegacyUser(nick);
-			if(!user)
-				return;
-		}
+	if (tth.empty() && type == SearchResult::TYPE_FILE) {
+		return;
+	}
 
-		string encoding = ClientManager::getInstance()->findHubEncoding(user.hint);
-		nick = Text::toUtf8(nick, encoding);
-		file = Text::toUtf8(file, encoding);
-		hubName = Text::toUtf8(hubName, encoding);
-
-		if(!user) {
-			user.user = ClientManager::getInstance()->findUser(nick, user.hint);
-			if(!user)
-				return;
-		}
-
-		Style style;
-		{
-			auto lock = ClientManager::getInstance()->lock();
-			auto ou = ClientManager::getInstance()->findOnlineUser(user);
-			if (ou) {
-				style = ou->getIdentity().getStyle(); 
-			}
-		}
-
-		string tth;
-		if(hubName.compare(0, 4, "TTH:") == 0) {
-			tth = hubName.substr(4);
-			StringList names = ClientManager::getInstance()->getHubNames(user);
-			hubName = names.empty() ? _("Offline") : Util::toString(names);
-		}
-
-		if(tth.empty() && type == SearchResult::TYPE_FILE) {
-			return;
-		}
-
-		fire(SearchManagerListener::SR(), SearchResultPtr(new SearchResult(user, type, slots,
-			freeSlots, size, file, hubName, remoteIp, TTHValue(tth), Util::emptyString, style)));
-
-	} else if(x.compare(1, 4, "RES ") == 0 && x[x.length() - 1] == 0x0a) {
-		AdcCommand c(x.substr(0, x.length()-1));
-		if(c.getParameters().empty())
-			return;
-		string cid = c.getParam(0);
-		if(cid.size() != 39)
-			return;
-
-		UserPtr user = ClientManager::getInstance()->findUser(CID(cid));
-		if(!user)
-			return;
-
-		// This should be handled by AdcCommand really...
-		c.getParameters().erase(c.getParameters().begin());
-
-		onRES(c, user, remoteIp);
-
-	} /*else if(x.compare(1, 4, "SCH ") == 0 && x[x.length() - 1] == 0x0a) {
-		try {
-			respond(AdcCommand(x.substr(0, x.length()-1)));
-		} catch(ParseException& ) {
-		}
-	}*/ // Needs further DoS investigation
+	fire(SearchManagerListener::SR(), SearchResultPtr(new SearchResult(user, type, slots,
+		freeSlots, size, file, hubName, remoteIp, TTHValue(tth), Util::emptyString, style)));
 }
 
 void SearchManager::onRES(const AdcCommand& cmd, const UserPtr& from, const string& remoteIp) {

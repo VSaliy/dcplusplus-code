@@ -183,11 +183,16 @@ private:
 template<class T>
 class CommandHandler {
 public:
-	void dispatch(const string& aLine, bool nmdc = false) {
+	inline void dispatch(const string& aLine) noexcept {
+		dispatch(aLine, false);
+	}
+
+	template<typename... ArgT>
+	void dispatch(const string& aLine, bool nmdc, ArgT&&... args) noexcept {
 		try {
 			AdcCommand c(aLine, nmdc);
 
-#define C(n) case AdcCommand::CMD_##n: ((T*)this)->handle(AdcCommand::n(), c); break;
+#define C(n) case AdcCommand::CMD_##n: ((T*)this)->handle(AdcCommand::n(), c, std::forward<ArgT>(args)...); break;
 			switch(c.getCommand()) {
 				C(SUP);
 				C(STA);
