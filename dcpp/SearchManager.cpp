@@ -192,7 +192,7 @@ void SearchManager::onData(const string& x, const string& remoteIp) {
 	}
 
 	if (!Text::validateUtf8(x)) {
-		dcdebug("UTF-8 valition failed for received UDP data: %s\n", x.c_str());
+		dcdebug("UTF-8 validation failed for received UDP data: %s\n", x.c_str());
 		return;
 	}
 
