@@ -172,6 +172,8 @@ int SearchManager::run() {
 }
 
 void SearchManager::onData(const string& x, const string& remoteIp) {
+	if(x.empty()) { return; } // shouldn't happen but rather be safe...
+
 	if (x.compare(0, 1, "$") == 0) {
 		// NMDC commands
 		if (x.compare(1, 3, "SR ") == 0) {
