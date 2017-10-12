@@ -1,3 +1,4 @@
+-- 0.867 2017-10-12 --
 * [L#1722364] Prevent remote crashes from malevolent UDP data (maksis)
 
 -- 0.866 2017-05-20 --
