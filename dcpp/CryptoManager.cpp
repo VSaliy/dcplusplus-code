@@ -224,16 +224,19 @@ int CryptoManager::getKeyLength(TLSTmpKeys key) {
 }
 
 DH* CryptoManager::getTmpDH(int keyLen) {
+	// Ref: RFC 3526 + <https://wiki.openssl.org/index.php/Diffie-Hellman_parameters>
+
 	if (keyLen < 2048)
-		return NULL;
+		return nullptr;
 
-	DH* tmpDH = DH_new();
-	if(!tmpDH) return NULL;
+	DH* dh = DH_new();
+	if(!dh) return nullptr;
 
-	// From RFC 3526; checked via https://wiki.openssl.org/index.php/Diffie-Hellman_parameters#Validating_Parameters
+	BIGNUM* dhp_bn = nullptr;
+
 	switch (keyLen) {
 		case 2048: {
-			static unsigned char dh2048_p[]={
+			static unsigned char dh2048_p[] = {
 				0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xC9,0x0F,0xDA,0xA2,
 				0x21,0x68,0xC2,0x34,0xC4,0xC6,0x62,0x8B,0x80,0xDC,0x1C,0xD1,
 				0x29,0x02,0x4E,0x08,0x8A,0x67,0xCC,0x74,0x02,0x0B,0xBE,0xA6,
@@ -257,12 +260,12 @@ DH* CryptoManager::getTmpDH(int keyLen) {
 				0x15,0x72,0x8E,0x5A,0x8A,0xAC,0xAA,0x68,0xFF,0xFF,0xFF,0xFF,
 				0xFF,0xFF,0xFF,0xFF,
 			};
-			tmpDH->p = BN_bin2bn(dh2048_p, sizeof(dh2048_p), 0);
+			dhp_bn = BN_bin2bn(dh2048_p, sizeof(dh2048_p), nullptr);
 			break;
 		}
 
 		case 4096: {
-			static unsigned char dh4096_p[]={
+			static unsigned char dh4096_p[] = {
 				0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xC9,0x0F,0xDA,0xA2,
 				0x21,0x68,0xC2,0x34,0xC4,0xC6,0x62,0x8B,0x80,0xDC,0x1C,0xD1,
 				0x29,0x02,0x4E,0x08,0x8A,0x67,0xCC,0x74,0x02,0x0B,0xBE,0xA6,
@@ -307,34 +310,47 @@ DH* CryptoManager::getTmpDH(int keyLen) {
 				0x90,0xA6,0xC0,0x8F,0x4D,0xF4,0x35,0xC9,0x34,0x06,0x31,0x99,
 				0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,
 			};
-			tmpDH->p = BN_bin2bn(dh4096_p, sizeof(dh4096_p), 0);
+			dhp_bn = BN_bin2bn(dh4096_p, sizeof(dh4096_p), nullptr);
 			break;
 		}
 	}
 
-	static unsigned char dh_g[]={
+	if(!dhp_bn) {
+		DH_free(dh);
+		return nullptr;
+	}
+
+	static unsigned char dh_g[] = {
 		0x02,
 	};
+	BIGNUM* dhg_bn = BN_bin2bn(dh_g, sizeof(dh_g), nullptr);
+	if(!dhg_bn) {
+		BN_free(dhp_bn);
+		DH_free(dh);
+		return nullptr;
+	}
 
-	tmpDH->g = BN_bin2bn(dh_g, sizeof(dh_g), 0);
+	if(!DH_set0_pqg(dh, dhp_bn, nullptr, dhg_bn)) {
+		BN_free(dhg_bn);
+		BN_free(dhp_bn);
+		DH_free(dh);
+		return nullptr;
+	}
 
-	if(!tmpDH->p || !tmpDH->g) {
-		DH_free(tmpDH);
-		return NULL;
-	} else return tmpDH;
+	return dh;
 }
 
 RSA* CryptoManager::getTmpRSA(int keyLen) {
 	if (keyLen < 2048)
-		return NULL;
+		return nullptr;
 
 	RSA* tmpRSA = RSA_new();
 	BIGNUM* bn = BN_new();
 
-	if(!bn || !BN_set_word(bn, RSA_F4) || !RSA_generate_key_ex(tmpRSA, keyLen, bn, NULL)) {
+	if(!bn || !BN_set_word(bn, RSA_F4) || !RSA_generate_key_ex(tmpRSA, keyLen, bn, nullptr)) {
 		if (bn) BN_free(bn);
 		RSA_free(tmpRSA);
-		return NULL;
+		return nullptr;
 	}
 
 	BN_free(bn);

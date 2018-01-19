@@ -1,0 +1,27 @@
+* Build MinGW variants with the same settings as VS variants:
+	* -DOPENSSL_SYS_WIN32
+
+* Add -DOPENSSL_NO_CAPIENG which our mingw64 compiler only partially supports, leading to checks in
+  engines/e_capi.c to pass but producing errors when linking.
+
+diff -ru old/Configurations/10-main.conf new/Configurations/10-main.conf
+--- old/Configurations/10-main.conf	2018-01-20 12:34:40.498557600 +0100
++++ new/Configurations/10-main.conf	2018-01-20 12:34:40.498557600 +0100
+@@ -1445,7 +1445,7 @@
+         inherit_from     => [ "BASE_unix", asm("x86_asm"),
+                               sub { $disabled{shared} ? () : "x86_uplink" } ],
+         cc               => "gcc",
+-        cflags           => combine(picker(default => "-DL_ENDIAN -DWIN32_LEAN_AND_MEAN -DUNICODE -D_UNICODE -m32 -Wall",
++        cflags           => combine(picker(default => "-DOPENSSL_SYS_WIN32 -DOPENSSL_NO_CAPIENG -DL_ENDIAN -DWIN32_LEAN_AND_MEAN -DUNICODE -D_UNICODE -m32 -Wall",
+                                            debug   => "-g -O0",
+                                            release => "-O3 -fomit-frame-pointer"),
+                                     threads("-D_MT")),
+@@ -1474,7 +1474,7 @@
+         # Applink is never engaged and can as well be omitted.
+         inherit_from     => [ "BASE_unix", asm("x86_64_asm") ],
+         cc               => "gcc",
+-        cflags           => combine(picker(default => "-DL_ENDIAN -DWIN32_LEAN_AND_MEAN -DUNICODE -D_UNICODE -m64 -Wall",
++        cflags           => combine(picker(default => "-DOPENSSL_SYS_WIN32 -DOPENSSL_NO_CAPIENG -DL_ENDIAN -DWIN32_LEAN_AND_MEAN -DUNICODE -D_UNICODE -m64 -Wall",
+                                            debug   => "-g -O0",
+                                            release => "-O3"),
+                                     threads("-D_MT")),
