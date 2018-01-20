@@ -1,4 +1,5 @@
 * Update OpenSSL to version 1.1.0g
+* Use default ECC curve list since improvement in version OpenSSL 1.1 (cologic)
 
 -- 0.867 2017-10-12 --
 * [L#1722364] Prevent remote crashes from malevolent UDP data (maksis)
