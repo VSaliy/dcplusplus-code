@@ -1,5 +1,5 @@
-This folder contains a few scripts from po4a <http://po4a.alioth.debian.org/> used for translating
-help files. We only need the XHTML module.
+This folder contains a few scripts from po4a <https://www.po4a.org/> used for translating help
+files. We only need the XHTML module.
 
 Patches in the "patches" directory have been applied.
 

@@ -2,7 +2,7 @@
 # Dependencies:
 # - hg (this tree must be under hg version control)
 # - NSIS <http://nsis.sourceforge.net>
-# - Perl, in order to use po4a <https://po4a.alioth.debian.org/>
+# - Perl, in order to use po4a <https://www.po4a.org/>
 # - zip (MSYS / Cygwin provide one)
 
 Import('dev')
