@@ -1,6 +1,6 @@
 # Build help files for DC++
 # Dependencies:
-# - Perl, in order to use po4a <https://po4a.alioth.debian.org/>
+# - Perl, in order to use po4a <https://www.po4a.org/>
 # - Microsoft HTML Help Workshop
 #   <https://msdn.microsoft.com/en-us/library/ms670169.aspx>
 
