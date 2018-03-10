@@ -210,7 +210,7 @@ tstring RichTextBox::textUnderCursor(const ScreenCoordinate& p, bool includeSpac
 }
 
 int RichTextBox::fixupLineEndings(tstring::const_iterator begin, tstring::const_iterator end, tstring::difference_type ibo) const {
-	// http://rubyforge.org/pipermail/wxruby-users/2006-August/002116.html
+	// https://web.archive.org/web/20140518113109/http://rubyforge.org/pipermail/wxruby-users/2006-August/002116.html
 	// ("TE_RICH2 RichEdit control"). Otherwise charFromPos will be increasingly
 	// off from getText with each new line by one character.
 	int cur = 0;

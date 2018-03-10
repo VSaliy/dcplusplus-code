@@ -160,7 +160,7 @@ void Util::initialize(PathsMap pathOverrides) {
 	paths[PATH_RESOURCES] = exePath;
 
 	// libintl doesn't support wide path names so we use the short (8.3) format.
-	// http://sourceforge.net/p/gnuwin32/discussion/74807/thread/724990a4
+	// https://sourceforge.net/p/gnuwin32/discussion/74807/thread/724990a4/
 	tstring localePath_ = Text::toT(exePath) + _T("locale\\");
 	memset(buf, 0, sizeof(buf));
 	::GetShortPathName(localePath_.c_str(), buf, sizeof(buf)/sizeof(TCHAR));

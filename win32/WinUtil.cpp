@@ -680,7 +680,7 @@ bool WinUtil::checkCommand(tstring& cmd, tstring& param, tstring& message, tstri
 		if(param.empty()) {
 			status = T_("Specify a search string");
 		} else {
-			WinUtil::openLink(_T("http://www.imdb.com/find?q=") + Text::toT(Util::encodeURI(Text::fromT(param))));
+			WinUtil::openLink(_T("https://www.imdb.com/find?q=") + Text::toT(Util::encodeURI(Text::fromT(param))));
 		}
 	} else if(Util::stricmp(cmd.c_str(), _T("u")) == 0) {
 		if(param.empty()) {

@@ -71,7 +71,7 @@ protected:
  * Dummy dialog procedure - we superclass the dialog window class and handle the message
  * loop outside of the dialog box procedure.
  *
- * This is similar to http://blogs.msdn.com/oldnewthing/archive/2003/11/13/55662.aspx
+ * This is similar to https://blogs.msdn.microsoft.com/oldnewthing/20031113-00/?p=41843
  */
 template<typename WidgetType>
 INT_PTR CALLBACK Dialog<WidgetType>::dialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) {
