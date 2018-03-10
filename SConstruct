@@ -94,7 +94,7 @@ msvc_link_flags = {
 
 # BOOST_MOVE_USE_STANDARD_LIBRARY_MOVE: Prevents conflicts in some cases where
 # we do use a properly qualified std::forward / std::move but the boost version
-# still matches - see <http://lists.boost.org/boost-users/2012/07/75176.php>.
+# still matches - see <https://lists.boost.org/boost-users/2012/07/75176.php>.
 
 msvc_defs = {
     'common': [

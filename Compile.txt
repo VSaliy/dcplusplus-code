@@ -3,7 +3,7 @@
 
 1.	Application and Dependency versions needed
 
-		Some tools can be found on <http://sourceforge.net/projects/dcplusplus/files/Dev/>,
+		Some tools can be found on <https://sourceforge.net/projects/dcplusplus/files/Dev/>,
 		although I recommend getting them directly from their hosts.
 
 		* A modern C++ compiler. I am currently using these 2 packages by the MinGW-w64 project:
@@ -22,7 +22,7 @@
 		Make sure that Python is in your PATH environment variable.
 
 		* SCons - 2.5.0
-		<http://www.scons.org/download.php>
+		<http://scons.org/pages/download.html>
 
 		Note: SCons relies on Python so you need to have Python installed first.
 		Make sure that SCons is in your PATH environment variable.
@@ -33,7 +33,7 @@
 		Make sure that Perl is in your PATH environment variable.
 
 		* gettext runtime & tools - 0.17 or later
-		<http://ftp.gnome.org/pub/gnome/binaries/win32/dependencies/>
+		<https://ftp.gnome.org/pub/gnome/binaries/win32/dependencies/>
 
 		Make sure that the gettext tools are in your PATH environment variable.
 
@@ -109,8 +109,8 @@
 4. Alternative compilers
 
 	a. Various versions of MinGW (GCC 6.2 or later):
-	<http://sourceforge.net/projects/mingw-w64/files/>
-	<http://sourceforge.net/projects/mingw/files/>
+	<https://sourceforge.net/projects/mingw-w64/files/>
+	<https://sourceforge.net/projects/mingw/files/>
 
 		We recommend using compilers from the MinGW-w64 project. All you have to do to use one is
 		download it and extract it.

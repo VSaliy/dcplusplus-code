@@ -128,9 +128,9 @@ fullSlots(false)
 	links.bugs = links.homepage + _T("bugs/");
 	links.donate = links.homepage + _T("donate/");
 	links.blog = _T("https://dcpp.wordpress.com");
-	links.community = _T("http://dcbase.org");
+	links.community = _T("https://www.dcbase.org/");
 	links.pluginrepo = links.homepage + _T("plugins/");
-	links.contribute = _T("http://dcbase.org/contribute/");
+	links.contribute = _T("https://www.dcbase.org/contribute/");
 
 	initWindow();
 	initTabs();
