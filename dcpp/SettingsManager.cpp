@@ -97,7 +97,7 @@ const string SettingsManager::settingTags[] =
 	"BoldHub", "BoldPm", "BoldQueue", "BoldSearch", "BoldSystemLog", "ClearSearch",
 	"ClickableChatLinks",
 	"CompressTransfers", "ConfirmADLSRemoval", "ConfirmExit", "ConfirmHubClosing",
-	"ConfirmHubRemoval", "ConfirmItemRemoval", "ConfirmUserRemoval", "Coral", "DcextRegister",
+	"ConfirmHubRemoval", "ConfirmItemRemoval", "ConfirmUserRemoval", "DcextRegister",
 	"DontDlAlreadyQueued", "DontDLAlreadyShared", "EnableCCPM", "FavShowJoins",
 	"FilterMessages",
 	"FinishedDLOnlyFull", "FollowLinks", "GeoCity", "GeoRegion", "GetUserCountry", "GetUserInfo",
@@ -320,7 +320,6 @@ SettingsManager::SettingsManager() {
 	setDefault(FOLLOW_LINKS, false);
 	setDefault(SEND_BLOOM, true);
 	setDefault(OWNER_DRAWN_MENUS, true);
-	setDefault(CORAL, true);
 	setDefault(FINISHED_DL_ONLY_FULL, true);
 	setDefault(CONFIRM_EXIT, true);
 	setDefault(CONFIRM_HUB_CLOSING, true);

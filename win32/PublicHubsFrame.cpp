@@ -481,8 +481,8 @@ void PublicHubsFrame::on(DownloadFailed, const string& l) noexcept {
 	callAsync([=] { onFinished(str(TF_("Download failed: %1%") % Text::toT(l)), false); });
 }
 
-void PublicHubsFrame::on(DownloadFinished, const string& l, bool fromCoral) noexcept {
-	callAsync([=] { onFinished(str(TF_("Hub list downloaded%1% (%2%)") % (fromCoral ? T_(" from Coral") : Util::emptyStringT) % Text::toT(l)), true); });
+void PublicHubsFrame::on(DownloadFinished, const string& l) noexcept {
+	callAsync([=] { onFinished(str(TF_("Hub list downloaded (%1%)") % Text::toT(l)), true); });
 }
 
 void PublicHubsFrame::on(LoadedFromCache, const string& l, const string& d) noexcept {

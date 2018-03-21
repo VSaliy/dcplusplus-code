@@ -50,7 +50,6 @@ public:
 	double getSpeed() const { return speed; }
 
 	GETSET(string, url, Url);
-	GETSET(bool, coralized, Coralized);
 
 private:
 	enum RequestType { TYPE_GET, TYPE_POST };

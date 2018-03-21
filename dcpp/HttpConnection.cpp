@@ -29,10 +29,7 @@
 
 namespace dcpp {
 
-static const std::string CORAL_SUFFIX = ".nyud.net";
-
 HttpConnection::HttpConnection(const string& aUserAgent) :
-coralized(false),
 userAgent(aUserAgent),
 port("80"),
 size(-1),
@@ -118,12 +115,6 @@ void HttpConnection::prepareRequest(RequestType type) {
 
 	if(!query.empty())
 		file += '?' + query;
-
-	if(coralized && server.size() > CORAL_SUFFIX.size() &&
-		server.compare(server.size() - CORAL_SUFFIX.size(), CORAL_SUFFIX.size(), CORAL_SUFFIX) != 0)
-	{
-		server += CORAL_SUFFIX;
-	}
 
 	if(port.empty())
 		port = "80";

@@ -1103,7 +1103,6 @@ void TransferView::on(HttpManagerListener::Added, HttpConnection* c) noexcept {
 	ui->setStatus(STATUS_RUNNING);
 
 	tstring statusString = T_("Downloading");
-	if(c->getCoralized()) { statusString += _T(" [Coral]"); }
 	ui->setStatusString(move(statusString));
 
 	ui->setTransferred(c->getDone(), c->getDone(), c->getSize());
@@ -1134,7 +1133,6 @@ void TransferView::on(HttpManagerListener::Complete, HttpConnection* c, OutputSt
 	ui->setStatus(STATUS_WAITING);
 
 	tstring statusString = T_("Download finished");
-	if(c->getCoralized()) { statusString += _T(" [Coral]"); }
 	ui->setStatusString(move(statusString));
 
 	ui->setTransferred(c->getDone(), c->getDone(), c->getSize());

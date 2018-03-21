@@ -88,7 +88,7 @@ private:
 
 	File* createFile(const string& file);
 
-	HttpConnection* makeConn(string&& url, bool coralized, OutputStream* stream, CallBack callback, const string& userAgent, Flags::MaskType connFlags = 0);
+	HttpConnection* makeConn(string&& url, OutputStream* stream, CallBack callback, const string& userAgent, Flags::MaskType connFlags = 0);
 	Conn* findConn(HttpConnection* c);
 	void resetStream(HttpConnection* c);
 	void removeLater(HttpConnection* c);

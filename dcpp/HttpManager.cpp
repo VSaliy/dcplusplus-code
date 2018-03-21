@@ -38,19 +38,19 @@ HttpManager::~HttpManager() {
 }
 
 HttpConnection* HttpManager::download(string url, OutputStream* stream,  HttpManager::CallBack callback, const string& userAgent) {
-	auto conn = makeConn(move(url), SETTING(CORAL), stream, callback, userAgent);
+	auto conn = makeConn(move(url), stream, callback, userAgent);
 	conn->download();
 	return conn;
 }
 
 HttpConnection* HttpManager::download(string url, const StringMap& postData, OutputStream* stream, HttpManager::CallBack callback, const string& userAgent) {
-	auto conn = makeConn(move(url), false, stream, callback, userAgent);
+	auto conn = makeConn(move(url), stream, callback, userAgent);
 	conn->download(postData);
 	return conn;
 }
 
 HttpConnection* HttpManager::download(string url, const string& file, HttpManager::CallBack callback, const string& userAgent) {
-	auto conn = makeConn(move(url), SETTING(CORAL), createFile(file), callback, userAgent, HttpManager::CONN_MANAGED | HttpManager::CONN_FILE);
+	auto conn = makeConn(move(url), createFile(file), callback, userAgent, HttpManager::CONN_MANAGED | HttpManager::CONN_FILE);
 	conn->download();
 	return conn;
 }
@@ -103,7 +103,7 @@ File* HttpManager::createFile(const string& file) {
 	return f;
 }
 
-HttpConnection* HttpManager::makeConn(string&& url, bool coralized, OutputStream* stream, HttpManager::CallBack callback, const string& userAgent, Flags::MaskType connFlags) {
+HttpConnection* HttpManager::makeConn(string&& url, OutputStream* stream, HttpManager::CallBack callback, const string& userAgent, Flags::MaskType connFlags) {
 	auto c = new HttpConnection(userAgent);
 	{
 		Lock l(cs);
@@ -116,7 +116,6 @@ HttpConnection* HttpManager::makeConn(string&& url, bool coralized, OutputStream
 	}
 	c->addListener(this);
 	c->setUrl(move(url));
-	c->setCoralized(coralized);
 	fire(HttpManagerListener::Added(), c);
 	return c;
 }
@@ -168,14 +167,6 @@ void HttpManager::on(HttpConnectionListener::Data, HttpConnection* c, const uint
 
 void HttpManager::on(HttpConnectionListener::Failed, HttpConnection* c, const string& str) noexcept {
 	resetStream(c);
-
-	if(c->getCoralized()) {
-		fire(HttpManagerListener::Removed(), c);
-		c->setCoralized(false);
-		fire(HttpManagerListener::Added(), c);
-		c->download();
-		return;
-	}
 
 	OutputStream* stream;
 	HttpManager::CallBack callback;

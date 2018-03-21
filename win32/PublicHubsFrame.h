@@ -126,7 +126,7 @@ private:
 
 	virtual void on(DownloadStarting, const string& l) noexcept;
 	virtual void on(DownloadFailed, const string& l) noexcept;
-	virtual void on(DownloadFinished, const string& l, bool fromCoral) noexcept;
+	virtual void on(DownloadFinished, const string& l) noexcept;
 	virtual void on(LoadedFromCache, const string& l, const string& d) noexcept;
 	virtual void on(Corrupted, const string& l) noexcept;
 
