@@ -2,7 +2,7 @@
 
   DC++ Widget Toolkit
 
-  Copyright (c) 2007-2017, Jacek Sieka
+  Copyright (c) 2007-2018, Jacek Sieka
 
   All rights reserved.
 
