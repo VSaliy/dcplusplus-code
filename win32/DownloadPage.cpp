@@ -25,6 +25,7 @@
 #include <dwt/widgets/Grid.h>
 #include <dwt/widgets/Label.h>
 #include <dwt/widgets/Spinner.h>
+#include <dwt/widgets/MessageBox.h>
 
 #include "resource.h"
 #include "HubListsDlg.h"
@@ -114,8 +115,11 @@ PropPage(parent, 3, 1)
 
 		cur->addChild(Label::Seed(T_("Public Hubs list URL")));
 
-		// dummy grid so that the button doesn't fill the whole row.
-		cur->addChild(Grid::Seed(1, 1))->addChild(Button::Seed(T_("Configure Public Hub Lists")))->onClicked([this] { handleConfigHubLists(); });
+		GridPtr cur2 = cur->addChild(Grid::Seed(1, 2));
+		cur2->column(1).mode = GridInfo::FILL; 
+		cur2->column(1).align = GridInfo::BOTTOM_RIGHT;
+		cur2->addChild(Button::Seed(T_("Configure Public Hub Lists")))->onClicked([this] { handleConfigHubLists(); });
+		cur2->addChild(Button::Seed(T_("Reset Public Hub Lists")))->onClicked([this] { handleResetHubLists(); });
 
 		cur->addChild(Label::Seed(T_("HTTP Proxy (for hublist only)")))->setHelpId(IDH_SETTINGS_DOWNLOAD_PROXY);
 		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::textBox);
@@ -146,3 +150,10 @@ void DownloadPage::write() {
 void DownloadPage::handleConfigHubLists() {
 	HubListsDlg(this).run();
 }
+
+void DownloadPage::handleResetHubLists() {
+	if(dwt::MessageBox(this).show(T_("This will remove all existing hublist entries and reset to the default preconfigured ones. Do you really want to proceed?"), T_("Public Hubs list"), dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION) == IDYES) { 
+		SettingsManager::getInstance()->unset(SettingsManager::HUBLIST_SERVERS);
+	}
+}
+
