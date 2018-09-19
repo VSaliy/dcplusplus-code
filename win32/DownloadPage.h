@@ -33,6 +33,7 @@ private:
 	ItemList items;
 
 	void handleConfigHubLists();
+	void handleResetHubLists();
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_DOWNLOAD_PAGE_H)

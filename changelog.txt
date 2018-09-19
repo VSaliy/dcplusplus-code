@@ -1,3 +1,4 @@
+* Add function to reset the list of public hublist servers to current defaults (emtee)
 * Update OpenSSL to version 1.1.1
 * Use default ECC curve list since improvement in version OpenSSL 1.1 (cologic)
 * Remove Coral CDN support, since it's stopped running (cologic)
