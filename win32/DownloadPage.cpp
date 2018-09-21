@@ -119,7 +119,10 @@ PropPage(parent, 3, 1)
 		cur2->column(1).mode = GridInfo::FILL; 
 		cur2->column(1).align = GridInfo::BOTTOM_RIGHT;
 		cur2->addChild(Button::Seed(T_("Configure Public Hub Lists")))->onClicked([this] { handleConfigHubLists(); });
-		cur2->addChild(Button::Seed(T_("Reset Public Hub Lists")))->onClicked([this] { handleResetHubLists(); });
+
+		auto resetList = cur2->addChild(Button::Seed(T_("Reset Public Hub Lists")));
+		resetList->setHelpId(IDH_SETTINGS_DOWNLOAD_RESETLISTS);
+		resetList->onClicked([this] { handleResetHubLists(); });
 
 		cur->addChild(Label::Seed(T_("HTTP Proxy (for hublist only)")))->setHelpId(IDH_SETTINGS_DOWNLOAD_PROXY);
 		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::textBox);
