@@ -290,7 +290,9 @@ void PublicHubsFrame::updateList() {
 			"%2%\r\n\r\n"
 			"It is strongly recommended that you do not connect to any of the hubs listed here "
 			"and that you remove this hub list from your collection by using the \"Configure\" "
-			"button below."
+			"button below. Alternatively you can go to Settings / Downloads pane and click "
+			"\"Reset Public Hub Lists\" button to get the list of latest known safe and working " 
+			"public hub list servers."
 			) % Text::toT(FavoriteManager::getInstance()->getCurrentHubList()) % Text::toT(blacklisted)));
 		blacklist->setEnabled(true);
 		blacklist->setVisible(true);
