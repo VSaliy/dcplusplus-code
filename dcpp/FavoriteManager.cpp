@@ -56,6 +56,8 @@ FavoriteManager::FavoriteManager() : lastId(0), useHttp(false), running(false), 
 	addBlacklist("hublist.org", "Domain used for spam purposes.");
 	addBlacklist("hubtracker.com", "Domain lost to unknown owners advertising dubious pharmaceuticals.");
 	addBlacklist("openhublist.org", "Domain used for spam purposes.");
+	addBlacklist("dchublist.com", "Redirection to the new domain fails. To access this hublist add its new address <https://www.te-home.net/?do=hublist&get=hublist.xml.bz2> instead.");
+	addBlacklist("hublista.hu", "Server discontinued, domain may lost to unknown owners.");
 }
 
 FavoriteManager::~FavoriteManager() {
