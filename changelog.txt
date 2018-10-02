@@ -1,3 +1,6 @@
+* During the first run of a new DC++ release shipped with new default hublist servers the new addresses are automatically added
+  to the existing setup (no manual reset/configuration needed anymore) (emtee)
+* Revisit default hublists, add new working hublist servers; blacklist discontinued or inaccessible server addresses (emtee)
 * Add function to reset the list of public hublist servers to current defaults (emtee)
 * Update OpenSSL to version 1.1.1
 * Use default ECC curve list since improvement in version OpenSSL 1.1 (cologic)

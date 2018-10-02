@@ -558,6 +558,19 @@ void SettingsManager::load(string const& aFileName)
 			unset(PUBLICHUBSFRAME_WIDTHS);
 		}
 
+		if(v <= 0.867) {
+			// add all the newly introduced default hublist servers automatically. 
+			// change this to the version number of the previous release each time a new default hublist server entry added.
+			string lists = get(HUBLIST_SERVERS);
+			StringTokenizer<string> t(getDefault(HUBLIST_SERVERS), ';');
+			
+			for(auto& i: t.getTokens()) {
+				if(lists.find(i) == string::npos)
+					lists += ";" + i;
+			}
+			set(HUBLIST_SERVERS, lists);
+		}
+		
 		if(SETTING(SET_MINISLOT_SIZE) < 512)
 			set(SET_MINISLOT_SIZE, 512);
 		if(SETTING(AUTODROP_INTERVAL) < 1)
