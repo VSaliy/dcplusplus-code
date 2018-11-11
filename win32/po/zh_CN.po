@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: win32\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2016-09-14 20:52+0200\n"
+"POT-Creation-Date: 2018-11-12 00:08+0100\n"
 "PO-Revision-Date: 2013-10-23 18:10+0000\n"
 "Last-Translator: fenxiang <lm386@163.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,18 +16,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2016-09-14 18:21+0000\n"
-"X-Generator: Launchpad (build 18186)\n"
-
-#: win32\PublicHubsFrame.cpp:485
-msgid " from Coral"
-msgstr " 来自Coral"
+"X-Launchpad-Export-Date: 2018-11-11 22:48+0000\n"
+"X-Generator: Launchpad (build 18816)\n"
 
 #: win32\FinishedFrameBase.h:733
 msgid "% transferred"
 msgstr "% 已传输"
 
-#: win32\MainWindow.cpp:1486
+#: win32\MainWindow.cpp:1487
 #, boost-format
 msgid ""
 "%1%\n"
@@ -46,18 +42,18 @@ msgstr "%1% %2%：%3%"
 msgid "%1% (%2$0.2f)"
 msgstr "%1% (%2$0.2f)"
 
-#: win32\SearchFrame.cpp:526
+#: win32\SearchFrame.cpp:547
 #, boost-format
 msgid "%1% (%2%)"
 msgstr "%1% (%2%)"
 
-#: win32\SearchFrame.cpp:1107
+#: win32\SearchFrame.cpp:1128
 #, boost-format
 msgid "%1% / %2% item"
 msgid_plural "%1% / %2% items"
 msgstr[0] "%1% / %2% 项"
 
-#: win32\SearchFrame.cpp:1138
+#: win32\SearchFrame.cpp:1159
 #, boost-format
 msgid "%1% / %2% sources ignored: %3%"
 msgstr "%1% / %2% 资源被忽略：%3%"
@@ -67,14 +63,13 @@ msgstr "%1% / %2% 资源被忽略：%3%"
 msgid "%1% doesn't need any additional configuration"
 msgstr "%1% 不需要额外的配置"
 
-#: win32\SearchFrame.cpp:1113
+#: win32\SearchFrame.cpp:1134
 #, boost-format
 msgid "%1% dropped"
 msgstr "%1% 被丢弃"
 
-#: win32\PluginApiWin.cpp:71 win32\PluginApiWin.cpp:72
-#: win32\QueueFrame.cpp:949 win32\WinUtil.cpp:861
-#: win32\FinishedFrameBase.h:461
+#: win32\PluginApiWin.cpp:71 win32\PluginApiWin.cpp:72 win32\QueueFrame.cpp:949
+#: win32\WinUtil.cpp:861 win32\FinishedFrameBase.h:461
 #, boost-format
 msgid "%1% files"
 msgstr "%1% 个文件"
@@ -94,7 +89,7 @@ msgstr "%1% 空闲槽 of %2% 总共的上传槽 - 点击调整"
 msgid "%1% hubs"
 msgstr "%1% hubs"
 
-#: win32\SearchFrame.cpp:1105 win32\FinishedFrameBase.h:572
+#: win32\SearchFrame.cpp:1126 win32\FinishedFrameBase.h:572
 #, boost-format
 msgid "%1% item"
 msgid_plural "%1% items"
@@ -126,12 +121,12 @@ msgstr ""
 msgid "%1% recent items will be saved from now on."
 msgstr "到现在为止的%1% 最近打开的项目将被保存。"
 
-#: win32\SearchFrame.cpp:848
+#: win32\SearchFrame.cpp:869
 #, boost-format
 msgid "%1% results"
 msgstr "%1% 结果"
 
-#: win32\SearchFrame.cpp:1139
+#: win32\SearchFrame.cpp:1160
 #, boost-format
 msgid "%1% sources added"
 msgstr "%1% 资源已添加"
@@ -148,7 +143,7 @@ msgstr[0] "%1% 个用户"
 msgid "%1% users"
 msgstr "%1% 用户"
 
-#: win32\MainWindow.cpp:1610
+#: win32\MainWindow.cpp:1631
 #, fuzzy, boost-format
 msgid "%1%-level %2%"
 msgstr "%1%: %2%"
@@ -158,11 +153,11 @@ msgstr "%1%: %2%"
 msgid "%1%/%2%"
 msgstr "%1%/%2%"
 
-#: win32\MainWindow.cpp:911 win32\MainWindow.cpp:1197
-#: win32\MainWindow.cpp:1201 win32\MainWindow.cpp:1205
-#: win32\MainWindow.cpp:1209 win32\TransferView.cpp:227
-#: win32\TransferView.cpp:367 win32\TransferView.cpp:452
-#: win32\UsersFrame.cpp:73 win32\FinishedFrameBase.h:574
+#: win32\MainWindow.cpp:911 win32\MainWindow.cpp:1197 win32\MainWindow.cpp:1201
+#: win32\MainWindow.cpp:1205 win32\MainWindow.cpp:1209
+#: win32\TransferView.cpp:227 win32\TransferView.cpp:367
+#: win32\TransferView.cpp:452 win32\UsersFrame.cpp:73
+#: win32\FinishedFrameBase.h:574
 #, boost-format
 msgid "%1%/s"
 msgstr "%1%/秒"
@@ -193,8 +188,8 @@ msgid "&Browse file list"
 msgstr "浏览文件列表(&B)"
 
 #: win32\DirectoryListingFrame.cpp:932 win32\LogPage.cpp:79
-#: win32\NotificationsPage.cpp:112 win32\SearchFrame.cpp:887
-#: win32\SearchFrame.cpp:915
+#: win32\NotificationsPage.cpp:112 win32\SearchFrame.cpp:908
+#: win32\SearchFrame.cpp:936
 msgid "&Browse..."
 msgstr "浏览(&B)..."
 
@@ -216,7 +211,7 @@ msgid "&Configure..."
 msgstr "配置(&C)..."
 
 #: win32\FavHubsFrame.cpp:104 win32\FavHubsFrame.cpp:364
-#: win32\PublicHubsFrame.cpp:400
+#: win32\PublicHubsFrame.cpp:402
 msgid "&Connect"
 msgstr "连接(&C)"
 
@@ -228,7 +223,7 @@ msgstr "复制(&C)"
 msgid "&Copy\tCtrl+C"
 msgstr "复制(&C)\tCtrl+C"
 
-#: win32\MainWindow.cpp:1750
+#: win32\MainWindow.cpp:1771
 msgid "&Customize\tDouble-click"
 msgstr "自定义(&C)\t双击"
 
@@ -249,7 +244,7 @@ msgid "&Disconnect"
 msgstr "断开连接(&D)"
 
 #: win32\DirectoryListingFrame.cpp:852 win32\DirectoryListingFrame.cpp:879
-#: win32\DirectoryListingFrame.cpp:892 win32\SearchFrame.cpp:851
+#: win32\DirectoryListingFrame.cpp:892 win32\SearchFrame.cpp:872
 msgid "&Download"
 msgstr "下载(&D)"
 
@@ -289,7 +284,7 @@ msgstr "转到目录(&G)"
 msgid "&Help"
 msgstr "帮助(&H)"
 
-#: win32\MainWindow.cpp:1766
+#: win32\MainWindow.cpp:1787
 msgid "&Hide\tCtrl+1"
 msgstr "隐藏(&H)\tCtrl+1"
 
@@ -349,11 +344,10 @@ msgstr "刷新(&R)"
 #: win32\FavHubGroupsDlg.cpp:108 win32\FavHubsFrame.cpp:140
 #: win32\FavHubsFrame.cpp:371 win32\FavoriteDirsPage.cpp:78
 #: win32\PluginPage.cpp:120 win32\PluginPage.cpp:263 win32\QueueFrame.cpp:941
-#: win32\QueueFrame.cpp:955 win32\QueueFrame.cpp:969 win32\SearchFrame.cpp:867
-#: win32\SearchTypesPage.cpp:94 win32\StringListDlg.cpp:160
-#: win32\UCPage.cpp:76 win32\UploadPage.cpp:90 win32\UserMatchPage.cpp:98
-#: win32\UsersFrame.cpp:466 win32\FinishedFrameBase.h:467
-#: win32\FinishedFrameBase.h:492
+#: win32\QueueFrame.cpp:955 win32\QueueFrame.cpp:969 win32\SearchFrame.cpp:888
+#: win32\SearchTypesPage.cpp:94 win32\StringListDlg.cpp:160 win32\UCPage.cpp:76
+#: win32\UploadPage.cpp:90 win32\UserMatchPage.cpp:98 win32\UsersFrame.cpp:466
+#: win32\FinishedFrameBase.h:467 win32\FinishedFrameBase.h:492
 msgid "&Remove"
 msgstr "删除(&R)"
 
@@ -391,7 +385,7 @@ msgstr "用户(&U)\tCtrl+U"
 msgid "&View"
 msgstr "查看(&V)"
 
-#: win32\DirectoryListingFrame.cpp:856 win32\SearchFrame.cpp:855
+#: win32\DirectoryListingFrame.cpp:856 win32\SearchFrame.cpp:876
 #: win32\FinishedFrameBase.h:463
 msgid "&View as text"
 msgstr "以文本方式查看(&V)"
@@ -498,8 +492,8 @@ msgstr "主动模式(让DC++使用NAT-PMP/UPnP来配置路由)"
 msgid "Add"
 msgstr "新增"
 
-#: win32\HubFrame.cpp:1305 win32\PublicHubsFrame.cpp:401
-#: win32\WinUtil.cpp:1660 win32\UserInfoBase.h:161
+#: win32\HubFrame.cpp:1305 win32\PublicHubsFrame.cpp:403 win32\WinUtil.cpp:1660
+#: win32\UserInfoBase.h:161
 msgid "Add To &Favorites"
 msgstr "添加到 &收藏夹"
 
@@ -643,11 +637,11 @@ msgstr "程序"
 msgid "Application version"
 msgstr "程序版本"
 
-#: win32\SearchFrame.cpp:172
+#: win32\SearchFrame.cpp:193
 msgid "At least"
 msgstr "至少"
 
-#: win32\SearchFrame.cpp:173
+#: win32\SearchFrame.cpp:194
 msgid "At most"
 msgstr "至多"
 
@@ -757,7 +751,7 @@ msgid "Away mode on: %1%"
 msgstr "打开离开状态: %1%"
 
 #: win32\ADLSProperties.cpp:100 win32\ExpertsPage.cpp:54
-#: win32\ExpertsPage.cpp:55 win32\ExpertsPage.cpp:57 win32\SearchFrame.cpp:183
+#: win32\ExpertsPage.cpp:55 win32\ExpertsPage.cpp:57 win32\SearchFrame.cpp:204
 #: win32\UploadFilteringPage.cpp:76 win32\UploadFilteringPage.cpp:81
 msgid "B"
 msgstr "B"
@@ -811,7 +805,7 @@ msgstr "机器人"
 msgid "Break on first ADLSearch match"
 msgstr "ADL搜索中得到第一个匹配文件后停止"
 
-#: win32\DownloadPage.cpp:60 win32\DownloadPage.cpp:72
+#: win32\DownloadPage.cpp:61 win32\DownloadPage.cpp:73
 msgid "Browse..."
 msgstr "浏览..."
 
@@ -837,7 +831,7 @@ msgstr "CRC 已校验"
 msgid "CRC32 inconsistency (SFV-Check)"
 msgstr "CRC32 出错(SFV-Check)"
 
-#: win32\PublicHubsFrame.cpp:494
+#: win32\PublicHubsFrame.cpp:496
 msgid "Cached hub list is corrupted or unsupported"
 msgstr "缓存hub列表被在破坏或不支持"
 
@@ -929,7 +923,7 @@ msgstr "关闭所有文件列表窗口"
 msgid "Close all hubs"
 msgstr "关闭全部hubs"
 
-#: win32\MainWindow.cpp:374 win32\MainWindow.cpp:1716
+#: win32\MainWindow.cpp:374 win32\MainWindow.cpp:1737
 msgid "Close all hubs of a favorite group"
 msgstr "关闭收藏组的全部站点"
 
@@ -945,7 +939,7 @@ msgstr "关闭所有搜索窗口"
 msgid "Close disconnected hubs"
 msgstr "关闭已连接的站点"
 
-#: win32\MainWindow.cpp:375 win32\MainWindow.cpp:1716
+#: win32\MainWindow.cpp:375 win32\MainWindow.cpp:1737
 msgid "Close hubs not in a favorite group"
 msgstr "关闭非收藏组的站点"
 
@@ -970,7 +964,7 @@ msgstr "编译器"
 msgid "Configure"
 msgstr "设置"
 
-#: win32\DownloadPage.cpp:118
+#: win32\DownloadPage.cpp:121
 msgid "Configure Public Hub Lists"
 msgstr "设定公众服务器列表"
 
@@ -1077,8 +1071,8 @@ msgstr "复制magnet链接"
 msgid "Copy user information"
 msgstr "个人信息"
 
-#: win32\HubFrame.cpp:64 win32\PublicHubsFrame.cpp:49
-#: win32\TransferView.cpp:59 win32\UserInfoBase.cpp:133
+#: win32\HubFrame.cpp:64 win32\PublicHubsFrame.cpp:49 win32\TransferView.cpp:59
+#: win32\UserInfoBase.cpp:133
 msgid "Country"
 msgstr "国家/地区"
 
@@ -1137,7 +1131,7 @@ msgstr "D: %1%"
 msgid "D: %1%/s (%2%)"
 msgstr "D: %1%/s (%2%)"
 
-#: win32\MainWindow.cpp:1913
+#: win32\MainWindow.cpp:1934
 #, boost-format
 msgid ""
 "D: %1%/s (%2%)\r\n"
@@ -1167,12 +1161,12 @@ msgid "Decrease priority"
 msgstr "设定优先级"
 
 #: win32\AppearancePage.cpp:142 win32\AppearancePage.cpp:175
-#: win32\ConnectivityManualPage.cpp:259 win32\FavHubProperties.cpp:269
+#: win32\ConnectivityManualPage.cpp:261 win32\FavHubProperties.cpp:269
 #: win32\WinUtil.cpp:1180
 msgid "Default"
 msgstr "默认"
 
-#: win32\DownloadPage.cpp:52
+#: win32\DownloadPage.cpp:53
 msgid "Default download directory"
 msgstr "默认下载目录"
 
@@ -1221,13 +1215,13 @@ msgstr ""
 msgid "Direct encrypted private message channel"
 msgstr "发送私人消息(&S)"
 
-#: win32\DownloadPage.cpp:46
+#: win32\DownloadPage.cpp:47
 msgid "Directories"
 msgstr "目录"
 
 #: win32\ADLSProperties.cpp:77 win32\DirectoryListingFrame.cpp:1573
-#: win32\FavoriteDirsPage.cpp:41 win32\LogPage.cpp:74
-#: win32\SearchFrame.cpp:490 win32\UploadPage.cpp:47
+#: win32\FavoriteDirsPage.cpp:41 win32\LogPage.cpp:74 win32\SearchFrame.cpp:511
+#: win32\UploadPage.cpp:47
 msgid "Directory"
 msgstr "目录"
 
@@ -1268,6 +1262,10 @@ msgstr "论坛"
 #: win32\NotificationsPage.cpp:93
 msgid "Display a balloon popup"
 msgstr "显示气泡提示"
+
+#: win32\AdvancedPage.cpp:54
+msgid "Display testing nags"
+msgstr ""
 
 #: win32\NotificationsPage.cpp:118
 msgid "Display the balloon only when DC++ is in the background"
@@ -1358,12 +1356,12 @@ msgstr "下载匹配的"
 msgid "Download Queue"
 msgstr "下载队列"
 
-#: win32\PublicHubsFrame.cpp:481
+#: win32\PublicHubsFrame.cpp:483
 #, boost-format
 msgid "Download failed: %1%"
 msgstr "下载失败:  %1%"
 
-#: win32\TransferView.cpp:1136 win32\WinUtil.cpp:92
+#: win32\TransferView.cpp:1135 win32\WinUtil.cpp:92
 msgid "Download finished"
 msgstr "下载完成"
 
@@ -1371,7 +1369,7 @@ msgstr "下载完成"
 msgid "Download full list"
 msgstr "下载完整列表"
 
-#: win32\MainWindow.cpp:887 win32\MainWindow.cpp:1894
+#: win32\MainWindow.cpp:887 win32\MainWindow.cpp:1915
 msgid "Download limit"
 msgstr "下载限制"
 
@@ -1397,15 +1395,15 @@ msgstr "下载通道数设置"
 msgid "Download speed"
 msgstr "下载速度"
 
-#: win32\SearchFrame.cpp:877
+#: win32\SearchFrame.cpp:898
 msgid "Download to..."
 msgstr "下载到..."
 
-#: win32\SearchFrame.cpp:853
+#: win32\SearchFrame.cpp:874
 msgid "Download whole directory"
 msgstr "下载整个目录"
 
-#: win32\SearchFrame.cpp:905
+#: win32\SearchFrame.cpp:926
 msgid "Download whole directory to..."
 msgstr "下载整个目录到..."
 
@@ -1413,7 +1411,7 @@ msgstr "下载整个目录到..."
 msgid "Downloaded"
 msgstr "已下载"
 
-#: win32\PublicHubsFrame.cpp:496
+#: win32\PublicHubsFrame.cpp:498
 #, boost-format
 msgid "Downloaded hub list is corrupted or unsupported (%1%)"
 msgstr "下载站点列表出错或不支持 (%1%)"
@@ -1436,11 +1434,11 @@ msgstr "正在从 %1% 用户下载"
 msgid "Downloading list..."
 msgstr "正在下载列表..."
 
-#: win32\PublicHubsFrame.cpp:226 win32\PublicHubsFrame.cpp:411
+#: win32\PublicHubsFrame.cpp:226 win32\PublicHubsFrame.cpp:413
 msgid "Downloading public hub list..."
 msgstr "正在下载公共服务器列表..."
 
-#: win32\PublicHubsFrame.cpp:477
+#: win32\PublicHubsFrame.cpp:479
 #, boost-format
 msgid "Downloading public hub list... (%1%)"
 msgstr "正在下载公共服务器列表... (%1%)"
@@ -1515,7 +1513,7 @@ msgstr "当Windows会话锁定时启用离开模式"
 msgid "Enable safe and compressed transfers"
 msgstr "使用安全、压缩传输"
 
-#: win32\AdvancedPage.cpp:53
+#: win32\AdvancedPage.cpp:52
 msgid "Enable segmented downloads"
 msgstr "启用分段下载"
 
@@ -1536,7 +1534,7 @@ msgstr "正在下载"
 msgid "Encrypted transfer"
 msgstr "加密传输"
 
-#: win32\SearchFrame.cpp:141
+#: win32\SearchFrame.cpp:162
 msgid "Enter search here"
 msgstr "在这里搜索"
 
@@ -1601,7 +1599,7 @@ msgstr "准确大小"
 msgid "Example hub tab"
 msgstr "站点标签页样例"
 
-#: win32\MainWindow.cpp:1897
+#: win32\MainWindow.cpp:1918
 msgid "Exit"
 msgstr "退出"
 
@@ -1699,6 +1697,10 @@ msgstr "收藏夹"
 msgid "Features"
 msgstr "特点"
 
+#: win32\MainWindow.cpp:1502 win32\MainWindow.cpp:1513
+msgid "Feel free to report any bug via Help > Links > Report a bug."
+msgstr ""
+
 #: win32\DirectoryListingFrame.cpp:64 win32\DirectoryListingFrame.cpp:1566
 #: win32\SearchFrame.cpp:50 win32\TransferView.cpp:48
 msgid "File"
@@ -1750,7 +1752,7 @@ msgstr "文件不存在"
 msgid "File size"
 msgstr "文件大小"
 
-#: win32\SearchFrame.cpp:189
+#: win32\SearchFrame.cpp:210
 msgid "File type"
 msgstr "文件类型"
 
@@ -1785,11 +1787,11 @@ msgstr "文件: %1%"
 msgid "Filter hubs"
 msgstr "过滤的站点"
 
-#: win32\SearchFrame.cpp:265
+#: win32\SearchFrame.cpp:286
 msgid "Filter search results"
 msgstr "过滤搜索结果"
 
-#: win32\SearchFrame.cpp:261
+#: win32\SearchFrame.cpp:282
 msgid "Filter search results:"
 msgstr "过滤搜索结果:"
 
@@ -1902,7 +1904,7 @@ msgid "Get started"
 msgstr "开始"
 
 #: win32\ADLSProperties.cpp:103 win32\ListFilter.cpp:155
-#: win32\SearchFrame.cpp:186
+#: win32\SearchFrame.cpp:207
 msgid "GiB"
 msgstr "GiB"
 
@@ -1948,7 +1950,7 @@ msgstr "按照用户分组"
 msgid "Guess user country from IP"
 msgstr "根据IP地址猜测用户所在国家"
 
-#: win32\DownloadPage.cpp:120
+#: win32\DownloadPage.cpp:127
 msgid "HTTP Proxy (for hublist only)"
 msgstr "HTTP 代理 (仅用于服务器列表)"
 
@@ -1972,12 +1974,11 @@ msgstr "帮助中心"
 msgid "Hidden user"
 msgstr "隐藏的用户"
 
-#: win32\SearchFrame.cpp:212
+#: win32\SearchFrame.cpp:233
 msgid "Hide files already in share"
 msgstr "隐藏文件已被共享"
 
-#: win32\QueueFrame.cpp:408 win32\QueueFrame.cpp:997
-#: win32\TransferView.cpp:553
+#: win32\QueueFrame.cpp:408 win32\QueueFrame.cpp:997 win32\TransferView.cpp:553
 msgid "High"
 msgstr "高"
 
@@ -1985,8 +1986,7 @@ msgstr "高"
 msgid "High prio max size"
 msgstr "高优先级的最大尺寸"
 
-#: win32\QueueFrame.cpp:409 win32\QueueFrame.cpp:998
-#: win32\TransferView.cpp:554
+#: win32\QueueFrame.cpp:409 win32\QueueFrame.cpp:998 win32\TransferView.cpp:554
 msgid "Highest"
 msgstr "最高"
 
@@ -2016,9 +2016,8 @@ msgstr "命中数"
 msgid "Homepage"
 msgstr "主页"
 
-#: win32\FavHubProperties.cpp:74 win32\SearchFrame.cpp:58
-#: win32\TabsPage.cpp:37 win32\TransferView.cpp:52 win32\UCPage.cpp:39
-#: win32\FinishedFrameBase.h:743
+#: win32\FavHubProperties.cpp:74 win32\SearchFrame.cpp:58 win32\TabsPage.cpp:37
+#: win32\TransferView.cpp:52 win32\UCPage.cpp:39 win32\FinishedFrameBase.h:743
 msgid "Hub"
 msgstr "服务器"
 
@@ -2051,9 +2050,9 @@ msgstr "站点地址或磁力链"
 msgid "Hub already exists as a favorite"
 msgstr "站点已在收藏夹中"
 
-#: win32\PublicHubsFrame.cpp:485
-#, boost-format
-msgid "Hub list downloaded%1% (%2%)"
+#: win32\PublicHubsFrame.cpp:487
+#, fuzzy, boost-format
+msgid "Hub list downloaded (%1%)"
 msgstr "站点列表已下载%1% (%2%)"
 
 #: win32\HubFrame.cpp:603
@@ -2073,7 +2072,7 @@ msgstr "站点"
 msgid "Hublist"
 msgstr "Hub列表"
 
-#: win32\HistoryPage.cpp:81 win32\SearchFrame.cpp:218
+#: win32\HistoryPage.cpp:81 win32\SearchFrame.cpp:239
 msgid "Hubs"
 msgstr "站点数"
 
@@ -2089,12 +2088,12 @@ msgstr "站点（可操作）"
 msgid "Hubs (registered)"
 msgstr "站点（已注册）"
 
-#: win32\SearchFrame.cpp:232
+#: win32\SearchFrame.cpp:253
 #, fuzzy
 msgid "Hubs where I'm op"
 msgstr "仅在我是管理员的地方"
 
-#: win32\SearchFrame.cpp:234
+#: win32\SearchFrame.cpp:255
 msgid "Hubs with secure transfers"
 msgstr ""
 
@@ -2123,7 +2122,7 @@ msgstr "IP (v4)"
 msgid "IP (v6)"
 msgstr "IP (v6)"
 
-#: win32\MainWindow.cpp:1604
+#: win32\MainWindow.cpp:1625
 msgid ""
 "IP -> country mappings are disabled. Turn them back on via Settings > "
 "Appearance."
@@ -2154,7 +2153,7 @@ msgid "Identification (leave blank for defaults)"
 msgstr "身份识别 (不填则与默认相同)"
 
 #: win32\TransferView.cpp:167 win32\TransferView.cpp:353
-#: win32\TransferView.cpp:1192
+#: win32\TransferView.cpp:1190
 msgid "Idle"
 msgstr "空闲"
 
@@ -2227,7 +2226,7 @@ msgstr "无效的扩展名：%1%"
 msgid "Invalid file list name"
 msgstr "文件列表名无效"
 
-#: win32\SearchFrame.cpp:1000
+#: win32\SearchFrame.cpp:1021
 msgid "Invalid input value for TTH search"
 msgstr ""
 
@@ -2297,7 +2296,7 @@ msgstr "关键字搜索："
 #: win32\ADLSProperties.cpp:101 win32\ExpertsPage.cpp:46
 #: win32\ExpertsPage.cpp:49 win32\ListFilter.cpp:159 win32\QueuePage.cpp:73
 #: win32\QueuePage.cpp:79 win32\QueuePage.cpp:85 win32\QueuePage.cpp:91
-#: win32\QueuePage.cpp:139 win32\SearchFrame.cpp:184
+#: win32\QueuePage.cpp:139 win32\SearchFrame.cpp:205
 msgid "KiB"
 msgstr "KiB"
 
@@ -2360,7 +2359,7 @@ msgstr "让DC++决定最好的连接设置"
 msgid "Let DC++ draw tabs"
 msgstr "让DC++绘制标签页"
 
-#: win32\DownloadPage.cpp:78
+#: win32\DownloadPage.cpp:79
 msgid "Limits"
 msgstr "限制"
 
@@ -2390,7 +2389,7 @@ msgstr "载入DC++中, 请稍候... (%1%)"
 msgid "Loading file list: %1%"
 msgstr "载入文件列表：%1%"
 
-#: win32\PublicHubsFrame.cpp:489
+#: win32\PublicHubsFrame.cpp:491
 #, boost-format
 msgid "Locally cached (as of %1%) version of the hub list loaded (%2%)"
 msgstr "已载本地缓存（%1%）的入站点列表版本（%2%）"
@@ -2440,8 +2439,7 @@ msgstr "登录"
 msgid "Logs"
 msgstr "日志"
 
-#: win32\QueueFrame.cpp:406 win32\QueueFrame.cpp:995
-#: win32\TransferView.cpp:551
+#: win32\QueueFrame.cpp:406 win32\QueueFrame.cpp:995 win32\TransferView.cpp:551
 msgid "Low"
 msgstr "低"
 
@@ -2449,8 +2447,7 @@ msgstr "低"
 msgid "Low prio max size"
 msgstr "低优先级最大尺寸"
 
-#: win32\QueueFrame.cpp:405 win32\QueueFrame.cpp:994
-#: win32\TransferView.cpp:550
+#: win32\QueueFrame.cpp:405 win32\QueueFrame.cpp:994 win32\TransferView.cpp:550
 msgid "Lowest"
 msgstr "最低"
 
@@ -2572,7 +2569,7 @@ msgstr "最大上传率 (KiB/s) (0 = 不限)"
 msgid "Maximum number of recent items to save"
 msgstr "保存\"最近的项目\"的最大数量"
 
-#: win32\DownloadPage.cpp:95
+#: win32\DownloadPage.cpp:96
 msgid "Maximum simultaneous downloads (0 = infinite)"
 msgstr "同一文件最大同时下载数 (0 = 无限)"
 
@@ -2581,7 +2578,7 @@ msgid "Menu bar\tCtrl+0"
 msgstr "菜单\tCtrl+0"
 
 #: win32\ADLSProperties.cpp:102 win32\ExpertsPage.cpp:50
-#: win32\ListFilter.cpp:157 win32\SearchFrame.cpp:185
+#: win32\ListFilter.cpp:157 win32\SearchFrame.cpp:206
 msgid "MiB"
 msgstr "MB"
 
@@ -2639,16 +2636,14 @@ msgid "Most of these options require that you restart DC++."
 msgstr "注意：某些选项需要重启DC++"
 
 #: win32\ADLSearchFrame.cpp:104 win32\FavHubsFrame.cpp:133
-#: win32\FavHubsFrame.cpp:369 win32\PluginPage.cpp:115
-#: win32\PluginPage.cpp:261 win32\StringListDlg.cpp:150 win32\UCPage.cpp:72
-#: win32\UserMatchPage.cpp:94
+#: win32\FavHubsFrame.cpp:369 win32\PluginPage.cpp:115 win32\PluginPage.cpp:261
+#: win32\StringListDlg.cpp:150 win32\UCPage.cpp:72 win32\UserMatchPage.cpp:94
 msgid "Move &Down"
 msgstr "下移(&D)"
 
 #: win32\ADLSearchFrame.cpp:98 win32\FavHubsFrame.cpp:126
-#: win32\FavHubsFrame.cpp:368 win32\PluginPage.cpp:110
-#: win32\PluginPage.cpp:260 win32\StringListDlg.cpp:145 win32\UCPage.cpp:68
-#: win32\UserMatchPage.cpp:90
+#: win32\FavHubsFrame.cpp:368 win32\PluginPage.cpp:110 win32\PluginPage.cpp:260
+#: win32\StringListDlg.cpp:145 win32\UCPage.cpp:68 win32\UserMatchPage.cpp:90
 msgid "Move &Up"
 msgstr "上移(&U)"
 
@@ -2754,7 +2749,7 @@ msgstr "没有可用的帮助信息"
 msgid "No matches found for: %1%"
 msgstr "没有找到匹配：%1%"
 
-#: win32\DownloadPage.cpp:105
+#: win32\DownloadPage.cpp:106
 msgid "No new downloads if speed exceeds (KiB/s, 0 = disable)"
 msgstr "速度超过此值时不开始新的下载任务 (kB/s, 0 =禁用)"
 
@@ -2778,7 +2773,7 @@ msgstr "无法下载，找不到用户共享该文件"
 msgid "Noon"
 msgstr "中午"
 
-#: win32\QueueFrame.cpp:407 win32\QueueFrame.cpp:996 win32\SearchFrame.cpp:171
+#: win32\QueueFrame.cpp:407 win32\QueueFrame.cpp:996 win32\SearchFrame.cpp:192
 #: win32\TransferView.cpp:552
 msgid "Normal"
 msgstr "普通"
@@ -2803,7 +2798,7 @@ msgstr "注意：自定义搜索类型将仅用于ADC站点！"
 msgid "Note; Files appear in the share only after they've been hashed!"
 msgstr "注意; 新文件仅在被hash结束后才会出现在共享列表里!"
 
-#: win32\DownloadPage.cpp:108
+#: win32\DownloadPage.cpp:109
 #, no-c-format
 msgid "Note; because of changing download speeds, this is not 100% accurate..."
 msgstr "注意; 由于下载速度不断变化, 因此这不是 100% 准确..."
@@ -2845,7 +2840,7 @@ msgstr "只显示已经完全下载下来的文件"
 msgid "Only show joins / parts for favorite users"
 msgstr "只显示好友的 进/出 消息"
 
-#: win32\SearchFrame.cpp:206
+#: win32\SearchFrame.cpp:227
 msgid "Only users with free slots"
 msgstr "只显示有空闲通道的用户"
 
@@ -2857,7 +2852,7 @@ msgstr "打开目录(&f)"
 msgid "Open crash log"
 msgstr "打开崩溃日志"
 
-#: win32\MainWindow.cpp:314 win32\MainWindow.cpp:458 win32\MainWindow.cpp:1891
+#: win32\MainWindow.cpp:314 win32\MainWindow.cpp:458 win32\MainWindow.cpp:1912
 msgid "Open downloads directory"
 msgstr "打开下载目录"
 
@@ -3117,15 +3112,15 @@ msgstr "传出连接的代理服务器设置"
 msgid "Public Hubs"
 msgstr "公共Hub"
 
-#: win32\DownloadPage.cpp:112
+#: win32\DownloadPage.cpp:113 win32\DownloadPage.cpp:158
 msgid "Public Hubs list"
 msgstr "公共 Hub 列表"
 
-#: win32\DownloadPage.cpp:115
+#: win32\DownloadPage.cpp:116
 msgid "Public Hubs list URL"
 msgstr "公共 Hub 列表网址"
 
-#: win32\SearchFrame.cpp:150
+#: win32\SearchFrame.cpp:171
 msgid "Purge"
 msgstr "清除"
 
@@ -3176,7 +3171,7 @@ msgstr "重新载入资源"
 msgid "Reached the %1% of the file list, continuing from the %2%"
 msgstr "获取到文件列表的%1%，继续获取%2%"
 
-#: win32\SearchFrame.cpp:1129
+#: win32\SearchFrame.cpp:1150
 msgid "Ready to search..."
 msgstr "准备搜索..."
 
@@ -3337,6 +3332,11 @@ msgstr "正在请求 %1%"
 msgid "Require TLS ADC client-client connections"
 msgstr "要求TLS ADC 客户端-客户端 连接"
 
+#: win32\DownloadPage.cpp:123
+#, fuzzy
+msgid "Reset Public Hub Lists"
+msgstr "设定公众服务器列表"
+
 #: win32\HashProgressDlg.cpp:186
 msgid "Resume hashing"
 msgstr "恢复hashing"
@@ -3355,17 +3355,17 @@ msgstr "SOCKS5"
 
 #: win32\ConnectivityManualPage.cpp:82 win32\MainWindow.cpp:452
 #: win32\NotepadFrame.cpp:109 win32\RichTextBox.cpp:112
-#: win32\SearchFrame.cpp:104 win32\SearchFrame.cpp:156 win32\TabsPage.cpp:40
+#: win32\SearchFrame.cpp:125 win32\SearchFrame.cpp:177 win32\TabsPage.cpp:40
 msgid "Search"
 msgstr "搜索"
 
-#: win32\SearchFrame.cpp:1002 win32\SearchFrame.cpp:1083
-#: win32\SearchFrame.cpp:1095 win32\SearchFrame.cpp:1125
+#: win32\SearchFrame.cpp:1023 win32\SearchFrame.cpp:1104
+#: win32\SearchFrame.cpp:1116 win32\SearchFrame.cpp:1146
 #, boost-format
 msgid "Search - %1%"
 msgstr "搜索 - %1%"
 
-#: win32\SearchFrame.cpp:1130
+#: win32\SearchFrame.cpp:1151
 msgid "Search - Ready to search..."
 msgstr "搜索 - 就绪..."
 
@@ -3382,7 +3382,7 @@ msgstr "搜索关键字"
 msgid "Search by TTH"
 msgstr "搜索菜单"
 
-#: win32\SearchFrame.cpp:131
+#: win32\SearchFrame.cpp:152
 msgid "Search for"
 msgstr "搜索"
 
@@ -3394,7 +3394,7 @@ msgstr "搜索其它下载点"
 msgid "Search history"
 msgstr "搜索框下拉历史数"
 
-#: win32\SearchFrame.cpp:201
+#: win32\SearchFrame.cpp:222
 msgid "Search options"
 msgstr "搜索选项"
 
@@ -3419,7 +3419,7 @@ msgstr "搜索类型"
 msgid "Search types"
 msgstr "搜索类型"
 
-#: win32\SearchFrame.cpp:1077
+#: win32\SearchFrame.cpp:1098
 #, boost-format
 msgid "Searching for %1%..."
 msgstr "正在搜索 %1%..."
@@ -3429,7 +3429,7 @@ msgstr "正在搜索 %1%..."
 msgid "Searching for: %1%"
 msgstr "正在搜索：%1%"
 
-#: win32\SearchFrame.cpp:1093 win32\SearchFrame.cpp:1123
+#: win32\SearchFrame.cpp:1114 win32\SearchFrame.cpp:1144
 #, boost-format
 msgid "Searching too soon, next search in %1% second"
 msgid_plural "Searching too soon, next search in %1% seconds"
@@ -3526,7 +3526,7 @@ msgid ""
 "is less than the current number of slots, no uploads are cancelled."
 msgstr ""
 
-#: win32\MainWindow.cpp:466 win32\MainWindow.cpp:1893
+#: win32\MainWindow.cpp:466 win32\MainWindow.cpp:1914
 #: win32\SettingsDialog.cpp:373
 msgid "Settings"
 msgstr "设置"
@@ -3564,15 +3564,15 @@ msgstr "已共享的文件"
 msgid "Sharing"
 msgstr "共享"
 
-#: win32\ShellMenu.cpp:107
+#: win32\ShellMenu.cpp:104
 msgid "Shell menu"
 msgstr "外观菜单"
 
-#: win32\ShellMenu.cpp:109
+#: win32\ShellMenu.cpp:106
 msgid "Shell menus"
 msgstr "外观菜单"
 
-#: win32\MainWindow.cpp:1890
+#: win32\MainWindow.cpp:1911
 msgid "Show"
 msgstr "显示(恢复窗口)"
 
@@ -3589,8 +3589,8 @@ msgstr "显示DC++生产的"
 msgid "Show timestamps in chat by default"
 msgstr "默认在聊天窗口显示时间戳"
 
-#: win32\DirectoryListingFrame.cpp:66 win32\MainWindow.cpp:1754
-#: win32\QueueFrame.cpp:54 win32\SearchFrame.cpp:54 win32\SearchFrame.cpp:161
+#: win32\DirectoryListingFrame.cpp:66 win32\MainWindow.cpp:1775
+#: win32\QueueFrame.cpp:54 win32\SearchFrame.cpp:54 win32\SearchFrame.cpp:182
 #: win32\TransferView.cpp:56 win32\UploadPage.cpp:48
 msgid "Size"
 msgstr "文件大小"
@@ -3695,7 +3695,7 @@ msgstr "速度: %1%/s"
 msgid "Start"
 msgstr "开始..."
 
-#: win32\AdvancedPage.cpp:54
+#: win32\AdvancedPage.cpp:53
 msgid "Start DC++ when Windows starts"
 msgstr ""
 
@@ -3771,8 +3771,7 @@ msgid "TLS Keyprint"
 msgstr "TLS 密钥"
 
 #: win32\AboutDlg.cpp:113 win32\DirectoryListingFrame.cpp:68
-#: win32\QueueFrame.cpp:62 win32\SearchFrame.cpp:61
-#: win32\TransferView.cpp:1004
+#: win32\QueueFrame.cpp:62 win32\SearchFrame.cpp:61 win32\TransferView.cpp:1004
 msgid "TTH"
 msgstr "TTH"
 
@@ -3796,13 +3795,25 @@ msgstr "标签页"
 msgid "Tag"
 msgstr "标记"
 
-#: win32\MainWindow.cpp:1622 win32\MainWindow.cpp:1682
+#: win32\MainWindow.cpp:1504
+msgid "Testing nags can be fully disabled via Settings > Advanced."
+msgstr ""
+
+#: win32\MainWindow.cpp:1500
+msgid "Testing version of DC++"
+msgstr ""
+
+#: win32\MainWindow.cpp:1501 win32\MainWindow.cpp:1512
+msgid "Thank you for using a testing version of DC++!"
+msgstr ""
+
+#: win32\MainWindow.cpp:1643 win32\MainWindow.cpp:1703
 #, boost-format
 msgid "The %1% GeoIP database could not be updated"
 msgstr "%1% GeoIP数据库无法更新"
 
-#: win32\MainWindow.cpp:1649 win32\MainWindow.cpp:1651
-#: win32\MainWindow.cpp:1675
+#: win32\MainWindow.cpp:1670 win32\MainWindow.cpp:1672
+#: win32\MainWindow.cpp:1696
 #, boost-format
 msgid "The %1% GeoIP database has been successfully updated"
 msgstr "%1% GeoIP 数据库成功更新"
@@ -3832,7 +3843,7 @@ msgstr ""
 "\n"
 "如果你选择了 '不'，这些站点将会被移动默认组。"
 
-#: win32\MainWindow.cpp:1785
+#: win32\MainWindow.cpp:1806
 msgid ""
 "The menu bar is now hidden. Press Alt or F10 to temporarily bring it back "
 "into view."
@@ -3862,10 +3873,21 @@ msgstr "此Hub不在收藏夹中"
 msgid "This is an example of a balloon popup notification!"
 msgstr "这是气泡提示的样例！"
 
+#: win32\MainWindow.cpp:1503
+msgid "This message will show up in the status bar in the future."
+msgstr ""
+
 #: win32\SearchTypesPage.cpp:213
 msgid ""
 "This will delete all defined search types and restore the default ones. Do "
 "you want to continue?"
+msgstr "这将删除全部定义好的搜索类型和还原默认值。继续？"
+
+#: win32\DownloadPage.cpp:158
+#, fuzzy
+msgid ""
+"This will remove all existing hublist entries and reset to the default "
+"preconfigured ones. Do you really want to proceed?"
 msgstr "这将删除全部定义好的搜索类型和还原默认值。继续？"
 
 #: win32\ListFilter.cpp:153
@@ -3908,7 +3930,7 @@ msgstr "切换用户加入站点的显示方式。仅对新加入的用户生效
 msgid "Toggles visibility of the list of users for the current hub."
 msgstr ""
 
-#: win32\MainWindow.cpp:1748
+#: win32\MainWindow.cpp:1769
 msgid "Toolbar"
 msgstr "工具栏"
 
@@ -3993,7 +4015,7 @@ msgstr ""
 msgid "Under what name you see the directory"
 msgstr "给该目录取一个别名"
 
-#: win32\DownloadPage.cpp:64
+#: win32\DownloadPage.cpp:65
 msgid "Unfinished downloads directory"
 msgstr "未完成下载文件目录"
 
@@ -4027,7 +4049,7 @@ msgstr "删除插件"
 msgid "Updating a plugin"
 msgstr ""
 
-#: win32\MainWindow.cpp:1626
+#: win32\MainWindow.cpp:1647
 #, boost-format
 msgid "Updating the %1% GeoIP database..."
 msgstr "正在更新%1% GeoIP 数据库..."
@@ -4036,7 +4058,7 @@ msgstr "正在更新%1% GeoIP 数据库..."
 msgid "Upload Slots"
 msgstr "上传槽"
 
-#: win32\MainWindow.cpp:887 win32\MainWindow.cpp:1895
+#: win32\MainWindow.cpp:887 win32\MainWindow.cpp:1916
 msgid "Upload limit"
 msgstr "上传限制"
 
@@ -4054,7 +4076,7 @@ msgstr "上传限制设置为%1% KiB/s"
 msgid "Upload limit: %1%/s - Click to adjust"
 msgstr "上传限制：%1%/s - 单击“调整”"
 
-#: win32\MainWindow.cpp:1854 win32\UploadPage.cpp:105
+#: win32\MainWindow.cpp:1875 win32\UploadPage.cpp:105
 msgid "Upload slots"
 msgstr "上传通道数"
 
@@ -4084,10 +4106,6 @@ msgstr "上传"
 #: win32\AdvancedPage.cpp:47
 msgid "Use CTRL for line history"
 msgstr "使用CTRL键调用输入语句的历史"
-
-#: win32\AdvancedPage.cpp:52
-msgid "Use Coral network for HTTP downloads (improves reliability)"
-msgstr "为HTTP下载使用Coral网络（提高可靠度）"
 
 #: win32\ProxyPage.cpp:109
 msgid "Use SOCKS5 server to resolve host names"
@@ -4225,7 +4243,7 @@ msgid ""
 msgstr ""
 
 #: win32\PublicHubsFrame.cpp:288
-#, boost-format
+#, fuzzy, boost-format
 msgid ""
 "Warning: fraudulent hub list detected!\r\n"
 "\r\n"
@@ -4235,7 +4253,9 @@ msgid ""
 "\r\n"
 "It is strongly recommended that you do not connect to any of the hubs listed "
 "here and that you remove this hub list from your collection by using the "
-"\"Configure\" button below."
+"\"Configure\" button below. Alternatively you can go to Settings / Downloads "
+"pane and click \"Reset Public Hub Lists\" button to get the list of latest "
+"known safe and working public hub list servers."
 msgstr ""
 "警告：检测到欺诈集线器列表！\r\n"
 "\r\n"
@@ -4302,11 +4322,11 @@ msgstr "和"
 msgid "beginning"
 msgstr "开始"
 
-#: win32\MainWindow.cpp:1610
+#: win32\MainWindow.cpp:1631
 msgid "city"
 msgstr "城市"
 
-#: win32\MainWindow.cpp:1610
+#: win32\MainWindow.cpp:1631
 msgid "country"
 msgstr "乡村"
 
