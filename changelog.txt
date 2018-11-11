@@ -1,3 +1,4 @@
+-- 0.868 2018-11-12 --
 * During the first run of a new DC++ release shipped with new default hublist servers the new addresses are automatically added
   to the existing setup (no manual reset/configuration needed anymore) (emtee)
 * Revisit default hublists, add new working hublist servers; blacklist discontinued or inaccessible server addresses (emtee)
