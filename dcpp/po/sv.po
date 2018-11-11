@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2016-09-14 20:51+0200\n"
+"POT-Creation-Date: 2018-11-12 00:07+0100\n"
 "PO-Revision-Date: 2016-09-06 21:41+0000\n"
 "Last-Translator: Fredrik Ullner <ullner@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -15,40 +15,40 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2016-09-14 18:21+0000\n"
-"X-Generator: Launchpad (build 18186)\n"
+"X-Launchpad-Export-Date: 2018-11-11 22:49+0000\n"
+"X-Generator: Launchpad (build 18816)\n"
 
 #: dcpp\DownloadManager.cpp:360
 #, boost-format
 msgid " - Queued: %1%"
 msgstr " - Köad: %1%"
 
-#: dcpp\Util.cpp:575
+#: dcpp\Util.cpp:578
 #, c-format, boost-format
 msgid "%'lld B"
 msgstr "%'lld B"
 
-#: dcpp\Util.cpp:537
+#: dcpp\Util.cpp:540
 #, c-format, boost-format
 msgid "%.02f GiB"
 msgstr "%.02f GiB"
 
-#: dcpp\Util.cpp:533
+#: dcpp\Util.cpp:536
 #, c-format, boost-format
 msgid "%.02f KiB"
 msgstr "%.02f KiB"
 
-#: dcpp\Util.cpp:535
+#: dcpp\Util.cpp:538
 #, c-format, boost-format
 msgid "%.02f MiB"
 msgstr "%.02f MiB"
 
-#: dcpp\Util.cpp:541
+#: dcpp\Util.cpp:544
 #, c-format, boost-format
 msgid "%.02f PiB"
 msgstr "%.02f PiB"
 
-#: dcpp\Util.cpp:539
+#: dcpp\Util.cpp:542
 #, c-format, boost-format
 msgid "%.02f TiB"
 msgstr "%.02f TiB"
@@ -63,8 +63,8 @@ msgstr "%1% %2% (tillagd av %3%)"
 msgid "%1% %2% port (%3% %4%)"
 msgstr "%1% %2% port (%3% %4%)"
 
-#: dcpp\HttpConnection.cpp:143 dcpp\HttpConnection.cpp:226
-#: dcpp\HttpConnection.cpp:282
+#: dcpp\HttpConnection.cpp:134 dcpp\HttpConnection.cpp:217
+#: dcpp\HttpConnection.cpp:273
 #, boost-format
 msgid "%1% (%2%)"
 msgstr "%1% (%2%)"
@@ -96,7 +96,7 @@ msgstr "%1% är inget giltigt plugin"
 msgid "%1% is not compatible with %2%"
 msgstr "%1% är inte kompatibel med %2%"
 
-#: dcpp\HashManager.cpp:693
+#: dcpp\HashManager.cpp:695
 #, boost-format
 msgid ""
 "%1% not shared; calculated CRC32 does not match the one found in SFV file."
@@ -127,12 +127,12 @@ msgstr "%1%: %2%"
 msgid "%1%: File not available"
 msgstr "%1%: Filen ej tillgänglig"
 
-#: dcpp\Util.cpp:531
+#: dcpp\Util.cpp:534
 #, c-format, boost-format
 msgid "%d B"
 msgstr "%d B"
 
-#: dcpp\Util.cpp:571
+#: dcpp\Util.cpp:574
 #, c-format, boost-format
 msgid "%s B"
 msgstr "%s B"
@@ -211,7 +211,7 @@ msgstr "CRC32-inkonsekvens (SFV-kontroll)"
 msgid "CRC32 inconsistency (SFV-Check): %1%"
 msgstr "CRC32-inkonsekvens (SFV-kontroll):  %1%"
 
-#: dcpp\CryptoManager.cpp:507
+#: dcpp\CryptoManager.cpp:521
 #, boost-format
 msgid "Certificate verification for %1% failed with error: %2%"
 msgstr "Certificatverifiering för %1% misslyckades med fel: %2%"
@@ -220,7 +220,7 @@ msgstr "Certificatverifiering för %1% misslyckades med fel: %2%"
 msgid "Compressed"
 msgstr "Komprimerad"
 
-#: dcpp\BufferedSocket.cpp:203 dcpp\SSLSocket.cpp:171 dcpp\SSLSocket.cpp:178
+#: dcpp\BufferedSocket.cpp:203 dcpp\SSLSocket.cpp:172 dcpp\SSLSocket.cpp:179
 msgid "Connection closed"
 msgstr "Anslutningen stängd"
 
@@ -358,33 +358,34 @@ msgstr "Dubblerad källa: %1%"
 msgid "Encrypted transfer"
 msgstr "Krypterad överföring"
 
-#: dcpp\HttpConnection.cpp:252
+#: dcpp\HttpConnection.cpp:243
 #, boost-format
 msgid "Endless redirection loop (%1%)"
 msgstr "Oändlig hänvisningsloop (%1%)"
 
-#: dcpp\HashManager.cpp:541
+#: dcpp\HashManager.cpp:543
 #, boost-format
 msgid "Error creating hash data file: %1%"
 msgstr "Fel vid skapande av hashdatafil: %1%"
 
 #: dcpp\BZUtils.cpp:35 dcpp\BZUtils.cpp:56 dcpp\BZUtils.cpp:64
-#: dcpp\ZUtils.cpp:37 dcpp\ZUtils.cpp:60 dcpp\ZUtils.cpp:82 dcpp\ZUtils.cpp:92
+#: dcpp\ZUtils.cpp:37 dcpp\ZUtils.cpp:73 dcpp\ZUtils.cpp:100
+#: dcpp\ZUtils.cpp:110
 msgid "Error during compression"
 msgstr "Fel under komprimering"
 
 #: dcpp\BZUtils.cpp:76 dcpp\BZUtils.cpp:98 dcpp\BZUtils.cpp:101
-#: dcpp\CryptoManager.cpp:658 dcpp\CryptoManager.cpp:677
-#: dcpp\CryptoManager.cpp:691 dcpp\ZUtils.cpp:106 dcpp\ZUtils.cpp:131
-#: dcpp\ZUtils.cpp:145
+#: dcpp\CryptoManager.cpp:672 dcpp\CryptoManager.cpp:691
+#: dcpp\CryptoManager.cpp:705 dcpp\ZUtils.cpp:124 dcpp\ZUtils.cpp:149
+#: dcpp\ZUtils.cpp:163
 msgid "Error during decompression"
 msgstr "Fel under avkomprimering"
 
-#: dcpp\CryptoManager.cpp:141
+#: dcpp\CryptoManager.cpp:139
 msgid "Error generating certificate"
 msgstr "Fel vid skapande av ceritikat"
 
-#: dcpp\HashManager.cpp:698
+#: dcpp\HashManager.cpp:700
 #, boost-format
 msgid "Error hashing %1%: %2%"
 msgstr "Fel under hashning %1%: %2%"
@@ -399,7 +400,7 @@ msgstr "Fel vid laddning av %1%"
 msgid "Error loading %1%: %2%"
 msgstr "Fel vid laddning av %1%: %2%"
 
-#: dcpp\HashManager.cpp:109 dcpp\HashManager.cpp:311
+#: dcpp\HashManager.cpp:111 dcpp\HashManager.cpp:313
 #, boost-format
 msgid "Error saving hash data: %1%"
 msgstr "Fel vid sparandet av hashdatan: %1%"
@@ -408,7 +409,7 @@ msgstr "Fel vid sparandet av hashdatan: %1%"
 msgid "Executable"
 msgstr "Körbar"
 
-#: dcpp\MappingManager.cpp:110 dcpp\MappingManager.cpp:226
+#: dcpp\MappingManager.cpp:110 dcpp\MappingManager.cpp:227
 msgid "Failed to create port mappings"
 msgstr "Kunde inte skapa portmappning"
 
@@ -421,15 +422,15 @@ msgstr "Kunde inte hämta externt IP"
 msgid "Failed to initialize the %1% interface"
 msgstr "Kunde inte initialisera gränssnittet %1%"
 
-#: dcpp\CryptoManager.cpp:374
+#: dcpp\CryptoManager.cpp:388
 msgid "Failed to load certificate file"
 msgstr "Kunde inte ladda certifikatfil"
 
-#: dcpp\CryptoManager.cpp:382
+#: dcpp\CryptoManager.cpp:396
 msgid "Failed to load private key"
 msgstr "Kunde inte ladda privat nyckel"
 
-#: dcpp\CryptoManager.cpp:395
+#: dcpp\CryptoManager.cpp:409
 #, boost-format
 msgid "Failed to load trusted certificate from %1%"
 msgstr "Kunde inte ladda betrott certifikat från %1%"
@@ -443,7 +444,7 @@ msgstr "Kunde inte mappa porten %1% (%2% %3%) med gränssnittet %4%"
 msgid "Failed to negotiate base protocol"
 msgstr "Kunde inte förhandla basprotokoll"
 
-#: dcpp\MappingManager.cpp:235
+#: dcpp\MappingManager.cpp:238
 #, boost-format
 msgid ""
 "Failed to remove port mappings from the %1% device with the %2% interface"
@@ -488,17 +489,17 @@ msgstr ""
 msgid "File list refresh initiated"
 msgstr "Uppdatering av fillistan påbörjad"
 
-#: dcpp\HashManager.cpp:81
+#: dcpp\HashManager.cpp:83
 #, boost-format
 msgid "Finished hashing: %1%"
 msgstr "Hashning färdig: %1%"
 
-#: dcpp\HashManager.cpp:75
+#: dcpp\HashManager.cpp:77
 #, boost-format
 msgid "Finished hashing: %1% (%2% at %3%/s)"
 msgstr "Hashning färdig: %1% (%2% at %3%/s)"
 
-#: dcpp\HashManager.cpp:78
+#: dcpp\HashManager.cpp:80
 #, boost-format
 msgid "Finished hashing: %1% (%2%)"
 msgstr "Hashning färdig: %1% (%2%)"
@@ -507,11 +508,11 @@ msgstr "Hashning färdig: %1% (%2%)"
 msgid "Full tree does not match TTH root"
 msgstr "Fullt träd matchar inte TTH-roten"
 
-#: dcpp\CryptoManager.cpp:363
+#: dcpp\CryptoManager.cpp:377
 msgid "Generated new TLS certificate"
 msgstr "Genererade nytt TLS-certifikat"
 
-#: dcpp\MappingManager.cpp:246
+#: dcpp\MappingManager.cpp:249
 msgid "Generic"
 msgstr "Allmän"
 
@@ -524,11 +525,11 @@ msgstr "Fel vid HTTP nerladdning vid skapande av fil %1%, fel: %2%"
 msgid "Hash database"
 msgstr "Hashdatabas"
 
-#: dcpp\HashManager.cpp:620
+#: dcpp\HashManager.cpp:622
 msgid "Hash database rebuilt"
 msgstr "Hashdatabasen ombyggd"
 
-#: dcpp\HashManager.cpp:68 dcpp\HashManager.cpp:256
+#: dcpp\HashManager.cpp:70 dcpp\HashManager.cpp:258
 #, boost-format
 msgid "Hashing failed: %1%"
 msgstr "Hashning misslyckades: %1%"
@@ -545,7 +546,7 @@ msgstr ""
 msgid "Ignore"
 msgstr "Ignorera"
 
-#: dcpp\FavoriteManager.cpp:720
+#: dcpp\FavoriteManager.cpp:725
 #, boost-format
 msgid "Invalid URL: %1%"
 msgstr "Ogiltig länk: %1%"
@@ -573,7 +574,7 @@ msgstr "Ogiltigt filnamn hittades vid indexering av mappen %1%"
 msgid "Invalid regular expression: %1%"
 msgstr "Ogiltigt reguljärt uttryck: %1%"
 
-#: dcpp\SettingsManager.cpp:679
+#: dcpp\SettingsManager.cpp:700
 msgid "Invalid search type name"
 msgstr "Ogiltigt namn för söktyp"
 
@@ -589,7 +590,7 @@ msgstr ""
 "Ogiltig målfil (saknar mapp, kontrollera inställning för standard "
 "nedladdningsmapp)"
 
-#: dcpp\FavoriteManager.cpp:463
+#: dcpp\FavoriteManager.cpp:467
 msgid "Kick user(s)"
 msgstr "Sparka användare"
 
@@ -610,7 +611,7 @@ msgstr "Saknar samband för %1%"
 msgid "More bytes written than requested"
 msgstr "Skrev fler byte än efterfrågat"
 
-#: dcpp\CryptoManager.cpp:130
+#: dcpp\CryptoManager.cpp:128
 msgid "No certificate file chosen"
 msgstr "Ingen certifikatfil vald"
 
@@ -618,7 +619,7 @@ msgstr "Ingen certifikatfil vald"
 msgid "No directory specified"
 msgstr "Ingen mapp specificerad"
 
-#: dcpp\CryptoManager.cpp:127
+#: dcpp\CryptoManager.cpp:125
 msgid "No private key file chosen"
 msgstr "Ingen privat nyckelfil vald"
 
@@ -626,7 +627,7 @@ msgstr "Ingen privat nyckelfil vald"
 msgid "No slots available"
 msgstr "Inga platser tillgängliga"
 
-#: dcpp\SettingsManager.cpp:737
+#: dcpp\SettingsManager.cpp:758
 msgid "No such search type"
 msgstr "Ingen sådan söktyp"
 
@@ -641,8 +642,8 @@ msgstr "Lyssnar inte efter anslutningar. Vänligen starta om %1%"
 
 #: dcpp\ClientManager.cpp:149 dcpp\ClientManager.cpp:180
 #: dcpp\FinishedManager.cpp:131 dcpp\FinishedManager.cpp:137
-#: dcpp\FinishedManager.cpp:143 dcpp\SearchManager.cpp:266
-#: dcpp\SearchManager.cpp:343 dcpp\Transfer.cpp:81 dcpp\Transfer.cpp:85
+#: dcpp\FinishedManager.cpp:143 dcpp\SearchManager.cpp:323
+#: dcpp\SearchManager.cpp:384 dcpp\Transfer.cpp:81 dcpp\Transfer.cpp:85
 msgid "Offline"
 msgstr "Offline"
 
@@ -658,7 +659,7 @@ msgstr "Passivt läge"
 msgid "Picture"
 msgstr "Bild"
 
-#: dcpp\MappingManager.cpp:240
+#: dcpp\MappingManager.cpp:243
 #, boost-format
 msgid "Port mapping: %1%"
 msgstr "Portmappning: %1%"
@@ -668,7 +669,7 @@ msgid ""
 "Public IP address detected, selecting active mode with direct connection"
 msgstr "Offentlig IP-adress upptäckt. Väljer aktivt läge med direktanslutning"
 
-#: dcpp\FavoriteManager.cpp:467
+#: dcpp\FavoriteManager.cpp:471
 msgid "Redirect user(s)"
 msgstr "Omdirigera användare"
 
@@ -730,32 +731,32 @@ msgid ""
 msgstr ""
 "Lyckades skapa portmappningar på enhet %1% med användargränssnittet %2%"
 
-#: dcpp\MappingManager.cpp:234
+#: dcpp\MappingManager.cpp:237
 #, boost-format
 msgid ""
 "Successfully removed port mappings from the %1% device with the %2% interface"
 msgstr ""
 "Lyckades ta bort portmappningar från enhet %1% med användargränssnittet %2%"
 
-#: dcpp\CryptoManager.cpp:606
+#: dcpp\CryptoManager.cpp:620
 #, boost-format
 msgid "Supplied KeyPrint %1% did not match %2%."
 msgstr "Skickad KeyPrint %1% matchade inte %2%"
 
-#: dcpp\CryptoManager.cpp:604
+#: dcpp\CryptoManager.cpp:618
 msgid "Supplied KeyPrint did not match any certificate."
 msgstr "Skickad KeyPrint matchade inte något certificat"
 
-#: dcpp\CryptoManager.cpp:365
+#: dcpp\CryptoManager.cpp:379
 #, boost-format
 msgid "TLS disabled, failed to generate certificate: %1%"
 msgstr "TLS avaktiverat. Misslyckades att generera certifikat: %1%"
 
-#: dcpp\CryptoManager.cpp:355
+#: dcpp\CryptoManager.cpp:369
 msgid "TLS disabled, no certificate file set"
 msgstr "TLS avaktiverat. Ingen certifikatsfil angiven"
 
-#: dcpp\SSLSocket.cpp:189
+#: dcpp\SSLSocket.cpp:190
 msgid "TLS error"
 msgstr "TLS-fel"
 
@@ -825,11 +826,11 @@ msgstr ""
 "Denna hubb försöker att använda din klient för att spamma %1%. Vänligen "
 "upplys hubbägaren om att åtgärda detta"
 
-#: dcpp\SettingsManager.cpp:683 dcpp\SettingsManager.cpp:705
+#: dcpp\SettingsManager.cpp:704 dcpp\SettingsManager.cpp:726
 msgid "This search type already exists"
 msgstr "Denna söktyp finns redan"
 
-#: dcpp\HttpConnection.cpp:297
+#: dcpp\HttpConnection.cpp:288
 #, boost-format
 msgid "Too much data in response body (%1%)"
 msgstr "För mycket data i svarshuvudet (%1%)"
@@ -842,7 +843,7 @@ msgstr "Överföring"
 msgid "Transfer (TCP)"
 msgstr "Överföring (TCP)"
 
-#: dcpp\HttpConnection.cpp:213
+#: dcpp\HttpConnection.cpp:204
 #, boost-format
 msgid "Transfer-encoding error (%1%)"
 msgstr "Överföringsfel (%1%)"
@@ -877,7 +878,7 @@ msgstr ""
 msgid "Unable to open filelist: %1%"
 msgstr "Kan inte öppna fillista: %1%"
 
-#: dcpp\HashManager.cpp:122
+#: dcpp\HashManager.cpp:124
 msgid "Unable to read hash data file"
 msgstr "Kan inte läsa hashdatafil"
 

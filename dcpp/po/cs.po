@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2016-09-14 20:51+0200\n"
+"POT-Creation-Date: 2018-11-12 00:07+0100\n"
 "PO-Revision-Date: 2012-09-09 21:22+0000\n"
 "Last-Translator: M@nk <Unknown>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -15,40 +15,40 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2016-09-14 18:21+0000\n"
-"X-Generator: Launchpad (build 18186)\n"
+"X-Launchpad-Export-Date: 2018-11-11 22:49+0000\n"
+"X-Generator: Launchpad (build 18816)\n"
 
 #: dcpp\DownloadManager.cpp:360
 #, boost-format
 msgid " - Queued: %1%"
 msgstr ""
 
-#: dcpp\Util.cpp:575
+#: dcpp\Util.cpp:578
 #, c-format, boost-format
 msgid "%'lld B"
 msgstr "%'lld B"
 
-#: dcpp\Util.cpp:537
+#: dcpp\Util.cpp:540
 #, c-format, boost-format
 msgid "%.02f GiB"
 msgstr "%.02f GiB"
 
-#: dcpp\Util.cpp:533
+#: dcpp\Util.cpp:536
 #, c-format, boost-format
 msgid "%.02f KiB"
 msgstr "%.02f KiB"
 
-#: dcpp\Util.cpp:535
+#: dcpp\Util.cpp:538
 #, c-format, boost-format
 msgid "%.02f MiB"
 msgstr "%.02f MiB"
 
-#: dcpp\Util.cpp:541
+#: dcpp\Util.cpp:544
 #, c-format, boost-format
 msgid "%.02f PiB"
 msgstr "%.02f PiB"
 
-#: dcpp\Util.cpp:539
+#: dcpp\Util.cpp:542
 #, c-format, boost-format
 msgid "%.02f TiB"
 msgstr "%.02f TiB"
@@ -63,8 +63,8 @@ msgstr ""
 msgid "%1% %2% port (%3% %4%)"
 msgstr ""
 
-#: dcpp\HttpConnection.cpp:143 dcpp\HttpConnection.cpp:226
-#: dcpp\HttpConnection.cpp:282
+#: dcpp\HttpConnection.cpp:134 dcpp\HttpConnection.cpp:217
+#: dcpp\HttpConnection.cpp:273
 #, boost-format
 msgid "%1% (%2%)"
 msgstr "%1% (%2%)"
@@ -96,7 +96,7 @@ msgstr "%1% není validní plugin"
 msgid "%1% is not compatible with %2%"
 msgstr ""
 
-#: dcpp\HashManager.cpp:693
+#: dcpp\HashManager.cpp:695
 #, boost-format
 msgid ""
 "%1% not shared; calculated CRC32 does not match the one found in SFV file."
@@ -129,12 +129,12 @@ msgstr ""
 msgid "%1%: File not available"
 msgstr "%1%: Soubor není dostupný"
 
-#: dcpp\Util.cpp:531
+#: dcpp\Util.cpp:534
 #, c-format, boost-format
 msgid "%d B"
 msgstr "%d B"
 
-#: dcpp\Util.cpp:571
+#: dcpp\Util.cpp:574
 #, c-format, boost-format
 msgid "%s B"
 msgstr "%s B"
@@ -210,7 +210,7 @@ msgstr "CRC32 nesuhlasí (SFV kontrola)"
 msgid "CRC32 inconsistency (SFV-Check): %1%"
 msgstr "CRC32 nesuhlasí (SFV kontrola)"
 
-#: dcpp\CryptoManager.cpp:507
+#: dcpp\CryptoManager.cpp:521
 #, boost-format
 msgid "Certificate verification for %1% failed with error: %2%"
 msgstr ""
@@ -219,7 +219,7 @@ msgstr ""
 msgid "Compressed"
 msgstr "Komprimovaný"
 
-#: dcpp\BufferedSocket.cpp:203 dcpp\SSLSocket.cpp:171 dcpp\SSLSocket.cpp:178
+#: dcpp\BufferedSocket.cpp:203 dcpp\SSLSocket.cpp:172 dcpp\SSLSocket.cpp:179
 msgid "Connection closed"
 msgstr "Spojení ukončeno"
 
@@ -346,33 +346,34 @@ msgstr "Duplicitní zdroj: %1%"
 msgid "Encrypted transfer"
 msgstr " Zabezpečený přenosový port (%1% TCP)"
 
-#: dcpp\HttpConnection.cpp:252
+#: dcpp\HttpConnection.cpp:243
 #, boost-format
 msgid "Endless redirection loop (%1%)"
 msgstr ""
 
-#: dcpp\HashManager.cpp:541
+#: dcpp\HashManager.cpp:543
 #, boost-format
 msgid "Error creating hash data file: %1%"
 msgstr "Chyba vytváření souboru hashe: %1%"
 
 #: dcpp\BZUtils.cpp:35 dcpp\BZUtils.cpp:56 dcpp\BZUtils.cpp:64
-#: dcpp\ZUtils.cpp:37 dcpp\ZUtils.cpp:60 dcpp\ZUtils.cpp:82 dcpp\ZUtils.cpp:92
+#: dcpp\ZUtils.cpp:37 dcpp\ZUtils.cpp:73 dcpp\ZUtils.cpp:100
+#: dcpp\ZUtils.cpp:110
 msgid "Error during compression"
 msgstr "Chyba pocesu komprese"
 
 #: dcpp\BZUtils.cpp:76 dcpp\BZUtils.cpp:98 dcpp\BZUtils.cpp:101
-#: dcpp\CryptoManager.cpp:658 dcpp\CryptoManager.cpp:677
-#: dcpp\CryptoManager.cpp:691 dcpp\ZUtils.cpp:106 dcpp\ZUtils.cpp:131
-#: dcpp\ZUtils.cpp:145
+#: dcpp\CryptoManager.cpp:672 dcpp\CryptoManager.cpp:691
+#: dcpp\CryptoManager.cpp:705 dcpp\ZUtils.cpp:124 dcpp\ZUtils.cpp:149
+#: dcpp\ZUtils.cpp:163
 msgid "Error during decompression"
 msgstr "Chyba během dekomprese"
 
-#: dcpp\CryptoManager.cpp:141
+#: dcpp\CryptoManager.cpp:139
 msgid "Error generating certificate"
 msgstr "Chyba generovaného certifikátu"
 
-#: dcpp\HashManager.cpp:698
+#: dcpp\HashManager.cpp:700
 #, boost-format
 msgid "Error hashing %1%: %2%"
 msgstr "Chyba hashování %1%: %2%"
@@ -387,7 +388,7 @@ msgstr "Chyba hashování %1%: %2%"
 msgid "Error loading %1%: %2%"
 msgstr "Chyba hashování %1%: %2%"
 
-#: dcpp\HashManager.cpp:109 dcpp\HashManager.cpp:311
+#: dcpp\HashManager.cpp:111 dcpp\HashManager.cpp:313
 #, boost-format
 msgid "Error saving hash data: %1%"
 msgstr "Chyba při ukládání hashe: %1%"
@@ -396,7 +397,7 @@ msgstr "Chyba při ukládání hashe: %1%"
 msgid "Executable"
 msgstr "Spustitelny"
 
-#: dcpp\MappingManager.cpp:110 dcpp\MappingManager.cpp:226
+#: dcpp\MappingManager.cpp:110 dcpp\MappingManager.cpp:227
 msgid "Failed to create port mappings"
 msgstr "Neúspěšné vytvoření mapování portů"
 
@@ -409,15 +410,15 @@ msgstr "Selhalo získání externí IP adresy"
 msgid "Failed to initialize the %1% interface"
 msgstr "Selhala inicializace  %1%  rozhraní"
 
-#: dcpp\CryptoManager.cpp:374
+#: dcpp\CryptoManager.cpp:388
 msgid "Failed to load certificate file"
 msgstr "Nemohu nahrát soubor s certifikátem"
 
-#: dcpp\CryptoManager.cpp:382
+#: dcpp\CryptoManager.cpp:396
 msgid "Failed to load private key"
 msgstr "Nemohu nahrát privátní klíč"
 
-#: dcpp\CryptoManager.cpp:395
+#: dcpp\CryptoManager.cpp:409
 #, boost-format
 msgid "Failed to load trusted certificate from %1%"
 msgstr ""
@@ -431,7 +432,7 @@ msgstr "Nepodařilo se vytvořit připojení"
 msgid "Failed to negotiate base protocol"
 msgstr "Nemohu nastavit základní protokol"
 
-#: dcpp\MappingManager.cpp:235
+#: dcpp\MappingManager.cpp:238
 #, fuzzy, boost-format
 msgid ""
 "Failed to remove port mappings from the %1% device with the %2% interface"
@@ -473,17 +474,17 @@ msgstr "Probíhá obnovení seznamu souborů, prosím počkejte"
 msgid "File list refresh initiated"
 msgstr "Zahájení obnovení seznamu souborů"
 
-#: dcpp\HashManager.cpp:81
+#: dcpp\HashManager.cpp:83
 #, boost-format
 msgid "Finished hashing: %1%"
 msgstr "Dokončeno hashování: %1%"
 
-#: dcpp\HashManager.cpp:75
+#: dcpp\HashManager.cpp:77
 #, boost-format
 msgid "Finished hashing: %1% (%2% at %3%/s)"
 msgstr "Hash hotov: %1% (%2% at %3%/s)"
 
-#: dcpp\HashManager.cpp:78
+#: dcpp\HashManager.cpp:80
 #, boost-format
 msgid "Finished hashing: %1% (%2%)"
 msgstr "Hash hotov:: %1% (%2%)"
@@ -492,11 +493,11 @@ msgstr "Hash hotov:: %1% (%2%)"
 msgid "Full tree does not match TTH root"
 msgstr "Stáhnutý strom neodpovídá porovnanému TTH základu (TTH root)"
 
-#: dcpp\CryptoManager.cpp:363
+#: dcpp\CryptoManager.cpp:377
 msgid "Generated new TLS certificate"
 msgstr "Vygenerovaný nový TLS certifikát"
 
-#: dcpp\MappingManager.cpp:246
+#: dcpp\MappingManager.cpp:249
 msgid "Generic"
 msgstr ""
 
@@ -509,11 +510,11 @@ msgstr ""
 msgid "Hash database"
 msgstr "Hash databáze"
 
-#: dcpp\HashManager.cpp:620
+#: dcpp\HashManager.cpp:622
 msgid "Hash database rebuilt"
 msgstr "Hash databáze obnovena"
 
-#: dcpp\HashManager.cpp:68 dcpp\HashManager.cpp:256
+#: dcpp\HashManager.cpp:70 dcpp\HashManager.cpp:258
 #, boost-format
 msgid "Hashing failed: %1%"
 msgstr "Hashování selhalo: %1%"
@@ -530,7 +531,7 @@ msgstr ""
 msgid "Ignore"
 msgstr ""
 
-#: dcpp\FavoriteManager.cpp:720
+#: dcpp\FavoriteManager.cpp:725
 #, fuzzy, boost-format
 msgid "Invalid URL: %1%"
 msgstr "Hledání zakázáno: %1%"
@@ -559,7 +560,7 @@ msgstr "Nesprávný soubor najit během hashovaní adresáře %1%"
 msgid "Invalid regular expression: %1%"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:679
+#: dcpp\SettingsManager.cpp:700
 msgid "Invalid search type name"
 msgstr "Nespravné jméno typu hledaní"
 
@@ -575,7 +576,7 @@ msgstr ""
 "Chybný cílový soubor (chybějící adresář, zkontrolujte nastavení adresáře pro "
 "stáhnuté soubory)"
 
-#: dcpp\FavoriteManager.cpp:463
+#: dcpp\FavoriteManager.cpp:467
 msgid "Kick user(s)"
 msgstr "Vykopnout uživatele"
 
@@ -596,7 +597,7 @@ msgstr ""
 msgid "More bytes written than requested"
 msgstr "Zapsáno více dat, než je požadováno"
 
-#: dcpp\CryptoManager.cpp:130
+#: dcpp\CryptoManager.cpp:128
 msgid "No certificate file chosen"
 msgstr "Certifikát není vybrán"
 
@@ -604,7 +605,7 @@ msgstr "Certifikát není vybrán"
 msgid "No directory specified"
 msgstr "Nebyl zvolen adresář"
 
-#: dcpp\CryptoManager.cpp:127
+#: dcpp\CryptoManager.cpp:125
 msgid "No private key file chosen"
 msgstr "Soukromý klíč není vybrán"
 
@@ -612,7 +613,7 @@ msgstr "Soukromý klíč není vybrán"
 msgid "No slots available"
 msgstr "Nejsou volné žádné sloty"
 
-#: dcpp\SettingsManager.cpp:737
+#: dcpp\SettingsManager.cpp:758
 msgid "No such search type"
 msgstr "Hledaný typ nenalezen"
 
@@ -627,8 +628,8 @@ msgstr "Nenaslouchá připojením - prosím restartujte %1%"
 
 #: dcpp\ClientManager.cpp:149 dcpp\ClientManager.cpp:180
 #: dcpp\FinishedManager.cpp:131 dcpp\FinishedManager.cpp:137
-#: dcpp\FinishedManager.cpp:143 dcpp\SearchManager.cpp:266
-#: dcpp\SearchManager.cpp:343 dcpp\Transfer.cpp:81 dcpp\Transfer.cpp:85
+#: dcpp\FinishedManager.cpp:143 dcpp\SearchManager.cpp:323
+#: dcpp\SearchManager.cpp:384 dcpp\Transfer.cpp:81 dcpp\Transfer.cpp:85
 msgid "Offline"
 msgstr "Nepřipojen"
 
@@ -644,7 +645,7 @@ msgstr "Pasivní mód"
 msgid "Picture"
 msgstr "Obraz"
 
-#: dcpp\MappingManager.cpp:240
+#: dcpp\MappingManager.cpp:243
 #, boost-format
 msgid "Port mapping: %1%"
 msgstr ""
@@ -654,7 +655,7 @@ msgid ""
 "Public IP address detected, selecting active mode with direct connection"
 msgstr "Zjištěna veřejná IP adresa, byl zvolen aktivní mód s přímým připojením"
 
-#: dcpp\FavoriteManager.cpp:467
+#: dcpp\FavoriteManager.cpp:471
 msgid "Redirect user(s)"
 msgstr "Přesměrovat uživatele"
 
@@ -713,31 +714,31 @@ msgid ""
 "Successfully created port mappings on the %1% device with the %2% interface"
 msgstr ""
 
-#: dcpp\MappingManager.cpp:234
+#: dcpp\MappingManager.cpp:237
 #, fuzzy, boost-format
 msgid ""
 "Successfully removed port mappings from the %1% device with the %2% interface"
 msgstr "Nepodařilo se vytvořit připojení"
 
-#: dcpp\CryptoManager.cpp:606
+#: dcpp\CryptoManager.cpp:620
 #, boost-format
 msgid "Supplied KeyPrint %1% did not match %2%."
 msgstr ""
 
-#: dcpp\CryptoManager.cpp:604
+#: dcpp\CryptoManager.cpp:618
 msgid "Supplied KeyPrint did not match any certificate."
 msgstr ""
 
-#: dcpp\CryptoManager.cpp:365
+#: dcpp\CryptoManager.cpp:379
 #, boost-format
 msgid "TLS disabled, failed to generate certificate: %1%"
 msgstr "TLS zakázáno, nelze vygenerovat certifikát: %1%"
 
-#: dcpp\CryptoManager.cpp:355
+#: dcpp\CryptoManager.cpp:369
 msgid "TLS disabled, no certificate file set"
 msgstr "TLS zakázáno, chybí certifikát"
 
-#: dcpp\SSLSocket.cpp:189
+#: dcpp\SSLSocket.cpp:190
 msgid "TLS error"
 msgstr ""
 
@@ -803,11 +804,11 @@ msgstr ""
 "Tento hub se snaží použít vašeho klienta k rozesílání SPAMu %1%, prosím "
 "upozorněte vlastníka hubu k nápravě."
 
-#: dcpp\SettingsManager.cpp:683 dcpp\SettingsManager.cpp:705
+#: dcpp\SettingsManager.cpp:704 dcpp\SettingsManager.cpp:726
 msgid "This search type already exists"
 msgstr "Hledaný typ již existuje"
 
-#: dcpp\HttpConnection.cpp:297
+#: dcpp\HttpConnection.cpp:288
 #, boost-format
 msgid "Too much data in response body (%1%)"
 msgstr ""
@@ -820,7 +821,7 @@ msgstr "Přenos"
 msgid "Transfer (TCP)"
 msgstr "Přenos (TCP)"
 
-#: dcpp\HttpConnection.cpp:213
+#: dcpp\HttpConnection.cpp:204
 #, boost-format
 msgid "Transfer-encoding error (%1%)"
 msgstr ""
@@ -854,7 +855,7 @@ msgstr ""
 msgid "Unable to open filelist: %1%"
 msgstr "Nemohu otevřít seznam souborů: %1%"
 
-#: dcpp\HashManager.cpp:122
+#: dcpp\HashManager.cpp:124
 msgid "Unable to read hash data file"
 msgstr "Nelze číst hash souborů"
 

@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2016-09-14 20:52+0300\n"
-"PO-Revision-Date: 2016-09-07 16:41+0000\n"
+"POT-Creation-Date: 2018-11-12 00:08+0100\n"
+"PO-Revision-Date: 2018-11-11 11:36+0000\n"
 "Last-Translator: eMTee <Unknown>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2016-09-14 18:22+0000\n"
-"X-Generator: Launchpad (build 18186)\n"
+"X-Launchpad-Export-Date: 2018-11-11 22:50+0000\n"
+"X-Generator: Launchpad (build 18816)\n"
 
 #. type: Content of: <html><body><ul><li><div><placeholder><a>
 #: help/chat_commands.html:9 help/index.html:148
@@ -1287,17 +1287,16 @@ msgstr ""
 #: help/dialog_favorite_hub.html:42 help/dialog_favorite_hub.html:43
 #: help/index.html:62 help/window_favorite_hubs.html:30
 #: help/window_favorite_hubs.html:50 help/window_favorite_hubs.html:51
-#: help/window_main.html:29 help/window_main.html:143
-#: help/window_main.html:148 help/window_main.html:245
+#: help/window_main.html:29 help/window_main.html:143 help/window_main.html:148
+#: help/window_main.html:245
 msgid "Favorite hub groups"
 msgstr "Kedvenc hub csoportok"
 
 #. type: Content of: <html><body><dl><dd><div><placeholder><a>
 #: help/dialog_fav_hub_groups.html:10 help/index.html:33
 #: help/keyboard_commands.html:46 help/window_main.html:74
-#: help/window_main.html:75 help/window_main.html:208
-#: help/window_main.html:241 help/window_main.html:243
-#: help/window_main.html:244
+#: help/window_main.html:75 help/window_main.html:208 help/window_main.html:241
+#: help/window_main.html:243 help/window_main.html:244
 msgid "Favorite Hubs"
 msgstr "Kedvenc Hubok"
 
@@ -2281,7 +2280,7 @@ msgstr "Kedvenc felhasználók megfeleltetése"
 #: help/window_hub.html:113 help/window_main.html:78 help/window_main.html:79
 #: help/window_main.html:209 help/window_main.html:248
 #: help/window_main.html:249 help/window_public_hubs.html:16
-#: help/window_public_hubs.html:86 help/window_users.html:10
+#: help/window_public_hubs.html:84 help/window_users.html:10
 #: help/window_users.html:11
 msgid "Users"
 msgstr "Felhasználók"
@@ -3064,19 +3063,18 @@ msgstr ""
 #. type: Content of: <html><body><p>
 #: help/faq_install.html:17
 msgid ""
-"Note: if you use the portable (.zip) version of DC++ with Windows Vista or "
-"newer operating system then it's not recommended to unpack it to the Program "
-"Files directory. Doing so may cause loss of settings and/or unfinished "
-"downloads due to the <a po4a-id=0>User Account Control Data Redirection</a> "
-"technology."
+"Note: if you use the portable (.zip) version of DC++, then it's not "
+"recommended to unpack it to the Program Files directory. Doing so may cause "
+"loss of settings and/or unfinished downloads due to the <a po4a-id=0>User "
+"Account Control Data Redirection</a> technology."
 msgstr ""
-"<u>Figyelem</u>: ha a DC++ hordozható változatát (.zip) <u>Windows Vista "
-"vagy újabb</u> operációs rendszer alatt használod fontos tudni, hogy a "
-"hordozható változatot nem ajánlott kicsomagolni a Program Files könyvtárba, "
-"hacsak az UAC (magyarul Felhasználói fiókok felügyelete) szolgáltatás nincs "
-"teljesen kikapcsolva. Az innen való futtatás a beállítások és befejezetlen "
-"letöltések elvesztését és egyéb probémákat vonhat maga után a <a po4a-"
-"id=0>Microsoft User Account Control Data Redirection technológia</a> miatt."
+"Figyelem: ha a DC++ hordozható változatát (.zip)  használod fontos tudni, "
+"hogy a hordozható változatot nem ajánlott kicsomagolni a Program Files "
+"könyvtárba, hacsak az UAC (magyarul Felhasználói fiókok felügyelete) "
+"szolgáltatás nincs teljesen kikapcsolva. Az innen való futtatás a "
+"beállítások és befejezetlen letöltések elvesztését és egyéb probémákat "
+"vonhat maga után a <a po4a-id=0>Microsoft User Account Control Data "
+"Redirection</a> technológia miatt."
 
 #. type: Content of: <html><body><h1>
 #: help/faq_install.html:20
@@ -3806,34 +3804,33 @@ msgstr ""
 #: help/faq_portforward.html:89
 msgid ""
 "If you find the external IP is constantly changing, you can sign up to a "
-"free dynamic DNS service such as <a po4a-id=0>No-IP</a> , <a po4a-"
-"id=1>Dynip</a> or <a po4a-id=2>FreeDNS</a> and put your dynamic DNS address "
-"into the External / WAN IP field in DC++ <a po4a-id=3>Connection Settings</"
-"a>. Each DDNS provider has a downloadable IP updater software what updates "
-"the dynamic name service with your latest IP. Make sure you download, "
-"configure and run this program while using DC++. Many router models have "
-"DDNS client software included for specific DDNS provider(s) so it worth a "
-"check in your router configurations before choosing a provider. After you "
-"setup the built-in DDNS client you won't need to run any IP updater "
-"software, your router will automatically take care of updating your DNS name."
+"free dynamic DNS service such as <a po4a-id=0>No-IP</a> or <a po4a-"
+"id=1>FreeDNS</a> and put your dynamic DNS address into the External / WAN IP "
+"field in DC++ <a po4a-id=2>Connection Settings</a>. Each DDNS provider has a "
+"downloadable IP updater software what updates the dynamic name service with "
+"your latest IP. Make sure you download, configure and run this program while "
+"using DC++. Many router models have DDNS client software included for "
+"specific DDNS provider(s) so it worth a check in your router configurations "
+"before choosing a provider. After you setup the built-in DDNS client you "
+"won't need to run any IP updater software, your router will automatically "
+"take care of updating your DNS name."
 msgstr ""
 "Abban az esetben ha a külső IP címed változik (dinamikus IP cím) érdmes "
 "regisztrálni egy ingyenes dinamikus DNS szolgáltatásra, mint pl. a <a po4a-"
-"id=0>No-IP</a>, a <a po4a-id=1>Dynip</a> vagy a <a po4a-id=2>FreeDNS</a>. "
-"Ezután az IP cím helyett a dinamikus DNS címedet írd be a Külső / WAN IP "
-"mezőbe a <a po4a-id=3>Kapcsolatok beállításaiban</a>. Minden DDNS "
-"szolgáltató rendelkezik egy letölthető IP cím frissítő kliens programmal, "
-"amely az IP cím változáskor automatikusan frissíti a dinamikus név "
-"szolgáltatást. Töltsd le és futtasd ezt a programot, mikor a DC++-t "
-"használod. Sok router eleve beépítve tartalmaz kliens programot egy vagy "
-"több dinamikus névszolgáltató használatához, így mielőtt szolgáltatót "
-"választasz, érdemes ezt megnézni a router konfigurációjában. A routerben "
-"végzett beállítások esetén nincs szükség a letölthető IP frissítő "
-"szoftverre, ez esetben a router automatikusan elvégzi a dinamikus cím "
-"frissítését."
+"id=0>No-IP/a> vagy a <a po4a-id=1>FreeDNS/a> . Ezután az IP cím helyett a "
+"dinamikus DNS címedet írd be a Külső / WAN IP mezőbe a DC++ <a po4a-"
+"id=2>Kapcsolatok beállításaiban</a>. Minden DDNS szolgáltató rendelkezik egy "
+"letölthető IP cím frissítő kliens programmal, amely az IP cím változáskor "
+"automatikusan frissíti a dinamikus név szolgáltatást. Töltsd le és futtasd "
+"ezt a programot, mikor a DC++-t használod. Sok router eleve beépítve "
+"tartalmaz kliens programot egy vagy több dinamikus névszolgáltató "
+"használatához, így mielőtt szolgáltatót választasz, érdemes ezt megnézni a "
+"router konfigurációjában. A routerben végzett beállítások esetén nincs "
+"szükség a letölthető IP frissítő szoftverre, ez esetben a router "
+"automatikusan elvégzi a dinamikus cím frissítését."
 
 #. type: Content of: <html><body><ul><li>
-#: help/faq_portforward.html:96
+#: help/faq_portforward.html:94
 msgid ""
 "If you find that your internal IP changes when you restart your computer "
 "then your operating system is obtaining an IP address from your router at "
@@ -3855,7 +3852,7 @@ msgstr ""
 "módszerrel</a> kereshető meg."
 
 #. type: Content of: <html><body><ul><li>
-#: help/faq_portforward.html:97
+#: help/faq_portforward.html:95
 msgid ""
 "Another option to ensure you'll always have the same internal IP address is "
 "to set up static IP address for your computer. Here's a <a po4a-id=0>FAQ</a> "
@@ -3867,7 +3864,7 @@ msgstr ""
 "a különböző Windows operációs rendszerek alatt."
 
 #. type: Content of: <html><body><p>
-#: help/faq_portforward.html:100
+#: help/faq_portforward.html:98
 msgid ""
 "Besides normal file transfers DC++ is capable of <a po4a-id=0>secure</a> (<a "
 "po4a-id=1>SSL encrypted</a>) way of receiving and transmitting files on ADC "
@@ -4176,12 +4173,8 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li><ul><li>
 #: help/faq_settings_files.html:45
-msgid ""
-"<i>C:\\Users\\[your username]\\AppData\\Roaming\\DC++\\</i> in Windows Vista "
-"and later."
-msgstr ""
-"<i>C:\\Users\\[felhasználónév]\\AppData\\Roaming\\DC++\\</i> Windows Vista "
-"és újabb verzió esetén."
+msgid "<i>C:\\Users\\[your username]\\AppData\\Roaming\\DC++\\</i>"
+msgstr "<i>C:\\Users\\[felhasználónév]\\AppData\\Roaming\\DC++\\</i>"
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_settings_files.html:49
@@ -4307,18 +4300,18 @@ msgstr "Indítsd el a DC++-t. Ezzel készen is vagy."
 #: help/faq_settings_files.html:66
 msgid ""
 "<u>Warning</u>: do not unpack the portable (zipped) version of DC++ under "
-"the Program Files folder if you use <u>Windows Vista or later</u> unless you "
-"have the UAC service completely disabled. Doing so may cause loss of "
-"settings and/or unfinished downloads due to <a po4a-id=0>Microsoft's User "
-"Account Control Data Redirection technology</a>."
+"the Program Files folder unless you have the UAC service completely "
+"disabled. Doing so may cause loss of settings and/or unfinished downloads "
+"due to <a po4a-id=0>Microsoft's User Account Control Data Redirection "
+"technology</a>."
 msgstr ""
-"<u>Figyelem</u>: ha a DC++ hordozható változatát (.zip) <u>Windows Vista "
-"vagy újabb</u> operációs rendszer alatt használod fontos tudni, hogy a "
-"hordozható változatot nem ajánlott kicsomagolni a Program Files könyvtárba, "
-"hacsak az UAC (magyarul Felhasználói fiókok felügyelete) szolgáltatás nincs "
-"teljesen kikapcsolva. Az innen való futtatás a beállítások és befejezetlen "
-"letöltések elvesztését és egyéb probémákat vonhat maga után a <a po4a-"
-"id=0>Microsoft User Account Control Data Redirection technológia</a> miatt."
+"Figyelem: ha a DC++ hordozható változatát (.zip) használod fontos tudni, "
+"hogy a hordozható változatot nem ajánlott kicsomagolni a Program Files "
+"könyvtárba, hacsak az UAC (magyarul Felhasználói fiókok felügyelete) "
+"szolgáltatás nincs teljesen kikapcsolva. Az innen való futtatás a "
+"beállítások és befejezetlen letöltések elvesztését és egyéb probémákat "
+"vonhat maga után a <a po4a-id=0>Microsoft User Account Control Data "
+"Redirection</a> technológia miatt."
 
 #. type: Content of: <html><body><h2>
 #: help/faq_settings_files.html:68
@@ -4463,12 +4456,8 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/faq_settings_files.html:84
-msgid ""
-"<i>C:\\Users\\[your username]\\AppData\\Local\\DC++\\</i> in Windows Vista "
-"and later."
-msgstr ""
-"<i>C:\\Users\\[felhasználónév]\\AppData\\Local\\DC++\\</i> Windows Vista és "
-"újabb verzió esetén."
+msgid "<i>C:\\Users\\[your username]\\AppData\\Local\\DC++\\</i>"
+msgstr "<i>C:\\Users\\[felhasználónév]\\AppData\\Local\\DC++\\</i>"
 
 #. type: Content of: <html><body><h1>
 #: help/faq_slowdownload.html:9
@@ -4877,17 +4866,17 @@ msgstr ""
 msgid ""
 "The &quot;<acronym po4a-id=0>QoS</acronym> Packet Scheduler&quot; is enabled "
 "in your Windows so you are not able to use some reserved bandwidth for "
-"download. Follow <a po4a-id=1> this guide</a> to disable QoS in Windows "
-"Vista, 7 or 8.  Some routers also have QoS capabilities, but it shouldn't be "
-"enabled by default. Please consult your router's manual for more information."
+"download. Follow <a po4a-id=1> this guide</a> to disable QoS in Windows 7 or "
+"8.  Some routers also have QoS capabilities, but it shouldn't be enabled by "
+"default. Please consult your router's manual for more information."
 msgstr ""
-"Be van kapcsolva a Windows-ban a &quot;<acronym po4a-id=0>QoS</acronym> "
-"Csomag Ütemező&quot; szolgáltatás, ezért esetleg nem tudod igénybevenni a "
-"teljes rendelkezésre álló sávszélességet a letöltéshez. A QoS "
-"kikapcsolásához Vista, Windows 7 vagy 8 esetén kövesd <a po4a-id=1>ezt a "
-"leírást</a> (angolul).  Néhány router típusban szintén megtalálható a QoS "
-"funkció, bár általában alapértelmezetten nincs bekapcsolva. A routered "
-"dokumentációjában található erről további információ."
+"Be van kapcsolva a Windows-ban a &quot;<acronym po4a-id=0>QoS</a> Csomag "
+"Ütemező&quot; szolgáltatás, ezért esetleg nem tudod igénybevenni a teljes "
+"rendelkezésre álló sávszélességet a letöltéshez. A QoS kikapcsolásához "
+"Windows 7 vagy 8 esetén kövesd <a po4a-id=1>ezt a leírást</a> (angolul). "
+"Néhány router típusban szintén megtalálható a QoS funkció, bár általában "
+"alapértelmezetten nincs bekapcsolva. A routered dokumentációjában található "
+"erről további információ."
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_slowdownload.html:174
@@ -4897,9 +4886,9 @@ msgid ""
 "Windows become infected with spy/adware.  Even they are disinfected, their "
 "destructive modifications usually still remain. You can follow the official "
 "guided help from Microsoft how to restore these settings <a po4a-id=0>in "
-"Windows 7 and 8.x</a> and <a po4a-id=1>in Windows Vista</a>.  If you're "
-"running Windows 10 Anniversary Update or later you can try <a po4a-id=2>this "
-"tool</a> to fix network settings and more."
+"Windows 7 and 8.x</a>.  If you're running Windows 10 Anniversary Update or "
+"later you can try <a po4a-id=1>this tool</a> to fix network settings and "
+"more."
 msgstr ""
 "A számítógéped rosszindulatú programmal fertőzött és ez elállította az "
 "operációs rendszer alacsony színtű hálózati beállításait. Ez gyakori ha a "
@@ -4907,10 +4896,10 @@ msgstr ""
 "rendszer fertőtlenítése után is megmaradhatnak és gátolhatják a hálózatot "
 "használó programok normális működését. A Microsoft oldalán található "
 "hivatalos segítség lépésenként mutatja be, hogy mi módon lehet ezt a "
-"problémát megszüntetni <a po4a-id=0>Windows 7, 8.x</a> ill. <a po4a-"
-"id=1>Windows Vista</a> alatt. Ha Windows 10 Anniversary Update vagy újabb "
-"van a gépeden akkor megpróbálhatod <a po4a-id=2>ezt az eszközt</a> futtatni "
-"a hálózati és egyéb beállítások kijavítására."
+"problémát megszüntetni <a po4a-id=0>Windows 7 vagy 8.x alatt</a>. Ha Windows "
+"10 Anniversary Update vagy újabb van a gépeden akkor megpróbálhatod <a po4a-"
+"id=1>ezt az eszközt</a> futtatni a hálózati és egyéb beállítások "
+"kijavítására."
 
 #. type: Content of: <html><body><h1>
 #: help/faq_unblock.html:10
@@ -5091,15 +5080,6 @@ msgstr ""
 #. type: Content of: <html><body><p><ul><li>
 #: help/faq_unblock.html:60
 msgid ""
-"<u>in Windows Vista</u>: go to Control Panel -&gt; Windows Firewall -&gt; "
-"Exceptions Tab. Select DC++ and click Delete."
-msgstr ""
-"<u>Windows Vista esetén</u>: nyisd meg a Vezérlőpult -&gt; Windows Tűzfal -"
-"&gt; Kivételek fület. Itt válaszd ki a DC++-t és kattints a Törlés-re."
-
-#. type: Content of: <html><body><p><ul><li>
-#: help/faq_unblock.html:63
-msgid ""
 "<u>in Windows 7 or later</u>: go to Control Panel -&gt; Windows Firewall -"
 "&gt; Allow a program or feature through Windows Firewall. Select DC++ and "
 "click Remove."
@@ -5109,7 +5089,7 @@ msgstr ""
 "alblakot. Itt válaszd ki a DC++-t és kattints a Törlés-re."
 
 #. type: Content of: <html><body><p>
-#: help/faq_unblock.html:67
+#: help/faq_unblock.html:64
 msgid ""
 "Start DC++ again and if a firewall popup window appears asking permission "
 "for DC++, click Allow."
@@ -5118,7 +5098,7 @@ msgstr ""
 "kérve a DC++ számára, ott kattints az Engedélyezésre."
 
 #. type: Content of: <html><body><p>
-#: help/faq_unblock.html:70
+#: help/faq_unblock.html:67
 msgid ""
 "If the above doesn't help its wise to enable logging of packets that the "
 "firewall drops for troubleshooting DC++ (or any other applications') access. "
@@ -5130,23 +5110,7 @@ msgstr ""
 "Ehhez"
 
 #. type: Content of: <html><body><p><ul><li>
-#: help/faq_unblock.html:72
-msgid ""
-"<u>in Windows Vista</u>: you can find the firewall logging properties at "
-"Start Menu -&gt; All Programs -&gt; Administrative Tools -&gt; Windows "
-"Firewall with Advanced Security -&gt; Windows Firewall Properties -&gt; "
-"Profile tabs -&gt; Customize button under the Logging section under each of "
-"the profile tabs. You can also specify the path of the log file there."
-msgstr ""
-"<u>Windows Vista esetén</u>: a tűzfal naplózás tulajdonságai a következő "
-"helyen találhatóak : Start Menü -&gt; Minden program -&gt; Felügyeleti "
-"eszközök -&gt; Windows tűzfal megnövelt biztonsággal -&gt; Windows tűzfal "
-"tulajdonságok -&gt; Profil fülek -&gt; Testreszabás gomb a Naplózás rész "
-"alatt minden egyes profil fül alatt. A naplófájl útvonala is megadható ezen "
-"a helyen."
-
-#. type: Content of: <html><body><p><ul><li>
-#: help/faq_unblock.html:74
+#: help/faq_unblock.html:69
 msgid ""
 "<u>in Windows 7 and later</u>: go to Control Panel -&gt; Windows Firewall -"
 "&gt; Advanced Settings -&gt; Monitoring -&gt; Firewall. You can browse the "
@@ -5157,12 +5121,12 @@ msgstr ""
 "részt. Itt részletesen böngészhetőek a tűzfal események."
 
 #. type: Content of: <html><body><h2>
-#: help/faq_unblock.html:79
+#: help/faq_unblock.html:74
 msgid "Unblock DC++ in various 3rd party security software"
 msgstr "A DC++ engedélyezése a telepített biztonsági programokban"
 
 #. type: Content of: <html><body><p>
-#: help/faq_unblock.html:81
+#: help/faq_unblock.html:76
 msgid ""
 "The method for unblocking programs in 3rd party security software varies "
 "from product to product.  Check the program's help or manual for proper "
@@ -5183,7 +5147,7 @@ msgstr ""
 "is)."
 
 #. type: Content of: <html><body><p>
-#: help/faq_unblock.html:87
+#: help/faq_unblock.html:82
 msgid ""
 "After deleting the rules restart DC++. In most cases you'll be shown a popup "
 "window or a taskbar alert from the security software where you can properly "
@@ -5195,12 +5159,12 @@ msgstr ""
 "megfelelő kivételi szabályok létrehozására)."
 
 #. type: Content of: <html><body><p>
-#: help/faq_unblock.html:90
+#: help/faq_unblock.html:85
 msgid "Some additional tips:"
 msgstr "Néhány további tipp:"
 
 #. type: Content of: <html><body><p><ul><li>
-#: help/faq_unblock.html:92
+#: help/faq_unblock.html:87
 msgid ""
 "Almost all anti-virus suites (Norton 360, McAfee, CA, Eset, Kaspersky, F-"
 "Secure, AVG, etc.) include a firewall component with their \"typical\" "
@@ -5215,21 +5179,21 @@ msgstr ""
 "külön nem telepítettél és működésének semmi jelét nem tapasztalod."
 
 #. type: Content of: <html><body><p><ul><li>
-#: help/faq_unblock.html:96
+#: help/faq_unblock.html:91
 msgid ""
 "If you use a third party software firewall or securty suite then make sure "
-"you have the <a po4a-id=0>internal Windows firewall disabled</a>.  On Vista "
-"and later Windows versions your 3rd party firewall application most likely "
-"disables the internal firewall automatically."
+"you have the <a po4a-id=0>internal Windows firewall disabled</a>.  On "
+"Windows 7 and later Windows versions your 3rd party firewall application "
+"most likely disables the internal firewall automatically."
 msgstr ""
 "Ha telepített egyedi tűzfal szoftvert vagy biztonsági programcsomagot "
 "használsz, ellenőrizd, hogy a <a po4a-id=0>beépített Windows tűzfal ki "
-"legyen kapcsolva</a>. Vista vagy újabb Windows verziók esetében a külső "
+"legyen kapcsolva</a>.  Windows 7 vagy újabb Windows verziók esetében a külső "
 "gyártó által készített tűzfal szoftver nagy eséllyel magától is ki tudja "
 "kapcsolni a beépített tűzfalat."
 
 #. type: Content of: <html><body><p><ul><li>
-#: help/faq_unblock.html:100
+#: help/faq_unblock.html:95
 msgid ""
 "You can find configuration instructions for some popular firewall software "
 "<a po4a-id=0>here</a>."
@@ -5627,21 +5591,20 @@ msgstr ""
 #: help/get_started.html:18
 msgid ""
 "The newest version of DC++ should work well on any officially supported "
-"Windows client operating system, including Vista SP2, Windows 7 SP1, 8.x and "
-"10. Some older versions will run on Windows XP, 2000 or Win9x/ME but using DC"
-"++ on these old, discontinued and vulnerable operating systems is neither "
-"recommended nor supported.  As long as it downloaded from the <a po4a-"
-"id=0>official site</a>, DC++ contains no viruses or adware of any kind. DC++ "
-"is free; if you paid for it, ask for a refund!"
+"Windows client operating system, including Windows 7 SP1, 8.x and 10. Some "
+"older versions will run on Windows XP or Vista, but using DC++ on these old, "
+"discontinued and vulnerable operating systems is neither recommended nor "
+"supported.  As long as it downloaded from the <a po4a-id=0>official site</"
+"a>, DC++ contains no viruses or adware of any kind. DC++ is free; if you "
+"paid for it, ask for a refund!"
 msgstr ""
 "A DC++ legújabb verziója az összes hivatalosan támogatott Windows operációs "
-"rendszeren (Windows Vista SP2, Windows 7 SP1, 8.x és 10) futtatható. A "
-"korábbi verziók egy része fut Windows XP, 2000 vagy Win9x/ME alatt is, de a "
-"DC++ használata ezeken a sérülékeny őskövületeken nem ajánlott és főképp nem "
-"támogatott. A <a po4a-id=0>hivatalos weboldalról</a> letöltött DC++ "
-"garantáltan nem tartalmaz vírusokat, kémprogramokat vagy más kártékony "
-"elemeket. A DC++ ingyenes, így ha bármilyen módon bárhol fizettél érte, kérj "
-"visszatérítést!"
+"rendszeren (Windows 7 SP1, 8.x és 10) futtatható. A korábbi verziók egy "
+"része fut Windows XP  vagy Vista alatt is, de a DC++ használata ezeken a "
+"sérülékeny őskövületeken nem ajánlott és főképp nem támogatott. A <a po4a-"
+"id=0>hivatalos weboldalról</a> letöltött DC++ garantáltan nem tartalmaz "
+"vírusokat, kémprogramokat vagy más kártékony elemeket. A DC++ ingyenes, így "
+"ha bármilyen módon bárhol fizettél érte, kérj visszatérítést!"
 
 #. type: Content of: <html><body><h2>
 #: help/get_started.html:26
@@ -5795,19 +5758,20 @@ msgid ""
 "<a po4a-id=1>General settings</a>, etc...)  or you won't be able to connect "
 "to any hub."
 msgstr ""
-"A <a href=\"http://bcdc.dccafe.org/hu/start\" target=\"_blank\" class="
-"\"external\">BCDC++ kezdőknek szóló magyar nyelvű oldala</a> egy közérthető, "
-"rengeteg képernyőképet tartalmazó leírás. Bemutatja a DC++ működését és a "
-"szükséges minimális beállításokat, amelyek mindenképpen szükségesek a "
-"sikeres használathoz. (A leírás - lévén BCDC++-hoz készült - kis mértékben "
-"eltér a DC++-ban található beállításoktól, de az eltérés az alapvetően "
-"szükséges beállításokat nem érinti). Hasonlóan kitűnő, kezdőknek szóló "
-"leírás található a <a href=\"http://dcpp.hu\" target=\"_blank\" class="
-"\"external\">dcpp.hu</a> portálon is. Az eredeti angol nyelvű DC++ "
-"gyorstalpaló <a po4a-id=0>itt</a> található. Semmiképpen ne hagyd ki az "
-"alapvetően szükséges DC++ beállítások áttekintését (pl. nick megadása a <a "
-"po4a-id=1>Személyes beállításokban</a>, stb...), mivel ezek hiánya azt "
-"eredményezheti, hogy egyetlen hubhoz sem fogsz tudni kapcsolódni."
+"A <a href=\"https://web.archive.org/web/20130606101921/http://bcdc.dccafe."
+"org/hu/start\" target=\"_blank\" class=\"external\">BCDC++ kezdőknek szóló "
+"magyar nyelvű oldala</a> egy közérthető, rengeteg képernyőképet tartalmazó "
+"leírás. Bemutatja a DC++ működését és a szükséges minimális beállításokat, "
+"amelyek mindenképpen szükségesek a sikeres használathoz. (A leírás - lévén "
+"BCDC++-hoz készült - kis mértékben eltér a DC++-ban található "
+"beállításoktól, de az eltérés az alapvetően szükséges beállításokat nem "
+"érinti). Hasonlóan kitűnő, kezdőknek szóló leírás található a <a href="
+"\"https://web.archive.org/web/20120430080612/http://dcpp.hu:80/\" target="
+"\"_blank\" class=\"external\">dcpp.hu</a> portálon is. Az eredeti angol "
+"nyelvű DC++ gyorstalpaló <a po4a-id=0>itt</a> található. Semmiképpen ne "
+"hagyd ki az alapvetően szükséges DC++ beállítások áttekintését (pl. nick "
+"megadása a <a po4a-id=1>Személyes beállításokban</a>, stb...), mivel ezek "
+"hiánya azt eredményezheti, hogy egyetlen hubhoz sem fogsz tudni kapcsolódni."
 
 #. type: Content of: <html><body><p>
 #: help/get_started.html:86
@@ -5938,11 +5902,12 @@ msgid ""
 "There is a complete <a po4a-id=0>Direct Connect FAQ</a> maintained at "
 "dslreports.com."
 msgstr ""
-"További GYIK-ek, tippek és segítség található a <a href=\"http://bcdc.dccafe."
-"org/hu\" target=\"_blank\" class=\"external\">BCDC++ magyar honlapon</a>, a "
-"<a href=\"http://dcpp.hu\" target=\"_blank\" class=\"external\">Magyar "
-"Direct Connect portálon</a> és az angol nyelvű <a po4a-id=0>Direct Connect "
-"FAQ</a> oldalon."
+"További GYIK-ek, tippek és segítség található a <a href=\"https://web."
+"archive.org/web/20131115231608/http://bcdc.dccafe.org/hu\" target=\"_blank\" "
+"class=\"external\">BCDC++ magyar honlapon</a>, a <a href=\"https://web."
+"archive.org/web/20120531014530/http://dcpp.hu:80/\" target=\"_blank\" class="
+"\"external\">Magyar Direct Connect portálon</a> és az angol nyelvű <a po4a-"
+"id=0>Direct Connect FAQ</a> oldalon."
 
 #. type: Content of: <html><body><ul><li>
 #: help/get_started.html:131
@@ -6054,22 +6019,22 @@ msgstr "Fájl-lista"
 #. type: Content of: <html><body><dl><dd><placeholder><a>
 #: help/index.html:32 help/keyboard_commands.html:52
 #: help/keyboard_commands.html:89 help/window_main.html:70
-#: help/window_main.html:71 help/window_main.html:206
-#: help/window_main.html:235 help/window_main.html:236
+#: help/window_main.html:71 help/window_main.html:206 help/window_main.html:235
+#: help/window_main.html:236
 msgid "Public Hubs"
 msgstr "Publikus Hubok"
 
 #. type: Content of: <html><body><dl><dd><placeholder><a>
 #: help/index.html:36 help/settings_tabs.html:59 help/window_main.html:86
-#: help/window_main.html:87 help/window_main.html:211
-#: help/window_main.html:254 help/window_main.html:255
+#: help/window_main.html:87 help/window_main.html:211 help/window_main.html:254
+#: help/window_main.html:255
 msgid "Finished Downloads"
 msgstr "Befejezett letöltések"
 
 #. type: Content of: <html><body><dl><dd><placeholder><a>
 #: help/index.html:37 help/settings_tabs.html:62 help/window_main.html:90
-#: help/window_main.html:91 help/window_main.html:212
-#: help/window_main.html:257 help/window_main.html:258
+#: help/window_main.html:91 help/window_main.html:212 help/window_main.html:257
+#: help/window_main.html:258
 msgid "Finished Uploads"
 msgstr "Befejezett feltöltések"
 
@@ -6151,8 +6116,7 @@ msgstr "Kapcsolódás"
 
 #. type: Content of: <html><body><h1>
 #: help/index.html:75 help/settings_connectivity.html:17
-#: help/settings_connectivity.html:64
-#: help/settings_connectivity_manual.html:10
+#: help/settings_connectivity.html:64 help/settings_connectivity_manual.html:10
 msgid "Manual configuration"
 msgstr "Kézi beállítás"
 
@@ -7454,32 +7418,11 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_advanced.html:127
-msgid "Use Coral network for HTTP downloads (improves reliability)"
-msgstr "A Coral hálózat használata a HTTP letöltésekhez (megbízhatóbb)"
-
-#. type: Content of: <html><body><dl><dd>
-#: help/settings_advanced.html:129
-msgid ""
-"With this option enabled, DC++ uses <a po4a-id=0>The Coral Content "
-"Distribution Network</a> when establishing HTTP connections."
-msgstr ""
-"Az opció engedélyezésével a DC++a <a po4a-id=0>Coral Tartalomelosztó "
-"Hálózatot</a> használja a HTTP kapcsolatokhoz."
-
-#. type: Content of: <html><body><dl><dd>
-#: help/settings_advanced.html:132
-msgid "If the download fails, DC++ tries again with the non-Coralized address."
-msgstr ""
-"Ha a letöltés Coral-on keresztül nem sikerül, a DC++ automatikusan újra "
-"próbálkozik a normál módszerrel."
-
-#. type: Content of: <html><body><dl><dt>
-#: help/settings_advanced.html:134
 msgid "Enable segmented downloads"
 msgstr "Többszálú letöltés engedélyezése"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_advanced.html:135
+#: help/settings_advanced.html:128
 msgid ""
 "With this option enabled, DC++ uses segmented downloading. i.e. it downloads "
 "each file in many parts simultaneously from all available sources."
@@ -7489,18 +7432,33 @@ msgstr ""
 "forrásból tölteni."
 
 #. type: Content of: <html><body><dl><dt>
-#: help/settings_advanced.html:136
+#: help/settings_advanced.html:129
 msgid "Start DC++ when Windows starts"
 msgstr "A DC++ indítása a Windows indulásakor"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_advanced.html:137
+#: help/settings_advanced.html:130
 msgid ""
 "With this option enabled, DC++ will start up automatically when Windows "
 "starts."
 msgstr ""
 "Ha ez a beállítás engedélyezett a DC++ a Windows indulásakor automatikusan "
 "elindul."
+
+#. type: Content of: <html><body><dl><dt>
+#: help/settings_advanced.html:132
+msgid "Display testing nags"
+msgstr "Tesztelési infók megjelenítése"
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_advanced.html:134
+msgid ""
+"Display bug report / etc information when using a testing version of DC++ "
+"(one that has not yet been marked as stable by the DC++ team)."
+msgstr ""
+"Hibajelentés és egyéb információk megjelenítését engedélyezi (egy, még a DC+"
+"+ fejlesztői csapat által nem stabil kiadásnak jelölt) DC++ teszt verzió "
+"használata esetén."
 
 #. type: Content of: <html><body><p>
 #: help/settings_appearance.html:10
@@ -8735,11 +8693,8 @@ msgstr ""
 
 #. type: Content of: <html><body><div><dl><dd><ul><li>
 #: help/settings_downloads.html:25
-msgid ""
-"<i>C:\\Users\\[your username]\\Downloads\\</i> in Windows Vista and later."
-msgstr ""
-"<i>C:\\Users\\[felhasználónév]\\Downloads\\</i> Windows Vista és újabb "
-"verzió esetén."
+msgid "<i>C:\\Users\\[your username]\\Downloads\\</i>"
+msgstr "<i>C:\\Users\\[felhasználónév]\\Downloads\\</i>"
 
 #. type: Content of: <html><body><div><dl><dd><p>
 #: help/settings_downloads.html:28
@@ -8804,12 +8759,8 @@ msgstr ""
 
 #. type: Content of: <html><body><div><dl><dd><ul><li>
 #: help/settings_downloads.html:41
-msgid ""
-"<i>C:\\Users\\[your username]\\AppData\\Local\\DC++\\Incomplete</i> in "
-"Windows Vista and later."
-msgstr ""
-"<i>C:\\Users\\[felhasználónév]\\AppData\\Local\\DC++\\Incomplete</i> Windows "
-"Vista és újabb verzió esetén."
+msgid "<i>C:\\Users\\[your username]\\AppData\\Local\\DC++\\Incomplete</i>"
+msgstr "<i>C:\\Users\\[felhasználónév]\\AppData\\Local\\DC++\\Incomplete</i>"
 
 #. type: Content of: <html><body><div><dl><dd><p>
 #: help/settings_downloads.html:45
@@ -8975,11 +8926,25 @@ msgstr "Publikus Hublista URL-je"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_downloads.html:98
+msgid "Reset Public Hub Lists"
+msgstr "Hubllisták alaphelyzetbe állítása"
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_downloads.html:99
+msgid ""
+"This function removes all existing configured hublist entries and reset to "
+"the default preconfigured ones came with the current DC++ version."
+msgstr ""
+"Ez a funkció minden eddig beállított hublistát eltávolít és visszaállítja az "
+"alapáértelmezett, az aktuális DC++ verzióval érkező listákat."
+
+#. type: Content of: <html><body><dl><dt>
+#: help/settings_downloads.html:100
 msgid "HTTP Proxy (for hublist only)"
 msgstr "HTTP Proxy (csak hublistákhoz)"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_downloads.html:99
+#: help/settings_downloads.html:101
 msgid ""
 "This HTTP proxy will <u>only</u> be used to request the Public Hub List "
 "specified above. It's <u>not</u> used for uploads, downloads, or connecting "
@@ -9450,7 +9415,7 @@ msgstr "Chat előzmények sorainak száma ablak megnyitásakor"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_history.html:14 help/window_main.html:350
-#: help/window_public_hubs.html:83 help/window_search.html:58
+#: help/window_public_hubs.html:81 help/window_search.html:58
 msgid "Hubs"
 msgstr "Hubok"
 
@@ -11436,12 +11401,12 @@ msgstr "Betűtípus testre szabás"
 #: help/settings_styles.html:60
 msgid ""
 "By default, the font used by the current Windows theme is used throughout DC+"
-"+ (generally Segoe UI (size 9) on Vista and higher). A different font may be "
-"selected here."
+"+ (generally Segoe UI (size 9) on Windows 7 and newer). A different font may "
+"be selected here."
 msgstr ""
 "A DC++ alapértelmezetten az aktuális Windows téma betűtípusát használja (az "
-"alap betűtípus Vista és újabb rendszerek esetén 9-es méretű Segoe UI). Itt "
-"választható ki ettől eltérő betűtípus."
+"alap betűtípus Windows 7 és újabb rendszerek esetén 9-es méretű Segoe UI). "
+"Itt választható ki ettől eltérő betűtípus."
 
 #. type: Content of: <html><body><h2>
 #: help/settings_styles.html:64
@@ -12812,7 +12777,7 @@ msgstr ""
 #: help/window_download_queue.html:146 help/window_finished_downloads.html:58
 #: help/window_finished_uploads.html:58 help/window_hub.html:96
 #: help/window_main.html:130 help/window_pm.html:31
-#: help/window_public_hubs.html:71 help/window_search.html:127
+#: help/window_public_hubs.html:69 help/window_search.html:127
 msgid "Status bar"
 msgstr "Állapotsor"
 
@@ -12946,8 +12911,7 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd><dl><dd><div>
 #: help/window_favorite_hubs.html:30 help/window_favorite_hubs.html:51
-#: help/window_main.html:29 help/window_main.html:143
-#: help/window_main.html:148
+#: help/window_main.html:29 help/window_main.html:143 help/window_main.html:148
 msgid ""
 "More information about the use of favorite hub groups in the help topics "
 "associated to the <placeholder id=0/> dialog."
@@ -13129,7 +13093,7 @@ msgstr "Beviteli mező és keresési mód választó legördülő (balra)"
 msgid ""
 "Enter your search terms here. The most recent searches can be accessed by "
 "unfolding the list contained within this box. Select the desired matching "
-"method from the dropdown in the right. Available modes are: excact word "
+"method from the dropdown in the right. Available modes are: exact word "
 "match, partial word match or match a <a po4a-id=0>regular expression</a>."
 msgstr ""
 "Ide írd be a keresendő kifejezést. A legutóbbi keresett kifejezések "
@@ -13803,8 +13767,7 @@ msgid "Their E-Mail address. Normally blank or false."
 msgstr "A felhasználó e-mail címe. Általában üres, vagy nem valós."
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_hub.html:62 help/window_search.html:89
-#: help/window_users.html:30
+#: help/window_hub.html:62 help/window_search.html:89 help/window_users.html:30
 msgid "CID"
 msgstr "CID"
 
@@ -13842,10 +13805,10 @@ msgid ""
 "The filter, consisting of an input box, a column selection box and a method "
 "selection box, can help filter the list on the fly based on textual "
 "matching. You can filter the contents of any individual column or the whole "
-"list. There are three filtering methods available to choose from: excact "
-"word match, partial word match or match a <a po4a-id=0>regular expression</"
-"a>. Note that filtered results are not removed from the list; they can at "
-"any time be restored by just clearing the filter out."
+"list. There are three filtering methods available to choose from: exact word "
+"match, partial word match or match a <a po4a-id=0>regular expression</a>. "
+"Note that filtered results are not removed from the list; they can at any "
+"time be restored by just clearing the filter out."
 msgstr ""
 "A szűrő egy beviteli mezőből, egy oszlop választó és egy összehasonlitási "
 "módszer választó legördülő menüből áll és segítségével a lista azonnal "
@@ -13914,7 +13877,7 @@ msgid "This window can be focused with Alt+M."
 msgstr "Az ablakra az Alt+M gyorsbillentyű kombinációval lehet fókuszálni."
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_hub.html:98 help/window_public_hubs.html:73
+#: help/window_hub.html:98 help/window_public_hubs.html:71
 msgid "Messages part (left)"
 msgstr "Üzenetek (bal oldalon)"
 
@@ -14097,8 +14060,7 @@ msgstr ""
 "egy-egy új <placeholder id=0/> ablakban."
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_main.html:31 help/window_main.html:207
-#: help/window_main.html:238
+#: help/window_main.html:31 help/window_main.html:207 help/window_main.html:238
 msgid "Reconnect"
 msgstr "Újracsatlakozás"
 
@@ -14112,8 +14074,8 @@ msgstr ""
 "hubhoz. Ha az aktív ablak nem hub ablak, akkor semmi nem történik."
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_main.html:33 help/window_main.html:155
-#: help/window_main.html:217 help/window_main.html:274
+#: help/window_main.html:33 help/window_main.html:155 help/window_main.html:217
+#: help/window_main.html:274
 msgid "Open file list..."
 msgstr "Fájl-lista megnyitása..."
 
@@ -14129,8 +14091,7 @@ msgstr ""
 "letöltött fájl-listákat tartalmazó FileLists nevű alkönyvtár nyílik meg."
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_main.html:35 help/window_main.html:218
-#: help/window_main.html:279
+#: help/window_main.html:35 help/window_main.html:218 help/window_main.html:279
 msgid "Open own list"
 msgstr "Saját fájl-lista megnyitása"
 
@@ -14161,8 +14122,7 @@ msgstr ""
 "mappa</a> alatt található FileLists nevű könyvtárban vannak eltárolva)."
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_main.html:39 help/window_main.html:219
-#: help/window_main.html:285
+#: help/window_main.html:39 help/window_main.html:219 help/window_main.html:285
 msgid "Refresh file list"
 msgstr "Fájl-lista frissítése"
 
@@ -14176,8 +14136,7 @@ msgstr ""
 "megváltozott tartalmat keresve majd frissíti a fájl-listádat."
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_main.html:41 help/window_main.html:216
-#: help/window_main.html:269
+#: help/window_main.html:41 help/window_main.html:216 help/window_main.html:269
 msgid "Open downloads directory"
 msgstr "Letöltési könyvtár megnyitása"
 
@@ -15550,25 +15509,19 @@ msgstr "Frissítés"
 #: help/window_public_hubs.html:67
 msgid ""
 "Download a fresh version of the hublist. If the download fails click Refresh "
-"again to get the next available hublist in the dropdown.  DC++ uses <a po4a-"
-"id=0>The Coral Content Distribution Network</a> to get hublists by default. "
-"This improves reliability and makes it possible to download hublists even "
-"when the original hublist server is out of service."
+"again to get the next available hublist in the dropdown."
 msgstr ""
 "A hublista legfrissebb változatát tölti le. Ha a letöltés nem sikerül, a "
 "Frissítés gomb újbóli megnyomására a következő, a legördülő menüben elérhető "
-"hublista jelenik meg. Alapesetben a DC++ a <a po4a-id=0>Coral "
-"Tartalomterjesztő Hálózatot</a> használja a hublisták lekéréséhez. Ez a "
-"hálózat növeli a letöltés megbízhatóságát és lehetővé teszi a hublista "
-"letöltését akkor is, ha az eredeti hublista szerver nem működik."
+"hublista jelenik meg."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_public_hubs.html:75
+#: help/window_public_hubs.html:73
 msgid "Shows status messages about the loading of public hub lists;"
 msgstr "A publikus hublisták letöltésének állapotüzeneteit mutatja;"
 
 #. type: Content of: <html><body><dl><dd><ul><li>
-#: help/window_public_hubs.html:77
+#: help/window_public_hubs.html:75
 msgid ""
 "&quot;downloading&quot;: hub list is currently being downloaded from the "
 "server, this may take a while;"
@@ -15577,7 +15530,7 @@ msgstr ""
 "Ez hosszabb ideig is eltarthat;"
 
 #. type: Content of: <html><body><dl><dd><ul><li>
-#: help/window_public_hubs.html:78
+#: help/window_public_hubs.html:76
 msgid ""
 "&quot;downloaded&quot;: hub list has been successfully downloaded from the "
 "server, and is currently being displayed; you're looking at a fresh version "
@@ -15588,7 +15541,7 @@ msgstr ""
 "változata;"
 
 #. type: Content of: <html><body><dl><dd><ul><li>
-#: help/window_public_hubs.html:79
+#: help/window_public_hubs.html:77
 msgid ""
 "&quot;loaded from chache&quot;: a previously saved hub list has been "
 "successfully loaded from your DC++ cache directory, and is currently being "
@@ -15601,7 +15554,7 @@ msgstr ""
 "idejemúlt lehet. A lista frissítéséhez klikkelj a 'Frissítés' gombra;"
 
 #. type: Content of: <html><body><dl><dd><ul><li>
-#: help/window_public_hubs.html:80
+#: help/window_public_hubs.html:78
 msgid ""
 "error messages may also appear in this area: when a hub list download has "
 "failed, DC++ will automatically switch to the next hub list."
@@ -15611,7 +15564,7 @@ msgstr ""
 "következő hublistára vált."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_public_hubs.html:85
+#: help/window_public_hubs.html:83
 msgid ""
 "The total number of individual hubs in the current hub list. When the "
 "hublist is filtered, it shows the number of hubs filtered out as well."
@@ -15621,7 +15574,7 @@ msgstr ""
 "kiírásra."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_public_hubs.html:87
+#: help/window_public_hubs.html:85
 msgid "Sum of the users numbers of every hubs in the current hub list."
 msgstr "Az aktuális hublista hubjain lévő felhasználók számának összesítése."
 
