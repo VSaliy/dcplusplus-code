@@ -359,7 +359,7 @@ SettingsManager::SettingsManager() {
 	setDefault(USERS_FILTER_QUEUE, false);
 	setDefault(USERS_FILTER_WAITING, false);
 	setDefault(MAX_PM_WINDOWS, 50);
-	setDefault(REQUIRE_TLS, false);
+	setDefault(REQUIRE_TLS, true); // True by default: We assume TLS is commonplace enough among ADC clients.
 	setDefault(ENABLE_CCPM, true);
 	setDefault(ALWAYS_CCPM, false);
 	setDefault(LAST_SHARED_FOLDER, Util::emptyString);
@@ -570,7 +570,13 @@ void SettingsManager::load(string const& aFileName)
 			}
 			set(HUBLIST_SERVERS, lists);
 		}
-		
+
+		if(v <= 0.868) {
+			// Move back to default as this is now true by default:
+			// We assume TLS is commonplace enough among ADC clients.
+			unset(REQUIRE_TLS);
+		}
+
 		if(SETTING(SET_MINISLOT_SIZE) < 512)
 			set(SET_MINISLOT_SIZE, 512);
 		if(SETTING(AUTODROP_INTERVAL) < 1)
