@@ -69,7 +69,7 @@ CryptoManager::CryptoManager()
 		for(int i = KEY_RSA_2048; i != KEY_LAST; ++i)
 			tmpKeysMap[i] = getTmpRSA(getKeyLength(static_cast<TLSTmpKeys>(i)));
 
-		const char ciphersuites[] = "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:DHE-RSA-AES128-SHA:AES128-SHA";
+		const char ciphersuites[] = "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-SHA256";
 		SSL_CTX_set_min_proto_version(clientContext, TLS1_2_VERSION);
 		SSL_CTX_set_security_level(clientContext, 2);
 		SSL_CTX_set_cipher_list(clientContext, ciphersuites);
