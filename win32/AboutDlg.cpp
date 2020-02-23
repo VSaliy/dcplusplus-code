@@ -104,7 +104,7 @@ bool AboutDlg::handleInitDialog() {
 		ls.caption += T_("Leading project contributor: poy\nEx-project contributor: Todd Pederzani\nEx-codeveloper: Per Lind\303\251n\nOriginal DC++ logo design: Martin Skogevall\nGraphics: Radox and various GPL and CC authors\n\nDC++ is licenced under GPL.");
 		cur->addChild(ls);
 
-		cur->addChild(Link::Seed(_T("http://dcplusplus.sourceforge.net/"), true));
+		cur->addChild(Link::Seed(_T("https://dcplusplus.sourceforge.io/"), true));
 
 		auto ts = WinUtil::Seeds::Dialog::textBox;
 		ts.style |= ES_READONLY;
@@ -178,7 +178,7 @@ bool AboutDlg::handleInitDialog() {
 
 	HttpManager::getInstance()->addListener(this);
 	onDestroy([this] { HttpManager::getInstance()->removeListener(this); });
-	c = HttpManager::getInstance()->download("http://dcplusplus.sourceforge.net/version.xml");
+	c = HttpManager::getInstance()->download("https://dcplusplus.sourceforge.io/version.xml");
 
 	return false;
 }

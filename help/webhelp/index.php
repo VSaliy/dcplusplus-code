@@ -1,7 +1,7 @@
 <?
 function error()
 {
-	exit('Error. <a href="http://dcplusplus.sourceforge.net/">Click here to go back to the main DC++ site.</a>');
+	exit('Error. <a href="https://dcplusplus.sourceforge.io/">Click here to go back to the main DC++ site.</a>');
 }
 
 if (!isset($_SERVER) || !isset($_SERVER['SCRIPT_URL']))
