@@ -515,7 +515,7 @@ void WinUtil::handleDblClicks(dwt::TextBoxBase* box) {
 	box->onLeftMouseDblClick([box](const dwt::MouseEvent& me) { return parseLink(box->textUnderCursor(me.pos)); });
 }
 
-#define LINE2 _T("-- http://dcplusplus.sourceforge.net <DC++ ") _T(VERSIONSTRING) _T(">")
+#define LINE2 _T("-- https://dcplusplus.sourceforge.io <DC++ ") _T(VERSIONSTRING) _T(">")
 const TCHAR
 	*msgs[] = {
 		_T("\r\n-- I'm a happy DC++ user. You could be happy too.\r\n") LINE2,

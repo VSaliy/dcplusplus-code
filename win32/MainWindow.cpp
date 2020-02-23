@@ -114,7 +114,7 @@ awayIdle(false),
 fullSlots(false)
 {
 	// Don't forget to update version.xml when changing these links!
-	links.homepage = _T("http://dcplusplus.sourceforge.net/");
+	links.homepage = _T("https://dcplusplus.sourceforge.io/");
 	links.downloads = links.homepage + _T("download/");
 	links.geoip6 = _T("https://geolite.maxmind.com/download/geoip/database/GeoIPv6.dat.gz");
 	links.geoip4 = _T("https://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz");
@@ -187,7 +187,7 @@ fullSlots(false)
 
 	TimerManager::getInstance()->start();
 
-	conns[CONN_VERSION] = HttpManager::getInstance()->download("http://dcplusplus.sourceforge.net/version.xml");
+	conns[CONN_VERSION] = HttpManager::getInstance()->download("https://dcplusplus.sourceforge.io/version.xml");
 
 	try {
 		ConnectivityManager::getInstance()->setup(true, true);
