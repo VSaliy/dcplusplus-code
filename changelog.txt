@@ -1,5 +1,7 @@
 * Require TLS 1.2 or newer (currently only TLS 1.3)-based ADCS connections (cologic)
 * "Require TLS ADC client-client connections" setting now on by default (poy)
+* Drop support for SHA-1-based ciphersuites due to chosen-prefix collisions from https://sha-mbles.github.io/ (cologic)
+* Disallow Diffie-Hellman keys smaller than 2048 bits to mitigate the Logjam attack (cologic)
 
 -- 0.868 2018-11-12 --
 * During the first run of a new DC++ release shipped with new default hublist servers the new addresses are automatically added
