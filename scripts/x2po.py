@@ -358,7 +358,7 @@ msgstr ""
 """.replace("TRANSLATOR", translator).replace("PROJECT", project).replace("PLURAL", plural).replace("LANGUAGE", language)
 )
 
-for k, v in newmap.iteritems():
+for k, v in newmap.items():
 	out.write(u'msgid "' + k + u'"\n')
 	out.write(u'msgstr "' + v + u'"\n')
 	out.write(u'\n')

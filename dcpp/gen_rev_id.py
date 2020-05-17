@@ -21,6 +21,6 @@ def get_rev_id(env):
 
 
 def gen_rev_id(target, source, env):
-    f = open(str(target[0]), 'wb')
+    f = open(str(target[0]), 'w')
     f.write('#define DCPP_REVISION "%s"\n' % get_rev_id(env))
     f.close()

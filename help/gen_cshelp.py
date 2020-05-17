@@ -6,8 +6,8 @@ by the DC++ help system.
 
 def gen_cshelp(target, source):
     import codecs
-    from HTMLParser import HTMLParser, HTMLParseError
-    from htmlentitydefs import entitydefs
+    from html.parser import HTMLParser
+    from html.entities import entitydefs
     import re
     from build_util import html_to_rtf
 
@@ -15,6 +15,10 @@ def gen_cshelp(target, source):
 
     # will hold [id, text] pairs
     output = []
+
+    # https://code.djangoproject.com/ticket/23763
+    class HTMLParseError(Exception):
+        pass
 
     # define our HTML parsing class derived from HTMLParser
     class Parser(HTMLParser):
@@ -87,7 +91,7 @@ def gen_cshelp(target, source):
         try:
             parser.feed(f.read())
         except HTMLParseError:
-            print 'gen_cshelp: parse error in ' + path
+            print('gen_cshelp: parse error in ' + path)
             raise
         f.close()
         parser.close()

@@ -32,7 +32,7 @@ if dev.is_win32():
     elif env['RC'].find('windres') != -1:  # MinGW
         env.Append(RCFLAGS=['-D' + env['arch']])
     else:
-        print 'Unknown resource compiler.'
+        print('Unknown resource compiler.')
         Return()
     res = env.RES(dev.get_sources(source_path, '*.rc'))
     env.Depends(res, 'resource.h')

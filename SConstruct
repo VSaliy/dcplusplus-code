@@ -1,6 +1,6 @@
 # vim: set filetype: py
 
-EnsureSConsVersion(2, 5, 0)
+EnsureSConsVersion(3, 0, 0)
 
 import os
 import sys
@@ -24,6 +24,15 @@ from build_util import Dev, gen_po_name
 #   -Wno-missing-field-initializers: Overzealous; makes sense to disable.
 #   -Wno-unknown-pragmas: htmlhelp.h emits these.
 #   -Wno-unused-[parameter / value]: We have a ton of these; maybe one day...
+#
+#   These are mostly/all in Boost and should be fixable by updating Boost:
+#   -Wno-parentheses: boost version in DC++ has a lot of these
+#   -Wimplicit-fallthrough=0: boost version in DC++ has a lot of these, which
+#   https://developers.redhat.com/blog/2017/03/10/wimplicit-fallthrough-in-gcc-7/
+#   describes the reasoning behind
+#   -Wno-cast-function-type: boost/boost/thread/win32/thread_primitives.hpp:313
+#   -Wno-unused-but-set-variable: dwarf/dwarf_arange.c:113:13
+#   -Wno-deprecated-copy: boost/boost/regex/v4/basic_regex_creator.hpp:50:4
 gcc_flags = {
     'common': [
         '-g', '-Wall', '-Wextra',
@@ -31,6 +40,8 @@ gcc_flags = {
         '-Wno-missing-field-initializers',
         '-Wno-unknown-pragmas',
         '-Wno-unused-parameter', '-Wno-unused-value',
+        '-Wno-parentheses', '-Wimplicit-fallthrough=0',
+        '-Wno-cast-function-type', '-Wno-unused-but-set-variable',
         '-fexceptions',
     ],
     'debug': [],
@@ -38,7 +49,7 @@ gcc_flags = {
 }
 
 gcc_xxflags = {
-    'common': [],
+    'common': ['-Wno-deprecated-copy'],
     'debug': [],
     'release': []
 }
