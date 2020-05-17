@@ -60,7 +60,7 @@ class Dev:
                 'RC': 'windres',
                 'strip': 'strip',
             }
-            for tool_ref, tool_bin in BUILD_TOOLS.iteritems():
+            for tool_ref, tool_bin in BUILD_TOOLS.items():
                 self.env[tool_ref] = prefix + tool_bin
 
             # "gcc" should always be present.
@@ -73,7 +73,7 @@ class Dev:
             # fetch a base path).
             # <https://sourceforge.net/p/mingw-w64/mailman/message/33224826/>
             if 'mingw' in self.env['TOOLS']:
-                for tool_ref, tool_bin in BUILD_TOOLS.iteritems():
+                for tool_ref, tool_bin in BUILD_TOOLS.items():
                     if not self.env.WhereIs(self.env[tool_ref]):
                         base_tool_path = os.path.dirname(gcc_path)
                         print(
@@ -167,9 +167,9 @@ class Dev:
                 matches.append(root + '/' + filename)
             if not recursive:
                 dirnames[:] = []
-        return map(lambda x: (
+        return list(map(lambda x: (
             os.path.normpath(self.get_build_path(source_path) + x)
-        ), matches)
+        ), matches))
 
     # execute the SConscript file in the specified sub-directory.
     def build(self, source_path, local_env=None):
@@ -466,13 +466,13 @@ def get_lcid(lang):
     lang = lang.replace('-', '_')
 
     # look for an exact match
-    for (identifier, name) in windows_locale.iteritems():
+    for (identifier, name) in windows_locale.items():
         if name == lang:
             return identifier
 
     # ignore the "sub-language" part
     lang = lang.split('_')[0]
-    for (identifier, name) in windows_locale.iteritems():
+    for (identifier, name) in windows_locale.items():
         if name.split('_')[0] == lang:
             return identifier
 

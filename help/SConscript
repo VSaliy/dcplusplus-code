@@ -33,12 +33,12 @@ if not env['i18n']:
     Return()
 
 if env.WhereIs('perl') is None:
-    print 'Perl is required to run po4a scripts, skipping help build'
+    print('Perl is required to run po4a scripts, skipping help build')
     Return()
 
 env['asciidoc'] = dev.get_asciidoc()
 if env['asciidoc'] is None:
-    print 'asciidoc is required to process Compile.txt, skipping help build'
+    print('asciidoc is required to process Compile.txt, skipping help build')
     Return()
 
 # fix hhc.exe reverse return value - UGLY - taken from the NSIS build system
@@ -267,7 +267,7 @@ for po_node in po_list:
         env.CHMBuild(targets, [CHM_sources, po_node])
 
 if not hasHHC:
-    print 'hhc.exe not found, skipping chm build'
+    print('hhc.exe not found, skipping chm build')
     Return()
 
 # compile the main (untranslated) help file
