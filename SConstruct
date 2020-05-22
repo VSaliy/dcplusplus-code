@@ -40,7 +40,8 @@ gcc_flags = {
         '-Wno-missing-field-initializers',
         '-Wno-unknown-pragmas',
         '-Wno-unused-parameter', '-Wno-unused-value',
-        '-Wno-parentheses', '-Wimplicit-fallthrough=0',
+        '-Wno-parentheses', 
+#       '-Wimplicit-fallthrough=0', TODO This won't work with gcc 6.x, readd when feasible
         '-Wno-cast-function-type', '-Wno-unused-but-set-variable',
         '-fexceptions',
     ],
