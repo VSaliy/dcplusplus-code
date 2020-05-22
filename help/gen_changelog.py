@@ -1,7 +1,7 @@
 #@PydevCodeAnalysisIgnore
 
 def gen_changelog(target, source, env):
-        import re, cgi
+	import re, cgi
 
 	f_template = open(str(source[1]), "rb")
 	template = f_template.read()
