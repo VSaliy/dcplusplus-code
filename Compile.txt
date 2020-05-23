@@ -45,10 +45,10 @@
 
 		Make sure that hhc.exe is in your PATH environment variable.
 
-		* asciidoc (only needed to build help files)
-		<http://www.methods.co.nz/asciidoc/>
+		* asciidoc3 (only needed to build help files)
+		<https://pypi.org/project/asciidoc3/#files>
 
-		Make sure that asciidoc is in your PATH environment variable.
+		Make sure that asciidoc3 is in your PATH environment variable.
 
 		* NSIS - 3.0 or later (only needed to build the installer)
 		<http://nsis.sourceforge.net> 
@@ -75,14 +75,11 @@
 		<https://msdn.microsoft.com/en-US/windows/desktop/hh852363>; it installs into
 		"C:\Program Files (x86)\Windows Kits\8.0".
 
-	b. OpenSSL (only for Visual Studio)
+	b. OpenSSL (currently only for MinGW)
 
-		Download OpenSSL from www.openssl.org and compile it. You should get libraries called
-		libeay32.lib and ssleay32.lib; copy them in openssl/lib.
-
-		To compile DC++ in debug mode, OpenSSL libraries have to be compiled in debug mode too
-		(read their instructions file; it's a matter of adding "debug" in the do_* file you use).
-		Rename debug libraries to libeay32d.lib and ssleay32d.lib; put them in openssl/lib.
+		Download OpenSSL from www.openssl.org, copy the 'openssl-*.tar.gz' archive to the openssl/build folder
+		and compile it using the build.bat script. It will copy the compiled libraries to openssl/lib.
+		The compilation process requires Cygwin to be installed.
 
 		You may also ask around in the DCDev hub; someone might have already built a package.
 
