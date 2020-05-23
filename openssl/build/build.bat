@@ -1,5 +1,5 @@
 @echo off
-choice /M "%0 - Make sure you have Cygwin and Visual Studio - Make sure you have an 'openssl-*.tar.gz' file in this directory - Continue?"
+choice /M "%0 - Make sure you have Cygwin - Make sure you have an 'openssl-*.tar.gz' file in this directory - Continue?"
 echo on
 if errorlevel 2 goto end
 
