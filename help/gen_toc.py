@@ -4,8 +4,8 @@
 
 def gen_toc(target, source, lcid):
     import codecs
-    from HTMLParser import HTMLParser
-    from htmlentitydefs import entitydefs
+    from html.parser import HTMLParser
+    from html.entities import entitydefs
     import re
     from build_util import get_win_cp
 
