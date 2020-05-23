@@ -391,7 +391,7 @@ class Dev:
             pathext = self.env['ENV']['PATHEXT'] + ';.py'
         else:
             pathext = ''
-        asciidoc = self.env.WhereIs('asciidoc', pathext=pathext)
+        asciidoc = self.env.WhereIs('asciidoc3', pathext=pathext)
         if asciidoc is None:
             return None
         if asciidoc[-3:] == '.py':
