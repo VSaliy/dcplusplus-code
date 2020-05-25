@@ -222,7 +222,7 @@ def gen_CHM(target, source, env):
         name_file = File(web_dir + '/name.txt')
         print('Generating ' + str(name_file))
         if template:
-            open(str(name_file), 'wb').write('English (United States)')
+            open(str(name_file), 'w').write('English (United States)')
         else:
             env['NAME_FILE'] = name_file
             gen_po_name(po_node, env)
