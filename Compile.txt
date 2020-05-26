@@ -79,7 +79,19 @@
 
 		Download OpenSSL from www.openssl.org, copy the 'openssl-*.tar.gz' archive to the openssl/build folder
 		and compile it using the build.bat script. It will copy the compiled libraries to openssl/lib.
-		The compilation process requires Cygwin to be installed.
+		The build process needs Cygwin and above the basic (default) packages it requires the following 
+		additional packages to be installed under Cygwin:
+
+		- perl (Perl builds for Windows are unsuitable for this process)
+		- make
+
+		<https://bennierobinson.com/programming/2016/01/24/perl-windows-2016.html> explains how to set up these
+		packages in detail.
+
+		Make sure that Cygwin's 'bin' folder is in your PATH environment variable.
+
+		You'll also need a GNU Patch executable for the operation in your PATH. It can be either the GNU Win32 binary
+		or a package installed under Cygwin or even any patch executable that may come with your versioning system.
 
 		You may also ask around in the DCDev hub; someone might have already built a package.
 
