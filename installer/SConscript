@@ -95,10 +95,13 @@ for line in f:
         else:
             # copy from the build dir
             match = dev.get_build_path('bin') + '/' + match
-        sources.append(match)
+        if line.lstrip().startswith("File /r"):
+            sources.append(Dir(match))
+        else:
+            sources.append(File(match))
 f.close()
 sources.append(potfile)
-sources.append(po_list)
+sources += po_list
 sources.sort()
 
 
@@ -110,8 +113,8 @@ def gen_installer(target, source, env):
 
     # the file, included by the installer, that lists all available
     # translations
-    f_i18n = codecs.open(build_path + 'i18n.nsh', 'wb', 'utf_16_le')
-    f_i18n.write(unicode(codecs.BOM_UTF16_LE, 'utf_16_le'))
+    f_i18n = codecs.open(build_path + 'i18n.nsh', 'w', 'utf_16_le')
+    f_i18n.write(codecs.BOM_UTF16_LE.decode('utf-16-le'))
 
     # copy the source files to the build directory
     for node in source:
@@ -158,9 +161,9 @@ def gen_installer(target, source, env):
             # parse translated strings to generate a message catalog included
             # by i18n.nsh
             f_nsh = codecs.open(
-                build_path + '_' + name + '.nsh', 'wb', 'utf_16_le',
+                build_path + '_' + name + '.nsh', 'w', 'utf_16_le',
             )
-            f_nsh.write(unicode(codecs.BOM_UTF16_LE, 'utf_16_le'))
+            f_nsh.write(codecs.BOM_UTF16_LE.decode('utf-16-le'))
             f_nsh.write('!insertmacro LANGFILE_EXT "' + name + '"\n')
             dom = parse(xml_file)
             for elem in dom.firstChild.childNodes:
