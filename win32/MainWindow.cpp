@@ -1638,7 +1638,7 @@ void MainWindow::updateGeo(bool v6) {
 
 	auto& file = v6 ? geo6File : geo4File;
 	try {
-		file.reset(new File(GeoManager::getDbPath(v6) + ".gz", File::WRITE, File::CREATE | File::TRUNCATE));
+		file.reset(new File(GeoManager::getDbPath(v6) + ".gz.tmp", File::WRITE, File::CREATE | File::TRUNCATE));
 	} catch(const FileException&) {
 		LogManager::getInstance()->message(str(F_("The %1% GeoIP database could not be updated") % geoType(v6)));
 		return;
@@ -1663,6 +1663,8 @@ void MainWindow::completeGeoUpdate(bool v6, bool success) {
 				geoRegion = GeoRegion_Idle;
 
 				try {
+					File::renameFile(GeoManager::getDbPath(true) + ".gz.tmp", GeoManager::getDbPath(true) + ".gz");
+					File::renameFile(GeoManager::getDbPath(false) + ".gz.tmp", GeoManager::getDbPath(false) + ".gz");
 					File::renameFile(GeoManager::getRegionDbPath() + ".tmp", GeoManager::getRegionDbPath());
 				} catch(const FileException&) { }
 
@@ -1691,13 +1693,21 @@ void MainWindow::completeGeoUpdate(bool v6, bool success) {
 			return;
 		}
 
+		try {
+			File::renameFile(GeoManager::getDbPath(v6) + ".gz.tmp", GeoManager::getDbPath(v6) + ".gz");
+		} catch(const FileException&) { }
+
 		GeoManager::getInstance()->update(v6);
 
 		LogManager::getInstance()->message(str(F_("The %1% GeoIP database has been successfully updated") % geoType(v6)));
 
 	} else {
+
 		if(geoRegion == (v6 ? GeoRegion_FromV6 : GeoRegion_FromV4)) {
+			File::deleteFile(GeoManager::getRegionDbPath() + ".tmp");
 			geoRegion = GeoRegion_Idle;
+		} else {
+			File::deleteFile(GeoManager::getDbPath(v6) + ".gz.tmp");
 		}
 
 		LogManager::getInstance()->message(str(F_("The %1% GeoIP database could not be updated") % geoType(v6)));
