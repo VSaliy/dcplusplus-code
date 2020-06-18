@@ -111,7 +111,8 @@ lastDown(0),
 lastTick(GET_TICK()),
 away(false),
 awayIdle(false),
-fullSlots(false)
+fullSlots(false),
+geoStaticServe(false)
 {
 	// Don't forget to update version.xml when changing these links!
 	links.homepage = _T("https://dcplusplus.sourceforge.io/");
@@ -1592,6 +1593,11 @@ void MainWindow::completeVersionUpdate(bool success, const string& result) {
 			xml.stepOut();
 		}
 
+		xml.resetCurrentChild();
+		if(xml.findChild("GeoIPStaticServe")) {
+			geoStaticServe = true;
+		}
+		
 		xml.stepOut();
 	} catch (const Exception&) { } }
 
@@ -1607,10 +1613,10 @@ void MainWindow::checkGeoUpdate() {
 }
 
 void MainWindow::checkGeoUpdate(bool v6) {
-	// update when the database is non-existent or older than 16 days (GeoIP updates every month).
+	// update when the database is non-existent, older than 16 days and it is frequently updated (GeoIP updates every month) 
 	try {
 		File f(GeoManager::getDbPath(v6) + ".gz", File::READ, File::OPEN);
-		if(f.getSize() > 0 && static_cast<time_t>(f.getLastModified()) > GET_TIME() - 3600 * 24 * 16) {
+		if(f.getSize() > 0 && (geoStaticServe || static_cast<time_t>(f.getLastModified()) > GET_TIME() - 3600 * 24 * 16)) {
 			return;
 		}
 	} catch(const FileException&) { }
