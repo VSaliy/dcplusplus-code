@@ -160,6 +160,7 @@ private:
 	atomic<HttpConnection*> conns[CONN_LAST];
 	unique_ptr<File> geo6File, geo4File;
 	enum { GeoRegion_Idle, GeoRegion_FromV4, GeoRegion_FromV6 } geoRegion;
+	bool geoStaticServe; /// signals when GeoIP databases are not updated frequently for some reason
 
 	HANDLE stopperThread;
 
