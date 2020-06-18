@@ -640,6 +640,10 @@ bool Util::isPublicIp(const string& ip, bool v6) noexcept {
 	return !isLocalIp(ip, v6) && !isPrivateIp(ip, v6);
 }
 
+bool Util::isIpV4(const string& ip) noexcept {
+	return inet_addr(ip.c_str()) != INADDR_NONE;
+}
+
 vector<Util::AddressInfo> Util::getIpAddresses(bool v6) {
 	vector<Util::AddressInfo> adapterData;
 

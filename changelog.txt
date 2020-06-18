@@ -1,3 +1,4 @@
+* Fix GeoIP country in the Transfer View and Search window (emtee)
 * Keep existing GeoIP files after an unsuccessful download (emtee)
 * MiniUPnPc security and stability updates
 * Update OpenSSL to version 1.1.1g
