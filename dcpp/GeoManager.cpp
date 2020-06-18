@@ -52,6 +52,21 @@ void GeoManager::close() {
 const string& GeoManager::getCountry(const string& ip, int flags) {
 	if(!ip.empty()) {
 
+		/*Check for the IP version when the caller didn't specify it.
+		  This hadn't needed for years but with GeoIP databases released 
+		  somewhere in mid 2018 and on for V4 addresses (and for any arbitrary
+		  string for the matter) the GeoIP_id_by_addr_v6 call, unlike before
+		  when it returned no hits, now always returns a specific id that is 
+		  actually in the database. This resulted the same invalid country
+		  returned by this function for V4 addresses in cases when called 
+		  with IP version unspecified.
+		  This also ensures that V4 IPs never looked up unnecessary in the 
+		  V6 database which should improve performance.*/
+
+		if((flags & V6) && (flags & V4)) {
+			flags = Util::isIpV4(ip) ? V4 : V6;
+		}
+
 		if((flags & V6) && geo6.get()) {
 			const auto& ret = geo6->getCountry(ip);
 			if(!ret.empty())

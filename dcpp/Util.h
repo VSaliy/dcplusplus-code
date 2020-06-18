@@ -417,6 +417,9 @@ public:
 
 	static bool isPublicIp(const string& ip, bool v6) noexcept;
 
+	// Return whether the IP is a well formatted IPv4 address
+	static bool isIpV4(const string& ip) noexcept;
+
 	struct AddressInfo {
 		AddressInfo(const string& aName, const string& aIP, uint8_t aPrefix) : adapterName(aName), ip(aIP), prefix(aPrefix) { }
 		string adapterName;
