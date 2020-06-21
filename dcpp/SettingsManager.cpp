@@ -194,7 +194,7 @@ SettingsManager::SettingsManager() {
 	setDefault(IGNORE_BOT_PMS, false);
 	setDefault(LIST_DUPES, true);
 	setDefault(BUFFER_SIZE, 64);
-	setDefault(HUBLIST_SERVERS, "https://www.te-home.net/?do=hublist&get=hublist.xml.bz2;https://dchublist.org/hublist.xml.bz2;https://dchublist.ru/hublist.xml.bz2;https://tankafett.biz/?do=hublist&get=hublist.xml.bz2;http://hublist.eu/hublist.xml.bz2;");
+	setDefault(HUBLIST_SERVERS, "https://www.te-home.net/?do=hublist&get=hublist.xml.bz2;https://dchublist.org/hublist.xml.bz2;https://dchublist.ru/hublist.xml.bz2;https://tankafett.biz/?do=hublist&get=hublist.xml.bz2;https://dcnf.github.io/Hublist/hublist.xml.bz2;");
 	setDefault(DOWNLOAD_SLOTS, 6);
 	setDefault(MAX_DOWNLOAD_SPEED, 0);
 	setDefault(LOG_DIRECTORY, Util::getPath(Util::PATH_USER_LOCAL) + "Logs" PATH_SEPARATOR_STR);
@@ -558,7 +558,7 @@ void SettingsManager::load(string const& aFileName)
 			unset(PUBLICHUBSFRAME_WIDTHS);
 		}
 
-		if(v <= 0.867) {
+		if(v <= 0.868) {
 			// add all the newly introduced default hublist servers automatically. 
 			// change this to the version number of the previous release each time a new default hublist server entry added.
 			string lists = get(HUBLIST_SERVERS);
@@ -569,9 +569,7 @@ void SettingsManager::load(string const& aFileName)
 					lists += ";" + i;
 			}
 			set(HUBLIST_SERVERS, lists);
-		}
 
-		if(v <= 0.868) {
 			// Move back to default as this is now true by default:
 			// We assume TLS is commonplace enough among ADC clients.
 			unset(REQUIRE_TLS);
