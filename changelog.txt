@@ -1,3 +1,4 @@
+* Add option to exclude encrypted private messages from logs
 * [L#1445330] Allow CCPM on unencrypted ADC hubs (emtee)
 * [L#1853692] Blacklist an unmaintained hublist server
 * [L#1829064] Add new hublist server dcnf.github.io

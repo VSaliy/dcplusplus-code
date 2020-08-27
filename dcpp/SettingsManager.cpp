@@ -113,7 +113,7 @@ const string SettingsManager::settingTags[] =
 	"StatusInChat", "TimeDependentThrottle", "TimeStamps",
 	"ToggleActiveTab", "UrlHandler", "UseCTRLForLineHistory", "UseSystemIcons",
 	"UsersFilterFavorite", "UsersFilterOnline", "UsersFilterQueue", "UsersFilterWaiting",
-	"RegisterSystemStartup",
+	"RegisterSystemStartup", "DontLogCCPMChat",
 	"SENTRY",
 	// Int64
 	"TotalUpload", "TotalDownload", "SharingSkiplistMinSize", "SharingSkiplistMaxSize",
@@ -362,6 +362,7 @@ SettingsManager::SettingsManager() {
 	setDefault(REQUIRE_TLS, true); // True by default: We assume TLS is commonplace enough among ADC clients.
 	setDefault(ENABLE_CCPM, true);
 	setDefault(ALWAYS_CCPM, false);
+	setDefault(DONT_LOG_CCPM, false);
 	setDefault(LAST_SHARED_FOLDER, Util::emptyString);
 	setDefault(SHARING_SKIPLIST_EXTENSIONS, Util::emptyString);
 	setDefault(SHARING_SKIPLIST_REGEX, Util::emptyString);
