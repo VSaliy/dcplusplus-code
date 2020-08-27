@@ -194,6 +194,8 @@ PrivateFrame::~PrivateFrame() {
 void PrivateFrame::addedChat(const tstring& message) {
 	setDirty(SettingsManager::BOLD_PM);
 
+	if (ccReady() && SETTING(DONT_LOG_CCPM)) return;
+
 	if(SETTING(LOG_PRIVATE_CHAT)) {
 		ParamMap params;
 		params["message"] = [&message] { return Text::toDOS(Text::fromT(message)); };

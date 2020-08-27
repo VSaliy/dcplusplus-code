@@ -61,6 +61,8 @@ AdvancedPage::ListItem AdvancedPage::listItems[] = {
 			}
 		}
 	},
+	// @TODO this would be better placed in LogPage, in a new grid item at the bottom of the page
+	{ SettingsManager::DONT_LOG_CCPM, N_("Do not log the direct encrypted secure private chat"), IDH_SETTINGS_DONT_LOG_CCPM_CHAT },
 	{ 0, 0 }
 };
 
