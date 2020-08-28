@@ -51,6 +51,7 @@ dir(0),
 options(0),
 logFormat(0),
 logFile(0),
+dontLogCCPMCheckBox(0),
 oldSelection(-1)
 {
 	setHelpId(IDH_LOGPAGE);
@@ -61,7 +62,7 @@ oldSelection(-1)
 
 	auto group = grid->addChild(GroupBox::Seed(T_("Logging")));
 
-	GridPtr grid = group->addChild(Grid::Seed(3, 1));
+	GridPtr grid = group->addChild(Grid::Seed(4, 1));
 	grid->column(0).mode = GridInfo::FILL;
 	grid->row(1).mode = GridInfo::FILL;
 	grid->row(1).align = GridInfo::STRETCH;
@@ -93,6 +94,12 @@ oldSelection(-1)
 
 		cur->addChild(Label::Seed(T_("Filename")));
 		logFile = cur->addChild(WinUtil::Seeds::Dialog::textBox);
+	}
+
+	{
+		dontLogCCPMCheckBox = grid->addChild(Grid::Seed(1, 1))->addChild(CheckBox::Seed(T_("Do not log the direct encrypted secure private chat")));
+		items.emplace_back(dontLogCCPMCheckBox, SettingsManager::DONT_LOG_CCPM, PropPage::T_BOOL);
+		dontLogCCPMCheckBox->setHelpId(IDH_SETTINGS_DONT_LOG_CCPM_CHAT); 
 	}
 
 	PropPage::read(items);

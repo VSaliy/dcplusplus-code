@@ -40,6 +40,8 @@ private:
 	TextBoxPtr logFormat;
 	TextBoxPtr logFile;
 
+	CheckBoxPtr dontLogCCPMCheckBox; 
+
 	int oldSelection;
 
 	//store all log options here so we can discard them
