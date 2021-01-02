@@ -294,8 +294,8 @@ SettingsManager::SettingsManager() {
 	setDefault(NO_IP_OVERRIDE, false);
 	setDefault(SEARCH_ONLY_FREE_SLOTS, false);
 	setDefault(SEARCH_FILTER_SHARED, true);
-	setDefault(SOCKET_IN_BUFFER, 64*1024);
-	setDefault(SOCKET_OUT_BUFFER, 64*1024);
+	setDefault(SOCKET_IN_BUFFER, 0); // OS default
+	setDefault(SOCKET_OUT_BUFFER, 0); // OS default
 	setDefault(TLS_TRUSTED_CERTIFICATES_PATH, Util::getPath(Util::PATH_USER_CONFIG) + "Certificates" PATH_SEPARATOR_STR);
 	setDefault(TLS_PRIVATE_KEY_FILE, Util::getPath(Util::PATH_USER_CONFIG) + "Certificates" PATH_SEPARATOR_STR "client.key");
 	setDefault(TLS_CERTIFICATE_FILE, Util::getPath(Util::PATH_USER_CONFIG) + "Certificates" PATH_SEPARATOR_STR "client.crt");
