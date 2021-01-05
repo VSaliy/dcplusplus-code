@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001-2019 Jacek Sieka, arnetheduck on gmail point com
+ * Copyright (C) 2001-2021 Jacek Sieka, arnetheduck on gmail point com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,12 +38,6 @@ using std::vector;
 class FileReader : boost::noncopyable {
 public:
 
-	enum Strategy {
-		DIRECT,
-		MAPPED,
-		CACHED
-	};
-
 	typedef function<bool(const void*, size_t)> DataCallback;
 
 	/**
@@ -63,8 +57,7 @@ public:
 	size_t read(const string& file, const DataCallback& callback);
 
 private:
-	static const size_t DEFAULT_BLOCK_SIZE = 256*1024;
-	static const size_t DEFAULT_MMAP_SIZE = 64*1024*1024;
+	static const size_t DEFAULT_BLOCK_SIZE = 1024*1024;
 
 	string file;
 	bool direct;
@@ -77,7 +70,6 @@ private:
 	void* align(void* buf, size_t alignment);
 
 	size_t readDirect(const string& file, const DataCallback& callback);
-	size_t readMapped(const string& file, const DataCallback& callback);
 	size_t readCached(const string& file, const DataCallback& callback);
 };
 
