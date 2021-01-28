@@ -13,7 +13,7 @@
 #else
 #define OS_STRING "Generic/1"
 #endif
-#define MINIUPNPC_VERSION_STRING "2.0"
+#define MINIUPNPC_VERSION_STRING "2.2.1"
 
 #if 0
 /* according to "UPnP Device Architecture 1.0" */
