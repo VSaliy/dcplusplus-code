@@ -21,7 +21,7 @@
 
 #include <cstdint>
 #include <string>
-#include <boost/noncopyable.hpp>
+#include <boost/core/noncopyable.hpp>
 
 namespace dcpp {
 

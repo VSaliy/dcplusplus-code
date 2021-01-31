@@ -19,7 +19,7 @@
 #ifndef DCPLUSPLUS_DCPP_POINTER_H
 #define DCPLUSPLUS_DCPP_POINTER_H
 
-#include <boost/intrusive_ptr.hpp>
+#include <boost/smart_ptr/intrusive_ptr.hpp>
 
 #include <memory>
 

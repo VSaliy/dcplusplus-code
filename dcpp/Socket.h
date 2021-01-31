@@ -45,7 +45,7 @@ const int INVALID_SOCKET = -1;
 #include "Util.h"
 #include "Exception.h"
 
-#include <boost/noncopyable.hpp>
+#include <boost/core/noncopyable.hpp>
 #include <memory>
 
 namespace dcpp {

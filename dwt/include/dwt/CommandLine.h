@@ -36,7 +36,7 @@
 #ifndef DWT_CommandLine_h
 #define DWT_CommandLine_h
 
-#include <boost/noncopyable.hpp>
+#include <boost/core/noncopyable.hpp>
 #include <vector>
 #include "tstring.h"
 

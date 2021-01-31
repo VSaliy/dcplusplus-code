@@ -19,7 +19,7 @@
 #ifndef DCPLUSPLUS_WIN32_LIST_FILTER_H
 #define DCPLUSPLUS_WIN32_LIST_FILTER_H
 
-#include <boost/noncopyable.hpp>
+#include <boost/core/noncopyable.hpp>
 
 #include <dcpp/StringMatch.h>
 

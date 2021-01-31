@@ -19,7 +19,7 @@
 #ifndef DCPLUSPLUS_DCPP_FINISHED_ITEM_H
 #define DCPLUSPLUS_DCPP_FINISHED_ITEM_H
 
-#include <boost/noncopyable.hpp>
+#include <boost/core/noncopyable.hpp>
 
 #include "forward.h"
 #include "typedefs.h"

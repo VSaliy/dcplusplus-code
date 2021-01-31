@@ -21,7 +21,7 @@
 
 #include <map>
 
-#include <boost/noncopyable.hpp>
+#include <boost/core/noncopyable.hpp>
 
 #include "forward.h"
 #include "Flags.h"

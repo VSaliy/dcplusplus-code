@@ -2,7 +2,11 @@
 //
 // R-tree initial packing
 //
-// Copyright (c) 2011-2015 Adam Wulkiewicz, Lodz, Poland.
+// Copyright (c) 2011-2017 Adam Wulkiewicz, Lodz, Poland.
+//
+// This file was modified by Oracle on 2019.
+// Modifications copyright (c) 2019 Oracle and/or its affiliates.
+// Contributed and/or modified by Adam Wulkiewicz, on behalf of Oracle
 //
 // Use, modification and distribution is subject to the Boost Software License,
 // Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -11,8 +15,11 @@
 #ifndef BOOST_GEOMETRY_INDEX_DETAIL_RTREE_PACK_CREATE_HPP
 #define BOOST_GEOMETRY_INDEX_DETAIL_RTREE_PACK_CREATE_HPP
 
+#include <boost/core/ignore_unused.hpp>
+
 #include <boost/geometry/algorithms/expand.hpp>
 #include <boost/geometry/index/detail/algorithms/bounds.hpp>
+#include <boost/geometry/index/detail/algorithms/nth_element.hpp>
 
 #include <boost/geometry/algorithms/detail/expand_by_epsilon.hpp>
 
@@ -67,7 +74,7 @@ struct nth_element_and_half_boxes
     {
         if ( I == dim_index )
         {
-            std::nth_element(first, median, last, point_entries_comparer<I>());
+            index::detail::nth_element(first, median, last, point_entries_comparer<I>());
 
             geometry::convert(box, left);
             geometry::convert(box, right);
@@ -134,6 +141,7 @@ class pack
     typedef typename geometry::coordinate_type<point_type>::type coordinate_type;
     typedef typename detail::default_content_result<Box>::type content_type;
     typedef typename Options::parameters_type parameters_type;
+    typedef typename detail::strategy_type<parameters_type>::type strategy_type;
     static const std::size_t dimension = geometry::dimension<point_type>::value;
 
     typedef typename rtree::container_from_elements_type<
@@ -162,7 +170,7 @@ public:
         values_count = static_cast<size_type>(diff);
         entries.reserve(values_count);
         
-        expandable_box<Box> hint_box;
+        expandable_box<Box, strategy_type> hint_box(detail::get_strategy(parameters));
         for ( ; first != last ; ++first )
         {
             // NOTE: support for iterators not returning true references adapted
@@ -191,19 +199,19 @@ public:
     }
 
 private:
-    template <typename BoxType>
+    template <typename BoxType, typename Strategy>
     class expandable_box
     {
     public:
-        expandable_box()
-            : m_initialized(false)
+        explicit expandable_box(Strategy const& strategy)
+            : m_strategy(strategy), m_initialized(false)
         {}
 
         template <typename Indexable>
-        explicit expandable_box(Indexable const& indexable)
-            : m_initialized(true)
+        explicit expandable_box(Indexable const& indexable, Strategy const& strategy)
+            : m_strategy(strategy), m_initialized(true)
         {
-            detail::bounds(indexable, m_box);
+            detail::bounds(indexable, m_box, m_strategy);
         }
 
         template <typename Indexable>
@@ -214,12 +222,12 @@ private:
                 // it's guaranteed that the Box will be initialized
                 // only for Points, Boxes and Segments but that's ok
                 // since only those Geometries can be stored
-                detail::bounds(indexable, m_box);
+                detail::bounds(indexable, m_box, m_strategy);
                 m_initialized = true;
             }
             else
             {
-                geometry::expand(m_box, indexable);
+                detail::expand(m_box, indexable, m_strategy);
             }
         }
 
@@ -235,8 +243,9 @@ private:
         }
 
     private:
-        bool m_initialized;
         BoxType m_box;
+        Strategy m_strategy;
+        bool m_initialized;
     };
 
     struct subtree_elements_counts
@@ -270,7 +279,8 @@ private:
 
             // calculate values box and copy values
             //   initialize the box explicitly to avoid GCC-4.4 uninitialized variable warnings with O2
-            expandable_box<Box> elements_box(translator(*(first->second)));
+            expandable_box<Box, strategy_type> elements_box(translator(*(first->second)),
+                                                            detail::get_strategy(parameters));
             rtree::elements(l).push_back(*(first->second));                                                 // MAY THROW (A?,C)
             for ( ++first ; first != last ; ++first )
             {
@@ -316,7 +326,7 @@ private:
         std::size_t nodes_count = calculate_nodes_count(values_count, subtree_counts);
         rtree::elements(in).reserve(nodes_count);                                                           // MAY THROW (A)
         // calculate values box and copy values
-        expandable_box<Box> elements_box;
+        expandable_box<Box, strategy_type> elements_box(detail::get_strategy(parameters));
         
         per_level_packets(first, last, hint_box, values_count, subtree_counts, next_subtree_counts,
                           rtree::elements(in), elements_box,
@@ -382,7 +392,7 @@ private:
     inline static
     subtree_elements_counts calculate_subtree_elements_counts(std::size_t elements_count, parameters_type const& parameters, size_type & leafs_level)
     {
-        boost::ignore_unused_variable_warning(parameters);
+        boost::ignore_unused(parameters);
 
         subtree_elements_counts res(1, 1);
         leafs_level = 0;
