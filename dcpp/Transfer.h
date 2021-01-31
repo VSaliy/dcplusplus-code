@@ -20,6 +20,7 @@
 #define DCPLUSPLUS_DCPP_TRANSFER_H_
 
 #include <deque>
+#include <boost/core/noncopyable.hpp>
 
 #include "forward.h"
 #include "MerkleTree.h"

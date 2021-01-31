@@ -20,6 +20,21 @@
 #define DCPLUSPLUS_DCPP_FORMAT_H_
 
 #include <libintl.h>
+
+// libintl's "#define snprintf libintl_snprintf" does not play nicely with
+// Boost using std::snprintf. https://github.com/boostorg/system/issues/32
+// describes this issue in the context of #define snprintf _snprintf which
+// creates analogous problems. libintl's snprintf isn't part of localizing
+// per se, so allow Boost to use std::snprintf(...), unobstructed by macro
+// definitions.
+//
+// https://www.c-plusplus.net/forum/topic/231492/bin-am-verzweifeln-error-libintl_snprintf-is-not-a-member-of-std
+// notes, for example: "Für mich sieht das sehr stark danach aus, daß einer
+// deiner anderen Header sowas wie #define snprintf libintl_snprintf macht.
+// Und sowas macht man natürlich einfach nicht." But libintl does, exactly,
+// that.
+#undef snprintf
+
 #include <boost/format.hpp>
 
 #ifdef BUILDING_DCPP

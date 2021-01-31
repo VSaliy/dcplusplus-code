@@ -105,14 +105,14 @@ toolbar(0),
 tabs(0),
 tray_pm(false),
 geoRegion(GeoRegion_Idle),
+geoStaticServe(false),
 stopperThread(NULL),
 lastUp(0),
 lastDown(0),
 lastTick(GET_TICK()),
 away(false),
 awayIdle(false),
-fullSlots(false),
-geoStaticServe(false)
+fullSlots(false)
 {
 	// Don't forget to update version.xml when changing these links!
 	links.homepage = _T("https://dcplusplus.sourceforge.io/");

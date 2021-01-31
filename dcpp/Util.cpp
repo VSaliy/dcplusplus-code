@@ -87,30 +87,17 @@ extern "C" const char *_nl_locale_name_default(void);
 
 #ifdef _WIN32
 
-typedef HRESULT (WINAPI* _SHGetKnownFolderPath)(GUID& rfid, DWORD dwFlags, HANDLE hToken, PWSTR *ppszPath);
-
 static string getDownloadsPath(const string& def) {
 	// Try Vista downloads path
-	static _SHGetKnownFolderPath getKnownFolderPath = 0;
-	static HINSTANCE shell32 = NULL;
+	PWSTR path = NULL;
 
-	if(!shell32) {
-	    shell32 = ::LoadLibrary(_T("Shell32.dll"));
-	    if(shell32)
-	    {
-	    	getKnownFolderPath = (_SHGetKnownFolderPath)::GetProcAddress(shell32, "SHGetKnownFolderPath");
+	// Defined in KnownFolders.h.
+	static GUID downloads = {0x374de290, 0x123f, 0x4565, {0x91, 0x64, 0x39, 0xc4, 0x92, 0x5e, 0x46, 0x7b}};
 
-	    	if(getKnownFolderPath) {
-	    		 PWSTR path = NULL;
-	             // Defined in KnownFolders.h.
-	             static GUID downloads = {0x374de290, 0x123f, 0x4565, {0x91, 0x64, 0x39, 0xc4, 0x92, 0x5e, 0x46, 0x7b}};
-	    		 if(getKnownFolderPath(downloads, 0, NULL, &path) == S_OK) {
-	    			 string ret = Text::fromT(path) + "\\";
-	    			 ::CoTaskMemFree(path);
-	    			 return ret;
-	    		 }
-	    	}
-	    }
+	if(::SHGetKnownFolderPath(downloads, 0, NULL, &path) == S_OK) {
+		string ret = Text::fromT(path) + "\\";
+		::CoTaskMemFree(path);
+		return ret;
 	}
 
 	return def + "Downloads\\";
