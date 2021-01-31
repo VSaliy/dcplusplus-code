@@ -23,6 +23,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <boost/core/noncopyable.hpp>
 
 typedef struct GeoIPTag GeoIP;
 

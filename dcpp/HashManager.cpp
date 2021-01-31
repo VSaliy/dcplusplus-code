@@ -368,33 +368,7 @@ be found, and if it has no case-insensitive duplicate. */
 
 #ifdef _WIN32
 
-/* we are going to use GetFinalPathNameByHandle to retrieve a properly cased path out of the
-lower-case one that the version 2 file registry has provided us with. that API is only available
-on Windows >= Vista. */
-typedef DWORD (WINAPI *t_GetFinalPathNameByHandle)(HANDLE, LPTSTR, DWORD, DWORD);
-t_GetFinalPathNameByHandle initGFPNBH() {
-	static bool init = false;
-	static t_GetFinalPathNameByHandle GetFinalPathNameByHandle = nullptr;
-
-	if(!init) {
-		init = true;
-
-		auto lib = ::LoadLibrary(_T("kernel32.dll"));
-		if(lib) {
-			GetFinalPathNameByHandle = reinterpret_cast<t_GetFinalPathNameByHandle>(
-				::GetProcAddress(lib, "GetFinalPathNameByHandleW"));
-		}
-	}
-
-	return GetFinalPathNameByHandle;
-}
-
 bool upgradeFromV2(string& file) {
-	auto GetFinalPathNameByHandle = initGFPNBH();
-	if(!GetFinalPathNameByHandle) {
-		return false;
-	}
-
 	WIN32_FIND_DATA data;
 	// FindFirstFile does a case-insensitive search by default
 	auto handle = ::FindFirstFile(Text::toT(file).c_str(), &data);
@@ -417,7 +391,7 @@ bool upgradeFromV2(string& file) {
 	}
 
 	wstring buf(file.size() * 2, 0);
-	buf.resize(GetFinalPathNameByHandle(handle, &buf[0], buf.size(), 0));
+	buf.resize(::GetFinalPathNameByHandle(handle, &buf[0], buf.size(), 0));
 
 	::CloseHandle(handle);
 

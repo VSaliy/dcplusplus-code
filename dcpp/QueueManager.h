@@ -124,7 +124,6 @@ public:
 
 	Download* getDownload(UserConnection& aSource) noexcept;
 	void putDownload(Download* aDownload, bool finished) noexcept;
-	void setFile(Download* download);
 
 	pair<size_t, int64_t> getQueued(const UserPtr& aUser) const;
 

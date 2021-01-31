@@ -26,6 +26,8 @@
 #include "CriticalSection.h"
 #include "Flags.h"
 
+#include <boost/core/noncopyable.hpp>
+
 namespace dcpp {
 
 /** A user connected to one or more hubs. */
