@@ -14,6 +14,7 @@
 * Disallow Diffie-Hellman keys smaller than 2048 bits to mitigate the Logjam attack (cologic)
 * Update bzip2 to version 1.0.8
 * Update MiniUPnPc to version 2.2.1
+* Update Boost to version 1.72
 
 -- 0.868 2018-11-12 --
 * During the first run of a new DC++ release shipped with new default hublist servers the new addresses are automatically added

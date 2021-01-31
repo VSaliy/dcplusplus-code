@@ -39,7 +39,7 @@
 #include "WindowsHeaders.h"
 #include "tstring.h"
 
-#include <boost/noncopyable.hpp>
+#include <boost/core/noncopyable.hpp>
 
 namespace dwt {
 

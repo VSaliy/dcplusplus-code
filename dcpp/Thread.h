@@ -30,7 +30,7 @@
 
 #include <cstdint>
 
-#include <boost/noncopyable.hpp>
+#include <boost/core/noncopyable.hpp>
 #include "Exception.h"
 
 namespace dcpp {

@@ -76,7 +76,7 @@
 #include <memory>
 #include <vector>
 #include <list>
-#include <boost/noncopyable.hpp>
+#include <boost/core/noncopyable.hpp>
 
 // Other quirks
 

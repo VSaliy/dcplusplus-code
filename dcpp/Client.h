@@ -32,7 +32,7 @@
 #include "Speaker.h"
 #include "TimerManager.h"
 
-#include <boost/noncopyable.hpp>
+#include <boost/core/noncopyable.hpp>
 
 namespace dcpp {
 

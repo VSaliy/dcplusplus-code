@@ -26,7 +26,7 @@
 #include "MerkleTree.h"
 #include "Pointer.h"
 
-#include <boost/noncopyable.hpp>
+#include <boost/core/noncopyable.hpp>
 
 namespace dcpp {
 

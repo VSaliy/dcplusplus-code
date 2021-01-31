@@ -71,8 +71,8 @@
 #include <utility>
 #include <vector>
 
-#include <boost/intrusive_ptr.hpp>
-#include <boost/noncopyable.hpp>
+#include <boost/smart_ptr/intrusive_ptr.hpp>
+#include <boost/core/noncopyable.hpp>
 #include <boost/optional.hpp>
 #include <boost/range/algorithm/find_if.hpp>
 #include <boost/range/algorithm/find.hpp>
@@ -83,6 +83,11 @@
 #include <boost/variant.hpp>
 
 #include <bzlib.h>
+
+// https://github.com/mingw-w64/mingw-w64/blob/fc2b4752ac61670d6d4940959a78da5ad8a9ebc4/mingw-w64-headers/include/wincrypt.h#L1505
+#ifdef X509_NAME
+#undef X509_NAME
+#endif
 
 #include <openssl/ssl.h>
 

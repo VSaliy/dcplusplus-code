@@ -24,7 +24,7 @@
 #include <string>
 #include <vector>
 
-#include <boost/noncopyable.hpp>
+#include <boost/core/noncopyable.hpp>
 
 namespace dcpp {
 

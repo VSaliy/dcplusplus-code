@@ -22,7 +22,7 @@
 #include <memory>
 #include <unordered_map>
 
-#include <boost/noncopyable.hpp>
+#include <boost/core/noncopyable.hpp>
 
 #include <dcpp/FastAlloc.h>
 #include <dcpp/QueueManagerListener.h>

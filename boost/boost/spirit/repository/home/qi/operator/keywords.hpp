@@ -31,6 +31,7 @@
 #include <boost/spirit/home/qi/action/action.hpp>
 #include <boost/spirit/home/qi/directive/hold.hpp>
 #include <boost/mpl/count_if.hpp>
+#include <boost/mpl/greater.hpp>
 #include <boost/mpl/range_c.hpp>
 #include <boost/mpl/copy.hpp>
 #include <boost/mpl/size.hpp>
@@ -262,7 +263,7 @@ namespace boost { namespace spirit { namespace repository { namespace qi
             // 1) parse a keyword and fetch the parser index associated with that keyword
             // 2) call the associated parser and store the parsed value in the matching attribute.
 
-            while(true)
+            for(;;)
             {
 
                 spirit::qi::skip_over(first, last, skipper);
@@ -343,7 +344,7 @@ namespace boost { namespace spirit { namespace repository { namespace qi
             // 1) parse a keyword and fetch the parser index associated with that keyword
             // 2) call the associated parser and store the parsed value in the matching attribute.
 
-            while(true)
+            for(;;)
             {
                 spirit::qi::skip_over(first, last, skipper);
                 Iterator save = first;

@@ -22,6 +22,11 @@
 #include "w.h"
 #include "typedefs.h"
 
+// https://github.com/mingw-w64/mingw-w64/blob/fc2b4752ac61670d6d4940959a78da5ad8a9ebc4/mingw-w64-headers/include/wincrypt.h#L1505
+#ifdef X509_NAME
+#undef X509_NAME
+#endif
+
 #include <openssl/ssl.h>
 
 #include <vector>

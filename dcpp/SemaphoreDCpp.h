@@ -22,7 +22,7 @@
 #ifndef DCPLUSPLUS_DCPP_SEMAPHOREDCPP_H
 #define DCPLUSPLUS_DCPP_SEMAPHOREDCPP_H
 
-#include <boost/noncopyable.hpp>
+#include <boost/core/noncopyable.hpp>
 
 #ifdef _WIN32
 #include "w.h"
