@@ -71,9 +71,6 @@ public:
 	/** Return block size of the tree associated with root, or 0 if no such tree is in the store */
 	int64_t getBlockSize(const TTHValue& root);
 
-	void addTree(const string& aFileName, uint32_t aTimeStamp, const TigerTree& tt) {
-		hashDone(aFileName, aTimeStamp, tt, -1, -1);
-	}
 	void addTree(const TigerTree& tree) { Lock l(cs); store.addTree(tree); }
 
 	void getStats(string& curFile, uint64_t& bytesLeft, size_t& filesLeft) const {
