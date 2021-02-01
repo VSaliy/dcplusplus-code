@@ -667,6 +667,8 @@ int HashManager::Hasher::run() {
 
 				if(xcrc32 && xcrc32->getValue() != sfv.getCRC()) {
 					LogManager::getInstance()->message(str(F_("%1% not shared; calculated CRC32 does not match the one found in SFV file.") % Util::addBrackets(fname)));
+				} else if(sizeLeft != 0) {
+					LogManager::getInstance()->message(str(F_("%1% not shared; hashing did not complete.") % Util::addBrackets(fname)));
 				} else {
 					HashManager::getInstance()->hashDone(fname, timestamp, tt, speed, size);
 				}
