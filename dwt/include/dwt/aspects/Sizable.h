@@ -40,8 +40,12 @@
 #include "../Dispatchers.h"
 #include "../Events.h"
 
-namespace dwt { namespace aspects {
+namespace dwt {
 
+// g++ 10.x otherwise doesn't instantiate it, leading to a linker error.
+template SizedEvent Dispatchers::convert<SizedEvent>(const MSG& msg);
+
+namespace aspects {
 namespace detail {
 	inline Rectangle clientRectFromMSG(const MSG &msg) {
 		RECT rc;
