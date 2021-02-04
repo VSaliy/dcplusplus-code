@@ -4,6 +4,7 @@
 * [L#1853692] Blacklist an unmaintained hublist server
 * [L#1829064] Add new hublist server dcnf.github.io
 * [L#1815377] Fix a bug that could keep files from hashing due to CRC errors when automatic .sfv checking is enabled (emtee)
+* [L#1910274] Don't add incomplete TTH trees to hash database
 * Fix GeoIP country in the Transfer View and Search window (emtee)
 * Keep existing GeoIP files after an unsuccessful download (emtee)
 * MiniUPnPc security and stability updates
