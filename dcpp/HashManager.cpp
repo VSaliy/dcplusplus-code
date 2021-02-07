@@ -390,6 +390,8 @@ bool upgradeFromV2(string& file) {
 		return false;
 	}
 
+	// use GetFinalPathNameByHandle to retrieve a properly cased path from the
+	// lower-case one that the version 2 file registry has provided us with.
 	wstring buf(file.size() * 2, 0);
 	buf.resize(::GetFinalPathNameByHandle(handle, &buf[0], buf.size(), 0));
 

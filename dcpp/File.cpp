@@ -535,7 +535,7 @@ bool FileFindIter::operator!=(const FileFindIter& rhs) const {
 FileFindIter::DirData::DirData() : ent(NULL) {}
 
 string FileFindIter::DirData::getFileName() {
-	if (!ent) return Util::emptyString;
+	if (!ent || !Text::validateUtf8(ent->d_name)) return Util::emptyString;
 	return Text::toUtf8(ent->d_name);
 }
 
