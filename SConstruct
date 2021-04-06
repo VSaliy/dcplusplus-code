@@ -23,7 +23,6 @@ from build_util import Dev, gen_po_name
 #   -Wno-unknown-pragmas: htmlhelp.h emits these.
 #   -Wno-unused-[parameter / value]: We have a ton of these; maybe one day...
 #   -Wno-unused-but-set-variable: dwarf/dwarf_arange.c:113:13
-#   -Wno-deprecated-copy: boost/regex/v4/regex.hpp
 gcc_flags = {
     'common': [
         '-g', '-Wall', '-Wextra',
@@ -38,7 +37,7 @@ gcc_flags = {
 }
 
 gcc_xxflags = {
-    'common': ['-Wno-deprecated-copy'],
+    'common': [],
     'debug': [],
     'release': []
 }
@@ -224,8 +223,8 @@ if dev.is_win32():
     # Windows header defines
     # <https://msdn.microsoft.com/en-us/library/aa383745(VS.85).aspx>
     env.Append(CPPDEFINES=[
-        '_WIN32_WINNT=0x601',  # Windows 7
-        'WINVER=0x601',  # Windows 7
+        '_WIN32_WINNT=0x600',  # Windows Vista
+        'WINVER=0x600',  # Windows Vista
         '_WIN32_IE=0x600',  # Common Controls 6
 
         # other defs that influence Windows headers

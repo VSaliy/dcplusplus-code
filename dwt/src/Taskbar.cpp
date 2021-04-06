@@ -60,6 +60,9 @@ static t_DwmSetIconicThumbnail DwmSetIconicThumbnail = 0;
 typedef HRESULT (WINAPI *t_DwmSetWindowAttribute)(HWND, DWORD, LPCVOID, DWORD);
 static t_DwmSetWindowAttribute DwmSetWindowAttribute = 0;
 
+typedef BOOL (WINAPI *t_ChangeWindowMessageFilterEx)(HWND, UINT, DWORD, void*);
+static t_ChangeWindowMessageFilterEx ChangeWindowMessageFilterEx = 0;
+
 Taskbar::Taskbar() :
 taskbar(0),
 window(0)
@@ -84,6 +87,13 @@ void Taskbar::initTaskbar(WindowPtr window_) {
 		get(DwmSetIconicThumbnail);
 		get(DwmSetWindowAttribute);
 #undef get
+
+		if(!ChangeWindowMessageFilterEx) {
+			LibraryLoader lib_user32(_T("user32"));
+			ChangeWindowMessageFilterEx = reinterpret_cast<t_ChangeWindowMessageFilterEx>(
+				lib_user32.getProcAddress(_T("ChangeWindowMessageFilterEx")));
+			// ignore failures, this isn't a vital call to have.
+		}
 
 		window = window_;
 		dwtassert(window, "Taskbar: no widget set");
@@ -141,8 +151,10 @@ void Taskbar::addToTaskbar(ContainerPtr tab) {
 
 	/* call ChangeWindowMessageFilterEx on the 2 messages we use to dispatch bitmaps to the
 	destktop manager to prevent blockings because of different privilege levels. */
-	::ChangeWindowMessageFilterEx(proxy->handle(), WM_DWMSENDICONICTHUMBNAIL, 1/*MSGFLT_ALLOW*/, 0);
-	::ChangeWindowMessageFilterEx(proxy->handle(), WM_DWMSENDICONICLIVEPREVIEWBITMAP, 1/*MSGFLT_ALLOW*/, 0);
+	if(ChangeWindowMessageFilterEx) {
+		ChangeWindowMessageFilterEx(proxy->handle(), WM_DWMSENDICONICTHUMBNAIL, 1/*MSGFLT_ALLOW*/, 0);
+		ChangeWindowMessageFilterEx(proxy->handle(), WM_DWMSENDICONICLIVEPREVIEWBITMAP, 1/*MSGFLT_ALLOW*/, 0);
+	}
 
 	// keep the proxy window in sync with the actual tab window.
 	tab->onTextChanging([proxy](const tstring& text) { proxy->setText(text); });
