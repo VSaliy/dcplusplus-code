@@ -1029,14 +1029,13 @@ void NmdcHub::on(Second, uint64_t aTick) noexcept {
 }
 
 void NmdcHub::on(Minute, uint64_t aTick) noexcept {
+	if(!sock) return;
+
 	refreshLocalIp();
 
 	if(aTick > (lastProtectedIPsUpdate + 24*3600*1000)) {
 		protectedIPs = {
-			"dcpp.net",
-			"dchublist.com",
-			"hublist.eu",
-			"hublista.hu",
+			"dchublist.org",
 			"dcbase.org"
 		};
 		for(auto i = protectedIPs.begin(); i != protectedIPs.end();) {
