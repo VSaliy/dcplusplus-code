@@ -1,3 +1,4 @@
+* [L#1703150] Fix crash when closing NMDC hubs (emtee)
 * [L#1909853] Allow the operating system to determine the best socket buffer sizes by default (maksis)
 * Add option to exclude encrypted private messages from logs (emtee)
 * [L#1445330] Allow CCPM on unencrypted ADC hubs (emtee)
