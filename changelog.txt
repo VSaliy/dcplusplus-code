@@ -1,3 +1,4 @@
+* Adaptively determine fastest TLS 1.3 ciphersuites
 * [L#1703150] Fix crash when closing NMDC hubs (emtee)
 * [L#1909853] Allow the operating system to determine the best socket buffer sizes by default (maksis)
 * Add option to exclude encrypted private messages from logs (emtee)
