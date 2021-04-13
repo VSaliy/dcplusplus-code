@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001-2020 Jacek Sieka, arnetheduck on gmail point com
+ * Copyright (C) 2001-2021 Jacek Sieka, arnetheduck on gmail point com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,6 +40,39 @@ int CryptoManager::idxVerifyData = 0;
 char CryptoManager::idxVerifyDataName[] = APPNAME ".VerifyData";
 CryptoManager::SSLVerifyData CryptoManager::trustedKeyprint = { false, "trusted_keyp" };
 
+#if defined(_MSC_VER) && (defined(_M_IX86) || defined(_M_X64))
+#include <intrin.h>
+static inline void mcpuid(int function, int subfunction, int cpuInfo[4]) {
+	__cpuidex(cpuInfo, function, subfunction);
+}
+#elif (defined(__clang__) || defined(__GNUC__)) && (defined(__i386__) || defined(__x86_64__))
+#include <cpuid.h>
+static inline void mcpuid(int function, int subfunction, int cpuInfo[4]) {
+	__cpuid_count(function,subfunction,cpuInfo[0],cpuInfo[1],cpuInfo[2],cpuInfo[3]);
+}
+#else
+static inline void mcpuid(int function, int subfunction, int cpuInfo[4]) {
+	cpuInfo[0] = 0; cpuInfo[1] = 0; cpuInfo[2] = 0; cpuInfo[3] = 0;
+}
+#endif
+
+static bool hardware_gcm(void) {
+	int cpuInfo[4], maxcpuid;
+	mcpuid(0,0,cpuInfo);
+	maxcpuid = cpuInfo[0];
+	if (maxcpuid >= 1) {
+		mcpuid(1,0,cpuInfo);
+		if ((cpuInfo[2] & (1<<1|1<<25)) == (1<<1|1<<25))
+			 return true;
+	}
+	if (maxcpuid >= 7) {
+		mcpuid(7,0,cpuInfo);
+		if ((cpuInfo[2] & (1<<10|1<<9)) == (1<<10|1<<9))
+			 return true;
+	}
+	return false;
+}
+
 CryptoManager::CryptoManager()
 :
 	certsLoaded(false),
@@ -69,14 +102,23 @@ CryptoManager::CryptoManager()
 		for(int i = KEY_RSA_2048; i != KEY_LAST; ++i)
 			tmpKeysMap[i] = getTmpRSA(getKeyLength(static_cast<TLSTmpKeys>(i)));
 
-		const char ciphersuites[] = "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA256";
+		const char ciphersuites12[] = "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA256";
+
+		// Arranged in order of performance, depending on presence of AES-NI and CLMUL
+		const char ciphersuites13_aesgcm[] = "TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256";
+		const char ciphersuites13_chacha[] = "TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384";
+		const char* ciphersuites13 = hardware_gcm() ? ciphersuites13_aesgcm : ciphersuites13_chacha;
+
 		SSL_CTX_set_min_proto_version(clientContext, TLS1_2_VERSION);
 		SSL_CTX_set_security_level(clientContext, 2);
-		SSL_CTX_set_cipher_list(clientContext, ciphersuites);
+		SSL_CTX_set_cipher_list(clientContext, ciphersuites12);
+		SSL_CTX_set_ciphersuites(clientContext, ciphersuites13);
+
 		SSL_CTX_set_min_proto_version(serverContext, TLS1_2_VERSION);
 		SSL_CTX_set_security_level(serverContext, 2);
-		SSL_CTX_set_options(serverContext, SSL_OP_SINGLE_DH_USE);
-		SSL_CTX_set_cipher_list(serverContext, ciphersuites);
+		SSL_CTX_set_options(serverContext, SSL_OP_SINGLE_DH_USE|SSL_OP_CIPHER_SERVER_PREFERENCE|SSL_OP_PRIORITIZE_CHACHA);
+		SSL_CTX_set_cipher_list(serverContext, ciphersuites12);
+		SSL_CTX_set_ciphersuites(serverContext, ciphersuites13);
 
 		EC_KEY* tmp_ecdh;
 		if ((tmp_ecdh = EC_KEY_new_by_curve_name(NID_X9_62_prime256v1)) != NULL) {
@@ -97,9 +139,6 @@ CryptoManager::CryptoManager()
 CryptoManager::~CryptoManager() {
 	CRYPTO_set_locking_callback(NULL);
 	delete[] cs;
-
-	/* thread-local cleanup */ 
-	ERR_remove_thread_state(NULL);
 
 	clientContext.reset();
 	serverContext.reset();
@@ -207,7 +246,7 @@ void CryptoManager::generateCertificate() {
 void CryptoManager::sslRandCheck() {
 	if(!RAND_status()) {
 #ifdef _WIN32
-		RAND_screen();
+		RAND_poll();
 #endif
 	}
 }
