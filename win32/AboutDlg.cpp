@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001-2019 Jacek Sieka, arnetheduck on gmail point com
+ * Copyright (C) 2001-2021 Jacek Sieka, arnetheduck on gmail point com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,7 +61,7 @@ static const char thanks[] = "Big thanks to all donators and people who have con
 "stanislav maslovski, david grundberg, pavel andreev, yakov suraev, kulmegil, smir, emtee, individ, "
 "pseudonym, crise, ben, ximin luo, razzloss, andrew browne, darkklor, vasily.n, netcelli, "
 "gennady proskurin, iceman50, flow84, alexander sashnov, yorhel, irainman, maksis, "
-"pavel pimenov, konstantin, night. Keep it coming!";
+"pavel pimenov, konstantin, night, klondike. Keep it coming!";
 
 AboutDlg::AboutDlg(dwt::Widget* parent) :
 dwt::ModalDialog(parent),
@@ -100,7 +100,7 @@ bool AboutDlg::handleInitDialog() {
 
 		cur->addChild(Label::Seed(WinUtil::createIcon(IDI_DCPP, 48)));
 
-		ls.caption = Text::toT(dcpp::fullVersionString) + _T("\n(c) Copyright 2001-2019 Jacek Sieka\n");
+		ls.caption = Text::toT(dcpp::fullVersionString) + _T("\n(c) Copyright 2001-2021 Jacek Sieka\n");
 		ls.caption += T_("Leading project contributor: poy\nEx-project contributor: Todd Pederzani\nEx-codeveloper: Per Lind\303\251n\nOriginal DC++ logo design: Martin Skogevall\nGraphics: Radox and various GPL and CC authors\n\nDC++ is licenced under GPL.");
 		cur->addChild(ls);
 
