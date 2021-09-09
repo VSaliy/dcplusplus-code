@@ -1,3 +1,4 @@
+-- 0.870 2021-09-09 --
 * Adaptively determine fastest TLS 1.3 ciphersuites (klondike)
 * [L#1703150] Fix crash when closing NMDC hubs (emtee)
 * [L#1909853] Allow the operating system to determine the best socket buffer sizes by default (maksis)
@@ -6,8 +7,8 @@
 * [L#1853692] Blacklist an unmaintained hublist server
 * [L#1829064] Add new hublist server dcnf.github.io
 * [L#1815377] Fix a bug that could keep files from hashing due to CRC errors when automatic .sfv checking is enabled (emtee)
-* [L#1910274] Don't add incomplete TTH trees to hash database
-* [L#1649066] Don't share files/directories with non-UTF-8 names on Linux/macOS/BSDs
+* [L#1910274] Don't add incomplete TTH trees to hash database (cologic)
+* [L#1649066] Don't share files/directories with non-UTF-8 names on Linux/macOS/BSDs (cologic)
 * Fix GeoIP country in the Transfer View and Search window (emtee)
 * Keep existing GeoIP files after an unsuccessful download (emtee)
 * Update OpenSSL to version 1.1.1k
