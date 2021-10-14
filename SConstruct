@@ -155,7 +155,7 @@ opts.AddVariables(
      '- "i686-w64-mingw32-" for 32-bit MinGW builds.\n'
      '- "x86_64-w64-mingw32-" for 64-bit MinGW builds.\n'
      'May be forced to nothing via "prefix=".'),
-    EnumVariable('arch', 'Target architecture', 'x86', ['x86', 'x64', 'ia64']),
+    EnumVariable('arch', 'Target architecture', 'x86', ['x86', 'x64']),
     BoolVariable('msvcproj', 'Build MSVC project files', 'no'),
     BoolVariable(
         'distro',
@@ -250,8 +250,10 @@ if 'gcc' in env['TOOLS']:
     # Require SSE2 for e.g., significantly faster Tiger hashing
     # https://www.cryptopp.com/benchmarks.html
     # Require SSE3 for FISTTP
-    if env['arch'] in ['x86', 'x64']:
-        env.Append(CCFLAGS=['-march=nocona', '-mtune=generic'])
+    if env['arch'] == 'x86':
+        env.Append(CCFLAGS=['-march=nocona', '-mtune=generic']) # Through SSE3
+    elif env['arch'] == 'x64':
+        env.Append(CCFLAGS=['-march=core2',  '-mtune=generic']) # Through SSSE3
 
 if 'msvc' in env['TOOLS']:
     env['pch'] = True
