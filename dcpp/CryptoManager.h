@@ -74,6 +74,8 @@ public:
 	static RSA* tmp_rsa_cb(SSL* /*ssl*/, int /*is_export*/, int keylength);
 	static int verify_callback(int preverify_ok, X509_STORE_CTX *ctx);
 
+	static string keyprintToString(const ByteVector& kp) noexcept;
+
 	static int idxVerifyData;
 
 private:

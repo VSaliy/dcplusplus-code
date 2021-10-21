@@ -233,7 +233,7 @@ private:
 	bool handleUsersContextMenu(dwt::ScreenCoordinate pt);
 	void handleShowUsersClicked();
 	void handleDoubleClickUsers();
-	void handleCopyHub();
+	void handleCopyHub(bool keyprinted);
 	void handleSearchHub();
 	void handleAddAsFavorite();
 
