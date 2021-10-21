@@ -157,6 +157,10 @@ CryptoManager::~CryptoManager() {
 	CRYPTO_cleanup_all_ex_data();
 }
 
+string CryptoManager::keyprintToString(const ByteVector& kp) noexcept {
+	return "SHA256/" + Encoder::toBase32(&kp[0], kp.size());
+} 
+
 bool CryptoManager::TLSOk() const noexcept {
 	return certsLoaded && !keyprint.empty();
 }
@@ -597,7 +601,7 @@ int CryptoManager::verify_callback(int preverify_ok, X509_STORE_CTX *ctx) {
 			return allowUntrusted ? 1 : 0;
 
 		ByteVector kp = ssl::X509_digest(cert, EVP_sha256());
-		string expected_keyp = "SHA256/" + Encoder::toBase32(&kp[0], kp.size());
+		string expected_keyp = keyprintToString(kp);
 
 		// Do a full string comparison to avoid potential false positives caused by invalid inputs
 		if(keyp.compare(expected_keyp) == 0) {

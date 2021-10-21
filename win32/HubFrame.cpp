@@ -29,6 +29,7 @@
 #include <dcpp/LogManager.h>
 #include <dcpp/SearchManager.h>
 #include <dcpp/PluginManager.h>
+#include <dcpp/CryptoManager.h>
 #include <dcpp/User.h>
 #include <dcpp/UserMatch.h>
 #include <dcpp/version.h>
@@ -1306,7 +1307,9 @@ void HubFrame::tabMenuImpl(dwt::Menu* menu) {
 	}
 
 	menu->appendItem(T_("&Reconnect\tCtrl+R"), [this] { reconnect(); }, WinUtil::menuIcon(IDI_RECONNECT));
-	menu->appendItem(T_("Copy &address to clipboard"), [this] { handleCopyHub(); });
+	menu->appendItem(T_("Copy &address to clipboard"), [this] { handleCopyHub(false); });
+	if (client->isSecure() && client->getHubUrl().find("?kp=") == string::npos)
+		menu->appendItem(T_("Copy address with &keyprint to clipboard"), [this] { handleCopyHub(true); });
 	menu->appendItem(T_("&Search hub"), [this] { handleSearchHub(); }, WinUtil::menuIcon(IDI_SEARCH));
 	menu->appendItem(T_("&Disconnect"), [this] { disconnect(false); }, WinUtil::menuIcon(IDI_HUB_OFF));
 
@@ -1333,8 +1336,9 @@ void HubFrame::handleShowUsersClicked() {
 	statusDirty = true;
 }
 
-void HubFrame::handleCopyHub() {
-	WinUtil::setClipboard(Text::toT(url));
+void HubFrame::handleCopyHub(bool keyprinted) {
+	auto address = keyprinted ? url + "/?kp=" + CryptoManager::getInstance()->keyprintToString(client->getKeyprint()) : url;
+	WinUtil::setClipboard(Text::toT(address));
 }
 
 void HubFrame::handleSearchHub() {

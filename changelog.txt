@@ -1,4 +1,5 @@
 -- 0.8xx ---
+* Allow copy of hub address with keyprint on secure hubs (from AirDC++)
 * Require SSSE3 for 64-bit builds (cologic)
 
 -- 0.870 2021-09-09 --
