@@ -30,7 +30,7 @@ gcc_flags = {
         '-Wno-unknown-pragmas',
         '-Wno-unused-parameter', '-Wno-unused-value',
         '-Wno-unused-but-set-variable',
-        '-fexceptions',
+        '-fexceptions'
     ],
     'debug': [],
     'release': ['-O3', '-fno-ipa-cp-clone']
@@ -223,8 +223,8 @@ if dev.is_win32():
     # Windows header defines
     # <https://msdn.microsoft.com/en-us/library/aa383745(VS.85).aspx>
     env.Append(CPPDEFINES=[
-        '_WIN32_WINNT=0x600',  # Windows Vista
-        'WINVER=0x600',  # Windows Vista
+        '_WIN32_WINNT=0x601',  # Windows 7
+        'WINVER=0x601',  # Windows 7
         '_WIN32_IE=0x600',  # Common Controls 6
 
         # other defs that influence Windows headers
@@ -275,7 +275,7 @@ if 'mingw' in env['TOOLS']:
 
     env.Append(LINKFLAGS=[
         '-static-libgcc', '-static-libstdc++', '-mthreads',
-        '-Wl,--enable-runtime-pseudo-reloc',
+        '-Wl,--enable-runtime-pseudo-reloc'
     ])
 
     if env['mode'] == 'release' or sys.platform == 'win32':
