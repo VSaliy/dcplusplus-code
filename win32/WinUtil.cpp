@@ -44,7 +44,6 @@
 
 #include <dwt/Clipboard.h>
 #include <dwt/DWTException.h>
-#include <dwt/LibraryLoader.h>
 #include <dwt/WidgetCreator.h>
 #include <dwt/util/GDI.h>
 #include <dwt/widgets/Grid.h>

@@ -39,7 +39,6 @@
 #include <dwt/widgets/ToolTip.h>
 #include <dwt/WidgetCreator.h>
 #include <dwt/util/StringUtils.h>
-#include <dwt/util/win32/Version.h>
 #include <dwt/DWTException.h>
 #include <dwt/resources/Brush.h>
 #include <dwt/Texts.h>
@@ -180,7 +179,7 @@ void TabView::create(const Seed & cs) {
 
 		closeIcon = cs.closeIcon;
 
-		if(cs.tabStyle == Seed::WinBrowser && util::win32::ensureVersion(util::win32::VISTA)) {
+		if(cs.tabStyle == Seed::WinBrowser) {
 			theme.load(std::wstring(L"BrowserTab::") + std::wstring(VSCLASS_TAB), this);
 			if(!theme)
 				theme.load(VSCLASS_TAB, this, false);
