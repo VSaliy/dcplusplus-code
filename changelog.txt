@@ -1,4 +1,5 @@
 -- 0.8xx ---
+* Offer the current testing release to a random subset of users at start (emtee)
 * Allow copy of hub address with keyprint on secure hubs (from AirDC++)
 * Require SSSE3 for 64-bit builds (cologic)
 
