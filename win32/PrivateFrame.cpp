@@ -314,6 +314,7 @@ void PrivateFrame::startCC(bool silent) {
 		}
 
 		tstring err = ou->getUser()->isNMDC() ? T_("A secure ADC hub is required; this feature is not supported on NMDC hubs") :
+			!ou->getUser()->isSet(User::TLS) ? T_("The user does not support secure encrypted connections") :
 			!ou->getIdentity().supports(AdcHub::CCPM_FEATURE) ? T_("The user does not support the CCPM ADC extension") : _T("");
 		if(!err.empty()) {
 			if(!silent) { addStatus(str(TF_("Cannot start the direct encrypted channel: %1%") % err)); }
