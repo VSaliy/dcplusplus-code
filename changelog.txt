@@ -1,7 +1,8 @@
 -- 0.8xx ---
+* [L#1682791] Block possible unencrypted direct private message connection attempts (fix adapted from AirDC++) (emtee)
 * Upgrade compiler for better performance; allows further optimizations to modern Windows versions (cologic, emtee)
 * Offer the current testing release to a random subset of users at start (emtee)
-* Allow copy of hub address with keyprint on secure hubs (from AirDC++)
+* Allow copy of hub address with keyprint on secure hubs (code adapted from AirDC++) (emtee)
 * Require SSSE3 for 64-bit builds (cologic)
 
 -- 0.870 2021-09-09 --

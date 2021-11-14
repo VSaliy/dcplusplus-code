@@ -741,8 +741,16 @@ void ConnectionManager::on(AdcCommand::INF, UserConnection* aSource, const AdcCo
 		type = tokCheck.second;
 
 		// set the PM flag now in order to send a INF with PM1
-		if((type == CONNECTION_TYPE_PM || cmd.hasFlag("PM", 0)) && !aSource->isSet(UserConnection::FLAG_PM)) {
-			aSource->setFlag(UserConnection::FLAG_PM);
+		if(type == CONNECTION_TYPE_PM || cmd.hasFlag("PM", 0)) {
+			if(!aSource->isSet(UserConnection::FLAG_PM)) {
+				aSource->setFlag(UserConnection::FLAG_PM);
+			}
+
+			if (!aSource->getUser()->isSet(User::TLS)) {
+				aSource->send(AdcCommand(AdcCommand::SEV_FATAL, AdcCommand::ERROR_GENERIC, "Unencrypted CCPM connections aren't allowed"));
+				putConnection(aSource);
+				return;
+			}
 		}
 
 		aSource->inf(false);
