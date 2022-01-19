@@ -54,6 +54,7 @@
 #include <dwt/widgets/SplitterContainer.h>
 #include <dwt/widgets/ToolBar.h>
 
+#include "AboutConfig.h"
 #include "AboutDlg.h"
 #include "ADLSearchFrame.h"
 #include "CrashLogger.h"
@@ -356,6 +357,9 @@ void MainWindow::initMenu() {
 			[this] { SystemFrame::openWindow(getTabView()); });
 		viewIndexes[StatsFrame::id] = viewMenu->appendItem(T_("Network Statistics"),
 			[this] { StatsFrame::openWindow(getTabView()); }, WinUtil::menuIcon(IDI_NET_STATS));
+		viewIndexes[ACFrame::id] = viewMenu->appendItem(T_("About:config"),
+			[this] { ACFrame::openWindow(getTabView()); }, WinUtil::menuIcon(IDI_DCPP));
+
 		viewMenu->appendItem(T_("Indexing progress"), [this] { handleHashProgress(); }, WinUtil::menuIcon(IDI_INDEXING));
 		viewMenu->appendSeparator();
 		viewIndexes["Menu"] = viewMenu->appendItem(T_("Menu bar\tCtrl+0"), [this] { switchMenuBar(); });
@@ -2125,5 +2129,6 @@ void MainWindow::openWindow(const string& id, const WindowParams& params) {
 	compare_id(SystemFrame);
 	compare_id(StatsFrame);
 	compare_id(TextFrame);
+	compare_id(ACFrame);
 #undef compare_id
 }

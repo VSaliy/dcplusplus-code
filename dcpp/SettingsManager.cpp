@@ -62,6 +62,7 @@ const string SettingsManager::settingTags[] =
 	"Language", "Toolbar", "LastSearchType", "Mapper", "Mapper6",
 	"SoundMainChat", "SoundPM", "SoundPMWindow", "SoundFinishedDL", "SoundFinishedFL", "LastSharedFolder",
 	"SharingSkiplistExtensions", "SharingSkiplistRegEx", "SharingSkiplistPaths", "WhitelistOpenURIs",
+	"ACFrameOrder", "ACFrameWidths",
 	"SENTRY",
 	// Ints
 	"IncomingConnections", "IncomingConnections6", "OutgoingConnections", "InPort", "InPort6", 
@@ -113,7 +114,7 @@ const string SettingsManager::settingTags[] =
 	"StatusInChat", "TimeDependentThrottle", "TimeStamps",
 	"ToggleActiveTab", "UrlHandler", "UseCTRLForLineHistory", "UseSystemIcons",
 	"UsersFilterFavorite", "UsersFilterOnline", "UsersFilterQueue", "UsersFilterWaiting",
-	"RegisterSystemStartup", "DontLogCCPMChat",
+	"RegisterSystemStartup", "DontLogCCPMChat", "AboutCfgDisclaimer",
 	"SENTRY",
 	// Int64
 	"TotalUpload", "TotalDownload", "SharingSkiplistMinSize", "SharingSkiplistMaxSize",
@@ -373,6 +374,7 @@ SettingsManager::SettingsManager() {
 	setDefault(MAX_EXTRA_SLOTS, 3);
 	setDefault(TESTING_STATUS, TESTING_ENABLED);
 	setDefault(WHITELIST_OPEN_URIS, "http:;https:;www;mailto:");
+	setDefault(AC_DISCLAIM, true);
 
 	setSearchTypeDefaults();
 
