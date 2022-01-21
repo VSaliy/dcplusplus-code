@@ -1,4 +1,5 @@
 -- 0.8xx ---
+* Add AboutConfig frame for testing and debugging purposes (iceman50, emtee)
 * [L#1682791] Block possible unencrypted direct private message connection attempts (fix adapted from AirDC++) (emtee)
 * Upgrade compiler for better performance; allows further optimizations to modern Windows versions (cologic, emtee)
 * Offer the current testing release to a random subset of users at start (emtee)
